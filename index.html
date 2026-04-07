@@ -302,6 +302,7 @@ footer{
   .footer-inner{grid-template-columns:1fr}
   .driver-perks{gap:12px}
   .zone-grid{grid-template-columns:1fr 1fr}
+  #safety .section-inner > div[style*="grid-template-columns"]{grid-template-columns:1fr !important}
 }
 @media(max-width:480px){
   .hero h1{font-size:2rem}
@@ -331,6 +332,7 @@ footer{
     <a href="#how" data-i18n="nav_how">How It Works</a>
     <a href="#pricing" data-i18n="nav_pricing">Pricing</a>
     <a href="#zones" data-i18n="nav_zones">Zones</a>
+    <a href="#safety" data-i18n="nav_safety">Safety</a>
     <a href="driver-register.html" data-i18n="nav_drive">Drive With Us</a>
     <a href="business-register.html" data-i18n="nav_business">For Business</a>
   </div>
@@ -342,6 +344,7 @@ footer{
   <a href="#how" onclick="closeMobile()" data-i18n="nav_how">How It Works</a>
   <a href="#pricing" onclick="closeMobile()" data-i18n="nav_pricing">Pricing</a>
   <a href="#zones" onclick="closeMobile()" data-i18n="nav_zones">Zones</a>
+  <a href="#safety" onclick="closeMobile()" data-i18n="nav_safety">Safety</a>
   <a href="driver-register.html" onclick="closeMobile()" data-i18n="nav_drive">Drive With Us</a>
   <a href="business-register.html" onclick="closeMobile()" data-i18n="nav_business">For Business</a>
   <a href="#order" onclick="closeMobile()" class="nav-cta" style="text-align:center" data-i18n="nav_cta">Request Delivery</a>
@@ -478,6 +481,92 @@ footer{
       <div class="zone-card"><div class="zone-icon">&#127965;</div><h4>Les Cayes</h4><p data-i18n="z_cay">Available</p></div>
       <div class="zone-card"><div class="zone-icon">&#127963;</div><h4>Gonaives</h4><p data-i18n="z_gon">Available</p></div>
       <div class="zone-card"><div class="zone-icon">&#9889;</div><h4>Jacmel</h4><p data-i18n="z_jac">Coming Soon</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SAFETY & SECURITY -->
+<section id="safety" style="background:var(--white);padding:80px 24px">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-tag" style="background:rgba(34,197,94,.08);color:var(--green)">&#128737; <span data-i18n="sf_tag">Safety First</span></div>
+    <h2 class="section-title" data-i18n="sf_title">Your Safety is Our <em>Priority</em></h2>
+    <p class="section-sub" style="margin:12px auto 32px;max-width:600px" data-i18n="sf_sub">MsouWout is built with safety at every level. Multiple layers of protection for both passengers and drivers.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:900px;margin:0 auto;text-align:left">
+      <!-- Passenger Safety -->
+      <div style="background:linear-gradient(135deg,rgba(0,32,159,.03),rgba(0,32,159,.08));border-radius:16px;padding:28px;border:1px solid rgba(0,32,159,.1)">
+        <h3 style="font-family:var(--display);font-size:1.2rem;color:var(--blue);margin-bottom:16px" data-i18n="sf_pass_title">&#128100; Passenger Safety</h3>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_p1">Verified drivers with ID, license, and background check before approval</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_p2">See driver photo, name, and license plate before pickup</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_p3">Real-time GPS tracking - share your trip link with family</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_p4">Emergency button sends your location to contacts and MsouWout support</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_p5">Digital payments only - no cash means safer rides</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_p6">Geofenced safe zones - service only in approved, secure areas</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_p7">Daytime service only (6am-8pm) for maximum visibility</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Driver Safety -->
+      <div style="background:linear-gradient(135deg,rgba(210,16,52,.03),rgba(210,16,52,.08));border-radius:16px;padding:28px;border:1px solid rgba(210,16,52,.1)">
+        <h3 style="font-family:var(--display);font-size:1.2rem;color:var(--red);margin-bottom:16px" data-i18n="sf_drv_title">&#128663; Driver Safety</h3>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_d1">Rider identity verified before trip confirmation</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_d2">No cash handling - all payments digital, reducing robbery risk</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_d3">Zone restrictions keep you in safe, approved service areas only</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_d4">Emergency alert system - one tap to notify support and authorities</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_d5">Trip details automatically shared with your emergency contacts</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_d6">Route blocked if it crosses restricted or dangerous zones</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <span style="color:var(--green);font-size:1.1rem;flex-shrink:0">&#10003;</span>
+            <span style="font-size:.85rem;line-height:1.5" data-i18n="sf_d7">24/7 support line for driver emergencies</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;padding:20px 28px;background:rgba(0,32,159,.04);border-radius:12px;display:inline-flex;align-items:center;gap:12px;border:1px solid rgba(0,32,159,.1)">
+      <span style="font-size:1.5rem">&#128737;</span>
+      <span style="font-size:.88rem;font-weight:600;color:var(--blue)" data-i18n="sf_badge">Built for Haiti. Designed for safety. Every trip, every time.</span>
     </div>
   </div>
 </section>
@@ -679,6 +768,17 @@ const T = {
     pr_cta:"Commander", pr_ride_cta:"Reserver un Trajet",
     z_tag:"Couverture", z_title:"Ou Nous Operons", z_sub:"En expansion chaque semaine. Zones actuellement desservies.",
     z_pap:"Couverture complete", z_pv:"Couverture complete", z_cap:"Couverture complete", z_cay:"Disponible", z_gon:"Disponible", z_jac:"Bientot",
+    sf_tag:"Sekirite Anvan Tout", sf_title:"Votre Securite est Notre Priorite", sf_sub:"MsouWout est concu avec la securite a chaque niveau. Plusieurs couches de protection pour les passagers et les chauffeurs.",
+    sf_pass_title:"&#128100; Securite des Passagers", sf_drv_title:"&#128663; Securite des Chauffeurs",
+    sf_p1:"Chauffeurs verifies avec piece d'identite, permis et verification des antecedents", sf_p2:"Voyez la photo, le nom et la plaque du chauffeur avant le ramassage",
+    sf_p3:"Suivi GPS en temps reel - partagez le lien de votre trajet avec votre famille", sf_p4:"Bouton d'urgence envoie votre position aux contacts et au support MsouWout",
+    sf_p5:"Paiements numeriques uniquement - pas d'especes = trajets plus surs", sf_p6:"Zones securisees geofencees - service uniquement dans les zones approuvees",
+    sf_p7:"Service de jour uniquement (6h-20h) pour une visibilite maximale",
+    sf_d1:"Identite du passager verifiee avant confirmation du trajet", sf_d2:"Pas de manipulation d'especes - tous les paiements numeriques, reduisant le risque de vol",
+    sf_d3:"Restrictions de zone vous gardent dans des zones de service sures et approuvees", sf_d4:"Systeme d'alerte d'urgence - un tap pour notifier le support et les autorites",
+    sf_d5:"Details du trajet automatiquement partages avec vos contacts d'urgence", sf_d6:"Itineraire bloque s'il traverse des zones restreintes ou dangereuses",
+    sf_d7:"Ligne de support 24/7 pour les urgences chauffeurs", sf_badge:"Concu pour Haiti. Concu pour la securite. Chaque trajet, a chaque fois.",
+    nav_safety:"Securite",
     d_tag:"Conduire avec MsouWout", d_title:"Gagnez de l'Argent comme Chauffeur", d_sub:"Rejoignez notre reseau de chauffeurs de confiance. Definissez votre propre horaire et developpez votre activite.",
     d_p1:"Paiements Hebdomadaires", d_p2:"Horaires Flexibles", d_p3:"Votre Propre Patron", d_p4:"Bonus Recompenses", d_cta:"Postuler comme Chauffeur",
     o_tag:"Demander un Service", o_title:"Demander une Livraison ou un Trajet", o_sub:"Remplissez le formulaire et nous vous mettrons en relation avec un chauffeur via WhatsApp.",
@@ -719,6 +819,17 @@ const T = {
     pr_cta:"Order Now", pr_ride_cta:"Book a Ride",
     z_tag:"Coverage", z_title:"Where We Operate", z_sub:"Growing every week. Currently serving these areas.",
     z_pap:"Full coverage", z_pv:"Full coverage", z_cap:"Full coverage", z_cay:"Available", z_gon:"Available", z_jac:"Coming Soon",
+    sf_tag:"Safety First", sf_title:"Your Safety is Our Priority", sf_sub:"MsouWout is built with safety at every level. Multiple layers of protection for both passengers and drivers.",
+    sf_pass_title:"&#128100; Passenger Safety", sf_drv_title:"&#128663; Driver Safety",
+    sf_p1:"Verified drivers with ID, license, and background check before approval", sf_p2:"See driver photo, name, and license plate before pickup",
+    sf_p3:"Real-time GPS tracking - share your trip link with family", sf_p4:"Emergency button sends your location to contacts and MsouWout support",
+    sf_p5:"Digital payments only - no cash means safer rides", sf_p6:"Geofenced safe zones - service only in approved, secure areas",
+    sf_p7:"Daytime service only (6am-8pm) for maximum visibility",
+    sf_d1:"Rider identity verified before trip confirmation", sf_d2:"No cash handling - all payments digital, reducing robbery risk",
+    sf_d3:"Zone restrictions keep you in safe, approved service areas only", sf_d4:"Emergency alert system - one tap to notify support and authorities",
+    sf_d5:"Trip details automatically shared with your emergency contacts", sf_d6:"Route blocked if it crosses restricted or dangerous zones",
+    sf_d7:"24/7 support line for driver emergencies", sf_badge:"Built for Haiti. Designed for safety. Every trip, every time.",
+    nav_safety:"Safety",
     d_tag:"Drive With MsouWout", d_title:"Earn Money as a Driver", d_sub:"Join our network of trusted drivers. Set your own schedule, keep more of what you earn, and grow your business with us.",
     d_p1:"Weekly Payouts", d_p2:"Flexible Hours", d_p3:"Your Own Boss", d_p4:"Bonus Rewards", d_cta:"Apply to Drive",
     o_tag:"Request Service", o_title:"Request a Delivery or Ride", o_sub:"Fill out the form and we'll match you with a driver via WhatsApp.",
@@ -759,6 +870,17 @@ const T = {
     pr_cta:"Kòmande Kounye a", pr_ride_cta:"Rezève yon Vwayaj",
     z_tag:"Kouvèti", z_title:"Kote Nou Opere", z_sub:"Ap grandi chak semèn. Zòn nou sèvi kounye a.",
     z_pap:"Kouvèti konplè", z_pv:"Kouvèti konplè", z_cap:"Kouvèti konplè", z_cay:"Disponib", z_gon:"Disponib", z_jac:"Byento",
+    sf_tag:"Sekirite Anvan Tout", sf_title:"Sekirite Ou se Priyorite Nou", sf_sub:"MsouWout bati ak sekirite nan chak nivo. Plizyè kouch pwoteksyon pou pasaje ak chofè.",
+    sf_pass_title:"&#128100; Sekirite Pasaje", sf_drv_title:"&#128663; Sekirite Chofè",
+    sf_p1:"Chofè verifye ak pyès idantite, lisans, epi verifikasyon anvan apwobasyon", sf_p2:"Wè foto chofè a, non li, ak plak machin anvan ranmase",
+    sf_p3:"Swivi GPS an tan reyèl - pataje lyen vwayaj ou ak fanmi ou", sf_p4:"Bouton ijans voye pozisyon ou bay kontak ou ak sipò MsouWout",
+    sf_p5:"Peman dijital sèlman - pa kach vle di vwayaj pi an sekirite", sf_p6:"Zòn sekirize - sèvis sèlman nan zòn apwouve ak sekirize",
+    sf_p7:"Sèvis lajounen sèlman (6è-8è diswa) pou vizibilite maksimòm",
+    sf_d1:"Idantite pasaje verifye anvan konfimasyon vwayaj", sf_d2:"Pa manyen kach - tout peman dijital, diminye risk vòl",
+    sf_d3:"Restriksyon zòn kenbe ou nan zòn sèvis ki an sekirite sèlman", sf_d4:"Sistèm alèt ijans - yon klik pou notifye sipò ak otorite yo",
+    sf_d5:"Detay vwayaj otomatikman pataje ak kontak ijans ou yo", sf_d6:"Wout bloke si li travèse zòn restrenn oswa danjere",
+    sf_d7:"Liy sipò 24/7 pou ijans chofè", sf_badge:"Bati pou Ayiti. Konsevwa pou sekirite. Chak vwayaj, chak fwa.",
+    nav_safety:"Sekirite",
     d_tag:"Kondwi ak MsouWout", d_title:"Fè Lajan kòm Chofè", d_sub:"Rejwenn rezo chofè konfyans nou. Fikse pwòp orè ou epi devlope biznis ou avèk nou.",
     d_p1:"Peman Chak Semèn", d_p2:"Orè Fleksib", d_p3:"Pwòp Patwon Ou", d_p4:"Bonis Rekonpans", d_cta:"Aplike pou Kondwi",
     o_tag:"Mande Sèvis", o_title:"Mande yon Livrezon oswa Vwayaj", o_sub:"Ranpli fòm nan epi nou ap matche ou ak yon chofè via WhatsApp.",
@@ -799,6 +921,17 @@ const T = {
     pr_cta:"Ordenar Ahora", pr_ride_cta:"Reservar Viaje",
     z_tag:"Cobertura", z_title:"Donde Operamos", z_sub:"Creciendo cada semana. Areas que servimos actualmente.",
     z_pap:"Cobertura completa", z_pv:"Cobertura completa", z_cap:"Cobertura completa", z_cay:"Disponible", z_gon:"Disponible", z_jac:"Pronto",
+    sf_tag:"Seguridad Primero", sf_title:"Tu Seguridad es Nuestra Prioridad", sf_sub:"MsouWout esta construido con seguridad en cada nivel. Multiples capas de proteccion para pasajeros y conductores.",
+    sf_pass_title:"&#128100; Seguridad del Pasajero", sf_drv_title:"&#128663; Seguridad del Conductor",
+    sf_p1:"Conductores verificados con identificacion, licencia y verificacion de antecedentes", sf_p2:"Ver foto, nombre y placa del conductor antes de la recogida",
+    sf_p3:"Rastreo GPS en tiempo real - comparte el enlace de tu viaje con tu familia", sf_p4:"Boton de emergencia envia tu ubicacion a contactos y soporte MsouWout",
+    sf_p5:"Solo pagos digitales - sin efectivo significa viajes mas seguros", sf_p6:"Zonas seguras geocercadas - servicio solo en areas aprobadas y seguras",
+    sf_p7:"Servicio diurno unicamente (6am-8pm) para maxima visibilidad",
+    sf_d1:"Identidad del pasajero verificada antes de confirmar el viaje", sf_d2:"Sin manejo de efectivo - todos los pagos digitales, reduciendo riesgo de robo",
+    sf_d3:"Restricciones de zona te mantienen en areas de servicio seguras y aprobadas", sf_d4:"Sistema de alerta de emergencia - un toque para notificar soporte y autoridades",
+    sf_d5:"Detalles del viaje compartidos automaticamente con tus contactos de emergencia", sf_d6:"Ruta bloqueada si cruza zonas restringidas o peligrosas",
+    sf_d7:"Linea de soporte 24/7 para emergencias de conductores", sf_badge:"Construido para Haiti. Disenado para seguridad. Cada viaje, cada vez.",
+    nav_safety:"Seguridad",
     d_tag:"Conduce con MsouWout", d_title:"Gana Dinero como Conductor", d_sub:"Unete a nuestra red de conductores confiables. Establece tu propio horario y crece tu negocio.",
     d_p1:"Pagos Semanales", d_p2:"Horarios Flexibles", d_p3:"Tu Propio Jefe", d_p4:"Bonos de Recompensa", d_cta:"Aplicar para Conducir",
     o_tag:"Solicitar Servicio", o_title:"Solicitar Entrega o Viaje", o_sub:"Completa el formulario y te conectamos con un conductor via WhatsApp.",
