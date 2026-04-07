@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MsouWout - Devenir Chauffeur | Become a Driver</title>
+<meta name="description" content="Join MsouWout's verified driver network in Haiti. Earn on your schedule delivering packages and providing rides across Port-au-Prince and beyond.">
+<meta property="og:title" content="MsouWout - Become a Driver">
+<meta property="og:description" content="Join Haiti's trusted delivery and ridesharing driver network. A HaitiBiznis platform.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://msouwout.com/driver-register.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D21034;--red-dark:#B00D2C;--red-light:#E8243F;
+  --blue:#00209F;--blue-dark:#001566;
+  --gold:#D4A017;--gold-light:#E8B82E;
+  --white:#FFFFFF;--off-white:#FFF8F8;--light-gray:#F0E8E8;
+  --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;
+  --green:#22C55E;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --display:'DM Serif Display',Georgia,serif;
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+/* ═══ LANGUAGE BAR ═══ */
+.lang-bar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;
+  background:var(--red);
+  padding:6px 20px;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;
+}
+.lang-bar a{
+  color:rgba(255,255,255,.7);font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:100px;
+  cursor:pointer;transition:all .2s;letter-spacing:.02em;
+}
+.lang-bar a:hover{color:#fff;background:rgba(255,255,255,.15)}
+.lang-bar a.active{color:var(--red);background:#fff}
+
+/* ═══ NAV ═══ */
+nav{
+  position:fixed;top:36px;left:0;right:0;z-index:1000;
+  background:var(--blue);border-bottom:3px solid var(--red);
+  padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.nav-logo span{font-family:var(--display);font-weight:900;font-size:1.25rem;color:#fff;letter-spacing:-.02em}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{color:rgba(255,255,255,.8);font-size:.82rem;font-weight:600;transition:color .2s;letter-spacing:.01em}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  background:var(--red);color:#fff;padding:10px 22px;border-radius:100px;font-size:.82rem;
+  font-weight:700;transition:all .25s;border:none;cursor:pointer;
+}
+.nav-cta:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(210,16,52,.35)}
+.mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+.mobile-nav{display:none;position:fixed;top:100px;left:0;right:0;background:var(--blue);padding:24px;z-index:999;border-bottom:3px solid var(--red);flex-direction:column;gap:16px}
+.mobile-nav.open{display:flex}
+.mobile-nav a{color:rgba(255,255,255,.9);font-size:.95rem;font-weight:600;padding:8px 0}
+
+/* ═══ HERO ═══ */
+.hero{
+  min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:140px 24px 80px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 60%,#000D4F 100%);
+}
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:100px;
+  background:linear-gradient(to top,var(--off-white),transparent);pointer-events:none;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  padding:8px 20px;border-radius:100px;font-size:.78rem;font-weight:600;color:var(--gold-light);
+  margin-bottom:28px;letter-spacing:.03em;
+  animation:fadeUp .8s ease both;
+}
+.hero h1{
+  font-family:var(--display);font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;
+  color:#fff;line-height:1.1;letter-spacing:-.03em;max-width:800px;
+  animation:fadeUp .8s .1s ease both;
+}
+.hero h1 em{font-style:italic;color:var(--red-light)}
+.hero-sub{
+  font-size:clamp(.95rem,2vw,1.15rem);color:rgba(255,255,255,.75);line-height:1.7;
+  max-width:560px;margin:24px auto 0;font-weight:400;
+  animation:fadeUp .8s .2s ease both;
+}
+.hero-actions{
+  display:flex;gap:14px;margin-top:36px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp .8s .3s ease both;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:16px 32px;border-radius:100px;
+  font-weight:700;font-size:.92rem;cursor:pointer;border:none;transition:all .3s;
+  font-family:var(--body);letter-spacing:.01em;
+}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 4px 20px rgba(210,16,52,.3)}
+.btn-red:hover{background:var(--red-dark);transform:translateY(-2px);box-shadow:0 10px 32px rgba(210,16,52,.4)}
+.btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn-ghost:hover{background:rgba(255,255,255,.2);transform:translateY(-2px)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ═══ SECTIONS ═══ */
+section{padding:80px 24px;position:relative}
+.section-inner{max-width:1080px;margin:0 auto}
+.section-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--red);margin-bottom:12px;
+}
+.section-title{
+  font-family:var(--display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;
+  color:var(--dark);line-height:1.1;letter-spacing:-.02em;
+}
+.section-sub{font-size:.95rem;color:var(--text-light);line-height:1.7;margin-top:12px;max-width:560px}
+
+/* ═══ BENEFITS ═══ */
+.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:48px}
+.benefit-card{
+  background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);
+  padding:32px 28px;transition:all .35s;position:relative;overflow:hidden;text-align:center;
+}
+.benefit-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--red));opacity:0;transition:opacity .35s;
+}
+.benefit-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.08)}
+.benefit-card:hover::before{opacity:1}
+.benefit-icon{
+  width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  font-size:2rem;margin:0 auto 20px;background:rgba(0,32,159,.08);
+}
+.benefit-card h3{font-size:1.1rem;font-weight:800;color:var(--dark);margin-bottom:8px;letter-spacing:-.01em}
+.benefit-card p{font-size:.85rem;color:var(--text-light);line-height:1.7}
+
+/* ═══ REQUIREMENTS ═══ */
+.req-section{background:var(--white)}
+.req-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:40px}
+.req-card{
+  background:var(--off-white);border:1px solid rgba(0,0,0,.05);border-radius:14px;
+  padding:24px 20px;text-align:center;transition:all .3s;
+}
+.req-card:hover{border-color:rgba(0,32,159,.3);transform:translateY(-2px)}
+.req-card .req-icon{font-size:2rem;margin-bottom:10px}
+.req-card h4{font-size:.92rem;font-weight:700;color:var(--dark);margin-bottom:6px}
+.req-card p{font-size:.78rem;color:var(--text-light);line-height:1.6}
+
+/* ═══ FORM ═══ */
+.form-section{background:var(--off-white)}
+.form-card{
+  background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);
+  padding:40px 36px;max-width:680px;margin:40px auto 0;box-shadow:0 4px 24px rgba(0,0,0,.06);
+}
+.form-card input,.form-card select,.form-card textarea{
+  width:100%;padding:14px 18px;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;
+  font-size:.88rem;font-family:var(--body);margin-bottom:14px;transition:border .25s;
+  background:var(--white);color:var(--text);
+}
+.form-card input::placeholder,.form-card textarea::placeholder{color:var(--text-light)}
+.form-card select{color:var(--text-light);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236A5A5A' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.form-card select option{background:var(--white);color:var(--text)}
+.form-card input:focus,.form-card select:focus,.form-card textarea:focus{outline:none;border-color:var(--blue)}
+.form-card textarea{min-height:80px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-label{display:block;font-size:.82rem;font-weight:700;color:var(--dark);margin-bottom:6px;letter-spacing:.01em}
+.form-group{margin-bottom:14px}
+.form-group:last-child{margin-bottom:0}
+
+/* Radio & Checkbox groups */
+.radio-group,.checkbox-group{
+  display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;
+}
+.radio-group label,.checkbox-group label{
+  display:flex;align-items:center;gap:6px;
+  font-size:.85rem;color:var(--text);cursor:pointer;
+  background:var(--off-white);padding:8px 14px;border-radius:10px;
+  border:1.5px solid rgba(0,0,0,.08);transition:all .25s;
+}
+.radio-group label:hover,.checkbox-group label:hover{border-color:var(--blue);background:rgba(0,32,159,.03)}
+.radio-group input:checked + span,.checkbox-group input:checked + span{color:var(--blue);font-weight:700}
+.radio-group label:has(input:checked),.checkbox-group label:has(input:checked){
+  border-color:var(--blue);background:rgba(0,32,159,.06);
+}
+.radio-group input,.checkbox-group input{accent-color:var(--blue);width:16px;height:16px}
+
+/* Zones checkbox grid */
+.zones-check-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:14px;
+}
+.zones-check-grid label{
+  display:flex;align-items:center;gap:8px;
+  font-size:.83rem;color:var(--text);cursor:pointer;
+  background:var(--off-white);padding:10px 14px;border-radius:10px;
+  border:1.5px solid rgba(0,0,0,.08);transition:all .25s;
+}
+.zones-check-grid label:hover{border-color:var(--blue);background:rgba(0,32,159,.03)}
+.zones-check-grid label:has(input:checked){border-color:var(--blue);background:rgba(0,32,159,.06)}
+.zones-check-grid input{accent-color:var(--blue);width:16px;height:16px}
+
+/* Terms checkbox */
+.terms-group{margin:18px 0 20px}
+.terms-group label{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:.82rem;color:var(--text-light);line-height:1.6;cursor:pointer;
+}
+.terms-group input{accent-color:var(--red);width:18px;height:18px;margin-top:2px;flex-shrink:0}
+
+/* Form success message */
+.form-success{
+  display:none;text-align:center;padding:40px 20px;
+}
+.form-success .success-icon{font-size:3.5rem;margin-bottom:16px}
+.form-success h3{font-family:var(--display);font-size:1.6rem;color:var(--dark);margin-bottom:8px}
+.form-success p{font-size:.92rem;color:var(--text-light);line-height:1.7}
+
+/* ═══ DRIVER CTA (red section) ═══ */
+.driver-section{
+  background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 100%);
+  text-align:center;
+}
+.driver-section .section-tag{color:var(--gold-light)}
+.driver-section .section-title{color:#fff}
+.driver-section .section-sub{color:rgba(255,255,255,.85);margin:12px auto 0}
+
+/* ═══ ECOSYSTEM ═══ */
+.ecosystem{background:var(--white);text-align:center}
+.eco-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:36px}
+.eco-card{
+  background:var(--off-white);border:1px solid rgba(0,0,0,.05);border-radius:14px;
+  padding:24px 20px;text-align:center;transition:all .3s;display:block;
+}
+.eco-card:hover{border-color:rgba(0,32,159,.2);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.06)}
+.eco-card .eco-icon{font-size:2rem;margin-bottom:10px}
+.eco-card h4{font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:4px}
+.eco-card p{font-size:.75rem;color:var(--text-light)}
+
+/* ═══ FOOTER ═══ */
+footer{
+  background:var(--dark);
+  padding:48px 24px 24px;
+}
+.footer-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px}
+.footer-brand h3{font-family:var(--display);font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:8px}
+.footer-brand p{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.7}
+.footer-col h4{font-size:.78rem;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.footer-col a{display:block;font-size:.82rem;color:rgba(255,255,255,.5);padding:4px 0;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{
+  max-width:1080px;margin:24px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);
+  display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:rgba(255,255,255,.4);
+}
+
+/* ═══ ECO BAR ═══ */
+.eco-bar{
+  background:var(--dark);
+  padding:14px 20px;text-align:center;position:fixed;bottom:0;left:0;right:0;z-index:999;
+}
+.eco-bar span{color:rgba(255,255,255,.4);font-size:.7rem;font-weight:500;margin-right:6px}
+.eco-bar a{color:rgba(255,255,255,.4);font-size:.72rem;font-weight:600;margin:0 8px;transition:color .2s}
+.eco-bar a:hover{color:#fff}
+
+/* ═══ WHATSAPP ═══ */
+.wa-float{
+  position:fixed;bottom:60px;right:20px;z-index:998;
+  width:56px;height:56px;border-radius:50%;
+  background:#25D366;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(37,211,102,.35);transition:all .3s;
+  font-size:1.6rem;
+}
+.wa-float:hover{transform:scale(1.08);box-shadow:0 8px 28px rgba(37,211,102,.5)}
+
+/* ═══ SPINNER ═══ */
+.btn-spinner{display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-loading .btn-spinner{display:inline-block}
+.btn-loading .btn-text{opacity:.6}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .benefits-grid{grid-template-columns:1fr}
+  .req-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  .footer-inner{grid-template-columns:1fr}
+  .zones-check-grid{grid-template-columns:1fr 1fr}
+  .form-card{padding:28px 20px}
+}
+@media(max-width:480px){
+  .hero h1{font-size:2rem}
+  .req-grid{grid-template-columns:1fr}
+  .zones-check-grid{grid-template-columns:1fr}
+  .hero-actions{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <a onclick="setLang('fr')" class="active" id="lang-fr">&#127467;&#127479; Francais</a>
+  <a onclick="setLang('en')" id="lang-en">&#127468;&#127463; English</a>
+  <a onclick="setLang('ht')" id="lang-ht">&#127469;&#127481; Kreyol</a>
+  <a onclick="setLang('es')" id="lang-es">&#127466;&#127480; Espanol</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="assets/msouwout-logo.jpg" alt="MsouWout Logo">
+    <span>MsouWout</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#services" data-i18n="nav_services">Services</a>
+    <a href="index.html#how" data-i18n="nav_how">How It Works</a>
+    <a href="index.html#pricing" data-i18n="nav_pricing">Pricing</a>
+    <a href="index.html#zones" data-i18n="nav_zones">Zones</a>
+    <a href="#register" data-i18n="nav_register">Register</a>
+  </div>
+  <a href="#register" class="nav-cta" data-i18n="nav_apply">Apply Now</a>
+  <button class="mobile-toggle" onclick="toggleMobile()">&#9776;</button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html#services" onclick="closeMobile()" data-i18n="nav_services">Services</a>
+  <a href="index.html#how" onclick="closeMobile()" data-i18n="nav_how">How It Works</a>
+  <a href="index.html#pricing" onclick="closeMobile()" data-i18n="nav_pricing">Pricing</a>
+  <a href="index.html#zones" onclick="closeMobile()" data-i18n="nav_zones">Zones</a>
+  <a href="#register" onclick="closeMobile()" data-i18n="nav_register">Register</a>
+  <a href="#register" onclick="closeMobile()" class="nav-cta" style="text-align:center" data-i18n="nav_apply">Apply Now</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">&#128663; <span data-i18n="hero_badge">Join the MsouWout Driver Network</span></div>
+  <h1 data-i18n="hero_title">Become a <em>MsouWout</em> Driver</h1>
+  <p class="hero-sub" data-i18n="hero_sub">Join our verified driver network. Earn money on your schedule delivering packages and providing rides across Haiti.</p>
+  <div class="hero-actions">
+    <a href="#register" class="btn btn-red" data-i18n="hero_cta1">&#128221; Register Now</a>
+    <a href="#benefits" class="btn btn-ghost" data-i18n="hero_cta2">&#128161; Learn More</a>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section id="benefits">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-tag">&#11088; <span data-i18n="ben_tag">Driver Benefits</span></div>
+    <h2 class="section-title" data-i18n="ben_title">Why Drive with MsouWout?</h2>
+    <p class="section-sub" style="margin:12px auto 0" data-i18n="ben_sub">Flexible work, fair pay, and a growing community of trusted drivers across Haiti.</p>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">&#128176;</div>
+        <h3 data-i18n="ben1_title">Earn on Your Schedule</h3>
+        <p data-i18n="ben1_desc">Work when you want. Full-time or part-time, mornings or evenings. You control your hours and your income.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">&#128205;</div>
+        <h3 data-i18n="ben2_title">Choose Your Zones</h3>
+        <p data-i18n="ben2_desc">Select the neighborhoods you know best. Drive in familiar areas from Turgeau to Kenscoff and everywhere in between.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">&#129309;</div>
+        <h3 data-i18n="ben3_title">Support Your Community</h3>
+        <p data-i18n="ben3_desc">Connect people with essential deliveries and safe transportation. Be a trusted part of Haiti's growing digital economy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REQUIREMENTS -->
+<section class="req-section" id="requirements">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-tag">&#128203; <span data-i18n="req_tag">Requirements</span></div>
+    <h2 class="section-title" data-i18n="req_title">What You Need to Get Started</h2>
+    <p class="section-sub" style="margin:12px auto 0" data-i18n="req_sub">Make sure you meet these basic requirements before applying.</p>
+    <div class="req-grid">
+      <div class="req-card">
+        <div class="req-icon">&#128179;</div>
+        <h4 data-i18n="req1_title">Valid ID</h4>
+        <p data-i18n="req1_desc">Government-issued identification card (CIN or passport). Must be current and not expired.</p>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">&#128663;</div>
+        <h4 data-i18n="req2_title">Vehicle Documents</h4>
+        <p data-i18n="req2_desc">Valid driver's license, vehicle registration, and insurance. Vehicle must be in good working condition.</p>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">&#9989;</div>
+        <h4 data-i18n="req3_title">Clean Record</h4>
+        <p data-i18n="req3_desc">No major traffic violations or criminal record. We verify all driver backgrounds for passenger safety.</p>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">&#128241;</div>
+        <h4 data-i18n="req4_title">Smartphone</h4>
+        <p data-i18n="req4_desc">Android or iPhone with WhatsApp and mobile data. Needed for receiving orders and live GPS tracking.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRATION FORM -->
+<section class="form-section" id="register">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-tag">&#128221; <span data-i18n="reg_tag">Driver Registration</span></div>
+    <h2 class="section-title" data-i18n="reg_title">Register as a Driver</h2>
+    <p class="section-sub" style="margin:12px auto 0" data-i18n="reg_sub">Fill out the form below and our team will contact you within 24 hours to complete your onboarding.</p>
+
+    <form class="form-card" id="driverForm" action="https://formsubmit.co/business@haitibiznis.com" method="POST">
+      <input type="hidden" name="_subject" value="MsouWout - New Driver Registration">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://msouwout.com/driver-success.html">
+      <input type="hidden" name="Referred By" id="referralField" value="">
+
+      <!-- Full Name & Phone -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_name_label">Full Name *</label>
+          <input type="text" name="Full Name" placeholder="Jean Pierre" data-i18n-placeholder="f_name_ph" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_phone_label">Phone Number *</label>
+          <input type="tel" name="Phone" placeholder="+509 XXXX XXXX" data-i18n-placeholder="f_phone_ph" required>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_email_label">Email (optional)</label>
+        <input type="email" name="Email" placeholder="jean@example.com" data-i18n-placeholder="f_email_ph">
+      </div>
+
+      <!-- Vehicle Type -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_vehicle_label">Vehicle Type *</label>
+        <select name="Vehicle Type" required>
+          <option value="" disabled selected data-i18n="f_vehicle_ph">-- Select Vehicle Type --</option>
+          <option value="Motorcycle" data-i18n="f_v_moto">Motorcycle</option>
+          <option value="Car" data-i18n="f_v_car">Car</option>
+          <option value="Van" data-i18n="f_v_van">Van</option>
+          <option value="Truck" data-i18n="f_v_truck">Truck</option>
+        </select>
+      </div>
+
+      <!-- License Plate & Driver's License -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_plate_label">License Plate</label>
+          <input type="text" name="License Plate" placeholder="AB-12345" data-i18n-placeholder="f_plate_ph">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_license_label">Driver's License Number</label>
+          <input type="text" name="Drivers License" placeholder="License #" data-i18n-placeholder="f_license_ph">
+        </div>
+      </div>
+
+      <!-- Preferred Service -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_service_label">Preferred Service *</label>
+        <div class="radio-group">
+          <label><input type="radio" name="Preferred Service" value="Rides" required><span data-i18n="f_s_rides">Rides</span></label>
+          <label><input type="radio" name="Preferred Service" value="Delivery"><span data-i18n="f_s_delivery">Delivery</span></label>
+          <label><input type="radio" name="Preferred Service" value="Both"><span data-i18n="f_s_both">Both</span></label>
+        </div>
+      </div>
+
+      <!-- Preferred Zones -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_zones_label">Preferred Zones</label>
+        <div class="zones-check-grid">
+          <label><input type="checkbox" name="Zones" value="Turgeau"><span>Turgeau</span></label>
+          <label><input type="checkbox" name="Zones" value="Canape Vert"><span>Canape Vert</span></label>
+          <label><input type="checkbox" name="Zones" value="Bourdon"><span>Bourdon</span></label>
+          <label><input type="checkbox" name="Zones" value="Juvenat"><span>Juvenat</span></label>
+          <label><input type="checkbox" name="Zones" value="Delmas 19 to Petion-Ville"><span data-i18n="f_z_delmas">Delmas 19 to Petion-Ville</span></label>
+          <label><input type="checkbox" name="Zones" value="Montagne Noire"><span>Montagne Noire</span></label>
+          <label><input type="checkbox" name="Zones" value="Pelerin"><span>Pelerin</span></label>
+          <label><input type="checkbox" name="Zones" value="Laboule"><span>Laboule</span></label>
+          <label><input type="checkbox" name="Zones" value="Thomassin"><span>Thomassin</span></label>
+          <label><input type="checkbox" name="Zones" value="Fermate"><span>Fermate</span></label>
+          <label><input type="checkbox" name="Zones" value="Kenscoff to Le Florville"><span data-i18n="f_z_kenscoff">Kenscoff to Le Florville</span></label>
+        </div>
+      </div>
+
+      <!-- Terms -->
+      <div class="terms-group">
+        <label>
+          <input type="checkbox" name="Agreed to Terms" value="Yes" required>
+          <span data-i18n="f_terms">I agree to MsouWout's driver requirements: no cash transactions, verified identity, live GPS tracking during service, and daytime service hours (6am - 8pm).</span>
+        </label>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn btn-red" id="submitBtn" style="width:100%;justify-content:center">
+        <span class="btn-text" data-i18n="f_submit">&#128663; Submit Registration</span>
+        <span class="btn-spinner"></span>
+      </button>
+    </form>
+
+    <!-- Success message (shown after submit) -->
+    <div class="form-card form-success" id="formSuccess">
+      <div class="success-icon">&#9989;</div>
+      <h3 data-i18n="success_title">Registration Submitted!</h3>
+      <p data-i18n="success_desc">Thank you for applying to drive with MsouWout. Our team will review your application and contact you via WhatsApp within 24 hours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section class="ecosystem">
+  <div class="section-inner">
+    <div class="section-tag">&#127760; <span data-i18n="eco_tag">HaitiBiznis Ecosystem</span></div>
+    <h2 class="section-title" data-i18n="eco_title">Part of Something Bigger</h2>
+    <p class="section-sub" style="margin:12px auto 0" data-i18n="eco_sub">MsouWout is the delivery backbone of Haiti's connected digital platform hub.</p>
+    <div class="eco-grid">
+      <a href="https://48hoursready.com" class="eco-card" target="_blank">
+        <div class="eco-icon">&#128640;</div>
+        <h4>48HoursReady</h4>
+        <p data-i18n="eco_48">Launch your business in 48 hours</p>
+      </a>
+      <a href="https://myplopplop.com" class="eco-card" target="_blank">
+        <div class="eco-icon">&#128722;</div>
+        <h4>MyPlopPlop</h4>
+        <p data-i18n="eco_plop">Haiti's digital marketplace</p>
+      </a>
+      <a href="https://msouwout.com" class="eco-card" target="_blank" style="border-color:var(--blue)">
+        <div class="eco-icon">&#128663;</div>
+        <h4>MsouWout</h4>
+        <p data-i18n="eco_sou">Delivery & ridesharing</p>
+      </a>
+      <a href="https://talent4peace.com" class="eco-card" target="_blank">
+        <div class="eco-icon">&#11088;</div>
+        <h4>Talent4Peace</h4>
+        <p data-i18n="eco_t4p">Find talent, build peace</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>MsouWout</h3>
+      <p data-i18n="footer_desc">Haiti's trusted delivery and ridesharing platform. Fast, affordable, reliable. A HaitiBiznis platform.</p>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_links">Quick Links</h4>
+      <a href="index.html#services" data-i18n="nav_services">Services</a>
+      <a href="index.html#pricing" data-i18n="nav_pricing">Pricing</a>
+      <a href="index.html#zones" data-i18n="nav_zones">Zones</a>
+      <a href="index.html#drive" data-i18n="nav_drive">Drive With Us</a>
+      <a href="https://48hoursready.com/referral.html" data-i18n="footer_referral">Referral Program</a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_ecosystem">Ecosystem</h4>
+      <a href="https://haitibiznis.com" target="_blank">HaitiBiznis</a>
+      <a href="https://48hoursready.com" target="_blank">48HoursReady</a>
+      <a href="https://myplopplop.com" target="_blank">MyPlopPlop</a>
+      <a href="https://talent4peace.com" target="_blank">Talent4Peace</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 MsouWout. A <a href="https://haitibiznis.com" style="color:var(--red)">HaitiBiznis</a> Platform.</span>
+    <span>WhatsApp: +509 4190 2005</span>
+  </div>
+</footer>
+
+<!-- ECO BAR -->
+<div class="eco-bar">
+  <span data-i18n="eco_label">Part of</span>
+  <a href="https://haitibiznis.com">HaitiBiznis</a>
+  <a href="https://48hoursready.com">48HoursReady</a>
+  <a href="https://myplopplop.com">MyPlopPlop</a>
+  <a href="https://msouwout.com" style="color:var(--red)">MsouWout</a>
+  <a href="https://talent4peace.com">Talent4Peace</a>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/50941902005?text=Hello%20MsouWout!%20I%20want%20to%20become%20a%20driver" target="_blank" class="wa-float">&#128172;</a>
+
+<script>
+/* ═══ TRANSLATIONS ═══ */
+const T = {
+  fr: {
+    nav_services:"Services", nav_how:"Comment Ca Marche", nav_pricing:"Tarifs", nav_zones:"Zones", nav_drive:"Conduire avec Nous",
+    nav_register:"Inscription", nav_apply:"Postuler",
+    hero_badge:"Rejoignez le Reseau de Chauffeurs MsouWout",
+    hero_title:"Devenez Chauffeur <em>MsouWout</em>",
+    hero_sub:"Rejoignez notre reseau de chauffeurs verifies. Gagnez de l'argent a votre rythme en livrant des colis et en transportant des passagers a travers Haiti.",
+    hero_cta1:"&#128221; S'inscrire Maintenant", hero_cta2:"&#128161; En Savoir Plus",
+    ben_tag:"Avantages Chauffeur", ben_title:"Pourquoi Conduire avec MsouWout?",
+    ben_sub:"Travail flexible, paiement equitable et une communaute croissante de chauffeurs de confiance a travers Haiti.",
+    ben1_title:"Gagnez a Votre Rythme", ben1_desc:"Travaillez quand vous voulez. Temps plein ou partiel, matin ou soir. Vous controlez vos heures et vos revenus.",
+    ben2_title:"Choisissez Vos Zones", ben2_desc:"Selectionnez les quartiers que vous connaissez le mieux. Conduisez dans des zones familieres de Turgeau a Kenscoff.",
+    ben3_title:"Soutenez Votre Communaute", ben3_desc:"Connectez les gens avec des livraisons essentielles et un transport sur. Faites partie de l'economie numerique croissante d'Haiti.",
+    req_tag:"Exigences", req_title:"Ce Dont Vous Avez Besoin",
+    req_sub:"Assurez-vous de remplir ces conditions de base avant de postuler.",
+    req1_title:"Piece d'Identite Valide", req1_desc:"Carte d'identite gouvernementale (CIN ou passeport). Doit etre en cours de validite.",
+    req2_title:"Documents du Vehicule", req2_desc:"Permis de conduire valide, immatriculation et assurance. Le vehicule doit etre en bon etat.",
+    req3_title:"Casier Judiciaire Vierge", req3_desc:"Pas d'infractions majeures ni de casier judiciaire. Nous verifions tous les antecedents des chauffeurs.",
+    req4_title:"Smartphone", req4_desc:"Android ou iPhone avec WhatsApp et donnees mobiles. Necessaire pour recevoir les commandes et le suivi GPS.",
+    reg_tag:"Inscription Chauffeur", reg_title:"Inscrivez-vous comme Chauffeur",
+    reg_sub:"Remplissez le formulaire ci-dessous et notre equipe vous contactera dans les 24 heures pour completer votre integration.",
+    f_name_label:"Nom Complet *", f_name_ph:"Jean Pierre",
+    f_phone_label:"Numero de Telephone *", f_phone_ph:"+509 XXXX XXXX",
+    f_email_label:"Email (optionnel)", f_email_ph:"jean@example.com",
+    f_vehicle_label:"Type de Vehicule *", f_vehicle_ph:"-- Selectionnez le Type de Vehicule --",
+    f_v_moto:"Moto", f_v_car:"Voiture", f_v_van:"Van", f_v_truck:"Camion",
+    f_plate_label:"Plaque d'Immatriculation", f_plate_ph:"AB-12345",
+    f_license_label:"Numero de Permis de Conduire", f_license_ph:"Permis #",
+    f_service_label:"Service Prefere *", f_s_rides:"Transport", f_s_delivery:"Livraison", f_s_both:"Les Deux",
+    f_zones_label:"Zones Preferees",
+    f_z_delmas:"Delmas 19 a Petion-Ville", f_z_kenscoff:"Kenscoff a Le Florville",
+    f_terms:"J'accepte les exigences des chauffeurs MsouWout: pas de transactions en especes, identite verifiee, suivi GPS en direct pendant le service, et heures de service de jour (6h - 20h).",
+    f_submit:"&#128663; Soumettre l'Inscription",
+    success_title:"Inscription Soumise!", success_desc:"Merci d'avoir postule pour conduire avec MsouWout. Notre equipe examinera votre candidature et vous contactera via WhatsApp dans les 24 heures.",
+    eco_tag:"Ecosysteme HaitiBiznis", eco_title:"Partie de Quelque Chose de Plus Grand",
+    eco_sub:"MsouWout est la colonne vertebrale logistique du hub numerique connecte d'Haiti.",
+    eco_48:"Lancez votre entreprise en 48h", eco_plop:"Le marketplace numerique d'Haiti",
+    eco_sou:"Livraison et covoiturage", eco_t4p:"Trouvez des talents, construisez la paix",
+    footer_desc:"La plateforme de livraison et covoiturage de confiance d'Haiti. Rapide, abordable, fiable. Une plateforme HaitiBiznis.",
+    footer_links:"Liens Rapides", footer_ecosystem:"Ecosysteme", footer_referral:"Programme de Parrainage",
+    eco_label:"Partie de"
+  },
+  en: {
+    nav_services:"Services", nav_how:"How It Works", nav_pricing:"Pricing", nav_zones:"Zones", nav_drive:"Drive With Us",
+    nav_register:"Register", nav_apply:"Apply Now",
+    hero_badge:"Join the MsouWout Driver Network",
+    hero_title:"Become a <em>MsouWout</em> Driver",
+    hero_sub:"Join our verified driver network. Earn money on your schedule delivering packages and providing rides across Haiti.",
+    hero_cta1:"&#128221; Register Now", hero_cta2:"&#128161; Learn More",
+    ben_tag:"Driver Benefits", ben_title:"Why Drive with MsouWout?",
+    ben_sub:"Flexible work, fair pay, and a growing community of trusted drivers across Haiti.",
+    ben1_title:"Earn on Your Schedule", ben1_desc:"Work when you want. Full-time or part-time, mornings or evenings. You control your hours and your income.",
+    ben2_title:"Choose Your Zones", ben2_desc:"Select the neighborhoods you know best. Drive in familiar areas from Turgeau to Kenscoff and everywhere in between.",
+    ben3_title:"Support Your Community", ben3_desc:"Connect people with essential deliveries and safe transportation. Be a trusted part of Haiti's growing digital economy.",
+    req_tag:"Requirements", req_title:"What You Need to Get Started",
+    req_sub:"Make sure you meet these basic requirements before applying.",
+    req1_title:"Valid ID", req1_desc:"Government-issued identification card (CIN or passport). Must be current and not expired.",
+    req2_title:"Vehicle Documents", req2_desc:"Valid driver's license, vehicle registration, and insurance. Vehicle must be in good working condition.",
+    req3_title:"Clean Record", req3_desc:"No major traffic violations or criminal record. We verify all driver backgrounds for passenger safety.",
+    req4_title:"Smartphone", req4_desc:"Android or iPhone with WhatsApp and mobile data. Needed for receiving orders and live GPS tracking.",
+    reg_tag:"Driver Registration", reg_title:"Register as a Driver",
+    reg_sub:"Fill out the form below and our team will contact you within 24 hours to complete your onboarding.",
+    f_name_label:"Full Name *", f_name_ph:"Jean Pierre",
+    f_phone_label:"Phone Number *", f_phone_ph:"+509 XXXX XXXX",
+    f_email_label:"Email (optional)", f_email_ph:"jean@example.com",
+    f_vehicle_label:"Vehicle Type *", f_vehicle_ph:"-- Select Vehicle Type --",
+    f_v_moto:"Motorcycle", f_v_car:"Car", f_v_van:"Van", f_v_truck:"Truck",
+    f_plate_label:"License Plate", f_plate_ph:"AB-12345",
+    f_license_label:"Driver's License Number", f_license_ph:"License #",
+    f_service_label:"Preferred Service *", f_s_rides:"Rides", f_s_delivery:"Delivery", f_s_both:"Both",
+    f_zones_label:"Preferred Zones",
+    f_z_delmas:"Delmas 19 to Petion-Ville", f_z_kenscoff:"Kenscoff to Le Florville",
+    f_terms:"I agree to MsouWout's driver requirements: no cash transactions, verified identity, live GPS tracking during service, and daytime service hours (6am - 8pm).",
+    f_submit:"&#128663; Submit Registration",
+    success_title:"Registration Submitted!", success_desc:"Thank you for applying to drive with MsouWout. Our team will review your application and contact you via WhatsApp within 24 hours.",
+    eco_tag:"HaitiBiznis Ecosystem", eco_title:"Part of Something Bigger",
+    eco_sub:"MsouWout is the delivery backbone of Haiti's connected digital platform hub.",
+    eco_48:"Launch your business in 48 hours", eco_plop:"Haiti's digital marketplace",
+    eco_sou:"Delivery & ridesharing", eco_t4p:"Find talent, build peace",
+    footer_desc:"Haiti's trusted delivery and ridesharing platform. Fast, affordable, reliable. A HaitiBiznis platform.",
+    footer_links:"Quick Links", footer_ecosystem:"Ecosystem", footer_referral:"Referral Program",
+    eco_label:"Part of"
+  },
+  ht: {
+    nav_services:"Sevis", nav_how:"Koman Li Mache", nav_pricing:"Pri", nav_zones:"Zon", nav_drive:"Kondwi ak Nou",
+    nav_register:"Enskri", nav_apply:"Aplike Kounye a",
+    hero_badge:"Rejwenn Rezo Chofe MsouWout la",
+    hero_title:"Vin yon Chofe <em>MsouWout</em>",
+    hero_sub:"Rejwenn rezo chofe verifye nou an. Touche lajan nan ore ou livrezon pake ak transpote pasaje atrave Ayiti.",
+    hero_cta1:"&#128221; Enskri Kounye a", hero_cta2:"&#128161; Aprann Plis",
+    ben_tag:"Avantaj Chofe", ben_title:"Poukisa Kondwi ak MsouWout?",
+    ben_sub:"Travay fleksib, peyman jis, ak yon kominote chofe konfyans k ap grandi atrave Ayiti.",
+    ben1_title:"Touche nan Ore Ou", ben1_desc:"Travay le ou vle. Tan plen oswa pasyel, maten oswa aswe. Ou kontwole ore ou ak revni ou.",
+    ben2_title:"Chwazi Zon Ou", ben2_desc:"Chwazi katye ou konnen pi byen. Kondwi nan zon ou abitye soti Turgeau rive Kenscoff.",
+    ben3_title:"Sipote Kominote Ou", ben3_desc:"Konekte moun ak livrezon esansyel ak transpotasyon san danje. Fè pati ekonomi dijital Ayiti ki ap grandi.",
+    req_tag:"Egzijans", req_title:"Sa Ou Bezwen pou Komanse",
+    req_sub:"Asire ou ranpli kondisyon debaz sa yo anvan ou aplike.",
+    req1_title:"Kat Idantite Valid", req1_desc:"Kat idantite gouvenmantal (CIN oswa paspò). Dwe aktyel e pa ekspire.",
+    req2_title:"Dokiman Machin", req2_desc:"Pemi kondwi valid, anrejistreman machin, ak asirans. Machin nan dwe an bon eta.",
+    req3_title:"Dosye Pwop", req3_desc:"Pa gen enfaksyon trafik grav oswa dosye kriminèl. Nou verifye tout antesedyan chofe.",
+    req4_title:"Smartphone", req4_desc:"Android oswa iPhone ak WhatsApp ak done mobil. Nesesè pou resevwa komand ak swivi GPS.",
+    reg_tag:"Enskrisyon Chofe", reg_title:"Enskri kom Chofe",
+    reg_sub:"Ranpli fom anba a epi ekip nou ap kontakte ou nan 24 edtan pou konplete entegrasyon ou.",
+    f_name_label:"Non Konple *", f_name_ph:"Jean Pierre",
+    f_phone_label:"Nimewo Telefon *", f_phone_ph:"+509 XXXX XXXX",
+    f_email_label:"Imel (opsyonel)", f_email_ph:"jean@example.com",
+    f_vehicle_label:"Tip Machin *", f_vehicle_ph:"-- Chwazi Tip Machin --",
+    f_v_moto:"Moto", f_v_car:"Machin", f_v_van:"Van", f_v_truck:"Kamyon",
+    f_plate_label:"Plak Machin", f_plate_ph:"AB-12345",
+    f_license_label:"Nimewo Pemi Kondwi", f_license_ph:"Pemi #",
+    f_service_label:"Sevis Prefere *", f_s_rides:"Transpò", f_s_delivery:"Livrezon", f_s_both:"Tou de",
+    f_zones_label:"Zon Prefere",
+    f_z_delmas:"Delmas 19 a Petion-Ville", f_z_kenscoff:"Kenscoff a Le Florville",
+    f_terms:"Mwen aksepte egzijans chofe MsouWout: pa gen tranzaksyon lajan kach, idantite verifye, swivi GPS an dirèk pandan sevis, ak ore sevis lajounen (6am - 8pm).",
+    f_submit:"&#128663; Soumèt Enskrisyon",
+    success_title:"Enskrisyon Soumèt!", success_desc:"Mesi paske ou aplike pou kondwi ak MsouWout. Ekip nou ap revize aplikasyon ou epi kontakte ou via WhatsApp nan 24 edtan.",
+    eco_tag:"Ekosistem HaitiBiznis", eco_title:"Pati nan Yon Bagay Pi Gwo",
+    eco_sub:"MsouWout se kolon vetebral livrezon nan hub nimerik konekte Ayiti a.",
+    eco_48:"Lanse biznis ou nan 48 edtan", eco_plop:"Mache nimerik Ayiti",
+    eco_sou:"Livrezon ak ridesharing", eco_t4p:"Jwenn talan, bati lape",
+    footer_desc:"Platfom livrezon ak ridesharing Ayiti a fe konfyans. Rapid, abodab, fyab. Yon platfom HaitiBiznis.",
+    footer_links:"Lyen Rapid", footer_ecosystem:"Ekosistem", footer_referral:"Pwogram Referans",
+    eco_label:"Pati nan"
+  },
+  es: {
+    nav_services:"Servicios", nav_how:"Como Funciona", nav_pricing:"Precios", nav_zones:"Zonas", nav_drive:"Conduce con Nosotros",
+    nav_register:"Registro", nav_apply:"Aplicar Ahora",
+    hero_badge:"Unete a la Red de Conductores MsouWout",
+    hero_title:"Conviertete en Conductor <em>MsouWout</em>",
+    hero_sub:"Unete a nuestra red de conductores verificados. Gana dinero a tu ritmo entregando paquetes y ofreciendo viajes en Haiti.",
+    hero_cta1:"&#128221; Registrarse Ahora", hero_cta2:"&#128161; Saber Mas",
+    ben_tag:"Beneficios del Conductor", ben_title:"Por que Conducir con MsouWout?",
+    ben_sub:"Trabajo flexible, pago justo y una comunidad creciente de conductores confiables en Haiti.",
+    ben1_title:"Gana a Tu Ritmo", ben1_desc:"Trabaja cuando quieras. Tiempo completo o parcial, mananas o tardes. Tu controlas tus horas e ingresos.",
+    ben2_title:"Elige Tus Zonas", ben2_desc:"Selecciona los barrios que mejor conoces. Conduce en areas familiares desde Turgeau hasta Kenscoff.",
+    ben3_title:"Apoya Tu Comunidad", ben3_desc:"Conecta personas con entregas esenciales y transporte seguro. Se parte de la economia digital creciente de Haiti.",
+    req_tag:"Requisitos", req_title:"Lo Que Necesitas para Comenzar",
+    req_sub:"Asegurate de cumplir estos requisitos basicos antes de aplicar.",
+    req1_title:"Identificacion Valida", req1_desc:"Documento de identidad gubernamental (CIN o pasaporte). Debe estar vigente y no vencido.",
+    req2_title:"Documentos del Vehiculo", req2_desc:"Licencia de conducir valida, registro vehicular y seguro. El vehiculo debe estar en buenas condiciones.",
+    req3_title:"Registro Limpio", req3_desc:"Sin infracciones de transito graves ni antecedentes penales. Verificamos los antecedentes de todos los conductores.",
+    req4_title:"Smartphone", req4_desc:"Android o iPhone con WhatsApp y datos moviles. Necesario para recibir pedidos y seguimiento GPS en vivo.",
+    reg_tag:"Registro de Conductor", reg_title:"Registrate como Conductor",
+    reg_sub:"Completa el formulario y nuestro equipo te contactara en 24 horas para completar tu incorporacion.",
+    f_name_label:"Nombre Completo *", f_name_ph:"Jean Pierre",
+    f_phone_label:"Numero de Telefono *", f_phone_ph:"+509 XXXX XXXX",
+    f_email_label:"Email (opcional)", f_email_ph:"jean@example.com",
+    f_vehicle_label:"Tipo de Vehiculo *", f_vehicle_ph:"-- Seleccionar Tipo de Vehiculo --",
+    f_v_moto:"Motocicleta", f_v_car:"Carro", f_v_van:"Van", f_v_truck:"Camion",
+    f_plate_label:"Placa del Vehiculo", f_plate_ph:"AB-12345",
+    f_license_label:"Numero de Licencia de Conducir", f_license_ph:"Licencia #",
+    f_service_label:"Servicio Preferido *", f_s_rides:"Viajes", f_s_delivery:"Entregas", f_s_both:"Ambos",
+    f_zones_label:"Zonas Preferidas",
+    f_z_delmas:"Delmas 19 a Petion-Ville", f_z_kenscoff:"Kenscoff a Le Florville",
+    f_terms:"Acepto los requisitos de conductores de MsouWout: sin transacciones en efectivo, identidad verificada, rastreo GPS en vivo durante el servicio, y horario de servicio diurno (6am - 8pm).",
+    f_submit:"&#128663; Enviar Registro",
+    success_title:"Registro Enviado!", success_desc:"Gracias por aplicar para conducir con MsouWout. Nuestro equipo revisara tu solicitud y te contactara via WhatsApp en 24 horas.",
+    eco_tag:"Ecosistema HaitiBiznis", eco_title:"Parte de Algo Mas Grande",
+    eco_sub:"MsouWout es la columna vertebral logistica del hub digital conectado de Haiti.",
+    eco_48:"Lanza tu negocio en 48 horas", eco_plop:"El marketplace digital de Haiti",
+    eco_sou:"Entrega y transporte compartido", eco_t4p:"Encuentra talento, construye paz",
+    footer_desc:"La plataforma de entrega y transporte compartido de confianza de Haiti. Rapido, asequible, confiable. Una plataforma HaitiBiznis.",
+    footer_links:"Enlaces Rapidos", footer_ecosystem:"Ecosistema", footer_referral:"Programa de Referidos",
+    eco_label:"Parte de"
+  }
+};
+
+let currentLang='fr';
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-bar a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('lang-'+lang).classList.add('active');
+  const t=T[lang]||T.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.getAttribute('data-i18n');
+    if(t[key]) el.innerHTML=t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key=el.getAttribute('data-i18n-placeholder');
+    if(t[key]) el.placeholder=t[key];
+  });
+}
+
+function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open')}
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
+
+/* ═══ FORM SUBMISSION ═══ */
+(function(){
+  var form = document.getElementById('driverForm');
+  var submitBtn = document.getElementById('submitBtn');
+  var formSuccess = document.getElementById('formSuccess');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    // Collect form data
+    var formData = new FormData(form);
+    var jsonData = {};
+    var zones = [];
+
+    formData.forEach(function(value, key){
+      if(key === 'Zones'){
+        zones.push(value);
+      } else {
+        jsonData[key] = value;
+      }
+    });
+    if(zones.length > 0) jsonData['Preferred Zones'] = zones.join(', ');
+    jsonData['Submitted At'] = new Date().toISOString();
+    jsonData['Source'] = 'driver-register.html';
+
+    // Show loading state
+    submitBtn.classList.add('btn-loading');
+    submitBtn.disabled = true;
+
+    // Try API first, then fallback to formsubmit.co
+    var apiUrl = 'https://api.msouwout.com/drivers/register';
+    var apiSuccess = false;
+
+    fetch(apiUrl, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      body: JSON.stringify(jsonData)
+    })
+    .then(function(res){
+      if(res.ok) apiSuccess = true;
+    })
+    .catch(function(){
+      // API unavailable, that's fine
+    })
+    .finally(function(){
+      // Always submit to formsubmit.co as well
+      // Build URL-encoded data for formsubmit
+      var fsData = new URLSearchParams();
+      formData.forEach(function(value, key){
+        if(key === 'Zones'){
+          // Handled separately
+        } else {
+          fsData.append(key, value);
+        }
+      });
+      if(zones.length > 0) fsData.append('Preferred Zones', zones.join(', '));
+
+      fetch('https://formsubmit.co/ajax/business@haitibiznis.com', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
+        body: fsData.toString()
+      })
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        // Show success
+        form.style.display = 'none';
+        formSuccess.style.display = 'block';
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
+      })
+      .catch(function(){
+        // If formsubmit also fails but API succeeded, still show success
+        if(apiSuccess){
+          form.style.display = 'none';
+          formSuccess.style.display = 'block';
+        } else {
+          // Both failed - fall back to normal form submit
+          form.removeEventListener('submit', arguments.callee);
+          form.submit();
+        }
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
+      });
+    });
+  });
+})();
+
+/* ═══ REFERRAL TRACKING ═══ */
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var ref=params.get('ref');
+  if(ref){
+    document.getElementById('referralField').value=ref;
+    try{sessionStorage.setItem('msou_ref',ref)}catch(e){}
+  }else{
+    try{
+      var saved=sessionStorage.getItem('msou_ref');
+      if(saved) document.getElementById('referralField').value=saved;
+    }catch(e){}
+  }
+})();
+
+/* ═══ SCROLL ANIMATIONS ═══ */
+var observer=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}
+  });
+},{threshold:.1});
+document.querySelectorAll('.benefit-card,.req-card,.eco-card').forEach(function(el){
+  el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity .6s ease,transform .6s ease';
+  observer.observe(el);
+});
+
+setLang('fr');
+</script>
+</body>
+</html>

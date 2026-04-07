@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MsouWout - Enregistrement Business | Business Registration</title>
+<meta name="description" content="Partner your business with MsouWout for reliable delivery and ridesharing services across Haiti. Register today.">
+<meta property="og:title" content="MsouWout - Business Registration">
+<meta property="og:description" content="Partner your business with MsouWout. Reliable delivery across Haiti.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://msouwout.com/business-register.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D21034;--red-dark:#B00D2C;--red-light:#E8243F;
+  --blue:#00209F;--blue-dark:#001566;
+  --gold:#D4A017;--gold-light:#E8B82E;
+  --white:#FFFFFF;--off-white:#FFF8F8;--light-gray:#F0E8E8;
+  --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;
+  --green:#22C55E;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --display:'DM Serif Display',Georgia,serif;
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+/* ═══ LANGUAGE BAR ═══ */
+.lang-bar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;
+  background:var(--red);
+  padding:6px 20px;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;
+}
+.lang-bar a{
+  color:rgba(255,255,255,.7);font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:100px;
+  cursor:pointer;transition:all .2s;letter-spacing:.02em;
+}
+.lang-bar a:hover{color:#fff;background:rgba(255,255,255,.15)}
+.lang-bar a.active{color:var(--red);background:#fff}
+
+/* ═══ NAV ═══ */
+nav{
+  position:fixed;top:36px;left:0;right:0;z-index:1000;
+  background:var(--blue);border-bottom:3px solid var(--red);
+  padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.nav-logo span{font-family:var(--display);font-weight:900;font-size:1.25rem;color:#fff;letter-spacing:-.02em}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{color:rgba(255,255,255,.8);font-size:.82rem;font-weight:600;transition:color .2s;letter-spacing:.01em}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  background:var(--red);color:#fff;padding:10px 22px;border-radius:100px;font-size:.82rem;
+  font-weight:700;transition:all .25s;border:none;cursor:pointer;
+}
+.nav-cta:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(210,16,52,.35)}
+.mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+.mobile-nav{display:none;position:fixed;top:100px;left:0;right:0;background:var(--blue);padding:24px;z-index:999;border-bottom:3px solid var(--red);flex-direction:column;gap:16px}
+.mobile-nav.open{display:flex}
+.mobile-nav a{color:rgba(255,255,255,.9);font-size:.95rem;font-weight:600;padding:8px 0}
+
+/* ═══ HERO ═══ */
+.hero{
+  min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:140px 24px 80px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 60%,#000D4F 100%);
+}
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:100px;
+  background:linear-gradient(to top,var(--off-white),transparent);pointer-events:none;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  padding:8px 20px;border-radius:100px;font-size:.78rem;font-weight:600;color:var(--gold-light);
+  margin-bottom:28px;letter-spacing:.03em;
+  animation:fadeUp .8s ease both;
+}
+.hero h1{
+  font-family:var(--display);font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;
+  color:#fff;line-height:1.1;letter-spacing:-.03em;max-width:800px;
+  animation:fadeUp .8s .1s ease both;
+}
+.hero h1 em{font-style:italic;color:var(--red)}
+.hero-sub{
+  font-size:clamp(.95rem,2vw,1.15rem);color:rgba(255,255,255,.75);line-height:1.7;
+  max-width:560px;margin:24px auto 0;font-weight:400;
+  animation:fadeUp .8s .2s ease both;
+}
+.hero-actions{
+  display:flex;gap:14px;margin-top:36px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp .8s .3s ease both;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:16px 32px;border-radius:100px;
+  font-weight:700;font-size:.92rem;cursor:pointer;border:none;transition:all .3s;
+  font-family:var(--body);letter-spacing:.01em;
+}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 4px 20px rgba(210,16,52,.3)}
+.btn-red:hover{background:var(--red-dark);transform:translateY(-2px);box-shadow:0 10px 32px rgba(210,16,52,.4)}
+.btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn-ghost:hover{background:rgba(255,255,255,.2);transform:translateY(-2px)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ═══ SECTIONS ═══ */
+section{padding:80px 24px;position:relative}
+.section-inner{max-width:1080px;margin:0 auto}
+.section-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--red);margin-bottom:12px;
+}
+.section-title{
+  font-family:var(--display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;
+  color:var(--dark);line-height:1.1;letter-spacing:-.02em;
+}
+.section-sub{font-size:.95rem;color:var(--text-light);line-height:1.7;margin-top:12px;max-width:560px}
+
+/* ═══ BENEFITS ═══ */
+.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;margin-top:48px}
+.benefit-card{
+  background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);
+  padding:32px 28px;transition:all .35s;position:relative;overflow:hidden;text-align:center;
+}
+.benefit-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--red));opacity:0;transition:opacity .35s;
+}
+.benefit-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.08)}
+.benefit-card:hover::before{opacity:1}
+.benefit-icon{
+  width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;margin:0 auto 20px;background:rgba(0,32,159,.08);
+}
+.benefit-card h3{font-size:1.05rem;font-weight:800;color:var(--dark);margin-bottom:8px;letter-spacing:-.01em}
+.benefit-card p{font-size:.83rem;color:var(--text-light);line-height:1.7}
+
+/* ═══ FORM ═══ */
+.form-card{
+  background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);
+  padding:40px 36px;max-width:680px;margin:40px auto 0;box-shadow:0 4px 24px rgba(0,0,0,.06);
+}
+.form-card input,.form-card select,.form-card textarea{
+  width:100%;padding:14px 18px;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;
+  font-size:.88rem;font-family:var(--body);margin-bottom:14px;transition:border .25s;
+  background:var(--white);color:var(--text);
+}
+.form-card input::placeholder,.form-card textarea::placeholder{color:var(--text-light)}
+.form-card select{color:var(--text-light);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236A5A5A' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.form-card select option{background:var(--white);color:var(--text)}
+.form-card input:focus,.form-card select:focus,.form-card textarea:focus{outline:none;border-color:var(--blue)}
+.form-card textarea{min-height:100px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-label{display:block;font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:.02em}
+.form-group{margin-bottom:4px}
+
+/* Radio group */
+.radio-group{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.radio-option{
+  display:flex;align-items:center;gap:8px;padding:12px 18px;
+  border:1.5px solid rgba(0,0,0,.1);border-radius:12px;cursor:pointer;
+  transition:all .25s;font-size:.85rem;font-weight:500;color:var(--text);
+  flex:1;min-width:140px;
+}
+.radio-option:hover{border-color:var(--blue)}
+.radio-option input[type="radio"]{accent-color:var(--blue);width:16px;height:16px;cursor:pointer}
+.radio-option.selected{border-color:var(--blue);background:rgba(0,32,159,.04)}
+
+/* Checkbox */
+.checkbox-group{
+  display:flex;align-items:flex-start;gap:10px;margin:18px 0;
+  padding:16px;background:var(--off-white);border-radius:12px;border:1px solid rgba(0,0,0,.05);
+}
+.checkbox-group input[type="checkbox"]{accent-color:var(--red);width:18px;height:18px;margin-top:2px;cursor:pointer;flex-shrink:0}
+.checkbox-group label{font-size:.82rem;color:var(--text);line-height:1.6;cursor:pointer}
+
+/* Form status */
+.form-status{
+  display:none;text-align:center;padding:16px;border-radius:12px;margin-top:14px;
+  font-size:.88rem;font-weight:600;
+}
+.form-status.success{display:block;background:rgba(34,197,94,.1);color:#16a34a;border:1px solid rgba(34,197,94,.2)}
+.form-status.error{display:block;background:rgba(210,16,52,.08);color:var(--red);border:1px solid rgba(210,16,52,.15)}
+
+/* ═══ HOW IT WORKS ═══ */
+.how-section{background:var(--white)}
+.how-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:48px;counter-reset:step}
+.how-step{position:relative;padding:28px 24px;text-align:center}
+.how-step::before{
+  counter-increment:step;content:counter(step);
+  display:flex;align-items:center;justify-content:center;
+  width:48px;height:48px;border-radius:50%;margin:0 auto 20px;
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;
+  font-family:var(--display);font-weight:900;font-size:1.2rem;
+  box-shadow:0 4px 16px rgba(0,32,159,.25);
+}
+.how-step h3{font-size:.95rem;font-weight:800;color:var(--dark);margin-bottom:8px}
+.how-step p{font-size:.82rem;color:var(--text-light);line-height:1.7}
+
+/* ═══ ECOSYSTEM ═══ */
+.ecosystem{background:var(--white);text-align:center}
+.eco-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:36px}
+.eco-card{
+  background:var(--off-white);border:1px solid rgba(0,0,0,.05);border-radius:14px;
+  padding:24px 20px;text-align:center;transition:all .3s;display:block;
+}
+.eco-card:hover{border-color:rgba(0,32,159,.2);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.06)}
+.eco-card .eco-icon{font-size:2rem;margin-bottom:10px}
+.eco-card h4{font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:4px}
+.eco-card p{font-size:.75rem;color:var(--text-light)}
+
+/* ═══ FOOTER ═══ */
+footer{
+  background:var(--dark);
+  padding:48px 24px 24px;
+}
+.footer-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px}
+.footer-brand h3{font-family:var(--display);font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:8px}
+.footer-brand p{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.7}
+.footer-col h4{font-size:.78rem;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.footer-col a{display:block;font-size:.82rem;color:rgba(255,255,255,.5);padding:4px 0;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{
+  max-width:1080px;margin:24px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);
+  display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:rgba(255,255,255,.4);
+}
+
+/* ═══ ECO BAR ═══ */
+.eco-bar{
+  background:var(--dark);
+  padding:14px 20px;text-align:center;position:fixed;bottom:0;left:0;right:0;z-index:999;
+}
+.eco-bar span{color:rgba(255,255,255,.4);font-size:.7rem;font-weight:500;margin-right:6px}
+.eco-bar a{color:rgba(255,255,255,.4);font-size:.72rem;font-weight:600;margin:0 8px;transition:color .2s}
+.eco-bar a:hover{color:#fff}
+
+/* ═══ WHATSAPP ═══ */
+.wa-float{
+  position:fixed;bottom:60px;right:20px;z-index:998;
+  width:56px;height:56px;border-radius:50%;
+  background:#25D366;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(37,211,102,.35);transition:all .3s;
+  font-size:1.6rem;
+}
+.wa-float:hover{transform:scale(1.08);box-shadow:0 8px 28px rgba(37,211,102,.5)}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .benefits-grid{grid-template-columns:1fr}
+  .how-steps{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .radio-group{flex-direction:column}
+  .footer-inner{grid-template-columns:1fr}
+  .form-card{padding:28px 20px}
+}
+@media(max-width:480px){
+  .hero h1{font-size:2rem}
+  .hero-actions{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <a onclick="setLang('fr')" class="active" id="lang-fr">&#127467;&#127479; Francais</a>
+  <a onclick="setLang('en')" id="lang-en">&#127468;&#127463; English</a>
+  <a onclick="setLang('ht')" id="lang-ht">&#127469;&#127481; Kreyol</a>
+  <a onclick="setLang('es')" id="lang-es">&#127466;&#127480; Espanol</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <a href="index.html" style="display:flex;align-items:center;gap:10px">
+      <img src="assets/msouwout-logo.jpg" alt="MsouWout Logo">
+      <span>MsouWout</span>
+    </a>
+  </div>
+  <div class="nav-links">
+    <a href="index.html" data-i18n="nav_home">Home</a>
+    <a href="index.html#services" data-i18n="nav_services">Services</a>
+    <a href="index.html#pricing" data-i18n="nav_pricing">Pricing</a>
+    <a href="index.html#zones" data-i18n="nav_zones">Zones</a>
+    <a href="#register" data-i18n="nav_register">Register</a>
+  </div>
+  <a href="#register" class="nav-cta" data-i18n="nav_cta_biz">Register Your Business</a>
+  <button class="mobile-toggle" onclick="toggleMobile()">&#9776;</button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html" onclick="closeMobile()" data-i18n="nav_home">Home</a>
+  <a href="index.html#services" onclick="closeMobile()" data-i18n="nav_services">Services</a>
+  <a href="index.html#pricing" onclick="closeMobile()" data-i18n="nav_pricing">Pricing</a>
+  <a href="index.html#zones" onclick="closeMobile()" data-i18n="nav_zones">Zones</a>
+  <a href="#register" onclick="closeMobile()" class="nav-cta" style="text-align:center" data-i18n="nav_cta_biz">Register Your Business</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">&#127970; <span data-i18n="hero_badge">Business Partnership Program</span></div>
+  <h1 data-i18n="hero_title">Partner Your Business with <em>MsouWout</em></h1>
+  <p class="hero-sub" data-i18n="hero_sub">Reach more customers with reliable delivery. Let MsouWout handle your logistics while you focus on growing your business.</p>
+  <div class="hero-actions">
+    <a href="#register" class="btn btn-red" data-i18n="hero_cta1">&#127970; Register Now</a>
+    <a href="#benefits" class="btn btn-ghost" data-i18n="hero_cta2">&#9889; See Benefits</a>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section id="benefits">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-tag">&#9889; <span data-i18n="ben_tag">Why Partner With Us</span></div>
+    <h2 class="section-title" data-i18n="ben_title">Grow Your Business with MsouWout</h2>
+    <p class="section-sub" style="margin:12px auto 0" data-i18n="ben_sub">Join Haiti's fastest-growing delivery network and unlock new revenue.</p>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">&#127758;</div>
+        <h3 data-i18n="ben1_title">Expand Your Reach</h3>
+        <p data-i18n="ben1_desc">Deliver to customers across all of Haiti. Our network covers 10+ cities and growing every week.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" style="background:rgba(210,16,52,.08)">&#128170;</div>
+        <h3 data-i18n="ben2_title">Reliable Drivers</h3>
+        <p data-i18n="ben2_desc">Every driver is verified and rated. Your packages arrive safely, on time, every time.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" style="background:rgba(212,160,23,.1)">&#128205;</div>
+        <h3 data-i18n="ben3_title">Track Every Order</h3>
+        <p data-i18n="ben3_desc">Real-time GPS tracking and WhatsApp updates for you and your customers. Full visibility on every delivery.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" style="background:rgba(34,197,94,.08)">&#128176;</div>
+        <h3 data-i18n="ben4_title">No Upfront Costs</h3>
+        <p data-i18n="ben4_desc">Zero registration fees. You only pay per delivery. Start sending orders today with no commitment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRATION FORM -->
+<section id="register" style="background:var(--white)">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-tag">&#128221; <span data-i18n="reg_tag">Business Registration</span></div>
+    <h2 class="section-title" data-i18n="reg_title">Register Your Business</h2>
+    <p class="section-sub" style="margin:12px auto 0" data-i18n="reg_sub">Fill out the form below and our team will get you set up within 24 hours.</p>
+    <form class="form-card" id="bizForm" action="https://formsubmit.co/business@haitibiznis.com" method="POST">
+      <input type="hidden" name="_subject" value="MsouWout - New Business Registration">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://msouwout.com/success.html">
+
+      <!-- Business Name -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_biz_name_label">Business Name *</label>
+        <input type="text" name="Business Name" placeholder="e.g. Restaurant Lakay" data-i18n-placeholder="f_biz_name_ph" required>
+      </div>
+
+      <!-- Contact Person & Phone -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_contact_label">Contact Person *</label>
+          <input type="text" name="Contact Person" placeholder="Full name" data-i18n-placeholder="f_contact_ph" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_phone_label">Phone Number *</label>
+          <input type="tel" name="Phone Number" placeholder="+509 XXXX XXXX" data-i18n-placeholder="f_phone_ph" required>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_email_label">Email</label>
+        <input type="email" name="Email" placeholder="business@example.com" data-i18n-placeholder="f_email_ph">
+      </div>
+
+      <!-- Business Type -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_type_label">Business Type *</label>
+        <select name="Business Type" required>
+          <option value="" disabled selected data-i18n="f_type_default">-- Select Business Type --</option>
+          <option value="Restaurant" data-i18n="f_type_restaurant">Restaurant</option>
+          <option value="Retail Store" data-i18n="f_type_retail">Retail Store</option>
+          <option value="Grocery" data-i18n="f_type_grocery">Grocery</option>
+          <option value="Pharmacy" data-i18n="f_type_pharmacy">Pharmacy</option>
+          <option value="Other" data-i18n="f_type_other">Other</option>
+        </select>
+      </div>
+
+      <!-- Business Address -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_address_label">Business Address</label>
+        <input type="text" name="Business Address" placeholder="Street, City, Department" data-i18n-placeholder="f_address_ph">
+      </div>
+
+      <!-- Service Needed (Radio) -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_service_label">Service Needed *</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="Service Needed" value="Delivery Only" required>
+            <span data-i18n="f_service_delivery">Delivery Only</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="Service Needed" value="Rides (for employees)">
+            <span data-i18n="f_service_rides">Rides (for employees)</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="Service Needed" value="Both">
+            <span data-i18n="f_service_both">Both</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Estimated Daily Orders -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_orders_label">Estimated Daily Orders</label>
+        <select name="Estimated Daily Orders">
+          <option value="" disabled selected data-i18n="f_orders_default">-- Select Estimated Volume --</option>
+          <option value="1-5">1 - 5</option>
+          <option value="5-15">5 - 15</option>
+          <option value="15-30">15 - 30</option>
+          <option value="30+">30+</option>
+        </select>
+      </div>
+
+      <!-- Special Requirements -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_notes_label">Special Requirements / Notes</label>
+        <textarea name="Special Requirements" placeholder="Any special delivery needs, hours of operation, or questions..." data-i18n-placeholder="f_notes_ph"></textarea>
+      </div>
+
+      <!-- Terms Checkbox -->
+      <div class="checkbox-group">
+        <input type="checkbox" id="termsCheck" name="Agreed to Terms" value="Yes" required>
+        <label for="termsCheck" data-i18n="f_terms">I agree to MsouWout's business terms: verified drivers, live tracking, digital payments only (MonCash / NatCash).</label>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn btn-red" style="width:100%;justify-content:center" data-i18n="f_submit">&#127970; Register My Business</button>
+
+      <div class="form-status" id="formStatus"></div>
+    </form>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-tag">&#128736; <span data-i18n="how_tag">How It Works</span></div>
+    <h2 class="section-title" data-i18n="how_title">Get Started in 3 Steps</h2>
+    <p class="section-sub" style="margin:12px auto 0" data-i18n="how_sub">From registration to your first delivery, we make it easy.</p>
+    <div class="how-steps">
+      <div class="how-step">
+        <h3 data-i18n="hw1_title">Register</h3>
+        <p data-i18n="hw1_desc">Fill out the form above with your business details. Our team reviews your application within 24 hours.</p>
+      </div>
+      <div class="how-step">
+        <h3 data-i18n="hw2_title">Get Verified</h3>
+        <p data-i18n="hw2_desc">We confirm your business information, set up your account, and assign a dedicated contact for your deliveries.</p>
+      </div>
+      <div class="how-step">
+        <h3 data-i18n="hw3_title">Start Receiving Deliveries</h3>
+        <p data-i18n="hw3_desc">Request pickups via WhatsApp or our platform. Drivers arrive at your location, pick up orders, and deliver to your customers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section class="ecosystem">
+  <div class="section-inner">
+    <div class="section-tag">&#127760; <span data-i18n="eco_tag">HaitiBiznis Ecosystem</span></div>
+    <h2 class="section-title" data-i18n="eco_title">Part of Something Bigger</h2>
+    <p class="section-sub" style="margin:12px auto 0" data-i18n="eco_sub">MsouWout is the delivery backbone of Haiti's connected digital platform hub.</p>
+    <div class="eco-grid">
+      <a href="https://48hoursready.com" class="eco-card" target="_blank">
+        <div class="eco-icon">&#128640;</div>
+        <h4>48HoursReady</h4>
+        <p data-i18n="eco_48">Launch your business in 48 hours</p>
+      </a>
+      <a href="https://myplopplop.com" class="eco-card" target="_blank">
+        <div class="eco-icon">&#128722;</div>
+        <h4>MyPlopPlop</h4>
+        <p data-i18n="eco_plop">Haiti's digital marketplace</p>
+      </a>
+      <a href="https://msouwout.com" class="eco-card" target="_blank" style="border-color:var(--blue)">
+        <div class="eco-icon">&#128663;</div>
+        <h4>MsouWout</h4>
+        <p data-i18n="eco_sou">Delivery & ridesharing</p>
+      </a>
+      <a href="https://talent4peace.com" class="eco-card" target="_blank">
+        <div class="eco-icon">&#11088;</div>
+        <h4>Talent4Peace</h4>
+        <p data-i18n="eco_t4p">Find talent, build peace</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>MsouWout</h3>
+      <p data-i18n="footer_desc">Haiti's trusted delivery and ridesharing platform. Fast, affordable, reliable. A HaitiBiznis platform.</p>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_links">Quick Links</h4>
+      <a href="index.html" data-i18n="nav_home">Home</a>
+      <a href="index.html#services" data-i18n="nav_services">Services</a>
+      <a href="index.html#pricing" data-i18n="nav_pricing">Pricing</a>
+      <a href="index.html#zones" data-i18n="nav_zones">Zones</a>
+      <a href="https://48hoursready.com/referral.html" data-i18n="footer_referral">Referral Program</a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_ecosystem">Ecosystem</h4>
+      <a href="https://haitibiznis.com" target="_blank">HaitiBiznis</a>
+      <a href="https://48hoursready.com" target="_blank">48HoursReady</a>
+      <a href="https://myplopplop.com" target="_blank">MyPlopPlop</a>
+      <a href="https://talent4peace.com" target="_blank">Talent4Peace</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 MsouWout. A <a href="https://haitibiznis.com" style="color:var(--red)">HaitiBiznis</a> Platform.</span>
+    <span>WhatsApp: +509 4190 2005</span>
+  </div>
+</footer>
+
+<!-- ECO BAR -->
+<div class="eco-bar">
+  <span data-i18n="eco_label">Part of</span>
+  <a href="https://haitibiznis.com">HaitiBiznis</a>
+  <a href="https://48hoursready.com">48HoursReady</a>
+  <a href="https://myplopplop.com">MyPlopPlop</a>
+  <a href="https://msouwout.com" style="color:var(--red)">MsouWout</a>
+  <a href="https://talent4peace.com">Talent4Peace</a>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/50941902005?text=Hello%20MsouWout!%20I%20want%20to%20register%20my%20business" target="_blank" class="wa-float">&#128172;</a>
+
+<script>
+/* ═══ TRANSLATIONS ═══ */
+const T = {
+  fr: {
+    nav_home:"Accueil", nav_services:"Services", nav_pricing:"Tarifs", nav_zones:"Zones", nav_register:"Inscription",
+    nav_cta_biz:"Inscrire Votre Business",
+    hero_badge:"Programme Partenariat Business",
+    hero_title:"Associez Votre Business avec <em>MsouWout</em>",
+    hero_sub:"Atteignez plus de clients avec une livraison fiable. Laissez MsouWout gerer votre logistique pendant que vous developpez votre entreprise.",
+    hero_cta1:"&#127970; S'inscrire Maintenant", hero_cta2:"&#9889; Voir les Avantages",
+    ben_tag:"Pourquoi Nous Choisir", ben_title:"Developpez Votre Business avec MsouWout",
+    ben_sub:"Rejoignez le reseau de livraison le plus dynamique d'Haiti et debloquez de nouveaux revenus.",
+    ben1_title:"Elargissez Votre Portee", ben1_desc:"Livrez a des clients dans tout Haiti. Notre reseau couvre 10+ villes et grandit chaque semaine.",
+    ben2_title:"Chauffeurs Fiables", ben2_desc:"Chaque chauffeur est verifie et note. Vos colis arrivent en securite, a temps, a chaque fois.",
+    ben3_title:"Suivez Chaque Commande", ben3_desc:"Suivi GPS en temps reel et mises a jour WhatsApp pour vous et vos clients. Visibilite complete sur chaque livraison.",
+    ben4_title:"Aucun Cout Initial", ben4_desc:"Zero frais d'inscription. Vous payez uniquement par livraison. Commencez a envoyer des commandes aujourd'hui.",
+    reg_tag:"Inscription Business", reg_title:"Inscrivez Votre Business", reg_sub:"Remplissez le formulaire ci-dessous et notre equipe vous configure en 24 heures.",
+    f_biz_name_label:"Nom du Business *", f_biz_name_ph:"ex. Restaurant Lakay",
+    f_contact_label:"Personne de Contact *", f_contact_ph:"Nom complet",
+    f_phone_label:"Numero de Telephone *", f_phone_ph:"+509 XXXX XXXX",
+    f_email_label:"Email", f_email_ph:"business@example.com",
+    f_type_label:"Type de Business *", f_type_default:"-- Selectionnez le Type --",
+    f_type_restaurant:"Restaurant", f_type_retail:"Magasin de Detail", f_type_grocery:"Epicerie", f_type_pharmacy:"Pharmacie", f_type_other:"Autre",
+    f_address_label:"Adresse du Business", f_address_ph:"Rue, Ville, Departement",
+    f_service_label:"Service Requis *", f_service_delivery:"Livraison Seulement", f_service_rides:"Transport (pour employes)", f_service_both:"Les Deux",
+    f_orders_label:"Commandes Journalieres Estimees", f_orders_default:"-- Selectionnez le Volume --",
+    f_notes_label:"Exigences Speciales / Notes", f_notes_ph:"Besoins de livraison speciaux, heures d'operation, ou questions...",
+    f_terms:"J'accepte les conditions business de MsouWout : chauffeurs verifies, suivi en direct, paiements numeriques uniquement (MonCash / NatCash).",
+    f_submit:"&#127970; Inscrire Mon Business",
+    f_success:"Inscription envoyee avec succes ! Notre equipe vous contactera sous 24 heures.",
+    f_error:"Erreur lors de l'envoi. Veuillez reessayer ou nous contacter via WhatsApp.",
+    how_tag:"Comment Ca Marche", how_title:"Demarrez en 3 Etapes", how_sub:"De l'inscription a votre premiere livraison, nous facilitons tout.",
+    hw1_title:"Inscrivez-vous", hw1_desc:"Remplissez le formulaire ci-dessus avec les details de votre business. Notre equipe examine votre demande en 24 heures.",
+    hw2_title:"Soyez Verifie", hw2_desc:"Nous confirmons vos informations, configurons votre compte et assignons un contact dedie pour vos livraisons.",
+    hw3_title:"Commencez a Recevoir des Livraisons", hw3_desc:"Demandez des ramassages via WhatsApp ou notre plateforme. Les chauffeurs arrivent, recuperent et livrent a vos clients.",
+    eco_tag:"Ecosysteme HaitiBiznis", eco_title:"Partie de Quelque Chose de Plus Grand",
+    eco_sub:"MsouWout est la colonne vertebrale logistique du hub numerique d'Haiti.",
+    eco_48:"Lancez votre entreprise en 48h", eco_plop:"Le marketplace numerique d'Haiti", eco_sou:"Livraison et covoiturage", eco_t4p:"Trouvez des talents, construisez la paix",
+    footer_desc:"La plateforme de livraison et covoiturage de confiance d'Haiti. Rapide, abordable, fiable. Une plateforme HaitiBiznis.",
+    footer_links:"Liens Rapides", footer_ecosystem:"Ecosysteme", footer_referral:"Programme de Parrainage",
+    eco_label:"Partie de"
+  },
+  en: {
+    nav_home:"Home", nav_services:"Services", nav_pricing:"Pricing", nav_zones:"Zones", nav_register:"Register",
+    nav_cta_biz:"Register Your Business",
+    hero_badge:"Business Partnership Program",
+    hero_title:"Partner Your Business with <em>MsouWout</em>",
+    hero_sub:"Reach more customers with reliable delivery. Let MsouWout handle your logistics while you focus on growing your business.",
+    hero_cta1:"&#127970; Register Now", hero_cta2:"&#9889; See Benefits",
+    ben_tag:"Why Partner With Us", ben_title:"Grow Your Business with MsouWout",
+    ben_sub:"Join Haiti's fastest-growing delivery network and unlock new revenue.",
+    ben1_title:"Expand Your Reach", ben1_desc:"Deliver to customers across all of Haiti. Our network covers 10+ cities and growing every week.",
+    ben2_title:"Reliable Drivers", ben2_desc:"Every driver is verified and rated. Your packages arrive safely, on time, every time.",
+    ben3_title:"Track Every Order", ben3_desc:"Real-time GPS tracking and WhatsApp updates for you and your customers. Full visibility on every delivery.",
+    ben4_title:"No Upfront Costs", ben4_desc:"Zero registration fees. You only pay per delivery. Start sending orders today with no commitment.",
+    reg_tag:"Business Registration", reg_title:"Register Your Business", reg_sub:"Fill out the form below and our team will get you set up within 24 hours.",
+    f_biz_name_label:"Business Name *", f_biz_name_ph:"e.g. Restaurant Lakay",
+    f_contact_label:"Contact Person *", f_contact_ph:"Full name",
+    f_phone_label:"Phone Number *", f_phone_ph:"+509 XXXX XXXX",
+    f_email_label:"Email", f_email_ph:"business@example.com",
+    f_type_label:"Business Type *", f_type_default:"-- Select Business Type --",
+    f_type_restaurant:"Restaurant", f_type_retail:"Retail Store", f_type_grocery:"Grocery", f_type_pharmacy:"Pharmacy", f_type_other:"Other",
+    f_address_label:"Business Address", f_address_ph:"Street, City, Department",
+    f_service_label:"Service Needed *", f_service_delivery:"Delivery Only", f_service_rides:"Rides (for employees)", f_service_both:"Both",
+    f_orders_label:"Estimated Daily Orders", f_orders_default:"-- Select Estimated Volume --",
+    f_notes_label:"Special Requirements / Notes", f_notes_ph:"Any special delivery needs, hours of operation, or questions...",
+    f_terms:"I agree to MsouWout's business terms: verified drivers, live tracking, digital payments only (MonCash / NatCash).",
+    f_submit:"&#127970; Register My Business",
+    f_success:"Registration submitted successfully! Our team will contact you within 24 hours.",
+    f_error:"Error submitting. Please try again or contact us via WhatsApp.",
+    how_tag:"How It Works", how_title:"Get Started in 3 Steps", how_sub:"From registration to your first delivery, we make it easy.",
+    hw1_title:"Register", hw1_desc:"Fill out the form above with your business details. Our team reviews your application within 24 hours.",
+    hw2_title:"Get Verified", hw2_desc:"We confirm your business information, set up your account, and assign a dedicated contact for your deliveries.",
+    hw3_title:"Start Receiving Deliveries", hw3_desc:"Request pickups via WhatsApp or our platform. Drivers arrive at your location, pick up orders, and deliver to your customers.",
+    eco_tag:"HaitiBiznis Ecosystem", eco_title:"Part of Something Bigger",
+    eco_sub:"MsouWout is the delivery backbone of Haiti's connected digital platform hub.",
+    eco_48:"Launch your business in 48 hours", eco_plop:"Haiti's digital marketplace", eco_sou:"Delivery & ridesharing", eco_t4p:"Find talent, build peace",
+    footer_desc:"Haiti's trusted delivery and ridesharing platform. Fast, affordable, reliable. A HaitiBiznis platform.",
+    footer_links:"Quick Links", footer_ecosystem:"Ecosystem", footer_referral:"Referral Program",
+    eco_label:"Part of"
+  },
+  ht: {
+    nav_home:"Akèy", nav_services:"Sevis", nav_pricing:"Pri", nav_zones:"Zon", nav_register:"Enskri",
+    nav_cta_biz:"Enskri Biznis Ou",
+    hero_badge:"Pwogram Patenarya Biznis",
+    hero_title:"Asosye Biznis Ou ak <em>MsouWout</em>",
+    hero_sub:"Rive plis kliyan ak livrezon fyab. Kite MsouWout jere lojistik ou pandan ou konsantre sou devlope biznis ou.",
+    hero_cta1:"&#127970; Enskri Kounye a", hero_cta2:"&#9889; We Avantaj Yo",
+    ben_tag:"Poukisa Chwazi Nou", ben_title:"Grandi Biznis Ou ak MsouWout",
+    ben_sub:"Rejwenn rezo livrezon ki ap grandi pi vit an Ayiti epi debloke nouvo revni.",
+    ben1_title:"Elaji Pote Ou", ben1_desc:"Livre bay kliyan nan tout Ayiti. Rezo nou kouvri 10+ vil epi ap grandi chak semèn.",
+    ben2_title:"Chofe Fyab", ben2_desc:"Chak chofe verifye epi note. Pake ou rive an sekirite, alè, chak fwa.",
+    ben3_title:"Swiv Chak Komand", ben3_desc:"Swivi GPS an tan reyèl ak mizajou WhatsApp pou ou ak kliyan ou. Vizibilite konplè sou chak livrezon.",
+    ben4_title:"Okenn Kou Avan", ben4_desc:"Zero frè enskripsyon. Ou peye sèlman pa livrezon. Komanse voye komand jodi a.",
+    reg_tag:"Enskripsyon Biznis", reg_title:"Enskri Biznis Ou", reg_sub:"Ranpli fom anba a epi ekip nou ap konfigire ou nan 24 èdtan.",
+    f_biz_name_label:"Non Biznis *", f_biz_name_ph:"ex. Restoran Lakay",
+    f_contact_label:"Moun Kontak *", f_contact_ph:"Non konplè",
+    f_phone_label:"Nimewo Telefon *", f_phone_ph:"+509 XXXX XXXX",
+    f_email_label:"Imèl", f_email_ph:"business@example.com",
+    f_type_label:"Tip Biznis *", f_type_default:"-- Chwazi Tip Biznis --",
+    f_type_restaurant:"Restoran", f_type_retail:"Magazen Detay", f_type_grocery:"Makèt", f_type_pharmacy:"Famasi", f_type_other:"Lot",
+    f_address_label:"Adrès Biznis", f_address_ph:"Ri, Vil, Depatman",
+    f_service_label:"Sevis Bezwen *", f_service_delivery:"Livrezon Sèlman", f_service_rides:"Transpò (pou anplwaye)", f_service_both:"Tou De",
+    f_orders_label:"Komand Jounen Estime", f_orders_default:"-- Chwazi Volim Estime --",
+    f_notes_label:"Egzijans Espesyal / Not", f_notes_ph:"Nenpot bezwen livrezon espesyal, orè operasyon, oswa kesyon...",
+    f_terms:"M dakò ak kondisyon biznis MsouWout: chofe verifye, swivi an dirèk, peman nimerik sèlman (MonCash / NatCash).",
+    f_submit:"&#127970; Enskri Biznis Mwen",
+    f_success:"Enskripsyon soumèt avèk siksè! Ekip nou ap kontakte ou nan 24 èdtan.",
+    f_error:"Erè nan soumisyon. Tanpri eseye ankò oswa kontakte nou via WhatsApp.",
+    how_tag:"Koman Li Mache", how_title:"Komanse nan 3 Etap", how_sub:"Soti nan enskripsyon rive nan premye livrezon ou, nou fasilite tout bagay.",
+    hw1_title:"Enskri", hw1_desc:"Ranpli fom anwo a ak detay biznis ou. Ekip nou egzamine demann ou nan 24 èdtan.",
+    hw2_title:"Jwenn Verifikasyon", hw2_desc:"Nou konfime enfomasyon biznis ou, konfigire kont ou, epi bay yon kontak dedye pou livrezon ou.",
+    hw3_title:"Komanse Resevwa Livrezon", hw3_desc:"Mande ranmasaj via WhatsApp oswa platfom nou. Chofe rive, pran komand, epi livre bay kliyan ou.",
+    eco_tag:"Ekosistèm HaitiBiznis", eco_title:"Pati nan Yon Bagay Pi Gwo",
+    eco_sub:"MsouWout se kolon vètebral livrezon nan hub nimerik konekte Ayiti a.",
+    eco_48:"Lanse biznis ou nan 48 èdtan", eco_plop:"Mache nimerik Ayiti", eco_sou:"Livrezon ak ridesharing", eco_t4p:"Jwenn talan, bati lapè",
+    footer_desc:"Platfom livrezon ak ridesharing Ayiti a fè konfyans. Rapid, abodab, fyab. Yon platfom HaitiBiznis.",
+    footer_links:"Lyen Rapid", footer_ecosystem:"Ekosistèm", footer_referral:"Pwogram Referans",
+    eco_label:"Pati nan"
+  },
+  es: {
+    nav_home:"Inicio", nav_services:"Servicios", nav_pricing:"Precios", nav_zones:"Zonas", nav_register:"Registro",
+    nav_cta_biz:"Registra Tu Negocio",
+    hero_badge:"Programa de Alianza Empresarial",
+    hero_title:"Asocia Tu Negocio con <em>MsouWout</em>",
+    hero_sub:"Llega a mas clientes con entregas confiables. Deja que MsouWout maneje tu logistica mientras te enfocas en crecer tu negocio.",
+    hero_cta1:"&#127970; Registrarse Ahora", hero_cta2:"&#9889; Ver Beneficios",
+    ben_tag:"Por Que Elegirnos", ben_title:"Crece Tu Negocio con MsouWout",
+    ben_sub:"Unete a la red de entregas de mas rapido crecimiento en Haiti y desbloquea nuevos ingresos.",
+    ben1_title:"Expande Tu Alcance", ben1_desc:"Entrega a clientes en todo Haiti. Nuestra red cubre 10+ ciudades y crece cada semana.",
+    ben2_title:"Conductores Confiables", ben2_desc:"Cada conductor esta verificado y calificado. Tus paquetes llegan seguros, a tiempo, siempre.",
+    ben3_title:"Rastrea Cada Pedido", ben3_desc:"Seguimiento GPS en tiempo real y actualizaciones WhatsApp para ti y tus clientes. Visibilidad completa en cada entrega.",
+    ben4_title:"Sin Costos Iniciales", ben4_desc:"Cero tarifas de registro. Solo pagas por entrega. Comienza a enviar pedidos hoy sin compromiso.",
+    reg_tag:"Registro Empresarial", reg_title:"Registra Tu Negocio", reg_sub:"Completa el formulario y nuestro equipo te configura en 24 horas.",
+    f_biz_name_label:"Nombre del Negocio *", f_biz_name_ph:"ej. Restaurante Lakay",
+    f_contact_label:"Persona de Contacto *", f_contact_ph:"Nombre completo",
+    f_phone_label:"Numero de Telefono *", f_phone_ph:"+509 XXXX XXXX",
+    f_email_label:"Email", f_email_ph:"negocio@ejemplo.com",
+    f_type_label:"Tipo de Negocio *", f_type_default:"-- Seleccionar Tipo --",
+    f_type_restaurant:"Restaurante", f_type_retail:"Tienda Minorista", f_type_grocery:"Supermercado", f_type_pharmacy:"Farmacia", f_type_other:"Otro",
+    f_address_label:"Direccion del Negocio", f_address_ph:"Calle, Ciudad, Departamento",
+    f_service_label:"Servicio Necesario *", f_service_delivery:"Solo Entregas", f_service_rides:"Transporte (para empleados)", f_service_both:"Ambos",
+    f_orders_label:"Pedidos Diarios Estimados", f_orders_default:"-- Seleccionar Volumen Estimado --",
+    f_notes_label:"Requisitos Especiales / Notas", f_notes_ph:"Necesidades especiales de entrega, horarios de operacion, o preguntas...",
+    f_terms:"Acepto los terminos empresariales de MsouWout: conductores verificados, seguimiento en vivo, pagos digitales unicamente (MonCash / NatCash).",
+    f_submit:"&#127970; Registrar Mi Negocio",
+    f_success:"Registro enviado con exito! Nuestro equipo te contactara en 24 horas.",
+    f_error:"Error al enviar. Intenta de nuevo o contactanos via WhatsApp.",
+    how_tag:"Como Funciona", how_title:"Comienza en 3 Pasos", how_sub:"Desde el registro hasta tu primera entrega, lo hacemos facil.",
+    hw1_title:"Registrate", hw1_desc:"Completa el formulario con los detalles de tu negocio. Nuestro equipo revisa tu solicitud en 24 horas.",
+    hw2_title:"Verificacion", hw2_desc:"Confirmamos tu informacion, configuramos tu cuenta y asignamos un contacto dedicado para tus entregas.",
+    hw3_title:"Comienza a Recibir Entregas", hw3_desc:"Solicita recogidas via WhatsApp o nuestra plataforma. Los conductores llegan, recogen y entregan a tus clientes.",
+    eco_tag:"Ecosistema HaitiBiznis", eco_title:"Parte de Algo Mas Grande",
+    eco_sub:"MsouWout es la columna vertebral logistica del hub digital de Haiti.",
+    eco_48:"Lanza tu negocio en 48 horas", eco_plop:"El marketplace digital de Haiti", eco_sou:"Entrega y transporte compartido", eco_t4p:"Encuentra talento, construye paz",
+    footer_desc:"La plataforma de entrega y transporte de confianza de Haiti. Rapido, asequible, confiable. Una plataforma HaitiBiznis.",
+    footer_links:"Enlaces Rapidos", footer_ecosystem:"Ecosistema", footer_referral:"Programa de Referidos",
+    eco_label:"Parte de"
+  }
+};
+
+let currentLang='fr';
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-bar a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('lang-'+lang).classList.add('active');
+  const t=T[lang]||T.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.getAttribute('data-i18n');
+    if(t[key]) el.innerHTML=t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key=el.getAttribute('data-i18n-placeholder');
+    if(t[key]) el.placeholder=t[key];
+  });
+}
+
+function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open')}
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
+
+/* ═══ RADIO HIGHLIGHT ═══ */
+document.querySelectorAll('.radio-option input[type="radio"]').forEach(radio=>{
+  radio.addEventListener('change',function(){
+    this.closest('.radio-group').querySelectorAll('.radio-option').forEach(opt=>opt.classList.remove('selected'));
+    this.closest('.radio-option').classList.add('selected');
+  });
+});
+
+/* ═══ FORM SUBMISSION: API first, fallback to formsubmit.co ═══ */
+(function(){
+  var form=document.getElementById('bizForm');
+  if(!form) return;
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var statusEl=document.getElementById('formStatus');
+    var submitBtn=form.querySelector('button[type="submit"]');
+    var origText=submitBtn.innerHTML;
+    var t=T[currentLang]||T.fr;
+
+    // Collect form data
+    var formData=new FormData(form);
+    var jsonData={};
+    formData.forEach(function(value,key){jsonData[key]=value});
+    jsonData['_timestamp']=new Date().toISOString();
+    jsonData['_lang']=currentLang;
+    jsonData['_source']='business-register';
+
+    // Disable button
+    submitBtn.disabled=true;
+    submitBtn.innerHTML='&#9203; Sending...';
+    statusEl.className='form-status';
+    statusEl.style.display='none';
+
+    // Try API first
+    var apiUrl='/api/business-register';
+    var apiOk=false;
+
+    fetch(apiUrl,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(jsonData)
+    })
+    .then(function(res){
+      if(res.ok){apiOk=true}
+      // Always submit to formsubmit.co as backup
+      return submitToFormsubmit(formData);
+    })
+    .catch(function(){
+      // API failed, submit to formsubmit.co
+      return submitToFormsubmit(formData);
+    })
+    .then(function(){
+      // Show success
+      statusEl.className='form-status success';
+      statusEl.textContent=t.f_success||'Registration submitted successfully!';
+      statusEl.style.display='block';
+      submitBtn.innerHTML=origText;
+      submitBtn.disabled=false;
+      form.reset();
+      // Scroll to status
+      statusEl.scrollIntoView({behavior:'smooth',block:'center'});
+    })
+    .catch(function(){
+      statusEl.className='form-status error';
+      statusEl.textContent=t.f_error||'Error submitting. Please try again.';
+      statusEl.style.display='block';
+      submitBtn.innerHTML=origText;
+      submitBtn.disabled=false;
+    });
+  });
+
+  function submitToFormsubmit(formData){
+    return fetch('https://formsubmit.co/ajax/business@haitibiznis.com',{
+      method:'POST',
+      body:formData
+    });
+  }
+})();
+</script>
+</body>
+</html>
