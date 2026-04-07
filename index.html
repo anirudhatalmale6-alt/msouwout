@@ -14,6 +14,8 @@
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#00209F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -309,6 +311,12 @@ footer{
   .how-steps{grid-template-columns:1fr}
   .hero-actions{flex-direction:column;align-items:center}
 }
+.install-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:999;background:linear-gradient(135deg,#00209F 0%,#D21034 100%);color:#fff;padding:14px 20px;box-shadow:0 -4px 20px rgba(0,0,0,.15);align-items:center;gap:12px}
+.install-banner.show{display:flex}
+.install-banner-text{flex:1;font-size:.82rem;font-weight:600}
+.install-banner-text small{display:block;font-size:.7rem;font-weight:400;opacity:.8;margin-top:2px}
+.install-banner-btn{background:#fff;color:#00209F;border:none;padding:10px 22px;border-radius:100px;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.install-banner-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:1.2rem;cursor:pointer;padding:4px}
 </style>
 </head>
 <body>
@@ -739,6 +747,13 @@ footer{
   <a href="https://talent4peace.com">Talent4Peace</a>
 </div>
 
+<!-- INSTALL BANNER -->
+<div class="install-banner" id="installBanner">
+  <div class="install-banner-text" data-i18n="install_text">Installer MsouWout<small>Ajouter à votre écran d'accueil</small></div>
+  <button class="install-banner-btn" id="installBtn" data-i18n="install_btn">Installer</button>
+  <button class="install-banner-close" id="installClose">&times;</button>
+</div>
+
 <!-- WHATSAPP FLOAT -->
 <a href="https://wa.me/50941902005?text=Hello%20MsouWout!%20I%20need%20a%20delivery%20/%20ride" target="_blank" class="wa-float">&#128172;</a>
 
@@ -794,7 +809,8 @@ const T = {
     eco_48:"Lancez votre entreprise en 48h", eco_plop:"Le marketplace numerique d'Haiti", eco_sou:"Livraison et covoiturage", eco_t4p:"Trouvez des talents, construisez la paix",
     footer_desc:"La plateforme de livraison et covoiturage de confiance d'Haiti. Rapide, abordable, fiable. Une plateforme HaitiBiznis.",
     footer_links:"Liens Rapides", footer_ecosystem:"Ecosysteme", footer_referral:"Programme de Parrainage",
-    eco_label:"Partie de"
+    eco_label:"Partie de",
+    install_text:"Installer MsouWout<small>Ajouter à votre écran d'accueil</small>", install_btn:"Installer"
   },
   en: {
     nav_services:"Services", nav_how:"How It Works", nav_pricing:"Pricing", nav_zones:"Zones", nav_drive:"Drive With Us", nav_cta:"Request Delivery",
@@ -845,7 +861,8 @@ const T = {
     eco_48:"Launch your business in 48 hours", eco_plop:"Haiti's digital marketplace", eco_sou:"Delivery & ridesharing", eco_t4p:"Find talent, build peace",
     footer_desc:"Haiti's trusted delivery and ridesharing platform. Fast, affordable, reliable. A HaitiBiznis platform.",
     footer_links:"Quick Links", footer_ecosystem:"Ecosystem", footer_referral:"Referral Program",
-    eco_label:"Part of"
+    eco_label:"Part of",
+    install_text:"Install MsouWout<small>Add to your home screen for quick access</small>", install_btn:"Install"
   },
   ht: {
     nav_services:"Sevis", nav_how:"Koman Li Mache", nav_pricing:"Pri", nav_zones:"Zòn", nav_drive:"Kondwi ak Nou", nav_cta:"Mande Livrezon",
@@ -896,7 +913,8 @@ const T = {
     eco_48:"Lanse biznis ou nan 48 èdtan", eco_plop:"Mache nimerik Ayiti", eco_sou:"Livrezon ak ridesharing", eco_t4p:"Jwenn talan, bati lapè",
     footer_desc:"Platfòm livrezon ak ridesharing Ayiti a fè konfyans. Rapid, abòdab, fyab. Yon platfòm HaitiBiznis.",
     footer_links:"Lyen Rapid", footer_ecosystem:"Ekosistèm", footer_referral:"Pwogram Referans",
-    eco_label:"Pati nan"
+    eco_label:"Pati nan",
+    install_text:"Enstale MsouWout<small>Mete sou ekran lakay ou</small>", install_btn:"Enstale"
   },
   es: {
     nav_services:"Servicios", nav_how:"Como Funciona", nav_pricing:"Precios", nav_zones:"Zonas", nav_drive:"Conduce con Nosotros", nav_cta:"Solicitar Entrega",
@@ -947,7 +965,8 @@ const T = {
     eco_48:"Lanza tu negocio en 48 horas", eco_plop:"El marketplace digital de Haiti", eco_sou:"Entrega y transporte compartido", eco_t4p:"Encuentra talento, construye paz",
     footer_desc:"La plataforma de entrega y transporte compartido de confianza de Haiti. Rapido, asequible, confiable. Una plataforma HaitiBiznis.",
     footer_links:"Enlaces Rapidos", footer_ecosystem:"Ecosistema", footer_referral:"Programa de Referidos",
-    eco_label:"Parte de"
+    eco_label:"Parte de",
+    install_text:"Instalar MsouWout<small>Añadir a tu pantalla de inicio</small>", install_btn:"Instalar"
   }
 };
 
@@ -1007,6 +1026,31 @@ document.querySelectorAll('.service-card,.how-step,.price-card,.zone-card,.eco-c
 });
 
 setLang('fr');
+
+// PWA Install
+if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}
+var deferredPrompt=null;
+var iBanner=document.getElementById('installBanner');
+var iBtn=document.getElementById('installBtn');
+var iClose=document.getElementById('installClose');
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();deferredPrompt=e;iBanner.classList.add('show');
+});
+iBtn.addEventListener('click',function(){
+  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(function(){iBanner.classList.remove('show');deferredPrompt=null})}
+});
+iClose.addEventListener('click',function(){iBanner.classList.remove('show');sessionStorage.setItem('mw_install_dismissed','1')});
+setTimeout(function(){
+  if(!deferredPrompt&&!sessionStorage.getItem('mw_install_dismissed')&&!window.matchMedia('(display-mode: standalone)').matches){
+    iBanner.classList.add('show');
+    iBtn.addEventListener('click',function(){
+      var isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
+      if(isIOS){alert('Tap the Share button, then "Add to Home Screen"')}
+      else{alert('Tap the menu (⋮), then "Install app"')}
+      iBanner.classList.remove('show');
+    },{once:true});
+  }
+},3000);
 </script>
 </body>
 </html>
