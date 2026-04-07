@@ -805,7 +805,7 @@ function closeMobile(){document.getElementById('mobileNav').classList.remove('op
     submitBtn.disabled = true;
 
     // Try API first, then fallback to formsubmit.co
-    var apiUrl = 'https://api.msouwout.com/drivers/register';
+    var apiUrl = 'https://msouwout-backend.onrender.com/api/drivers';
     var apiSuccess = false;
 
     fetch(apiUrl, {
