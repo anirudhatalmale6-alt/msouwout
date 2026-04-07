@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MsouWout - Driver Application Received</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Fraunces:opsz,wght@9..144,700;9..144,900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--flame:#E8461E;--midnight:#0C1222;--navy:#141E33;--text:#C8D0E0;--text-dim:#7A869E;--green:#22C55E;--body:'Outfit',system-ui,sans-serif;--display:'Fraunces',Georgia,serif}
+body{font-family:var(--body);background:var(--midnight);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.container{max-width:480px;text-align:center}
+.icon{width:80px;height:80px;border-radius:50%;background:var(--flame);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 24px;box-shadow:0 4px 24px rgba(232,70,30,.3)}
+h1{font-family:var(--display);font-size:1.6rem;color:#fff;margin-bottom:12px}
+p{color:var(--text-dim);font-size:.9rem;line-height:1.7;margin-bottom:20px}
+.card{background:var(--navy);border-radius:16px;padding:24px;border:1px solid rgba(255,255,255,.06);margin:20px 0;text-align:left}
+.card h3{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px}
+.card li{font-size:.85rem;line-height:2;margin-left:20px;color:var(--text)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:100px;font-weight:700;font-size:.9rem;text-decoration:none;transition:all .25s;font-family:var(--body)}
+.btn-green{background:#25D366;color:#fff}
+.links{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:20px}
+.links a.back{color:var(--flame);font-size:.85rem;font-weight:600;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="icon">&#128663;</div>
+  <h1 data-i18n="title">Application Received!</h1>
+  <p data-i18n="desc">Thank you for applying to drive with MsouWout. Our team will review your application and contact you via WhatsApp within 24-48 hours.</p>
+  <div class="card">
+    <h3 data-i18n="next_title">Next Steps:</h3>
+    <ol>
+      <li data-i18n="next1">We review your application</li>
+      <li data-i18n="next2">WhatsApp interview and verification</li>
+      <li data-i18n="next3">Onboarding and first assignment</li>
+    </ol>
+  </div>
+  <div class="links">
+    <a href="https://wa.me/50941902005?text=I%20just%20applied%20to%20drive%20with%20MsouWout" target="_blank" class="btn btn-green">&#128172; WhatsApp +509 4190 2005</a>
+    <a href="index.html" class="back" data-i18n="back">&larr; Back to MsouWout</a>
+  </div>
+</div>
+<script>
+const T={
+  fr:{title:"Candidature Recue!",desc:"Merci d'avoir postule pour conduire avec MsouWout. Notre equipe examinera votre candidature et vous contactera via WhatsApp sous 24-48 heures.",next_title:"Prochaines Etapes:",next1:"Nous examinons votre candidature",next2:"Entretien et verification WhatsApp",next3:"Integration et premiere mission",back:"&larr; Retour a MsouWout"},
+  en:{title:"Application Received!",desc:"Thank you for applying to drive with MsouWout. Our team will review your application and contact you via WhatsApp within 24-48 hours.",next_title:"Next Steps:",next1:"We review your application",next2:"WhatsApp interview and verification",next3:"Onboarding and first assignment",back:"&larr; Back to MsouWout"},
+  ht:{title:"Aplikasyon Resevwa!",desc:"Mèsi paske ou aplike pou kondwi ak MsouWout. Ekip nou ap revize aplikasyon ou epi kontakte ou via WhatsApp nan 24-48 èdtan.",next_title:"Pwochen Etap:",next1:"Nou revize aplikasyon ou",next2:"Entèvyou ak verifikasyon WhatsApp",next3:"Entegrasyon ak premye misyon",back:"&larr; Retounen nan MsouWout"},
+  es:{title:"Aplicacion Recibida!",desc:"Gracias por aplicar para conducir con MsouWout. Nuestro equipo revisara tu aplicacion y te contactara via WhatsApp en 24-48 horas.",next_title:"Proximos Pasos:",next1:"Revisamos tu aplicacion",next2:"Entrevista y verificacion por WhatsApp",next3:"Incorporacion y primera asignacion",back:"&larr; Volver a MsouWout"}
+};
+function setLang(l){const t=T[l]||T.fr;document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k])el.innerHTML=t[k]});}
+setLang('fr');
+</script>
+</body>
+</html>
