@@ -604,6 +604,34 @@ footer{
   </div>
 </section>
 
+<!-- REFERRAL PROGRAM -->
+<section style="padding:60px 24px;">
+  <div class="section-inner" style="text-align:center">
+    <div style="background:linear-gradient(135deg,#1E3A8A 0%,#3B82F6 100%);border-radius:16px;padding:32px 24px;color:white;">
+      <h3 style="font-size:1.4rem;margin-bottom:8px;" data-i18n="ref_title">Earn Money with Referrals!</h3>
+      <p style="opacity:0.9;margin-bottom:20px;font-size:0.95rem;line-height:1.6;" data-i18n="ref_desc">Become an ambassador! Earn commissions on every referral. Share your link and start earning today. No limits!</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;">
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:16px;flex:1;min-width:130px;">
+          <div style="font-size:1.5rem;font-weight:700;margin-bottom:4px;">3%</div>
+          <div style="font-size:0.85rem;font-weight:600;" data-i18n="ref_c1">Customer Referral</div>
+          <div style="font-size:0.75rem;opacity:0.8;margin-top:4px;" data-i18n="ref_c1d">Earn 3% on every delivery ordered by someone you referred</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:16px;flex:1;min-width:130px;">
+          <div style="font-size:1.5rem;font-weight:700;margin-bottom:4px;">2%</div>
+          <div style="font-size:0.85rem;font-weight:600;" data-i18n="ref_c2">Driver Referral</div>
+          <div style="font-size:0.75rem;opacity:0.8;margin-top:4px;" data-i18n="ref_c2d">Refer a driver and earn 2% on their rides and deliveries</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:16px;flex:1;min-width:130px;">
+          <div style="font-size:1.5rem;font-weight:700;margin-bottom:4px;">3%</div>
+          <div style="font-size:0.85rem;font-weight:600;" data-i18n="ref_c3">Business Referral</div>
+          <div style="font-size:0.75rem;opacity:0.8;margin-top:4px;" data-i18n="ref_c3d">Refer a business and earn 3% on their logistics orders</div>
+        </div>
+      </div>
+      <button onclick="shareMsouWoutReferral()" style="background:#FF6B35;color:white;font-weight:700;padding:14px 32px;border-radius:50px;font-size:1rem;border:none;cursor:pointer;margin-right:8px;">&#128279; <span data-i18n="ref_share">Share My Referral Link</span></button>
+    </div>
+  </div>
+</section>
+
 <!-- ORDER FORM -->
 <section id="order">
   <div class="section-inner" style="text-align:center">
@@ -805,6 +833,11 @@ const T = {
     nav_safety:"Securite",
     d_tag:"Conduire avec MsouWout", d_title:"Gagnez de l'Argent comme Chauffeur", d_sub:"Rejoignez notre reseau de chauffeurs de confiance. Definissez votre propre horaire et developpez votre activite.",
     d_p1:"Paiements Hebdomadaires", d_p2:"Horaires Flexibles", d_p3:"Votre Propre Patron", d_p4:"Bonus Recompenses", d_cta:"Postuler comme Chauffeur",
+    ref_title:"Gagnez de l'Argent avec les Parrainages !", ref_desc:"Devenez ambassadeur ! Gagnez des commissions sur chaque parrainage. Partagez votre lien et commencez a gagner aujourd'hui. Sans limites !",
+    ref_c1:"Parrainage Client", ref_c1d:"Gagnez 3% sur chaque livraison commandee par quelqu'un que vous avez parraine",
+    ref_c2:"Parrainage Chauffeur", ref_c2d:"Parrainez un chauffeur et gagnez 2% sur ses trajets et livraisons",
+    ref_c3:"Parrainage Business", ref_c3d:"Parrainez une entreprise et gagnez 3% sur leurs commandes logistiques",
+    ref_share:"Partager Mon Lien de Parrainage", ref_hero_title:"Invitez vos Amis, Gagnez !", ref_hero_btn:"Partager",
     o_tag:"Demander un Service", o_title:"Demander une Livraison ou un Trajet", o_sub:"Remplissez le formulaire et nous vous mettrons en relation avec un chauffeur via WhatsApp.",
     o_name:"Nom Complet", o_phone:"Telephone / WhatsApp", o_type:"-- Type de Service --", o_delivery:"Livraison de Colis", o_ride:"Covoiturage", o_logistics:"Logistique Business",
     o_pickup:"Lieu de Ramassage", o_dest:"Destination", o_pkg:"Taille et description du colis (si livraison)", o_pay:"-- Mode de Paiement --", o_cash:"Especes a la Livraison / En Personne",
@@ -857,6 +890,11 @@ const T = {
     nav_safety:"Safety",
     d_tag:"Drive With MsouWout", d_title:"Earn Money as a Driver", d_sub:"Join our network of trusted drivers. Set your own schedule, keep more of what you earn, and grow your business with us.",
     d_p1:"Weekly Payouts", d_p2:"Flexible Hours", d_p3:"Your Own Boss", d_p4:"Bonus Rewards", d_cta:"Apply to Drive",
+    ref_title:"Earn Money with Referrals!", ref_desc:"Become an ambassador! Earn commissions on every referral. Share your link and start earning today. No limits!",
+    ref_c1:"Customer Referral", ref_c1d:"Earn 3% on every delivery ordered by someone you referred",
+    ref_c2:"Driver Referral", ref_c2d:"Refer a driver and earn 2% on their rides and deliveries",
+    ref_c3:"Business Referral", ref_c3d:"Refer a business and earn 3% on their logistics orders",
+    ref_share:"Share My Referral Link", ref_hero_title:"Invite Friends, Earn Cash!", ref_hero_btn:"Share Now",
     o_tag:"Request Service", o_title:"Request a Delivery or Ride", o_sub:"Fill out the form and we'll match you with a driver via WhatsApp.",
     o_name:"Full Name", o_phone:"Phone / WhatsApp", o_type:"-- Service Type --", o_delivery:"Package Delivery", o_ride:"Ridesharing", o_logistics:"Business Logistics",
     o_pickup:"Pickup Location", o_dest:"Destination", o_pkg:"Package size & description (if delivery)", o_pay:"-- Payment Method --", o_cash:"Cash on Delivery / In Person",
@@ -909,6 +947,11 @@ const T = {
     nav_safety:"Sekirite",
     d_tag:"Kondwi ak MsouWout", d_title:"Fè Lajan kòm Chofè", d_sub:"Rejwenn rezo chofè konfyans nou. Fikse pwòp orè ou epi devlope biznis ou avèk nou.",
     d_p1:"Peman Chak Semèn", d_p2:"Orè Fleksib", d_p3:"Pwòp Patwon Ou", d_p4:"Bonis Rekonpans", d_cta:"Aplike pou Kondwi",
+    ref_title:"Touche Lajan ak Rekòmandasyon!", ref_desc:"Vin yon anbasadè! Touche komisyon sou chak rekòmandasyon. Pataje lyen ou epi kòmanse touche jodi a. Pa gen limit!",
+    ref_c1:"Rekòmandasyon Kliyan", ref_c1d:"Touche 3% sou chak livrezon yon moun ou te rekòmande kòmande",
+    ref_c2:"Rekòmandasyon Chofè", ref_c2d:"Rekòmande yon chofè epi touche 2% sou transpò ak livrezon yo",
+    ref_c3:"Rekòmandasyon Biznis", ref_c3d:"Rekòmande yon biznis epi touche 3% sou kòmand lojistik yo",
+    ref_share:"Pataje Lyen Rekòmandasyon Mwen", ref_hero_title:"Envite Zanmi, Touche Lajan!", ref_hero_btn:"Pataje Kounye a",
     o_tag:"Mande Sèvis", o_title:"Mande yon Livrezon oswa Vwayaj", o_sub:"Ranpli fòm nan epi nou ap matche ou ak yon chofè via WhatsApp.",
     o_name:"Non Konplè", o_phone:"Telefòn / WhatsApp", o_type:"-- Tip Sèvis --", o_delivery:"Livrezon Pakè", o_ride:"Ridesharing", o_logistics:"Lojistik Biznis",
     o_pickup:"Kote pou Ranmase", o_dest:"Destinasyon", o_pkg:"Gwosè ak deskripsyon pakè (si livrezon)", o_pay:"-- Metòd Peman --", o_cash:"Kach nan Livrezon / An Pèsòn",
@@ -961,6 +1004,11 @@ const T = {
     nav_safety:"Seguridad",
     d_tag:"Conduce con MsouWout", d_title:"Gana Dinero como Conductor", d_sub:"Unete a nuestra red de conductores confiables. Establece tu propio horario y crece tu negocio.",
     d_p1:"Pagos Semanales", d_p2:"Horarios Flexibles", d_p3:"Tu Propio Jefe", d_p4:"Bonos de Recompensa", d_cta:"Aplicar para Conducir",
+    ref_title:"Gana Dinero con Referencias!", ref_desc:"Conviertete en embajador! Gana comisiones por cada referencia. Comparte tu enlace y empieza a ganar hoy. Sin limites!",
+    ref_c1:"Referencia de Cliente", ref_c1d:"Gana 3% en cada entrega ordenada por alguien que referiste",
+    ref_c2:"Referencia de Conductor", ref_c2d:"Refiere un conductor y gana 2% en sus viajes y entregas",
+    ref_c3:"Referencia de Negocio", ref_c3d:"Refiere un negocio y gana 3% en sus pedidos de logistica",
+    ref_share:"Compartir Mi Enlace de Referencia", ref_hero_title:"Invita Amigos, Gana!", ref_hero_btn:"Compartir",
     o_tag:"Solicitar Servicio", o_title:"Solicitar Entrega o Viaje", o_sub:"Completa el formulario y te conectamos con un conductor via WhatsApp.",
     o_name:"Nombre Completo", o_phone:"Telefono / WhatsApp", o_type:"-- Tipo de Servicio --", o_delivery:"Entrega de Paquetes", o_ride:"Transporte Compartido", o_logistics:"Logistica Empresarial",
     o_pickup:"Lugar de Recogida", o_dest:"Destino", o_pkg:"Tamano y descripcion del paquete (si es entrega)", o_pay:"-- Metodo de Pago --", o_cash:"Efectivo en Entrega / En Persona",
