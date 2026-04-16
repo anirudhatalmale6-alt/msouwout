@@ -28,6 +28,59 @@
   --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;
   --green:#22C55E;
   --body:'Plus Jakarta Sans',system-ui,sans-serif;
+}
+/* ═══ LOCATION AUTOCOMPLETE ═══ */
+.loc-suggestions{
+  position:absolute;top:100%;left:0;right:0;z-index:50;
+  background:#fff;border:1.5px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;
+  max-height:200px;overflow-y:auto;display:none;
+  box-shadow:0 8px 24px rgba(0,0,0,.1);
+}
+.loc-suggestions.active{display:block}
+.loc-item{
+  padding:10px 14px;font-size:.85rem;cursor:pointer;
+  border-bottom:1px solid #f1f5f9;display:flex;align-items:flex-start;gap:8px;
+}
+.loc-item:last-child{border-bottom:none}
+.loc-item:hover,.loc-item.selected{background:#f0f9ff}
+.loc-item .loc-icon{color:#6366f1;font-size:.9rem;flex-shrink:0;margin-top:1px}
+.loc-item .loc-name{font-weight:600;color:#1e293b}
+.loc-item .loc-addr{font-size:.75rem;color:#94a3b8;margin-top:1px}
+/* ═══ SIGNUP MODAL ═══ */
+.signup-overlay{
+  position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);
+  display:none;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(4px);
+}
+.signup-overlay.active{display:flex}
+.signup-modal{
+  background:#fff;border-radius:20px;padding:32px 24px;max-width:400px;width:100%;
+  text-align:center;position:relative;
+  box-shadow:0 24px 48px rgba(0,0,0,.15);animation:modalIn .3s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.signup-modal h3{font-family:var(--display);font-size:1.4rem;margin-bottom:8px;color:var(--dark)}
+.signup-modal p{font-size:.88rem;color:var(--text-light);margin-bottom:20px;line-height:1.5}
+.signup-modal input{
+  width:100%;padding:14px 16px;border:1.5px solid #e2e8f0;border-radius:12px;
+  font-size:.95rem;margin-bottom:10px;font-family:var(--body);
+}
+.signup-modal input:focus{border-color:var(--blue);outline:none;box-shadow:0 0 0 3px rgba(0,32,159,.1)}
+.signup-modal .btn-signup{
+  width:100%;padding:14px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  color:#fff;font-size:.95rem;font-weight:700;cursor:pointer;
+  font-family:var(--body);margin-top:4px;
+}
+.signup-modal .btn-signup:hover{opacity:.9}
+.signup-modal .skip-link{
+  display:block;margin-top:14px;font-size:.82rem;color:var(--text-light);
+  cursor:pointer;text-decoration:underline;
+}
+.signup-close{
+  position:absolute;top:12px;right:14px;background:none;border:none;
+  font-size:1.3rem;cursor:pointer;color:#94a3b8;line-height:1;
+
   --display:'DM Serif Display',Georgia,serif;
   --radius:16px;
 }
@@ -654,9 +707,25 @@ footer{
         <option value="Ridesharing" data-i18n="o_ride">Ridesharing</option>
         <option value="Business Logistics" data-i18n="o_logistics">Business Logistics</option>
       </select>
-      <div class="form-row">
-        <input type="text" name="Pickup Location" placeholder="Pickup Location" data-i18n-placeholder="o_pickup" required>
-        <input type="text" name="Destination" placeholder="Destination" data-i18n-placeholder="o_dest" required>
+      <div class="form-row" style="position:relative">
+        <div style="position:relative;flex:1">
+          <input type="text" name="Pickup Location" id="pickupInput" placeholder="Pickup Location" data-i18n-placeholder="o_pickup" required autocomplete="off">
+          <input type="hidden" id="pickupLat" name="Pickup Lat">
+          <input type="hidden" id="pickupLon" name="Pickup Lon">
+          <div class="loc-suggestions" id="pickupSuggestions"></div>
+        </div>
+        <div style="position:relative;flex:1">
+          <input type="text" name="Destination" id="destInput" placeholder="Destination" data-i18n-placeholder="o_dest" required autocomplete="off">
+          <input type="hidden" id="destLat" name="Dest Lat">
+          <input type="hidden" id="destLon" name="Dest Lon">
+          <div class="loc-suggestions" id="destSuggestions"></div>
+        </div>
+      </div>
+      <!-- Fare display -->
+      <div id="fareDisplay" style="display:none;background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border:1.5px solid #86efac;border-radius:14px;padding:16px;text-align:center;margin:4px 0;">
+        <div style="font-size:.78rem;color:#166534;font-weight:600;margin-bottom:4px" data-i18n="o_fare_label">Estimated Fare</div>
+        <div id="fareAmount" style="font-size:1.6rem;font-weight:800;color:#15803d"></div>
+        <div id="fareDistance" style="font-size:.75rem;color:#4ade80;margin-top:2px"></div>
       </div>
       <input type="text" name="Package Description" id="pkgDesc" placeholder="Package size & description (if delivery)" data-i18n-placeholder="o_pkg">
       <select name="Payment Method" id="paymentMethod" required>
@@ -665,7 +734,7 @@ footer{
         <option value="NatCash">NatCash</option>
         <option value="Cash" data-i18n="o_cash">Cash on Delivery / In Person</option>
       </select>
-      <input type="number" name="Amount (HTG)" id="orderAmount" placeholder="Amount (HTG)" min="20" style="padding:14px 16px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:.95rem;width:100%;box-sizing:border-box;">
+      <input type="hidden" name="Amount (HTG)" id="orderAmount">
       <textarea name="Notes" placeholder="Additional notes (time preference, special instructions...)" data-i18n-placeholder="o_notes"></textarea>
       <button type="submit" class="btn btn-red" id="orderSubmitBtn" style="width:100%;justify-content:center" data-i18n="o_submit">&#128230; Submit Request</button>
     </form>
@@ -1193,6 +1262,262 @@ function shareMsouWoutReferral() {
   }
 }
 </script>
+
+<!-- SIGNUP MODAL -->
+<div class="signup-overlay" id="signupOverlay">
+  <div class="signup-modal">
+    <button class="signup-close" onclick="closeSignup()">&times;</button>
+    <div style="font-size:2.2rem;margin-bottom:8px">&#128663;</div>
+    <h3 id="signupTitle">Inscrivez-vous Gratuitement</h3>
+    <p id="signupDesc">Creez un compte gratuit pour finaliser votre reservation et suivre vos trajets.</p>
+    <input type="text" id="signupName" placeholder="Nom Complet">
+    <input type="tel" id="signupPhone" placeholder="Telephone / WhatsApp">
+    <button class="btn-signup" id="signupBtn" onclick="completeSignup()">Continuer la Reservation</button>
+    <span class="skip-link" id="signupSkip" onclick="skipSignup()">Continuer sans compte</span>
+  </div>
+</div>
+
+<script>
+/* ═══ LOCATION AUTOCOMPLETE & FARE CALCULATION ═══ */
+(function(){
+  var debounceTimer;
+  var NOMINATIM = 'https://nominatim.openstreetmap.org/search';
+  /* Haiti bounding box for search priority */
+  var HAITI_BOUNDS = '&viewbox=-74.5,17.6,-71.6,20.1&bounded=1';
+
+  /* Common Haiti locations for instant results */
+  var HAITI_PLACES = [
+    {name:'Petion-Ville',addr:'Petion-Ville, Port-au-Prince',lat:18.5125,lon:-72.2854},
+    {name:'Delmas',addr:'Delmas, Port-au-Prince',lat:18.5547,lon:-72.3025},
+    {name:'Tabarre',addr:'Tabarre, Port-au-Prince',lat:18.5647,lon:-72.2653},
+    {name:'Carrefour',addr:'Carrefour, Ouest',lat:18.5283,lon:-72.3996},
+    {name:'Kenscoff',addr:'Kenscoff, Ouest',lat:18.4497,lon:-72.2847},
+    {name:'Cap-Haitien',addr:'Cap-Haitien, Nord',lat:19.7578,lon:-72.2042},
+    {name:'Gonaives',addr:'Gonaives, Artibonite',lat:19.4500,lon:-72.6889},
+    {name:'Les Cayes',addr:'Les Cayes, Sud',lat:18.1947,lon:-73.7511},
+    {name:'Jacmel',addr:'Jacmel, Sud-Est',lat:18.2342,lon:-72.5350},
+    {name:'Leogane',addr:'Leogane, Ouest',lat:18.5111,lon:-72.6333},
+    {name:'Cite Soleil',addr:'Cite Soleil, Port-au-Prince',lat:18.5794,lon:-72.3397},
+    {name:'Croix-des-Bouquets',addr:'Croix-des-Bouquets, Ouest',lat:18.5728,lon:-72.2267},
+    {name:'Bourdon',addr:'Bourdon, Port-au-Prince',lat:18.5283,lon:-72.3283},
+    {name:'Turgeau',addr:'Turgeau, Port-au-Prince',lat:18.5350,lon:-72.3317},
+    {name:'Canape Vert',addr:'Canape Vert, Port-au-Prince',lat:18.5392,lon:-72.3233},
+    {name:'Bois Verna',addr:'Bois Verna, Port-au-Prince',lat:18.5367,lon:-72.3350},
+    {name:'Centre-Ville PAP',addr:'Centre-Ville, Port-au-Prince',lat:18.5425,lon:-72.3386},
+    {name:'Aeroport Toussaint Louverture',addr:'Aeroport, Tabarre',lat:18.5800,lon:-72.2925},
+    {name:'Marche en Fer',addr:'Centre-Ville, Port-au-Prince',lat:18.5442,lon:-72.3394},
+    {name:'Hotel Montana',addr:'Petion-Ville, Port-au-Prince',lat:18.5208,lon:-72.2961},
+    {name:'Place Boyer',addr:'Petion-Ville',lat:18.5117,lon:-72.2878},
+    {name:'Fontamara',addr:'Fontamara, Port-au-Prince',lat:18.5389,lon:-72.3539},
+    {name:'Freres',addr:'Petion-Ville',lat:18.5047,lon:-72.2736},
+    {name:'Thomassin',addr:'Thomassin, Ouest',lat:18.4800,lon:-72.2900},
+    {name:'Martissant',addr:'Martissant, Port-au-Prince',lat:18.5222,lon:-72.3583},
+    {name:'Port-au-Prince',addr:'Port-au-Prince, Ouest',lat:18.5425,lon:-72.3386},
+    {name:'Hinche',addr:'Hinche, Centre',lat:19.1500,lon:-72.0167},
+    {name:'Jeremie',addr:'Jeremie, Grand\'Anse',lat:18.6500,lon:-74.1167},
+    {name:'Mirebalais',addr:'Mirebalais, Centre',lat:18.8333,lon:-72.1000},
+    {name:'Saint-Marc',addr:'Saint-Marc, Artibonite',lat:19.1167,lon:-72.7000}
+  ];
+
+  function setupAutocomplete(inputId, suggestionsId, latId, lonId) {
+    var input = document.getElementById(inputId);
+    var sugBox = document.getElementById(suggestionsId);
+    if (!input || !sugBox) return;
+
+    input.addEventListener('input', function() {
+      clearTimeout(debounceTimer);
+      var query = input.value.trim();
+      if (query.length < 2) { sugBox.classList.remove('active'); return; }
+
+      /* First show local Haiti matches instantly */
+      var localResults = HAITI_PLACES.filter(function(p) {
+        return p.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+               p.addr.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+      }).slice(0, 5);
+
+      if (localResults.length > 0) {
+        showSuggestions(sugBox, localResults, input, latId, lonId);
+      }
+
+      /* Then fetch from Nominatim after debounce */
+      debounceTimer = setTimeout(function() {
+        fetch(NOMINATIM + '?format=json&q=' + encodeURIComponent(query + ' Haiti') + '&limit=5&countrycodes=ht' + HAITI_BOUNDS, {
+          headers: { 'Accept-Language': 'fr' }
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var results = data.map(function(item) {
+            var parts = item.display_name.split(',');
+            return {
+              name: parts[0].trim(),
+              addr: parts.slice(1, 3).join(',').trim(),
+              lat: parseFloat(item.lat),
+              lon: parseFloat(item.lon)
+            };
+          });
+          /* Merge with local results, remove duplicates */
+          var combined = localResults.slice();
+          results.forEach(function(r) {
+            if (!combined.some(function(c) { return Math.abs(c.lat - r.lat) < 0.002 && Math.abs(c.lon - r.lon) < 0.002; })) {
+              combined.push(r);
+            }
+          });
+          showSuggestions(sugBox, combined.slice(0, 6), input, latId, lonId);
+        })
+        .catch(function() { /* keep local results */ });
+      }, 300);
+    });
+
+    input.addEventListener('focus', function() {
+      if (sugBox.children.length > 0 && input.value.length >= 2) sugBox.classList.add('active');
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!sugBox.contains(e.target) && e.target !== input) sugBox.classList.remove('active');
+    });
+  }
+
+  function showSuggestions(box, items, input, latId, lonId) {
+    box.innerHTML = '';
+    if (items.length === 0) { box.classList.remove('active'); return; }
+    items.forEach(function(item) {
+      var div = document.createElement('div');
+      div.className = 'loc-item';
+      div.innerHTML = '<span class="loc-icon">&#128205;</span><div><div class="loc-name">' + item.name + '</div><div class="loc-addr">' + item.addr + '</div></div>';
+      div.addEventListener('click', function() {
+        input.value = item.name;
+        document.getElementById(latId).value = item.lat;
+        document.getElementById(lonId).value = item.lon;
+        box.classList.remove('active');
+        calculateFare();
+      });
+      box.appendChild(div);
+    });
+    box.classList.add('active');
+  }
+
+  setupAutocomplete('pickupInput', 'pickupSuggestions', 'pickupLat', 'pickupLon');
+  setupAutocomplete('destInput', 'destSuggestions', 'destLat', 'destLon');
+
+  /* ═══ FARE CALCULATION ═══ */
+  /* Haiti ride pricing (HTG):
+     Base fare: 50 HTG
+     Per km: 25 HTG (local), 20 HTG (inter-city >15km)
+     Minimum: 75 HTG */
+  window.calculateFare = function() {
+    var lat1 = parseFloat(document.getElementById('pickupLat').value);
+    var lon1 = parseFloat(document.getElementById('pickupLon').value);
+    var lat2 = parseFloat(document.getElementById('destLat').value);
+    var lon2 = parseFloat(document.getElementById('destLon').value);
+
+    if (isNaN(lat1) || isNaN(lat2)) return;
+
+    var dist = haversine(lat1, lon1, lat2, lon2);
+    var baseFare = 50;
+    var perKm = dist > 15 ? 20 : 25;
+    var fare = Math.max(75, Math.round((baseFare + dist * perKm) / 5) * 5); /* round to nearest 5 */
+
+    document.getElementById('fareAmount').textContent = fare + ' HTG';
+    document.getElementById('fareDistance').textContent = dist.toFixed(1) + ' km';
+    document.getElementById('fareDisplay').style.display = 'block';
+    document.getElementById('orderAmount').value = fare;
+  };
+
+  function haversine(lat1, lon1, lat2, lon2) {
+    var R = 6371;
+    var dLat = (lat2 - lat1) * Math.PI / 180;
+    var dLon = (lon2 - lon1) * Math.PI / 180;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  /* ═══ SIGNUP PROMPT (after fare) ═══ */
+  var orderForm = document.getElementById('orderForm');
+
+  /* Show signup modal after fare is calculated (if not signed up) */
+  var _origCalcFare = window.calculateFare;
+  window.calculateFare = function() {
+    _origCalcFare();
+    /* If fare was calculated and user hasn't signed up, show modal after a brief delay */
+    var amt = document.getElementById('orderAmount').value;
+    if (amt && !sessionStorage.getItem('msw_signed_up')) {
+      setTimeout(function() {
+        document.getElementById('signupOverlay').classList.add('active');
+      }, 800);
+    }
+  };
+
+  window.closeSignup = function() {
+    document.getElementById('signupOverlay').classList.remove('active');
+  };
+
+  window.completeSignup = function() {
+    var name = document.getElementById('signupName').value.trim();
+    var phone = document.getElementById('signupPhone').value.trim();
+    if (!name || !phone) {
+      alert(window._currentLang === 'en' ? 'Please enter your name and phone number.' :
+            window._currentLang === 'kr' ? 'Tanpri antre non ou ak nimewo telefon ou.' :
+            'Veuillez entrer votre nom et numero de telephone.');
+      return;
+    }
+    /* Fill form fields with signup data */
+    var nameInput = orderForm.querySelector('[name="Full Name"]');
+    var phoneInput = orderForm.querySelector('[name="Phone / WhatsApp"]');
+    if (nameInput) nameInput.value = name;
+    if (phoneInput) phoneInput.value = phone;
+    sessionStorage.setItem('msw_signed_up', '1');
+    sessionStorage.setItem('msw_user_name', name);
+    sessionStorage.setItem('msw_user_phone', phone);
+    document.getElementById('signupOverlay').classList.remove('active');
+    /* Submit the form programmatically */
+    orderForm.dispatchEvent(new Event('submit', {bubbles: true}));
+  };
+
+  window.skipSignup = function() {
+    sessionStorage.setItem('msw_signed_up', '1');
+    document.getElementById('signupOverlay').classList.remove('active');
+    orderForm.dispatchEvent(new Event('submit', {bubbles: true}));
+  };
+
+  /* Pre-fill from saved signup */
+  var savedName = sessionStorage.getItem('msw_user_name');
+  var savedPhone = sessionStorage.getItem('msw_user_phone');
+  if (savedName) {
+    var nameInput = orderForm.querySelector('[name="Full Name"]');
+    if (nameInput) nameInput.value = savedName;
+  }
+  if (savedPhone) {
+    var phoneInput = orderForm.querySelector('[name="Phone / WhatsApp"]');
+    if (phoneInput) phoneInput.value = savedPhone;
+  }
+})();
+
+/* Update signup modal text on language change */
+var _origSetLang = setLang;
+setLang = function(lang) {
+  window._currentLang = lang;
+  _origSetLang(lang);
+  var signupT = {
+    fr: {title:'Inscrivez-vous Gratuitement', desc:'Creez un compte gratuit pour finaliser votre reservation et suivre vos trajets.', btn:'Continuer la Reservation', skip:'Continuer sans compte', name:'Nom Complet', phone:'Telephone / WhatsApp'},
+    en: {title:'Sign Up for Free', desc:'Create a free account to complete your booking and track your rides.', btn:'Continue Booking', skip:'Continue without account', name:'Full Name', phone:'Phone / WhatsApp'},
+    kr: {title:'Enskri Gratis', desc:'Kreye yon kont gratis pou fini rezèvasyon ou epi swiv vwayaj ou yo.', btn:'Kontinye Rezèvasyon', skip:'Kontinye san kont', name:'Non Konplè', phone:'Telefòn / WhatsApp'},
+    es: {title:'Registrese Gratis', desc:'Cree una cuenta gratuita para completar su reserva y seguir sus viajes.', btn:'Continuar Reserva', skip:'Continuar sin cuenta', name:'Nombre Completo', phone:'Telefono / WhatsApp'}
+  };
+  var t = signupT[lang] || signupT.fr;
+  var el;
+  el = document.getElementById('signupTitle'); if (el) el.textContent = t.title;
+  el = document.getElementById('signupDesc'); if (el) el.textContent = t.desc;
+  el = document.getElementById('signupBtn'); if (el) el.textContent = t.btn;
+  el = document.getElementById('signupSkip'); if (el) el.textContent = t.skip;
+  el = document.getElementById('signupName'); if (el) el.placeholder = t.name;
+  el = document.getElementById('signupPhone'); if (el) el.placeholder = t.phone;
+  /* Fare label */
+  var fareLabels = {fr:'Tarif Estime', en:'Estimated Fare', kr:'Pri Estimasyon', es:'Tarifa Estimada'};
+  var fl = document.querySelector('[data-i18n="o_fare_label"]');
+  if (fl) fl.textContent = fareLabels[lang] || fareLabels.fr;
+};
+</script>
 </body>
 </html>
-<!-- rebuild Thu Apr 16 08:31:14 PM UTC 2026 -->
