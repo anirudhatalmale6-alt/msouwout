@@ -671,7 +671,8 @@ footer{
     </form>
     <script>
     (function(){
-      var PAYMENT_API = 'https://msouwout-backend.onrender.com/api/payments';
+      var PAYMENT_API = 'https://plopplop.solutionip.app/api';
+      var PAYMENT_CLIENT_ID = 'pp_1ohu5zz2tcx';
       var form = document.getElementById('orderForm');
       form.addEventListener('submit', function(e) {
         var payMethod = document.getElementById('paymentMethod').value;
@@ -685,19 +686,19 @@ footer{
         btn.textContent = 'Processing...';
         var refId = 'MSW-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
         var apiMethod = payMethod === 'MonCash' ? 'moncash' : payMethod === 'NatCash' ? 'natcash' : 'all';
-        fetch(PAYMENT_API + '/create', {
+        fetch(PAYMENT_API + '/paiement-marchand', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            reference_id: refId,
-            amount: amount,
-            payment_method: apiMethod,
-            description: 'MsouWout Service ' + refId
+            client_id: PAYMENT_CLIENT_ID,
+            refference_id: refId,
+            montant: amount,
+            payment_method: apiMethod
           })
         })
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          if (data.success && data.payment_url) {
+          if (data.status === true && data.url) {
             // Also submit the form data via email for the record
             var formData = new FormData(form);
             formData.append('Payment Reference', refId);
@@ -706,7 +707,7 @@ footer{
               method: 'POST', body: formData
             }).catch(function(){});
             // Redirect to payment
-            window.location.href = data.payment_url;
+            window.location.href = data.url;
           } else {
             btn.disabled = false;
             btn.textContent = 'Submit Request';
