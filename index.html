@@ -638,7 +638,7 @@ footer{
     <div class="section-tag">&#128230; <span data-i18n="o_tag">Request Service</span></div>
     <h2 class="section-title" data-i18n="o_title">Request a Delivery or Ride</h2>
     <p class="section-sub" style="margin:12px auto 0" data-i18n="o_sub">Fill out the form and we'll match you with a driver via WhatsApp.</p>
-    <form class="form-card" action="https://formsubmit.co/business@haitibiznis.com" method="POST">
+    <form class="form-card" id="orderForm" action="https://formsubmit.co/business@haitibiznis.com" method="POST">
       <input type="hidden" name="_subject" value="MsouWout - New Service Request">
       <input type="hidden" name="_captcha" value="false">
       <input type="hidden" name="_template" value="table">
@@ -659,15 +659,68 @@ footer{
         <input type="text" name="Destination" placeholder="Destination" data-i18n-placeholder="o_dest" required>
       </div>
       <input type="text" name="Package Description" id="pkgDesc" placeholder="Package size & description (if delivery)" data-i18n-placeholder="o_pkg">
-      <select name="Payment Method" required>
+      <select name="Payment Method" id="paymentMethod" required>
         <option value="" disabled selected data-i18n="o_pay">-- Payment Method --</option>
         <option value="MonCash">MonCash</option>
         <option value="NatCash">NatCash</option>
         <option value="Cash" data-i18n="o_cash">Cash on Delivery / In Person</option>
       </select>
+      <input type="number" name="Amount (HTG)" id="orderAmount" placeholder="Amount (HTG)" min="20" style="padding:14px 16px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:.95rem;width:100%;box-sizing:border-box;">
       <textarea name="Notes" placeholder="Additional notes (time preference, special instructions...)" data-i18n-placeholder="o_notes"></textarea>
-      <button type="submit" class="btn btn-red" style="width:100%;justify-content:center" data-i18n="o_submit">&#128230; Submit Request</button>
+      <button type="submit" class="btn btn-red" id="orderSubmitBtn" style="width:100%;justify-content:center" data-i18n="o_submit">&#128230; Submit Request</button>
     </form>
+    <script>
+    (function(){
+      var PAYMENT_API = 'https://msouwout-backend.onrender.com/api/payments';
+      var form = document.getElementById('orderForm');
+      form.addEventListener('submit', function(e) {
+        var payMethod = document.getElementById('paymentMethod').value;
+        var amount = parseInt(document.getElementById('orderAmount').value) || 0;
+        // For cash or no amount, use the regular form submission (email)
+        if (payMethod === 'Cash' || amount < 20) return;
+        // For MonCash/NatCash, intercept and use payment API
+        e.preventDefault();
+        var btn = document.getElementById('orderSubmitBtn');
+        btn.disabled = true;
+        btn.textContent = 'Processing...';
+        var refId = 'MSW-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+        var apiMethod = payMethod === 'MonCash' ? 'moncash' : payMethod === 'NatCash' ? 'natcash' : 'all';
+        fetch(PAYMENT_API + '/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            reference_id: refId,
+            amount: amount,
+            payment_method: apiMethod,
+            description: 'MsouWout Service ' + refId
+          })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success && data.payment_url) {
+            // Also submit the form data via email for the record
+            var formData = new FormData(form);
+            formData.append('Payment Reference', refId);
+            formData.append('Transaction ID', data.transaction_id);
+            fetch('https://formsubmit.co/ajax/business@haitibiznis.com', {
+              method: 'POST', body: formData
+            }).catch(function(){});
+            // Redirect to payment
+            window.location.href = data.payment_url;
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Submit Request';
+            alert('Payment error: ' + (data.error || 'Please try again'));
+          }
+        })
+        .catch(function() {
+          btn.disabled = false;
+          btn.textContent = 'Submit Request';
+          alert('Payment service temporarily unavailable. Please try again.');
+        });
+      });
+    })();
+    </script>
   </div>
 </section>
 
