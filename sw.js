@@ -1,4 +1,4 @@
-const CACHE_NAME = 'msouwout-v2';
+const CACHE_NAME = 'msouwout-v3';
 const ASSETS = ['/', '/index.html', '/assets/msouwout-icon.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));
