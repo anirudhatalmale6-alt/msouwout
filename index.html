@@ -1265,15 +1265,54 @@ function shareMsouWoutReferral() {
 
 <!-- SIGNUP MODAL -->
 <div class="signup-overlay" id="signupOverlay">
-  <div class="signup-modal">
+  <div class="signup-modal" style="max-width:420px;padding:28px 22px;text-align:left">
     <button class="signup-close" onclick="closeSignup()">&times;</button>
-    <div style="font-size:2.2rem;margin-bottom:8px">&#128663;</div>
-    <h3 id="signupTitle">Inscrivez-vous Gratuitement</h3>
-    <p id="signupDesc">Creez un compte gratuit pour finaliser votre reservation et suivre vos trajets.</p>
-    <input type="text" id="signupName" placeholder="Nom Complet">
-    <input type="tel" id="signupPhone" placeholder="Telephone / WhatsApp">
-    <button class="btn-signup" id="signupBtn" onclick="completeSignup()">Continuer la Reservation</button>
-    <span class="skip-link" id="signupSkip" onclick="skipSignup()">Continuer sans compte</span>
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:2rem;margin-bottom:6px">&#128663;</div>
+      <h3 id="signupTitle" style="font-size:1.3rem">Creez votre compte MsouWout</h3>
+      <p id="signupDesc" style="font-size:.82rem;color:var(--text-light);margin-top:4px">Inscrivez-vous gratuitement pour reserver des trajets et suivre vos courses.</p>
+    </div>
+    <div style="display:flex;gap:8px">
+      <input type="text" id="signupFirstName" placeholder="Prenom" style="flex:1">
+      <input type="text" id="signupLastName" placeholder="Nom" style="flex:1">
+    </div>
+    <div style="display:flex;align-items:center;border:1.5px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:10px">
+      <span style="padding:12px 10px 12px 14px;background:#f8fafc;color:var(--text);font-weight:600;font-size:.9rem;border-right:1.5px solid #e2e8f0;white-space:nowrap">+509</span>
+      <input type="tel" id="signupPhone" placeholder="Nimewo telefon" style="border:none;border-radius:0;margin-bottom:0;flex:1">
+    </div>
+    <input type="email" id="signupEmail" placeholder="Email (opsyonèl)">
+    <div style="position:relative">
+      <input type="password" id="signupPassword" placeholder="Kreye yon modpas">
+      <button type="button" onclick="togglePwdVisibility()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:#94a3b8;padding:4px" id="pwdToggle">&#128065;</button>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:8px;margin:6px 0 14px">
+      <input type="checkbox" id="signupTerms" style="width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:var(--blue)">
+      <label for="signupTerms" style="font-size:.75rem;color:var(--text-light);line-height:1.4;cursor:pointer" id="signupTermsLabel">En continuant, j'accepte les <a href="#" style="color:var(--blue);font-weight:600">Conditions d'Utilisation</a> et la <a href="#" style="color:var(--blue);font-weight:600">Politique de Confidentialite</a> de MsouWout.</label>
+    </div>
+    <button class="btn-signup" id="signupBtn" onclick="completeSignup()">Kreye Kont & Kontinye</button>
+    <div style="text-align:center;margin-top:12px">
+      <span style="font-size:.8rem;color:var(--text-light)" id="signupHaveAccount">Ou gen yon kont deja?</span>
+      <a href="#" style="font-size:.8rem;color:var(--blue);font-weight:700;margin-left:4px" id="signupLoginLink" onclick="toggleLoginMode(event)">Konekte</a>
+    </div>
+    <div style="text-align:center;margin-top:8px">
+      <span class="skip-link" id="signupSkip" onclick="skipSignup()" style="font-size:.78rem">Kontinye san kont</span>
+    </div>
+    <!-- LOGIN MODE (hidden by default) -->
+    <div id="loginMode" style="display:none">
+      <div style="text-align:center;margin-bottom:16px">
+        <h3 id="loginTitle" style="font-size:1.3rem">Konekte nan kont ou</h3>
+      </div>
+      <div style="display:flex;align-items:center;border:1.5px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:10px">
+        <span style="padding:12px 10px 12px 14px;background:#f8fafc;color:var(--text);font-weight:600;font-size:.9rem;border-right:1.5px solid #e2e8f0;white-space:nowrap">+509</span>
+        <input type="tel" id="loginPhone" placeholder="Nimewo telefon" style="border:none;border-radius:0;margin-bottom:0;flex:1">
+      </div>
+      <input type="password" id="loginPassword" placeholder="Modpas">
+      <button class="btn-signup" onclick="completeLogin()">Konekte</button>
+      <div style="text-align:center;margin-top:12px">
+        <span style="font-size:.8rem;color:var(--text-light)">Pa gen kont?</span>
+        <a href="#" style="font-size:.8rem;color:var(--blue);font-weight:700;margin-left:4px" onclick="toggleLoginMode(event)">Enskri</a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1453,25 +1492,123 @@ function shareMsouWoutReferral() {
     document.getElementById('signupOverlay').classList.remove('active');
   };
 
+  window.togglePwdVisibility = function() {
+    var pwd = document.getElementById('signupPassword');
+    var btn = document.getElementById('pwdToggle');
+    if (pwd.type === 'password') { pwd.type = 'text'; btn.innerHTML = '&#128064;'; }
+    else { pwd.type = 'password'; btn.innerHTML = '&#128065;'; }
+  };
+
+  window.toggleLoginMode = function(e) {
+    if (e) e.preventDefault();
+    var signupFields = document.getElementById('signupOverlay').querySelector('.signup-modal');
+    var loginDiv = document.getElementById('loginMode');
+    var signupEls = signupFields.querySelectorAll('#signupFirstName,#signupLastName,#signupPhone,#signupEmail,#signupPassword,#signupTerms,#signupBtn,#signupSkip,#signupHaveAccount,#signupLoginLink,#pwdToggle');
+    var titleEl = document.getElementById('signupTitle');
+    var descEl = document.getElementById('signupDesc');
+    var termsRow = document.getElementById('signupTerms').parentElement;
+    var nameRow = document.getElementById('signupFirstName').parentElement;
+    var phoneRow = document.getElementById('signupPhone').parentElement.parentElement;
+    var emailEl = document.getElementById('signupEmail');
+    var pwdRow = document.getElementById('signupPassword').parentElement;
+
+    if (loginDiv.style.display === 'none') {
+      /* Switch to login mode */
+      loginDiv.style.display = 'block';
+      titleEl.parentElement.style.display = 'none';
+      nameRow.style.display = 'none';
+      phoneRow.style.display = 'none';
+      emailEl.style.display = 'none';
+      pwdRow.style.display = 'none';
+      termsRow.style.display = 'none';
+      document.getElementById('signupBtn').style.display = 'none';
+      document.getElementById('signupSkip').style.display = 'none';
+      document.getElementById('signupHaveAccount').parentElement.style.display = 'none';
+    } else {
+      /* Switch to signup mode */
+      loginDiv.style.display = 'none';
+      titleEl.parentElement.style.display = 'block';
+      nameRow.style.display = 'flex';
+      phoneRow.style.display = 'flex';
+      emailEl.style.display = 'block';
+      pwdRow.style.display = 'block';
+      termsRow.style.display = 'flex';
+      document.getElementById('signupBtn').style.display = 'block';
+      document.getElementById('signupSkip').style.display = 'block';
+      document.getElementById('signupHaveAccount').parentElement.style.display = 'block';
+    }
+  };
+
   window.completeSignup = function() {
-    var name = document.getElementById('signupName').value.trim();
+    var firstName = document.getElementById('signupFirstName').value.trim();
+    var lastName = document.getElementById('signupLastName').value.trim();
     var phone = document.getElementById('signupPhone').value.trim();
-    if (!name || !phone) {
-      alert(window._currentLang === 'en' ? 'Please enter your name and phone number.' :
-            window._currentLang === 'kr' ? 'Tanpri antre non ou ak nimewo telefon ou.' :
-            'Veuillez entrer votre nom et numero de telephone.');
+    var email = document.getElementById('signupEmail').value.trim();
+    var password = document.getElementById('signupPassword').value;
+    var terms = document.getElementById('signupTerms').checked;
+
+    if (!firstName || !lastName) {
+      alert(window._currentLang === 'en' ? 'Please enter your first and last name.' : 'Tanpri antre non ou ak siyati ou.');
       return;
     }
-    /* Fill form fields with signup data */
+    if (!phone || phone.length < 8) {
+      alert(window._currentLang === 'en' ? 'Please enter a valid phone number.' : 'Tanpri antre yon nimewo telefon valab.');
+      return;
+    }
+    if (!password || password.length < 4) {
+      alert(window._currentLang === 'en' ? 'Please create a password (at least 4 characters).' : 'Tanpri kreye yon modpas (omwen 4 karaktè).');
+      return;
+    }
+    if (!terms) {
+      alert(window._currentLang === 'en' ? 'Please accept the Terms of Service.' : 'Tanpri aksepte Kondisyon Itilizasyon yo.');
+      return;
+    }
+
+    var fullName = firstName + ' ' + lastName;
+    var fullPhone = '+509 ' + phone;
+
+    /* Save user data */
+    var userData = { firstName: firstName, lastName: lastName, phone: fullPhone, email: email, signedUp: Date.now() };
+    try { localStorage.setItem('msw_user', JSON.stringify(userData)); } catch(e) {}
+
+    /* Fill form fields */
     var nameInput = orderForm.querySelector('[name="Full Name"]');
     var phoneInput = orderForm.querySelector('[name="Phone / WhatsApp"]');
-    if (nameInput) nameInput.value = name;
-    if (phoneInput) phoneInput.value = phone;
+    if (nameInput) nameInput.value = fullName;
+    if (phoneInput) phoneInput.value = fullPhone;
     sessionStorage.setItem('msw_signed_up', '1');
-    sessionStorage.setItem('msw_user_name', name);
-    sessionStorage.setItem('msw_user_phone', phone);
+    sessionStorage.setItem('msw_user_name', fullName);
+    sessionStorage.setItem('msw_user_phone', fullPhone);
     document.getElementById('signupOverlay').classList.remove('active');
-    /* Submit the form programmatically */
+    /* Auto-submit after signup */
+    orderForm.dispatchEvent(new Event('submit', {bubbles: true}));
+  };
+
+  window.completeLogin = function() {
+    var phone = document.getElementById('loginPhone').value.trim();
+    var password = document.getElementById('loginPassword').value;
+    if (!phone || !password) {
+      alert('Tanpri antre nimewo telefon ou ak modpas ou.');
+      return;
+    }
+    /* For now, check localStorage for matching user */
+    var fullPhone = '+509 ' + phone;
+    var nameInput = orderForm.querySelector('[name="Full Name"]');
+    var phoneInput = orderForm.querySelector('[name="Phone / WhatsApp"]');
+    try {
+      var saved = JSON.parse(localStorage.getItem('msw_user') || '{}');
+      if (saved.phone === fullPhone) {
+        if (nameInput) nameInput.value = saved.firstName + ' ' + saved.lastName;
+        if (phoneInput) phoneInput.value = fullPhone;
+      } else {
+        if (phoneInput) phoneInput.value = fullPhone;
+      }
+    } catch(e) {
+      if (phoneInput) phoneInput.value = fullPhone;
+    }
+    sessionStorage.setItem('msw_signed_up', '1');
+    sessionStorage.setItem('msw_user_phone', fullPhone);
+    document.getElementById('signupOverlay').classList.remove('active');
     orderForm.dispatchEvent(new Event('submit', {bubbles: true}));
   };
 
@@ -1481,17 +1618,17 @@ function shareMsouWoutReferral() {
     orderForm.dispatchEvent(new Event('submit', {bubbles: true}));
   };
 
-  /* Pre-fill from saved signup */
-  var savedName = sessionStorage.getItem('msw_user_name');
-  var savedPhone = sessionStorage.getItem('msw_user_phone');
-  if (savedName) {
-    var nameInput = orderForm.querySelector('[name="Full Name"]');
-    if (nameInput) nameInput.value = savedName;
-  }
-  if (savedPhone) {
-    var phoneInput = orderForm.querySelector('[name="Phone / WhatsApp"]');
-    if (phoneInput) phoneInput.value = savedPhone;
-  }
+  /* Pre-fill from saved user data */
+  try {
+    var savedUser = JSON.parse(localStorage.getItem('msw_user') || '{}');
+    if (savedUser.firstName) {
+      var nameInput = orderForm.querySelector('[name="Full Name"]');
+      var phoneInput = orderForm.querySelector('[name="Phone / WhatsApp"]');
+      if (nameInput) nameInput.value = savedUser.firstName + ' ' + savedUser.lastName;
+      if (phoneInput) phoneInput.value = savedUser.phone;
+      sessionStorage.setItem('msw_signed_up', '1');
+    }
+  } catch(e) {}
 })();
 
 /* Update signup modal text on language change */
@@ -1500,19 +1637,26 @@ setLang = function(lang) {
   window._currentLang = lang;
   _origSetLang(lang);
   var signupT = {
-    fr: {title:'Inscrivez-vous Gratuitement', desc:'Creez un compte gratuit pour finaliser votre reservation et suivre vos trajets.', btn:'Continuer la Reservation', skip:'Continuer sans compte', name:'Nom Complet', phone:'Telephone / WhatsApp'},
-    en: {title:'Sign Up for Free', desc:'Create a free account to complete your booking and track your rides.', btn:'Continue Booking', skip:'Continue without account', name:'Full Name', phone:'Phone / WhatsApp'},
-    kr: {title:'Enskri Gratis', desc:'Kreye yon kont gratis pou fini rezèvasyon ou epi swiv vwayaj ou yo.', btn:'Kontinye Rezèvasyon', skip:'Kontinye san kont', name:'Non Konplè', phone:'Telefòn / WhatsApp'},
-    es: {title:'Registrese Gratis', desc:'Cree una cuenta gratuita para completar su reserva y seguir sus viajes.', btn:'Continuar Reserva', skip:'Continuar sin cuenta', name:'Nombre Completo', phone:'Telefono / WhatsApp'}
+    fr: {title:'Creez votre compte MsouWout', desc:'Inscrivez-vous gratuitement pour reserver des trajets et suivre vos courses.', btn:'Creer Compte & Continuer', skip:'Continuer sans compte', fname:'Prenom', lname:'Nom', phone:'Nimewo telefon', email:'Email (optionnel)', pwd:'Creer un mot de passe', terms:'En continuant, j\'accepte les <a href="#" style="color:var(--blue);font-weight:600">Conditions d\'Utilisation</a> et la <a href="#" style="color:var(--blue);font-weight:600">Politique de Confidentialite</a> de MsouWout.', have:'Vous avez deja un compte?', login:'Connexion', loginTitle:'Connectez-vous a votre compte', noAccount:'Pas de compte?', register:'Inscription'},
+    en: {title:'Create your MsouWout account', desc:'Sign up for free to book rides and track your trips.', btn:'Create Account & Continue', skip:'Continue without account', fname:'First Name', lname:'Last Name', phone:'Phone number', email:'Email (optional)', pwd:'Create a password', terms:'By continuing, I agree to MsouWout\'s <a href="#" style="color:var(--blue);font-weight:600">Terms of Service</a> and <a href="#" style="color:var(--blue);font-weight:600">Privacy Policy</a>.', have:'Already have an account?', login:'Log in', loginTitle:'Log in to your account', noAccount:'No account?', register:'Sign up'},
+    kr: {title:'Kreye kont MsouWout ou', desc:'Enskri gratis pou rezève vwayaj epi swiv kous ou yo.', btn:'Kreye Kont & Kontinye', skip:'Kontinye san kont', fname:'Prenon', lname:'Siyati', phone:'Nimewo telefon', email:'Imèl (opsyonèl)', pwd:'Kreye yon modpas', terms:'Lè m kontinye, mwen aksepte <a href="#" style="color:var(--blue);font-weight:600">Kondisyon Itilizasyon</a> ak <a href="#" style="color:var(--blue);font-weight:600">Politik Konfidansyalite</a> MsouWout.', have:'Ou gen yon kont deja?', login:'Konekte', loginTitle:'Konekte nan kont ou', noAccount:'Pa gen kont?', register:'Enskri'},
+    es: {title:'Crea tu cuenta MsouWout', desc:'Registrate gratis para reservar viajes y seguir tus recorridos.', btn:'Crear Cuenta y Continuar', skip:'Continuar sin cuenta', fname:'Nombre', lname:'Apellido', phone:'Numero de telefono', email:'Email (opcional)', pwd:'Crear una contrasena', terms:'Al continuar, acepto los <a href="#" style="color:var(--blue);font-weight:600">Terminos de Servicio</a> y la <a href="#" style="color:var(--blue);font-weight:600">Politica de Privacidad</a> de MsouWout.', have:'Ya tienes cuenta?', login:'Iniciar sesion', loginTitle:'Inicia sesion en tu cuenta', noAccount:'No tienes cuenta?', register:'Registrarse'}
   };
-  var t = signupT[lang] || signupT.fr;
+  var t = signupT[lang] || signupT.kr;
   var el;
   el = document.getElementById('signupTitle'); if (el) el.textContent = t.title;
   el = document.getElementById('signupDesc'); if (el) el.textContent = t.desc;
   el = document.getElementById('signupBtn'); if (el) el.textContent = t.btn;
   el = document.getElementById('signupSkip'); if (el) el.textContent = t.skip;
-  el = document.getElementById('signupName'); if (el) el.placeholder = t.name;
+  el = document.getElementById('signupFirstName'); if (el) el.placeholder = t.fname;
+  el = document.getElementById('signupLastName'); if (el) el.placeholder = t.lname;
   el = document.getElementById('signupPhone'); if (el) el.placeholder = t.phone;
+  el = document.getElementById('signupEmail'); if (el) el.placeholder = t.email;
+  el = document.getElementById('signupPassword'); if (el) el.placeholder = t.pwd;
+  el = document.getElementById('signupTermsLabel'); if (el) el.innerHTML = t.terms;
+  el = document.getElementById('signupHaveAccount'); if (el) el.textContent = t.have;
+  el = document.getElementById('signupLoginLink'); if (el) el.textContent = t.login;
+  el = document.getElementById('loginTitle'); if (el) el.textContent = t.loginTitle;
   /* Fare label */
   var fareLabels = {fr:'Tarif Estime', en:'Estimated Fare', kr:'Pri Estimasyon', es:'Tarifa Estimada'};
   var fl = document.querySelector('[data-i18n="o_fare_label"]');
