@@ -1324,38 +1324,71 @@ function shareMsouWoutReferral() {
   /* Haiti bounding box for search priority */
   var HAITI_BOUNDS = '&viewbox=-74.5,17.6,-71.6,20.1&bounded=1';
 
-  /* Common Haiti locations for instant results */
+  /* Operating cities - intra-city only (roads blocked between cities) */
+  var CITY_ZONES = {
+    'Cap-Haitien': {center:{lat:19.7578,lon:-72.2042}, radius:12},
+    'Gonaives': {center:{lat:19.4500,lon:-72.6889}, radius:10},
+    'Les Cayes': {center:{lat:18.1947,lon:-73.7511}, radius:10},
+    'Jacmel': {center:{lat:18.2342,lon:-72.5350}, radius:10}
+  };
+
+  /* Neighborhoods within operating cities */
   var HAITI_PLACES = [
-    {name:'Petion-Ville',addr:'Petion-Ville, Port-au-Prince',lat:18.5125,lon:-72.2854},
-    {name:'Delmas',addr:'Delmas, Port-au-Prince',lat:18.5547,lon:-72.3025},
-    {name:'Tabarre',addr:'Tabarre, Port-au-Prince',lat:18.5647,lon:-72.2653},
-    {name:'Carrefour',addr:'Carrefour, Ouest',lat:18.5283,lon:-72.3996},
-    {name:'Kenscoff',addr:'Kenscoff, Ouest',lat:18.4497,lon:-72.2847},
-    {name:'Cap-Haitien',addr:'Cap-Haitien, Nord',lat:19.7578,lon:-72.2042},
-    {name:'Gonaives',addr:'Gonaives, Artibonite',lat:19.4500,lon:-72.6889},
-    {name:'Les Cayes',addr:'Les Cayes, Sud',lat:18.1947,lon:-73.7511},
-    {name:'Jacmel',addr:'Jacmel, Sud-Est',lat:18.2342,lon:-72.5350},
-    {name:'Leogane',addr:'Leogane, Ouest',lat:18.5111,lon:-72.6333},
-    {name:'Cite Soleil',addr:'Cite Soleil, Port-au-Prince',lat:18.5794,lon:-72.3397},
-    {name:'Croix-des-Bouquets',addr:'Croix-des-Bouquets, Ouest',lat:18.5728,lon:-72.2267},
-    {name:'Bourdon',addr:'Bourdon, Port-au-Prince',lat:18.5283,lon:-72.3283},
-    {name:'Turgeau',addr:'Turgeau, Port-au-Prince',lat:18.5350,lon:-72.3317},
-    {name:'Canape Vert',addr:'Canape Vert, Port-au-Prince',lat:18.5392,lon:-72.3233},
-    {name:'Bois Verna',addr:'Bois Verna, Port-au-Prince',lat:18.5367,lon:-72.3350},
-    {name:'Centre-Ville PAP',addr:'Centre-Ville, Port-au-Prince',lat:18.5425,lon:-72.3386},
-    {name:'Aeroport Toussaint Louverture',addr:'Aeroport, Tabarre',lat:18.5800,lon:-72.2925},
-    {name:'Marche en Fer',addr:'Centre-Ville, Port-au-Prince',lat:18.5442,lon:-72.3394},
-    {name:'Hotel Montana',addr:'Petion-Ville, Port-au-Prince',lat:18.5208,lon:-72.2961},
-    {name:'Place Boyer',addr:'Petion-Ville',lat:18.5117,lon:-72.2878},
-    {name:'Fontamara',addr:'Fontamara, Port-au-Prince',lat:18.5389,lon:-72.3539},
-    {name:'Freres',addr:'Petion-Ville',lat:18.5047,lon:-72.2736},
-    {name:'Thomassin',addr:'Thomassin, Ouest',lat:18.4800,lon:-72.2900},
-    {name:'Martissant',addr:'Martissant, Port-au-Prince',lat:18.5222,lon:-72.3583},
-    {name:'Port-au-Prince',addr:'Port-au-Prince, Ouest',lat:18.5425,lon:-72.3386},
-    {name:'Hinche',addr:'Hinche, Centre',lat:19.1500,lon:-72.0167},
-    {name:'Jeremie',addr:'Jeremie, Grand\'Anse',lat:18.6500,lon:-74.1167},
-    {name:'Mirebalais',addr:'Mirebalais, Centre',lat:18.8333,lon:-72.1000},
-    {name:'Saint-Marc',addr:'Saint-Marc, Artibonite',lat:19.1167,lon:-72.7000}
+    /* ── Cap-Haitien ── */
+    {name:'Cap-Haitien Centre',addr:'Centre-Ville, Cap-Haitien',lat:19.7578,lon:-72.2042,city:'Cap-Haitien'},
+    {name:'Carrefour Shada',addr:'Shada, Cap-Haitien',lat:19.7550,lon:-72.1980,city:'Cap-Haitien'},
+    {name:'Vertières',addr:'Vertières, Cap-Haitien',lat:19.7480,lon:-72.2130,city:'Cap-Haitien'},
+    {name:'Petite Anse',addr:'Petite Anse, Cap-Haitien',lat:19.7650,lon:-72.1950,city:'Cap-Haitien'},
+    {name:'Bande du Nord',addr:'Bande du Nord, Cap-Haitien',lat:19.7700,lon:-72.2200,city:'Cap-Haitien'},
+    {name:'Haut du Cap',addr:'Haut du Cap, Cap-Haitien',lat:19.7400,lon:-72.2100,city:'Cap-Haitien'},
+    {name:'Cite Lescot',addr:'Cite Lescot, Cap-Haitien',lat:19.7520,lon:-72.2010,city:'Cap-Haitien'},
+    {name:'Barrière Bouteille',addr:'Barrière Bouteille, Cap-Haitien',lat:19.7590,lon:-72.2080,city:'Cap-Haitien'},
+    {name:'Rue Espagnole',addr:'Rue Espagnole, Cap-Haitien',lat:19.7575,lon:-72.2030,city:'Cap-Haitien'},
+    {name:'Fort Saint-Michel',addr:'Fort Saint-Michel, Cap-Haitien',lat:19.7610,lon:-72.2000,city:'Cap-Haitien'},
+    {name:'Charrier',addr:'Charrier, Cap-Haitien',lat:19.7450,lon:-72.2050,city:'Cap-Haitien'},
+    {name:'Limonade',addr:'Limonade, Nord',lat:19.7200,lon:-72.1300,city:'Cap-Haitien'},
+    {name:'Madeline',addr:'Madeline, Cap-Haitien',lat:19.7530,lon:-72.2100,city:'Cap-Haitien'},
+    {name:'Magdoos',addr:'Magdoos, Cap-Haitien',lat:19.7560,lon:-72.2060,city:'Cap-Haitien'},
+    {name:'La Fossette',addr:'La Fossette, Cap-Haitien',lat:19.7620,lon:-72.1990,city:'Cap-Haitien'},
+    {name:'Aeroport Hugo Chavez',addr:'Aeroport, Cap-Haitien',lat:19.7330,lon:-72.1950,city:'Cap-Haitien'},
+    {name:'Marche de Fer Cap',addr:'Marche de Fer, Cap-Haitien',lat:19.7570,lon:-72.2035,city:'Cap-Haitien'},
+    {name:'Place d\'Armes',addr:'Place d\'Armes, Cap-Haitien',lat:19.7582,lon:-72.2045,city:'Cap-Haitien'},
+    /* ── Gonaives ── */
+    {name:'Gonaives Centre',addr:'Centre-Ville, Gonaives',lat:19.4500,lon:-72.6889,city:'Gonaives'},
+    {name:'Raboteau',addr:'Raboteau, Gonaives',lat:19.4570,lon:-72.6950,city:'Gonaives'},
+    {name:'Ka Soley',addr:'Ka Soley, Gonaives',lat:19.4450,lon:-72.6850,city:'Gonaives'},
+    {name:'Jubile',addr:'Jubile, Gonaives',lat:19.4520,lon:-72.6920,city:'Gonaives'},
+    {name:'Trou Sable',addr:'Trou Sable, Gonaives',lat:19.4480,lon:-72.6830,city:'Gonaives'},
+    {name:'Praville',addr:'Praville, Gonaives',lat:19.4550,lon:-72.6800,city:'Gonaives'},
+    {name:'Blanc Miche',addr:'Blanc Miche, Gonaives',lat:19.4430,lon:-72.6900,city:'Gonaives'},
+    {name:'Pont Tamarin',addr:'Pont Tamarin, Gonaives',lat:19.4600,lon:-72.6870,city:'Gonaives'},
+    {name:'Labranle',addr:'Labranle, Gonaives',lat:19.4470,lon:-72.6940,city:'Gonaives'},
+    {name:'Bigonet',addr:'Bigonet, Gonaives',lat:19.4410,lon:-72.6810,city:'Gonaives'},
+    {name:'Bassin',addr:'Bassin, Gonaives',lat:19.4540,lon:-72.6960,city:'Gonaives'},
+    /* ── Les Cayes ── */
+    {name:'Les Cayes Centre',addr:'Centre-Ville, Les Cayes',lat:18.1947,lon:-73.7511,city:'Les Cayes'},
+    {name:'Bergeaud',addr:'Bergeaud, Les Cayes',lat:18.1970,lon:-73.7550,city:'Les Cayes'},
+    {name:'Dory',addr:'Dory, Les Cayes',lat:18.1900,lon:-73.7470,city:'Les Cayes'},
+    {name:'Ile-a-Vache',addr:'Ile-a-Vache, Sud',lat:18.0830,lon:-73.6470,city:'Les Cayes'},
+    {name:'Laborde',addr:'Laborde, Les Cayes',lat:18.1920,lon:-73.7530,city:'Les Cayes'},
+    {name:'Gelée',addr:'Gelée, Les Cayes',lat:18.1870,lon:-73.7400,city:'Les Cayes'},
+    {name:'Torbeck',addr:'Torbeck, Sud',lat:18.1700,lon:-73.7700,city:'Les Cayes'},
+    {name:'Marche Les Cayes',addr:'Marche, Les Cayes',lat:18.1950,lon:-73.7500,city:'Les Cayes'},
+    {name:'Camp-Perrin',addr:'Camp-Perrin, Sud',lat:18.2200,lon:-73.8600,city:'Les Cayes'},
+    {name:'Cavaillon',addr:'Cavaillon, Sud',lat:18.2100,lon:-73.6600,city:'Les Cayes'},
+    {name:'Cite La Paix',addr:'Cite La Paix, Les Cayes',lat:18.1980,lon:-73.7480,city:'Les Cayes'},
+    /* ── Jacmel ── */
+    {name:'Jacmel Centre',addr:'Centre-Ville, Jacmel',lat:18.2342,lon:-72.5350,city:'Jacmel'},
+    {name:'Bassin Bleu',addr:'Bassin Bleu, Jacmel',lat:18.2500,lon:-72.5200,city:'Jacmel'},
+    {name:'Ti Mouillage',addr:'Ti Mouillage, Jacmel',lat:18.2280,lon:-72.5280,city:'Jacmel'},
+    {name:'Marigot',addr:'Marigot, Sud-Est',lat:18.2300,lon:-72.3200,city:'Jacmel'},
+    {name:'Cayes-Jacmel',addr:'Cayes-Jacmel, Sud-Est',lat:18.2230,lon:-72.3800,city:'Jacmel'},
+    {name:'La Vallée',addr:'La Vallée, Jacmel',lat:18.2100,lon:-72.5600,city:'Jacmel'},
+    {name:'Plage Raymond',addr:'Plage Raymond, Jacmel',lat:18.2250,lon:-72.5500,city:'Jacmel'},
+    {name:'Cyvadier',addr:'Cyvadier, Jacmel',lat:18.2150,lon:-72.4900,city:'Jacmel'},
+    {name:'Marche de Fer Jacmel',addr:'Marche de Fer, Jacmel',lat:18.2340,lon:-72.5340,city:'Jacmel'},
+    {name:'Bois Chandelle',addr:'Bois Chandelle, Jacmel',lat:18.2400,lon:-72.5450,city:'Jacmel'},
+    {name:'Meyer',addr:'Meyer, Jacmel',lat:18.2420,lon:-72.5300,city:'Jacmel'}
   ];
 
   function setupAutocomplete(inputId, suggestionsId, latId, lonId) {
@@ -1439,10 +1472,20 @@ function shareMsouWoutReferral() {
   setupAutocomplete('destInput', 'destSuggestions', 'destLat', 'destLon');
 
   /* ═══ FARE CALCULATION ═══ */
-  /* Haiti ride pricing (HTG):
+  /* Haiti ride pricing (HTG) - intra-city only:
      Base fare: 50 HTG
-     Per km: 25 HTG (local), 20 HTG (inter-city >15km)
-     Minimum: 75 HTG */
+     Per km: 25 HTG
+     Minimum: 75 HTG
+     Inter-city routes BLOCKED (roads closed) */
+
+  function getCity(lat, lon) {
+    for (var name in CITY_ZONES) {
+      var z = CITY_ZONES[name];
+      if (haversine(lat, lon, z.center.lat, z.center.lon) <= z.radius) return name;
+    }
+    return null;
+  }
+
   window.calculateFare = function() {
     var lat1 = parseFloat(document.getElementById('pickupLat').value);
     var lon1 = parseFloat(document.getElementById('pickupLon').value);
@@ -1451,14 +1494,45 @@ function shareMsouWoutReferral() {
 
     if (isNaN(lat1) || isNaN(lat2)) return;
 
+    var city1 = getCity(lat1, lon1);
+    var city2 = getCity(lat2, lon2);
+    var fareDisplay = document.getElementById('fareDisplay');
+    var fareAmount = document.getElementById('fareAmount');
+    var fareDistance = document.getElementById('fareDistance');
+
+    /* Check if both locations are in an operating city */
+    if (!city1 || !city2) {
+      fareAmount.textContent = '--';
+      fareDistance.textContent = window._currentLang === 'en'
+        ? 'Service available in Cap-Haitien, Gonaives, Les Cayes & Jacmel only'
+        : 'Sèvis disponib nan Cap-Haitien, Gonaives, Les Cayes & Jacmel sèlman';
+      fareDisplay.style.display = 'block';
+      fareDisplay.style.background = 'linear-gradient(135deg,#dc2626,#b91c1c)';
+      document.getElementById('orderAmount').value = '';
+      return;
+    }
+
+    /* Block inter-city routes (roads blocked by gangs) */
+    if (city1 !== city2) {
+      fareAmount.textContent = '--';
+      fareDistance.textContent = window._currentLang === 'en'
+        ? 'Inter-city routes unavailable (roads blocked). Same-city trips only.'
+        : 'Wout ant vil yo pa disponib (wout bloke). Vwayaj nan menm vil sèlman.';
+      fareDisplay.style.display = 'block';
+      fareDisplay.style.background = 'linear-gradient(135deg,#dc2626,#b91c1c)';
+      document.getElementById('orderAmount').value = '';
+      return;
+    }
+
     var dist = haversine(lat1, lon1, lat2, lon2);
     var baseFare = 50;
-    var perKm = dist > 15 ? 20 : 25;
-    var fare = Math.max(75, Math.round((baseFare + dist * perKm) / 5) * 5); /* round to nearest 5 */
+    var perKm = 25;
+    var fare = Math.max(75, Math.round((baseFare + dist * perKm) / 5) * 5);
 
-    document.getElementById('fareAmount').textContent = fare + ' HTG';
-    document.getElementById('fareDistance').textContent = dist.toFixed(1) + ' km';
-    document.getElementById('fareDisplay').style.display = 'block';
+    fareAmount.textContent = fare + ' HTG';
+    fareDistance.textContent = dist.toFixed(1) + ' km · ' + city1;
+    fareDisplay.style.display = 'block';
+    fareDisplay.style.background = 'linear-gradient(135deg,var(--green),#16a34a)';
     document.getElementById('orderAmount').value = fare;
   };
 
