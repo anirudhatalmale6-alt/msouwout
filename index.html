@@ -1326,6 +1326,7 @@ function shareMsouWoutReferral() {
 
   /* Operating cities - intra-city only (roads blocked between cities) */
   var CITY_ZONES = {
+    'Port-au-Prince': {center:{lat:18.5350,lon:-72.3350}, radius:15},
     'Cap-Haitien': {center:{lat:19.7578,lon:-72.2042}, radius:12},
     'Gonaives': {center:{lat:19.4500,lon:-72.6889}, radius:10},
     'Les Cayes': {center:{lat:18.1947,lon:-73.7511}, radius:10},
@@ -1334,6 +1335,35 @@ function shareMsouWoutReferral() {
 
   /* Neighborhoods within operating cities */
   var HAITI_PLACES = [
+    /* ── Port-au-Prince / Petion-Ville (geo-fenced zones) ── */
+    {name:'Petion-Ville',addr:'Petion-Ville',lat:18.5125,lon:-72.2854,city:'Port-au-Prince'},
+    {name:'Delmas',addr:'Delmas, Port-au-Prince',lat:18.5547,lon:-72.3025,city:'Port-au-Prince'},
+    {name:'Tabarre',addr:'Tabarre, Port-au-Prince',lat:18.5647,lon:-72.2653,city:'Port-au-Prince'},
+    {name:'Turgeau',addr:'Turgeau, Port-au-Prince',lat:18.5350,lon:-72.3317,city:'Port-au-Prince'},
+    {name:'Canape Vert',addr:'Canape Vert, Port-au-Prince',lat:18.5392,lon:-72.3233,city:'Port-au-Prince'},
+    {name:'Bourdon',addr:'Bourdon, Port-au-Prince',lat:18.5283,lon:-72.3283,city:'Port-au-Prince'},
+    {name:'Juvenat',addr:'Juvenat, Petion-Ville',lat:18.5180,lon:-72.2920,city:'Port-au-Prince'},
+    {name:'Montagne Noire',addr:'Montagne Noire, Petion-Ville',lat:18.4950,lon:-72.2850,city:'Port-au-Prince'},
+    {name:'Pelerin',addr:'Pelerin, Petion-Ville',lat:18.4870,lon:-72.2800,city:'Port-au-Prince'},
+    {name:'Laboule',addr:'Laboule, Petion-Ville',lat:18.4780,lon:-72.2880,city:'Port-au-Prince'},
+    {name:'Thomassin',addr:'Thomassin, Ouest',lat:18.4800,lon:-72.2900,city:'Port-au-Prince'},
+    {name:'Fermate',addr:'Fermate, Petion-Ville',lat:18.5100,lon:-72.2950,city:'Port-au-Prince'},
+    {name:'Kenscoff',addr:'Kenscoff, Ouest',lat:18.4497,lon:-72.2847,city:'Port-au-Prince'},
+    {name:'Bois Verna',addr:'Bois Verna, Port-au-Prince',lat:18.5367,lon:-72.3350,city:'Port-au-Prince'},
+    {name:'Fontamara',addr:'Fontamara, Port-au-Prince',lat:18.5389,lon:-72.3539,city:'Port-au-Prince'},
+    {name:'Freres',addr:'Freres, Petion-Ville',lat:18.5047,lon:-72.2736,city:'Port-au-Prince'},
+    {name:'Place Boyer',addr:'Place Boyer, Petion-Ville',lat:18.5117,lon:-72.2878,city:'Port-au-Prince'},
+    {name:'Centre-Ville PAP',addr:'Centre-Ville, Port-au-Prince',lat:18.5425,lon:-72.3386,city:'Port-au-Prince'},
+    {name:'Aeroport Toussaint Louverture',addr:'Aeroport, Tabarre',lat:18.5800,lon:-72.2925,city:'Port-au-Prince'},
+    {name:'Delmas 19',addr:'Delmas 19, Port-au-Prince',lat:18.5450,lon:-72.3100,city:'Port-au-Prince'},
+    {name:'Delmas 33',addr:'Delmas 33, Port-au-Prince',lat:18.5400,lon:-72.3050,city:'Port-au-Prince'},
+    {name:'Delmas 75',addr:'Delmas 75, Port-au-Prince',lat:18.5350,lon:-72.2950,city:'Port-au-Prince'},
+    {name:'Carrefour',addr:'Carrefour, Ouest',lat:18.5283,lon:-72.3996,city:'Port-au-Prince'},
+    {name:'Magdoos',addr:'Magdoos, Petion-Ville',lat:18.5130,lon:-72.2870,city:'Port-au-Prince'},
+    {name:'Marche en Fer',addr:'Centre-Ville, Port-au-Prince',lat:18.5442,lon:-72.3394,city:'Port-au-Prince'},
+    {name:'Hotel Montana',addr:'Petion-Ville',lat:18.5208,lon:-72.2961,city:'Port-au-Prince'},
+    {name:'Croix-des-Bouquets',addr:'Croix-des-Bouquets, Ouest',lat:18.5728,lon:-72.2267,city:'Port-au-Prince'},
+    {name:'Port-au-Prince',addr:'Port-au-Prince, Ouest',lat:18.5425,lon:-72.3386,city:'Port-au-Prince'},
     /* ── Cap-Haitien ── */
     {name:'Cap-Haitien Centre',addr:'Centre-Ville, Cap-Haitien',lat:19.7578,lon:-72.2042,city:'Cap-Haitien'},
     {name:'Carrefour Shada',addr:'Shada, Cap-Haitien',lat:19.7550,lon:-72.1980,city:'Cap-Haitien'},
@@ -1348,7 +1378,6 @@ function shareMsouWoutReferral() {
     {name:'Charrier',addr:'Charrier, Cap-Haitien',lat:19.7450,lon:-72.2050,city:'Cap-Haitien'},
     {name:'Limonade',addr:'Limonade, Nord',lat:19.7200,lon:-72.1300,city:'Cap-Haitien'},
     {name:'Madeline',addr:'Madeline, Cap-Haitien',lat:19.7530,lon:-72.2100,city:'Cap-Haitien'},
-    {name:'Magdoos',addr:'Magdoos, Petion-Ville',lat:18.5130,lon:-72.2870,city:'Petion-Ville'},
     {name:'La Fossette',addr:'La Fossette, Cap-Haitien',lat:19.7620,lon:-72.1990,city:'Cap-Haitien'},
     {name:'Aeroport Hugo Chavez',addr:'Aeroport, Cap-Haitien',lat:19.7330,lon:-72.1950,city:'Cap-Haitien'},
     {name:'Marche de Fer Cap',addr:'Marche de Fer, Cap-Haitien',lat:19.7570,lon:-72.2035,city:'Cap-Haitien'},
