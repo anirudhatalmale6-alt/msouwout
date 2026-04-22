@@ -173,6 +173,56 @@ nav{
 .hero-stat .num{font-family:var(--display);font-size:2rem;font-weight:900;color:#fff}
 .hero-stat .label{font-size:.75rem;color:rgba(255,255,255,.6);margin-top:4px;font-weight:500}
 
+/* ═══ RIDE-TYPE CARDS ═══ */
+.ride-cards{
+  display:flex;gap:16px;margin-top:32px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp .8s .25s ease both;
+}
+.ride-card{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  border-radius:16px;padding:20px 24px;min-width:150px;max-width:180px;
+  text-align:center;cursor:pointer;transition:all .3s;text-decoration:none;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.ride-card:hover{
+  background:rgba(255,255,255,.2);transform:translateY(-4px);
+  box-shadow:0 8px 32px rgba(0,0,0,.2);border-color:rgba(255,255,255,.4);
+}
+.ride-card-icon{font-size:2.2rem;display:block;margin-bottom:8px}
+.ride-card-title{font-family:var(--display);font-size:1rem;font-weight:800;color:#fff;margin-bottom:4px}
+.ride-card-desc{font-size:.72rem;color:rgba(255,255,255,.65);line-height:1.4;font-weight:400}
+
+/* ═══ TRUST BADGES ═══ */
+.trust-badges{
+  display:flex;gap:24px;margin-top:20px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp .8s .35s ease both;
+}
+.trust-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.78rem;font-weight:600;color:rgba(255,255,255,.85);letter-spacing:.02em;
+}
+.trust-badge::before{
+  content:'';display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:var(--green,#22c55e);flex-shrink:0;
+}
+
+/* ═══ HERO CTA BIG ═══ */
+.btn-red-big{
+  background:var(--red);color:#fff;box-shadow:0 6px 28px rgba(210,16,52,.4);
+  padding:20px 48px;font-size:1.15rem;font-weight:800;letter-spacing:.02em;
+  border-radius:100px;text-transform:uppercase;
+}
+.btn-red-big:hover{
+  background:var(--red-dark);transform:translateY(-3px);
+  box-shadow:0 12px 40px rgba(210,16,52,.5);
+}
+.btn-ghost-sm{
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);
+  border:1px solid rgba(255,255,255,.15);
+  padding:10px 24px;font-size:.78rem;font-weight:500;border-radius:100px;
+}
+.btn-ghost-sm:hover{background:rgba(255,255,255,.15);color:#fff}
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 
 /* ═══ SECTIONS ═══ */
@@ -351,6 +401,10 @@ footer{
   .nav-links{display:none}
   .mobile-toggle{display:block}
   .hero-stats{flex-direction:column;gap:20px}
+  .ride-cards{gap:10px}
+  .ride-card{min-width:100px;max-width:140px;padding:14px 16px}
+  .ride-card-icon{font-size:1.8rem}
+  .trust-badges{gap:14px}
   .services-grid,.pricing-grid{grid-template-columns:1fr}
   .how-steps{grid-template-columns:1fr 1fr}
   .form-row{grid-template-columns:1fr}
@@ -415,17 +469,49 @@ footer{
 <section class="hero">
   <img src="assets/msouwout-icon.png" alt="MsouWout" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.2);box-shadow:0 8px 32px rgba(0,0,0,.3);margin-bottom:20px;animation:fadeUp .8s ease both">
   <div class="hero-badge">&#128293; <span data-i18n="hero_badge">A HaitiBiznis Platform</span></div>
-  <h1 data-i18n="hero_title">Livrezon &amp; Transpò <em>Rapid</em> an Ayiti</h1>
-  <p class="hero-sub" data-i18n="hero_sub">MsouWout connects you with trusted drivers for fast package delivery and affordable ridesharing across Haiti.</p>
+  <h1 data-i18n="hero_title">Mande Transpo Ou <em>An Sekirite</em></h1>
+  <p class="hero-sub" data-i18n="hero_sub">Moto, machin, oswa livrezon — rapid, an sekirite, ak chofe verifye atrave Ayiti.</p>
+
+  <!-- RIDE-TYPE QUICK CARDS -->
+  <div class="ride-cards">
+    <a href="#order" class="ride-card">
+      <span class="ride-card-icon">&#127949;</span>
+      <div class="ride-card-title" data-i18n="rc_moto_title">Moto</div>
+      <div class="ride-card-desc" data-i18n="rc_moto_desc">Quick &amp; affordable</div>
+    </a>
+    <a href="#order" class="ride-card">
+      <span class="ride-card-icon">&#128663;</span>
+      <div class="ride-card-title" data-i18n="rc_car_title">Car</div>
+      <div class="ride-card-desc" data-i18n="rc_car_desc">Comfortable, A/C</div>
+    </a>
+    <a href="#order" class="ride-card">
+      <span class="ride-card-icon">&#128230;</span>
+      <div class="ride-card-title" data-i18n="rc_delivery_title">Delivery</div>
+      <div class="ride-card-desc" data-i18n="rc_delivery_desc">Packages &amp; food</div>
+    </a>
+  </div>
+
+  <!-- PRIMARY CTA -->
   <div class="hero-actions">
-    <a href="#order" class="btn btn-red" data-i18n="hero_cta1">&#128230; Request a Delivery</a>
-    <a href="driver-register.html" class="btn btn-ghost" data-i18n="hero_cta2">&#128663; Become a Driver</a>
+    <a href="#order" class="btn btn-red-big" data-i18n="hero_cta1">&#128661; Mande yon Kous</a>
+  </div>
+
+  <!-- TRUST BADGES -->
+  <div class="trust-badges">
+    <span class="trust-badge" data-i18n="trust_verified">Verified Drivers</span>
+    <span class="trust-badge" data-i18n="trust_gps">GPS Tracking</span>
+    <span class="trust-badge" data-i18n="trust_payment">Easy Payment</span>
+  </div>
+
+  <!-- SECONDARY: BECOME A DRIVER -->
+  <div style="margin-top:14px;animation:fadeUp .8s .4s ease both;">
+    <a href="driver-register.html" class="btn btn-ghost-sm" data-i18n="hero_cta2">&#128663; Become a Driver</a>
   </div>
 
   <!-- REFERRAL INVITE BUTTON -->
   <div class="referral-hero-cta" id="referralHeroCta" style="margin-top:16px;animation:fadeUp .8s .5s ease both;">
     <div style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#FF6B35 0%,#F7C948 100%);border-radius:50px;padding:8px 10px 8px 14px;box-shadow:0 2px 12px rgba(255,107,53,0.3);">
-      <span style="font-size:1.1rem;flex-shrink:0;">🎁</span>
+      <span style="font-size:1.1rem;flex-shrink:0;">&#127873;</span>
       <strong style="color:#fff;font-size:0.78rem;font-weight:700;white-space:nowrap;" data-i18n="ref_hero_title">Invite Friends, Earn Cash!</strong>
       <button onclick="shareMsouWoutReferral()" style="background:#fff;color:#FF6B35;border:none;border-radius:50px;padding:6px 14px;font-weight:700;font-size:0.75rem;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s;" data-i18n="ref_hero_btn">Share Now</button>
     </div>
@@ -923,9 +1009,11 @@ const T = {
   fr: {
     nav_services:"Services", nav_how:"Comment Ca Marche", nav_pricing:"Tarifs", nav_zones:"Zones", nav_drive:"Conduire avec Nous", nav_cta:"Demander Livrezon",
     hero_badge:"Une Plateforme HaitiBiznis",
-    hero_title:"Livraison &amp; Transport <em>Rapide</em> en Haiti",
-    hero_sub:"MsouWout vous connecte avec des chauffeurs de confiance pour une livraison rapide et du covoiturage abordable a travers Haiti.",
-    hero_cta1:"&#128230; Demander une Livraison", hero_cta2:"&#128663; Devenir Chauffeur",
+    hero_title:"Commandez Votre Trajet <em>en Securite</em>",
+    hero_sub:"Moto, voiture ou livraison — rapide, en securite, avec des chauffeurs verifies a travers Haiti.",
+    hero_cta1:"&#128661; Demander un Trajet", hero_cta2:"&#128663; Devenir Chauffeur",
+    rc_moto_title:"Moto", rc_moto_desc:"Rapide et abordable", rc_car_title:"Voiture", rc_car_desc:"Confortable, climatisee", rc_delivery_title:"Livraison", rc_delivery_desc:"Colis et nourriture",
+    trust_verified:"Chauffeurs Verifies", trust_gps:"Suivi GPS", trust_payment:"Paiement Facile",
     stat1_num:"10+", stat1_label:"Villes Couvertes", stat2_num:"24/7", stat2_label:"Disponible", stat3_num:"MonCash", stat3_label:"Accepte",
     srv_tag:"Nos Services", srv_title:"Tout Ce Dont Vous Avez Besoin, Livre", srv_sub:"Des colis aux passagers, MsouWout livre rapidement et en toute securite.",
     srv1_title:"Livraison de Colis", srv1_desc:"Envoyez des colis a travers la ville ou a travers Haiti. Suivi en temps reel, preuve de livraison et manutention securisee.",
@@ -980,9 +1068,11 @@ const T = {
   en: {
     nav_services:"Services", nav_how:"How It Works", nav_pricing:"Pricing", nav_zones:"Zones", nav_drive:"Drive With Us", nav_cta:"Request Delivery",
     hero_badge:"A HaitiBiznis Platform",
-    hero_title:"Fast Delivery &amp; Ridesharing <em>Across Haiti</em>",
-    hero_sub:"MsouWout connects you with trusted drivers for fast package delivery and affordable ridesharing across Haiti.",
-    hero_cta1:"&#128230; Request a Delivery", hero_cta2:"&#128663; Become a Driver",
+    hero_title:"Request Your Ride <em>Safely</em>",
+    hero_sub:"Moto, car, or delivery — fast, safe, with verified drivers across Haiti.",
+    hero_cta1:"&#128661; Request a Ride", hero_cta2:"&#128663; Become a Driver",
+    rc_moto_title:"Moto", rc_moto_desc:"Quick &amp; affordable", rc_car_title:"Car", rc_car_desc:"Comfortable, A/C", rc_delivery_title:"Delivery", rc_delivery_desc:"Packages &amp; food",
+    trust_verified:"Verified Drivers", trust_gps:"GPS Tracking", trust_payment:"Easy Payment",
     stat1_num:"10+", stat1_label:"Cities Covered", stat2_num:"24/7", stat2_label:"Available", stat3_num:"MonCash", stat3_label:"Accepted",
     srv_tag:"Our Services", srv_title:"Everything You Need, Delivered", srv_sub:"From packages to passengers, MsouWout gets it there fast and safe.",
     srv1_title:"Package Delivery", srv1_desc:"Send packages across town or across Haiti. Real-time tracking, proof of delivery, and secure handling for all your shipments.",
@@ -1037,9 +1127,11 @@ const T = {
   ht: {
     nav_services:"Sevis", nav_how:"Koman Li Mache", nav_pricing:"Pri", nav_zones:"Zòn", nav_drive:"Kondwi ak Nou", nav_cta:"Mande Livrezon",
     hero_badge:"Yon Platfòm HaitiBiznis",
-    hero_title:"Livrezon &amp; Transpò <em>Rapid</em> an Ayiti",
-    hero_sub:"MsouWout konekte ou ak chofè konfyans pou livrezon rapid ak ridesharing abòdab atravè Ayiti.",
-    hero_cta1:"&#128230; Mande yon Livrezon", hero_cta2:"&#128663; Vin yon Chofè",
+    hero_title:"Mande Transpò Ou <em>An Sekirite</em>",
+    hero_sub:"Moto, machin, oswa livrezon — rapid, an sekirite, ak chofè verifye atravè Ayiti.",
+    hero_cta1:"&#128661; Mande yon Kous", hero_cta2:"&#128663; Vin yon Chofè",
+    rc_moto_title:"Moto", rc_moto_desc:"Rapid epi abòdab", rc_car_title:"Machin", rc_car_desc:"Konfòtab, klima", rc_delivery_title:"Livrezon", rc_delivery_desc:"Pakè ak manje",
+    trust_verified:"Chofè Verifye", trust_gps:"Swivi GPS", trust_payment:"Peman Fasil",
     stat1_num:"10+", stat1_label:"Vil Kouvri", stat2_num:"24/7", stat2_label:"Disponib", stat3_num:"MonCash", stat3_label:"Aksepte",
     srv_tag:"Sevis Nou", srv_title:"Tout Sa Ou Bezwen, Livre", srv_sub:"Soti nan pakè rive nan pasaje, MsouWout pote li vit epi san danje.",
     srv1_title:"Livrezon Pakè", srv1_desc:"Voye pakè atravè vil la oswa atravè Ayiti. Swivi an tan reyèl, prèv livrezon, ak mannyèl sekirize.",
@@ -1094,9 +1186,11 @@ const T = {
   es: {
     nav_services:"Servicios", nav_how:"Como Funciona", nav_pricing:"Precios", nav_zones:"Zonas", nav_drive:"Conduce con Nosotros", nav_cta:"Solicitar Entrega",
     hero_badge:"Una Plataforma HaitiBiznis",
-    hero_title:"Entrega &amp; Transporte <em>Rapido</em> en Haiti",
-    hero_sub:"MsouWout te conecta con conductores confiables para entregas rapidas y transporte compartido asequible en Haiti.",
-    hero_cta1:"&#128230; Solicitar Entrega", hero_cta2:"&#128663; Ser Conductor",
+    hero_title:"Solicita Tu Viaje <em>con Seguridad</em>",
+    hero_sub:"Moto, carro o entrega — rapido, seguro, con conductores verificados en Haiti.",
+    hero_cta1:"&#128661; Solicitar un Viaje", hero_cta2:"&#128663; Ser Conductor",
+    rc_moto_title:"Moto", rc_moto_desc:"Rapido y economico", rc_car_title:"Carro", rc_car_desc:"Comodo, con A/C", rc_delivery_title:"Entrega", rc_delivery_desc:"Paquetes y comida",
+    trust_verified:"Conductores Verificados", trust_gps:"Rastreo GPS", trust_payment:"Pago Facil",
     stat1_num:"10+", stat1_label:"Ciudades Cubiertas", stat2_num:"24/7", stat2_label:"Disponible", stat3_num:"MonCash", stat3_label:"Aceptado",
     srv_tag:"Nuestros Servicios", srv_title:"Todo Lo Que Necesitas, Entregado", srv_sub:"De paquetes a pasajeros, MsouWout lo lleva rapido y seguro.",
     srv1_title:"Entrega de Paquetes", srv1_desc:"Envia paquetes por la ciudad o por todo Haiti. Seguimiento en tiempo real y manejo seguro.",
