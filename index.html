@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ht">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -464,9 +464,9 @@ footer{
 
 <!-- LANGUAGE BAR -->
 <div class="lang-bar">
-  <a onclick="setLang('fr')" class="active" id="lang-fr">&#127467;&#127479; Francais</a>
+  <a onclick="setLang('fr')" id="lang-fr">&#127467;&#127479; Francais</a>
   <a onclick="setLang('en')" id="lang-en">&#127468;&#127463; English</a>
-  <a onclick="setLang('ht')" id="lang-ht">&#127469;&#127481; Kreyol</a>
+  <a onclick="setLang('ht')" class="active" id="lang-ht">&#127469;&#127481; Kreyol</a>
   <a onclick="setLang('es')" id="lang-es">&#127466;&#127480; Espanol</a>
 </div>
 
@@ -1102,11 +1102,12 @@ const T = {
   fr: {
     nav_services:"Services", nav_how:"Comment Ca Marche", nav_pricing:"Tarifs", nav_zones:"Zones", nav_drive:"Conduire avec Nous", nav_cta:"S'inscrire Gratuit",
     hero_badge:"Une Plateforme HaitiBiznis",
-    hero_title:"Demandez Taxi, Moto ou Livraison <em>en Securite</em>",
-    hero_sub:"Chauffeurs verifies. Suivi GPS. Service rapide a travers Haiti.",
-    hero_cta1:"&#128661; Demander un Trajet", hero_cta2:"&#128176; S'inscrire comme Chauffeur — Gagnez de l'Argent",
+    hero_title:"Vous avez une voiture ou une moto?",
+    hero_sub:"Commencez a gagner chaque jour avec MsouWout.",
+    hero_cta1:"INSCRIVEZ-VOUS COMME CHAUFFEUR GRATUIT", hero_cta2:"&#128176; S'inscrire comme Chauffeur",
+    hero_user_q:"Vous avez besoin d'une course?", hero_ride_btn:"&#128663; Demander Taxi / Moto", hero_delivery_btn:"&#128230; Demander Livraison",
     rc_moto_title:"Moto", rc_moto_desc:"Rapide. Economique. Disponible partout.", rc_car_title:"Voiture", rc_car_desc:"Confortable. Securise. Pour tous trajets.", rc_delivery_title:"Livraison", rc_delivery_desc:"Rapide. Fiable. Nourriture et colis.",
-    trust_verified:"Chauffeurs Verifies", trust_gps:"Suivi GPS", trust_payment:"Paiement Facile",
+    trust_verified:"&#10004; Chauffeurs Verifies", trust_gps:"&#10004; Courses en securite", trust_payment:"Paiement Facile", trust_schedule:"&#10004; Travaillez a votre rythme",
     stat1_num:"10+", stat1_label:"Villes Couvertes", stat2_num:"24/7", stat2_label:"Disponible", stat3_num:"MonCash", stat3_label:"Accepte",
     srv_tag:"Nos Services", srv_title:"Trajets &amp; Livraison, Tout en Un", srv_sub:"Reservez un trajet en moto ou voiture, ou envoyez des colis — MsouWout gere tout, vite et en securite.",
     srv1_title:"Livraison de Colis", srv1_desc:"Envoyez des colis a travers la ville ou a travers Haiti. Suivi en temps reel, preuve de livraison et manutention securisee.",
@@ -1164,16 +1165,21 @@ const T = {
     pay_tag:"Paiement", pay_title:"Nous acceptons", pay_sub:"Payez comme vous voulez. Toutes les methodes de paiement locales acceptees.",
     sp_drivers:"Chauffeurs verifies", sp_rides:"Trajets effectues", sp_zones:"Zones disponibles",
     web_push_label:"&#127760; Tout commence sur",
-    sticky_ride:"&#128661; Demander un Trajet", sticky_driver:"S'inscrire Gratuit"
+    ac_ride_title:"Demander Course", ac_ride_desc:"Taxi / Moto — Rapide. Securise.", ac_ride_cta:"Demander Maintenant &#8594;",
+    ac_del_title:"Demander Livraison", ac_del_desc:"Nourriture, colis, services.", ac_del_cta:"Envoyer Livraison &#8594;",
+    earn_title:"Combien Pouvez-Vous Gagner?", earn_amount:"Jusqu'a <strong>1,000+ HTG par jour</strong> selon activite", earn_cta:"Commencez Aujourd'hui &#8594;",
+    sec_title:"La Securite est Notre Priorite", sec1:"Identite du chauffeur verifiee", sec2:"GPS en temps reel", sec3:"Chaque course tracable",
+    sticky_ride:"&#128663; Demander Course", sticky_driver:"&#128176; Devenir Chauffeur"
   },
   en: {
     nav_services:"Services", nav_how:"How It Works", nav_pricing:"Pricing", nav_zones:"Zones", nav_drive:"Drive With Us", nav_cta:"Sign Up Free",
     hero_badge:"A HaitiBiznis Platform",
-    hero_title:"Request Taxi, Moto or Delivery <em>Safely</em>",
-    hero_sub:"Verified drivers. GPS tracking. Fast service across Haiti.",
-    hero_cta1:"&#128661; Request a Ride", hero_cta2:"&#128176; Sign Up as Driver — Earn Money",
+    hero_title:"Got a Car or Motorcycle?",
+    hero_sub:"Start earning every day with MsouWout.",
+    hero_cta1:"SIGN UP AS DRIVER FREE", hero_cta2:"&#128176; Sign Up as Driver",
+    hero_user_q:"Need a ride?", hero_ride_btn:"&#128663; Request Taxi / Moto", hero_delivery_btn:"&#128230; Request Delivery",
     rc_moto_title:"Moto", rc_moto_desc:"Fast. Affordable. Available everywhere.", rc_car_title:"Car", rc_car_desc:"Comfortable. Safe. For all trips.", rc_delivery_title:"Delivery", rc_delivery_desc:"Fast. Reliable. Food and packages.",
-    trust_verified:"Verified Drivers", trust_gps:"GPS Tracking", trust_payment:"Easy Payment",
+    trust_verified:"&#10004; Verified Drivers", trust_gps:"&#10004; Safe rides", trust_payment:"Easy Payment", trust_schedule:"&#10004; Work your own schedule",
     stat1_num:"10+", stat1_label:"Cities Covered", stat2_num:"24/7", stat2_label:"Available", stat3_num:"MonCash", stat3_label:"Accepted",
     srv_tag:"Our Services", srv_title:"Rides &amp; Delivery, All in One", srv_sub:"Book a moto or car ride, or send packages — MsouWout handles it all, fast and safe.",
     srv1_title:"Package Delivery", srv1_desc:"Send packages across town or across Haiti. Real-time tracking, proof of delivery, and secure handling for all your shipments.",
@@ -1231,16 +1237,21 @@ const T = {
     pay_tag:"Payment", pay_title:"We accept", pay_sub:"Pay how you want. All local payment methods accepted.",
     sp_drivers:"Verified drivers", sp_rides:"Rides completed", sp_zones:"Zones available",
     web_push_label:"&#127760; It all starts at",
-    sticky_ride:"&#128661; Request a Ride", sticky_driver:"Sign Up Free"
+    ac_ride_title:"Request Ride", ac_ride_desc:"Taxi / Moto — Fast. Safe.", ac_ride_cta:"Request Now &#8594;",
+    ac_del_title:"Request Delivery", ac_del_desc:"Food, packages, services.", ac_del_cta:"Send Delivery &#8594;",
+    earn_title:"How Much Can You Earn?", earn_amount:"Up to <strong>1,000+ HTG per day</strong> based on activity", earn_cta:"Start Today &#8594;",
+    sec_title:"Safety is Our Priority", sec1:"Driver identity verified", sec2:"Real-time GPS", sec3:"Every ride traceable",
+    sticky_ride:"&#128663; Request Ride", sticky_driver:"&#128176; Become Driver"
   },
   ht: {
     nav_services:"Sevis", nav_how:"Koman Li Mache", nav_pricing:"Pri", nav_zones:"Zon", nav_drive:"Kondwi ak Nou", nav_cta:"Enskri Gratis",
     hero_badge:"Yon Platfòm HaitiBiznis",
-    hero_title:"Mande Taxi, Moto oswa Livrezon <em>An Sekirite</em>",
-    hero_sub:"Chofe verifye. Suivi GPS. Sevis rapid atrave Ayiti.",
-    hero_cta1:"&#128661; Mande Yon Kous", hero_cta2:"&#128176; Enskri kom Chofe — Fe Lajan",
+    hero_title:"Ou Gen Machin oswa Moto?",
+    hero_sub:"Komanse fe lajan chak jou ak MsouWout.",
+    hero_cta1:"ENSKRI KOM CHOFE GRATIS", hero_cta2:"&#128176; Enskri kom Chofe",
+    hero_user_q:"Ou bezwen yon kous?", hero_ride_btn:"&#128663; Mande Taxi / Moto", hero_delivery_btn:"&#128230; Mande Livrezon",
     rc_moto_title:"Moto", rc_moto_desc:"Rapid. Ekonomik. Disponib tout kote.", rc_car_title:"Machin", rc_car_desc:"Konfotab. Sekirize. Pou tout traje.", rc_delivery_title:"Livrezon", rc_delivery_desc:"Rapid. Fyab. Pou manje ak colis.",
-    trust_verified:"Chofè Verifye", trust_gps:"Swivi GPS", trust_payment:"Peman Fasil",
+    trust_verified:"&#10004; Chofe verifye", trust_gps:"&#10004; Kous an sekirite", trust_payment:"Peman Fasil", trust_schedule:"&#10004; Travay sou pwop ore ou",
     stat1_num:"10+", stat1_label:"Vil Kouvri", stat2_num:"24/7", stat2_label:"Disponib", stat3_num:"MonCash", stat3_label:"Aksepte",
     srv_tag:"Sevis Nou", srv_title:"Transpò &amp; Livrezon, Tout nan Yon Sèl", srv_sub:"Rezève yon kous moto oswa machin, oswa voye pakè — MsouWout jere tout, vit epi an sekirite.",
     srv1_title:"Livrezon Pakè", srv1_desc:"Voye pakè atravè vil la oswa atravè Ayiti. Swivi an tan reyèl, prèv livrezon, ak mannyèl sekirize.",
@@ -1298,16 +1309,21 @@ const T = {
     pay_tag:"Peman", pay_title:"Nou aksepte", pay_sub:"Peye jan ou vle. Tout metod peman lokal aksepte.",
     sp_drivers:"Chofe verifye", sp_rides:"Kous fet", sp_zones:"Zon disponib",
     web_push_label:"&#127760; Tout komanse sou",
-    sticky_ride:"&#128661; Mande Yon Kous", sticky_driver:"Enskri Gratis"
+    ac_ride_title:"Mande Kous", ac_ride_desc:"Taxi / Moto — Rapid. Sekirize.", ac_ride_cta:"Mande Kounye a &#8594;",
+    ac_del_title:"Mande Livrezon", ac_del_desc:"Manje, colis, sevis.", ac_del_cta:"Voye Livrezon &#8594;",
+    earn_title:"Konbyen Ou Ka Fe?", earn_amount:"Jiska <strong>1,000+ HTG pa jou</strong> selon aktivite", earn_cta:"Komanse Jodi a &#8594;",
+    sec_title:"Sekirite Nou Se Priyorite", sec1:"Idantite chofe verifye", sec2:"GPS an tan reyel", sec3:"Chak kous ka trase",
+    sticky_ride:"&#128663; Mande Kous", sticky_driver:"&#128176; Vin Chofe"
   },
   es: {
     nav_services:"Servicios", nav_how:"Como Funciona", nav_pricing:"Precios", nav_zones:"Zonas", nav_drive:"Conduce con Nosotros", nav_cta:"Inscribirse Gratis",
     hero_badge:"Una Plataforma HaitiBiznis",
-    hero_title:"Solicita Taxi, Moto o Entrega <em>con Seguridad</em>",
-    hero_sub:"Conductores verificados. Rastreo GPS. Servicio rapido en todo Haiti.",
-    hero_cta1:"&#128661; Solicitar un Viaje", hero_cta2:"&#128176; Inscribirse como Conductor — Gana Dinero",
+    hero_title:"Tienes Carro o Moto?",
+    hero_sub:"Empieza a ganar cada dia con MsouWout.",
+    hero_cta1:"INSCRIBETE COMO CONDUCTOR GRATIS", hero_cta2:"&#128176; Inscribirse como Conductor",
+    hero_user_q:"Necesitas un viaje?", hero_ride_btn:"&#128663; Solicitar Taxi / Moto", hero_delivery_btn:"&#128230; Solicitar Entrega",
     rc_moto_title:"Moto", rc_moto_desc:"Rapido. Economico. Disponible en todas partes.", rc_car_title:"Carro", rc_car_desc:"Comodo. Seguro. Para todos los viajes.", rc_delivery_title:"Entrega", rc_delivery_desc:"Rapido. Confiable. Comida y paquetes.",
-    trust_verified:"Conductores Verificados", trust_gps:"Rastreo GPS", trust_payment:"Pago Facil",
+    trust_verified:"&#10004; Conductores Verificados", trust_gps:"&#10004; Viajes seguros", trust_payment:"Pago Facil", trust_schedule:"&#10004; Trabaja a tu ritmo",
     stat1_num:"10+", stat1_label:"Ciudades Cubiertas", stat2_num:"24/7", stat2_label:"Disponible", stat3_num:"MonCash", stat3_label:"Aceptado",
     srv_tag:"Nuestros Servicios", srv_title:"Viajes &amp; Entregas, Todo en Uno", srv_sub:"Reserva un viaje en moto o carro, o envia paquetes — MsouWout lo maneja todo, rapido y seguro.",
     srv1_title:"Entrega de Paquetes", srv1_desc:"Envia paquetes por la ciudad o por todo Haiti. Seguimiento en tiempo real y manejo seguro.",
@@ -1365,11 +1381,15 @@ const T = {
     pay_tag:"Pago", pay_title:"Aceptamos", pay_sub:"Paga como quieras. Todos los metodos de pago locales aceptados.",
     sp_drivers:"Conductores verificados", sp_rides:"Viajes realizados", sp_zones:"Zonas disponibles",
     web_push_label:"&#127760; Todo empieza en",
-    sticky_ride:"&#128661; Solicitar un Viaje", sticky_driver:"Inscribirse Gratis"
+    ac_ride_title:"Solicitar Viaje", ac_ride_desc:"Taxi / Moto — Rapido. Seguro.", ac_ride_cta:"Solicitar Ahora &#8594;",
+    ac_del_title:"Solicitar Entrega", ac_del_desc:"Comida, paquetes, servicios.", ac_del_cta:"Enviar Entrega &#8594;",
+    earn_title:"Cuanto Puedes Ganar?", earn_amount:"Hasta <strong>1,000+ HTG por dia</strong> segun actividad", earn_cta:"Empieza Hoy &#8594;",
+    sec_title:"La Seguridad es Nuestra Prioridad", sec1:"Identidad del conductor verificada", sec2:"GPS en tiempo real", sec3:"Cada viaje rastreable",
+    sticky_ride:"&#128663; Solicitar Viaje", sticky_driver:"&#128176; Ser Conductor"
   }
 };
 
-let currentLang='fr';
+let currentLang='ht';
 function setLang(lang){
   currentLang=lang;
   document.querySelectorAll('.lang-bar a').forEach(a=>a.classList.remove('active'));
@@ -1424,7 +1444,7 @@ document.querySelectorAll('.service-card,.how-step,.price-card,.zone-card,.eco-c
   observer.observe(el);
 });
 
-setLang('fr');
+setLang('ht');
 
 // PWA Install
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}
