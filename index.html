@@ -499,74 +499,79 @@ footer{
   <a href="driver-register.html" onclick="closeMobile()" class="nav-cta" style="text-align:center" data-i18n="nav_cta">Enskri Gratis</a>
 </div>
 
-<!-- HERO -->
+<!-- HERO — DRIVER-FIRST -->
 <section class="hero">
-  <div class="hero-badge">&#128293; <span data-i18n="hero_badge">Platfom Transpotasyon #1 an Ayiti</span></div>
-  <h1 data-i18n="hero_title">Mande Taxi, Moto oswa Livrezon <em>An Sekirite</em></h1>
-  <p class="hero-sub" data-i18n="hero_sub">Chofe verifye. Suivi GPS. Sevis rapid atrave Ayiti.</p>
+  <img src="assets/msouwout-logo.jpg" alt="MsouWout" style="width:120px;height:120px;border-radius:24px;object-fit:cover;margin-bottom:20px;box-shadow:0 12px 40px rgba(0,0,0,.3);border:2px solid rgba(255,255,255,.15);animation:fadeUp .8s ease both">
+  <h1 data-i18n="hero_title" style="animation:fadeUp .8s .1s ease both">Ou Gen Machin oswa Moto?</h1>
+  <p class="hero-sub" data-i18n="hero_sub" style="animation:fadeUp .8s .2s ease both">K&ograve;manse f&egrave; lajan chak jou ak MsouWout.</p>
 
-  <!-- RIDE-TYPE QUICK CARDS -->
-  <div class="ride-cards">
-    <a href="#order" class="ride-card">
-      <span class="ride-card-icon">&#127949;</span>
-      <div class="ride-card-title" data-i18n="rc_moto_title">Moto</div>
-      <div class="ride-card-desc" data-i18n="rc_moto_desc">Rapid. Ekonomik. Disponib tout kote.</div>
-    </a>
-    <a href="#order" class="ride-card">
-      <span class="ride-card-icon">&#128663;</span>
-      <div class="ride-card-title" data-i18n="rc_car_title">Voiture</div>
-      <div class="ride-card-desc" data-i18n="rc_car_desc">Konfortab. Sekirize. Pou tout traje.</div>
-    </a>
-    <a href="#order" class="ride-card">
-      <span class="ride-card-icon">&#128230;</span>
-      <div class="ride-card-title" data-i18n="rc_delivery_title">Livrezon</div>
-      <div class="ride-card-desc" data-i18n="rc_delivery_desc">Rapid. Fyab. Pou manje ak colis.</div>
-    </a>
+  <div class="hero-actions" style="animation:fadeUp .8s .3s ease both">
+    <a href="driver-register.html" class="btn btn-red-big" data-i18n="hero_cta1" style="font-size:1.1rem;padding:18px 40px">ENSKRI K&Ograve;M CHOF&Egrave; GRATIS</a>
   </div>
 
-  <!-- DUAL CTAs -->
-  <div class="hero-actions">
-    <a href="#order" class="btn btn-red-big" data-i18n="hero_cta1">&#128661; Mande Yon Kous</a>
-  </div>
-  <div style="margin-top:14px;animation:fadeUp .8s .4s ease both;">
-    <a href="driver-register.html" class="btn btn-gold-big" data-i18n="hero_cta2">&#128176; Enskri kom Chofe — Fe Lajan</a>
+  <div class="trust-badges" style="margin-top:24px;animation:fadeUp .8s .35s ease both">
+    <span class="trust-badge" data-i18n="trust_verified">&#10004; Chof&egrave; verifye</span>
+    <span class="trust-badge" data-i18n="trust_gps">&#10004; Kous an sekirite</span>
+    <span class="trust-badge" data-i18n="trust_schedule">&#10004; Travay sou pw&ograve;p or&egrave; ou</span>
   </div>
 
-  <!-- TRUST BADGES -->
-  <div class="trust-badges" style="margin-top:24px">
-    <span class="trust-badge" data-i18n="trust_verified">Chofe Verifye</span>
-    <span class="trust-badge" data-i18n="trust_gps">Suivi GPS</span>
-    <span class="trust-badge" data-i18n="trust_payment">Peman Fasil</span>
-  </div>
-
-  <div class="hero-stats">
-    <div class="hero-stat"><div class="num" data-i18n="stat1_num">50+</div><div class="label" data-i18n="stat1_label">Chofe Verifye</div></div>
-    <div class="hero-stat"><div class="num" data-i18n="stat2_num">24/7</div><div class="label" data-i18n="stat2_label">Disponib</div></div>
-    <div class="hero-stat"><div class="num" data-i18n="stat3_num">10+</div><div class="label" data-i18n="stat3_label">Zon Kouvri</div></div>
+  <!-- SECONDARY: USER SERVICE -->
+  <div style="margin-top:48px;padding-top:32px;border-top:1px solid rgba(255,255,255,.15);animation:fadeUp .8s .4s ease both;width:100%;max-width:500px">
+    <p style="font-size:1rem;color:rgba(255,255,255,.7);margin-bottom:16px;font-weight:600" data-i18n="hero_user_q">Ou bezwen yon kous?</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="#order" class="btn btn-ghost" style="flex:1;min-width:160px;justify-content:center;border-color:rgba(255,255,255,.3)" data-i18n="hero_ride_btn">&#128663; Mande Taxi / Moto</a>
+      <a href="#order" class="btn btn-ghost" style="flex:1;min-width:160px;justify-content:center;border-color:rgba(255,255,255,.3)" data-i18n="hero_delivery_btn">&#128230; Mande Livrezon</a>
+    </div>
   </div>
 </section>
 
-<!-- TRUST / SECURITY BLOCK -->
+<!-- 2 ACTION CARDS -->
+<section style="background:var(--white);padding:48px 24px">
+  <div class="section-inner">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;max-width:600px;margin:0 auto">
+      <a href="#order" style="background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:20px;padding:28px 24px;color:#fff;transition:all .3s;display:block" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:2rem;margin-bottom:10px">&#128663;</div>
+        <h3 style="font-family:var(--display);font-size:1.2rem;margin-bottom:6px" data-i18n="ac_ride_title">Mande Kous</h3>
+        <p style="font-size:.85rem;color:rgba(255,255,255,.8);margin-bottom:16px" data-i18n="ac_ride_desc">Taxi / Moto &mdash; Rapid. Sekirize.</p>
+        <span style="display:inline-block;background:#fff;color:var(--blue);padding:10px 24px;border-radius:100px;font-weight:800;font-size:.85rem" data-i18n="ac_ride_cta">Mande Kounye a &#8594;</span>
+      </a>
+      <a href="#order" style="background:linear-gradient(135deg,var(--gold),#B8880E);border-radius:20px;padding:28px 24px;color:#fff;transition:all .3s;display:block" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:2rem;margin-bottom:10px">&#128230;</div>
+        <h3 style="font-family:var(--display);font-size:1.2rem;margin-bottom:6px" data-i18n="ac_del_title">Mande Livrezon</h3>
+        <p style="font-size:.85rem;color:rgba(255,255,255,.8);margin-bottom:16px" data-i18n="ac_del_desc">Manje, colis, s&egrave;vis.</p>
+        <span style="display:inline-block;background:#fff;color:#8B6914;padding:10px 24px;border-radius:100px;font-weight:800;font-size:.85rem" data-i18n="ac_del_cta">Voye Livrezon &#8594;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DRIVER EARNINGS HOOK -->
+<section style="background:linear-gradient(135deg,var(--red),var(--red-dark));padding:60px 24px;text-align:center;color:#fff">
+  <div class="section-inner">
+    <div style="font-size:2.5rem;margin-bottom:12px">&#128176;</div>
+    <h2 style="font-family:var(--display);font-size:clamp(1.5rem,4vw,2.4rem);margin-bottom:8px" data-i18n="earn_title">Konbyen Ou Ka F&egrave;?</h2>
+    <p style="font-size:1.1rem;color:rgba(255,255,255,.9);margin-bottom:28px" data-i18n="earn_amount">Jiska <strong>1,000+ HTG pa jou</strong> selon aktivite</p>
+    <a href="driver-register.html" class="btn btn-white" style="background:#fff;color:var(--red);font-weight:800;font-size:1rem;padding:16px 36px" data-i18n="earn_cta">K&ograve;manse Jodi a &#8594;</a>
+  </div>
+</section>
+
+<!-- SECURITY BLOCK -->
 <section style="background:var(--white);padding:60px 24px">
   <div class="section-inner" style="text-align:center">
-    <div class="section-tag">&#128274; <span data-i18n="trust_tag">Sekirite</span></div>
-    <h2 class="section-title" data-i18n="trust_title">Sekirite nan men'w</h2>
-    <p class="section-sub" style="margin:12px auto 0" data-i18n="trust_sub">Ou toujou konnen kiles k ap vini epi kote w ye.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:40px;text-align:center">
-      <div style="padding:24px">
-        <div style="font-size:2.5rem;margin-bottom:12px">&#128100;</div>
-        <h3 style="font-size:1rem;font-weight:800;margin-bottom:6px" data-i18n="trust_f1_title">Konnen kiyes k ap vini</h3>
-        <p style="font-size:.85rem;color:var(--text-light);line-height:1.6" data-i18n="trust_f1_desc">Foto, non, ak noto chofe a avan li rive.</p>
+    <div style="font-size:2rem;margin-bottom:8px">&#128737;</div>
+    <h2 class="section-title" data-i18n="sec_title">Sekirite Nou Se Priyorite</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:32px;text-align:center">
+      <div style="padding:20px">
+        <div style="font-size:2rem;margin-bottom:10px">&#128100;</div>
+        <h3 style="font-size:.95rem;font-weight:800;margin-bottom:4px" data-i18n="sec1">Idantite chof&egrave; verifye</h3>
       </div>
-      <div style="padding:24px">
-        <div style="font-size:2.5rem;margin-bottom:12px">&#128663;</div>
-        <h3 style="font-size:1rem;font-weight:800;margin-bottom:6px" data-i18n="trust_f2_title">Konnen nan ki machin w ap monte</h3>
-        <p style="font-size:.85rem;color:var(--text-light);line-height:1.6" data-i18n="trust_f2_desc">Mak, koule, ak plak machin nan disponib avan.</p>
+      <div style="padding:20px">
+        <div style="font-size:2rem;margin-bottom:10px">&#128205;</div>
+        <h3 style="font-size:.95rem;font-weight:800;margin-bottom:4px" data-i18n="sec2">GPS an tan reyel</h3>
       </div>
-      <div style="padding:24px">
-        <div style="font-size:2.5rem;margin-bottom:12px">&#128205;</div>
-        <h3 style="font-size:1rem;font-weight:800;margin-bottom:6px" data-i18n="trust_f3_title">Swiv traje w an tan reyel</h3>
-        <p style="font-size:.85rem;color:var(--text-light);line-height:1.6" data-i18n="trust_f3_desc">GPS an direkt pou ou menm ak fanmi ou.</p>
+      <div style="padding:20px">
+        <div style="font-size:2rem;margin-bottom:10px">&#128270;</div>
+        <h3 style="font-size:.95rem;font-weight:800;margin-bottom:4px" data-i18n="sec3">Chak kous ka trase</h3>
       </div>
     </div>
   </div>
@@ -818,25 +823,6 @@ footer{
   </div>
 </section>
 
-<!-- SOCIAL PROOF -->
-<section style="padding:60px 24px;background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 100%);color:#fff">
-  <div class="section-inner">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;text-align:center">
-      <div>
-        <div style="font-family:var(--display);font-size:2.5rem;font-weight:900;color:var(--gold)">50+</div>
-        <div style="font-size:.85rem;color:rgba(255,255,255,.7);margin-top:4px" data-i18n="sp_drivers">Chofe verifye</div>
-      </div>
-      <div>
-        <div style="font-family:var(--display);font-size:2.5rem;font-weight:900;color:var(--gold)">500+</div>
-        <div style="font-size:.85rem;color:rgba(255,255,255,.7);margin-top:4px" data-i18n="sp_rides">Kous fet</div>
-      </div>
-      <div>
-        <div style="font-family:var(--display);font-size:2.5rem;font-weight:900;color:var(--gold)">10+</div>
-        <div style="font-size:.85rem;color:rgba(255,255,255,.7);margin-top:4px" data-i18n="sp_zones">Zon disponib</div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- WEBSITE PUSH STRIP -->
 <section style="padding:40px 24px;background:var(--red);text-align:center">
@@ -1096,8 +1082,8 @@ footer{
 
 <!-- STICKY FOOTER CTA -->
 <div class="sticky-footer-cta">
-  <a href="#order" class="btn btn-red" style="flex:1;text-align:center;padding:14px 16px;font-size:.85rem" data-i18n="sticky_ride">&#128661; Mande Yon Kous</a>
-  <a href="driver-register.html" class="btn" style="flex:1;text-align:center;padding:14px 16px;font-size:.85rem;background:var(--gold);color:var(--dark)" data-i18n="sticky_driver">Enskri Gratis</a>
+  <a href="driver-register.html" class="btn" style="flex:1;text-align:center;padding:14px 16px;font-size:.85rem;background:var(--red);color:#fff;font-weight:800" data-i18n="sticky_driver">&#128176; Vin Chof&egrave;</a>
+  <a href="#order" class="btn" style="flex:1;text-align:center;padding:14px 16px;font-size:.85rem;background:var(--blue);color:#fff;font-weight:800" data-i18n="sticky_ride">&#128663; Mande Kous</a>
 </div>
 
 <!-- INSTALL BANNER -->
