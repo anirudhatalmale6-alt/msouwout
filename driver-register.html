@@ -470,7 +470,7 @@ footer{
         </div>
         <div class="form-group">
           <label class="form-label" data-i18n="f_oavct_exp_label">Insurance Expiry Date *</label>
-          <input type="date" name="OAVCT Expiry Date" required>
+          <input type="date" name="OAVCT Expiry Date" id="oavctExpiryDate" required>
         </div>
       </div>
       <div class="form-group">
@@ -809,6 +809,14 @@ function setLang(lang){
 function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open')}
 function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
 
+/* Set OAVCT min date to tomorrow */
+(function(){
+  var d=new Date();d.setDate(d.getDate()+1);
+  var min=d.toISOString().split('T')[0];
+  var el=document.getElementById('oavctExpiryDate');
+  if(el)el.setAttribute('min',min);
+})();
+
 /* ═══ FORM SUBMISSION ═══ */
 (function(){
   var form = document.getElementById('driverForm');
@@ -817,6 +825,35 @@ function closeMobile(){document.getElementById('mobileNav').classList.remove('op
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
+
+    // Validate OAVCT expiry date is in the future
+    var oavctExpiry = form.querySelector('[name="OAVCT Expiry Date"]');
+    if(oavctExpiry && oavctExpiry.value){
+      var expDate = new Date(oavctExpiry.value);
+      var today = new Date();
+      today.setHours(0,0,0,0);
+      if(expDate <= today){
+        var oavctErr = document.getElementById('oavctError');
+        if(!oavctErr){
+          oavctErr = document.createElement('div');
+          oavctErr.id = 'oavctError';
+          oavctErr.style.cssText = 'background:#FEF2F2;border:1px solid #FCA5A5;border-radius:12px;padding:14px 16px;margin-bottom:16px;color:#991B1B;font-size:.88rem;font-weight:600;line-height:1.5;text-align:center';
+          oavctExpiry.closest('.form-row').after(oavctErr);
+        }
+        var msgs = {
+          fr:"Votre assurance OAVCT est expiree. Veuillez renouveler avant de vous inscrire.",
+          en:"Your OAVCT insurance is expired. Please renew before registering.",
+          ht:"Asirans OAVCT ou ekspire. Tanpri renouvle avan ou enskri.",
+          es:"Su seguro OAVCT esta vencido. Renueve antes de registrarse."
+        };
+        oavctErr.textContent = msgs[currentLang] || msgs.ht;
+        oavctExpiry.scrollIntoView({behavior:'smooth',block:'center'});
+        return;
+      } else {
+        var oavctErr = document.getElementById('oavctError');
+        if(oavctErr) oavctErr.remove();
+      }
+    }
 
     // Collect form data
     var formData = new FormData(form);
