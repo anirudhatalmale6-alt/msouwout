@@ -390,7 +390,7 @@ footer{
       <div class="req-card">
         <div class="req-icon">&#128663;</div>
         <h4 data-i18n="req2_title">Vehicle Documents</h4>
-        <p data-i18n="req2_desc">Valid driver's license, vehicle registration, and insurance. Vehicle must be in good working condition.</p>
+        <p data-i18n="req2_desc">Valid driver's license, vehicle registration, and valid OAVCT insurance. Vehicle must be in good working condition.</p>
       </div>
       <div class="req-card">
         <div class="req-icon">&#9989;</div>
@@ -460,6 +460,24 @@ footer{
           <label class="form-label" data-i18n="f_license_label">Driver's License Number</label>
           <input type="text" name="Drivers License" placeholder="License #" data-i18n-placeholder="f_license_ph">
         </div>
+      </div>
+
+      <!-- OAVCT Insurance -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_oavct_label">OAVCT Insurance Number *</label>
+          <input type="text" name="OAVCT Insurance Number" placeholder="OAVCT-XXXXXXX" data-i18n-placeholder="f_oavct_ph" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_oavct_exp_label">Insurance Expiry Date *</label>
+          <input type="date" name="OAVCT Expiry Date" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:.85rem;line-height:1.5;color:var(--text)">
+          <input type="checkbox" name="OAVCT Confirmed" value="Yes" required style="margin-top:4px;flex-shrink:0">
+          <span data-i18n="f_oavct_confirm">I confirm that I have a valid OAVCT insurance policy for my vehicle. I understand that driving without valid OAVCT insurance is illegal in Haiti and MsouWout requires it for all drivers.</span>
+        </label>
       </div>
 
       <!-- Preferred Service -->
@@ -613,7 +631,7 @@ const T = {
     req_tag:"Exigences", req_title:"Ce Dont Vous Avez Besoin",
     req_sub:"Assurez-vous de remplir ces conditions de base avant de postuler.",
     req1_title:"Piece d'Identite Valide", req1_desc:"Carte d'identite gouvernementale (CIN ou passeport). Doit etre en cours de validite.",
-    req2_title:"Documents du Vehicule", req2_desc:"Permis de conduire valide, immatriculation et assurance. Le vehicule doit etre en bon etat.",
+    req2_title:"Documents du Vehicule", req2_desc:"Permis de conduire valide, immatriculation et assurance OAVCT valide. Le vehicule doit etre en bon etat.",
     req3_title:"Casier Judiciaire Vierge", req3_desc:"Pas d'infractions majeures ni de casier judiciaire. Nous verifions tous les antecedents des chauffeurs.",
     req4_title:"Smartphone", req4_desc:"Android ou iPhone avec WhatsApp et donnees mobiles. Necessaire pour recevoir les commandes et le suivi GPS.",
     reg_tag:"Inscription Chauffeur", reg_title:"Inscrivez-vous comme Chauffeur",
@@ -625,6 +643,8 @@ const T = {
     f_v_moto:"Moto", f_v_car:"Voiture", f_v_van:"Van", f_v_truck:"Camion",
     f_plate_label:"Plaque d'Immatriculation", f_plate_ph:"AB-12345",
     f_license_label:"Numero de Permis de Conduire", f_license_ph:"Permis #",
+    f_oavct_label:"Numero d'Assurance OAVCT *", f_oavct_ph:"OAVCT-XXXXXXX", f_oavct_exp_label:"Date d'Expiration de l'Assurance *",
+    f_oavct_confirm:"Je confirme que je possede une assurance OAVCT valide pour mon vehicule. Je comprends que conduire sans assurance OAVCT valide est illegal en Haiti et que MsouWout l'exige pour tous les chauffeurs.",
     f_service_label:"Service Prefere *", f_s_rides:"Transport", f_s_delivery:"Livraison", f_s_both:"Les Deux",
     f_zones_label:"Zones Preferees",
     f_z_delmas:"Delmas 19 a Petion-Ville", f_z_kenscoff:"Kenscoff a Le Florville",
@@ -654,7 +674,7 @@ const T = {
     req_tag:"Requirements", req_title:"What You Need to Get Started",
     req_sub:"Make sure you meet these basic requirements before applying.",
     req1_title:"Valid ID", req1_desc:"Government-issued identification card (CIN or passport). Must be current and not expired.",
-    req2_title:"Vehicle Documents", req2_desc:"Valid driver's license, vehicle registration, and insurance. Vehicle must be in good working condition.",
+    req2_title:"Vehicle Documents", req2_desc:"Valid driver's license, vehicle registration, and valid OAVCT insurance. Vehicle must be in good working condition.",
     req3_title:"Clean Record", req3_desc:"No major traffic violations or criminal record. We verify all driver backgrounds for passenger safety.",
     req4_title:"Smartphone", req4_desc:"Android or iPhone with WhatsApp and mobile data. Needed for receiving orders and live GPS tracking.",
     reg_tag:"Driver Registration", reg_title:"Register as a Driver",
@@ -666,6 +686,8 @@ const T = {
     f_v_moto:"Motorcycle", f_v_car:"Car", f_v_van:"Van", f_v_truck:"Truck",
     f_plate_label:"License Plate", f_plate_ph:"AB-12345",
     f_license_label:"Driver's License Number", f_license_ph:"License #",
+    f_oavct_label:"OAVCT Insurance Number *", f_oavct_ph:"OAVCT-XXXXXXX", f_oavct_exp_label:"Insurance Expiry Date *",
+    f_oavct_confirm:"I confirm that I have a valid OAVCT insurance policy for my vehicle. I understand that driving without valid OAVCT insurance is illegal in Haiti and MsouWout requires it for all drivers.",
     f_service_label:"Preferred Service *", f_s_rides:"Rides", f_s_delivery:"Delivery", f_s_both:"Both",
     f_zones_label:"Preferred Zones",
     f_z_delmas:"Delmas 19 to Petion-Ville", f_z_kenscoff:"Kenscoff to Le Florville",
@@ -695,7 +717,7 @@ const T = {
     req_tag:"Egzijans", req_title:"Sa Ou Bezwen pou Komanse",
     req_sub:"Asire ou ranpli kondisyon debaz sa yo anvan ou aplike.",
     req1_title:"Kat Idantite Valid", req1_desc:"Kat idantite gouvenmantal (CIN oswa paspò). Dwe aktyel e pa ekspire.",
-    req2_title:"Dokiman Machin", req2_desc:"Pemi kondwi valid, anrejistreman machin, ak asirans. Machin nan dwe an bon eta.",
+    req2_title:"Dokiman Machin", req2_desc:"Pemi kondwi valid, anrejistreman machin, ak asirans OAVCT valid. Machin nan dwe an bon eta.",
     req3_title:"Dosye Pwop", req3_desc:"Pa gen enfaksyon trafik grav oswa dosye kriminèl. Nou verifye tout antesedyan chofe.",
     req4_title:"Smartphone", req4_desc:"Android oswa iPhone ak WhatsApp ak done mobil. Nesesè pou resevwa komand ak swivi GPS.",
     reg_tag:"Enskrisyon Chofe", reg_title:"Enskri kom Chofe",
@@ -707,6 +729,8 @@ const T = {
     f_v_moto:"Moto", f_v_car:"Machin", f_v_van:"Van", f_v_truck:"Kamyon",
     f_plate_label:"Plak Machin", f_plate_ph:"AB-12345",
     f_license_label:"Nimewo Pemi Kondwi", f_license_ph:"Pemi #",
+    f_oavct_label:"Nimewo Asirans OAVCT *", f_oavct_ph:"OAVCT-XXXXXXX", f_oavct_exp_label:"Dat Asirans Ekspire *",
+    f_oavct_confirm:"Mwen konfime ke mwen gen yon asirans OAVCT valid pou machin mwen. Mwen konprann ke kondwi san asirans OAVCT valid ilegal an Ayiti epi MsouWout mande sa pou tout chofe.",
     f_service_label:"Sevis Prefere *", f_s_rides:"Transpò", f_s_delivery:"Livrezon", f_s_both:"Tou de",
     f_zones_label:"Zon Prefere",
     f_z_delmas:"Delmas 19 a Petion-Ville", f_z_kenscoff:"Kenscoff a Le Florville",
@@ -736,7 +760,7 @@ const T = {
     req_tag:"Requisitos", req_title:"Lo Que Necesitas para Comenzar",
     req_sub:"Asegurate de cumplir estos requisitos basicos antes de aplicar.",
     req1_title:"Identificacion Valida", req1_desc:"Documento de identidad gubernamental (CIN o pasaporte). Debe estar vigente y no vencido.",
-    req2_title:"Documentos del Vehiculo", req2_desc:"Licencia de conducir valida, registro vehicular y seguro. El vehiculo debe estar en buenas condiciones.",
+    req2_title:"Documentos del Vehiculo", req2_desc:"Licencia de conducir valida, registro vehicular y seguro OAVCT vigente. El vehiculo debe estar en buenas condiciones.",
     req3_title:"Registro Limpio", req3_desc:"Sin infracciones de transito graves ni antecedentes penales. Verificamos los antecedentes de todos los conductores.",
     req4_title:"Smartphone", req4_desc:"Android o iPhone con WhatsApp y datos moviles. Necesario para recibir pedidos y seguimiento GPS en vivo.",
     reg_tag:"Registro de Conductor", reg_title:"Registrate como Conductor",
@@ -748,6 +772,8 @@ const T = {
     f_v_moto:"Motocicleta", f_v_car:"Carro", f_v_van:"Van", f_v_truck:"Camion",
     f_plate_label:"Placa del Vehiculo", f_plate_ph:"AB-12345",
     f_license_label:"Numero de Licencia de Conducir", f_license_ph:"Licencia #",
+    f_oavct_label:"Numero de Seguro OAVCT *", f_oavct_ph:"OAVCT-XXXXXXX", f_oavct_exp_label:"Fecha de Vencimiento del Seguro *",
+    f_oavct_confirm:"Confirmo que tengo una poliza de seguro OAVCT vigente para mi vehiculo. Entiendo que conducir sin seguro OAVCT valido es ilegal en Haiti y que MsouWout lo requiere para todos los conductores.",
     f_service_label:"Servicio Preferido *", f_s_rides:"Viajes", f_s_delivery:"Entregas", f_s_both:"Ambos",
     f_zones_label:"Zonas Preferidas",
     f_z_delmas:"Delmas 19 a Petion-Ville", f_z_kenscoff:"Kenscoff a Le Florville",
