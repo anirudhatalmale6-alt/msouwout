@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MsouWout Video Assets</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#111}
+
+.asset{
+  width:1080px;height:1920px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  margin:20px auto;
+}
+.asset-label{
+  background:#D4A017;color:#000;font-size:14px;font-weight:800;
+  padding:8px 20px;text-align:center;max-width:1080px;margin:0 auto;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+
+/* ASSET 1: Opening Title */
+#asset-open{
+  background:linear-gradient(160deg,#0A0E1A 0%,#001566 40%,#00209F 100%);
+  color:#fff;text-align:center;
+}
+#asset-open::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 30%,rgba(212,160,23,.08),transparent 60%);
+}
+#asset-open .content{position:relative;z-index:2;padding:0 80px}
+#asset-open .logo-area{margin-bottom:60px}
+#asset-open .logo-area img{width:180px;height:180px;border-radius:40px;border:4px solid rgba(212,160,23,.4);box-shadow:0 8px 40px rgba(0,0,0,.4)}
+#asset-open h1{
+  font-family:'DM Serif Display',serif;font-size:72px;line-height:1.15;margin-bottom:20px;
+}
+#asset-open h1 span{color:#E8C84A}
+#asset-open .tagline{font-size:32px;opacity:.6;font-weight:500;line-height:1.5}
+#asset-open .flag-bar{
+  position:absolute;top:0;left:0;right:0;height:12px;
+  background:linear-gradient(90deg,#00209F 50%,#D21034 50%);
+}
+
+/* ASSET 2: Problem Screen */
+#asset-problem{
+  background:linear-gradient(160deg,#0a0a0a,#1a1520,#0d0d18);
+  color:#fff;text-align:center;
+}
+#asset-problem .content{position:relative;z-index:2;padding:0 80px}
+#asset-problem h2{
+  font-family:'DM Serif Display',serif;font-size:64px;line-height:1.3;
+  max-width:800px;text-shadow:0 4px 20px rgba(0,0,0,.5);
+}
+
+/* ASSET 3: Solution/Features */
+#asset-features{
+  background:linear-gradient(160deg,#001566,#00209F);color:#fff;text-align:center;
+}
+#asset-features .content{position:relative;z-index:2;padding:0 60px;width:100%}
+#asset-features .feature-item{
+  background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.15);
+  border-radius:30px;padding:40px;margin-bottom:30px;text-align:left;
+  display:flex;align-items:center;gap:30px;
+}
+#asset-features .feature-item .f-icon{font-size:60px;flex-shrink:0}
+#asset-features .feature-item h3{font-size:36px;font-weight:800;margin-bottom:6px}
+#asset-features .feature-item p{font-size:24px;opacity:.6}
+
+/* ASSET 4: Hero End Screen */
+#asset-hero{
+  background:linear-gradient(160deg,#0A0E1A 0%,#001566 50%,#00209F 100%);
+  color:#fff;text-align:center;
+}
+#asset-hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(212,160,23,.1),transparent 50%);
+}
+#asset-hero .content{position:relative;z-index:2;padding:0 60px}
+#asset-hero .logo-area{margin-bottom:50px}
+#asset-hero .logo-area img{width:200px;height:200px;border-radius:44px;border:5px solid rgba(212,160,23,.5);box-shadow:0 12px 50px rgba(212,160,23,.2)}
+#asset-hero h1{
+  font-family:'DM Serif Display',serif;font-size:80px;line-height:1.1;
+  color:#E8C84A;text-shadow:0 0 60px rgba(212,160,23,.3);margin-bottom:30px;
+}
+#asset-hero .cta-url{
+  font-size:44px;font-weight:900;color:#fff;margin-bottom:16px;
+  letter-spacing:.02em;
+}
+#asset-hero .cta-sub{
+  font-size:28px;opacity:.6;margin-bottom:50px;
+}
+#asset-hero .cta-btn{
+  display:inline-block;background:#D21034;color:#fff;
+  font-size:32px;font-weight:800;padding:24px 60px;border-radius:20px;
+  box-shadow:0 8px 30px rgba(210,16,52,.4);
+}
+#asset-hero .flag-bar{
+  position:absolute;bottom:0;left:0;right:0;height:12px;
+  background:linear-gradient(90deg,#00209F 50%,#D21034 50%);
+}
+#asset-hero .watermark{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  font-size:18px;opacity:.3;font-weight:600;
+}
+
+/* ASSET 5: Lavi w gen vale */
+#asset-value{
+  background:linear-gradient(160deg,#1a3a5a,#00209F,#2a5a8a);
+  color:#fff;text-align:center;
+}
+#asset-value .content{position:relative;z-index:2;padding:0 80px}
+#asset-value h2{
+  font-family:'DM Serif Display',serif;font-size:80px;line-height:1.2;
+  text-shadow:0 4px 30px rgba(0,0,0,.4);
+}
+#asset-value p{font-size:30px;opacity:.6;margin-top:20px;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="asset-label">ASSET 1: OPENING TITLE CARD (0:00)</div>
+<div class="asset" id="asset-open">
+  <div class="flag-bar"></div>
+  <div class="content">
+    <div class="logo-area"><img src="assets/msouwout-icon.png" alt="MsouWout"></div>
+    <h1>Nan peyi a...<br>ou pa janm konnen<br>kiyes k ap vin <span>pran w</span></h1>
+    <p class="tagline">Sekirite se pa chans. Li dwe garanti.</p>
+  </div>
+</div>
+
+<div class="asset-label">ASSET 2: PROBLEM STATEMENT (0:03)</div>
+<div class="asset" id="asset-problem">
+  <div class="content">
+    <h2>"Sekirite se pa chans...<br><br>li dwe garanti."</h2>
+  </div>
+</div>
+
+<div class="asset-label">ASSET 3: FEATURE OVERLAY CARDS (0:12)</div>
+<div class="asset" id="asset-features">
+  <div class="content">
+    <div class="feature-item">
+      <div class="f-icon">&#9989;</div>
+      <div><h3>Chofe Verifye</h3><p>Verified driver with photo, name, plate</p></div>
+    </div>
+    <div class="feature-item">
+      <div class="f-icon">&#128205;</div>
+      <div><h3>Swivi An Tan Reyel</h3><p>Real-time GPS tracking every trip</p></div>
+    </div>
+    <div class="feature-item">
+      <div class="f-icon">&#128100;</div>
+      <div><h3>Idantite Kle</h3><p>Every driver registered with NIF + docs</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="asset-label">ASSET 4: HERO END SCREEN (0:24)</div>
+<div class="asset" id="asset-hero">
+  <div class="content">
+    <div class="logo-area"><img src="assets/msouwout-icon.png" alt="MsouWout"></div>
+    <h1>Sekirite Sou<br>Chak Wout</h1>
+    <div class="cta-url">MsouWout.com</div>
+    <div class="cta-sub">Enskri gratis jodi a</div>
+    <div class="cta-btn">&#128640; Telecharge App la</div>
+  </div>
+  <div class="flag-bar"></div>
+</div>
+
+<div class="asset-label">ASSET 5: EMOTIONAL CARD — "LAVI W GEN VALE" (0:18)</div>
+<div class="asset" id="asset-value">
+  <div class="content">
+    <h2>"Lavi w<br>gen vale"</h2>
+    <p>Paske chak traje dwe an sekirite.</p>
+  </div>
+</div>
+
+</body>
+</html>
