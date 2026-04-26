@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>MsouWout - Mesaj | Chat</title>
+<meta name="description" content="Chat with your driver or rider on MsouWout. Communicate about your ride in real time.">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D21034;--red-dark:#B00D2C;--red-light:#E8243F;
+  --blue:#00209F;--blue-dark:#001566;
+  --gold:#D4A017;--gold-light:#E8B82E;
+  --white:#FFFFFF;--off-white:#FFF8F8;--light-gray:#F0E8E8;
+  --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;
+  --green:#22C55E;--green-dark:#16A34A;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --display:'DM Serif Display',Georgia,serif;
+  --radius:16px;
+  --nav-h:64px;
+  --lang-h:36px;
+  --top-offset:100px; /* lang-h + nav-h */
+}
+html{scroll-behavior:smooth;height:100%}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;height:100%}
+a{text-decoration:none;color:inherit}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+
+/* ═══ LANGUAGE BAR ═══ */
+.lang-bar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;background:var(--red);
+  padding:6px 20px;display:flex;align-items:center;justify-content:center;gap:6px;height:var(--lang-h);
+}
+.lang-bar a{
+  color:rgba(255,255,255,.7);font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:100px;
+  cursor:pointer;transition:all .2s;letter-spacing:.02em;
+}
+.lang-bar a:hover{color:#fff;background:rgba(255,255,255,.15)}
+.lang-bar a.active{color:var(--red);background:#fff}
+
+/* ═══ NAV ═══ */
+nav{
+  position:fixed;top:var(--lang-h);left:0;right:0;z-index:1000;
+  background:var(--blue);border-bottom:3px solid var(--red);
+  padding:0 24px;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.nav-logo span{font-family:var(--display);font-weight:900;font-size:1.25rem;color:#fff;letter-spacing:-.02em}
+.nav-links{display:flex;align-items:center;gap:20px}
+.nav-links a{color:rgba(255,255,255,.8);font-size:.82rem;font-weight:600;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  background:var(--red);color:#fff;padding:10px 22px;border-radius:100px;font-size:.82rem;
+  font-weight:700;transition:all .25s;border:none;cursor:pointer;
+}
+.nav-cta:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(210,16,52,.35)}
+.mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+.mobile-nav{display:none;position:fixed;top:var(--top-offset);left:0;right:0;background:var(--blue);padding:24px;z-index:999;border-bottom:3px solid var(--red);flex-direction:column;gap:16px}
+.mobile-nav.open{display:flex}
+.mobile-nav a{color:rgba(255,255,255,.9);font-size:.95rem;font-weight:600;padding:8px 0}
+
+/* ═══ MAIN CONTAINER ═══ */
+.app-container{
+  position:fixed;top:var(--top-offset);left:0;right:0;bottom:0;
+  display:flex;flex-direction:column;
+  background:var(--off-white);
+}
+
+/* ═══ SCREENS ═══ */
+.screen{display:none;flex-direction:column;height:100%;overflow:hidden}
+.screen.active{display:flex}
+
+/* ═══ LOGIN SCREEN ═══ */
+.login-screen{
+  overflow-y:auto;align-items:center;justify-content:center;padding:40px 24px;
+}
+.login-card{
+  max-width:420px;width:100%;background:var(--white);border-radius:20px;
+  padding:40px 32px;box-shadow:0 20px 60px rgba(0,0,0,.08);border:1px solid rgba(0,0,0,.04);
+  animation:fadeUp .7s ease both;
+}
+.login-card h2{font-family:var(--display);font-size:1.5rem;color:var(--dark);text-align:center;margin-bottom:6px}
+.login-card .login-sub{font-size:.88rem;color:var(--text-light);text-align:center;margin-bottom:28px;line-height:1.5}
+.role-selector{display:flex;gap:12px;margin-bottom:24px}
+.role-btn{
+  flex:1;padding:18px 12px;border:2.5px solid #e2e8f0;border-radius:16px;background:var(--white);
+  cursor:pointer;text-align:center;transition:all .25s;font-family:var(--body);
+}
+.role-btn:hover{border-color:var(--blue);background:#F0F4FF}
+.role-btn.active{border-color:var(--blue);background:linear-gradient(135deg,#EEF2FF,#E0E7FF);box-shadow:0 4px 16px rgba(0,32,159,.1)}
+.role-btn .role-icon{font-size:2rem;margin-bottom:8px;display:block}
+.role-btn .role-label{font-size:.88rem;font-weight:800;color:var(--dark);display:block}
+.role-btn .role-desc{font-size:.72rem;color:var(--text-light);margin-top:2px;display:block}
+.phone-input-wrap{
+  position:relative;display:flex;align-items:center;
+  border:2px solid #e2e8f0;border-radius:14px;overflow:hidden;transition:border-color .2s;margin-bottom:16px;
+}
+.phone-input-wrap:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.08)}
+.phone-flag{
+  padding:14px 12px 14px 16px;background:#f8fafc;border-right:1px solid #e2e8f0;
+  display:flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;color:var(--text);flex-shrink:0;
+}
+.phone-input{
+  flex:1;padding:14px 16px;border:none;outline:none;font-size:1rem;
+  font-family:var(--body);font-weight:500;color:var(--dark);background:transparent;
+}
+.phone-input::placeholder{color:#b0b8c4;font-weight:400}
+.btn-login{
+  width:100%;padding:16px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  color:#fff;font-size:1rem;font-weight:800;cursor:pointer;
+  font-family:var(--body);transition:all .25s;
+}
+.btn-login:hover{box-shadow:0 8px 28px rgba(0,32,159,.3);transform:translateY(-1px)}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+.login-error{
+  background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;
+  padding:14px 16px;margin-bottom:16px;display:none;font-size:.85rem;color:#991B1B;line-height:1.5;
+}
+.spinner{
+  display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;
+}
+
+/* ═══ CONVERSATION LIST ═══ */
+.conv-screen{overflow:hidden}
+.conv-header{
+  padding:20px 20px 12px;background:var(--white);border-bottom:1px solid #f1f5f9;
+  flex-shrink:0;
+}
+.conv-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.conv-header h2{font-family:var(--display);font-size:1.3rem;color:var(--dark)}
+.btn-logout-sm{
+  padding:6px 14px;border-radius:100px;border:1.5px solid #e2e8f0;
+  background:transparent;color:var(--text-light);font-size:.72rem;font-weight:700;
+  cursor:pointer;font-family:var(--body);transition:all .2s;
+}
+.btn-logout-sm:hover{border-color:var(--red);color:var(--red)}
+.conv-user-info{font-size:.78rem;color:var(--text-light);display:flex;align-items:center;gap:6px}
+.conv-user-badge{
+  display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:100px;
+  font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;
+}
+.conv-user-badge.driver{background:#DBEAFE;color:#1E40AF}
+.conv-user-badge.rider{background:#F3E8FF;color:#7C3AED}
+.conv-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.conv-item{
+  display:flex;align-items:center;gap:14px;padding:16px 20px;
+  border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .15s;
+  animation:fadeIn .3s ease both;
+}
+.conv-item:hover{background:#FAFBFE}
+.conv-item:active{background:#F0F4FF}
+.conv-avatar{
+  width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;flex-shrink:0;font-weight:800;color:#fff;
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+}
+.conv-avatar.driver-av{background:linear-gradient(135deg,var(--red),var(--red-dark))}
+.conv-body{flex:1;min-width:0}
+.conv-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.conv-name{font-size:.92rem;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-time{font-size:.68rem;color:var(--text-light);flex-shrink:0;white-space:nowrap}
+.conv-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:3px}
+.conv-preview{font-size:.8rem;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.conv-preview.unread{color:var(--dark);font-weight:600}
+.conv-badge{
+  min-width:20px;height:20px;border-radius:100px;display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;font-weight:800;color:#fff;background:var(--red);padding:0 6px;flex-shrink:0;
+}
+.conv-ride-info{
+  display:flex;align-items:center;gap:6px;margin-top:4px;
+  font-size:.7rem;color:var(--text-light);
+}
+.conv-ride-tag{
+  display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:6px;
+  background:#F1F5F9;font-weight:600;font-size:.68rem;
+}
+.conv-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;padding:48px 32px;text-align:center;
+}
+.conv-empty-icon{font-size:3.5rem;margin-bottom:16px;opacity:.3}
+.conv-empty h3{font-family:var(--display);font-size:1.2rem;color:var(--dark);margin-bottom:8px}
+.conv-empty p{font-size:.88rem;color:var(--text-light);line-height:1.6;max-width:300px}
+.conv-empty a{
+  display:inline-block;margin-top:20px;padding:12px 28px;border-radius:100px;
+  background:var(--blue);color:#fff;font-weight:700;font-size:.88rem;transition:all .25s;
+}
+.conv-empty a:hover{background:var(--blue-dark);transform:translateY(-1px)}
+.conv-loading{
+  display:flex;align-items:center;justify-content:center;height:100%;
+  color:var(--text-light);font-size:.88rem;gap:8px;
+}
+.conv-loading .spinner{border-color:rgba(0,32,159,.15);border-top-color:var(--blue);width:24px;height:24px}
+
+/* ═══ CHAT VIEW ═══ */
+.chat-screen{overflow:hidden}
+.chat-header{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;
+  background:var(--white);border-bottom:1px solid #f1f5f9;flex-shrink:0;
+  box-shadow:0 2px 8px rgba(0,0,0,.03);
+}
+.chat-back{
+  width:36px;height:36px;border-radius:50%;border:none;background:#F1F5F9;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:1.1rem;color:var(--dark);transition:all .15s;flex-shrink:0;
+}
+.chat-back:hover{background:#E2E8F0}
+.chat-header-info{flex:1;min-width:0}
+.chat-header-name{font-size:.95rem;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-header-sub{font-size:.72rem;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn-whatsapp{
+  display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:100px;
+  border:none;background:#25D366;color:#fff;font-size:.75rem;font-weight:700;
+  cursor:pointer;font-family:var(--body);transition:all .2s;flex-shrink:0;
+}
+.btn-whatsapp:hover{background:#1DA851;transform:translateY(-1px)}
+.btn-whatsapp svg{width:16px;height:16px;fill:#fff}
+
+/* Messages container */
+.chat-messages{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:16px 16px 8px;display:flex;flex-direction:column;gap:4px;
+  background:linear-gradient(180deg,#F8F9FE 0%,var(--off-white) 100%);
+}
+.msg-date-sep{
+  text-align:center;padding:12px 0 8px;
+  font-size:.68rem;font-weight:700;color:var(--text-light);
+  letter-spacing:.04em;text-transform:uppercase;
+}
+.msg-bubble{
+  max-width:80%;padding:10px 14px;border-radius:16px;
+  font-size:.88rem;line-height:1.5;word-wrap:break-word;
+  position:relative;animation:msgIn .25s ease both;
+}
+.msg-sent{
+  align-self:flex-end;
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  color:#fff;border-bottom-right-radius:4px;
+}
+.msg-received{
+  align-self:flex-start;
+  background:var(--white);color:var(--dark);
+  border:1px solid #f1f5f9;border-bottom-left-radius:4px;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+}
+.msg-time{
+  font-size:.62rem;margin-top:4px;opacity:.6;
+}
+.msg-sent .msg-time{text-align:right}
+.msg-received .msg-time{text-align:left}
+.msg-system{
+  align-self:center;max-width:90%;text-align:center;
+  background:#F1F5F9;color:var(--text-light);font-size:.78rem;
+  padding:8px 16px;border-radius:12px;
+}
+
+/* Chat input bar */
+.chat-input-bar{
+  display:flex;align-items:flex-end;gap:8px;padding:10px 12px;
+  background:var(--white);border-top:1px solid #f1f5f9;flex-shrink:0;
+  position:sticky;bottom:0;
+}
+.chat-input-wrap{
+  flex:1;display:flex;align-items:flex-end;
+  border:2px solid #e2e8f0;border-radius:24px;padding:4px 16px;
+  transition:border-color .2s;background:#FAFBFE;min-height:44px;
+}
+.chat-input-wrap:focus-within{border-color:var(--blue);background:#fff}
+.chat-input{
+  flex:1;border:none;outline:none;font-size:.9rem;font-family:var(--body);
+  color:var(--dark);background:transparent;resize:none;
+  max-height:100px;line-height:1.4;padding:8px 0;
+}
+.chat-input::placeholder{color:#b0b8c4}
+.btn-send{
+  width:44px;height:44px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;flex-shrink:0;
+}
+.btn-send:hover{box-shadow:0 4px 16px rgba(0,32,159,.3);transform:translateY(-1px)}
+.btn-send:active{transform:scale(.95)}
+.btn-send:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-send svg{width:20px;height:20px;fill:#fff}
+
+/* Safe area for iOS */
+.chat-input-bar{padding-bottom:max(10px,env(safe-area-inset-bottom))}
+
+/* ═══ FOOTER (only on login) ═══ */
+footer{
+  background:var(--blue);color:rgba(255,255,255,.7);text-align:center;
+  padding:32px 24px;font-size:.8rem;flex-shrink:0;
+}
+footer a{color:var(--gold-light);font-weight:600}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .login-card{padding:32px 24px}
+  .msg-bubble{max-width:85%}
+}
+@media(min-width:769px){
+  .app-container{max-width:520px;margin:0 auto;border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;box-shadow:0 0 40px rgba(0,0,0,.05)}
+}
+</style>
+</head>
+<body>
+
+<!-- LANG BAR -->
+<div class="lang-bar">
+  <a onclick="setLang('fr')" id="lang-fr">&#127467;&#127479; Francais</a>
+  <a onclick="setLang('en')" id="lang-en">&#127468;&#127463; English</a>
+  <a onclick="setLang('ht')" class="active" id="lang-ht">&#127469;&#127481; Kreyol</a>
+  <a onclick="setLang('es')" id="lang-es">&#127466;&#127480; Espanol</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="assets/msouwout-icon.png" alt="MsouWout Logo">
+    <span>MsouWout</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" data-i18n="nav_home">Ak&egrave;y</a>
+    <a href="index.html#order" data-i18n="nav_order">Mande Kous</a>
+  </div>
+  <a href="index.html#order" class="nav-cta" data-i18n="nav_ride">Mande Kous</a>
+  <button class="mobile-toggle" onclick="toggleMobile()">&#9776;</button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html" onclick="closeMobile()" data-i18n="nav_home">Ak&egrave;y</a>
+  <a href="index.html#order" onclick="closeMobile()" data-i18n="nav_order">Mande Kous</a>
+</div>
+
+<!-- APP -->
+<div class="app-container">
+
+  <!-- ═══ SCREEN 1: LOGIN ═══ -->
+  <div class="screen login-screen active" id="screenLogin">
+    <div class="login-card">
+      <h2 data-i18n="login_title">Mesaj</h2>
+      <p class="login-sub" data-i18n="login_sub">Ou se chof&egrave; oswa kliyan?</p>
+
+      <div class="role-selector">
+        <button class="role-btn active" id="roleRider" onclick="selectRole('rider')">
+          <span class="role-icon">&#128100;</span>
+          <span class="role-label" data-i18n="role_rider">Kliyan</span>
+          <span class="role-desc" data-i18n="role_rider_desc">Mwen mande kous</span>
+        </button>
+        <button class="role-btn" id="roleDriver" onclick="selectRole('driver')">
+          <span class="role-icon">&#128663;</span>
+          <span class="role-label" data-i18n="role_driver">Chof&egrave;</span>
+          <span class="role-desc" data-i18n="role_driver_desc">Mwen kondui</span>
+        </button>
+      </div>
+
+      <div class="login-error" id="loginError"></div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="phone-input-wrap">
+          <div class="phone-flag">&#127469;&#127481; +509</div>
+          <input type="tel" class="phone-input" id="phoneInput" placeholder="4685 9702" required>
+        </div>
+        <button type="submit" class="btn-login" id="loginBtn" data-i18n="login_btn">Konekte</button>
+      </form>
+    </div>
+
+    <footer style="margin-top:auto;width:100vw;margin-left:calc(-50vw + 50%)">
+      <p>&copy; 2026 MsouWout &mdash; <span data-i18n="footer_part">Yon platf&ograve;m</span> <a href="https://haitibiznis.com">HaitiBiznis</a></p>
+    </footer>
+  </div>
+
+  <!-- ═══ SCREEN 2: CONVERSATION LIST ═══ -->
+  <div class="screen conv-screen" id="screenConvList">
+    <div class="conv-header">
+      <div class="conv-header-top">
+        <h2 data-i18n="conv_title">Mesaj</h2>
+        <button class="btn-logout-sm" onclick="logout()" data-i18n="logout">Dekonekte</button>
+      </div>
+      <div class="conv-user-info">
+        <span class="conv-user-badge" id="convUserBadge"></span>
+        <span id="convUserPhone"></span>
+      </div>
+    </div>
+    <div class="conv-list" id="convList"></div>
+  </div>
+
+  <!-- ═══ SCREEN 3: CHAT VIEW ═══ -->
+  <div class="screen chat-screen" id="screenChat">
+    <div class="chat-header">
+      <button class="chat-back" onclick="goBack()" title="Back">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="chat-header-info">
+        <div class="chat-header-name" id="chatHeaderName"></div>
+        <div class="chat-header-sub" id="chatHeaderSub"></div>
+      </div>
+      <a class="btn-whatsapp" id="btnWhatsApp" href="#" target="_blank" data-i18n="btn_whatsapp">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.98 7.98 0 01-4.244-1.222l-.304-.18-2.87.852.852-2.87-.18-.304A7.98 7.98 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg>
+        <span>WhatsApp</span>
+      </a>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-bar">
+      <div class="chat-input-wrap">
+        <textarea class="chat-input" id="chatInput" rows="1" placeholder="Ekri yon mesaj..." data-i18n-placeholder="input_placeholder" onkeydown="handleInputKey(event)" oninput="autoGrow(this)"></textarea>
+      </div>
+      <button class="btn-send" id="btnSend" onclick="sendMessage()" disabled>
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const API='https://msouwout-backend.onrender.com';
+
+/* ═══ STATE ═══ */
+let currentLang='ht';
+let userRole='rider'; // 'rider' or 'driver'
+let userPhone='';
+let driverId=null;
+let driverData=null;
+let conversations=[];
+let currentConv=null;
+let messages=[];
+let pollTimer=null;
+let convPollTimer=null;
+
+/* ═══ i18n ═══ */
+const T={
+  ht:{
+    nav_home:"Akèy",nav_order:"Mande Kous",nav_ride:"Mande Kous",
+    login_title:"Mesaj",login_sub:"Ou se chofè oswa kliyan?",login_btn:"Konekte",
+    role_rider:"Kliyan",role_driver:"Chofè",
+    role_rider_desc:"Mwen mande kous",role_driver_desc:"Mwen kondui",
+    conv_title:"Mesaj",logout:"Dekonekte",
+    footer_part:"Yon platfòm",
+    btn_whatsapp:"WhatsApp",
+    input_placeholder:"Ekri yon mesaj...",
+    empty_title:"Pa gen mesaj ankò",
+    empty_msg:"Lè ou mande yon kous, ou ka kominike ak chofè ou isit la.",
+    empty_cta:"Mande Yon Kous",
+    empty_driver_msg:"Lè ou aksepte yon kous, ou ka kominike ak kliyan ou isit la.",
+    err_not_found:"Nimewo sa a pa enskri.",
+    err_server:"Erè sèvè. Eseye ankò.",
+    err_network:"Pa gen koneksyon.",
+    loading:"Ap chache...",
+    today:"Jodi a",yesterday:"Yè",
+    ride_label:"Kous",delivery_label:"Livrezon",
+    msg_sent:"Voye",
+    badge_driver:"Chofè",badge_rider:"Kliyan"
+  },
+  fr:{
+    nav_home:"Accueil",nav_order:"Demander Course",nav_ride:"Demander Course",
+    login_title:"Messages",login_sub:"Êtes-vous chauffeur ou client?",login_btn:"Se Connecter",
+    role_rider:"Client",role_driver:"Chauffeur",
+    role_rider_desc:"Je demande des courses",role_driver_desc:"Je conduis",
+    conv_title:"Messages",logout:"Déconnexion",
+    footer_part:"Une plateforme",
+    btn_whatsapp:"WhatsApp",
+    input_placeholder:"Écrire un message...",
+    empty_title:"Pas encore de messages",
+    empty_msg:"Lorsque vous demandez une course, vous pouvez communiquer avec votre chauffeur ici.",
+    empty_cta:"Demander une Course",
+    empty_driver_msg:"Lorsque vous acceptez une course, vous pouvez communiquer avec votre client ici.",
+    err_not_found:"Ce numéro n'est pas enregistré.",
+    err_server:"Erreur serveur. Réessayez.",
+    err_network:"Pas de connexion.",
+    loading:"Recherche...",
+    today:"Aujourd'hui",yesterday:"Hier",
+    ride_label:"Course",delivery_label:"Livraison",
+    msg_sent:"Envoyé",
+    badge_driver:"Chauffeur",badge_rider:"Client"
+  },
+  en:{
+    nav_home:"Home",nav_order:"Request Ride",nav_ride:"Request Ride",
+    login_title:"Messages",login_sub:"Are you a driver or rider?",login_btn:"Log In",
+    role_rider:"Rider",role_driver:"Driver",
+    role_rider_desc:"I request rides",role_driver_desc:"I drive",
+    conv_title:"Messages",logout:"Log Out",
+    footer_part:"A platform by",
+    btn_whatsapp:"WhatsApp",
+    input_placeholder:"Type a message...",
+    empty_title:"No messages yet",
+    empty_msg:"When you request a ride, you can chat with your driver here.",
+    empty_cta:"Request a Ride",
+    empty_driver_msg:"When you accept a ride, you can chat with your rider here.",
+    err_not_found:"This number is not registered.",
+    err_server:"Server error. Try again.",
+    err_network:"No connection.",
+    loading:"Searching...",
+    today:"Today",yesterday:"Yesterday",
+    ride_label:"Ride",delivery_label:"Delivery",
+    msg_sent:"Sent",
+    badge_driver:"Driver",badge_rider:"Rider"
+  },
+  es:{
+    nav_home:"Inicio",nav_order:"Solicitar Viaje",nav_ride:"Solicitar Viaje",
+    login_title:"Mensajes",login_sub:"¿Eres conductor o pasajero?",login_btn:"Iniciar Sesión",
+    role_rider:"Pasajero",role_driver:"Conductor",
+    role_rider_desc:"Solicito viajes",role_driver_desc:"Yo conduzco",
+    conv_title:"Mensajes",logout:"Cerrar Sesión",
+    footer_part:"Una plataforma de",
+    btn_whatsapp:"WhatsApp",
+    input_placeholder:"Escribe un mensaje...",
+    empty_title:"No hay mensajes aún",
+    empty_msg:"Cuando solicites un viaje, podrás chatear con tu conductor aquí.",
+    empty_cta:"Solicitar un Viaje",
+    empty_driver_msg:"Cuando aceptes un viaje, podrás chatear con tu pasajero aquí.",
+    err_not_found:"Este número no está registrado.",
+    err_server:"Error del servidor. Intenta de nuevo.",
+    err_network:"Sin conexión.",
+    loading:"Buscando...",
+    today:"Hoy",yesterday:"Ayer",
+    ride_label:"Viaje",delivery_label:"Entrega",
+    msg_sent:"Enviado",
+    badge_driver:"Conductor",badge_rider:"Pasajero"
+  }
+};
+
+function t(key){return(T[currentLang]||T.ht)[key]||key}
+
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-bar a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('lang-'+lang).classList.add('active');
+  const tr=T[lang]||T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(tr[k]) el.innerHTML=tr[k];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const k=el.getAttribute('data-i18n-placeholder');
+    if(tr[k]) el.placeholder=tr[k];
+  });
+  // Re-render current view if needed
+  if(document.getElementById('screenConvList').classList.contains('active')){
+    renderConversations();
+  }
+}
+
+/* ═══ NAV ═══ */
+function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open')}
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
+
+/* ═══ SCREEN MANAGEMENT ═══ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ═══ ROLE SELECT ═══ */
+function selectRole(role){
+  userRole=role;
+  document.getElementById('roleRider').classList.toggle('active',role==='rider');
+  document.getElementById('roleDriver').classList.toggle('active',role==='driver');
+}
+
+/* ═══ LOGIN ═══ */
+async function handleLogin(e){
+  e.preventDefault();
+  const phone=document.getElementById('phoneInput').value.trim().replace(/\s/g,'');
+  if(!phone)return;
+
+  const btn=document.getElementById('loginBtn');
+  const errEl=document.getElementById('loginError');
+  errEl.style.display='none';
+  btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span> '+t('loading');
+
+  try{
+    if(userRole==='driver'){
+      // Driver: first login to get driver ID
+      const res=await fetch(API+'/api/drivers/login',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({phone:phone})
+      });
+      if(res.status===404){
+        errEl.textContent=t('err_not_found');errEl.style.display='block';
+        btn.disabled=false;btn.textContent=t('login_btn');return;
+      }
+      if(!res.ok){
+        errEl.textContent=t('err_server');errEl.style.display='block';
+        btn.disabled=false;btn.textContent=t('login_btn');return;
+      }
+      const data=await res.json();
+      driverData=data.driver||data;
+      driverId=driverData._id||driverData.id;
+      userPhone=phone;
+      await loadConversations();
+    }else{
+      // Rider: just use phone
+      userPhone=phone;
+      await loadConversations();
+    }
+  }catch(err){
+    errEl.textContent=t('err_network');errEl.style.display='block';
+    btn.disabled=false;btn.textContent=t('login_btn');
+  }
+}
+
+function logout(){
+  stopPolling();
+  stopConvPolling();
+  userPhone='';driverId=null;driverData=null;
+  conversations=[];currentConv=null;messages=[];
+  document.getElementById('phoneInput').value='';
+  document.getElementById('loginError').style.display='none';
+  document.getElementById('loginBtn').disabled=false;
+  document.getElementById('loginBtn').textContent=t('login_btn');
+  showScreen('screenLogin');
+}
+
+/* ═══ CONVERSATIONS ═══ */
+async function loadConversations(){
+  showScreen('screenConvList');
+  const list=document.getElementById('convList');
+  list.innerHTML='<div class="conv-loading"><span class="spinner"></span> '+t('loading')+'</div>';
+
+  // Update header badge
+  const badge=document.getElementById('convUserBadge');
+  badge.textContent=userRole==='driver'?t('badge_driver'):t('badge_rider');
+  badge.className='conv-user-badge '+userRole;
+  document.getElementById('convUserPhone').textContent='+509 '+userPhone;
+
+  try{
+    let url;
+    if(userRole==='driver'){
+      url=API+'/api/messages/conversations/driver/'+driverId;
+    }else{
+      url=API+'/api/messages/conversations/rider/'+encodeURIComponent(userPhone);
+    }
+    const res=await fetch(url);
+    if(!res.ok) throw new Error('Failed');
+    const data=await res.json();
+    conversations=Array.isArray(data)?data:(data.conversations||data.data||[]);
+    renderConversations();
+    startConvPolling();
+  }catch(err){
+    conversations=[];
+    renderConversations();
+    startConvPolling();
+  }
+}
+
+function renderConversations(){
+  const list=document.getElementById('convList');
+
+  if(conversations.length===0){
+    const emptyMsg=userRole==='driver'?t('empty_driver_msg'):t('empty_msg');
+    list.innerHTML=
+      '<div class="conv-empty">'+
+        '<div class="conv-empty-icon">&#128172;</div>'+
+        '<h3>'+t('empty_title')+'</h3>'+
+        '<p>'+emptyMsg+'</p>'+
+        (userRole==='rider'?'<a href="index.html#order">'+t('empty_cta')+'</a>':'')+
+      '</div>';
+    return;
+  }
+
+  list.innerHTML=conversations.map((c,i)=>{
+    const otherName=userRole==='driver'?(c.rider_name||c.rider_phone||'Kliyan'):(c.driver_name||'Chofè');
+    const initials=getInitials(otherName);
+    const lastMsg=c.last_message||c.lastMessage||'';
+    const preview=typeof lastMsg==='object'?(lastMsg.content||''):(lastMsg||'');
+    const time=formatTime(c.updated_at||c.updatedAt||c.last_message_at||c.created_at||c.createdAt);
+    const unread=getUnreadCount(c);
+    const trackCode=c.tracking_code||c.ride?.tracking_code||'';
+    const rideType=c.ride_type||c.ride?.ride_type||'ride';
+    const rideIcon=rideType==='delivery'?'&#128230;':'&#128663;';
+    const rideLabel=rideType==='delivery'?t('delivery_label'):t('ride_label');
+    const avatarClass=userRole==='driver'?'':'driver-av';
+
+    return '<div class="conv-item" onclick="openConversation('+i+')" style="animation-delay:'+(.05*i)+'s">'+
+      '<div class="conv-avatar '+avatarClass+'">'+initials+'</div>'+
+      '<div class="conv-body">'+
+        '<div class="conv-top">'+
+          '<span class="conv-name">'+escHtml(otherName)+'</span>'+
+          '<span class="conv-time">'+time+'</span>'+
+        '</div>'+
+        '<div class="conv-bottom">'+
+          '<span class="conv-preview'+(unread>0?' unread':'')+'">'+escHtml(preview)+'</span>'+
+          (unread>0?'<span class="conv-badge">'+unread+'</span>':'')+
+        '</div>'+
+        (trackCode?'<div class="conv-ride-info"><span class="conv-ride-tag">'+rideIcon+' '+rideLabel+'</span><span>'+escHtml(trackCode)+'</span></div>':'')+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function getUnreadCount(c){
+  if(userRole==='driver') return c.driver_unread||c.driverUnread||0;
+  return c.rider_unread||c.riderUnread||0;
+}
+
+function getInitials(name){
+  if(!name) return '?';
+  const parts=name.trim().split(/\s+/);
+  if(parts.length>=2) return (parts[0][0]+parts[1][0]).toUpperCase();
+  return name.substring(0,2).toUpperCase();
+}
+
+/* ═══ CHAT VIEW ═══ */
+async function openConversation(idx){
+  currentConv=conversations[idx];
+  if(!currentConv) return;
+  const convId=currentConv._id||currentConv.id;
+
+  const otherName=userRole==='driver'?(currentConv.rider_name||currentConv.rider_phone||'Kliyan'):(currentConv.driver_name||'Chofè');
+  document.getElementById('chatHeaderName').textContent=otherName;
+
+  const trackCode=currentConv.tracking_code||currentConv.ride?.tracking_code||'';
+  document.getElementById('chatHeaderSub').textContent=trackCode?('#'+trackCode):'';
+
+  // WhatsApp fallback
+  const otherPhone=userRole==='driver'?(currentConv.rider_phone||''):(currentConv.driver_phone||'');
+  const waBtn=document.getElementById('btnWhatsApp');
+  if(otherPhone){
+    const cleanPhone=otherPhone.replace(/[^0-9]/g,'');
+    const waPhone=cleanPhone.startsWith('509')?cleanPhone:'509'+cleanPhone;
+    waBtn.href='https://wa.me/'+waPhone;
+    waBtn.style.display='flex';
+  }else{
+    waBtn.style.display='none';
+  }
+
+  showScreen('screenChat');
+  stopConvPolling();
+
+  // Load messages
+  const msgContainer=document.getElementById('chatMessages');
+  msgContainer.innerHTML='<div class="conv-loading"><span class="spinner"></span></div>';
+
+  try{
+    const res=await fetch(API+'/api/messages/conversations/'+convId+'/messages?limit=100');
+    if(!res.ok) throw new Error('Failed');
+    const data=await res.json();
+    messages=Array.isArray(data)?data:(data.messages||data.data||[]);
+    // Sort chronological (oldest first)
+    messages.sort((a,b)=>new Date(a.created_at||a.createdAt)-new Date(b.created_at||b.createdAt));
+    renderMessages();
+    scrollToBottom();
+    markAsRead(convId);
+    startPolling(convId);
+  }catch(err){
+    messages=[];
+    renderMessages();
+    startPolling(convId);
+  }
+
+  // Focus input
+  document.getElementById('chatInput').focus();
+}
+
+function renderMessages(){
+  const container=document.getElementById('chatMessages');
+  if(messages.length===0){
+    container.innerHTML=
+      '<div class="conv-empty" style="padding:32px 16px">'+
+        '<div class="conv-empty-icon">&#128172;</div>'+
+        '<p style="font-size:.85rem;color:var(--text-light)">'+t('empty_title')+'</p>'+
+      '</div>';
+    return;
+  }
+
+  let html='';
+  let lastDate='';
+
+  messages.forEach((m,i)=>{
+    const dt=new Date(m.created_at||m.createdAt);
+    const dateStr=formatDateLabel(dt);
+
+    if(dateStr!==lastDate){
+      html+='<div class="msg-date-sep">'+dateStr+'</div>';
+      lastDate=dateStr;
+    }
+
+    const isSent=isMine(m);
+    const timeStr=dt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+
+    if(m.type==='system'){
+      html+='<div class="msg-bubble msg-system">'+escHtml(m.content||m.text||'')+'</div>';
+    }else{
+      html+='<div class="msg-bubble '+(isSent?'msg-sent':'msg-received')+'" style="animation-delay:'+(.03*i)+'s">'+
+        escHtml(m.content||m.text||'')+
+        '<div class="msg-time">'+timeStr+'</div>'+
+      '</div>';
+    }
+  });
+
+  container.innerHTML=html;
+}
+
+function isMine(msg){
+  const st=msg.sender_type||msg.senderType||'';
+  if(userRole==='driver'){
+    return st==='driver';
+  }
+  return st==='rider';
+}
+
+function scrollToBottom(){
+  const c=document.getElementById('chatMessages');
+  requestAnimationFrame(()=>{c.scrollTop=c.scrollHeight});
+}
+
+/* ═══ SEND MESSAGE ═══ */
+async function sendMessage(){
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if(!text||!currentConv) return;
+
+  const convId=currentConv._id||currentConv.id;
+  const btn=document.getElementById('btnSend');
+  btn.disabled=true;
+  input.value='';
+  input.style.height='auto';
+  updateSendBtn();
+
+  // Optimistic add
+  const tempMsg={
+    content:text,
+    sender_type:userRole,
+    sender_id:userRole==='driver'?driverId:userPhone,
+    created_at:new Date().toISOString(),
+    type:'text',
+    _temp:true
+  };
+  messages.push(tempMsg);
+  renderMessages();
+  scrollToBottom();
+
+  try{
+    const body={
+      sender_type:userRole,
+      sender_id:userRole==='driver'?driverId:userPhone,
+      content:text,
+      type:'text'
+    };
+    const res=await fetch(API+'/api/messages/conversations/'+convId+'/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    if(res.ok){
+      const data=await res.json();
+      // Replace temp msg with server response
+      const idx=messages.indexOf(tempMsg);
+      if(idx>=0){
+        const serverMsg=data.message||data;
+        messages[idx]=serverMsg;
+      }
+    }
+  }catch(err){
+    // Keep optimistic message even if send fails
+  }
+  btn.disabled=false;
+  input.focus();
+}
+
+/* ═══ POLLING ═══ */
+function startPolling(convId){
+  stopPolling();
+  pollTimer=setInterval(async()=>{
+    try{
+      const res=await fetch(API+'/api/messages/conversations/'+convId+'/messages?limit=100');
+      if(!res.ok)return;
+      const data=await res.json();
+      const newMsgs=Array.isArray(data)?data:(data.messages||data.data||[]);
+      newMsgs.sort((a,b)=>new Date(a.created_at||a.createdAt)-new Date(b.created_at||b.createdAt));
+      const oldLen=messages.filter(m=>!m._temp).length;
+      messages=newMsgs;
+      if(messages.length!==oldLen){
+        renderMessages();
+        scrollToBottom();
+        markAsRead(convId);
+      }
+    }catch(e){}
+  },5000);
+}
+
+function stopPolling(){
+  if(pollTimer){clearInterval(pollTimer);pollTimer=null}
+}
+
+function startConvPolling(){
+  stopConvPolling();
+  convPollTimer=setInterval(async()=>{
+    try{
+      let url;
+      if(userRole==='driver'){
+        url=API+'/api/messages/conversations/driver/'+driverId;
+      }else{
+        url=API+'/api/messages/conversations/rider/'+encodeURIComponent(userPhone);
+      }
+      const res=await fetch(url);
+      if(!res.ok)return;
+      const data=await res.json();
+      conversations=Array.isArray(data)?data:(data.conversations||data.data||[]);
+      renderConversations();
+    }catch(e){}
+  },10000);
+}
+
+function stopConvPolling(){
+  if(convPollTimer){clearInterval(convPollTimer);convPollTimer=null}
+}
+
+async function markAsRead(convId){
+  try{
+    await fetch(API+'/api/messages/conversations/'+convId+'/read',{
+      method:'PATCH',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({reader_type:userRole})
+    });
+  }catch(e){}
+}
+
+/* ═══ INPUT HANDLING ═══ */
+function handleInputKey(e){
+  if(e.key==='Enter'&&!e.shiftKey){
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoGrow(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,100)+'px';
+  updateSendBtn();
+}
+
+function updateSendBtn(){
+  const input=document.getElementById('chatInput');
+  document.getElementById('btnSend').disabled=!input.value.trim();
+}
+
+// Also listen to input event for send button state
+document.getElementById('chatInput').addEventListener('input',function(){updateSendBtn()});
+
+/* ═══ GO BACK ═══ */
+function goBack(){
+  stopPolling();
+  currentConv=null;
+  messages=[];
+  document.getElementById('chatInput').value='';
+  document.getElementById('chatInput').style.height='auto';
+  showScreen('screenConvList');
+  loadConversations();
+}
+
+/* ═══ HELPERS ═══ */
+function formatTime(dateStr){
+  if(!dateStr)return'';
+  const d=new Date(dateStr);
+  const now=new Date();
+  const diff=now-d;
+  if(diff<60000)return t('today');
+  if(isSameDay(d,now)) return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const yesterday=new Date(now);yesterday.setDate(yesterday.getDate()-1);
+  if(isSameDay(d,yesterday)) return t('yesterday');
+  return d.toLocaleDateString([],{month:'short',day:'numeric'});
+}
+
+function formatDateLabel(d){
+  const now=new Date();
+  if(isSameDay(d,now)) return t('today');
+  const yesterday=new Date(now);yesterday.setDate(yesterday.getDate()-1);
+  if(isSameDay(d,yesterday)) return t('yesterday');
+  return d.toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'});
+}
+
+function isSameDay(a,b){
+  return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();
+}
+
+function escHtml(s){
+  if(!s)return'';
+  const d=document.createElement('div');d.textContent=s;return d.innerHTML;
+}
+
+/* ═══ INIT ═══ */
+setLang('ht');
+</script>
+</body>
+</html>

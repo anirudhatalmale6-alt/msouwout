@@ -221,6 +221,7 @@ footer a{color:var(--gold-light);font-weight:600}
   </a>
   <div class="nav-links">
     <a href="index.html" data-i18n="nav_home">Akèy</a>
+    <a href="chat.html" data-i18n="nav_messages">Mesaj</a>
     <a href="index.html#order" data-i18n="nav_order">Mande Kous</a>
   </div>
   <a href="index.html#order" class="nav-cta" data-i18n="nav_ride">Mande Kous</a>
@@ -228,6 +229,7 @@ footer a{color:var(--gold-light);font-weight:600}
 </nav>
 <div class="mobile-nav" id="mobileNav">
   <a href="index.html" onclick="closeMobile()" data-i18n="nav_home">Akèy</a>
+  <a href="chat.html" onclick="closeMobile()" data-i18n="nav_messages">Mesaj</a>
   <a href="index.html#order" onclick="closeMobile()" data-i18n="nav_order">Mande Kous</a>
 </div>
 
@@ -288,7 +290,7 @@ const API='https://msouwout-backend.onrender.com';
 
 const T={
   ht:{
-    nav_home:"Akèy",nav_order:"Mande Kous",nav_ride:"Mande Kous",
+    nav_home:"Akèy",nav_messages:"Mesaj",nav_order:"Mande Kous",nav_ride:"Mande Kous",
     page_title:"Kont <em>Mwen</em>",page_sub:"Antre nimewo telefòn ou pou wè istwa kous ou.",
     login_title:"Istwa Kous Mwen",login_sub:"Antre nimewo telefòn ou te itilize pou mande kous.",
     login_btn:"Chache Kous Mwen",logout:"Dekonekte",
@@ -301,7 +303,7 @@ const T={
     ride_completed:"Fini",ride_in_progress:"An kou",ride_searching:"Ap chache",ride_cancelled:"Anile",ride_accepted:"Aksepte"
   },
   fr:{
-    nav_home:"Accueil",nav_order:"Demander Course",nav_ride:"Demander Course",
+    nav_home:"Accueil",nav_messages:"Messages",nav_order:"Demander Course",nav_ride:"Demander Course",
     page_title:"Mon <em>Compte</em>",page_sub:"Entrez votre numero de telephone pour voir l'historique de vos courses.",
     login_title:"Mon Historique",login_sub:"Entrez le numero de telephone utilise pour vos courses.",
     login_btn:"Rechercher Mes Courses",logout:"Deconnexion",
@@ -314,7 +316,7 @@ const T={
     ride_completed:"Termine",ride_in_progress:"En cours",ride_searching:"Recherche",ride_cancelled:"Annule",ride_accepted:"Accepte"
   },
   en:{
-    nav_home:"Home",nav_order:"Request Ride",nav_ride:"Request Ride",
+    nav_home:"Home",nav_messages:"Messages",nav_order:"Request Ride",nav_ride:"Request Ride",
     page_title:"My <em>Account</em>",page_sub:"Enter your phone number to see your ride history.",
     login_title:"My Ride History",login_sub:"Enter the phone number you used to request rides.",
     login_btn:"Find My Rides",logout:"Log Out",
@@ -327,7 +329,7 @@ const T={
     ride_completed:"Completed",ride_in_progress:"In Progress",ride_searching:"Searching",ride_cancelled:"Cancelled",ride_accepted:"Accepted"
   },
   es:{
-    nav_home:"Inicio",nav_order:"Solicitar Viaje",nav_ride:"Solicitar Viaje",
+    nav_home:"Inicio",nav_messages:"Mensajes",nav_order:"Solicitar Viaje",nav_ride:"Solicitar Viaje",
     page_title:"Mi <em>Cuenta</em>",page_sub:"Ingresa tu numero de telefono para ver tu historial de viajes.",
     login_title:"Mi Historial",login_sub:"Ingresa el numero de telefono que usaste para solicitar viajes.",
     login_btn:"Buscar Mis Viajes",logout:"Cerrar Sesion",

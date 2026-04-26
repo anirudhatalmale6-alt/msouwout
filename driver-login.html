@@ -277,6 +277,7 @@ footer a:hover{text-decoration:underline}
   </a>
   <div class="nav-links">
     <a href="index.html" data-i18n="nav_home">Akèy</a>
+    <a href="chat.html" data-i18n="nav_messages">Mesaj</a>
     <a href="driver-register.html" data-i18n="nav_register">Enskri</a>
   </div>
   <a href="driver-register.html" class="nav-cta" data-i18n="nav_apply">Aplike Kounye a</a>
@@ -284,6 +285,7 @@ footer a:hover{text-decoration:underline}
 </nav>
 <div class="mobile-nav" id="mobileNav">
   <a href="index.html" onclick="closeMobile()" data-i18n="nav_home">Akèy</a>
+  <a href="chat.html" onclick="closeMobile()" data-i18n="nav_messages">Mesaj</a>
   <a href="driver-register.html" onclick="closeMobile()" data-i18n="nav_register">Enskri</a>
   <a href="driver-register.html" onclick="closeMobile()" class="nav-cta" style="text-align:center" data-i18n="nav_apply">Aplike Kounye a</a>
 </div>
@@ -356,7 +358,7 @@ const API='https://msouwout-backend.onrender.com';
 
 const T={
   ht:{
-    nav_home:"Akèy",nav_register:"Enskri",nav_apply:"Aplike Kounye a",
+    nav_home:"Akèy",nav_messages:"Mesaj",nav_register:"Enskri",nav_apply:"Aplike Kounye a",
     page_title:"Konekte ak <em>Kont Ou</em>",page_sub:"Antre nimewo telefon ou pou wè estati aplikasyon ou ak istwa kous ou.",
     login_title:"Koneksyon Chofè",login_sub:"Antre nimewo telefòn ou te itilize pou enskri a.",
     phone_placeholder:"4685 9702",login_btn:"Konekte",
@@ -379,7 +381,7 @@ const T={
     member_since:"Manm depi"
   },
   fr:{
-    nav_home:"Accueil",nav_register:"S'inscrire",nav_apply:"Postuler",
+    nav_home:"Accueil",nav_messages:"Messages",nav_register:"S'inscrire",nav_apply:"Postuler",
     page_title:"Connectez-vous a <em>Votre Compte</em>",page_sub:"Entrez votre numero de telephone pour voir le statut de votre candidature et l'historique de vos courses.",
     login_title:"Connexion Chauffeur",login_sub:"Entrez le numero de telephone utilise lors de votre inscription.",
     phone_placeholder:"4685 9702",login_btn:"Se Connecter",
@@ -402,7 +404,7 @@ const T={
     member_since:"Membre depuis"
   },
   en:{
-    nav_home:"Home",nav_register:"Register",nav_apply:"Apply Now",
+    nav_home:"Home",nav_messages:"Messages",nav_register:"Register",nav_apply:"Apply Now",
     page_title:"Log in to <em>Your Account</em>",page_sub:"Enter your phone number to check your application status and ride history.",
     login_title:"Driver Login",login_sub:"Enter the phone number you used to register.",
     phone_placeholder:"4685 9702",login_btn:"Log In",
@@ -425,7 +427,7 @@ const T={
     member_since:"Member since"
   },
   es:{
-    nav_home:"Inicio",nav_register:"Registrarse",nav_apply:"Aplicar Ahora",
+    nav_home:"Inicio",nav_messages:"Mensajes",nav_register:"Registrarse",nav_apply:"Aplicar Ahora",
     page_title:"Inicia sesion en <em>Tu Cuenta</em>",page_sub:"Ingresa tu numero de telefono para ver el estado de tu solicitud e historial de viajes.",
     login_title:"Acceso Conductor",login_sub:"Ingresa el numero de telefono que usaste al registrarte.",
     phone_placeholder:"4685 9702",login_btn:"Iniciar Sesion",
