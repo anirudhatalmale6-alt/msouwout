@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MsouWout - Konekte | Driver Login</title>
+<meta name="description" content="Log in to your MsouWout driver account. Check your application status, view ride history, and manage your profile.">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D21034;--red-dark:#B00D2C;--red-light:#E8243F;
+  --blue:#00209F;--blue-dark:#001566;
+  --gold:#D4A017;--gold-light:#E8B82E;
+  --white:#FFFFFF;--off-white:#FFF8F8;--light-gray:#F0E8E8;
+  --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;
+  --green:#22C55E;--green-dark:#16A34A;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --display:'DM Serif Display',Georgia,serif;
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+.lang-bar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;
+  background:var(--red);
+  padding:6px 20px;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;
+}
+.lang-bar a{
+  color:rgba(255,255,255,.7);font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:100px;
+  cursor:pointer;transition:all .2s;letter-spacing:.02em;
+}
+.lang-bar a:hover{color:#fff;background:rgba(255,255,255,.15)}
+.lang-bar a.active{color:var(--red);background:#fff}
+
+nav{
+  position:fixed;top:36px;left:0;right:0;z-index:1000;
+  background:var(--blue);border-bottom:3px solid var(--red);
+  padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.nav-logo span{font-family:var(--display);font-weight:900;font-size:1.25rem;color:#fff;letter-spacing:-.02em}
+.nav-links{display:flex;align-items:center;gap:20px}
+.nav-links a{color:rgba(255,255,255,.8);font-size:.82rem;font-weight:600;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  background:var(--red);color:#fff;padding:10px 22px;border-radius:100px;font-size:.82rem;
+  font-weight:700;transition:all .25s;border:none;cursor:pointer;
+}
+.nav-cta:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(210,16,52,.35)}
+.mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+.mobile-nav{display:none;position:fixed;top:100px;left:0;right:0;background:var(--blue);padding:24px;z-index:999;border-bottom:3px solid var(--red);flex-direction:column;gap:16px}
+.mobile-nav.open{display:flex}
+.mobile-nav a{color:rgba(255,255,255,.9);font-size:.95rem;font-weight:600;padding:8px 0}
+
+.hero{
+  min-height:45vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:140px 24px 60px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 60%,#000D4F 100%);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 20%,rgba(210,16,52,.08) 0%,transparent 60%),
+             radial-gradient(ellipse at 70% 80%,rgba(212,160,23,.06) 0%,transparent 50%);
+}
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:80px;
+  background:linear-gradient(to top,var(--off-white),transparent);pointer-events:none;
+}
+.hero *{position:relative;z-index:1}
+.hero h1{
+  font-family:var(--display);font-size:clamp(1.8rem,4.5vw,3rem);font-weight:900;
+  color:#fff;line-height:1.15;letter-spacing:-.02em;max-width:600px;
+  animation:fadeUp .7s ease both;
+}
+.hero h1 em{font-style:italic;color:var(--gold-light)}
+.hero-sub{
+  font-size:clamp(.9rem,1.8vw,1.05rem);color:rgba(255,255,255,.65);line-height:1.6;
+  max-width:440px;margin:16px auto 0;font-weight:400;
+  animation:fadeUp .7s .1s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* LOGIN FORM */
+.login-section{padding:0 24px 60px;margin-top:-40px;position:relative;z-index:2}
+.login-card{
+  max-width:420px;margin:0 auto;background:var(--white);border-radius:20px;
+  padding:40px 32px;box-shadow:0 20px 60px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.04);
+  border:1px solid rgba(0,0,0,.04);
+  animation:fadeUp .7s .2s ease both;
+}
+.login-card h2{
+  font-family:var(--display);font-size:1.5rem;color:var(--dark);text-align:center;margin-bottom:6px;
+}
+.login-card .login-sub{
+  font-size:.88rem;color:var(--text-light);text-align:center;margin-bottom:28px;line-height:1.5;
+}
+.phone-input-wrap{
+  position:relative;display:flex;align-items:center;
+  border:2px solid #e2e8f0;border-radius:14px;overflow:hidden;
+  transition:border-color .2s;margin-bottom:16px;
+}
+.phone-input-wrap:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.08)}
+.phone-flag{
+  padding:14px 12px 14px 16px;font-size:1.1rem;background:#f8fafc;
+  border-right:1px solid #e2e8f0;display:flex;align-items:center;gap:6px;
+  font-size:.82rem;font-weight:700;color:var(--text);flex-shrink:0;
+}
+.phone-input{
+  flex:1;padding:14px 16px;border:none;outline:none;font-size:1rem;
+  font-family:var(--body);font-weight:500;color:var(--dark);
+  background:transparent;
+}
+.phone-input::placeholder{color:#b0b8c4;font-weight:400}
+.btn-login{
+  width:100%;padding:16px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--red),var(--red-dark));
+  color:#fff;font-size:1rem;font-weight:800;cursor:pointer;
+  font-family:var(--body);transition:all .25s;letter-spacing:.01em;
+}
+.btn-login:hover{box-shadow:0 8px 28px rgba(210,16,52,.35);transform:translateY(-1px)}
+.btn-login:active{transform:translateY(0)}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+.login-error{
+  background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;
+  padding:14px 16px;margin-bottom:16px;display:none;
+  font-size:.85rem;color:#991B1B;line-height:1.5;
+}
+.login-error a{color:var(--red);font-weight:700;text-decoration:underline}
+.login-footer{
+  text-align:center;margin-top:20px;font-size:.82rem;color:var(--text-light);
+}
+.login-footer a{color:var(--blue);font-weight:700}
+.login-footer a:hover{text-decoration:underline}
+.spinner{
+  display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;
+  vertical-align:middle;margin-right:6px;
+}
+
+/* DASHBOARD */
+.dashboard{display:none;padding:0 24px 60px;margin-top:-40px;position:relative;z-index:2}
+.dashboard.active{display:block}
+.dash-inner{max-width:640px;margin:0 auto}
+
+.welcome-bar{
+  background:var(--white);border-radius:20px;padding:28px 24px;
+  box-shadow:0 12px 40px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.04);
+  margin-bottom:16px;display:flex;align-items:center;gap:16px;
+  animation:fadeUp .5s ease both;
+}
+.welcome-avatar{
+  width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;flex-shrink:0;
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;
+}
+.welcome-info h2{font-family:var(--display);font-size:1.3rem;color:var(--dark);line-height:1.2}
+.welcome-info p{font-size:.82rem;color:var(--text-light);margin-top:2px}
+.btn-logout{
+  margin-left:auto;padding:8px 18px;border-radius:100px;border:1.5px solid #e2e8f0;
+  background:transparent;color:var(--text-light);font-size:.78rem;font-weight:700;
+  cursor:pointer;font-family:var(--body);transition:all .2s;flex-shrink:0;
+}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+.status-card{
+  border-radius:20px;padding:24px;margin-bottom:16px;
+  border:1px solid rgba(0,0,0,.04);
+  box-shadow:0 8px 32px rgba(0,0,0,.04);
+  animation:fadeUp .5s .1s ease both;
+}
+.status-card.pending{background:linear-gradient(135deg,#FEF9C3,#FEF3C7);border-color:#FDE68A}
+.status-card.approved{background:linear-gradient(135deg,#DCFCE7,#D1FAE5);border-color:#86EFAC}
+.status-card.rejected{background:linear-gradient(135deg,#FEE2E2,#FECACA);border-color:#FCA5A5}
+.status-card.suspended{background:linear-gradient(135deg,#F1F5F9,#E2E8F0);border-color:#CBD5E1}
+.status-badge{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;
+  font-size:.78rem;font-weight:800;letter-spacing:.02em;text-transform:uppercase;
+}
+.status-card.pending .status-badge{background:#F59E0B;color:#fff}
+.status-card.approved .status-badge{background:var(--green);color:#fff}
+.status-card.rejected .status-badge{background:var(--red);color:#fff}
+.status-card.suspended .status-badge{background:#64748B;color:#fff}
+.status-msg{font-size:.9rem;margin-top:12px;line-height:1.6;color:var(--text)}
+.status-msg strong{font-weight:800}
+
+.profile-card{
+  background:var(--white);border-radius:20px;padding:24px;margin-bottom:16px;
+  border:1px solid rgba(0,0,0,.04);box-shadow:0 8px 32px rgba(0,0,0,.04);
+  animation:fadeUp .5s .15s ease both;
+}
+.profile-card h3{
+  font-family:var(--display);font-size:1.1rem;color:var(--dark);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.profile-item{
+  background:#F8FAFC;border-radius:12px;padding:14px 16px;
+}
+.profile-item .label{font-size:.7rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.profile-item .value{font-size:.92rem;font-weight:700;color:var(--dark)}
+
+.rides-card{
+  background:var(--white);border-radius:20px;padding:24px;margin-bottom:16px;
+  border:1px solid rgba(0,0,0,.04);box-shadow:0 8px 32px rgba(0,0,0,.04);
+  animation:fadeUp .5s .2s ease both;
+}
+.rides-card h3{
+  font-family:var(--display);font-size:1.1rem;color:var(--dark);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.rides-empty{
+  text-align:center;padding:32px 16px;color:var(--text-light);font-size:.88rem;
+}
+.rides-empty .empty-icon{font-size:2.5rem;margin-bottom:12px;opacity:.4}
+.ride-row{
+  display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;
+  padding:14px 0;border-bottom:1px solid #F1F5F9;
+}
+.ride-row:last-child{border-bottom:none}
+.ride-date{font-size:.82rem;font-weight:600;color:var(--dark)}
+.ride-type{font-size:.75rem;color:var(--text-light);margin-top:2px}
+.ride-price{font-size:.92rem;font-weight:800;color:var(--dark)}
+.ride-status{
+  font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:100px;
+  text-transform:uppercase;letter-spacing:.03em;
+}
+.ride-status.completed{background:#DCFCE7;color:#166534}
+.ride-status.in_progress{background:#DBEAFE;color:#1E40AF}
+.ride-status.searching{background:#FEF9C3;color:#854D0E}
+.ride-status.cancelled{background:#FEE2E2;color:#991B1B}
+.ride-status.accepted{background:#E0E7FF;color:#3730A3}
+
+/* FOOTER */
+footer{
+  background:var(--blue);color:rgba(255,255,255,.7);text-align:center;
+  padding:32px 24px;font-size:.8rem;
+}
+footer a{color:var(--gold-light);font-weight:600}
+footer a:hover{text-decoration:underline}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .profile-grid{grid-template-columns:1fr}
+  .welcome-bar{flex-wrap:wrap}
+  .btn-logout{margin-left:0;margin-top:8px;width:100%;text-align:center}
+  .ride-row{grid-template-columns:1fr;gap:6px}
+  .ride-price{font-size:.85rem}
+}
+</style>
+</head>
+<body>
+
+<!-- LANG BAR -->
+<div class="lang-bar">
+  <a onclick="setLang('fr')" id="lang-fr">&#127467;&#127479; Francais</a>
+  <a onclick="setLang('en')" id="lang-en">&#127468;&#127463; English</a>
+  <a onclick="setLang('ht')" class="active" id="lang-ht">&#127469;&#127481; Kreyol</a>
+  <a onclick="setLang('es')" id="lang-es">&#127466;&#127480; Espanol</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="assets/msouwout-icon.png" alt="MsouWout Logo">
+    <span>MsouWout</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" data-i18n="nav_home">Akèy</a>
+    <a href="driver-register.html" data-i18n="nav_register">Enskri</a>
+  </div>
+  <a href="driver-register.html" class="nav-cta" data-i18n="nav_apply">Aplike Kounye a</a>
+  <button class="mobile-toggle" onclick="toggleMobile()">&#9776;</button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html" onclick="closeMobile()" data-i18n="nav_home">Akèy</a>
+  <a href="driver-register.html" onclick="closeMobile()" data-i18n="nav_register">Enskri</a>
+  <a href="driver-register.html" onclick="closeMobile()" class="nav-cta" style="text-align:center" data-i18n="nav_apply">Aplike Kounye a</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <h1 data-i18n="page_title">Konekte ak <em>Kont Ou</em></h1>
+  <p class="hero-sub" data-i18n="page_sub">Antre nimewo telefon ou pou wè estati aplikasyon ou ak istwa kous ou.</p>
+</section>
+
+<!-- LOGIN FORM -->
+<section class="login-section" id="loginSection">
+  <div class="login-card">
+    <h2 data-i18n="login_title">Koneksyon Chofe</h2>
+    <p class="login-sub" data-i18n="login_sub">Antre nimewo telefon ou te itilize pou enskri a.</p>
+
+    <div class="login-error" id="loginError"></div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="phone-input-wrap">
+        <div class="phone-flag">&#127469;&#127481; +509</div>
+        <input type="tel" class="phone-input" id="phoneInput" placeholder="4685 9702" data-i18n-placeholder="phone_placeholder" required>
+      </div>
+      <button type="submit" class="btn-login" id="loginBtn" data-i18n="login_btn">Konekte</button>
+    </form>
+
+    <div class="login-footer">
+      <span data-i18n="no_account">Ou poko enskri?</span>
+      <a href="driver-register.html" data-i18n="register_link">Enskri kounye a</a>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="dashboard" id="dashboard">
+  <div class="dash-inner">
+    <div class="welcome-bar">
+      <div class="welcome-avatar">&#128100;</div>
+      <div class="welcome-info">
+        <h2 id="driverName"></h2>
+        <p id="driverSince"></p>
+      </div>
+      <button class="btn-logout" onclick="logout()" data-i18n="logout">Dekonekte</button>
+    </div>
+
+    <div class="status-card" id="statusCard">
+      <span class="status-badge" id="statusBadge"></span>
+      <div class="status-msg" id="statusMsg"></div>
+    </div>
+
+    <div class="profile-card">
+      <h3>&#128203; <span data-i18n="profile_title">Pwofil Ou</span></h3>
+      <div class="profile-grid" id="profileGrid"></div>
+    </div>
+
+    <div class="rides-card">
+      <h3>&#128663; <span data-i18n="rides_title">Istwa Kous</span></h3>
+      <div id="ridesContent"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2026 MsouWout &mdash; <span data-i18n="footer_part">Yon platfom</span> <a href="https://haitibiznis.com">HaitiBiznis</a></p>
+</footer>
+
+<script>
+const API='https://msouwout-backend.onrender.com';
+
+const T={
+  ht:{
+    nav_home:"Akèy",nav_register:"Enskri",nav_apply:"Aplike Kounye a",
+    page_title:"Konekte ak <em>Kont Ou</em>",page_sub:"Antre nimewo telefon ou pou wè estati aplikasyon ou ak istwa kous ou.",
+    login_title:"Koneksyon Chofè",login_sub:"Antre nimewo telefòn ou te itilize pou enskri a.",
+    phone_placeholder:"4685 9702",login_btn:"Konekte",
+    no_account:"Ou poko enskri?",register_link:"Enskri kounye a",
+    logout:"Dekonekte",profile_title:"Pwofil Ou",rides_title:"Istwa Kous",
+    footer_part:"Yon platfòm",
+    err_not_found:"Nimewo sa a pa enskri. <a href='driver-register.html'>Enskri kounye a</a>",
+    err_server:"Erè sèvè. Eseye ankò.",err_network:"Pa gen koneksyon. Verifye entènèt ou.",
+    loading:"Ap chache...",
+    status_pending:"An Atant",status_approved:"Apwouve",status_rejected:"Rejte",status_suspended:"Sispann",
+    msg_pending:"Aplikasyon ou ap revize. Nou ap kontakte ou byento via WhatsApp.",
+    msg_approved:"Ou apwouve! Ou ka komanse aksepte kous sou MsouWout.",
+    msg_rejected:"Aplikasyon ou te rejte.",msg_rejected_reason:"Rezon: <strong>%s</strong>",
+    msg_suspended:"Kont ou sispann.",
+    lbl_phone:"Telefòn",lbl_vehicle:"Machin",lbl_plate:"Plak",lbl_email:"Imèl",lbl_service:"Sèvis",lbl_since:"Enskri depi",
+    vehicle_moto:"Moto",vehicle_car:"Machin",vehicle_truck:"Kamyon",vehicle_bike:"Bisiklèt",
+    service_ride:"Transpò",service_delivery:"Livrezon",service_both:"Tou de",
+    rides_empty:"Ou poko gen okenn kous.",
+    ride_completed:"Fini",ride_in_progress:"An kou",ride_searching:"Ap chache",ride_cancelled:"Anile",ride_accepted:"Aksepte",
+    member_since:"Manm depi"
+  },
+  fr:{
+    nav_home:"Accueil",nav_register:"S'inscrire",nav_apply:"Postuler",
+    page_title:"Connectez-vous a <em>Votre Compte</em>",page_sub:"Entrez votre numero de telephone pour voir le statut de votre candidature et l'historique de vos courses.",
+    login_title:"Connexion Chauffeur",login_sub:"Entrez le numero de telephone utilise lors de votre inscription.",
+    phone_placeholder:"4685 9702",login_btn:"Se Connecter",
+    no_account:"Pas encore inscrit?",register_link:"S'inscrire maintenant",
+    logout:"Deconnexion",profile_title:"Votre Profil",rides_title:"Historique des Courses",
+    footer_part:"Une plateforme",
+    err_not_found:"Ce numero n'est pas enregistre. <a href='driver-register.html'>S'inscrire maintenant</a>",
+    err_server:"Erreur serveur. Reessayez.",err_network:"Pas de connexion. Verifiez votre internet.",
+    loading:"Recherche...",
+    status_pending:"En Attente",status_approved:"Approuve",status_rejected:"Rejete",status_suspended:"Suspendu",
+    msg_pending:"Votre candidature est en cours de revision. Nous vous contacterons bientot via WhatsApp.",
+    msg_approved:"Vous etes approuve! Vous pouvez commencer a accepter des courses sur MsouWout.",
+    msg_rejected:"Votre candidature a ete rejetee.",msg_rejected_reason:"Raison: <strong>%s</strong>",
+    msg_suspended:"Votre compte est suspendu.",
+    lbl_phone:"Telephone",lbl_vehicle:"Vehicule",lbl_plate:"Plaque",lbl_email:"Email",lbl_service:"Service",lbl_since:"Inscrit depuis",
+    vehicle_moto:"Moto",vehicle_car:"Voiture",vehicle_truck:"Camion",vehicle_bike:"Velo",
+    service_ride:"Transport",service_delivery:"Livraison",service_both:"Les deux",
+    rides_empty:"Vous n'avez pas encore de courses.",
+    ride_completed:"Termine",ride_in_progress:"En cours",ride_searching:"Recherche",ride_cancelled:"Annule",ride_accepted:"Accepte",
+    member_since:"Membre depuis"
+  },
+  en:{
+    nav_home:"Home",nav_register:"Register",nav_apply:"Apply Now",
+    page_title:"Log in to <em>Your Account</em>",page_sub:"Enter your phone number to check your application status and ride history.",
+    login_title:"Driver Login",login_sub:"Enter the phone number you used to register.",
+    phone_placeholder:"4685 9702",login_btn:"Log In",
+    no_account:"Not registered yet?",register_link:"Register now",
+    logout:"Log Out",profile_title:"Your Profile",rides_title:"Ride History",
+    footer_part:"A platform by",
+    err_not_found:"This number is not registered. <a href='driver-register.html'>Register now</a>",
+    err_server:"Server error. Please try again.",err_network:"No connection. Check your internet.",
+    loading:"Searching...",
+    status_pending:"Pending",status_approved:"Approved",status_rejected:"Rejected",status_suspended:"Suspended",
+    msg_pending:"Your application is under review. We will contact you soon via WhatsApp.",
+    msg_approved:"You're approved! You can start accepting rides on MsouWout.",
+    msg_rejected:"Your application was rejected.",msg_rejected_reason:"Reason: <strong>%s</strong>",
+    msg_suspended:"Your account is suspended.",
+    lbl_phone:"Phone",lbl_vehicle:"Vehicle",lbl_plate:"Plate",lbl_email:"Email",lbl_service:"Service",lbl_since:"Registered",
+    vehicle_moto:"Motorcycle",vehicle_car:"Car",vehicle_truck:"Truck",vehicle_bike:"Bicycle",
+    service_ride:"Rides",service_delivery:"Delivery",service_both:"Both",
+    rides_empty:"You don't have any rides yet.",
+    ride_completed:"Completed",ride_in_progress:"In Progress",ride_searching:"Searching",ride_cancelled:"Cancelled",ride_accepted:"Accepted",
+    member_since:"Member since"
+  },
+  es:{
+    nav_home:"Inicio",nav_register:"Registrarse",nav_apply:"Aplicar Ahora",
+    page_title:"Inicia sesion en <em>Tu Cuenta</em>",page_sub:"Ingresa tu numero de telefono para ver el estado de tu solicitud e historial de viajes.",
+    login_title:"Acceso Conductor",login_sub:"Ingresa el numero de telefono que usaste al registrarte.",
+    phone_placeholder:"4685 9702",login_btn:"Iniciar Sesion",
+    no_account:"No estas registrado?",register_link:"Registrate ahora",
+    logout:"Cerrar Sesion",profile_title:"Tu Perfil",rides_title:"Historial de Viajes",
+    footer_part:"Una plataforma de",
+    err_not_found:"Este numero no esta registrado. <a href='driver-register.html'>Registrate ahora</a>",
+    err_server:"Error del servidor. Intenta de nuevo.",err_network:"Sin conexion. Verifica tu internet.",
+    loading:"Buscando...",
+    status_pending:"Pendiente",status_approved:"Aprobado",status_rejected:"Rechazado",status_suspended:"Suspendido",
+    msg_pending:"Tu solicitud esta en revision. Te contactaremos pronto via WhatsApp.",
+    msg_approved:"Estas aprobado! Puedes empezar a aceptar viajes en MsouWout.",
+    msg_rejected:"Tu solicitud fue rechazada.",msg_rejected_reason:"Razon: <strong>%s</strong>",
+    msg_suspended:"Tu cuenta esta suspendida.",
+    lbl_phone:"Telefono",lbl_vehicle:"Vehiculo",lbl_plate:"Placa",lbl_email:"Email",lbl_service:"Servicio",lbl_since:"Registrado",
+    vehicle_moto:"Moto",vehicle_car:"Carro",vehicle_truck:"Camion",vehicle_bike:"Bicicleta",
+    service_ride:"Transporte",service_delivery:"Entrega",service_both:"Ambos",
+    rides_empty:"Aun no tienes viajes.",
+    ride_completed:"Completado",ride_in_progress:"En Progreso",ride_searching:"Buscando",ride_cancelled:"Cancelado",ride_accepted:"Aceptado",
+    member_since:"Miembro desde"
+  }
+};
+
+let currentLang='ht';
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-bar a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('lang-'+lang).classList.add('active');
+  const t=T[lang]||T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.getAttribute('data-i18n');
+    if(t[key]) el.innerHTML=t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key=el.getAttribute('data-i18n-placeholder');
+    if(t[key]) el.placeholder=t[key];
+  });
+  if(window._driverData) renderDashboard(window._driverData);
+}
+function t(key){return (T[currentLang]||T.ht)[key]||key}
+
+function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open')}
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
+
+async function handleLogin(e){
+  e.preventDefault();
+  const phone=document.getElementById('phoneInput').value.trim();
+  if(!phone)return;
+
+  const btn=document.getElementById('loginBtn');
+  const errEl=document.getElementById('loginError');
+  errEl.style.display='none';
+
+  btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span> '+t('loading');
+
+  try{
+    const res=await fetch(API+'/api/drivers/login',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({phone:phone.replace(/\s/g,'')})
+    });
+
+    if(res.status===404){
+      errEl.innerHTML=t('err_not_found');
+      errEl.style.display='block';
+      btn.disabled=false;
+      btn.textContent=t('login_btn');
+      return;
+    }
+
+    if(!res.ok){
+      errEl.innerHTML=t('err_server');
+      errEl.style.display='block';
+      btn.disabled=false;
+      btn.textContent=t('login_btn');
+      return;
+    }
+
+    const data=await res.json();
+    window._driverData=data;
+    document.getElementById('loginSection').style.display='none';
+    document.getElementById('dashboard').classList.add('active');
+    renderDashboard(data);
+
+  }catch(err){
+    errEl.innerHTML=t('err_network');
+    errEl.style.display='block';
+    btn.disabled=false;
+    btn.textContent=t('login_btn');
+  }
+}
+
+function renderDashboard(data){
+  const d=data.driver;
+  const rides=data.rides||[];
+
+  document.getElementById('driverName').textContent=d.full_name;
+  const since=new Date(d.created_at);
+  document.getElementById('driverSince').textContent=t('member_since')+' '+since.toLocaleDateString();
+
+  const sc=document.getElementById('statusCard');
+  sc.className='status-card '+d.status;
+  document.getElementById('statusBadge').textContent=t('status_'+d.status);
+
+  let msg='';
+  if(d.status==='pending') msg=t('msg_pending');
+  else if(d.status==='approved') msg=t('msg_approved');
+  else if(d.status==='rejected'){
+    msg=t('msg_rejected');
+    if(d.rejection_reason) msg+=' '+t('msg_rejected_reason').replace('%s',d.rejection_reason);
+  }else if(d.status==='suspended'){
+    msg=t('msg_suspended');
+    if(d.rejection_reason) msg+=' '+t('msg_rejected_reason').replace('%s',d.rejection_reason);
+  }
+  document.getElementById('statusMsg').innerHTML=msg;
+
+  const vMap={motorcycle:t('vehicle_moto'),moto:t('vehicle_moto'),car:t('vehicle_car'),truck:t('vehicle_truck'),bicycle:t('vehicle_bike')};
+  const sMap={ride:t('service_ride'),delivery:t('service_delivery'),both:t('service_both')};
+
+  const grid=document.getElementById('profileGrid');
+  grid.innerHTML=[
+    item(t('lbl_phone'),d.phone),
+    item(t('lbl_vehicle'),vMap[d.vehicle_type?.toLowerCase()]||d.vehicle_type||'-'),
+    item(t('lbl_plate'),d.license_plate||'-'),
+    item(t('lbl_email'),d.email||'-'),
+    item(t('lbl_service'),sMap[d.preferred_service]||d.preferred_service||'-'),
+    item(t('lbl_since'),since.toLocaleDateString())
+  ].join('');
+
+  const rc=document.getElementById('ridesContent');
+  if(rides.length===0){
+    rc.innerHTML='<div class="rides-empty"><div class="empty-icon">&#128663;</div><p>'+t('rides_empty')+'</p></div>';
+  }else{
+    rc.innerHTML=rides.map(r=>{
+      const rd=new Date(r.created_at);
+      const statusClass=r.status.replace(/\s/g,'_');
+      return '<div class="ride-row">'+
+        '<div><div class="ride-date">'+rd.toLocaleDateString()+' '+rd.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</div>'+
+        '<div class="ride-type">'+(r.ride_type||'ride')+' &middot; '+(r.tracking_code||'')+'</div></div>'+
+        '<div class="ride-price">'+(r.price||0)+' HTG</div>'+
+        '<span class="ride-status '+statusClass+'">'+(t('ride_'+r.status)||r.status)+'</span>'+
+        '</div>';
+    }).join('');
+  }
+}
+
+function item(label,value){
+  return '<div class="profile-item"><div class="label">'+label+'</div><div class="value">'+value+'</div></div>';
+}
+
+function logout(){
+  window._driverData=null;
+  document.getElementById('dashboard').classList.remove('active');
+  document.getElementById('loginSection').style.display='';
+  document.getElementById('phoneInput').value='';
+  document.getElementById('loginError').style.display='none';
+}
+
+setLang('ht');
+</script>
+</body>
+</html>

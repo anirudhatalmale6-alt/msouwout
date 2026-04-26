@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MsouWout - Kont Mwen | My Account</title>
+<meta name="description" content="Check your MsouWout ride history and track your deliveries.">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D21034;--red-dark:#B00D2C;--red-light:#E8243F;
+  --blue:#00209F;--blue-dark:#001566;
+  --gold:#D4A017;--gold-light:#E8B82E;
+  --white:#FFFFFF;--off-white:#FFF8F8;--light-gray:#F0E8E8;
+  --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;
+  --green:#22C55E;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --display:'DM Serif Display',Georgia,serif;
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+.lang-bar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;background:var(--red);
+  padding:6px 20px;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;
+}
+.lang-bar a{
+  color:rgba(255,255,255,.7);font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:100px;
+  cursor:pointer;transition:all .2s;letter-spacing:.02em;
+}
+.lang-bar a:hover{color:#fff;background:rgba(255,255,255,.15)}
+.lang-bar a.active{color:var(--red);background:#fff}
+
+nav{
+  position:fixed;top:36px;left:0;right:0;z-index:1000;
+  background:var(--blue);border-bottom:3px solid var(--red);
+  padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.nav-logo span{font-family:var(--display);font-weight:900;font-size:1.25rem;color:#fff;letter-spacing:-.02em}
+.nav-links{display:flex;align-items:center;gap:20px}
+.nav-links a{color:rgba(255,255,255,.8);font-size:.82rem;font-weight:600;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  background:var(--red);color:#fff;padding:10px 22px;border-radius:100px;font-size:.82rem;
+  font-weight:700;transition:all .25s;border:none;cursor:pointer;
+}
+.nav-cta:hover{background:var(--red-dark)}
+.mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+.mobile-nav{display:none;position:fixed;top:100px;left:0;right:0;background:var(--blue);padding:24px;z-index:999;border-bottom:3px solid var(--red);flex-direction:column;gap:16px}
+.mobile-nav.open{display:flex}
+.mobile-nav a{color:rgba(255,255,255,.9);font-size:.95rem;font-weight:600;padding:8px 0}
+
+.hero{
+  min-height:40vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:140px 24px 60px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 60%,#000D4F 100%);
+}
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:80px;
+  background:linear-gradient(to top,var(--off-white),transparent);pointer-events:none;
+}
+.hero *{position:relative;z-index:1}
+.hero h1{
+  font-family:var(--display);font-size:clamp(1.8rem,4.5vw,3rem);font-weight:900;
+  color:#fff;line-height:1.15;letter-spacing:-.02em;
+  animation:fadeUp .7s ease both;
+}
+.hero h1 em{font-style:italic;color:var(--gold-light)}
+.hero-sub{
+  font-size:clamp(.9rem,1.8vw,1.05rem);color:rgba(255,255,255,.65);line-height:1.6;
+  max-width:440px;margin:16px auto 0;
+  animation:fadeUp .7s .1s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.login-section{padding:0 24px 60px;margin-top:-40px;position:relative;z-index:2}
+.login-card{
+  max-width:420px;margin:0 auto;background:var(--white);border-radius:20px;
+  padding:40px 32px;box-shadow:0 20px 60px rgba(0,0,0,.08);border:1px solid rgba(0,0,0,.04);
+  animation:fadeUp .7s .2s ease both;
+}
+.login-card h2{font-family:var(--display);font-size:1.5rem;color:var(--dark);text-align:center;margin-bottom:6px}
+.login-card .login-sub{font-size:.88rem;color:var(--text-light);text-align:center;margin-bottom:28px;line-height:1.5}
+.phone-input-wrap{
+  position:relative;display:flex;align-items:center;
+  border:2px solid #e2e8f0;border-radius:14px;overflow:hidden;transition:border-color .2s;margin-bottom:16px;
+}
+.phone-input-wrap:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.08)}
+.phone-flag{
+  padding:14px 12px 14px 16px;background:#f8fafc;border-right:1px solid #e2e8f0;
+  display:flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;color:var(--text);flex-shrink:0;
+}
+.phone-input{
+  flex:1;padding:14px 16px;border:none;outline:none;font-size:1rem;
+  font-family:var(--body);font-weight:500;color:var(--dark);background:transparent;
+}
+.phone-input::placeholder{color:#b0b8c4;font-weight:400}
+.btn-login{
+  width:100%;padding:16px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  color:#fff;font-size:1rem;font-weight:800;cursor:pointer;
+  font-family:var(--body);transition:all .25s;
+}
+.btn-login:hover{box-shadow:0 8px 28px rgba(0,32,159,.3);transform:translateY(-1px)}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+.login-error{
+  background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;
+  padding:14px 16px;margin-bottom:16px;display:none;font-size:.85rem;color:#991B1B;line-height:1.5;
+}
+.login-footer{text-align:center;margin-top:20px;font-size:.82rem;color:var(--text-light)}
+.login-footer a{color:var(--blue);font-weight:700}
+.spinner{
+  display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;
+}
+
+.dashboard{display:none;padding:0 24px 60px;margin-top:-40px;position:relative;z-index:2}
+.dashboard.active{display:block}
+.dash-inner{max-width:640px;margin:0 auto}
+
+.welcome-bar{
+  background:var(--white);border-radius:20px;padding:28px 24px;
+  box-shadow:0 12px 40px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.04);
+  margin-bottom:16px;display:flex;align-items:center;gap:16px;
+  animation:fadeUp .5s ease both;
+}
+.welcome-avatar{
+  width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;flex-shrink:0;background:linear-gradient(135deg,var(--gold),#B8880E);color:#fff;
+}
+.welcome-info h2{font-family:var(--display);font-size:1.3rem;color:var(--dark)}
+.welcome-info p{font-size:.82rem;color:var(--text-light);margin-top:2px}
+.btn-logout{
+  margin-left:auto;padding:8px 18px;border-radius:100px;border:1.5px solid #e2e8f0;
+  background:transparent;color:var(--text-light);font-size:.78rem;font-weight:700;
+  cursor:pointer;font-family:var(--body);transition:all .2s;flex-shrink:0;
+}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+.summary-row{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px;
+  animation:fadeUp .5s .1s ease both;
+}
+.summary-card{
+  background:var(--white);border-radius:16px;padding:20px;text-align:center;
+  border:1px solid rgba(0,0,0,.04);box-shadow:0 4px 16px rgba(0,0,0,.03);
+}
+.summary-card .num{font-family:var(--display);font-size:1.6rem;color:var(--dark)}
+.summary-card .lbl{font-size:.72rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+
+.rides-card{
+  background:var(--white);border-radius:20px;padding:24px;
+  border:1px solid rgba(0,0,0,.04);box-shadow:0 8px 32px rgba(0,0,0,.04);
+  animation:fadeUp .5s .15s ease both;
+}
+.rides-card h3{font-family:var(--display);font-size:1.1rem;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.rides-empty{text-align:center;padding:32px 16px;color:var(--text-light);font-size:.88rem}
+.rides-empty .empty-icon{font-size:2.5rem;margin-bottom:12px;opacity:.4}
+.ride-row{
+  display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;
+  padding:14px 0;border-bottom:1px solid #F1F5F9;
+}
+.ride-row:last-child{border-bottom:none}
+.ride-date{font-size:.82rem;font-weight:600;color:var(--dark)}
+.ride-type{font-size:.75rem;color:var(--text-light);margin-top:2px}
+.ride-price{font-size:.92rem;font-weight:800;color:var(--dark)}
+.ride-status{
+  font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:.03em;
+}
+.ride-status.completed{background:#DCFCE7;color:#166534}
+.ride-status.in_progress{background:#DBEAFE;color:#1E40AF}
+.ride-status.searching{background:#FEF9C3;color:#854D0E}
+.ride-status.cancelled{background:#FEE2E2;color:#991B1B}
+.ride-status.accepted{background:#E0E7FF;color:#3730A3}
+
+.cta-block{
+  text-align:center;margin-top:16px;animation:fadeUp .5s .2s ease both;
+}
+.cta-block a{
+  display:inline-block;padding:14px 32px;border-radius:100px;font-weight:800;font-size:.92rem;
+  background:var(--blue);color:#fff;transition:all .25s;
+}
+.cta-block a:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,32,159,.3)}
+
+footer{
+  background:var(--blue);color:rgba(255,255,255,.7);text-align:center;padding:32px 24px;font-size:.8rem;
+}
+footer a{color:var(--gold-light);font-weight:600}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .welcome-bar{flex-wrap:wrap}
+  .btn-logout{margin-left:0;margin-top:8px;width:100%;text-align:center}
+  .ride-row{grid-template-columns:1fr;gap:6px}
+}
+</style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <a onclick="setLang('fr')" id="lang-fr">&#127467;&#127479; Francais</a>
+  <a onclick="setLang('en')" id="lang-en">&#127468;&#127463; English</a>
+  <a onclick="setLang('ht')" class="active" id="lang-ht">&#127469;&#127481; Kreyol</a>
+  <a onclick="setLang('es')" id="lang-es">&#127466;&#127480; Espanol</a>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="assets/msouwout-icon.png" alt="MsouWout Logo">
+    <span>MsouWout</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" data-i18n="nav_home">Akèy</a>
+    <a href="index.html#order" data-i18n="nav_order">Mande Kous</a>
+  </div>
+  <a href="index.html#order" class="nav-cta" data-i18n="nav_ride">Mande Kous</a>
+  <button class="mobile-toggle" onclick="toggleMobile()">&#9776;</button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html" onclick="closeMobile()" data-i18n="nav_home">Akèy</a>
+  <a href="index.html#order" onclick="closeMobile()" data-i18n="nav_order">Mande Kous</a>
+</div>
+
+<section class="hero">
+  <h1 data-i18n="page_title">Kont <em>Mwen</em></h1>
+  <p class="hero-sub" data-i18n="page_sub">Antre nimewo telefon ou pou wè istwa kous ou.</p>
+</section>
+
+<section class="login-section" id="loginSection">
+  <div class="login-card">
+    <h2 data-i18n="login_title">Istwa Kous Mwen</h2>
+    <p class="login-sub" data-i18n="login_sub">Antre nimewo telefon ou te itilize pou mande kous.</p>
+    <div class="login-error" id="loginError"></div>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="phone-input-wrap">
+        <div class="phone-flag">&#127469;&#127481; +509</div>
+        <input type="tel" class="phone-input" id="phoneInput" placeholder="4685 9702" required>
+      </div>
+      <button type="submit" class="btn-login" id="loginBtn" data-i18n="login_btn">Chache Kous Mwen</button>
+    </form>
+    <div class="login-footer">
+      <span data-i18n="driver_q">Ou se chofe?</span>
+      <a href="driver-login.html" data-i18n="driver_link">Koneksyon chofe</a>
+    </div>
+  </div>
+</section>
+
+<section class="dashboard" id="dashboard">
+  <div class="dash-inner">
+    <div class="welcome-bar">
+      <div class="welcome-avatar">&#128100;</div>
+      <div class="welcome-info">
+        <h2 id="userName"></h2>
+        <p id="userPhone"></p>
+      </div>
+      <button class="btn-logout" onclick="logout()" data-i18n="logout">Dekonekte</button>
+    </div>
+
+    <div class="summary-row" id="summaryRow"></div>
+
+    <div class="rides-card">
+      <h3>&#128663; <span data-i18n="rides_title">Istwa Kous</span></h3>
+      <div id="ridesContent"></div>
+    </div>
+
+    <div class="cta-block">
+      <a href="index.html#order" data-i18n="new_ride">Mande Yon Nouvo Kous</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 MsouWout &mdash; <span data-i18n="footer_part">Yon platfom</span> <a href="https://haitibiznis.com">HaitiBiznis</a></p>
+</footer>
+
+<script>
+const API='https://msouwout-backend.onrender.com';
+
+const T={
+  ht:{
+    nav_home:"Akèy",nav_order:"Mande Kous",nav_ride:"Mande Kous",
+    page_title:"Kont <em>Mwen</em>",page_sub:"Antre nimewo telefòn ou pou wè istwa kous ou.",
+    login_title:"Istwa Kous Mwen",login_sub:"Antre nimewo telefòn ou te itilize pou mande kous.",
+    login_btn:"Chache Kous Mwen",logout:"Dekonekte",
+    driver_q:"Ou se chofè?",driver_link:"Koneksyon chofè",
+    rides_title:"Istwa Kous",footer_part:"Yon platfòm",new_ride:"Mande Yon Nouvo Kous",
+    err_empty:"Ou poko gen okenn kous ak nimewo sa a.",err_server:"Erè sèvè. Eseye ankò.",err_network:"Pa gen koneksyon.",
+    loading:"Ap chache...",
+    lbl_total:"Total Kous",lbl_spent:"Total Depanse",lbl_last:"Dènye Kous",
+    rides_empty:"Ou poko gen okenn kous.",
+    ride_completed:"Fini",ride_in_progress:"An kou",ride_searching:"Ap chache",ride_cancelled:"Anile",ride_accepted:"Aksepte"
+  },
+  fr:{
+    nav_home:"Accueil",nav_order:"Demander Course",nav_ride:"Demander Course",
+    page_title:"Mon <em>Compte</em>",page_sub:"Entrez votre numero de telephone pour voir l'historique de vos courses.",
+    login_title:"Mon Historique",login_sub:"Entrez le numero de telephone utilise pour vos courses.",
+    login_btn:"Rechercher Mes Courses",logout:"Deconnexion",
+    driver_q:"Vous etes chauffeur?",driver_link:"Connexion chauffeur",
+    rides_title:"Historique des Courses",footer_part:"Une plateforme",new_ride:"Demander une Nouvelle Course",
+    err_empty:"Aucune course trouvee avec ce numero.",err_server:"Erreur serveur. Reessayez.",err_network:"Pas de connexion.",
+    loading:"Recherche...",
+    lbl_total:"Total Courses",lbl_spent:"Total Depense",lbl_last:"Derniere Course",
+    rides_empty:"Vous n'avez pas encore de courses.",
+    ride_completed:"Termine",ride_in_progress:"En cours",ride_searching:"Recherche",ride_cancelled:"Annule",ride_accepted:"Accepte"
+  },
+  en:{
+    nav_home:"Home",nav_order:"Request Ride",nav_ride:"Request Ride",
+    page_title:"My <em>Account</em>",page_sub:"Enter your phone number to see your ride history.",
+    login_title:"My Ride History",login_sub:"Enter the phone number you used to request rides.",
+    login_btn:"Find My Rides",logout:"Log Out",
+    driver_q:"Are you a driver?",driver_link:"Driver login",
+    rides_title:"Ride History",footer_part:"A platform by",new_ride:"Request a New Ride",
+    err_empty:"No rides found with this number.",err_server:"Server error. Try again.",err_network:"No connection.",
+    loading:"Searching...",
+    lbl_total:"Total Rides",lbl_spent:"Total Spent",lbl_last:"Last Ride",
+    rides_empty:"You don't have any rides yet.",
+    ride_completed:"Completed",ride_in_progress:"In Progress",ride_searching:"Searching",ride_cancelled:"Cancelled",ride_accepted:"Accepted"
+  },
+  es:{
+    nav_home:"Inicio",nav_order:"Solicitar Viaje",nav_ride:"Solicitar Viaje",
+    page_title:"Mi <em>Cuenta</em>",page_sub:"Ingresa tu numero de telefono para ver tu historial de viajes.",
+    login_title:"Mi Historial",login_sub:"Ingresa el numero de telefono que usaste para solicitar viajes.",
+    login_btn:"Buscar Mis Viajes",logout:"Cerrar Sesion",
+    driver_q:"Eres conductor?",driver_link:"Acceso conductor",
+    rides_title:"Historial de Viajes",footer_part:"Una plataforma de",new_ride:"Solicitar un Nuevo Viaje",
+    err_empty:"No se encontraron viajes con este numero.",err_server:"Error del servidor. Intenta de nuevo.",err_network:"Sin conexion.",
+    loading:"Buscando...",
+    lbl_total:"Total Viajes",lbl_spent:"Total Gastado",lbl_last:"Ultimo Viaje",
+    rides_empty:"Aun no tienes viajes.",
+    ride_completed:"Completado",ride_in_progress:"En Progreso",ride_searching:"Buscando",ride_cancelled:"Cancelado",ride_accepted:"Aceptado"
+  }
+};
+
+let currentLang='ht';
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-bar a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('lang-'+lang).classList.add('active');
+  const t=T[lang]||T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(t[k]) el.innerHTML=t[k];
+  });
+  if(window._userData) renderDashboard(window._userData);
+}
+function t(key){return(T[currentLang]||T.ht)[key]||key}
+function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open')}
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
+
+async function handleLogin(e){
+  e.preventDefault();
+  const phone=document.getElementById('phoneInput').value.trim();
+  if(!phone)return;
+  const btn=document.getElementById('loginBtn');
+  const errEl=document.getElementById('loginError');
+  errEl.style.display='none';
+  btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span> '+t('loading');
+
+  try{
+    const res=await fetch(API+'/api/rides/history',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({phone:phone.replace(/\s/g,'')})
+    });
+    if(!res.ok){
+      errEl.textContent=t('err_server');errEl.style.display='block';
+      btn.disabled=false;btn.textContent=t('login_btn');return;
+    }
+    const data=await res.json();
+    if(data.total_rides===0){
+      errEl.textContent=t('err_empty');errEl.style.display='block';
+      btn.disabled=false;btn.textContent=t('login_btn');return;
+    }
+    window._userData=data;
+    document.getElementById('loginSection').style.display='none';
+    document.getElementById('dashboard').classList.add('active');
+    renderDashboard(data);
+  }catch(err){
+    errEl.textContent=t('err_network');errEl.style.display='block';
+    btn.disabled=false;btn.textContent=t('login_btn');
+  }
+}
+
+function renderDashboard(data){
+  document.getElementById('userName').textContent=data.customer_name||t('nav_home');
+  document.getElementById('userPhone').textContent=data.phone;
+
+  const rides=data.rides||[];
+  const totalSpent=rides.reduce((s,r)=>s+(r.price||0),0);
+  const lastDate=rides.length>0?new Date(rides[0].created_at).toLocaleDateString():'-';
+
+  document.getElementById('summaryRow').innerHTML=
+    '<div class="summary-card"><div class="num">'+rides.length+'</div><div class="lbl">'+t('lbl_total')+'</div></div>'+
+    '<div class="summary-card"><div class="num">'+totalSpent.toLocaleString()+' <small>HTG</small></div><div class="lbl">'+t('lbl_spent')+'</div></div>'+
+    '<div class="summary-card"><div class="num" style="font-size:1rem">'+lastDate+'</div><div class="lbl">'+t('lbl_last')+'</div></div>';
+
+  const rc=document.getElementById('ridesContent');
+  if(rides.length===0){
+    rc.innerHTML='<div class="rides-empty"><div class="empty-icon">&#128663;</div><p>'+t('rides_empty')+'</p></div>';
+  }else{
+    rc.innerHTML=rides.map(r=>{
+      const rd=new Date(r.created_at);
+      const sc=r.status.replace(/\s/g,'_');
+      return '<div class="ride-row">'+
+        '<div><div class="ride-date">'+rd.toLocaleDateString()+' '+rd.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</div>'+
+        '<div class="ride-type">'+(r.ride_type||'ride')+' &middot; '+(r.tracking_code||'')+'</div></div>'+
+        '<div class="ride-price">'+(r.price||0)+' HTG</div>'+
+        '<span class="ride-status '+sc+'">'+(t('ride_'+r.status)||r.status)+'</span>'+
+        '</div>';
+    }).join('');
+  }
+}
+
+function logout(){
+  window._userData=null;
+  document.getElementById('dashboard').classList.remove('active');
+  document.getElementById('loginSection').style.display='';
+  document.getElementById('phoneInput').value='';
+  document.getElementById('loginError').style.display='none';
+}
+
+setLang('ht');
+</script>
+</body>
+</html>
