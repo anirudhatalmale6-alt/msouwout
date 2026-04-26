@@ -492,7 +492,10 @@ footer{
 
       <!-- Preferred Zones -->
       <div class="form-group">
-        <label class="form-label" data-i18n="f_zones_label">Preferred Zones</label>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <label class="form-label" style="margin-bottom:0" data-i18n="f_zones_label">Preferred Zones</label>
+          <button type="button" onclick="toggleAllZones(this)" style="background:var(--blue);color:#fff;border:none;padding:6px 16px;border-radius:100px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:var(--body)" data-i18n="f_select_all">Tout Seleksyone</button>
+        </div>
         <div class="zones-check-grid">
           <label><input type="checkbox" name="Zones" value="Turgeau"><span>Turgeau</span></label>
           <label><input type="checkbox" name="Zones" value="Canape Vert"><span>Canape Vert</span></label>
@@ -646,7 +649,7 @@ const T = {
     f_oavct_label:"Numero d'Assurance OAVCT *", f_oavct_ph:"OAVCT-XXXXXXX", f_oavct_exp_label:"Date d'Expiration de l'Assurance *",
     f_oavct_confirm:"Je confirme que je possede une assurance OAVCT valide pour mon vehicule. Je comprends que conduire sans assurance OAVCT valide est illegal en Haiti et que MsouWout l'exige pour tous les chauffeurs.",
     f_service_label:"Service Prefere *", f_s_rides:"Transport", f_s_delivery:"Livraison", f_s_both:"Les Deux",
-    f_zones_label:"Zones Preferees",
+    f_zones_label:"Zones Preferees", f_select_all:"Tout Selectionner",
     f_z_delmas:"Delmas 19 a Petion-Ville", f_z_kenscoff:"Kenscoff a Le Florville",
     f_terms:"J'accepte les exigences des chauffeurs MsouWout: pas de transactions en especes, identite verifiee, suivi GPS en direct pendant le service, et heures de service de jour (6h - 20h).",
     f_submit:"&#128663; Soumettre l'Inscription",
@@ -689,7 +692,7 @@ const T = {
     f_oavct_label:"OAVCT Insurance Number *", f_oavct_ph:"OAVCT-XXXXXXX", f_oavct_exp_label:"Insurance Expiry Date *",
     f_oavct_confirm:"I confirm that I have a valid OAVCT insurance policy for my vehicle. I understand that driving without valid OAVCT insurance is illegal in Haiti and MsouWout requires it for all drivers.",
     f_service_label:"Preferred Service *", f_s_rides:"Rides", f_s_delivery:"Delivery", f_s_both:"Both",
-    f_zones_label:"Preferred Zones",
+    f_zones_label:"Preferred Zones", f_select_all:"Select All",
     f_z_delmas:"Delmas 19 to Petion-Ville", f_z_kenscoff:"Kenscoff to Le Florville",
     f_terms:"I agree to MsouWout's driver requirements: no cash transactions, verified identity, live GPS tracking during service, and daytime service hours (6am - 8pm).",
     f_submit:"&#128663; Submit Registration",
@@ -732,7 +735,7 @@ const T = {
     f_oavct_label:"Nimewo Asirans OAVCT *", f_oavct_ph:"OAVCT-XXXXXXX", f_oavct_exp_label:"Dat Asirans Ekspire *",
     f_oavct_confirm:"Mwen konfime ke mwen gen yon asirans OAVCT valid pou machin mwen. Mwen konprann ke kondwi san asirans OAVCT valid ilegal an Ayiti epi MsouWout mande sa pou tout chofe.",
     f_service_label:"Sevis Prefere *", f_s_rides:"Transpò", f_s_delivery:"Livrezon", f_s_both:"Tou de",
-    f_zones_label:"Zon Prefere",
+    f_zones_label:"Zon Prefere", f_select_all:"Tout Seleksyone",
     f_z_delmas:"Delmas 19 a Petion-Ville", f_z_kenscoff:"Kenscoff a Le Florville",
     f_terms:"Mwen aksepte egzijans chofe MsouWout: pa gen tranzaksyon lajan kach, idantite verifye, swivi GPS an dirèk pandan sevis, ak ore sevis lajounen (6am - 8pm).",
     f_submit:"&#128663; Soumèt Enskrisyon",
@@ -775,7 +778,7 @@ const T = {
     f_oavct_label:"Numero de Seguro OAVCT *", f_oavct_ph:"OAVCT-XXXXXXX", f_oavct_exp_label:"Fecha de Vencimiento del Seguro *",
     f_oavct_confirm:"Confirmo que tengo una poliza de seguro OAVCT vigente para mi vehiculo. Entiendo que conducir sin seguro OAVCT valido es ilegal en Haiti y que MsouWout lo requiere para todos los conductores.",
     f_service_label:"Servicio Preferido *", f_s_rides:"Viajes", f_s_delivery:"Entregas", f_s_both:"Ambos",
-    f_zones_label:"Zonas Preferidas",
+    f_zones_label:"Zonas Preferidas", f_select_all:"Seleccionar Todo",
     f_z_delmas:"Delmas 19 a Petion-Ville", f_z_kenscoff:"Kenscoff a Le Florville",
     f_terms:"Acepto los requisitos de conductores de MsouWout: sin transacciones en efectivo, identidad verificada, rastreo GPS en vivo durante el servicio, y horario de servicio diurno (6am - 8pm).",
     f_submit:"&#128663; Enviar Registro",
@@ -808,6 +811,15 @@ function setLang(lang){
 
 function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open')}
 function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
+
+function toggleAllZones(btn){
+  var boxes=document.querySelectorAll('[name="Zones"]');
+  var allChecked=Array.from(boxes).every(function(b){return b.checked});
+  boxes.forEach(function(b){b.checked=!allChecked});
+  var t={ht:["Tout Seleksyone","Deseleksyone Tout"],fr:["Tout Selectionner","Tout Deselectionner"],en:["Select All","Deselect All"],es:["Seleccionar Todo","Deseleccionar Todo"]};
+  var labels=t[currentLang]||t.ht;
+  btn.textContent=allChecked?labels[0]:labels[1];
+}
 
 /* Set OAVCT min date to tomorrow */
 (function(){
