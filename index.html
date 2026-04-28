@@ -78,11 +78,15 @@ a{text-decoration:none;color:inherit}
 
 .find-btn{
   width:100%;padding:18px;border-radius:var(--radius);background:var(--red);
-  color:var(--white);font-size:1.1rem;font-weight:800;transition:all .2s;
+  color:var(--white);font-size:1.1rem;font-weight:800;transition:all .3s;
   display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 16px rgba(210,16,52,.35);
 }
-.find-btn:hover{background:var(--red-dark);transform:translateY(-1px)}
-.find-btn:disabled{opacity:.4;transform:none}
+.find-btn:hover:not(:disabled){background:var(--red-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(210,16,52,.45)}
+.find-btn:disabled{opacity:.55;box-shadow:none;background:#C0C8D8;color:rgba(255,255,255,.7)}
+.find-btn:not(:disabled){animation:btnPulse 2s ease-in-out infinite}
+@keyframes btnPulse{0%,100%{box-shadow:0 4px 16px rgba(210,16,52,.35)}50%{box-shadow:0 4px 24px rgba(210,16,52,.55)}}
+.loc-input.filled{border-color:var(--green);background:var(--white)}
 
 .step1-trust{
   padding:16px 20px;border-top:1px solid var(--border);
@@ -423,7 +427,11 @@ function showStep(n){
 var pickupEl=document.getElementById('pickup');
 var dropEl=document.getElementById('dropoff');
 function checkInputs(){
-  document.getElementById('findBtn').disabled=!(pickupEl.value.trim()&&dropEl.value.trim());
+  var btn=document.getElementById('findBtn');
+  var ready=pickupEl.value.trim()&&dropEl.value.trim();
+  btn.disabled=!ready;
+  pickupEl.classList.toggle('filled',!!pickupEl.value.trim());
+  dropEl.classList.toggle('filled',!!dropEl.value.trim());
 }
 pickupEl.addEventListener('input',checkInputs);
 dropEl.addEventListener('input',checkInputs);
