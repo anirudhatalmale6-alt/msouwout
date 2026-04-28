@@ -263,6 +263,9 @@ a{text-decoration:none;color:inherit}
         <div class="loc-dot pickup"></div>
         <input type="text" class="loc-input" id="pickup" placeholder="Ki kote ou ye?" data-i18n-ph="ph_pickup">
       </div>
+      <button onclick="useMyLocation()" id="gpsBtn" style="display:flex;align-items:center;gap:6px;padding:6px 14px;margin:4px 0 4px 24px;border-radius:100px;background:rgba(27,140,61,.08);border:1px solid rgba(27,140,61,.2);color:var(--green);font-size:.75rem;font-weight:700;cursor:pointer;transition:all .2s">
+        <span>&#128205;</span> <span data-i18n="gps_btn">Sevi ak pozisyon mwen</span>
+      </button>
       <div class="loc-line"></div>
       <div class="loc-row">
         <div class="loc-dot drop"></div>
@@ -476,7 +479,9 @@ function submitRide(){
     riderName:'',
     vehicleType:vehicleType,
     pickupAddress:pickupEl.value.trim(),
-    dropoffAddress:dropEl.value.trim()
+    dropoffAddress:dropEl.value.trim(),
+    pickupLat:window._pickupLat||null,
+    pickupLng:window._pickupLng||null
   };
   if(timeMode==='later'){
     rideData.scheduledDate=document.getElementById('rDate').value;
@@ -557,6 +562,46 @@ function newRide(){
       }).catch(function(){});
   }
 })();
+
+/* GPS LOCATION */
+function useMyLocation(){
+  var btn=document.getElementById('gpsBtn');
+  btn.innerHTML='<span>&#8987;</span> <span>Chache pozisyon...</span>';
+  btn.style.opacity='.6';
+  if(!navigator.geolocation){
+    btn.innerHTML='<span>&#10060;</span> <span>GPS pa disponib</span>';
+    setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span>Sevi ak pozisyon mwen</span>';btn.style.opacity='1'},2000);
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var lat=pos.coords.latitude;
+    var lng=pos.coords.longitude;
+    window._pickupLat=lat;
+    window._pickupLng=lng;
+    fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json&addressdetails=1')
+      .then(function(r){return r.json()})
+      .then(function(data){
+        var addr=data.display_name||(''+lat.toFixed(4)+', '+lng.toFixed(4));
+        var parts=addr.split(',');
+        var short=parts.slice(0,3).join(',').trim();
+        document.getElementById('pickup').value=short;
+        checkInputs();
+        btn.innerHTML='<span>&#9989;</span> <span>Pozisyon jwenn!</span>';
+        btn.style.opacity='1';
+        setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span>Sevi ak pozisyon mwen</span>'},2000);
+      }).catch(function(){
+        document.getElementById('pickup').value=lat.toFixed(4)+', '+lng.toFixed(4);
+        checkInputs();
+        btn.innerHTML='<span>&#9989;</span> <span>GPS jwenn!</span>';
+        btn.style.opacity='1';
+      });
+  },function(err){
+    btn.style.opacity='1';
+    if(err.code===1) btn.innerHTML='<span>&#10060;</span> <span>Pèmisyon GPS refize</span>';
+    else btn.innerHTML='<span>&#10060;</span> <span>Pa ka jwenn pozisyon</span>';
+    setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span>Sevi ak pozisyon mwen</span>'},3000);
+  },{enableHighAccuracy:true,timeout:10000});
+}
 
 /* SAVE PHONE FOR NEXT TIME */
 document.getElementById('rPhone').addEventListener('change',function(){
