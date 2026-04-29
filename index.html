@@ -258,10 +258,27 @@ a{text-decoration:none;color:inherit}
   padding:8px 16px;border-radius:8px;background:var(--gold);color:var(--dark);
   font-size:.78rem;font-weight:800;flex-shrink:0;
 }
+.lang-bar{
+  background:var(--dark);padding:6px 20px;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  font-size:.68rem;z-index:1001;position:relative;
+}
+.lang-bar a{
+  color:rgba(255,255,255,.5);padding:3px 12px;border-radius:100px;
+  font-weight:600;transition:all .2s;cursor:pointer;
+}
+.lang-bar a:hover{color:#fff;background:rgba(255,255,255,.08)}
+.lang-bar a.active{color:var(--gold);background:rgba(212,160,23,.15)}
 </style>
 </head>
 <body>
 
+<div class="lang-bar">
+  <a class="active" data-lang="ht">Kreyòl</a>
+  <a data-lang="fr">Français</a>
+  <a data-lang="en">English</a>
+  <a data-lang="es">Español</a>
+</div>
 <div class="flag-stripe"></div>
 <div class="header">
   <div class="header-logo">
@@ -271,10 +288,10 @@ a{text-decoration:none;color:inherit}
   <div class="header-links">
     <a href="https://haitibiznis.com" class="header-link">HaitiBiznis</a>
     <div style="position:relative">
-      <button class="header-login" onclick="toggleLoginMenu()">Konekte</button>
+      <button class="header-login" onclick="toggleLoginMenu()" data-i18n="login_btn">Konekte</button>
       <div class="login-dropdown" id="loginDropdown">
-        <a href="user-login.html"><span>👤</span> Kliyan / Pasaje</a>
-        <a href="driver-login.html"><span>🚗</span> Chofe</a>
+        <a href="user-login.html"><span>👤</span> <span data-i18n="login_rider">Kliyan / Pasaje</span></a>
+        <a href="driver-login.html"><span>🚗</span> <span data-i18n="login_driver">Chofe</span></a>
       </div>
     </div>
   </div>
@@ -297,7 +314,7 @@ a{text-decoration:none;color:inherit}
     <div class="loc-inputs">
       <div class="loc-row">
         <div class="loc-dot pickup"></div>
-        <input type="text" class="loc-input" id="pickup" placeholder="Ki kote ou ye?" data-i18n-ph="ph_pickup">
+        <input type="text" class="loc-input" id="pickup" placeholder="Ki kote ou ye?" data-i18n-placeholder="ph_pickup">
       </div>
       <button onclick="useMyLocation()" id="gpsBtn" style="display:flex;align-items:center;gap:6px;padding:6px 14px;margin:4px 0 4px 24px;border-radius:100px;background:rgba(27,140,61,.08);border:1px solid rgba(27,140,61,.2);color:var(--green);font-size:.75rem;font-weight:700;cursor:pointer;transition:all .2s">
         <span>&#128205;</span> <span data-i18n="gps_btn">Sevi ak pozisyon mwen</span>
@@ -305,7 +322,7 @@ a{text-decoration:none;color:inherit}
       <div class="loc-line"></div>
       <div class="loc-row">
         <div class="loc-dot drop"></div>
-        <input type="text" class="loc-input" id="dropoff" placeholder="Ki kote ou prale?" data-i18n-ph="ph_drop">
+        <input type="text" class="loc-input" id="dropoff" placeholder="Ki kote ou prale?" data-i18n-placeholder="ph_drop">
       </div>
     </div>
 
@@ -314,11 +331,11 @@ a{text-decoration:none;color:inherit}
     <div class="quick-opts" style="margin-top:20px">
       <h3 data-i18n="popular">Kote popile</h3>
       <div class="quick-row">
-        <div class="quick-chip" onclick="setDest(this)">&#9992;&#65039; Ayewopo Toussaint</div>
-        <div class="quick-chip" onclick="setDest(this)">&#127978; Petyonvil</div>
-        <div class="quick-chip" onclick="setDest(this)">&#127958;&#65039; Labadi</div>
-        <div class="quick-chip" onclick="setDest(this)">&#127963;&#65039; Champ de Mars</div>
-        <div class="quick-chip" onclick="setDest(this)">&#128658; Tabarre</div>
+        <div class="quick-chip" onclick="setDest(this)" data-i18n="loc_airport">&#9992;&#65039; Ayewopo Toussaint</div>
+        <div class="quick-chip" onclick="setDest(this)" data-i18n="loc_petionville">&#127978; Petyonvil</div>
+        <div class="quick-chip" onclick="setDest(this)" data-i18n="loc_labadee">&#127958;&#65039; Labadi</div>
+        <div class="quick-chip" onclick="setDest(this)" data-i18n="loc_champ">&#127963;&#65039; Champ de Mars</div>
+        <div class="quick-chip" onclick="setDest(this)" data-i18n="loc_tabarre">&#128658; Tabarre</div>
       </div>
     </div>
   </div>
@@ -385,7 +402,7 @@ a{text-decoration:none;color:inherit}
 
     <div class="opt-label" data-i18n="phone_label">NIMEWO POU KONTAKTE OU</div>
     <div class="phone-row">
-      <input type="tel" id="rPhone" placeholder="+509 37 12 3456">
+      <input type="tel" id="rPhone" placeholder="+509 37 12 3456" data-i18n-placeholder="ph_phone">
     </div>
 
     <button class="request-btn" onclick="submitRide()" data-i18n="request_btn">&#128308; Mande Kous</button>
@@ -422,7 +439,7 @@ a{text-decoration:none;color:inherit}
   <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px">
     <img src="assets/msouwout-logo.jpg" alt="MsouWout" style="width:28px;height:28px;border-radius:6px">
     <span style="color:#fff;font-weight:800;font-size:.9rem">MsouWout</span>
-    <span style="color:rgba(255,255,255,.3);font-size:.7rem">pa HaitiBiznis</span>
+    <span style="color:rgba(255,255,255,.3);font-size:.7rem" data-i18n="footer_by">pa HaitiBiznis</span>
   </div>
   <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-bottom:8px">
     <a href="https://haitibiznis.com" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">HaitiBiznis</a>
@@ -437,7 +454,7 @@ a{text-decoration:none;color:inherit}
 
 <!-- KOUTYE STICKY BAR -->
 <div style="position:fixed;bottom:0;left:0;right:0;z-index:999;background:var(--gold);padding:10px 16px;text-align:center;box-shadow:0 -4px 16px rgba(0,0,0,.15)">
-  <a href="https://haitibiznis.com/koutye.html" style="color:var(--dark);font-weight:800;font-size:.82rem;display:flex;align-items:center;justify-content:center;gap:6px">&#128176; Pa selman kondwi — touche plis kom Koutye</a>
+  <a href="https://haitibiznis.com/koutye.html" style="color:var(--dark);font-weight:800;font-size:.82rem;display:flex;align-items:center;justify-content:center;gap:6px" data-i18n="koutye_bar">&#128176; Pa selman kondwi — touche plis kom Koutye</a>
 </div>
 
 <script>
@@ -447,6 +464,250 @@ var timeMode='now';
 var rideData={};
 var eventData=null;
 var ticketRef='';
+
+/* ═══ TRANSLATIONS ═══ */
+var T={
+  ht:{
+    main_q:'Jwenn Yon Kous <em>Nan 2 Minit</em>',
+    greeting:'Chofe ap reponn rapid via WhatsApp',
+    ph_pickup:'Ki kote ou ye?',
+    ph_drop:'Ki kote ou prale?',
+    gps_btn:'Sevi ak pozisyon mwen',
+    find_btn:'&#128308; Mande Kous Kounye A',
+    popular:'Kote popile',
+    loc_airport:'&#9992;&#65039; Ayewopo Toussaint',
+    loc_petionville:'&#127978; Petyonvil',
+    loc_labadee:'&#127958;&#65039; Labadi',
+    loc_champ:'&#127963;&#65039; Champ de Mars',
+    loc_tabarre:'&#128658; Tabarre',
+    t1:'Chofe verifye',
+    t2:'Repons rapid',
+    t3:'Sekirite garanti',
+    db_title:'&#128663; Ou gen yon machin/moto?',
+    db_sub:'Touche 500-3,000 HTG/jou',
+    db_btn:'Vin Chofe',
+    login_btn:'Konekte',
+    login_rider:'Kliyan / Pasaje',
+    login_driver:'Chofe',
+    edit:'Chanje',
+    vtype_label:'KALITE MACHIN',
+    moto_price:'Pi rapid, pi abodab',
+    car_name:'Machin',
+    car_price:'Konfortab, AC',
+    when_label:'KI LE',
+    now:'Kounye A',
+    later:'Pita',
+    est_label:'Estimasyon pri',
+    phone_label:'NIMEWO POU KONTAKTE OU',
+    ph_phone:'+509 37 12 3456',
+    request_btn:'&#128308; Mande Kous',
+    match_title:'N ap chache yon chofe...',
+    match_sub:'Chofe ki pi pre a ap resevwa demann ou an',
+    eta:'&#128337; 2-5 minit',
+    match_msg:'Chofe a ap kontakte ou sou WhatsApp. Si ou pa resevwa mesaj la, kontakte nou:',
+    wa_btn:'Kontakte sou WhatsApp',
+    new_ride:'Mande yon lot kous',
+    footer_by:'pa HaitiBiznis',
+    koutye_bar:'&#128176; Pa selman kondwi — touche plis kom Koutye',
+    gps_searching:'Chache pozisyon...',
+    gps_unavail:'GPS pa disponib',
+    gps_found:'Pozisyon jwenn!',
+    gps_found_short:'GPS jwenn!',
+    gps_denied:'Pèmisyon GPS refize',
+    gps_error:'Pa ka jwenn pozisyon',
+    wa_msg_prefix:'Bonjou, mwen mande yon',
+    wa_msg_from:'de',
+    wa_msg_to:'ale',
+    vehicle_car:'Machin',
+    vehicle_moto:'Moto'
+  },
+  fr:{
+    main_q:'Trouvez un Trajet <em>en 2 Minutes</em>',
+    greeting:'Les chauffeurs répondent rapidement via WhatsApp',
+    ph_pickup:'Où êtes-vous ?',
+    ph_drop:'Où allez-vous ?',
+    gps_btn:'Utiliser ma position',
+    find_btn:'&#128308; Demander un Trajet Maintenant',
+    popular:'Destinations populaires',
+    loc_airport:'&#9992;&#65039; Aéroport Toussaint',
+    loc_petionville:'&#127978; Pétion-Ville',
+    loc_labadee:'&#127958;&#65039; Labadie',
+    loc_champ:'&#127963;&#65039; Champ de Mars',
+    loc_tabarre:'&#128658; Tabarre',
+    t1:'Chauffeurs vérifiés',
+    t2:'Réponse rapide',
+    t3:'Sécurité garantie',
+    db_title:'&#128663; Vous avez une voiture/moto ?',
+    db_sub:'Gagnez 500-3 000 HTG/jour',
+    db_btn:'Devenir Chauffeur',
+    login_btn:'Connexion',
+    login_rider:'Client / Passager',
+    login_driver:'Chauffeur',
+    edit:'Modifier',
+    vtype_label:'TYPE DE VÉHICULE',
+    moto_price:'Plus rapide, plus abordable',
+    car_name:'Voiture',
+    car_price:'Confortable, AC',
+    when_label:'QUAND',
+    now:'Maintenant',
+    later:'Plus tard',
+    est_label:'Tarif estimé',
+    phone_label:'NUMÉRO DE CONTACT',
+    ph_phone:'+509 37 12 3456',
+    request_btn:'&#128308; Demander un Trajet',
+    match_title:'Recherche d\'un chauffeur...',
+    match_sub:'Le chauffeur le plus proche recevra votre demande',
+    eta:'&#128337; 2-5 minutes',
+    match_msg:'Le chauffeur vous contactera sur WhatsApp. Si vous ne recevez pas de message, contactez-nous :',
+    wa_btn:'Contacter sur WhatsApp',
+    new_ride:'Demander un autre trajet',
+    footer_by:'par HaitiBiznis',
+    koutye_bar:'&#128176; Ne faites pas que conduire — gagnez plus en tant que Koutye',
+    gps_searching:'Recherche de position...',
+    gps_unavail:'GPS non disponible',
+    gps_found:'Position trouvée !',
+    gps_found_short:'GPS trouvé !',
+    gps_denied:'Permission GPS refusée',
+    gps_error:'Impossible de trouver la position',
+    wa_msg_prefix:'Bonjour, je demande un(e)',
+    wa_msg_from:'de',
+    wa_msg_to:'à',
+    vehicle_car:'Voiture',
+    vehicle_moto:'Moto'
+  },
+  en:{
+    main_q:'Get a Ride <em>in 2 Minutes</em>',
+    greeting:'Drivers respond quickly via WhatsApp',
+    ph_pickup:'Where are you?',
+    ph_drop:'Where are you going?',
+    gps_btn:'Use my location',
+    find_btn:'&#128308; Request a Ride Now',
+    popular:'Popular destinations',
+    loc_airport:'&#9992;&#65039; Toussaint Airport',
+    loc_petionville:'&#127978; Pétion-Ville',
+    loc_labadee:'&#127958;&#65039; Labadee',
+    loc_champ:'&#127963;&#65039; Champ de Mars',
+    loc_tabarre:'&#128658; Tabarre',
+    t1:'Verified drivers',
+    t2:'Fast response',
+    t3:'Safety guaranteed',
+    db_title:'&#128663; Have a car or motorbike?',
+    db_sub:'Earn 500-3,000 HTG/day',
+    db_btn:'Become a Driver',
+    login_btn:'Log In',
+    login_rider:'Customer / Passenger',
+    login_driver:'Driver',
+    edit:'Change',
+    vtype_label:'VEHICLE TYPE',
+    moto_price:'Faster, more affordable',
+    car_name:'Car',
+    car_price:'Comfortable, AC',
+    when_label:'WHEN',
+    now:'Now',
+    later:'Later',
+    est_label:'Estimated fare',
+    phone_label:'CONTACT NUMBER',
+    ph_phone:'+509 37 12 3456',
+    request_btn:'&#128308; Request Ride',
+    match_title:'Finding a driver...',
+    match_sub:'The nearest driver will receive your request',
+    eta:'&#128337; 2-5 minutes',
+    match_msg:'The driver will contact you on WhatsApp. If you don\'t receive a message, contact us:',
+    wa_btn:'Contact on WhatsApp',
+    new_ride:'Request another ride',
+    footer_by:'by HaitiBiznis',
+    koutye_bar:'&#128176; Don\'t just drive — earn more as a Koutye',
+    gps_searching:'Finding location...',
+    gps_unavail:'GPS not available',
+    gps_found:'Location found!',
+    gps_found_short:'GPS found!',
+    gps_denied:'GPS permission denied',
+    gps_error:'Unable to find location',
+    wa_msg_prefix:'Hello, I\'m requesting a',
+    wa_msg_from:'from',
+    wa_msg_to:'to',
+    vehicle_car:'Car',
+    vehicle_moto:'Moto'
+  },
+  es:{
+    main_q:'Consigue un Viaje <em>en 2 Minutos</em>',
+    greeting:'Los conductores responden rápido por WhatsApp',
+    ph_pickup:'¿Dónde estás?',
+    ph_drop:'¿A dónde vas?',
+    gps_btn:'Usar mi ubicación',
+    find_btn:'&#128308; Pedir Viaje Ahora',
+    popular:'Destinos populares',
+    loc_airport:'&#9992;&#65039; Aeropuerto Toussaint',
+    loc_petionville:'&#127978; Pétion-Ville',
+    loc_labadee:'&#127958;&#65039; Labadee',
+    loc_champ:'&#127963;&#65039; Champ de Mars',
+    loc_tabarre:'&#128658; Tabarre',
+    t1:'Conductores verificados',
+    t2:'Respuesta rápida',
+    t3:'Seguridad garantizada',
+    db_title:'&#128663; ¿Tienes carro o moto?',
+    db_sub:'Gana 500-3,000 HTG/día',
+    db_btn:'Ser Conductor',
+    login_btn:'Iniciar Sesión',
+    login_rider:'Cliente / Pasajero',
+    login_driver:'Conductor',
+    edit:'Cambiar',
+    vtype_label:'TIPO DE VEHÍCULO',
+    moto_price:'Más rápido, más económico',
+    car_name:'Carro',
+    car_price:'Cómodo, AC',
+    when_label:'CUÁNDO',
+    now:'Ahora',
+    later:'Después',
+    est_label:'Tarifa estimada',
+    phone_label:'NÚMERO DE CONTACTO',
+    ph_phone:'+509 37 12 3456',
+    request_btn:'&#128308; Pedir Viaje',
+    match_title:'Buscando conductor...',
+    match_sub:'El conductor más cercano recibirá tu solicitud',
+    eta:'&#128337; 2-5 minutos',
+    match_msg:'El conductor te contactará por WhatsApp. Si no recibes un mensaje, contáctanos:',
+    wa_btn:'Contactar por WhatsApp',
+    new_ride:'Pedir otro viaje',
+    footer_by:'por HaitiBiznis',
+    koutye_bar:'&#128176; No solo conduzcas — gana más como Koutye',
+    gps_searching:'Buscando ubicación...',
+    gps_unavail:'GPS no disponible',
+    gps_found:'¡Ubicación encontrada!',
+    gps_found_short:'¡GPS encontrado!',
+    gps_denied:'Permiso GPS denegado',
+    gps_error:'No se pudo encontrar la ubicación',
+    wa_msg_prefix:'Hola, solicito un(a)',
+    wa_msg_from:'de',
+    wa_msg_to:'a',
+    vehicle_car:'Carro',
+    vehicle_moto:'Moto'
+  }
+};
+
+/* ═══ I18N ENGINE ═══ */
+var currentLang='ht';
+function t(key){ return (T[currentLang]||T.ht)[key]||key; }
+
+function setLang(lang){
+  currentLang=lang;
+  var tr=T[lang]||T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.getAttribute('data-i18n');
+    if(tr[k]) el.innerHTML=tr[k];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
+    var k=el.getAttribute('data-i18n-placeholder');
+    if(tr[k]) el.placeholder=tr[k];
+  });
+  document.querySelectorAll('.lang-bar a').forEach(function(a){
+    a.classList.toggle('active',a.getAttribute('data-lang')===lang);
+  });
+  localStorage.setItem('hb_lang',lang);
+}
+document.querySelectorAll('.lang-bar a').forEach(function(a){
+  a.addEventListener('click',function(){ setLang(a.getAttribute('data-lang')); });
+});
 
 /* STEP NAVIGATION */
 function showStep(n){
@@ -469,8 +730,8 @@ pickupEl.addEventListener('input',checkInputs);
 dropEl.addEventListener('input',checkInputs);
 
 function setDest(el){
-  var t=el.textContent.replace(/^[\S]+\s/,'').trim();
-  dropEl.value=t;
+  var txt=el.textContent.replace(/^[\S]+\s/,'').trim();
+  dropEl.value=txt;
   checkInputs();
   dropEl.focus();
 }
@@ -552,11 +813,12 @@ function showDriverFound(){
   var name=driverNames[Math.floor(Math.random()*driverNames.length)];
   document.getElementById('dcName').textContent=name;
   document.getElementById('dcEmoji').textContent=vehicleType==='car'?'\u{1F697}':'\u{1F3CD}';
-  document.getElementById('dcVehicle').textContent=vehicleType==='car'?'Machin':'Moto';
+  document.getElementById('dcVehicle').textContent=vehicleType==='car'?t('vehicle_car'):t('vehicle_moto');
 }
 
 function contactWhatsApp(){
-  var msg='Bonjou, mwen mande yon '+vehicleType+' de '+pickupEl.value+' ale '+dropEl.value;
+  var vName=vehicleType==='car'?t('vehicle_car').toLowerCase():t('vehicle_moto').toLowerCase();
+  var msg=t('wa_msg_prefix')+' '+vName+' '+t('wa_msg_from')+' '+pickupEl.value+' '+t('wa_msg_to')+' '+dropEl.value;
   if(rideData.id) msg+='. Ref: '+rideData.id;
   window.open('https://wa.me/50941902005?text='+encodeURIComponent(msg),'_blank');
 }
@@ -606,11 +868,11 @@ function newRide(){
 /* GPS LOCATION */
 function useMyLocation(){
   var btn=document.getElementById('gpsBtn');
-  btn.innerHTML='<span>&#8987;</span> <span>Chache pozisyon...</span>';
+  btn.innerHTML='<span>&#8987;</span> <span>'+t('gps_searching')+'</span>';
   btn.style.opacity='.6';
   if(!navigator.geolocation){
-    btn.innerHTML='<span>&#10060;</span> <span>GPS pa disponib</span>';
-    setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span>Sevi ak pozisyon mwen</span>';btn.style.opacity='1'},2000);
+    btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_unavail')+'</span>';
+    setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span data-i18n="gps_btn">'+t('gps_btn')+'</span>';btn.style.opacity='1'},2000);
     return;
   }
   navigator.geolocation.getCurrentPosition(function(pos){
@@ -626,20 +888,20 @@ function useMyLocation(){
         var short=parts.slice(0,3).join(',').trim();
         document.getElementById('pickup').value=short;
         checkInputs();
-        btn.innerHTML='<span>&#9989;</span> <span>Pozisyon jwenn!</span>';
+        btn.innerHTML='<span>&#9989;</span> <span>'+t('gps_found')+'</span>';
         btn.style.opacity='1';
-        setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span>Sevi ak pozisyon mwen</span>'},2000);
+        setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span data-i18n="gps_btn">'+t('gps_btn')+'</span>'},2000);
       }).catch(function(){
         document.getElementById('pickup').value=lat.toFixed(4)+', '+lng.toFixed(4);
         checkInputs();
-        btn.innerHTML='<span>&#9989;</span> <span>GPS jwenn!</span>';
+        btn.innerHTML='<span>&#9989;</span> <span>'+t('gps_found_short')+'</span>';
         btn.style.opacity='1';
       });
   },function(err){
     btn.style.opacity='1';
-    if(err.code===1) btn.innerHTML='<span>&#10060;</span> <span>Pèmisyon GPS refize</span>';
-    else btn.innerHTML='<span>&#10060;</span> <span>Pa ka jwenn pozisyon</span>';
-    setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span>Sevi ak pozisyon mwen</span>'},3000);
+    if(err.code===1) btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_denied')+'</span>';
+    else btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_error')+'</span>';
+    setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span data-i18n="gps_btn">'+t('gps_btn')+'</span>'},3000);
   },{enableHighAccuracy:true,timeout:10000});
 }
 
@@ -658,6 +920,10 @@ document.addEventListener('click',function(e){
     dd.classList.remove('show');
   }
 });
+
+/* APPLY SAVED LANGUAGE */
+var savedLang=localStorage.getItem('hb_lang');
+if(savedLang&&T[savedLang]) setLang(savedLang);
 </script>
 </body>
 </html>
