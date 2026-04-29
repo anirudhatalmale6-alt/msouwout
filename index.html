@@ -10,6 +10,10 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://msouwout.com">
 <meta property="og:image" content="https://msouwout.com/assets/og-msouwout.jpg">
+<link rel="canonical" href="https://msouwout.com/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"MsouWout","url":"https://msouwout.com","description":"Jwenn yon kous oswa livrezon toupatou nan Ayiti. Chofe verifye, repons rapid, sekirite garanti.","applicationCategory":"TransportationApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"HTG"},"provider":{"@type":"Organization","name":"HaitiBiznis","url":"https://haitibiznis.com"}}
+</script>
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0A0E1A">
@@ -44,7 +48,26 @@ a{text-decoration:none;color:inherit}
 .header-logo{display:flex;align-items:center;gap:8px}
 .header-logo img{width:32px;height:32px;border-radius:8px}
 .header-logo span{color:var(--white);font-size:1rem;font-weight:800}
+.header-links{display:flex;align-items:center;gap:6px}
 .header-link{color:rgba(255,255,255,.5);font-size:.72rem;font-weight:600}
+.header-login{
+  color:#fff;font-size:.72rem;font-weight:700;padding:5px 14px;
+  border-radius:100px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  transition:all .2s;position:relative;cursor:pointer;
+}
+.header-login:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.35)}
+.login-dropdown{
+  display:none;position:absolute;top:calc(100% + 8px);right:0;
+  background:#fff;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.2);
+  min-width:180px;overflow:hidden;z-index:200;
+}
+.login-dropdown.show{display:block}
+.login-dropdown a{
+  display:flex;align-items:center;gap:8px;padding:12px 16px;
+  font-size:.82rem;font-weight:600;color:var(--text);transition:background .15s;
+}
+.login-dropdown a:hover{background:var(--off-white)}
+.login-dropdown a span{font-size:1.1rem}
 
 /* ═══ STEP 1: WHERE ARE YOU GOING ═══ */
 .step{display:none;min-height:calc(100vh - 52px);padding-bottom:80px}
@@ -245,7 +268,16 @@ a{text-decoration:none;color:inherit}
     <img src="assets/msouwout-logo.jpg" alt="MsouWout" style="border-radius:8px" onerror="this.style.display='none'">
     <span>M Sou Wout</span>
   </div>
-  <a href="https://haitibiznis.com" class="header-link">HaitiBiznis</a>
+  <div class="header-links">
+    <a href="https://haitibiznis.com" class="header-link">HaitiBiznis</a>
+    <div style="position:relative">
+      <button class="header-login" onclick="toggleLoginMenu()">Konekte</button>
+      <div class="login-dropdown" id="loginDropdown">
+        <a href="user-login.html"><span>👤</span> Kliyan / Pasaje</a>
+        <a href="driver-login.html"><span>🚗</span> Chofe</a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══ STEP 1: WHERE ARE YOU GOING? ═══ -->
@@ -614,6 +646,17 @@ function useMyLocation(){
 /* SAVE PHONE FOR NEXT TIME */
 document.getElementById('rPhone').addEventListener('change',function(){
   if(this.value.trim()) localStorage.setItem('msw_phone',this.value.trim());
+});
+
+function toggleLoginMenu(){
+  var dd=document.getElementById('loginDropdown');
+  dd.classList.toggle('show');
+}
+document.addEventListener('click',function(e){
+  var dd=document.getElementById('loginDropdown');
+  if(!e.target.closest('.header-login')&&!e.target.closest('.login-dropdown')){
+    dd.classList.remove('show');
+  }
 });
 </script>
 </body>
