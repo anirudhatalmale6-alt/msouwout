@@ -314,6 +314,8 @@ footer a:hover{text-decoration:underline}
         <div class="phone-flag">&#127469;&#127481; +509</div>
         <input type="tel" class="phone-input" id="phoneInput" placeholder="4685 9702" data-i18n-placeholder="phone_placeholder" required>
       </div>
+      <label style="display:block;font-size:.75rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;margin:14px 0 6px" data-i18n="pin_label">PIN</label>
+      <input type="tel" maxlength="4" class="phone-input" id="pinInput" placeholder="1234" style="text-align:center;font-size:1.4rem;font-weight:800;letter-spacing:.3em;padding:14px" required>
       <button type="submit" class="btn-login" id="loginBtn" data-i18n="login_btn">Konekte</button>
     </form>
 
@@ -359,18 +361,19 @@ footer a:hover{text-decoration:underline}
 </footer>
 
 <script>
-const API='https://msouwout-backend.onrender.com';
+const API='https://haitibiznis-api.onrender.com';
 
 const T={
   ht:{
     nav_home:"Akèy",nav_messages:"Mesaj",nav_register:"Enskri",nav_apply:"Aplike Kounye a",
     page_title:"Konekte ak <em>Kont Ou</em>",page_sub:"Antre nimewo telefon ou pou wè estati aplikasyon ou ak istwa kous ou.",
-    login_title:"Koneksyon Chofè",login_sub:"Antre nimewo telefòn ou te itilize pou enskri a.",
-    phone_placeholder:"4685 9702",login_btn:"Konekte",
+    login_title:"Koneksyon Chofè",login_sub:"Antre nimewo telefòn ou ak PIN ou te resevwa lè ou enskri.",
+    phone_placeholder:"4685 9702",pin_label:"PIN",login_btn:"Konekte",
     no_account:"Ou poko enskri?",register_link:"Enskri kounye a",
     logout:"Dekonekte",profile_title:"Pwofil Ou",rides_title:"Istwa Kous",
     footer_part:"Yon platfòm",
     err_not_found:"Nimewo sa a pa enskri. <a href='driver-register.html'>Enskri kounye a</a>",
+    err_wrong_pin:"PIN pa kòrèk. Eseye ankò.",
     err_server:"Erè sèvè. Eseye ankò.",err_network:"Pa gen koneksyon. Verifye entènèt ou.",
     loading:"Ap chache...",
     status_pending:"An Atant",status_approved:"Apwouve",status_rejected:"Rejte",status_suspended:"Sispann",
@@ -388,12 +391,13 @@ const T={
   fr:{
     nav_home:"Accueil",nav_messages:"Messages",nav_register:"S'inscrire",nav_apply:"Postuler",
     page_title:"Connectez-vous a <em>Votre Compte</em>",page_sub:"Entrez votre numero de telephone pour voir le statut de votre candidature et l'historique de vos courses.",
-    login_title:"Connexion Chauffeur",login_sub:"Entrez le numero de telephone utilise lors de votre inscription.",
-    phone_placeholder:"4685 9702",login_btn:"Se Connecter",
+    login_title:"Connexion Chauffeur",login_sub:"Entrez votre numero de telephone et le PIN recu lors de l'inscription.",
+    phone_placeholder:"4685 9702",pin_label:"PIN",login_btn:"Se Connecter",
     no_account:"Pas encore inscrit?",register_link:"S'inscrire maintenant",
     logout:"Deconnexion",profile_title:"Votre Profil",rides_title:"Historique des Courses",
     footer_part:"Une plateforme",
     err_not_found:"Ce numero n'est pas enregistre. <a href='driver-register.html'>S'inscrire maintenant</a>",
+    err_wrong_pin:"PIN incorrect. Reessayez.",
     err_server:"Erreur serveur. Reessayez.",err_network:"Pas de connexion. Verifiez votre internet.",
     loading:"Recherche...",
     status_pending:"En Attente",status_approved:"Approuve",status_rejected:"Rejete",status_suspended:"Suspendu",
@@ -411,12 +415,13 @@ const T={
   en:{
     nav_home:"Home",nav_messages:"Messages",nav_register:"Register",nav_apply:"Apply Now",
     page_title:"Log in to <em>Your Account</em>",page_sub:"Enter your phone number to check your application status and ride history.",
-    login_title:"Driver Login",login_sub:"Enter the phone number you used to register.",
-    phone_placeholder:"4685 9702",login_btn:"Log In",
+    login_title:"Driver Login",login_sub:"Enter your phone number and the PIN you received when you registered.",
+    phone_placeholder:"4685 9702",pin_label:"PIN",login_btn:"Log In",
     no_account:"Not registered yet?",register_link:"Register now",
     logout:"Log Out",profile_title:"Your Profile",rides_title:"Ride History",
     footer_part:"A platform by",
     err_not_found:"This number is not registered. <a href='driver-register.html'>Register now</a>",
+    err_wrong_pin:"Wrong PIN. Try again.",
     err_server:"Server error. Please try again.",err_network:"No connection. Check your internet.",
     loading:"Searching...",
     status_pending:"Pending",status_approved:"Approved",status_rejected:"Rejected",status_suspended:"Suspended",
@@ -434,12 +439,13 @@ const T={
   es:{
     nav_home:"Inicio",nav_messages:"Mensajes",nav_register:"Registrarse",nav_apply:"Aplicar Ahora",
     page_title:"Inicia sesion en <em>Tu Cuenta</em>",page_sub:"Ingresa tu numero de telefono para ver el estado de tu solicitud e historial de viajes.",
-    login_title:"Acceso Conductor",login_sub:"Ingresa el numero de telefono que usaste al registrarte.",
-    phone_placeholder:"4685 9702",login_btn:"Iniciar Sesion",
+    login_title:"Acceso Conductor",login_sub:"Ingresa tu numero de telefono y el PIN que recibiste al registrarte.",
+    phone_placeholder:"4685 9702",pin_label:"PIN",login_btn:"Iniciar Sesion",
     no_account:"No estas registrado?",register_link:"Registrate ahora",
     logout:"Cerrar Sesion",profile_title:"Tu Perfil",rides_title:"Historial de Viajes",
     footer_part:"Una plataforma de",
     err_not_found:"Este numero no esta registrado. <a href='driver-register.html'>Registrate ahora</a>",
+    err_wrong_pin:"PIN incorrecto. Intenta de nuevo.",
     err_server:"Error del servidor. Intenta de nuevo.",err_network:"Sin conexion. Verifica tu internet.",
     loading:"Buscando...",
     status_pending:"Pendiente",status_approved:"Aprobado",status_rejected:"Rechazado",status_suspended:"Suspendido",
@@ -480,7 +486,8 @@ function closeMobile(){document.getElementById('mobileNav').classList.remove('op
 async function handleLogin(e){
   e.preventDefault();
   const phone=document.getElementById('phoneInput').value.trim();
-  if(!phone)return;
+  const pin=document.getElementById('pinInput').value.trim();
+  if(!phone||!pin)return;
 
   const btn=document.getElementById('loginBtn');
   const errEl=document.getElementById('loginError');
@@ -489,15 +496,26 @@ async function handleLogin(e){
   btn.disabled=true;
   btn.innerHTML='<span class="spinner"></span> '+t('loading');
 
+  var fullPhone=phone.replace(/\s/g,'');
+  if(!fullPhone.startsWith('+'))fullPhone='+509'+fullPhone;
+
   try{
-    const res=await fetch(API+'/api/drivers/login',{
+    const res=await fetch(API+'/api/rides/driver/login',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({phone:phone.replace(/\s/g,'')})
+      body:JSON.stringify({phone:fullPhone,pin:pin})
     });
 
     if(res.status===404){
       errEl.innerHTML=t('err_not_found');
+      errEl.style.display='block';
+      btn.disabled=false;
+      btn.textContent=t('login_btn');
+      return;
+    }
+
+    if(res.status===401){
+      errEl.innerHTML=t('err_wrong_pin');
       errEl.style.display='block';
       btn.disabled=false;
       btn.textContent=t('login_btn');
@@ -513,10 +531,26 @@ async function handleLogin(e){
     }
 
     const data=await res.json();
-    window._driverData=data;
+    var d=data.driver;
+    var mapped={
+      driver:{
+        full_name:(d.firstName||'')+' '+(d.lastName||''),
+        phone:d.phone,
+        vehicle_type:d.vehicleType==='car'?'car':'motorcycle',
+        license_plate:d.licensePlate||'',
+        email:d.email||null,
+        preferred_service:'ride',
+        status:d.verified?'approved':'pending',
+        is_verified:d.verified||false,
+        created_at:d.createdAt,
+        zone:d.zone||''
+      },
+      rides:[]
+    };
+    window._driverData=mapped;
     document.getElementById('loginSection').style.display='none';
     document.getElementById('dashboard').classList.add('active');
-    renderDashboard(data);
+    renderDashboard(mapped);
 
   }catch(err){
     errEl.innerHTML=t('err_network');
