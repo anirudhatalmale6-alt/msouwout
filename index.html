@@ -197,6 +197,43 @@ a{text-decoration:none;color:inherit}
 .fare-est .fe-price{font-size:1.3rem;font-weight:900;color:var(--green)}
 .fare-est .fe-label{font-size:.72rem;color:var(--text-light)}
 
+/* ═══ SIGNUP STEP ═══ */
+.signup-inner{
+  padding:40px 20px;max-width:480px;margin:0 auto;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:calc(100vh - 52px);
+}
+.signup-card{
+  background:var(--white);border-radius:var(--radius);padding:28px 24px;width:100%;
+  box-shadow:0 4px 24px rgba(0,0,0,.06);border:1px solid var(--border);
+}
+.signup-icon{font-size:2.8rem;margin-bottom:12px;display:block;text-align:center}
+.signup-title{font-size:1.3rem;font-weight:900;margin-bottom:6px;text-align:center;color:var(--dark)}
+.signup-sub{font-size:.85rem;color:var(--text-light);margin-bottom:24px;text-align:center;line-height:1.5}
+.signup-field{margin-bottom:14px}
+.signup-field label{display:block;font-size:.72rem;font-weight:700;color:var(--text-light);text-transform:uppercase;margin-bottom:6px;letter-spacing:.5px}
+.signup-field input{
+  width:100%;padding:14px;border:2px solid var(--border);border-radius:12px;
+  font-size:1rem;font-weight:500;background:var(--off-white);transition:all .2s;
+}
+.signup-field input:focus{border-color:var(--blue);outline:none;background:#fff}
+.signup-submit{
+  width:100%;padding:16px;border-radius:var(--radius);background:var(--green);
+  color:#fff;font-size:1rem;font-weight:800;margin-top:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;
+}
+.signup-submit:hover{background:#157a33}
+.signup-free{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-top:16px;font-size:.78rem;color:var(--text-muted);
+}
+.signup-free span{font-size:1rem}
+.signup-benefits{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;justify-content:center}
+.signup-benefits .sb{
+  display:flex;align-items:center;gap:4px;font-size:.72rem;font-weight:600;
+  color:var(--green);background:rgba(27,140,61,.06);padding:4px 10px;border-radius:100px;
+}
+
 /* ═══ STEP 3: MATCHING ═══ */
 .step3-inner{
   padding:40px 20px;max-width:480px;margin:0 auto;text-align:center;
@@ -411,6 +448,36 @@ a{text-decoration:none;color:inherit}
   </div>
 </div>
 
+<!-- ═══ SIGNUP STEP ═══ -->
+<div class="step" id="stepSignup">
+  <div class="signup-inner">
+    <div class="signup-card">
+      <span class="signup-icon">&#128100;</span>
+      <div class="signup-title" data-i18n="signup_title">Enskri Gratis</div>
+      <div class="signup-sub" data-i18n="signup_sub">Kreye yon kont pou mande kous ou a</div>
+      <div class="signup-benefits">
+        <div class="sb"><span>&#9989;</span> <span data-i18n="sb_track">Swiv kous ou</span></div>
+        <div class="sb"><span>&#128274;</span> <span data-i18n="sb_safe">Vwayaj an sekirite</span></div>
+        <div class="sb"><span>&#128176;</span> <span data-i18n="sb_refund">Ranbousman fasil</span></div>
+      </div>
+      <div class="signup-field">
+        <label data-i18n="signup_name_label">NON OU</label>
+        <input type="text" id="signupName" placeholder="Jean-Pierre" data-i18n-placeholder="signup_name_ph">
+      </div>
+      <div class="signup-field">
+        <label data-i18n="signup_phone_label">NIMEWO TELEFON</label>
+        <input type="tel" id="signupPhone" placeholder="+509 37 12 3456" data-i18n-placeholder="ph_phone">
+      </div>
+      <button class="signup-submit" onclick="completeSignup()">
+        <span data-i18n="signup_btn">Enskri e Mande Kous</span> <span>&#8594;</span>
+      </button>
+      <div class="signup-free">
+        <span>&#128274;</span> <span data-i18n="signup_free">100% gratis — pa gen okenn frè</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ STEP 3: MATCHING ═══ -->
 <div class="step" id="step3">
   <div class="step3-inner">
@@ -521,7 +588,19 @@ var T={
     wa_msg_from:'de',
     wa_msg_to:'ale',
     vehicle_car:'Machin',
-    vehicle_moto:'Moto'
+    vehicle_moto:'Moto',
+    signup_title:'Enskri Gratis',
+    signup_sub:'Kreye yon kont pou mande kous ou a',
+    sb_track:'Swiv kous ou',
+    sb_safe:'Vwayaj an sekirite',
+    sb_refund:'Ranbousman fasil',
+    signup_name_label:'NON OU',
+    signup_name_ph:'Jean-Pierre',
+    signup_phone_label:'NIMEWO TELEFON',
+    signup_btn:'Enskri e Mande Kous',
+    signup_free:'100% gratis — pa gen okenn frè',
+    signup_err_name:'Tanpri mete non ou',
+    signup_err_phone:'Tanpri mete nimewo telefon ou'
   },
   fr:{
     main_q:'Trouvez un Trajet <em>en 2 Minutes</em>',
@@ -575,7 +654,19 @@ var T={
     wa_msg_from:'de',
     wa_msg_to:'à',
     vehicle_car:'Voiture',
-    vehicle_moto:'Moto'
+    vehicle_moto:'Moto',
+    signup_title:'Inscription Gratuite',
+    signup_sub:'Créez un compte pour demander votre trajet',
+    sb_track:'Suivez vos trajets',
+    sb_safe:'Voyage sécurisé',
+    sb_refund:'Remboursement facile',
+    signup_name_label:'VOTRE NOM',
+    signup_name_ph:'Jean-Pierre',
+    signup_phone_label:'NUMÉRO DE TÉLÉPHONE',
+    signup_btn:'S\'inscrire et Demander',
+    signup_free:'100% gratuit — aucun frais',
+    signup_err_name:'Veuillez entrer votre nom',
+    signup_err_phone:'Veuillez entrer votre numéro'
   },
   en:{
     main_q:'Get a Ride <em>in 2 Minutes</em>',
@@ -629,7 +720,19 @@ var T={
     wa_msg_from:'from',
     wa_msg_to:'to',
     vehicle_car:'Car',
-    vehicle_moto:'Moto'
+    vehicle_moto:'Moto',
+    signup_title:'Sign Up For Free',
+    signup_sub:'Create an account to request your ride',
+    sb_track:'Track your rides',
+    sb_safe:'Safe travel',
+    sb_refund:'Easy refunds',
+    signup_name_label:'YOUR NAME',
+    signup_name_ph:'Jean-Pierre',
+    signup_phone_label:'PHONE NUMBER',
+    signup_btn:'Sign Up & Request Ride',
+    signup_free:'100% free — no charges',
+    signup_err_name:'Please enter your name',
+    signup_err_phone:'Please enter your phone number'
   },
   es:{
     main_q:'Consigue un Viaje <em>en 2 Minutos</em>',
@@ -683,7 +786,19 @@ var T={
     wa_msg_from:'de',
     wa_msg_to:'a',
     vehicle_car:'Carro',
-    vehicle_moto:'Moto'
+    vehicle_moto:'Moto',
+    signup_title:'Regístrate Gratis',
+    signup_sub:'Crea una cuenta para solicitar tu viaje',
+    sb_track:'Rastrea tus viajes',
+    sb_safe:'Viaje seguro',
+    sb_refund:'Reembolso fácil',
+    signup_name_label:'TU NOMBRE',
+    signup_name_ph:'Jean-Pierre',
+    signup_phone_label:'NÚMERO DE TELÉFONO',
+    signup_btn:'Registrarse y Pedir Viaje',
+    signup_free:'100% gratis — sin cargos',
+    signup_err_name:'Por favor ingresa tu nombre',
+    signup_err_phone:'Por favor ingresa tu número'
   }
 };
 
@@ -716,6 +831,11 @@ function showStep(n){
   document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active')});
   document.getElementById('step'+n).classList.add('active');
   window.scrollTo(0,0);
+}
+var savedName=localStorage.getItem('msw_user_name');
+if(savedName){
+  var nameEl=document.getElementById('signupName');
+  if(nameEl) nameEl.value=savedName;
 }
 
 /* STEP 1 — inputs enable button */
@@ -774,12 +894,35 @@ function updateFare(){
 
 /* STEP 2 — submit ride */
 function submitRide(){
-  var phone=document.getElementById('rPhone').value.trim();
-  if(!phone){document.getElementById('rPhone').focus();return}
+  var userSignedUp=localStorage.getItem('msw_user_name');
+  if(userSignedUp){
+    doSubmitRide(userSignedUp,localStorage.getItem('msw_phone')||document.getElementById('rPhone').value.trim());
+  } else {
+    var phone=document.getElementById('rPhone').value.trim();
+    if(phone) document.getElementById('signupPhone').value=phone;
+    showStep('Signup');
+    setLang(currentLang);
+  }
+}
+
+function completeSignup(){
+  var name=document.getElementById('signupName').value.trim();
+  var phone=document.getElementById('signupPhone').value.trim();
+  if(!name){alert(t('signup_err_name'));document.getElementById('signupName').focus();return}
+  if(!phone){alert(t('signup_err_phone'));document.getElementById('signupPhone').focus();return}
+  localStorage.setItem('msw_user_name',name);
+  localStorage.setItem('msw_phone',phone);
+  document.getElementById('rPhone').value=phone;
+  doSubmitRide(name,phone);
+}
+
+function doSubmitRide(name,phone){
+  if(!phone) phone=document.getElementById('rPhone').value.trim();
+  if(!phone){showStep(2);document.getElementById('rPhone').focus();return}
 
   rideData={
     riderPhone:phone,
-    riderName:'',
+    riderName:name||'',
     vehicleType:vehicleType,
     pickupAddress:pickupEl.value.trim(),
     dropoffAddress:dropEl.value.trim(),
@@ -922,6 +1065,18 @@ document.addEventListener('click',function(e){
     dd.classList.remove('show');
   }
 });
+
+/* AUTO GPS ON PAGE LOAD */
+(function(){
+  if(!navigator.geolocation||pickupEl.value.trim()) return;
+  if(navigator.permissions){
+    navigator.permissions.query({name:'geolocation'}).then(function(result){
+      if(result.state==='granted') useMyLocation();
+    }).catch(function(){});
+  } else {
+    useMyLocation();
+  }
+})();
 
 /* APPLY SAVED LANGUAGE */
 var savedLang=localStorage.getItem('hb_lang');
