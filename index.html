@@ -250,17 +250,26 @@ a{text-decoration:none;color:inherit}
 
 .match-found{display:none}
 .match-found.show{display:block}
-.driver-card{
-  background:var(--white);border-radius:var(--radius);padding:20px;
-  border:2px solid var(--green);margin-bottom:16px;text-align:center;
+.waitlist-check{font-size:3.5rem;margin-bottom:8px}
+.waitlist-title{font-size:1.5rem;font-weight:900;color:var(--green);margin-bottom:16px}
+.waitlist-card{
+  background:var(--white);border-radius:var(--radius);padding:24px 20px;
+  border:1px solid var(--border);margin-bottom:16px;text-align:left;
 }
-.driver-card .dc-emoji{font-size:2.5rem;margin-bottom:8px;display:block}
-.driver-card .dc-name{font-size:1.1rem;font-weight:800;margin-bottom:2px}
-.driver-card .dc-vehicle{font-size:.82rem;color:var(--text-light)}
-.driver-card .dc-eta{
-  display:inline-block;margin-top:10px;padding:6px 16px;border-radius:100px;
-  background:rgba(27,140,61,.08);color:var(--green);font-size:.82rem;font-weight:700;
+.waitlist-msg{font-size:.9rem;color:var(--text);line-height:1.65;margin-bottom:16px}
+.waitlist-badge{
+  background:rgba(0,32,159,.05);border:1px solid rgba(0,32,159,.12);
+  border-radius:10px;padding:12px 14px;font-size:.82rem;font-weight:700;
+  color:var(--blue);text-align:center;
 }
+.waitlist-route{
+  background:var(--white);border-radius:10px;padding:14px 16px;
+  border:1px solid var(--border);margin-bottom:16px;
+}
+.wr-row{display:flex;align-items:center;gap:10px;padding:4px 0;font-size:.85rem;font-weight:600}
+.wr-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.wr-dot.g{background:var(--green)}
+.wr-dot.r{background:var(--red)}
 .wa-connect{
   width:100%;padding:16px;border-radius:var(--radius);background:#25D366;
   color:var(--white);font-size:1rem;font-weight:800;
@@ -478,25 +487,27 @@ a{text-decoration:none;color:inherit}
   </div>
 </div>
 
-<!-- ═══ STEP 3: MATCHING ═══ -->
+<!-- ═══ STEP 3: WAITLIST CONFIRMATION ═══ -->
 <div class="step" id="step3">
   <div class="step3-inner">
     <div id="matchSearching">
       <div class="match-spinner"></div>
-      <div class="match-title" data-i18n="match_title">N ap chache yon chofe...</div>
-      <div class="match-sub" data-i18n="match_sub">Chofe ki pi pre a ap resevwa demann ou an</div>
+      <div class="match-title" data-i18n="match_title">N ap trete demann ou an...</div>
     </div>
     <div class="match-found" id="matchFound">
-      <div class="driver-card">
-        <span class="dc-emoji" id="dcEmoji">&#127949;&#65039;</span>
-        <div class="dc-name" id="dcName">Jean-Pierre</div>
-        <div class="dc-vehicle" id="dcVehicle">Moto</div>
-        <div class="dc-eta" data-i18n="eta">&#128337; 2-5 minit</div>
+      <div class="waitlist-check">&#9989;</div>
+      <div class="waitlist-title" data-i18n="wl_title">Mèsi!</div>
+      <div class="waitlist-card">
+        <p class="waitlist-msg" data-i18n="wl_msg">Mèsi paske ou mande yon kous sou MsouWout! Nou nan faz lansman epi n ap aktive premye chofè verifye yo nan zòn ou an. Ekip nou an ap kontakte ou sou WhatsApp lè nou gen transpò ki disponib nan zòn ou an.</p>
+        <div class="waitlist-badge" data-i18n="wl_badge">&#128640; Rete konekte — MsouWout ap rive nan zòn ou trè byento!</div>
       </div>
-      <p style="font-size:.82rem;color:var(--text-light);margin-bottom:16px;line-height:1.5" data-i18n="match_msg">Chofe a ap kontakte ou sou WhatsApp. Si ou pa resevwa mesaj la, kontakte nou:</p>
+      <div class="waitlist-route">
+        <div class="wr-row"><span class="wr-dot g"></span> <span id="wlPickup"></span></div>
+        <div class="wr-row"><span class="wr-dot r"></span> <span id="wlDrop"></span></div>
+      </div>
       <button class="wa-connect" onclick="contactWhatsApp()">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        <span data-i18n="wa_btn">Kontakte sou WhatsApp</span>
+        <span data-i18n="wl_wa_btn">Kontakte nou sou WhatsApp</span>
       </button>
       <button class="new-ride-btn" onclick="newRide()" data-i18n="new_ride">Mande yon lot kous</button>
     </div>
@@ -570,11 +581,11 @@ var T={
     phone_label:'NIMEWO POU KONTAKTE OU',
     ph_phone:'+509 37 12 3456',
     request_btn:'&#128308; Mande Kous',
-    match_title:'N ap chache yon chofe...',
-    match_sub:'Chofe ki pi pre a ap resevwa demann ou an',
-    eta:'&#128337; 2-5 minit',
-    match_msg:'Chofe a ap kontakte ou sou WhatsApp. Si ou pa resevwa mesaj la, kontakte nou:',
-    wa_btn:'Kontakte sou WhatsApp',
+    match_title:'N ap trete demann ou an...',
+    wl_title:'Mèsi!',
+    wl_msg:'Mèsi paske ou mande yon kous sou MsouWout! Nou nan faz lansman epi n ap aktive premye chofè verifye yo nan zòn ou an. Ekip nou an ap kontakte ou sou WhatsApp lè nou gen transpò ki disponib nan zòn ou an.',
+    wl_badge:'&#128640; Rete konekte — MsouWout ap rive nan zòn ou trè byento!',
+    wl_wa_btn:'Kontakte nou sou WhatsApp',
     new_ride:'Mande yon lot kous',
     footer_by:'pa HaitiBiznis',
     koutye_bar:'&#128176; Pa selman kondwi — touche plis kom Koutye',
@@ -636,11 +647,11 @@ var T={
     phone_label:'NUMÉRO DE CONTACT',
     ph_phone:'+509 37 12 3456',
     request_btn:'&#128308; Demander un Trajet',
-    match_title:'Recherche d\'un chauffeur...',
-    match_sub:'Le chauffeur le plus proche recevra votre demande',
-    eta:'&#128337; 2-5 minutes',
-    match_msg:'Le chauffeur vous contactera sur WhatsApp. Si vous ne recevez pas de message, contactez-nous :',
-    wa_btn:'Contacter sur WhatsApp',
+    match_title:'Traitement de votre demande...',
+    wl_title:'Merci !',
+    wl_msg:'Merci d\'avoir demandé un trajet sur MsouWout ! Nous sommes en phase de lancement et activons les premiers chauffeurs vérifiés dans votre zone. Notre équipe vous contactera sur WhatsApp dès qu\'un transport sera disponible dans votre zone.',
+    wl_badge:'&#128640; Restez connecté — MsouWout arrive dans votre zone très bientôt !',
+    wl_wa_btn:'Nous contacter sur WhatsApp',
     new_ride:'Demander un autre trajet',
     footer_by:'par HaitiBiznis',
     koutye_bar:'&#128176; Ne faites pas que conduire — gagnez plus en tant que Courtier',
@@ -702,11 +713,11 @@ var T={
     phone_label:'CONTACT NUMBER',
     ph_phone:'+509 37 12 3456',
     request_btn:'&#128308; Request Ride',
-    match_title:'Finding a driver...',
-    match_sub:'The nearest driver will receive your request',
-    eta:'&#128337; 2-5 minutes',
-    match_msg:'The driver will contact you on WhatsApp. If you don\'t receive a message, contact us:',
-    wa_btn:'Contact on WhatsApp',
+    match_title:'Processing your request...',
+    wl_title:'Thank you!',
+    wl_msg:'Thank you for requesting a ride on MsouWout! We are in our launch phase and activating the first verified drivers in your area. Our team will contact you on WhatsApp when transport is available in your zone.',
+    wl_badge:'&#128640; Stay connected — MsouWout is coming to your area very soon!',
+    wl_wa_btn:'Contact us on WhatsApp',
     new_ride:'Request another ride',
     footer_by:'by HaitiBiznis',
     koutye_bar:'&#128176; Don\'t just drive — earn more as a Broker',
@@ -768,11 +779,11 @@ var T={
     phone_label:'NÚMERO DE CONTACTO',
     ph_phone:'+509 37 12 3456',
     request_btn:'&#128308; Pedir Viaje',
-    match_title:'Buscando conductor...',
-    match_sub:'El conductor más cercano recibirá tu solicitud',
-    eta:'&#128337; 2-5 minutos',
-    match_msg:'El conductor te contactará por WhatsApp. Si no recibes un mensaje, contáctanos:',
-    wa_btn:'Contactar por WhatsApp',
+    match_title:'Procesando tu solicitud...',
+    wl_title:'¡Gracias!',
+    wl_msg:'¡Gracias por solicitar un viaje en MsouWout! Estamos en fase de lanzamiento y activando los primeros conductores verificados en tu zona. Nuestro equipo te contactará por WhatsApp cuando haya transporte disponible en tu zona.',
+    wl_badge:'&#128640; ¡Mantente conectado — MsouWout llega a tu zona muy pronto!',
+    wl_wa_btn:'Contáctanos por WhatsApp',
     new_ride:'Pedir otro viaje',
     footer_by:'por HaitiBiznis',
     koutye_bar:'&#128176; No solo conduzcas — gana más como Corredor',
@@ -944,21 +955,17 @@ function doSubmitRide(name,phone){
     body:JSON.stringify(rideData)
   }).then(function(r){return r.json()}).then(function(d){
     rideData.id=d._id||d.id;
-    setTimeout(showDriverFound,2500);
+    setTimeout(showWaitlist,2500);
   }).catch(function(){
-    setTimeout(showDriverFound,3000);
+    setTimeout(showWaitlist,3000);
   });
 }
 
-var driverNames=['Jean-Pierre','Marie-Claire','Frantz','Jacqueline','Pierre','Claudette','Samuel','Rose'];
-function showDriverFound(){
+function showWaitlist(){
   document.getElementById('matchSearching').style.display='none';
-  var mf=document.getElementById('matchFound');
-  mf.classList.add('show');
-  var name=driverNames[Math.floor(Math.random()*driverNames.length)];
-  document.getElementById('dcName').textContent=name;
-  document.getElementById('dcEmoji').textContent=vehicleType==='car'?'\u{1F697}':'\u{1F3CD}';
-  document.getElementById('dcVehicle').textContent=vehicleType==='car'?t('vehicle_car'):t('vehicle_moto');
+  document.getElementById('matchFound').classList.add('show');
+  document.getElementById('wlPickup').textContent=pickupEl.value.trim();
+  document.getElementById('wlDrop').textContent=dropEl.value.trim();
 }
 
 function contactWhatsApp(){
