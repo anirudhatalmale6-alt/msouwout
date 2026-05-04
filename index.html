@@ -317,6 +317,30 @@ a{text-decoration:none;color:inherit}
 }
 .lang-bar a:hover{color:#fff;background:rgba(255,255,255,.08)}
 .lang-bar a.active{color:var(--gold);background:rgba(212,160,23,.15)}
+
+/* ═══ TABLET LANDSCAPE ═══ */
+@media(min-width:700px){
+  .step1-bg.active{
+    display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr auto auto;
+    min-height:calc(100vh - 52px);
+  }
+  .step1-top{
+    max-width:none;padding:40px 32px 16px;
+    grid-column:1;grid-row:1;align-self:center;
+  }
+  .hero-moto-wrap{
+    grid-column:2;grid-row:1;
+    align-self:center;display:flex;align-items:center;justify-content:center;
+    padding:40px 20px!important;
+  }
+  .step1-trust{grid-column:1/-1;grid-row:2}
+  .driver-banner{grid-column:1/-1;grid-row:3;margin:0 0 16px}
+  .main-q{font-size:2.4rem}
+}
+@media(min-width:1024px){
+  .step1-top{padding:48px 40px 16px}
+  .main-q{font-size:2.6rem}
+}
 </style>
 </head>
 <body>
@@ -394,7 +418,7 @@ a{text-decoration:none;color:inherit}
     <div class="st-item"><span>&#128274;</span> <span data-i18n="t3">Sekirite garanti</span></div>
   </div>
 
-  <div style="text-align:center;padding:20px 16px 0">
+  <div class="hero-moto-wrap" style="text-align:center;padding:20px 16px 0">
     <img src="assets/hero-moto.jpg" alt="MsouWout delivery driver and customer" style="width:100%;max-width:480px;border-radius:16px;box-shadow:0 12px 36px rgba(0,0,0,.15)">
   </div>
 
