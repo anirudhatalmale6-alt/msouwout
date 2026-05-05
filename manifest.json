@@ -3,7 +3,7 @@
   "short_name": "MsouWout",
   "description": "Haiti's Safe Ride & Delivery Service",
   "start_url": "/",
-  "display": "minimal-ui",
+  "display": "browser",
   "background_color": "#00209F",
   "theme_color": "#00209F",
   "orientation": "portrait",
