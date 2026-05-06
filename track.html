@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Swiv Kous Ou — MsouWout</title>
-<meta name="description" content="Swiv kous ou an dirèk sou MsouWout. GPS live, pataje kous, SOS.">
+<meta name="description" content="Swiv kous ou an direk sou MsouWout. GPS live, pataje kous, SOS.">
 <meta name="theme-color" content="#0A0E1A">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
@@ -18,6 +18,7 @@
 :root{
   --blue:#00209F;--red:#D21034;--red-dark:#B00D2C;
   --gold:#D4A017;--green:#1B8C3D;--green-dark:#14702F;
+  --orange:#E67E22;
   --white:#FFFFFF;--off-white:#F5F7FA;
   --dark:#0A0E1A;--text:#1A2A4A;--text-light:#5A6B8A;--text-muted:#8A95AA;
   --border:#E2E8F0;
@@ -26,16 +27,20 @@
 }
 html,body{height:100%;overflow:hidden}
 body{font-family:var(--body);background:var(--dark);color:var(--text);-webkit-font-smoothing:antialiased}
+body.stealth{background:#f5f5f5}
 button{font-family:var(--body);cursor:pointer;border:none;background:none}
 a{text-decoration:none;color:inherit}
 
 .flag-stripe{height:3px;background:linear-gradient(90deg,var(--blue) 50%,var(--red) 50%);flex-shrink:0}
+body.stealth .flag-stripe{display:none}
 
 /* TOP BAR */
 .topbar{
   background:var(--dark);padding:10px 16px;display:flex;align-items:center;gap:10px;
   position:relative;z-index:500;flex-shrink:0;
 }
+body.stealth .topbar{background:#fff;border-bottom:1px solid #eee}
+body.stealth .topbar-title{color:#333}
 .topbar-logo{width:30px;height:30px;border-radius:8px;flex-shrink:0}
 .topbar-title{color:#fff;font-size:.85rem;font-weight:700;flex:1}
 .topbar-code{
@@ -43,17 +48,16 @@ a{text-decoration:none;color:inherit}
   background:rgba(212,160,23,.1);padding:4px 10px;border-radius:20px;
   border:1px solid rgba(212,160,23,.25);
 }
+body.stealth .topbar-code{display:none}
 
-/* LANG SWITCHER */
-.lang-sw{
-  display:flex;gap:3px;margin-left:4px;
-}
+.lang-sw{display:flex;gap:3px;margin-left:4px}
 .lang-sw button{
   color:rgba(255,255,255,.4);font-size:.6rem;font-weight:700;
-  padding:2px 5px;border-radius:4px;transition:all .2s;
-  text-transform:uppercase;
+  padding:2px 5px;border-radius:4px;transition:all .2s;text-transform:uppercase;
 }
 .lang-sw button.active{color:#fff;background:rgba(255,255,255,.15)}
+body.stealth .lang-sw button{color:#999}
+body.stealth .lang-sw button.active{color:#333;background:#eee}
 
 /* MAP */
 #map{flex:1;min-height:0;z-index:1}
@@ -66,66 +70,55 @@ a{text-decoration:none;color:inherit}
 }
 .driver-marker{
   width:18px;height:18px;background:var(--blue);border:3px solid #fff;
-  border-radius:50%;animation:driverPulse 2s infinite;
-  box-shadow:0 2px 8px rgba(0,0,0,.3);
+  border-radius:50%;animation:driverPulse 2s infinite;box-shadow:0 2px 8px rgba(0,0,0,.3);
 }
-.pickup-icon{
-  width:14px;height:14px;background:var(--green);border:3px solid #fff;
-  border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.25);
-}
-.dropoff-icon{
-  width:14px;height:14px;background:var(--red);border:3px solid #fff;
-  border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.25);
-}
+.pickup-icon{width:14px;height:14px;background:var(--green);border:3px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.dropoff-icon{width:14px;height:14px;background:var(--red);border:3px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 
 /* BOTTOM SHEET */
 .sheet{
   position:fixed;bottom:0;left:0;right:0;z-index:400;
   background:#fff;border-radius:20px 20px 0 0;
   box-shadow:0 -4px 30px rgba(0,0,0,.15);
-  max-height:58vh;overflow-y:auto;
+  max-height:62vh;overflow-y:auto;
   transform:translateY(0);transition:transform .3s ease;
 }
-.sheet-handle{
-  width:36px;height:4px;background:var(--border);border-radius:4px;
-  margin:10px auto 6px;
-}
+.sheet::-webkit-scrollbar{width:0}
+.sheet-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:10px auto 6px}
 
 /* STATUS STEPS */
 .status-bar{padding:0 16px 12px;overflow-x:auto}
 .status-steps{display:flex;gap:0;position:relative;min-width:0}
-.status-step{
-  flex:1;text-align:center;position:relative;padding-top:22px;min-width:0;
-}
-.status-step::before{
-  content:'';position:absolute;top:8px;left:0;right:0;height:3px;
-  background:var(--border);z-index:0;
-}
+.status-step{flex:1;text-align:center;position:relative;padding-top:22px;min-width:0}
+.status-step::before{content:'';position:absolute;top:8px;left:0;right:0;height:3px;background:var(--border);z-index:0}
 .status-step:first-child::before{left:50%}
 .status-step:last-child::before{right:50%}
 .status-dot{
   width:16px;height:16px;border-radius:50%;background:var(--border);
   border:2px solid #fff;position:absolute;top:1px;left:50%;
-  transform:translateX(-50%);z-index:1;transition:all .4s ease;
-  box-shadow:0 1px 4px rgba(0,0,0,.1);
+  transform:translateX(-50%);z-index:1;transition:all .4s ease;box-shadow:0 1px 4px rgba(0,0,0,.1);
 }
-.status-step.done .status-dot,
-.status-step.active-step .status-dot{background:var(--green);box-shadow:0 0 0 3px rgba(27,140,61,.2)}
-.status-step.done::before,
-.status-step.active-step::before{background:var(--green)}
+.status-step.done .status-dot,.status-step.active-step .status-dot{background:var(--green);box-shadow:0 0 0 3px rgba(27,140,61,.2)}
+.status-step.done::before,.status-step.active-step::before{background:var(--green)}
 .status-step.active-step .status-dot{animation:driverPulse 2s infinite}
-.status-label{
-  font-size:.58rem;font-weight:600;color:var(--text-muted);
-  margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+.status-label{font-size:.58rem;font-weight:600;color:var(--text-muted);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status-step.done .status-label,.status-step.active-step .status-label{color:var(--green)}
+
+/* SAFETY BADGE */
+.safety-badge{
+  margin:0 16px 10px;padding:8px 12px;border-radius:10px;
+  background:linear-gradient(135deg,rgba(27,140,61,.08),rgba(0,32,159,.06));
+  border:1px solid rgba(27,140,61,.15);display:flex;align-items:center;gap:8px;
 }
-.status-step.done .status-label,
-.status-step.active-step .status-label{color:var(--green)}
+.safety-badge-icon{font-size:1rem}
+.safety-badge-text{font-size:.68rem;font-weight:600;color:var(--green);flex:1}
+.safety-badge-btn{
+  font-size:.6rem;font-weight:700;color:var(--blue);background:rgba(0,32,159,.08);
+  padding:3px 10px;border-radius:6px;
+}
 
 /* DRIVER CARD */
-.driver-card{
-  margin:0 16px 12px;padding:12px;background:var(--off-white);
-  border-radius:12px;display:flex;align-items:center;gap:12px;
-}
+.driver-card{margin:0 16px 12px;padding:12px;background:var(--off-white);border-radius:12px;display:flex;align-items:center;gap:12px}
 .driver-card.hidden{display:none}
 .driver-avatar{
   width:44px;height:44px;border-radius:50%;background:var(--blue);
@@ -136,56 +129,211 @@ a{text-decoration:none;color:inherit}
 .driver-info{flex:1;min-width:0}
 .driver-name{font-size:.82rem;font-weight:700;color:var(--text)}
 .driver-vehicle{font-size:.7rem;color:var(--text-light);margin-top:1px}
-.driver-plate{
-  font-size:.65rem;font-weight:700;color:var(--blue);background:rgba(0,32,159,.08);
-  padding:2px 8px;border-radius:6px;display:inline-block;margin-top:3px;
-}
+.driver-plate{font-size:.65rem;font-weight:700;color:var(--blue);background:rgba(0,32,159,.08);padding:2px 8px;border-radius:6px;display:inline-block;margin-top:3px}
 
 /* RIDE DETAILS */
-.ride-details{
-  display:flex;gap:8px;padding:0 16px 14px;
-}
-.ride-stat{
-  flex:1;background:var(--off-white);border-radius:10px;padding:10px;text-align:center;
-}
+.ride-details{display:flex;gap:8px;padding:0 16px 14px}
+.ride-stat{flex:1;background:var(--off-white);border-radius:10px;padding:10px;text-align:center}
 .ride-stat-value{font-size:.95rem;font-weight:800;color:var(--text)}
 .ride-stat-label{font-size:.58rem;font-weight:600;color:var(--text-muted);margin-top:2px}
 
 /* ACTION BUTTONS */
-.actions{
-  display:flex;gap:8px;padding:0 16px 16px;
-}
+.actions{display:flex;gap:8px;padding:0 16px 8px}
 .act-btn{
   flex:1;padding:11px 6px;border-radius:12px;font-size:.72rem;font-weight:700;
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  transition:all .2s;color:#fff;
+  display:flex;align-items:center;justify-content:center;gap:5px;transition:all .2s;color:#fff;
 }
 .act-share{background:var(--green)}
 .act-share:active{background:var(--green-dark)}
 .act-call{background:var(--blue)}
 .act-call:active{background:#001A80}
 .act-call.disabled{background:var(--text-muted);pointer-events:none}
-.act-sos{background:var(--red);position:relative}
-.act-sos:active{background:var(--red-dark)}
-@keyframes sosPulse{
-  0%,100%{box-shadow:0 0 0 0 rgba(210,16,52,.4)}
-  50%{box-shadow:0 0 0 8px rgba(210,16,52,0)}
+
+/* SOS FAMILY SAFETY BUTTON */
+.safety-actions{padding:0 16px 16px;display:flex;gap:8px}
+.sos-family-btn{
+  flex:1;padding:13px 10px;border-radius:14px;font-size:.78rem;font-weight:800;
+  color:#fff;display:flex;align-items:center;justify-content:center;gap:7px;
+  background:linear-gradient(135deg,var(--red),var(--red-dark));
+  position:relative;overflow:hidden;
+  -webkit-user-select:none;user-select:none;
+  touch-action:none;
 }
-.act-sos{animation:sosPulse 2s infinite}
+.sos-family-btn::after{
+  content:'';position:absolute;inset:0;background:rgba(255,255,255,.1);
+  transform:scaleX(0);transform-origin:left;transition:transform 3s linear;
+}
+.sos-family-btn.holding::after{transform:scaleX(1)}
+.sos-family-btn .sos-sub-text{font-size:.58rem;font-weight:600;opacity:.8}
+
+.safe-btn{
+  flex:1;padding:13px 10px;border-radius:14px;font-size:.78rem;font-weight:800;
+  color:#fff;background:var(--green);display:none;
+  align-items:center;justify-content:center;gap:7px;
+}
+.safe-btn.show{display:flex}
+
+/* ROUTE DEVIATION WARNING */
+.deviation-banner{
+  display:none;margin:0 16px 10px;padding:10px 12px;border-radius:10px;
+  background:rgba(230,126,34,.1);border:1px solid rgba(230,126,34,.3);
+  font-size:.72rem;font-weight:700;color:var(--orange);
+  align-items:center;gap:8px;
+}
+.deviation-banner.show{display:flex}
+
+/* SOS LEVEL 1 — WARNING SCREEN */
+.sos-l1{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,.85);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:30px;text-align:center;
+}
+.sos-l1.show{display:flex}
+.sos-l1-icon{font-size:3rem;margin-bottom:16px}
+.sos-l1-title{color:#fff;font-size:1.2rem;font-weight:900;margin-bottom:8px}
+.sos-l1-sub{color:rgba(255,255,255,.7);font-size:.8rem;line-height:1.5;margin-bottom:20px;max-width:280px}
+.sos-l1-countdown{
+  width:80px;height:80px;border-radius:50%;
+  background:var(--red);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;font-weight:900;margin-bottom:20px;
+  box-shadow:0 0 0 0 rgba(210,16,52,.5);animation:countPulse 1s infinite;
+}
+@keyframes countPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(210,16,52,.5)}
+  50%{box-shadow:0 0 0 20px rgba(210,16,52,0)}
+}
+.sos-l1-cancel{
+  padding:12px 40px;background:rgba(255,255,255,.15);color:#fff;
+  border-radius:12px;font-size:.85rem;font-weight:700;
+  border:1px solid rgba(255,255,255,.2);
+}
+.sos-l1-silent{
+  margin-top:12px;padding:10px 30px;background:transparent;color:rgba(255,255,255,.5);
+  font-size:.7rem;font-weight:600;text-decoration:underline;
+}
+
+/* SOS LEVEL 2 — SILENT ALERT ACTIVE */
+.sos-l2{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(0,32,159,.95);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:30px;text-align:center;
+}
+.sos-l2.show{display:flex}
+.sos-l2-icon{font-size:2.5rem;margin-bottom:12px}
+.sos-l2-title{color:#fff;font-size:1.1rem;font-weight:900;margin-bottom:6px}
+.sos-l2-sub{color:rgba(255,255,255,.7);font-size:.78rem;line-height:1.5;margin-bottom:16px;max-width:300px}
+.sos-l2-features{
+  display:flex;flex-direction:column;gap:8px;margin-bottom:20px;width:100%;max-width:280px;
+}
+.sos-l2-feat{
+  display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);
+  padding:8px 12px;border-radius:10px;text-align:left;
+}
+.sos-l2-feat-icon{font-size:.9rem;flex-shrink:0}
+.sos-l2-feat-text{color:rgba(255,255,255,.9);font-size:.7rem;font-weight:600}
+.sos-l2-btns{display:flex;gap:8px;width:100%;max-width:280px}
+.sos-l2-stealth{
+  flex:1;padding:12px;background:rgba(255,255,255,.15);color:#fff;
+  border-radius:12px;font-size:.75rem;font-weight:700;
+}
+.sos-l2-escalate{
+  flex:1;padding:12px;background:var(--red);color:#fff;
+  border-radius:12px;font-size:.75rem;font-weight:700;
+}
+.sos-l2-safe{
+  margin-top:10px;padding:10px 30px;background:var(--green);color:#fff;
+  border-radius:10px;font-size:.78rem;font-weight:700;
+}
+
+/* SOS LEVEL 3 — ESCALATED */
+.sos-l3{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(210,16,52,.97);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:30px;text-align:center;
+}
+.sos-l3.show{display:flex}
+@keyframes l3Pulse{
+  0%,100%{opacity:1}50%{opacity:.7}
+}
+.sos-l3{animation:l3Pulse 2s infinite}
+.sos-l3-icon{font-size:3rem;margin-bottom:12px}
+.sos-l3-title{color:#fff;font-size:1.3rem;font-weight:900;margin-bottom:6px}
+.sos-l3-sub{color:rgba(255,255,255,.85);font-size:.8rem;line-height:1.5;margin-bottom:20px;max-width:300px}
+.sos-l3-status{
+  display:flex;flex-direction:column;gap:6px;width:100%;max-width:280px;margin-bottom:20px;
+}
+.sos-l3-item{
+  display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);
+  padding:8px 12px;border-radius:8px;
+}
+.sos-l3-item-text{color:#fff;font-size:.7rem;font-weight:600;flex:1}
+@keyframes statusBlink{0%,100%{opacity:1}50%{opacity:.4}}
+.sos-l3-item-status{
+  font-size:.6rem;font-weight:800;color:var(--gold);
+  animation:statusBlink 1.5s infinite;
+}
+.sos-l3-safe{
+  padding:12px 40px;background:var(--green);color:#fff;
+  border-radius:12px;font-size:.85rem;font-weight:800;
+}
+
+/* CONTACTS PANEL */
+.contacts-panel{
+  position:fixed;inset:0;z-index:550;background:rgba(0,0,0,.5);
+  display:none;align-items:flex-end;
+}
+.contacts-panel.show{display:flex}
+.contacts-sheet{
+  width:100%;background:#fff;border-radius:20px 20px 0 0;
+  padding:20px 16px;max-height:70vh;overflow-y:auto;
+}
+.contacts-title{font-size:.9rem;font-weight:800;margin-bottom:4px}
+.contacts-sub{font-size:.7rem;color:var(--text-light);margin-bottom:16px}
+.contact-item{
+  display:flex;align-items:center;gap:10px;padding:10px 0;
+  border-bottom:1px solid var(--border);
+}
+.contact-item:last-child{border-bottom:none}
+.contact-avatar{
+  width:36px;height:36px;border-radius:50%;background:var(--blue);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;font-weight:700;flex-shrink:0;
+}
+.contact-info{flex:1}
+.contact-name{font-size:.78rem;font-weight:700}
+.contact-phone{font-size:.65rem;color:var(--text-light)}
+.contact-rel{font-size:.58rem;color:var(--text-muted);background:var(--off-white);padding:1px 6px;border-radius:4px;margin-left:4px}
+.contact-del{color:var(--red);font-size:.7rem;font-weight:700;padding:6px}
+.add-contact-form{
+  display:flex;flex-direction:column;gap:8px;margin-top:12px;
+  padding-top:12px;border-top:1px solid var(--border);
+}
+.add-contact-form input,.add-contact-form select{
+  padding:10px 12px;border:1px solid var(--border);border-radius:10px;
+  font-size:.78rem;font-family:var(--body);
+}
+.add-contact-btn{
+  padding:10px;background:var(--blue);color:#fff;border-radius:10px;
+  font-size:.78rem;font-weight:700;
+}
+.contacts-close{
+  margin-top:12px;padding:10px;background:var(--off-white);border-radius:10px;
+  font-size:.78rem;font-weight:700;width:100%;text-align:center;color:var(--text);
+}
 
 /* END STATES */
-.end-state{
-  padding:30px 16px;text-align:center;display:none;
-}
+.end-state{padding:30px 16px;text-align:center;display:none}
 .end-state.show{display:block}
 .end-icon{font-size:2.5rem;margin-bottom:10px}
 .end-title{font-size:1.1rem;font-weight:800;margin-bottom:4px}
 .end-sub{font-size:.8rem;color:var(--text-light)}
-.end-price{
-  font-size:1.6rem;font-weight:900;color:var(--green);margin:12px 0 4px;
-}
+.end-price{font-size:1.6rem;font-weight:900;color:var(--green);margin:12px 0 4px}
 
-/* LOADING STATE */
+/* LOADING / ERROR */
 .loading-screen{
   position:fixed;inset:0;z-index:999;background:var(--dark);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -199,66 +347,37 @@ a{text-decoration:none;color:inherit}
   border-top-color:var(--gold);border-radius:50%;animation:ldSpin .8s linear infinite;
 }
 .loading-text{color:rgba(255,255,255,.5);font-size:.72rem;font-weight:600;margin-top:12px}
-
-/* ERROR STATE */
 .error-screen{
   position:fixed;inset:0;z-index:998;background:var(--off-white);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:40px;text-align:center;display:none;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px;text-align:center;
 }
 .error-screen.show{display:flex}
 .error-icon{font-size:3rem;margin-bottom:12px}
 .error-title{font-size:1.1rem;font-weight:800;margin-bottom:6px}
 .error-sub{font-size:.8rem;color:var(--text-light);line-height:1.5}
-.error-back{
-  margin-top:20px;padding:10px 28px;background:var(--blue);color:#fff;
-  border-radius:10px;font-size:.8rem;font-weight:700;
-}
+.error-back{margin-top:20px;padding:10px 28px;background:var(--blue);color:#fff;border-radius:10px;font-size:.8rem;font-weight:700}
 
-/* SOS OVERLAY */
-.sos-overlay{
-  position:fixed;inset:0;z-index:600;background:rgba(210,16,52,.95);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:40px;text-align:center;display:none;
+/* STEALTH FAKE CONTENT */
+.stealth-fake{
+  display:none;position:fixed;inset:0;z-index:580;background:#fff;
+  padding:60px 20px 20px;overflow-y:auto;
 }
-.sos-overlay.show{display:flex}
-.sos-overlay .sos-icon{font-size:4rem;margin-bottom:16px}
-.sos-overlay .sos-title{color:#fff;font-size:1.3rem;font-weight:900;margin-bottom:8px}
-.sos-overlay .sos-sub{color:rgba(255,255,255,.8);font-size:.85rem;line-height:1.5;margin-bottom:24px}
-.sos-overlay .sos-close{
-  padding:10px 32px;background:rgba(255,255,255,.2);color:#fff;
-  border-radius:10px;font-size:.8rem;font-weight:700;border:1px solid rgba(255,255,255,.3);
+body.stealth .stealth-fake{display:block}
+.stealth-fake h2{font-size:1rem;font-weight:700;margin-bottom:12px;color:#333}
+.stealth-fake p{font-size:.82rem;color:#666;line-height:1.6;margin-bottom:16px}
+.stealth-exit{
+  position:fixed;bottom:20px;right:20px;z-index:590;
+  width:12px;height:12px;border-radius:50%;background:transparent;
+  border:none;opacity:0;
 }
-
-/* CONFIRM DIALOG */
-.confirm-overlay{
-  position:fixed;inset:0;z-index:550;background:rgba(0,0,0,.6);
-  display:flex;align-items:center;justify-content:center;padding:20px;display:none;
-}
-.confirm-overlay.show{display:flex}
-.confirm-box{
-  background:#fff;border-radius:16px;padding:24px;text-align:center;
-  max-width:300px;width:100%;box-shadow:0 16px 48px rgba(0,0,0,.2);
-}
-.confirm-box .c-icon{font-size:2.5rem;margin-bottom:10px}
-.confirm-box .c-title{font-size:.95rem;font-weight:800;margin-bottom:6px}
-.confirm-box .c-sub{font-size:.75rem;color:var(--text-light);margin-bottom:18px;line-height:1.4}
-.confirm-btns{display:flex;gap:8px}
-.confirm-btns button{
-  flex:1;padding:10px;border-radius:10px;font-size:.78rem;font-weight:700;
-}
-.c-cancel{background:var(--off-white);color:var(--text)}
-.c-confirm{background:var(--red);color:#fff}
+body.stealth .stealth-exit{display:block}
 
 /* PAGE LAYOUT */
 .page-wrap{display:flex;flex-direction:column;height:100vh;height:100dvh}
 
-/* SCROLLBAR */
-.sheet::-webkit-scrollbar{width:0}
-
-/* SAFE AREA */
-@supports(padding-bottom: env(safe-area-inset-bottom)){
-  .actions{padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+@supports(padding-bottom:env(safe-area-inset-bottom)){
+  .safety-actions{padding-bottom:calc(16px + env(safe-area-inset-bottom))}
 }
 </style>
 </head>
@@ -275,33 +394,117 @@ a{text-decoration:none;color:inherit}
 <div class="error-screen" id="errorScreen">
   <div class="error-icon">&#128531;</div>
   <div class="error-title" data-i18n="err_title">Kous Pa Jwenn</div>
-  <div class="error-sub" data-i18n="err_sub">Verifye kòd swivi a epi eseye ankò.</div>
+  <div class="error-sub" data-i18n="err_sub">Verifye kod swivi a epi eseye anko.</div>
   <a href="index.html" class="error-back" data-i18n="err_back">Retounen Lakay</a>
 </div>
 
-<!-- SOS SENT OVERLAY -->
-<div class="sos-overlay" id="sosOverlay">
-  <div class="sos-icon">&#128680;</div>
-  <div class="sos-title" data-i18n="sos_sent">SOS VOYE!</div>
-  <div class="sos-sub" data-i18n="sos_sent_sub">Ekip sekirite nou an resevwa alèt ou. Rete kalm, yon moun ap reponn ou byen vit.</div>
-  <button class="sos-close" onclick="document.getElementById('sosOverlay').classList.remove('show')" data-i18n="sos_close">Fèmen</button>
+<!-- SOS LEVEL 1 — WARNING / COUNTDOWN -->
+<div class="sos-l1" id="sosL1">
+  <div class="sos-l1-icon">&#9888;&#65039;</div>
+  <div class="sos-l1-title" data-i18n="l1_title">Eske ou bezwen ed?</div>
+  <div class="sos-l1-sub" data-i18n="l1_sub">Si ou pa anile nan 10 segonn, yon alet silansye ap voye bay kontak konfyans ou yo ak ekip sekirite a.</div>
+  <div class="sos-l1-countdown" id="l1Count">10</div>
+  <button class="sos-l1-cancel" onclick="cancelSOS()" data-i18n="l1_cancel">Non, Mwen Anfom</button>
+  <button class="sos-l1-silent" onclick="triggerSilentNow()" data-i18n="l1_silent">Voye alet silansye kounye a</button>
 </div>
 
-<!-- CONFIRM DIALOG -->
-<div class="confirm-overlay" id="confirmOverlay">
-  <div class="confirm-box">
-    <div class="c-icon">&#9888;&#65039;</div>
-    <div class="c-title" data-i18n="sos_confirm_title">Voye SOS?</div>
-    <div class="c-sub" data-i18n="sos_confirm_sub">Sa ap voye yon alèt ijans bay ekip sekirite MsouWout.</div>
-    <div class="confirm-btns">
-      <button class="c-cancel" onclick="closeConfirm()" data-i18n="cancel">Anile</button>
-      <button class="c-confirm" onclick="sendSOS()" data-i18n="sos_send">Voye SOS</button>
+<!-- SOS LEVEL 2 — SILENT ALERT ACTIVE -->
+<div class="sos-l2" id="sosL2">
+  <div class="sos-l2-icon">&#128272;</div>
+  <div class="sos-l2-title" data-i18n="l2_title">Alet Silansye Aktif</div>
+  <div class="sos-l2-sub" data-i18n="l2_sub">GPS ou ap pataje an sekirite. Peson pa ka we sa sou ekran ou.</div>
+  <div class="sos-l2-features">
+    <div class="sos-l2-feat">
+      <span class="sos-l2-feat-icon">&#128205;</span>
+      <span class="sos-l2-feat-text" data-i18n="l2_gps">GPS live ap pataje ak kontak konfyans ou yo</span>
     </div>
+    <div class="sos-l2-feat">
+      <span class="sos-l2-feat-icon">&#128663;</span>
+      <span class="sos-l2-feat-text" data-i18n="l2_driver">Enfo chofe ak plak machin voye</span>
+    </div>
+    <div class="sos-l2-feat">
+      <span class="sos-l2-feat-icon">&#128065;</span>
+      <span class="sos-l2-feat-text" data-i18n="l2_monitor">Kous la ap sivèye pa ekip sekirite</span>
+    </div>
+    <div class="sos-l2-feat">
+      <span class="sos-l2-feat-icon">&#127908;</span>
+      <span class="sos-l2-feat-text" data-i18n="l2_audio">Anrejistreman odyo aktif</span>
+    </div>
+  </div>
+  <div class="sos-l2-btns">
+    <button class="sos-l2-stealth" onclick="enterStealth()" data-i18n="l2_stealth">Mod Diskre</button>
+    <button class="sos-l2-escalate" onclick="escalateToL3()" data-i18n="l2_escalate">Eskale Ijans</button>
+  </div>
+  <button class="sos-l2-safe" onclick="confirmSafe()" data-i18n="l2_safe">Mwen Anfom</button>
+</div>
+
+<!-- SOS LEVEL 3 — FULL ESCALATION -->
+<div class="sos-l3" id="sosL3">
+  <div class="sos-l3-icon">&#128680;</div>
+  <div class="sos-l3-title" data-i18n="l3_title">IJANS ESKALE</div>
+  <div class="sos-l3-sub" data-i18n="l3_sub">Tout sistèm sekirite aktive. Ed ap vini.</div>
+  <div class="sos-l3-status">
+    <div class="sos-l3-item">
+      <span>&#128205;</span>
+      <span class="sos-l3-item-text" data-i18n="l3_gps">GPS ap pataje an direk</span>
+      <span class="sos-l3-item-status" data-i18n="l3_active">AKTIF</span>
+    </div>
+    <div class="sos-l3-item">
+      <span>&#128100;</span>
+      <span class="sos-l3-item-text" data-i18n="l3_contacts">Kontak konfyans notifye</span>
+      <span class="sos-l3-item-status" data-i18n="l3_sent">VOYE</span>
+    </div>
+    <div class="sos-l3-item">
+      <span>&#128663;</span>
+      <span class="sos-l3-item-text" data-i18n="l3_drivers">Chofe tou pre yo alerte</span>
+      <span class="sos-l3-item-status" data-i18n="l3_active">AKTIF</span>
+    </div>
+    <div class="sos-l3-item">
+      <span>&#127908;</span>
+      <span class="sos-l3-item-text" data-i18n="l3_recording">Anrejistreman odyo</span>
+      <span class="sos-l3-item-status" id="l3RecStatus" data-i18n="l3_active">AKTIF</span>
+    </div>
+    <div class="sos-l3-item">
+      <span>&#128694;</span>
+      <span class="sos-l3-item-text" data-i18n="l3_security">Ekip sekirite</span>
+      <span class="sos-l3-item-status" data-i18n="l3_responding">AP REPONN</span>
+    </div>
+  </div>
+  <button class="sos-l3-safe" onclick="confirmSafe()" data-i18n="l3_safe">Mwen Anfom — Femen Alet</button>
+</div>
+
+<!-- STEALTH FAKE SCREEN -->
+<div class="stealth-fake" id="stealthFake">
+  <h2>Nouvèl Ayiti</h2>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
+</div>
+<button class="stealth-exit" id="stealthExit" onclick="exitStealth()"></button>
+
+<!-- CONTACTS PANEL -->
+<div class="contacts-panel" id="contactsPanel">
+  <div class="contacts-sheet">
+    <div class="contacts-title" data-i18n="ct_title">Kontak Konfyans Ou</div>
+    <div class="contacts-sub" data-i18n="ct_sub">Moun sa yo ap resevwa alet lè ou aktive SOS. Maksimom 5.</div>
+    <div id="contactsList"></div>
+    <div class="add-contact-form">
+      <input type="text" id="ctName" placeholder="Non kontak" data-i18n-ph="ct_name_ph">
+      <input type="tel" id="ctPhone" placeholder="Nimewo telefon" data-i18n-ph="ct_phone_ph">
+      <select id="ctRel">
+        <option value="family">Fanmi</option>
+        <option value="friend">Zanmi</option>
+        <option value="partner">Patnè</option>
+        <option value="other">Lòt</option>
+      </select>
+      <button class="add-contact-btn" onclick="addContact()" data-i18n="ct_add">Ajoute Kontak</button>
+    </div>
+    <button class="contacts-close" onclick="closeContacts()" data-i18n="ct_close">Femen</button>
   </div>
 </div>
 
 <!-- PAGE -->
-<div class="page-wrap">
+<div class="page-wrap" id="pageWrap">
   <div class="flag-stripe"></div>
   <div class="topbar">
     <img src="assets/msouwout-logo.jpg" alt="MsouWout" class="topbar-logo">
@@ -315,40 +518,34 @@ a{text-decoration:none;color:inherit}
     </div>
   </div>
 
-  <!-- MAP -->
   <div id="map"></div>
 
-  <!-- BOTTOM SHEET -->
   <div class="sheet" id="sheet">
     <div class="sheet-handle"></div>
 
-    <!-- STATUS BAR -->
     <div class="status-bar">
       <div class="status-steps" id="statusSteps">
-        <div class="status-step" data-status="searching">
-          <div class="status-dot"></div>
-          <div class="status-label" data-i18n="st_search">Ap chache</div>
-        </div>
-        <div class="status-step" data-status="accepted">
-          <div class="status-dot"></div>
-          <div class="status-label" data-i18n="st_accept">Aksepte</div>
-        </div>
-        <div class="status-step" data-status="in_progress">
-          <div class="status-dot"></div>
-          <div class="status-label" data-i18n="st_enroute">Nan wout</div>
-        </div>
-        <div class="status-step" data-status="arriving">
-          <div class="status-dot"></div>
-          <div class="status-label" data-i18n="st_arrive">Rive</div>
-        </div>
-        <div class="status-step" data-status="completed">
-          <div class="status-dot"></div>
-          <div class="status-label" data-i18n="st_done">Fini</div>
-        </div>
+        <div class="status-step" data-status="searching"><div class="status-dot"></div><div class="status-label" data-i18n="st_search">Ap chache</div></div>
+        <div class="status-step" data-status="accepted"><div class="status-dot"></div><div class="status-label" data-i18n="st_accept">Aksepte</div></div>
+        <div class="status-step" data-status="in_progress"><div class="status-dot"></div><div class="status-label" data-i18n="st_enroute">Nan wout</div></div>
+        <div class="status-step" data-status="arriving"><div class="status-dot"></div><div class="status-label" data-i18n="st_arrive">Rive</div></div>
+        <div class="status-step" data-status="completed"><div class="status-dot"></div><div class="status-label" data-i18n="st_done">Fini</div></div>
       </div>
     </div>
 
-    <!-- DRIVER CARD -->
+    <!-- SAFETY BADGE -->
+    <div class="safety-badge" id="safetyBadge">
+      <span class="safety-badge-icon">&#128737;</span>
+      <span class="safety-badge-text" data-i18n="sb_text">Sekirite Fanmi aktif</span>
+      <button class="safety-badge-btn" onclick="openContacts()" data-i18n="sb_contacts">Kontak</button>
+    </div>
+
+    <!-- ROUTE DEVIATION WARNING -->
+    <div class="deviation-banner" id="deviationBanner">
+      <span>&#9888;&#65039;</span>
+      <span data-i18n="dev_warn">Chofe a kite wout nòmal la</span>
+    </div>
+
     <div class="driver-card hidden" id="driverCard">
       <div class="driver-avatar" id="driverAvatar">?</div>
       <div class="driver-info">
@@ -358,23 +555,12 @@ a{text-decoration:none;color:inherit}
       </div>
     </div>
 
-    <!-- RIDE STATS -->
     <div class="ride-details" id="rideDetails">
-      <div class="ride-stat">
-        <div class="ride-stat-value" id="statDist">--</div>
-        <div class="ride-stat-label" data-i18n="distance">Distans</div>
-      </div>
-      <div class="ride-stat">
-        <div class="ride-stat-value" id="statTime">--</div>
-        <div class="ride-stat-label" data-i18n="time">Tan</div>
-      </div>
-      <div class="ride-stat">
-        <div class="ride-stat-value" id="statPrice">--</div>
-        <div class="ride-stat-label" data-i18n="price">Pri (HTG)</div>
-      </div>
+      <div class="ride-stat"><div class="ride-stat-value" id="statDist">--</div><div class="ride-stat-label" data-i18n="distance">Distans</div></div>
+      <div class="ride-stat"><div class="ride-stat-value" id="statTime">--</div><div class="ride-stat-label" data-i18n="time">Tan</div></div>
+      <div class="ride-stat"><div class="ride-stat-value" id="statPrice">--</div><div class="ride-stat-label" data-i18n="price">Pri (HTG)</div></div>
     </div>
 
-    <!-- ACTION BUTTONS -->
     <div class="actions" id="actionBtns">
       <button class="act-btn act-share" onclick="shareRide()">
         <span>&#128279;</span> <span data-i18n="share">Pataje</span>
@@ -382,17 +568,27 @@ a{text-decoration:none;color:inherit}
       <button class="act-btn act-call disabled" id="callBtn" onclick="callDriver()">
         <span>&#128222;</span> <span data-i18n="call">Rele Chofe</span>
       </button>
-      <button class="act-btn act-sos" onclick="showConfirm()">
-        <span>&#128680;</span> SOS
+    </div>
+
+    <!-- SOS FAMILY SAFETY -->
+    <div class="safety-actions" id="safetyBtns">
+      <button class="sos-family-btn" id="sosBtn"
+        onpointerdown="sosDown(event)" onpointerup="sosUp()" onpointerleave="sosUp()">
+        <span>&#128737;</span>
+        <span data-i18n="sos_btn">Sekirite Fanmi</span>
+        <span class="sos-sub-text" data-i18n="sos_hold">Kenbe 3s</span>
+      </button>
+      <button class="safe-btn" id="safeBtn" onclick="confirmSafe()">
+        <span>&#9989;</span>
+        <span data-i18n="safe_btn">Mwen Anfom</span>
       </button>
     </div>
 
-    <!-- END STATES -->
     <div class="end-state" id="endCompleted">
       <div class="end-icon">&#9989;</div>
       <div class="end-title" data-i18n="ride_done">Kous Fini!</div>
       <div class="end-price" id="endPrice">-- HTG</div>
-      <div class="end-sub" data-i18n="ride_done_sub">Mèsi pou konfyans ou nan MsouWout.</div>
+      <div class="end-sub" data-i18n="ride_done_sub">Mesi pou konfyans ou nan MsouWout.</div>
     </div>
     <div class="end-state" id="endCancelled">
       <div class="end-icon">&#10060;</div>
@@ -413,60 +609,112 @@ const SITE = 'https://msouwout.com';
 
 const I18N = {
   ht: {
-    track_title: 'Swiv Kous Ou', loading: 'Ap chaje...',
-    err_title: 'Kous Pa Jwenn', err_sub: 'Verifye kod swivi a epi eseye anko.', err_back: 'Retounen Lakay',
-    st_search: 'Ap chache', st_accept: 'Aksepte', st_enroute: 'Nan wout', st_arrive: 'Rive', st_done: 'Fini',
-    distance: 'Distans', time: 'Tan', price: 'Pri (HTG)',
-    share: 'Pataje', call: 'Rele Chofe',
-    sos_sent: 'SOS VOYE!', sos_sent_sub: 'Ekip sekirite nou an resevwa alet ou. Rete kalm, yon moun ap reponn ou byen vit.',
-    sos_close: 'Femen', sos_confirm_title: 'Voye SOS?', sos_confirm_sub: 'Sa ap voye yon alet ijans bay ekip sekirite MsouWout.',
-    cancel: 'Anile', sos_send: 'Voye SOS',
-    ride_done: 'Kous Fini!', ride_done_sub: 'Mesi pou konfyans ou nan MsouWout.',
-    ride_cancel: 'Kous Anile', ride_cancel_sub: 'Kous sa a te anile.',
-    ride_emer: 'Ijans Aktif', ride_emer_sub: 'Ekip sekirite ap reponn.',
-    share_msg: 'Mwen nan yon kous MsouWout! Swiv mwen la:'
+    track_title:'Swiv Kous Ou', loading:'Ap chaje...',
+    err_title:'Kous Pa Jwenn', err_sub:'Verifye kod swivi a epi eseye anko.', err_back:'Retounen Lakay',
+    st_search:'Ap chache', st_accept:'Aksepte', st_enroute:'Nan wout', st_arrive:'Rive', st_done:'Fini',
+    distance:'Distans', time:'Tan', price:'Pri (HTG)',
+    share:'Pataje', call:'Rele Chofe',
+    share_msg:'Mwen nan yon kous MsouWout! Swiv mwen la:',
+    sb_text:'Sekirite Fanmi aktif', sb_contacts:'Kontak',
+    dev_warn:'Chofe a kite wout nomal la',
+    sos_btn:'Sekirite Fanmi', sos_hold:'Kenbe 3s', safe_btn:'Mwen Anfom',
+    l1_title:'Eske ou bezwen ed?', l1_sub:'Si ou pa anile nan 10 segonn, yon alet silansye ap voye bay kontak konfyans ou yo ak ekip sekirite a.',
+    l1_cancel:'Non, Mwen Anfom', l1_silent:'Voye alet silansye kounye a',
+    l2_title:'Alet Silansye Aktif', l2_sub:'GPS ou ap pataje an sekirite. Peson pa ka we sa sou ekran ou.',
+    l2_gps:'GPS live ap pataje ak kontak konfyans ou yo', l2_driver:'Enfo chofe ak plak machin voye',
+    l2_monitor:'Kous la ap sivèye pa ekip sekirite', l2_audio:'Anrejistreman odyo aktif',
+    l2_stealth:'Mod Diskre', l2_escalate:'Eskale Ijans', l2_safe:'Mwen Anfom',
+    l3_title:'IJANS ESKALE', l3_sub:'Tout sistèm sekirite aktive. Ed ap vini.',
+    l3_gps:'GPS ap pataje an direk', l3_contacts:'Kontak konfyans notifye',
+    l3_drivers:'Chofe tou pre yo alerte', l3_recording:'Anrejistreman odyo',
+    l3_security:'Ekip sekirite', l3_active:'AKTIF', l3_sent:'VOYE', l3_responding:'AP REPONN',
+    l3_safe:'Mwen Anfom — Femen Alet',
+    ct_title:'Kontak Konfyans Ou', ct_sub:'Moun sa yo ap resevwa alet le ou aktive SOS. Maksimom 5.',
+    ct_add:'Ajoute Kontak', ct_close:'Femen',
+    ride_done:'Kous Fini!', ride_done_sub:'Mesi pou konfyans ou nan MsouWout.',
+    ride_cancel:'Kous Anile', ride_cancel_sub:'Kous sa a te anile.',
+    ride_emer:'Ijans Aktif', ride_emer_sub:'Ekip sekirite ap reponn.'
   },
   fr: {
-    track_title: 'Suivre Ma Course', loading: 'Chargement...',
-    err_title: 'Course Introuvable', err_sub: 'Verifiez le code de suivi et reessayez.', err_back: 'Retour Accueil',
-    st_search: 'Recherche', st_accept: 'Accepte', st_enroute: 'En route', st_arrive: 'Arrive', st_done: 'Termine',
-    distance: 'Distance', time: 'Temps', price: 'Prix (HTG)',
-    share: 'Partager', call: 'Appeler',
-    sos_sent: 'SOS ENVOYE!', sos_sent_sub: 'Notre equipe de securite a recu votre alerte. Restez calme, une reponse arrive.',
-    sos_close: 'Fermer', sos_confirm_title: 'Envoyer SOS?', sos_confirm_sub: 'Ceci enverra une alerte urgente a notre equipe de securite.',
-    cancel: 'Annuler', sos_send: 'Envoyer SOS',
-    ride_done: 'Course Terminee!', ride_done_sub: 'Merci pour votre confiance avec MsouWout.',
-    ride_cancel: 'Course Annulee', ride_cancel_sub: 'Cette course a ete annulee.',
-    ride_emer: 'Urgence Active', ride_emer_sub: 'L\'equipe de securite repond.',
-    share_msg: 'Je suis dans une course MsouWout! Suivez-moi ici:'
+    track_title:'Suivre Ma Course', loading:'Chargement...',
+    err_title:'Course Introuvable', err_sub:'Verifiez le code de suivi et reessayez.', err_back:'Retour Accueil',
+    st_search:'Recherche', st_accept:'Accepte', st_enroute:'En route', st_arrive:'Arrive', st_done:'Termine',
+    distance:'Distance', time:'Temps', price:'Prix (HTG)',
+    share:'Partager', call:'Appeler',
+    share_msg:'Je suis dans une course MsouWout! Suivez-moi ici:',
+    sb_text:'Securite Famille active', sb_contacts:'Contacts',
+    dev_warn:'Le chauffeur a devie de la route',
+    sos_btn:'Securite Famille', sos_hold:'Maintenir 3s', safe_btn:'Je Suis OK',
+    l1_title:'Avez-vous besoin d\'aide?', l1_sub:'Si vous n\'annulez pas dans 10 secondes, une alerte silencieuse sera envoyee a vos contacts de confiance.',
+    l1_cancel:'Non, Je Suis OK', l1_silent:'Envoyer alerte silencieuse maintenant',
+    l2_title:'Alerte Silencieuse Active', l2_sub:'Votre GPS est partage en securite. Personne ne peut voir cela sur votre ecran.',
+    l2_gps:'GPS en direct partage avec vos contacts', l2_driver:'Info chauffeur et plaque envoyes',
+    l2_monitor:'Course surveillee par l\'equipe securite', l2_audio:'Enregistrement audio actif',
+    l2_stealth:'Mode Discret', l2_escalate:'Escalader', l2_safe:'Je Suis OK',
+    l3_title:'URGENCE ESCALADEE', l3_sub:'Tous les systemes de securite sont actifs. L\'aide arrive.',
+    l3_gps:'GPS partage en direct', l3_contacts:'Contacts de confiance notifies',
+    l3_drivers:'Chauffeurs proches alertes', l3_recording:'Enregistrement audio',
+    l3_security:'Equipe securite', l3_active:'ACTIF', l3_sent:'ENVOYE', l3_responding:'REPOND',
+    l3_safe:'Je Suis OK — Fermer Alerte',
+    ct_title:'Vos Contacts de Confiance', ct_sub:'Ces personnes recevront une alerte quand vous activez SOS. Maximum 5.',
+    ct_add:'Ajouter Contact', ct_close:'Fermer',
+    ride_done:'Course Terminee!', ride_done_sub:'Merci pour votre confiance.',
+    ride_cancel:'Course Annulee', ride_cancel_sub:'Cette course a ete annulee.',
+    ride_emer:'Urgence Active', ride_emer_sub:'L\'equipe de securite repond.'
   },
   en: {
-    track_title: 'Track Your Ride', loading: 'Loading...',
-    err_title: 'Ride Not Found', err_sub: 'Check the tracking code and try again.', err_back: 'Back Home',
-    st_search: 'Searching', st_accept: 'Accepted', st_enroute: 'En Route', st_arrive: 'Arriving', st_done: 'Done',
-    distance: 'Distance', time: 'Time', price: 'Price (HTG)',
-    share: 'Share', call: 'Call Driver',
-    sos_sent: 'SOS SENT!', sos_sent_sub: 'Our security team received your alert. Stay calm, someone will respond shortly.',
-    sos_close: 'Close', sos_confirm_title: 'Send SOS?', sos_confirm_sub: 'This will send an emergency alert to MsouWout security team.',
-    cancel: 'Cancel', sos_send: 'Send SOS',
-    ride_done: 'Ride Complete!', ride_done_sub: 'Thank you for riding with MsouWout.',
-    ride_cancel: 'Ride Cancelled', ride_cancel_sub: 'This ride was cancelled.',
-    ride_emer: 'Emergency Active', ride_emer_sub: 'Security team is responding.',
-    share_msg: 'I\'m on a MsouWout ride! Track me here:'
+    track_title:'Track Your Ride', loading:'Loading...',
+    err_title:'Ride Not Found', err_sub:'Check the tracking code and try again.', err_back:'Back Home',
+    st_search:'Searching', st_accept:'Accepted', st_enroute:'En Route', st_arrive:'Arriving', st_done:'Done',
+    distance:'Distance', time:'Time', price:'Price (HTG)',
+    share:'Share', call:'Call Driver',
+    share_msg:'I\'m on a MsouWout ride! Track me here:',
+    sb_text:'Family Safety active', sb_contacts:'Contacts',
+    dev_warn:'Driver has deviated from route',
+    sos_btn:'Family Safety', sos_hold:'Hold 3s', safe_btn:'I\'m Safe',
+    l1_title:'Do you need help?', l1_sub:'If you don\'t cancel in 10 seconds, a silent alert will be sent to your trusted contacts and security team.',
+    l1_cancel:'No, I\'m Fine', l1_silent:'Send silent alert now',
+    l2_title:'Silent Alert Active', l2_sub:'Your GPS is being shared securely. No one can see this on your screen.',
+    l2_gps:'Live GPS shared with your trusted contacts', l2_driver:'Driver info and plate sent',
+    l2_monitor:'Ride monitored by security team', l2_audio:'Audio recording active',
+    l2_stealth:'Stealth Mode', l2_escalate:'Escalate', l2_safe:'I\'m Safe',
+    l3_title:'EMERGENCY ESCALATED', l3_sub:'All safety systems active. Help is on the way.',
+    l3_gps:'GPS sharing live', l3_contacts:'Trusted contacts notified',
+    l3_drivers:'Nearby drivers alerted', l3_recording:'Audio recording',
+    l3_security:'Security team', l3_active:'ACTIVE', l3_sent:'SENT', l3_responding:'RESPONDING',
+    l3_safe:'I\'m Safe — Close Alert',
+    ct_title:'Your Trusted Contacts', ct_sub:'These people will be alerted when you activate SOS. Maximum 5.',
+    ct_add:'Add Contact', ct_close:'Close',
+    ride_done:'Ride Complete!', ride_done_sub:'Thank you for riding with MsouWout.',
+    ride_cancel:'Ride Cancelled', ride_cancel_sub:'This ride was cancelled.',
+    ride_emer:'Emergency Active', ride_emer_sub:'Security team is responding.'
   },
   es: {
-    track_title: 'Seguir Tu Viaje', loading: 'Cargando...',
-    err_title: 'Viaje No Encontrado', err_sub: 'Verifica el codigo de seguimiento e intenta de nuevo.', err_back: 'Volver al Inicio',
-    st_search: 'Buscando', st_accept: 'Aceptado', st_enroute: 'En camino', st_arrive: 'Llegando', st_done: 'Listo',
-    distance: 'Distancia', time: 'Tiempo', price: 'Precio (HTG)',
-    share: 'Compartir', call: 'Llamar',
-    sos_sent: 'SOS ENVIADO!', sos_sent_sub: 'Nuestro equipo de seguridad recibio tu alerta. Mantente tranquilo, alguien respondera pronto.',
-    sos_close: 'Cerrar', sos_confirm_title: 'Enviar SOS?', sos_confirm_sub: 'Esto enviara una alerta de emergencia al equipo de seguridad de MsouWout.',
-    cancel: 'Cancelar', sos_send: 'Enviar SOS',
-    ride_done: 'Viaje Completado!', ride_done_sub: 'Gracias por confiar en MsouWout.',
-    ride_cancel: 'Viaje Cancelado', ride_cancel_sub: 'Este viaje fue cancelado.',
-    ride_emer: 'Emergencia Activa', ride_emer_sub: 'El equipo de seguridad esta respondiendo.',
-    share_msg: 'Estoy en un viaje MsouWout! Sigueme aqui:'
+    track_title:'Seguir Tu Viaje', loading:'Cargando...',
+    err_title:'Viaje No Encontrado', err_sub:'Verifica el codigo y reintenta.', err_back:'Volver al Inicio',
+    st_search:'Buscando', st_accept:'Aceptado', st_enroute:'En camino', st_arrive:'Llegando', st_done:'Listo',
+    distance:'Distancia', time:'Tiempo', price:'Precio (HTG)',
+    share:'Compartir', call:'Llamar',
+    share_msg:'Estoy en un viaje MsouWout! Sigueme aqui:',
+    sb_text:'Seguridad Familiar activa', sb_contacts:'Contactos',
+    dev_warn:'El conductor se desvio de la ruta',
+    sos_btn:'Seguridad Familiar', sos_hold:'Mantener 3s', safe_btn:'Estoy Bien',
+    l1_title:'Necesitas ayuda?', l1_sub:'Si no cancelas en 10 segundos, se enviara una alerta silenciosa a tus contactos de confianza.',
+    l1_cancel:'No, Estoy Bien', l1_silent:'Enviar alerta silenciosa ahora',
+    l2_title:'Alerta Silenciosa Activa', l2_sub:'Tu GPS se comparte de forma segura. Nadie puede ver esto en tu pantalla.',
+    l2_gps:'GPS en vivo compartido con tus contactos', l2_driver:'Info del conductor y placa enviados',
+    l2_monitor:'Viaje monitoreado por equipo de seguridad', l2_audio:'Grabacion de audio activa',
+    l2_stealth:'Modo Discreto', l2_escalate:'Escalar', l2_safe:'Estoy Bien',
+    l3_title:'EMERGENCIA ESCALADA', l3_sub:'Todos los sistemas de seguridad activos. La ayuda esta en camino.',
+    l3_gps:'GPS compartiendo en vivo', l3_contacts:'Contactos de confianza notificados',
+    l3_drivers:'Conductores cercanos alertados', l3_recording:'Grabacion de audio',
+    l3_security:'Equipo de seguridad', l3_active:'ACTIVO', l3_sent:'ENVIADO', l3_responding:'RESPONDIENDO',
+    l3_safe:'Estoy Bien — Cerrar Alerta',
+    ct_title:'Tus Contactos de Confianza', ct_sub:'Estas personas seran alertadas cuando actives SOS. Maximo 5.',
+    ct_add:'Agregar Contacto', ct_close:'Cerrar',
+    ride_done:'Viaje Completado!', ride_done_sub:'Gracias por confiar en MsouWout.',
+    ride_cancel:'Viaje Cancelado', ride_cancel_sub:'Este viaje fue cancelado.',
+    ride_emer:'Emergencia Activa', ride_emer_sub:'El equipo de seguridad responde.'
   }
 };
 
@@ -475,6 +723,15 @@ let map, pickupMarker, dropoffMarker, driverMarker, routeLine;
 let rideData = null;
 let pollTimer = null;
 let rideCode = '';
+let sosLevel = 0;
+let sosHoldTimer = null;
+let sosCountdown = null;
+let audioRecorder = null;
+let audioChunks = [];
+let checkpointTimer = null;
+let currentAlertId = null;
+
+function t(k) { return (I18N[lang] || I18N.ht)[k] || k; }
 
 function setLang(l) {
   lang = l;
@@ -490,19 +747,17 @@ function getParam() {
   return p.get('code') || p.get('id') || '';
 }
 
+function getRiderPhone() {
+  return rideData && rideData.rider ? rideData.rider.phone : localStorage.getItem('msw_phone') || '';
+}
+
+// ==================== MAP ====================
+
 function initMap() {
-  map = L.map('map', {
-    zoomControl: false,
-    attributionControl: false
-  }).setView([18.54, -72.34], 13);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19
-  }).addTo(map);
-
+  map = L.map('map', { zoomControl: false, attributionControl: false }).setView([18.54, -72.34], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
   L.control.attribution({ position: 'bottomleft', prefix: false })
-    .addAttribution('&copy; <a href="https://openstreetmap.org">OSM</a>')
-    .addTo(map);
+    .addAttribution('&copy; <a href="https://openstreetmap.org">OSM</a>').addTo(map);
 }
 
 function createIcon(cls) {
@@ -511,26 +766,18 @@ function createIcon(cls) {
 
 function updateMap(data) {
   if (!data.pickup) return;
-
   if (!pickupMarker) {
-    pickupMarker = L.marker([data.pickup.lat, data.pickup.lng], {
-      icon: createIcon('pickup-icon')
-    }).addTo(map).bindTooltip('Pickup', { permanent: false, direction: 'top' });
+    pickupMarker = L.marker([data.pickup.lat, data.pickup.lng], { icon: createIcon('pickup-icon') }).addTo(map);
   }
-
   if (!dropoffMarker && data.dropoff) {
-    dropoffMarker = L.marker([data.dropoff.lat, data.dropoff.lng], {
-      icon: createIcon('dropoff-icon')
-    }).addTo(map).bindTooltip('Dropoff', { permanent: false, direction: 'top' });
+    dropoffMarker = L.marker([data.dropoff.lat, data.dropoff.lng], { icon: createIcon('dropoff-icon') }).addTo(map);
   }
-
   if (!routeLine && data.pickup && data.dropoff) {
     routeLine = L.polyline(
       [[data.pickup.lat, data.pickup.lng], [data.dropoff.lat, data.dropoff.lng]],
       { color: '#00209F', weight: 3, dashArray: '8,8', opacity: 0.6 }
     ).addTo(map);
   }
-
   if (data.driver && data.driver.lat && data.driver.lng) {
     if (!driverMarker) {
       driverMarker = L.marker([data.driver.lat, data.driver.lng], {
@@ -549,12 +796,13 @@ function updateMap(data) {
   }
 }
 
+// ==================== STATUS ====================
+
 const STATUS_ORDER = ['searching', 'accepted', 'in_progress', 'arriving', 'completed'];
 
 function updateStatus(status) {
   const steps = document.querySelectorAll('.status-step');
   const idx = STATUS_ORDER.indexOf(status);
-
   steps.forEach((step, i) => {
     step.classList.remove('done', 'active-step');
     if (i < idx) step.classList.add('done');
@@ -564,33 +812,20 @@ function updateStatus(status) {
 
 function updateUI(data) {
   rideData = data;
-
   document.getElementById('topCode').textContent = data.tracking_code || '---';
-
-  if (data.distance_km != null) {
-    document.getElementById('statDist').textContent = data.distance_km.toFixed(1) + ' km';
-  }
-  if (data.duration_min != null) {
-    document.getElementById('statTime').textContent = data.duration_min + ' min';
-  }
-  if (data.price != null) {
-    document.getElementById('statPrice').textContent = data.price + ' HTG';
-  }
+  if (data.distance_km != null) document.getElementById('statDist').textContent = data.distance_km.toFixed(1) + ' km';
+  if (data.duration_min != null) document.getElementById('statTime').textContent = data.duration_min + ' min';
+  if (data.price != null) document.getElementById('statPrice').textContent = data.price + ' HTG';
 
   const driverCard = document.getElementById('driverCard');
   if (data.driver) {
     driverCard.classList.remove('hidden');
     const avatar = document.getElementById('driverAvatar');
-    if (data.driver.photo) {
-      avatar.innerHTML = '<img src="' + data.driver.photo + '" alt="">';
-    } else {
-      avatar.textContent = (data.driver.name || '?')[0].toUpperCase();
-    }
+    if (data.driver.photo) avatar.innerHTML = '<img src="' + data.driver.photo + '" alt="">';
+    else avatar.textContent = (data.driver.name || '?')[0].toUpperCase();
     document.getElementById('driverName').textContent = data.driver.name || '---';
-    const vType = data.driver.vehicle_type === 'car' ? 'Machin' : 'Moto';
-    document.getElementById('driverVehicle').textContent = vType;
+    document.getElementById('driverVehicle').textContent = data.driver.vehicle_type === 'car' ? 'Machin' : 'Moto';
     document.getElementById('driverPlate').textContent = data.driver.license_plate || '';
-
     const callBtn = document.getElementById('callBtn');
     if (data.driver.phone) {
       callBtn.classList.remove('disabled');
@@ -603,40 +838,43 @@ function updateUI(data) {
   const status = data.status;
   updateStatus(status);
 
-  const sheet = document.getElementById('sheet');
-  const rideDetails = document.getElementById('rideDetails');
-  const actionBtns = document.getElementById('actionBtns');
-  const driverCardEl = document.getElementById('driverCard');
-
   document.getElementById('endCompleted').classList.remove('show');
   document.getElementById('endCancelled').classList.remove('show');
   document.getElementById('endEmergency').classList.remove('show');
 
   if (status === 'completed') {
-    rideDetails.style.display = 'none';
-    actionBtns.style.display = 'none';
-    driverCardEl.classList.add('hidden');
+    hideActiveElements();
     document.getElementById('endCompleted').classList.add('show');
     document.getElementById('endPrice').textContent = (data.price || '--') + ' HTG';
     stopPolling();
   } else if (status === 'cancelled') {
-    rideDetails.style.display = 'none';
-    actionBtns.style.display = 'none';
-    driverCardEl.classList.add('hidden');
+    hideActiveElements();
     document.getElementById('endCancelled').classList.add('show');
     stopPolling();
   } else if (status === 'emergency') {
-    rideDetails.style.display = 'none';
-    actionBtns.style.display = 'none';
-    document.getElementById('endEmergency').classList.add('show');
-    stopPolling();
+    document.getElementById('rideDetails').style.display = '';
+    document.getElementById('actionBtns').style.display = '';
+    document.getElementById('safetyBtns').style.display = '';
+    document.getElementById('safeBtn').classList.add('show');
   } else {
-    rideDetails.style.display = '';
-    actionBtns.style.display = '';
+    document.getElementById('rideDetails').style.display = '';
+    document.getElementById('actionBtns').style.display = '';
+    document.getElementById('safetyBtns').style.display = '';
   }
 
   updateMap(data);
 }
+
+function hideActiveElements() {
+  document.getElementById('rideDetails').style.display = 'none';
+  document.getElementById('actionBtns').style.display = 'none';
+  document.getElementById('safetyBtns').style.display = 'none';
+  document.getElementById('driverCard').classList.add('hidden');
+  document.getElementById('safetyBadge').style.display = 'none';
+  document.getElementById('deviationBanner').classList.remove('show');
+}
+
+// ==================== POLLING ====================
 
 async function fetchRide() {
   try {
@@ -646,24 +884,27 @@ async function fetchRide() {
     document.getElementById('loadingScreen').classList.add('hide');
     updateUI(data);
     return true;
-  } catch (e) {
-    return false;
-  }
+  } catch (e) { return false; }
 }
 
 function startPolling() {
   stopPolling();
-  pollTimer = setInterval(fetchRide, 5000);
+  pollTimer = setInterval(async () => {
+    await fetchRide();
+    if (rideData && rideData.status === 'in_progress') sendCheckpoint();
+  }, 5000);
 }
 
 function stopPolling() {
   if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
 }
 
+// ==================== SHARE / CALL ====================
+
 function shareRide() {
   const code = rideData ? rideData.tracking_code : rideCode;
   const url = SITE + '/track.html?code=' + encodeURIComponent(code);
-  const msg = (I18N[lang] || I18N.ht).share_msg + ' ' + url;
+  const msg = t('share_msg') + ' ' + url;
   window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
 }
 
@@ -673,40 +914,283 @@ function callDriver() {
   }
 }
 
-function showConfirm() {
-  document.getElementById('confirmOverlay').classList.add('show');
+// ==================== SOS 3-LEVEL SYSTEM ====================
+
+function sosDown(e) {
+  e.preventDefault();
+  const btn = document.getElementById('sosBtn');
+  btn.classList.add('holding');
+  sosHoldTimer = setTimeout(() => {
+    btn.classList.remove('holding');
+    triggerL1();
+  }, 3000);
 }
 
-function closeConfirm() {
-  document.getElementById('confirmOverlay').classList.remove('show');
+function sosUp() {
+  const btn = document.getElementById('sosBtn');
+  btn.classList.remove('holding');
+  if (sosHoldTimer) { clearTimeout(sosHoldTimer); sosHoldTimer = null; }
 }
 
-async function sendSOS() {
-  closeConfirm();
-  let lat = null, lng = null;
+function triggerL1() {
+  sosLevel = 1;
+  document.getElementById('sosL1').classList.add('show');
+  let count = 10;
+  document.getElementById('l1Count').textContent = count;
+  sosCountdown = setInterval(() => {
+    count--;
+    document.getElementById('l1Count').textContent = count;
+    if (count <= 0) {
+      clearInterval(sosCountdown);
+      sosCountdown = null;
+      triggerSilent();
+    }
+  }, 1000);
+}
 
+function cancelSOS() {
+  if (sosCountdown) { clearInterval(sosCountdown); sosCountdown = null; }
+  sosLevel = 0;
+  document.getElementById('sosL1').classList.remove('show');
+}
+
+function triggerSilentNow() {
+  if (sosCountdown) { clearInterval(sosCountdown); sosCountdown = null; }
+  triggerSilent();
+}
+
+async function triggerSilent() {
+  sosLevel = 2;
+  document.getElementById('sosL1').classList.remove('show');
+  document.getElementById('sosL2').classList.add('show');
+  document.getElementById('safeBtn').classList.add('show');
+
+  const coords = await getGPS();
+  const phone = getRiderPhone();
+  const rideId = rideData ? rideData.ride_id : null;
+
+  try {
+    const resp = await fetch(API + '/safety/sos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        phone, name: rideData?.rider?.name || '',
+        lat: coords.lat, lng: coords.lng,
+        ride_id: rideId, level: 'silent', silent: true, trigger_reason: 'manual'
+      })
+    });
+    const data = await resp.json();
+    currentAlertId = data.alert_id;
+    if (data.contacts_to_notify && data.contacts_to_notify.length > 0) {
+      notifyContacts(data.contacts_to_notify, coords);
+    }
+  } catch (e) {}
+
+  startAudioRecording();
+}
+
+async function escalateToL3() {
+  sosLevel = 3;
+  document.getElementById('sosL2').classList.remove('show');
+  document.getElementById('sosL3').classList.add('show');
+
+  const coords = await getGPS();
+  const phone = getRiderPhone();
+  const rideId = rideData ? rideData.ride_id : null;
+
+  try {
+    const resp = await fetch(API + '/safety/sos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        phone, name: rideData?.rider?.name || '',
+        lat: coords.lat, lng: coords.lng,
+        ride_id: rideId, level: 'escalated', silent: false, trigger_reason: 'manual_escalation'
+      })
+    });
+    const data = await resp.json();
+    currentAlertId = data.alert_id;
+  } catch (e) {}
+}
+
+async function confirmSafe() {
+  const phone = getRiderPhone();
+  const rideId = rideData ? rideData.ride_id : null;
+
+  try {
+    await fetch(API + '/safety/safe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, ride_id: rideId, alert_id: currentAlertId })
+    });
+  } catch (e) {}
+
+  stopAudioRecording();
+  sosLevel = 0;
+  currentAlertId = null;
+  document.getElementById('sosL1').classList.remove('show');
+  document.getElementById('sosL2').classList.remove('show');
+  document.getElementById('sosL3').classList.remove('show');
+  document.getElementById('safeBtn').classList.remove('show');
+  document.body.classList.remove('stealth');
+}
+
+// ==================== STEALTH MODE ====================
+
+function enterStealth() {
+  document.getElementById('sosL2').classList.remove('show');
+  document.body.classList.add('stealth');
+}
+
+function exitStealth() {
+  document.body.classList.remove('stealth');
+  if (sosLevel >= 2) document.getElementById('sosL2').classList.add('show');
+}
+
+document.addEventListener('click', function(e) {
+  if (document.body.classList.contains('stealth')) {
+    var el = document.getElementById('stealthExit');
+    var rect = el.getBoundingClientRect();
+    if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
+      exitStealth();
+    }
+  }
+});
+
+// ==================== AUDIO RECORDING ====================
+
+async function startAudioRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioRecorder = new MediaRecorder(stream);
+    audioChunks = [];
+    audioRecorder.ondataavailable = function(e) { if (e.data.size > 0) audioChunks.push(e.data); };
+    audioRecorder.start(5000);
+  } catch (e) {}
+}
+
+function stopAudioRecording() {
+  if (audioRecorder && audioRecorder.state !== 'inactive') {
+    audioRecorder.stop();
+    audioRecorder.stream.getTracks().forEach(t => t.stop());
+    audioRecorder = null;
+  }
+}
+
+// ==================== GPS ====================
+
+async function getGPS() {
   try {
     const pos = await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 8000, enableHighAccuracy: true });
     });
-    lat = pos.coords.latitude;
-    lng = pos.coords.longitude;
-  } catch (e) {}
+    return { lat: pos.coords.latitude, lng: pos.coords.longitude };
+  } catch (e) {
+    return { lat: null, lng: null };
+  }
+}
 
-  const id = rideData ? (rideData.ride_id || rideData.id) : rideCode;
-  const phone = rideData && rideData.rider ? rideData.rider.phone : '';
-  const name = rideData && rideData.rider ? rideData.rider.name : '';
+// ==================== ROUTE CHECKPOINTS ====================
 
+async function sendCheckpoint() {
+  if (!rideData || !rideData.ride_id) return;
+  const coords = await getGPS();
+  if (!coords.lat) return;
   try {
-    await fetch(API + '/rides/' + encodeURIComponent(id) + '/emergency', {
+    const resp = await fetch(API + '/safety/checkpoint', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ lat, lng, phone, name })
+      body: JSON.stringify({ ride_id: rideData.ride_id, lat: coords.lat, lng: coords.lng })
     });
+    const data = await resp.json();
+    if (data.deviation) {
+      document.getElementById('deviationBanner').classList.add('show');
+      if (sosLevel < 2) triggerL1();
+    }
   } catch (e) {}
-
-  document.getElementById('sosOverlay').classList.add('show');
 }
+
+// ==================== NOTIFY CONTACTS ====================
+
+function notifyContacts(contacts, coords) {
+  const code = rideData ? rideData.tracking_code : rideCode;
+  const url = SITE + '/track.html?code=' + encodeURIComponent(code);
+  const driverInfo = rideData && rideData.driver
+    ? '\nChofe: ' + rideData.driver.name + ' | ' + (rideData.driver.license_plate || '')
+    : '';
+  const mapLink = coords.lat ? '\nGPS: https://maps.google.com/?q=' + coords.lat + ',' + coords.lng : '';
+
+  contacts.forEach(c => {
+    const msg = 'ALET SEKIRITE MsouWout!\n'
+      + (rideData?.rider?.name || '') + ' bezwen ed.'
+      + driverInfo + mapLink
+      + '\nSwiv kous la: ' + url;
+    window.open('https://wa.me/' + c.phone.replace(/[^0-9]/g, '') + '?text=' + encodeURIComponent(msg), '_blank');
+  });
+}
+
+// ==================== TRUSTED CONTACTS ====================
+
+function openContacts() {
+  document.getElementById('contactsPanel').classList.add('show');
+  loadContacts();
+}
+
+function closeContacts() {
+  document.getElementById('contactsPanel').classList.remove('show');
+}
+
+async function loadContacts() {
+  const phone = getRiderPhone();
+  if (!phone) { document.getElementById('contactsList').innerHTML = '<p style="font-size:.75rem;color:#8A95AA;padding:12px 0">Konekte pou jere kontak ou yo.</p>'; return; }
+  try {
+    const resp = await fetch(API + '/safety/contacts/' + encodeURIComponent(phone));
+    const contacts = await resp.json();
+    const list = document.getElementById('contactsList');
+    if (contacts.length === 0) {
+      list.innerHTML = '<p style="font-size:.75rem;color:#8A95AA;padding:12px 0">Pa gen kontak anko. Ajoute premye kontak konfyans ou.</p>';
+      return;
+    }
+    list.innerHTML = contacts.map(c =>
+      '<div class="contact-item">'
+      + '<div class="contact-avatar">' + (c.contact_name || '?')[0].toUpperCase() + '</div>'
+      + '<div class="contact-info"><div class="contact-name">' + (c.contact_name || c.contact_phone)
+      + '<span class="contact-rel">' + (c.relationship || 'family') + '</span></div>'
+      + '<div class="contact-phone">' + c.contact_phone + '</div></div>'
+      + '<button class="contact-del" onclick="delContact(\'' + c.id + '\')">X</button>'
+      + '</div>'
+    ).join('');
+  } catch (e) {
+    document.getElementById('contactsList').innerHTML = '<p style="font-size:.75rem;color:#D21034;">Ere chaje kontak yo.</p>';
+  }
+}
+
+async function addContact() {
+  const phone = getRiderPhone();
+  const name = document.getElementById('ctName').value.trim();
+  const cPhone = document.getElementById('ctPhone').value.trim();
+  const rel = document.getElementById('ctRel').value;
+  if (!cPhone) return;
+  try {
+    await fetch(API + '/safety/contacts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, contact_name: name, contact_phone: cPhone, relationship: rel })
+    });
+    document.getElementById('ctName').value = '';
+    document.getElementById('ctPhone').value = '';
+    loadContacts();
+  } catch (e) {}
+}
+
+async function delContact(id) {
+  try {
+    await fetch(API + '/safety/contacts/' + id, { method: 'DELETE' });
+    loadContacts();
+  } catch (e) {}
+}
+
+// ==================== INIT ====================
 
 async function init() {
   rideCode = getParam();
@@ -717,7 +1201,6 @@ async function init() {
   }
 
   initMap();
-
   const ok = await fetchRide();
   if (!ok) {
     document.getElementById('loadingScreen').classList.add('hide');
@@ -726,7 +1209,7 @@ async function init() {
   }
 
   const status = rideData ? rideData.status : '';
-  if (!['completed', 'cancelled', 'emergency'].includes(status)) {
+  if (!['completed', 'cancelled'].includes(status)) {
     startPolling();
   }
 }
