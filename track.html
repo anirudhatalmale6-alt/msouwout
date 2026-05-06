@@ -182,6 +182,41 @@ body.stealth .lang-sw button.active{color:#333;background:#eee}
 }
 .deviation-banner.show{display:flex}
 
+/* BATTERY WARNING */
+.battery-banner{
+  display:none;margin:0 16px 6px;padding:8px 12px;border-radius:10px;
+  background:rgba(210,16,52,.08);border:1px solid rgba(210,16,52,.2);
+  font-size:.68rem;font-weight:600;color:var(--red);
+  align-items:center;gap:6px;
+}
+.battery-banner.show{display:flex}
+
+/* OFFLINE BANNER */
+.offline-banner{
+  display:none;position:fixed;top:46px;left:0;right:0;z-index:510;
+  background:var(--red);color:#fff;text-align:center;
+  padding:6px;font-size:.68rem;font-weight:700;
+}
+.offline-banner.show{display:block}
+
+/* SAFETY CHECK POPUP */
+.safety-check{
+  position:fixed;inset:0;z-index:560;background:rgba(0,0,0,.7);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.safety-check.show{display:flex}
+.safety-check-box{
+  background:#fff;border-radius:18px;padding:28px;text-align:center;
+  max-width:300px;width:100%;box-shadow:0 16px 48px rgba(0,0,0,.25);
+}
+.sc-icon{font-size:2.5rem;margin-bottom:10px}
+.sc-title{font-size:.95rem;font-weight:800;margin-bottom:6px}
+.sc-sub{font-size:.75rem;color:var(--text-light);margin-bottom:18px;line-height:1.4}
+.sc-btns{display:flex;gap:8px}
+.sc-btns button{flex:1;padding:12px;border-radius:12px;font-size:.78rem;font-weight:700}
+.sc-safe{background:var(--green);color:#fff}
+.sc-help{background:var(--red);color:#fff}
+
 /* SOS LEVEL 1 — WARNING SCREEN */
 .sos-l1{
   position:fixed;inset:0;z-index:600;
@@ -473,6 +508,22 @@ body.stealth .stealth-exit{display:block}
   <button class="sos-l3-safe" onclick="confirmSafe()" data-i18n="l3_safe">Mwen Anfom — Femen Alet</button>
 </div>
 
+<!-- OFFLINE BANNER -->
+<div class="offline-banner" id="offlineBanner" data-i18n="offline">Pa gen koneksyon entenet. Dènye pozisyon GPS sove.</div>
+
+<!-- SAFETY CHECK POPUP -->
+<div class="safety-check" id="safetyCheck">
+  <div class="safety-check-box">
+    <div class="sc-icon">&#128737;</div>
+    <div class="sc-title" data-i18n="sc_title">Ou anfom?</div>
+    <div class="sc-sub" data-i18n="sc_sub">MsouWout ap verifye sekirite ou. Tanpri konfime ou anfom.</div>
+    <div class="sc-btns">
+      <button class="sc-safe" onclick="safetyCheckOK()" data-i18n="sc_safe">Wi, Mwen Anfom</button>
+      <button class="sc-help" onclick="safetyCheckHelp()" data-i18n="sc_help">Bezwen Ed</button>
+    </div>
+  </div>
+</div>
+
 <!-- STEALTH FAKE SCREEN -->
 <div class="stealth-fake" id="stealthFake">
   <h2>Nouvèl Ayiti</h2>
@@ -538,6 +589,12 @@ body.stealth .stealth-exit{display:block}
       <span class="safety-badge-icon">&#128737;</span>
       <span class="safety-badge-text" data-i18n="sb_text">Sekirite Fanmi aktif</span>
       <button class="safety-badge-btn" onclick="openContacts()" data-i18n="sb_contacts">Kontak</button>
+    </div>
+
+    <!-- BATTERY WARNING -->
+    <div class="battery-banner" id="batteryBanner">
+      <span>&#128267;</span>
+      <span data-i18n="batt_warn">Batri feb. GPS ap sove dènye pozisyon ou.</span>
     </div>
 
     <!-- ROUTE DEVIATION WARNING -->
@@ -633,7 +690,11 @@ const I18N = {
     ct_add:'Ajoute Kontak', ct_close:'Femen',
     ride_done:'Kous Fini!', ride_done_sub:'Mesi pou konfyans ou nan MsouWout.',
     ride_cancel:'Kous Anile', ride_cancel_sub:'Kous sa a te anile.',
-    ride_emer:'Ijans Aktif', ride_emer_sub:'Ekip sekirite ap reponn.'
+    ride_emer:'Ijans Aktif', ride_emer_sub:'Ekip sekirite ap reponn.',
+    offline:'Pa gen koneksyon entenet. Denye pozisyon GPS sove.',
+    batt_warn:'Batri feb. GPS ap sove denye pozisyon ou.',
+    sc_title:'Ou anfom?', sc_sub:'MsouWout ap verifye sekirite ou. Tanpri konfime ou anfom.',
+    sc_safe:'Wi, Mwen Anfom', sc_help:'Bezwen Ed'
   },
   fr: {
     track_title:'Suivre Ma Course', loading:'Chargement...',
@@ -660,7 +721,11 @@ const I18N = {
     ct_add:'Ajouter Contact', ct_close:'Fermer',
     ride_done:'Course Terminee!', ride_done_sub:'Merci pour votre confiance.',
     ride_cancel:'Course Annulee', ride_cancel_sub:'Cette course a ete annulee.',
-    ride_emer:'Urgence Active', ride_emer_sub:'L\'equipe de securite repond.'
+    ride_emer:'Urgence Active', ride_emer_sub:'L\'equipe de securite repond.',
+    offline:'Pas de connexion internet. Derniere position GPS sauvegardee.',
+    batt_warn:'Batterie faible. GPS sauvegarde votre derniere position.',
+    sc_title:'Vous allez bien?', sc_sub:'MsouWout verifie votre securite. Confirmez que vous allez bien.',
+    sc_safe:'Oui, Je Vais Bien', sc_help:'Besoin d\'Aide'
   },
   en: {
     track_title:'Track Your Ride', loading:'Loading...',
@@ -687,7 +752,11 @@ const I18N = {
     ct_add:'Add Contact', ct_close:'Close',
     ride_done:'Ride Complete!', ride_done_sub:'Thank you for riding with MsouWout.',
     ride_cancel:'Ride Cancelled', ride_cancel_sub:'This ride was cancelled.',
-    ride_emer:'Emergency Active', ride_emer_sub:'Security team is responding.'
+    ride_emer:'Emergency Active', ride_emer_sub:'Security team is responding.',
+    offline:'No internet connection. Last GPS position saved.',
+    batt_warn:'Low battery. GPS saving your last position.',
+    sc_title:'Are you okay?', sc_sub:'MsouWout is checking your safety. Please confirm you are okay.',
+    sc_safe:'Yes, I\'m Fine', sc_help:'Need Help'
   },
   es: {
     track_title:'Seguir Tu Viaje', loading:'Cargando...',
@@ -714,7 +783,11 @@ const I18N = {
     ct_add:'Agregar Contacto', ct_close:'Cerrar',
     ride_done:'Viaje Completado!', ride_done_sub:'Gracias por confiar en MsouWout.',
     ride_cancel:'Viaje Cancelado', ride_cancel_sub:'Este viaje fue cancelado.',
-    ride_emer:'Emergencia Activa', ride_emer_sub:'El equipo de seguridad responde.'
+    ride_emer:'Emergencia Activa', ride_emer_sub:'El equipo de seguridad responde.',
+    offline:'Sin conexion a internet. Ultima posicion GPS guardada.',
+    batt_warn:'Bateria baja. GPS guardando tu ultima posicion.',
+    sc_title:'Estas bien?', sc_sub:'MsouWout verifica tu seguridad. Confirma que estas bien.',
+    sc_safe:'Si, Estoy Bien', sc_help:'Necesito Ayuda'
   }
 };
 
@@ -1190,6 +1263,153 @@ async function delContact(id) {
   } catch (e) {}
 }
 
+// ==================== BATTERY MONITORING ====================
+
+let batteryLevel = 100;
+let batteryCharging = true;
+
+async function initBattery() {
+  if (!navigator.getBattery) return;
+  try {
+    const batt = await navigator.getBattery();
+    function update() {
+      batteryLevel = Math.round(batt.level * 100);
+      batteryCharging = batt.charging;
+      const banner = document.getElementById('batteryBanner');
+      if (batteryLevel <= 15 && !batteryCharging) {
+        banner.classList.add('show');
+        saveLastKnownGPS();
+      } else {
+        banner.classList.remove('show');
+      }
+      if (batteryLevel <= 5 && !batteryCharging && sosLevel === 0 && rideData && rideData.status === 'in_progress') {
+        sendCheckpoint();
+        saveLastKnownGPS();
+      }
+    }
+    batt.addEventListener('levelchange', update);
+    batt.addEventListener('chargingchange', update);
+    update();
+  } catch (e) {}
+}
+
+// ==================== DISCONNECT / RECONNECT ====================
+
+let isOnline = navigator.onLine;
+
+function initConnectivity() {
+  window.addEventListener('online', function() {
+    isOnline = true;
+    document.getElementById('offlineBanner').classList.remove('show');
+    if (rideData && !['completed', 'cancelled'].includes(rideData.status)) {
+      fetchRide();
+      if (!pollTimer) startPolling();
+    }
+  });
+  window.addEventListener('offline', function() {
+    isOnline = false;
+    document.getElementById('offlineBanner').classList.add('show');
+    saveLastKnownGPS();
+    stopPolling();
+  });
+}
+
+// ==================== LAST KNOWN GPS STORAGE ====================
+
+function saveLastKnownGPS() {
+  if (rideData) {
+    const data = {
+      ride_id: rideData.ride_id,
+      tracking_code: rideData.tracking_code,
+      rider_phone: rideData.rider ? rideData.rider.phone : '',
+      timestamp: new Date().toISOString()
+    };
+    if (rideData.driver && rideData.driver.lat) {
+      data.driver_lat = rideData.driver.lat;
+      data.driver_lng = rideData.driver.lng;
+    }
+    localStorage.setItem('msw_last_gps', JSON.stringify(data));
+  }
+  getGPS().then(function(coords) {
+    if (coords.lat) {
+      localStorage.setItem('msw_rider_last_lat', coords.lat);
+      localStorage.setItem('msw_rider_last_lng', coords.lng);
+      localStorage.setItem('msw_rider_last_time', new Date().toISOString());
+    }
+  });
+}
+
+// ==================== PASSENGER SAFETY CHECK ====================
+
+let safetyCheckTimer = null;
+let safetyCheckMissed = 0;
+
+function startSafetyChecks() {
+  stopSafetyChecks();
+  safetyCheckTimer = setInterval(function() {
+    if (!rideData || rideData.status !== 'in_progress') return;
+    if (sosLevel > 0) return;
+    document.getElementById('safetyCheck').classList.add('show');
+    setTimeout(function() {
+      if (document.getElementById('safetyCheck').classList.contains('show')) {
+        safetyCheckMissed++;
+        document.getElementById('safetyCheck').classList.remove('show');
+        if (safetyCheckMissed >= 2) {
+          triggerL1();
+          safetyCheckMissed = 0;
+        }
+      }
+    }, 30000);
+  }, 300000);
+}
+
+function stopSafetyChecks() {
+  if (safetyCheckTimer) { clearInterval(safetyCheckTimer); safetyCheckTimer = null; }
+  safetyCheckMissed = 0;
+}
+
+function safetyCheckOK() {
+  document.getElementById('safetyCheck').classList.remove('show');
+  safetyCheckMissed = 0;
+}
+
+function safetyCheckHelp() {
+  document.getElementById('safetyCheck').classList.remove('show');
+  triggerL1();
+}
+
+// ==================== ESCALATION TIMERS ====================
+
+let escalationTimer = null;
+
+function startEscalationTimer() {
+  stopEscalationTimer();
+  escalationTimer = setTimeout(function() {
+    if (sosLevel === 2) {
+      escalateToL3();
+    }
+  }, 300000);
+}
+
+function stopEscalationTimer() {
+  if (escalationTimer) { clearTimeout(escalationTimer); escalationTimer = null; }
+}
+
+// ==================== AUTO GPS REQUEST ====================
+
+function requestGPSPermission() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      localStorage.setItem('msw_rider_last_lat', pos.coords.latitude);
+      localStorage.setItem('msw_rider_last_lng', pos.coords.longitude);
+      localStorage.setItem('msw_rider_last_time', new Date().toISOString());
+    },
+    function(err) {},
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 }
+  );
+}
+
 // ==================== INIT ====================
 
 async function init() {
@@ -1201,6 +1421,10 @@ async function init() {
   }
 
   initMap();
+  initConnectivity();
+  requestGPSPermission();
+  initBattery();
+
   const ok = await fetchRide();
   if (!ok) {
     document.getElementById('loadingScreen').classList.add('hide');
@@ -1211,8 +1435,24 @@ async function init() {
   const status = rideData ? rideData.status : '';
   if (!['completed', 'cancelled'].includes(status)) {
     startPolling();
+    if (status === 'in_progress') startSafetyChecks();
   }
 }
+
+// Hook escalation timer into triggerSilent
+const _origTriggerSilent = triggerSilent;
+triggerSilent = async function() {
+  await _origTriggerSilent();
+  startEscalationTimer();
+};
+
+// Hook confirmSafe to stop timers
+const _origConfirmSafe = confirmSafe;
+confirmSafe = async function() {
+  stopEscalationTimer();
+  stopSafetyChecks();
+  await _origConfirmSafe();
+};
 
 init();
 </script>

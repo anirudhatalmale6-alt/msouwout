@@ -636,7 +636,8 @@ var T={
     gps_unavail:'GPS pa disponib',
     gps_found:'Pozisyon jwenn!',
     gps_found_short:'GPS jwenn!',
-    gps_denied:'Pèmisyon GPS refize',
+    gps_denied:'Pemisyon GPS refize',
+    gps_turn_on:'Aktive lokalizasyon ou',
     gps_error:'Pa ka jwenn pozisyon',
     wa_msg_prefix:'Bonjou, mwen mande yon',
     wa_msg_from:'de',
@@ -707,7 +708,8 @@ var T={
     gps_unavail:'GPS non disponible',
     gps_found:'Position trouvée !',
     gps_found_short:'GPS trouvé !',
-    gps_denied:'Permission GPS refusée',
+    gps_denied:'Permission GPS refusee',
+    gps_turn_on:'Activez votre localisation',
     gps_error:'Impossible de trouver la position',
     wa_msg_prefix:'Bonjour, je demande un(e)',
     wa_msg_from:'de',
@@ -779,6 +781,7 @@ var T={
     gps_found:'Location found!',
     gps_found_short:'GPS found!',
     gps_denied:'GPS permission denied',
+    gps_turn_on:'Turn on your location',
     gps_error:'Unable to find location',
     wa_msg_prefix:'Hello, I\'m requesting a',
     wa_msg_from:'from',
@@ -850,7 +853,8 @@ var T={
     gps_found:'¡Ubicación encontrada!',
     gps_found_short:'¡GPS encontrado!',
     gps_denied:'Permiso GPS denegado',
-    gps_error:'No se pudo encontrar la ubicación',
+    gps_turn_on:'Activa tu ubicacion',
+    gps_error:'No se pudo encontrar la ubicacion',
     wa_msg_prefix:'Hola, solicito un(a)',
     wa_msg_from:'de',
     wa_msg_to:'a',
@@ -1131,6 +1135,8 @@ function useMyLocation(){
     var lng=pos.coords.longitude;
     window._pickupLat=lat;
     window._pickupLng=lng;
+    localStorage.setItem('msw_last_lat',lat);
+    localStorage.setItem('msw_last_lng',lng);
     fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json&addressdetails=1')
       .then(function(r){return r.json()})
       .then(function(data){
@@ -1138,6 +1144,7 @@ function useMyLocation(){
         var parts=addr.split(',');
         var short=parts.slice(0,3).join(',').trim();
         document.getElementById('pickup').value=short;
+        localStorage.setItem('msw_last_addr',short);
         checkInputs();
         btn.innerHTML='<span>&#9989;</span> <span>'+t('gps_found')+'</span>';
         btn.style.opacity='1';
@@ -1150,10 +1157,15 @@ function useMyLocation(){
       });
   },function(err){
     btn.style.opacity='1';
-    if(err.code===1) btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_denied')+'</span>';
-    else btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_error')+'</span>';
-    setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span data-i18n="gps_btn">'+t('gps_btn')+'</span>'},3000);
-  },{enableHighAccuracy:true,timeout:10000});
+    if(err.code===1){
+      btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_denied')+'</span>';
+    } else if(err.code===2){
+      btn.innerHTML='<span>&#128205;</span> <span>'+t('gps_turn_on')+'</span>';
+    } else {
+      btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_error')+'</span>';
+    }
+    setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span data-i18n="gps_btn">'+t('gps_btn')+'</span>';btn.style.opacity='1'},4000);
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:60000});
 }
 
 /* SAVE PHONE FOR NEXT TIME */
@@ -1172,16 +1184,17 @@ document.addEventListener('click',function(e){
   }
 });
 
-/* AUTO GPS ON PAGE LOAD */
+/* AUTO GPS ON PAGE LOAD — always try */
 (function(){
-  if(!navigator.geolocation||pickupEl.value.trim()) return;
-  if(navigator.permissions){
-    navigator.permissions.query({name:'geolocation'}).then(function(result){
-      if(result.state==='granted') useMyLocation();
-    }).catch(function(){});
-  } else {
-    useMyLocation();
+  if(!navigator.geolocation) return;
+  var saved=localStorage.getItem('msw_last_lat');
+  if(saved&&!pickupEl.value.trim()){
+    var slat=localStorage.getItem('msw_last_lat');
+    var slng=localStorage.getItem('msw_last_lng');
+    var saddr=localStorage.getItem('msw_last_addr');
+    if(saddr){pickupEl.value=saddr;window._pickupLat=parseFloat(slat);window._pickupLng=parseFloat(slng);checkInputs();}
   }
+  setTimeout(function(){useMyLocation()},500);
 })();
 
 /* APPLY SAVED LANGUAGE */
