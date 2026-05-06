@@ -194,8 +194,16 @@ a{text-decoration:none;color:inherit}
   text-align:center;padding:12px;margin-bottom:16px;
   background:rgba(27,140,61,.06);border-radius:var(--radius);border:1px solid rgba(27,140,61,.15);
 }
+.fare-est.surging{background:rgba(212,160,23,.08);border-color:rgba(212,160,23,.25)}
 .fare-est .fe-price{font-size:1.3rem;font-weight:900;color:var(--green)}
+.fare-est.surging .fe-price{color:#B8860B}
 .fare-est .fe-label{font-size:.72rem;color:var(--text-light)}
+.surge-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:6px}
+.surge-tag{
+  display:inline-flex;align-items:center;gap:3px;font-size:.65rem;font-weight:700;
+  padding:2px 8px;border-radius:100px;background:rgba(212,160,23,.12);color:#8B6914;
+}
+.surge-tag .st-icon{font-size:.75rem}
 
 /* ═══ SIGNUP STEP ═══ */
 .signup-inner{
@@ -474,6 +482,7 @@ a{text-decoration:none;color:inherit}
     <div class="fare-est" id="fareEst">
       <div class="fe-label" data-i18n="est_label">Estimasyon pri</div>
       <div class="fe-price" id="farePrice">~75-150 HTG</div>
+      <div class="surge-tags" id="surgeTags"></div>
     </div>
 
     <div class="opt-label" data-i18n="phone_label">NIMEWO POU KONTAKTE OU</div>
@@ -566,7 +575,7 @@ a{text-decoration:none;color:inherit}
 </div>
 
 <script>
-var API_URL='https://graphs-underlying-charged-appears.trycloudflare.com';
+var API_URL='https://msouwout-backend.onrender.com';
 var vehicleType='moto';
 var timeMode='now';
 var rideData={};
@@ -639,7 +648,11 @@ var T={
     signup_btn:'Enskri e Mande Kous',
     signup_free:'100% gratis — pa gen okenn frè',
     signup_err_name:'Tanpri mete non ou',
-    signup_err_phone:'Tanpri mete nimewo telefon ou'
+    signup_err_phone:'Tanpri mete nimewo telefon ou',
+    surge_peak_traffic:'Trafik wo',
+    surge_night:'Lannwit',
+    surge_rain:'Lapli',
+    surge_demand:'Demand wo'
   },
   fr:{
     main_q:'Trouvez un Trajet <em>en 2 Minutes</em>',
@@ -705,7 +718,11 @@ var T={
     signup_btn:'S\'inscrire et Demander',
     signup_free:'100% gratuit — aucun frais',
     signup_err_name:'Veuillez entrer votre nom',
-    signup_err_phone:'Veuillez entrer votre numéro'
+    signup_err_phone:'Veuillez entrer votre numéro',
+    surge_peak_traffic:'Trafic élevé',
+    surge_night:'Nuit',
+    surge_rain:'Pluie',
+    surge_demand:'Forte demande'
   },
   en:{
     main_q:'Get a Ride <em>in 2 Minutes</em>',
@@ -771,7 +788,11 @@ var T={
     signup_btn:'Sign Up & Request Ride',
     signup_free:'100% free — no charges',
     signup_err_name:'Please enter your name',
-    signup_err_phone:'Please enter your phone number'
+    signup_err_phone:'Please enter your phone number',
+    surge_peak_traffic:'Heavy traffic',
+    surge_night:'Late night',
+    surge_rain:'Rain',
+    surge_demand:'High demand'
   },
   es:{
     main_q:'Consigue un Viaje <em>en 2 Minutos</em>',
@@ -837,7 +858,11 @@ var T={
     signup_btn:'Registrarse y Pedir Viaje',
     signup_free:'100% gratis — sin cargos',
     signup_err_name:'Por favor ingresa tu nombre',
-    signup_err_phone:'Por favor ingresa tu número'
+    signup_err_phone:'Por favor ingresa tu número',
+    surge_peak_traffic:'Tráfico alto',
+    surge_night:'Noche',
+    surge_rain:'Lluvia',
+    surge_demand:'Alta demanda'
   }
 };
 
@@ -923,13 +948,44 @@ function selectTime(mode,el){
   if(mode==='later'){sr.classList.add('show')}else{sr.classList.remove('show')}
 }
 
+var surgeData=null;
+var surgeIcons={peak_traffic:'&#128663;',night:'&#127769;',rain:'&#127783;&#65039;',demand:'&#128293;'};
+
 function updateFare(){
   var base=vehicleType==='car'?150:75;
   var perKm=vehicleType==='car'?75:40;
   var low=base;
   var high=base+perKm*5;
+  var mult=surgeData&&surgeData.multiplier>1?surgeData.multiplier:1;
+  low=Math.round(low*mult);
+  high=Math.round(high*mult);
   document.getElementById('farePrice').textContent='~'+low+'-'+high+' HTG';
+  var fareBox=document.getElementById('fareEst');
+  var tagsEl=document.getElementById('surgeTags');
+  if(surgeData&&surgeData.factors&&surgeData.factors.length>0){
+    fareBox.classList.add('surging');
+    var tags='';
+    surgeData.factors.forEach(function(f){
+      var icon=surgeIcons[f.type]||'&#9889;';
+      var pct=Math.round((f.boost-1)*100);
+      var lbl=t('surge_'+f.type)||f.label;
+      tags+='<span class="surge-tag"><span class="st-icon">'+icon+'</span>'+lbl+' +'+pct+'%</span>';
+    });
+    tagsEl.innerHTML=tags;
+  } else {
+    fareBox.classList.remove('surging');
+    tagsEl.innerHTML='';
+  }
 }
+
+function fetchSurge(){
+  fetch(API_URL+'/api/pricing/surge').then(function(r){return r.json()}).then(function(d){
+    surgeData=d;
+    updateFare();
+  }).catch(function(){});
+}
+fetchSurge();
+setInterval(fetchSurge,300000);
 
 /* STEP 2 — submit ride */
 function submitRide(){
