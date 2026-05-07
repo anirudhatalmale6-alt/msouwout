@@ -246,6 +246,52 @@ nav{
 .ride-status.cancelled{background:#FEE2E2;color:#991B1B}
 .ride-status.accepted{background:#E0E7FF;color:#3730A3}
 
+/* ACTIVE RIDE */
+.active-ride-card{
+  background:var(--white);border-radius:20px;padding:24px;margin-bottom:16px;
+  border:2px solid var(--green);box-shadow:0 8px 32px rgba(34,197,94,.12);
+  animation:fadeUp .5s .08s ease both;
+}
+.active-ride-card.ride-started{border-color:var(--blue);box-shadow:0 8px 32px rgba(0,32,159,.12)}
+.active-ride-card h3{
+  font-family:var(--display);font-size:1.1rem;color:var(--dark);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.ride-info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F1F5F9}
+.ride-info-row:last-child{border-bottom:none}
+.ride-info-label{font-size:.75rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.04em}
+.ride-info-value{font-size:.9rem;font-weight:700;color:var(--dark)}
+.pin-entry{margin-top:20px;padding-top:20px;border-top:2px dashed #e2e8f0;text-align:center}
+.pin-entry-label{font-size:.88rem;font-weight:700;color:var(--dark);margin-bottom:12px}
+.pin-input-ride{
+  width:160px;padding:16px;border:2px solid #e2e8f0;border-radius:14px;
+  text-align:center;font-size:1.8rem;font-weight:900;letter-spacing:.4em;
+  font-family:var(--body);color:var(--dark);outline:none;transition:border-color .2s;
+}
+.pin-input-ride:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(34,197,94,.12)}
+.btn-start-ride{
+  width:100%;padding:16px;border:none;border-radius:14px;margin-top:16px;
+  background:linear-gradient(135deg,var(--green),var(--green-dark));
+  color:#fff;font-size:1rem;font-weight:800;cursor:pointer;
+  font-family:var(--body);transition:all .25s;
+}
+.btn-start-ride:hover{box-shadow:0 8px 28px rgba(34,197,94,.35);transform:translateY(-1px)}
+.btn-start-ride:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-complete-ride{
+  width:100%;padding:16px;border:none;border-radius:14px;margin-top:12px;
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  color:#fff;font-size:1rem;font-weight:800;cursor:pointer;
+  font-family:var(--body);transition:all .25s;
+}
+.btn-complete-ride:hover{box-shadow:0 8px 28px rgba(0,32,159,.35);transform:translateY(-1px)}
+.btn-complete-ride:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+.pin-feedback{
+  border-radius:10px;padding:10px 14px;margin-top:12px;display:none;
+  font-size:.82rem;text-align:center;font-weight:600;
+}
+.pin-feedback.error{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;display:block}
+.pin-feedback.success{background:#DCFCE7;border:1px solid #86EFAC;color:#166534;display:block}
+
 /* FOOTER */
 footer{
   background:var(--blue);color:rgba(255,255,255,.7);text-align:center;
@@ -340,6 +386,20 @@ footer a:hover{text-decoration:underline}
       <button class="btn-logout" onclick="logout()" data-i18n="logout">Dekonekte</button>
     </div>
 
+    <div class="active-ride-card" id="activeRideCard" style="display:none">
+      <h3>&#128994; <span data-i18n="active_ride_title">Kous Aktif</span></h3>
+      <div id="activeRideInfo"></div>
+      <div class="pin-entry" id="pinEntrySection">
+        <div class="pin-entry-label" data-i18n="enter_ride_pin">Mande pasaje a pou PIN nan</div>
+        <input type="tel" maxlength="4" class="pin-input-ride" id="ridePinInput" placeholder="- - - -" inputmode="numeric" pattern="[0-9]*">
+        <div class="pin-feedback" id="pinFeedback"></div>
+        <button class="btn-start-ride" id="btnStartRide" onclick="startRide()" data-i18n="start_ride_btn">Kòmanse Kous</button>
+      </div>
+      <div id="inProgressSection" style="display:none">
+        <button class="btn-complete-ride" id="btnCompleteRide" onclick="completeRide()" data-i18n="complete_ride_btn">Fini Kous</button>
+      </div>
+    </div>
+
     <div class="status-card" id="statusCard">
       <span class="status-badge" id="statusBadge"></span>
       <div class="status-msg" id="statusMsg"></div>
@@ -363,7 +423,7 @@ footer a:hover{text-decoration:underline}
 </footer>
 
 <script>
-const API='https://graphs-underlying-charged-appears.trycloudflare.com';
+const API='https://msouwout-backend.onrender.com';
 
 const T={
   ht:{
@@ -388,7 +448,13 @@ const T={
     service_ride:"Transpò",service_delivery:"Livrezon",service_both:"Tou de",
     rides_empty:"Ou poko gen okenn kous.",
     ride_completed:"Fini",ride_in_progress:"An kou",ride_searching:"Ap chache",ride_cancelled:"Anile",ride_accepted:"Aksepte",
-    member_since:"Manm depi"
+    member_since:"Manm depi",
+    active_ride_title:"Kous Aktif",enter_ride_pin:"Mande pasaje a pou kòd PIN nan",
+    start_ride_btn:"Kòmanse Kous",complete_ride_btn:"Fini Kous",
+    pin_wrong:"PIN pa kòrèk. Eseye ankò.",pin_verified:"PIN verifye! Kous kòmanse!",
+    ride_started:"Kous an kou...",ride_completed_msg:"Kous fini! Mèsi.",
+    lbl_tracking:"Kòd Swiv",lbl_price:"Pri",lbl_type:"Tip",lbl_passenger:"Pasaje",
+    lbl_earning:"Revni Ou",confirm_complete:"Ou sèten ou vle fini kous sa a?"
   },
   fr:{
     nav_home:"Accueil",nav_messages:"Messages",nav_register:"S'inscrire",nav_apply:"Postuler",
@@ -412,7 +478,13 @@ const T={
     service_ride:"Transport",service_delivery:"Livraison",service_both:"Les deux",
     rides_empty:"Vous n'avez pas encore de courses.",
     ride_completed:"Termine",ride_in_progress:"En cours",ride_searching:"Recherche",ride_cancelled:"Annule",ride_accepted:"Accepte",
-    member_since:"Membre depuis"
+    member_since:"Membre depuis",
+    active_ride_title:"Course Active",enter_ride_pin:"Demandez le code PIN au passager",
+    start_ride_btn:"Demarrer la Course",complete_ride_btn:"Terminer la Course",
+    pin_wrong:"PIN incorrect. Reessayez.",pin_verified:"PIN verifie! Course demarree!",
+    ride_started:"Course en cours...",ride_completed_msg:"Course terminee! Merci.",
+    lbl_tracking:"Code Suivi",lbl_price:"Prix",lbl_type:"Type",lbl_passenger:"Passager",
+    lbl_earning:"Vos Gains",confirm_complete:"Etes-vous sur de vouloir terminer cette course?"
   },
   en:{
     nav_home:"Home",nav_messages:"Messages",nav_register:"Register",nav_apply:"Apply Now",
@@ -436,7 +508,13 @@ const T={
     service_ride:"Rides",service_delivery:"Delivery",service_both:"Both",
     rides_empty:"You don't have any rides yet.",
     ride_completed:"Completed",ride_in_progress:"In Progress",ride_searching:"Searching",ride_cancelled:"Cancelled",ride_accepted:"Accepted",
-    member_since:"Member since"
+    member_since:"Member since",
+    active_ride_title:"Active Ride",enter_ride_pin:"Ask the passenger for the PIN code",
+    start_ride_btn:"Start Ride",complete_ride_btn:"Complete Ride",
+    pin_wrong:"Wrong PIN. Try again.",pin_verified:"PIN verified! Ride started!",
+    ride_started:"Ride in progress...",ride_completed_msg:"Ride completed! Thank you.",
+    lbl_tracking:"Tracking Code",lbl_price:"Price",lbl_type:"Type",lbl_passenger:"Passenger",
+    lbl_earning:"Your Earning",confirm_complete:"Are you sure you want to complete this ride?"
   },
   es:{
     nav_home:"Inicio",nav_messages:"Mensajes",nav_register:"Registrarse",nav_apply:"Aplicar Ahora",
@@ -460,7 +538,13 @@ const T={
     service_ride:"Transporte",service_delivery:"Entrega",service_both:"Ambos",
     rides_empty:"Aun no tienes viajes.",
     ride_completed:"Completado",ride_in_progress:"En Progreso",ride_searching:"Buscando",ride_cancelled:"Cancelado",ride_accepted:"Aceptado",
-    member_since:"Miembro desde"
+    member_since:"Miembro desde",
+    active_ride_title:"Viaje Activo",enter_ride_pin:"Pida al pasajero el codigo PIN",
+    start_ride_btn:"Iniciar Viaje",complete_ride_btn:"Completar Viaje",
+    pin_wrong:"PIN incorrecto. Intenta de nuevo.",pin_verified:"PIN verificado! Viaje iniciado!",
+    ride_started:"Viaje en progreso...",ride_completed_msg:"Viaje completado! Gracias.",
+    lbl_tracking:"Codigo de Rastreo",lbl_price:"Precio",lbl_type:"Tipo",lbl_passenger:"Pasajero",
+    lbl_earning:"Tu Ganancia",confirm_complete:"Esta seguro de que desea completar este viaje?"
   }
 };
 
@@ -502,7 +586,7 @@ async function handleLogin(e){
   if(!fullPhone.startsWith('+'))fullPhone='+509'+fullPhone;
 
   try{
-    const res=await fetch(API+'/api/rides/driver/login',{
+    const res=await fetch(API+'/api/drivers/login',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({phone:fullPhone,pin:pin})
@@ -536,23 +620,25 @@ async function handleLogin(e){
     var d=data.driver;
     var mapped={
       driver:{
-        full_name:(d.firstName||'')+' '+(d.lastName||''),
+        id:d.id||d._id,
+        full_name:d.full_name||(d.firstName||'')+' '+(d.lastName||''),
         phone:d.phone,
-        vehicle_type:d.vehicleType==='car'?'car':'motorcycle',
-        license_plate:d.licensePlate||'',
+        vehicle_type:d.vehicle_type||d.vehicleType||(d.vehicleType==='car'?'car':'motorcycle'),
+        license_plate:d.license_plate||d.licensePlate||'',
         email:d.email||null,
-        preferred_service:'ride',
-        status:d.verified?'approved':'pending',
-        is_verified:d.verified||false,
-        created_at:d.createdAt,
+        preferred_service:d.preferred_service||'ride',
+        status:d.status||(d.verified?'approved':'pending'),
+        is_verified:d.is_verified||d.verified||false,
+        created_at:d.created_at||d.createdAt,
         zone:d.zone||''
       },
-      rides:[]
+      rides:data.rides||[]
     };
     window._driverData=mapped;
     document.getElementById('loginSection').style.display='none';
     document.getElementById('dashboard').classList.add('active');
     renderDashboard(mapped);
+    renderActiveRide(mapped.rides,mapped.driver.id);
 
   }catch(err){
     errEl.innerHTML=t('err_network');
@@ -622,10 +708,114 @@ function item(label,value){
 
 function logout(){
   window._driverData=null;
+  window._activeRide=null;
   document.getElementById('dashboard').classList.remove('active');
   document.getElementById('loginSection').style.display='';
   document.getElementById('phoneInput').value='';
   document.getElementById('loginError').style.display='none';
+  document.getElementById('activeRideCard').style.display='none';
+}
+
+// ========== ACTIVE RIDE + PIN ==========
+let _activeRide=null;
+
+function renderActiveRide(rides,driverId){
+  const card=document.getElementById('activeRideCard');
+  const active=rides.find(r=>r.status==='accepted'||r.status==='in_progress');
+  if(!active){card.style.display='none';_activeRide=null;return;}
+  _activeRide=active;
+  card.style.display='block';
+
+  const info=document.getElementById('activeRideInfo');
+  const vMap={motorcycle:t('vehicle_moto'),moto:t('vehicle_moto'),car:t('vehicle_car')};
+  info.innerHTML=
+    '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_tracking')+'</span><span class="ride-info-value">'+(active.tracking_code||'—')+'</span></div>'+
+    '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_passenger')+'</span><span class="ride-info-value">'+(active.customer_name||'Kliyan')+'</span></div>'+
+    '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_type')+'</span><span class="ride-info-value">'+(vMap[(active.ride_type||'').toLowerCase()]||active.ride_type||'—')+'</span></div>'+
+    '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_price')+'</span><span class="ride-info-value">'+(active.price||0)+' HTG</span></div>'+
+    '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_earning')+'</span><span class="ride-info-value">'+(active.driver_earning||0)+' HTG</span></div>';
+
+  const pinSection=document.getElementById('pinEntrySection');
+  const progressSection=document.getElementById('inProgressSection');
+  const fb=document.getElementById('pinFeedback');
+  fb.className='pin-feedback';fb.style.display='none';
+
+  if(active.status==='accepted'){
+    card.classList.remove('ride-started');
+    pinSection.style.display='block';
+    progressSection.style.display='none';
+    document.getElementById('ridePinInput').value='';
+  }else if(active.status==='in_progress'){
+    card.classList.add('ride-started');
+    pinSection.style.display='none';
+    progressSection.style.display='block';
+  }
+}
+
+async function startRide(){
+  if(!_activeRide)return;
+  const pin=document.getElementById('ridePinInput').value.trim();
+  const fb=document.getElementById('pinFeedback');
+  const btn=document.getElementById('btnStartRide');
+  fb.className='pin-feedback';fb.style.display='none';
+
+  if(!pin||pin.length!==4){
+    fb.textContent=t('pin_wrong');fb.className='pin-feedback error';return;
+  }
+
+  btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span> ...';
+
+  try{
+    const res=await fetch(API+'/api/rides/'+_activeRide.id+'/start',{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({pin:pin})
+    });
+    const data=await res.json();
+
+    if(res.status===403||!res.ok){
+      fb.textContent=t('pin_wrong');fb.className='pin-feedback error';
+      btn.disabled=false;btn.textContent=t('start_ride_btn');
+      document.getElementById('ridePinInput').value='';
+      return;
+    }
+
+    fb.textContent=t('pin_verified');fb.className='pin-feedback success';
+    _activeRide.status='in_progress';
+    setTimeout(()=>{
+      document.getElementById('pinEntrySection').style.display='none';
+      document.getElementById('inProgressSection').style.display='block';
+      document.getElementById('activeRideCard').classList.add('ride-started');
+      fb.style.display='none';
+    },1500);
+
+  }catch(e){
+    fb.textContent=t('err_network');fb.className='pin-feedback error';
+  }
+  btn.disabled=false;btn.textContent=t('start_ride_btn');
+}
+
+async function completeRide(){
+  if(!_activeRide)return;
+  if(!confirm(t('confirm_complete')))return;
+  const btn=document.getElementById('btnCompleteRide');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> ...';
+
+  try{
+    const res=await fetch(API+'/api/rides/'+_activeRide.id+'/complete',{
+      method:'PATCH',headers:{'Content-Type':'application/json'},body:'{}'
+    });
+    if(res.ok){
+      const fb=document.getElementById('pinFeedback');
+      fb.textContent=t('ride_completed_msg');fb.className='pin-feedback success';
+      document.getElementById('inProgressSection').style.display='none';
+      document.getElementById('pinEntrySection').style.display='none';
+      fb.style.display='block';
+      setTimeout(()=>{document.getElementById('activeRideCard').style.display='none';},3000);
+    }
+  }catch(e){}
+  btn.disabled=false;btn.textContent=t('complete_ride_btn');
 }
 
 setLang('ht');

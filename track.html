@@ -117,6 +117,20 @@ body.stealth .lang-sw button.active{color:#333;background:#eee}
   padding:3px 10px;border-radius:6px;
 }
 
+/* PIN CARD */
+.pin-card{
+  margin:0 16px 12px;padding:14px;border-radius:14px;
+  background:linear-gradient(135deg,var(--dark),#1a2240);
+  display:none;text-align:center;
+}
+.pin-card.show{display:block}
+.pin-label{font-size:.65rem;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.pin-code{
+  font-size:2rem;font-weight:900;color:var(--gold);letter-spacing:12px;
+  font-variant-numeric:tabular-nums;
+}
+.pin-hint{font-size:.62rem;color:rgba(255,255,255,.4);margin-top:6px}
+
 /* DRIVER CARD */
 .driver-card{margin:0 16px 12px;padding:12px;background:var(--off-white);border-radius:12px;display:flex;align-items:center;gap:12px}
 .driver-card.hidden{display:none}
@@ -603,6 +617,13 @@ body.stealth .stealth-exit{display:block}
       <span data-i18n="dev_warn">Chofe a kite wout nòmal la</span>
     </div>
 
+    <!-- SECURITY PIN -->
+    <div class="pin-card" id="pinCard">
+      <div class="pin-label" data-i18n="pin_label">Kòd Sekirite Ou</div>
+      <div class="pin-code" id="pinCode">----</div>
+      <div class="pin-hint" data-i18n="pin_hint">Bay chofè a kòd sa a avan kous la kòmanse</div>
+    </div>
+
     <div class="driver-card hidden" id="driverCard">
       <div class="driver-avatar" id="driverAvatar">?</div>
       <div class="driver-info">
@@ -694,7 +715,8 @@ const I18N = {
     offline:'Pa gen koneksyon entenet. Denye pozisyon GPS sove.',
     batt_warn:'Batri feb. GPS ap sove denye pozisyon ou.',
     sc_title:'Ou anfom?', sc_sub:'MsouWout ap verifye sekirite ou. Tanpri konfime ou anfom.',
-    sc_safe:'Wi, Mwen Anfom', sc_help:'Bezwen Ed'
+    sc_safe:'Wi, Mwen Anfom', sc_help:'Bezwen Ed',
+    pin_label:'Kod Sekirite Ou', pin_hint:'Bay chofe a kod sa a avan kous la komanse'
   },
   fr: {
     track_title:'Suivre Ma Course', loading:'Chargement...',
@@ -725,7 +747,8 @@ const I18N = {
     offline:'Pas de connexion internet. Derniere position GPS sauvegardee.',
     batt_warn:'Batterie faible. GPS sauvegarde votre derniere position.',
     sc_title:'Vous allez bien?', sc_sub:'MsouWout verifie votre securite. Confirmez que vous allez bien.',
-    sc_safe:'Oui, Je Vais Bien', sc_help:'Besoin d\'Aide'
+    sc_safe:'Oui, Je Vais Bien', sc_help:'Besoin d\'Aide',
+    pin_label:'Votre Code de Securite', pin_hint:'Donnez ce code au chauffeur avant le depart'
   },
   en: {
     track_title:'Track Your Ride', loading:'Loading...',
@@ -756,7 +779,8 @@ const I18N = {
     offline:'No internet connection. Last GPS position saved.',
     batt_warn:'Low battery. GPS saving your last position.',
     sc_title:'Are you okay?', sc_sub:'MsouWout is checking your safety. Please confirm you are okay.',
-    sc_safe:'Yes, I\'m Fine', sc_help:'Need Help'
+    sc_safe:'Yes, I\'m Fine', sc_help:'Need Help',
+    pin_label:'Your Security Code', pin_hint:'Give this code to the driver before the trip starts'
   },
   es: {
     track_title:'Seguir Tu Viaje', loading:'Cargando...',
@@ -787,7 +811,8 @@ const I18N = {
     offline:'Sin conexion a internet. Ultima posicion GPS guardada.',
     batt_warn:'Bateria baja. GPS guardando tu ultima posicion.',
     sc_title:'Estas bien?', sc_sub:'MsouWout verifica tu seguridad. Confirma que estas bien.',
-    sc_safe:'Si, Estoy Bien', sc_help:'Necesito Ayuda'
+    sc_safe:'Si, Estoy Bien', sc_help:'Necesito Ayuda',
+    pin_label:'Tu Codigo de Seguridad', pin_hint:'Dale este codigo al conductor antes de iniciar el viaje'
   }
 };
 
@@ -890,6 +915,14 @@ function updateUI(data) {
   if (data.duration_min != null) document.getElementById('statTime').textContent = data.duration_min + ' min';
   if (data.price != null) document.getElementById('statPrice').textContent = data.price + ' HTG';
 
+  var pinCard = document.getElementById('pinCard');
+  if (data.ride_pin && !['completed','cancelled'].includes(data.status)) {
+    document.getElementById('pinCode').textContent = data.ride_pin;
+    pinCard.classList.add('show');
+  } else {
+    pinCard.classList.remove('show');
+  }
+
   const driverCard = document.getElementById('driverCard');
   if (data.driver) {
     driverCard.classList.remove('hidden');
@@ -943,6 +976,7 @@ function hideActiveElements() {
   document.getElementById('actionBtns').style.display = 'none';
   document.getElementById('safetyBtns').style.display = 'none';
   document.getElementById('driverCard').classList.add('hidden');
+  document.getElementById('pinCard').classList.remove('show');
   document.getElementById('safetyBadge').style.display = 'none';
   document.getElementById('deviationBanner').classList.remove('show');
 }
@@ -951,7 +985,9 @@ function hideActiveElements() {
 
 async function fetchRide() {
   try {
-    const resp = await fetch(API + '/rides/' + encodeURIComponent(rideCode) + '/track');
+    const isOwner = !location.search.includes('shared=1');
+    const pinParam = isOwner ? '?pin=1' : '';
+    const resp = await fetch(API + '/rides/' + encodeURIComponent(rideCode) + '/track' + pinParam);
     if (!resp.ok) throw new Error('not found');
     const data = await resp.json();
     document.getElementById('loadingScreen').classList.add('hide');
@@ -976,7 +1012,7 @@ function stopPolling() {
 
 function shareRide() {
   const code = rideData ? rideData.tracking_code : rideCode;
-  const url = SITE + '/track.html?code=' + encodeURIComponent(code);
+  const url = SITE + '/track.html?code=' + encodeURIComponent(code) + '&shared=1';
   const msg = t('share_msg') + ' ' + url;
   window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
 }
