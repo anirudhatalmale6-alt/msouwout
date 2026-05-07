@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MsouWout Logistics — Load Board | Tablo Chajman</title>
+<meta name="description" content="Post cargo loads or find freight jobs across Haiti. MsouWout Logistics connects businesses with truck owners for reliable transport.">
+<meta property="og:title" content="MsouWout Logistics — Load Board">
+<meta property="og:description" content="Post cargo loads or browse available freight across Haiti. A HaitiBiznis platform.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://msouwout.com/logistics-board.html">
+<meta property="og:image" content="https://msouwout.com/assets/og-msouwout.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="canonical" href="https://msouwout.com/logistics-board.html">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D21034;--red-dark:#B00D2C;--red-light:#E8243F;
+  --blue:#00209F;--blue-dark:#001566;
+  --gold:#D4A017;--gold-light:#E8B82E;
+  --white:#FFFFFF;--off-white:#FFF8F8;--light-gray:#F0E8E8;
+  --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;
+  --green:#1B8C3D;--green-light:#22C55E;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --display:'DM Serif Display',Georgia,serif;
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button{font-family:var(--body);cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:var(--body)}
+
+/* ═══ LANGUAGE BAR ═══ */
+.lang-bar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;
+  background:var(--red);
+  padding:6px 20px;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;
+}
+.lang-bar a{
+  color:rgba(255,255,255,.7);font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:100px;
+  cursor:pointer;transition:all .2s;letter-spacing:.02em;
+}
+.lang-bar a:hover{color:#fff;background:rgba(255,255,255,.15)}
+.lang-bar a.active{color:var(--red);background:#fff}
+
+/* ═══ NAV ═══ */
+nav{
+  position:fixed;top:36px;left:0;right:0;z-index:1000;
+  background:var(--blue);border-bottom:3px solid var(--red);
+  padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.nav-logo span{font-family:var(--display);font-weight:900;font-size:1.25rem;color:#fff;letter-spacing:-.02em}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{color:rgba(255,255,255,.8);font-size:.82rem;font-weight:600;transition:color .2s;letter-spacing:.01em}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  background:var(--red);color:#fff;padding:10px 22px;border-radius:100px;font-size:.82rem;
+  font-weight:700;transition:all .25s;border:none;cursor:pointer;
+}
+.nav-cta:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(210,16,52,.35)}
+.mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+.mobile-nav{display:none;position:fixed;top:100px;left:0;right:0;background:var(--blue);padding:24px;z-index:999;border-bottom:3px solid var(--red);flex-direction:column;gap:16px}
+.mobile-nav.open{display:flex}
+.mobile-nav a{color:rgba(255,255,255,.9);font-size:.95rem;font-weight:600;padding:8px 0}
+
+/* ═══ HERO ═══ */
+.hero{
+  min-height:40vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:130px 24px 60px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 60%,#000D4F 100%);
+}
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:80px;
+  background:linear-gradient(to top,var(--off-white),transparent);pointer-events:none;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  padding:8px 20px;border-radius:100px;font-size:.78rem;font-weight:600;color:var(--gold-light);
+  margin-bottom:24px;letter-spacing:.03em;
+  animation:fadeUp .8s ease both;
+}
+.hero h1{
+  font-family:var(--display);font-size:clamp(2rem,5vw,3.2rem);font-weight:900;
+  color:#fff;line-height:1.1;letter-spacing:-.03em;max-width:800px;
+  animation:fadeUp .8s .1s ease both;
+}
+.hero h1 em{font-style:italic;color:var(--red-light)}
+.hero-sub{
+  font-size:clamp(.9rem,2vw,1.1rem);color:rgba(255,255,255,.75);line-height:1.7;
+  max-width:560px;margin:20px auto 0;font-weight:400;
+  animation:fadeUp .8s .2s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ═══ MAIN CONTENT ═══ */
+.main-content{
+  max-width:720px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:1;
+}
+
+/* ═══ TAB SWITCHER ═══ */
+.tab-switcher{
+  display:flex;gap:0;background:var(--white);border-radius:100px;padding:5px;
+  margin:-24px auto 28px;max-width:440px;
+  box-shadow:0 4px 24px rgba(0,0,0,.08);border:1px solid rgba(0,0,0,.06);
+  position:relative;z-index:2;
+}
+.tab-btn{
+  flex:1;padding:14px 20px;border-radius:100px;
+  font-size:.88rem;font-weight:700;text-align:center;
+  color:var(--text-light);background:transparent;
+  transition:all .3s;cursor:pointer;border:none;
+}
+.tab-btn.active{
+  background:var(--blue);color:#fff;
+  box-shadow:0 4px 16px rgba(0,32,159,.3);
+}
+.tab-btn:not(.active):hover{background:rgba(0,32,159,.05);color:var(--blue)}
+
+/* ═══ TAB PANELS ═══ */
+.tab-panel{display:none}
+.tab-panel.active{display:block;animation:fadeUp .4s ease both}
+
+/* ═══ FORM ═══ */
+.form-card{
+  background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);
+  padding:32px 28px;box-shadow:0 4px 24px rgba(0,0,0,.06);
+}
+.form-card input,.form-card select,.form-card textarea{
+  width:100%;padding:14px 18px;border:2px solid rgba(0,0,0,.08);border-radius:14px;
+  font-size:.88rem;font-family:var(--body);transition:all .25s;
+  background:var(--white);color:var(--text);
+}
+.form-card input::placeholder,.form-card textarea::placeholder{color:var(--text-light);font-weight:400}
+.form-card select{
+  color:var(--text-light);appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236A5A5A' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 16px center;
+}
+.form-card select option{background:var(--white);color:var(--text)}
+.form-card input:focus,.form-card select:focus,.form-card textarea:focus{
+  outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.1);
+}
+.form-card textarea{min-height:80px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-label{display:block;font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:.02em}
+.form-group{margin-bottom:16px}
+.form-group:last-child{margin-bottom:0}
+.form-hint{font-size:.7rem;color:var(--text-light);margin-top:4px}
+
+/* Radio group for urgency */
+.urgency-group{display:flex;gap:10px;flex-wrap:wrap}
+.urgency-option{
+  display:flex;align-items:center;gap:6px;
+  font-size:.85rem;color:var(--text);cursor:pointer;
+  background:var(--off-white);padding:10px 16px;border-radius:12px;
+  border:2px solid rgba(0,0,0,.06);transition:all .25s;flex:1;min-width:100px;
+}
+.urgency-option:hover{border-color:var(--blue);background:rgba(0,32,159,.03)}
+.urgency-option input{accent-color:var(--blue);width:16px;height:16px;cursor:pointer}
+.urgency-option:has(input:checked){border-color:var(--blue);background:rgba(0,32,159,.06)}
+
+/* Submit button */
+.submit-btn{
+  width:100%;padding:16px;border-radius:100px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;
+  font-size:1rem;font-weight:800;font-family:var(--body);
+  transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 20px rgba(210,16,52,.3);margin-top:8px;
+}
+.submit-btn:hover:not(:disabled){background:linear-gradient(135deg,var(--red-dark),#8a0920);transform:translateY(-2px);box-shadow:0 10px 32px rgba(210,16,52,.4)}
+.submit-btn:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+
+/* Success card */
+.success-card{
+  background:linear-gradient(135deg,rgba(27,140,61,.08),rgba(27,140,61,.04));
+  border:1px solid rgba(27,140,61,.2);border-radius:var(--radius);
+  padding:28px 24px;text-align:center;margin-top:20px;display:none;
+}
+.success-card.show{display:block;animation:fadeUp .5s ease both}
+.success-icon{font-size:2.5rem;margin-bottom:12px}
+.success-title{font-family:var(--display);font-size:1.4rem;font-weight:900;color:var(--green);margin-bottom:8px}
+.success-msg{font-size:.88rem;color:var(--text-light);line-height:1.6;margin-bottom:16px}
+.pin-box{
+  display:inline-flex;flex-direction:column;gap:4px;
+  background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:12px;
+  padding:16px 28px;margin:4px 8px;
+}
+.pin-label{font-size:.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.08em}
+.pin-value{font-size:1.6rem;font-weight:900;color:var(--blue);letter-spacing:6px;font-variant-numeric:tabular-nums}
+.tracking-code{
+  display:inline-block;background:var(--dark);color:var(--gold);
+  padding:8px 20px;border-radius:100px;font-size:.88rem;font-weight:800;
+  letter-spacing:1px;margin-bottom:16px;
+}
+
+/* ═══ BROWSE LOADS ═══ */
+.filter-bar{
+  display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;
+}
+.filter-bar select{
+  flex:1;min-width:140px;padding:12px 16px;border:2px solid rgba(0,0,0,.08);border-radius:14px;
+  font-size:.85rem;font-family:var(--body);font-weight:600;
+  background:var(--white);color:var(--text);appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236A5A5A' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+  transition:border .25s;cursor:pointer;
+}
+.filter-bar select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.1)}
+
+/* Load cards */
+.loads-list{display:flex;flex-direction:column;gap:14px}
+
+.load-card{
+  background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);
+  padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.04);
+  border-left:4px solid #C0C8D8;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.load-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.08)}
+.load-card.urgent{border-left-color:var(--gold)}
+.load-card.emergency{border-left-color:var(--red)}
+
+.load-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.cargo-icon{
+  width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;background:rgba(0,32,159,.06);flex-shrink:0;
+}
+.load-title{flex:1;min-width:0}
+.load-title h3{font-size:.95rem;font-weight:800;color:var(--dark);margin-bottom:2px}
+.load-title .load-meta{font-size:.75rem;color:var(--text-light);font-weight:500}
+
+.urgency-badge{
+  display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:100px;
+  font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;
+}
+.urgency-badge.normal{background:rgba(0,0,0,.05);color:#6A7A8A}
+.urgency-badge.urgent{background:rgba(212,160,23,.12);color:#9A7A0A}
+.urgency-badge.emergency{background:rgba(210,16,52,.1);color:var(--red)}
+
+.load-route{
+  display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;
+  padding:12px;background:var(--off-white);border-radius:12px;
+}
+.route-dots{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;padding-top:2px}
+.route-dots .rd{width:8px;height:8px;border-radius:50%}
+.route-dots .rd.g{background:var(--green)}
+.route-dots .rd.r{background:var(--red)}
+.route-dots .rl{width:1.5px;height:14px;background:rgba(0,0,0,.15)}
+.route-text{flex:1;font-size:.82rem;color:var(--text-light);line-height:1.5}
+.route-text strong{color:var(--text);font-weight:700;display:block;font-size:.84rem}
+
+.load-details{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.load-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:5px 12px;border-radius:8px;font-size:.73rem;font-weight:600;
+  background:rgba(0,32,159,.05);color:var(--blue);
+}
+.load-tag.price{background:rgba(27,140,61,.08);color:var(--green);font-weight:800;font-size:.82rem}
+
+.load-footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.load-time{font-size:.72rem;color:var(--text-light);font-weight:500}
+.contact-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:100px;
+  background:#25D366;color:#fff;font-size:.82rem;font-weight:700;border:none;cursor:pointer;
+  transition:all .3s;box-shadow:0 2px 12px rgba(37,211,102,.25);
+}
+.contact-btn:hover{background:#1EBE5A;transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,211,102,.35)}
+
+/* Empty state */
+.empty-state{
+  text-align:center;padding:60px 20px;
+}
+.empty-icon{font-size:3rem;margin-bottom:16px;opacity:.6}
+.empty-title{font-family:var(--display);font-size:1.3rem;font-weight:900;color:var(--dark);margin-bottom:8px}
+.empty-sub{font-size:.88rem;color:var(--text-light);line-height:1.6}
+
+/* Refresh indicator */
+.refresh-bar{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-size:.72rem;color:var(--text-light);font-weight:600;margin-bottom:16px;
+}
+.refresh-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Loading spinner */
+.spinner{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(0,32,159,.15);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-state{text-align:center;padding:40px 20px}
+.loading-state p{font-size:.85rem;color:var(--text-light);margin-top:12px}
+
+/* Form status */
+.form-status{
+  display:none;text-align:center;padding:14px;border-radius:12px;margin-top:14px;
+  font-size:.85rem;font-weight:600;
+}
+.form-status.error{display:block;background:rgba(210,16,52,.08);color:var(--red);border:1px solid rgba(210,16,52,.15)}
+
+/* ═══ FOOTER ═══ */
+footer{
+  background:var(--dark);
+  padding:48px 24px 24px;
+}
+.footer-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px}
+.footer-brand h3{font-family:var(--display);font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:8px}
+.footer-brand p{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.7}
+.footer-col h4{font-size:.78rem;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.footer-col a{display:block;font-size:.82rem;color:rgba(255,255,255,.5);padding:4px 0;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{
+  max-width:1080px;margin:24px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);
+  display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:rgba(255,255,255,.4);
+}
+
+/* ═══ ECO BAR ═══ */
+.eco-bar{
+  background:var(--dark);
+  padding:14px 20px;text-align:center;position:fixed;bottom:0;left:0;right:0;z-index:999;
+}
+.eco-bar span{color:rgba(255,255,255,.4);font-size:.7rem;font-weight:500;margin-right:6px}
+.eco-bar a{color:rgba(255,255,255,.4);font-size:.72rem;font-weight:600;margin:0 8px;transition:color .2s}
+.eco-bar a:hover{color:#fff}
+
+/* ═══ WHATSAPP FLOAT ═══ */
+.wa-float{
+  position:fixed;bottom:60px;right:20px;z-index:998;
+  width:56px;height:56px;border-radius:50%;
+  background:#25D366;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(37,211,102,.35);transition:all .3s;
+  font-size:1.6rem;
+}
+.wa-float:hover{transform:scale(1.08);box-shadow:0 8px 28px rgba(37,211,102,.5)}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .form-row{grid-template-columns:1fr}
+  .urgency-group{flex-direction:column}
+  .footer-inner{grid-template-columns:1fr}
+  .form-card{padding:24px 18px}
+  .filter-bar{flex-direction:column}
+  .load-footer{flex-direction:column;align-items:stretch}
+  .load-footer .contact-btn{justify-content:center}
+}
+@media(max-width:480px){
+  .hero h1{font-size:1.8rem}
+  .tab-btn{font-size:.8rem;padding:12px 14px}
+  .pin-box{padding:12px 20px;margin:4px}
+}
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <a onclick="setLang('ht')" class="active" id="lang-ht">&#127469;&#127481; Kreyol</a>
+  <a onclick="setLang('fr')" id="lang-fr">&#127467;&#127479; Francais</a>
+  <a onclick="setLang('en')" id="lang-en">&#127468;&#127463; English</a>
+  <a onclick="setLang('es')" id="lang-es">&#127466;&#127480; Espanol</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <a href="index.html" style="display:flex;align-items:center;gap:10px">
+      <img src="assets/msouwout-icon.png" alt="MsouWout Logo">
+      <span>MsouWout</span>
+    </a>
+  </div>
+  <div class="nav-links">
+    <a href="index.html" data-i18n="nav_home">Akèy</a>
+    <a href="index.html#services" data-i18n="nav_services">Sèvis</a>
+    <a href="index.html#pricing" data-i18n="nav_pricing">Pri</a>
+    <a href="driver-register.html" data-i18n="nav_drivers">Chofè</a>
+    <a href="business-register.html" data-i18n="nav_business">Biznis</a>
+  </div>
+  <a href="#post" class="nav-cta" data-i18n="nav_cta_post">&#128666; Poste Chajman</a>
+  <button class="mobile-toggle" onclick="toggleMobile()">&#9776;</button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html" onclick="closeMobile()" data-i18n="nav_home">Akèy</a>
+  <a href="index.html#services" onclick="closeMobile()" data-i18n="nav_services">Sèvis</a>
+  <a href="index.html#pricing" onclick="closeMobile()" data-i18n="nav_pricing">Pri</a>
+  <a href="driver-register.html" onclick="closeMobile()" data-i18n="nav_drivers">Chofè</a>
+  <a href="business-register.html" onclick="closeMobile()" data-i18n="nav_business">Biznis</a>
+  <a href="#post" onclick="closeMobile();switchTab('post')" class="nav-cta" style="text-align:center" data-i18n="nav_cta_post">&#128666; Poste Chajman</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">&#128666; <span data-i18n="hero_badge">Lojistik &amp; Transpò Machandiz</span></div>
+  <h1 data-i18n="hero_title">MsouWout <em>Logistics</em></h1>
+  <p class="hero-sub" data-i18n="hero_sub">Poste chajman ou pou kamyon pote, oswa jwenn machandiz pou transpote. Konekte biznis ak propriyetè kamyon toupatou nan Ayiti.</p>
+</section>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+  <!-- TAB SWITCHER -->
+  <div class="tab-switcher">
+    <button class="tab-btn active" onclick="switchTab('post')" id="tab-post" data-i18n="tab_post">&#128230; Poste Chajman</button>
+    <button class="tab-btn" onclick="switchTab('browse')" id="tab-browse" data-i18n="tab_browse">&#128270; Wè Chajman</button>
+  </div>
+
+  <!-- ═══ POST LOAD TAB ═══ -->
+  <div class="tab-panel active" id="panel-post">
+    <form class="form-card" id="loadForm" onsubmit="return submitLoad(event)">
+
+      <!-- Name & Phone -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_name_label">Non Ou *</label>
+          <input type="text" id="posted_by_name" required placeholder="Ex: Jean Pierre" data-i18n-placeholder="f_name_ph">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_phone_label">Telefòn Ou *</label>
+          <input type="tel" id="posted_by_phone" required placeholder="+509 XXXX XXXX" data-i18n-placeholder="f_phone_ph">
+        </div>
+      </div>
+
+      <!-- Cargo Type -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_cargo_label">Tip Machandiz *</label>
+        <select id="cargo_type" required>
+          <option value="" disabled selected data-i18n="f_cargo_default">-- Chwazi tip machandiz --</option>
+          <option value="rice" data-i18n="cargo_rice">&#127834; Diri / Rice</option>
+          <option value="cement" data-i18n="cargo_cement">&#127959; Siman / Cement</option>
+          <option value="fuel" data-i18n="cargo_fuel">&#9981; Gaz / Fuel</option>
+          <option value="construction" data-i18n="cargo_construction">&#128296; Konstriksyon / Construction</option>
+          <option value="food" data-i18n="cargo_food">&#127869; Manje / Food</option>
+          <option value="merchandise" data-i18n="cargo_merchandise">&#128230; Machandiz / Merchandise</option>
+          <option value="other" data-i18n="cargo_other">&#128462; Lòt / Other</option>
+        </select>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_desc_label">Deskripsyon (opsyonèl)</label>
+        <textarea id="cargo_description" rows="2" placeholder="Ex: 500 sak diri 50kg chak..." data-i18n-placeholder="f_desc_ph"></textarea>
+      </div>
+
+      <!-- Weight & Quantity -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_weight_label">Pwa an kg (opsyonèl)</label>
+          <input type="number" id="weight_kg" min="0" placeholder="Ex: 25000" data-i18n-placeholder="f_weight_ph">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_qty_label">Kantite (opsyonèl)</label>
+          <input type="text" id="quantity" placeholder="Ex: 500 sak" data-i18n-placeholder="f_qty_ph">
+        </div>
+      </div>
+
+      <!-- Truck Type -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_truck_label">Tip Kamyon Bezwen *</label>
+        <select id="truck_type_needed" required>
+          <option value="" disabled selected data-i18n="f_truck_default">-- Chwazi tip kamyon --</option>
+          <option value="flatbed" data-i18n="truck_flatbed">Flatbed / Plato</option>
+          <option value="semi_truck" data-i18n="truck_semi">Semi-Truck / Gwo Kamyon</option>
+          <option value="dump_truck" data-i18n="truck_dump">Dump Truck / Kamyon Benè</option>
+          <option value="container" data-i18n="truck_container">Container / Kontenè</option>
+          <option value="pickup" data-i18n="truck_pickup">Pickup</option>
+          <option value="van" data-i18n="truck_van">Van</option>
+          <option value="any" data-i18n="truck_any">Nenpòt / Any</option>
+        </select>
+      </div>
+
+      <!-- Pickup Address -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_pickup_label">Adrès Ranmasaj (Pickup) *</label>
+        <input type="text" id="pickup_address" required placeholder="Ex: Pòtoprens, Ri Capois" data-i18n-placeholder="f_pickup_ph">
+        <input type="hidden" id="pickup_lat">
+        <input type="hidden" id="pickup_lng">
+        <p class="form-hint" id="gps-status" data-i18n="f_gps_hint">&#128205; Ap chèche pozisyon GPS ou...</p>
+      </div>
+
+      <!-- Dropoff Address -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_dropoff_label">Adrès Livrezon (Dropoff) *</label>
+        <input type="text" id="dropoff_address" required placeholder="Ex: Gonayiv, Ri Jilbè" data-i18n-placeholder="f_dropoff_ph">
+        <input type="hidden" id="dropoff_lat">
+        <input type="hidden" id="dropoff_lng">
+      </div>
+
+      <!-- Price -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_price_label">Pri Ofri an HTG (opsyonèl)</label>
+        <input type="number" id="price" min="0" placeholder="Ex: 15000" data-i18n-placeholder="f_price_ph">
+      </div>
+
+      <!-- Urgency -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_urgency_label">Ijan *</label>
+        <div class="urgency-group">
+          <label class="urgency-option">
+            <input type="radio" name="urgency" value="normal" checked>
+            <span data-i18n="urg_normal">&#128994; Nòmal</span>
+          </label>
+          <label class="urgency-option">
+            <input type="radio" name="urgency" value="urgent">
+            <span data-i18n="urg_urgent">&#128992; Ijan</span>
+          </label>
+          <label class="urgency-option">
+            <input type="radio" name="urgency" value="emergency">
+            <span data-i18n="urg_emergency">&#128308; Ijans</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_notes_label">Nòt (opsyonèl)</label>
+        <textarea id="notes" rows="2" placeholder="Ex: Bezwen kamyon fridgo, rive anvan midi..." data-i18n-placeholder="f_notes_ph"></textarea>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="submit-btn" id="submitBtn" data-i18n="f_submit">&#128666; Poste Chajman An</button>
+
+      <div class="form-status" id="formStatus"></div>
+    </form>
+
+    <!-- Success Card -->
+    <div class="success-card" id="successCard">
+      <div class="success-icon">&#9989;</div>
+      <h3 class="success-title" data-i18n="success_title">Chajman Poste Avèk Siksè!</h3>
+      <p class="success-msg" data-i18n="success_msg">Men kòd swivi ou ak kòd PIN yo. Kenbe yo an sekirite.</p>
+      <div class="tracking-code" id="trackingCode"></div>
+      <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:8px">
+        <div class="pin-box">
+          <span class="pin-label" data-i18n="pin_pickup">PIN Ranmasaj</span>
+          <span class="pin-value" id="pickupPin">--</span>
+        </div>
+        <div class="pin-box">
+          <span class="pin-label" data-i18n="pin_delivery">PIN Livrezon</span>
+          <span class="pin-value" id="deliveryPin">--</span>
+        </div>
+      </div>
+      <button onclick="resetForm()" style="margin-top:20px;padding:12px 28px;border-radius:100px;background:var(--blue);color:#fff;font-size:.85rem;font-weight:700;border:none;cursor:pointer" data-i18n="success_new">&#10133; Poste Yon Lòt</button>
+    </div>
+  </div>
+
+  <!-- ═══ BROWSE LOADS TAB ═══ -->
+  <div class="tab-panel" id="panel-browse">
+
+    <div class="refresh-bar">
+      <span class="refresh-dot"></span>
+      <span data-i18n="refresh_label">Ap mete ajou otomatikman chak 30 segond</span>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <select id="filterTruck" onchange="filterLoads()">
+        <option value="" data-i18n="filter_truck_all">&#128666; Tout Tip Kamyon</option>
+        <option value="flatbed" data-i18n="truck_flatbed">Flatbed / Plato</option>
+        <option value="semi_truck" data-i18n="truck_semi">Semi-Truck / Gwo Kamyon</option>
+        <option value="dump_truck" data-i18n="truck_dump">Dump Truck / Kamyon Benè</option>
+        <option value="container" data-i18n="truck_container">Container / Kontenè</option>
+        <option value="pickup" data-i18n="truck_pickup">Pickup</option>
+        <option value="van" data-i18n="truck_van">Van</option>
+        <option value="any" data-i18n="truck_any">Nenpòt / Any</option>
+      </select>
+      <select id="filterUrgency" onchange="filterLoads()">
+        <option value="" data-i18n="filter_urg_all">&#9889; Tout Ijan</option>
+        <option value="normal" data-i18n="urg_normal">&#128994; Nòmal</option>
+        <option value="urgent" data-i18n="urg_urgent">&#128992; Ijan</option>
+        <option value="emergency" data-i18n="urg_emergency">&#128308; Ijans</option>
+      </select>
+    </div>
+
+    <!-- Load list -->
+    <div id="loadsList" class="loads-list">
+      <div class="loading-state" id="loadsLoading">
+        <div class="spinner"></div>
+        <p data-i18n="loading">Ap chaje...</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>MsouWout</h3>
+      <p data-i18n="footer_desc">Platfòm livrezon ak transpò Ayiti a fè konfyans. Rapid, abodab, fyab. Yon platfòm HaitiBiznis.</p>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_links">Lyen Rapid</h4>
+      <a href="index.html" data-i18n="nav_home">Akèy</a>
+      <a href="index.html#services" data-i18n="nav_services">Sèvis</a>
+      <a href="index.html#pricing" data-i18n="nav_pricing">Pri</a>
+      <a href="driver-register.html" data-i18n="nav_drivers">Chofè</a>
+      <a href="business-register.html" data-i18n="nav_business">Biznis</a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_ecosystem">Ekosistèm</h4>
+      <a href="https://haitibiznis.com" target="_blank">HaitiBiznis</a>
+      <a href="https://48hoursready.com" target="_blank">48HoursReady</a>
+      <a href="https://myplopplop.com" target="_blank">MyPlopPlop</a>
+      <a href="https://prolakay.haitibiznis.com" target="_blank">Pwofesyonèl Lakay</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 MsouWout. A <a href="https://haitibiznis.com" style="color:var(--red)">HaitiBiznis</a> Platform.</span>
+    <span>WhatsApp: +509 4190 2005</span>
+  </div>
+</footer>
+
+<!-- ECO BAR -->
+<div class="eco-bar">
+  <span data-i18n="eco_label">Pati nan</span>
+  <a href="https://haitibiznis.com">HaitiBiznis</a>
+  <a href="https://48hoursready.com">48HoursReady</a>
+  <a href="https://myplopplop.com">MyPlopPlop</a>
+  <a href="https://msouwout.com" style="color:var(--red)">MsouWout</a>
+  <a href="https://prolakay.haitibiznis.com">Pwofesyonèl Lakay</a>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/50941902005?text=Hello%20MsouWout!%20M%20enterese%20nan%20lojistik" target="_blank" class="wa-float">&#128172;</a>
+
+<script>
+/* ═══ CONFIG ═══ */
+var API='https://msouwout-backend.onrender.com';
+var DEFAULT_LAT=18.5392, DEFAULT_LNG=-72.3350;
+var allLoads=[];
+var refreshTimer=null;
+
+/* ═══ TRANSLATIONS ═══ */
+var T={
+ht:{
+  nav_home:"Akèy",nav_services:"Sèvis",nav_pricing:"Pri",nav_drivers:"Chofè",nav_business:"Biznis",
+  nav_cta_post:"&#128666; Poste Chajman",
+  hero_badge:"Lojistik &amp; Transpò Machandiz",
+  hero_title:"MsouWout <em>Logistics</em>",
+  hero_sub:"Poste chajman ou pou kamyon pote, oswa jwenn machandiz pou transpote. Konekte biznis ak propriyetè kamyon toupatou nan Ayiti.",
+  tab_post:"&#128230; Poste Chajman",tab_browse:"&#128270; Wè Chajman",
+  f_name_label:"Non Ou *",f_name_ph:"Ex: Jean Pierre",
+  f_phone_label:"Telefòn Ou *",f_phone_ph:"+509 XXXX XXXX",
+  f_cargo_label:"Tip Machandiz *",f_cargo_default:"-- Chwazi tip machandiz --",
+  cargo_rice:"&#127834; Diri",cargo_cement:"&#127959; Siman",cargo_fuel:"&#9981; Gaz",
+  cargo_construction:"&#128296; Konstriksyon",cargo_food:"&#127869; Manje",
+  cargo_merchandise:"&#128230; Machandiz",cargo_other:"&#128462; Lòt",
+  f_desc_label:"Deskripsyon (opsyonèl)",f_desc_ph:"Ex: 500 sak diri 50kg chak...",
+  f_weight_label:"Pwa an kg (opsyonèl)",f_weight_ph:"Ex: 25000",
+  f_qty_label:"Kantite (opsyonèl)",f_qty_ph:"Ex: 500 sak",
+  f_truck_label:"Tip Kamyon Bezwen *",f_truck_default:"-- Chwazi tip kamyon --",
+  truck_flatbed:"Flatbed / Plato",truck_semi:"Semi-Truck / Gwo Kamyon",
+  truck_dump:"Dump Truck / Kamyon Benè",truck_container:"Container / Kontenè",
+  truck_pickup:"Pickup",truck_van:"Van",truck_any:"Nenpòt / Any",
+  f_pickup_label:"Adrès Ranmasaj (Pickup) *",f_pickup_ph:"Ex: Pòtoprens, Ri Capois",
+  f_gps_hint:"&#128205; Ap chèche pozisyon GPS ou...",f_gps_found:"&#128205; GPS jwenn!",f_gps_fail:"&#128205; GPS pa disponib, mete kòdonnen manyèlman",
+  f_dropoff_label:"Adrès Livrezon (Dropoff) *",f_dropoff_ph:"Ex: Gonayiv, Ri Jilbè",
+  f_price_label:"Pri Ofri an HTG (opsyonèl)",f_price_ph:"Ex: 15000",
+  f_urgency_label:"Ijan *",
+  urg_normal:"&#128994; Nòmal",urg_urgent:"&#128992; Ijan",urg_emergency:"&#128308; Ijans",
+  f_notes_label:"Nòt (opsyonèl)",f_notes_ph:"Ex: Bezwen kamyon fridgo, rive anvan midi...",
+  f_submit:"&#128666; Poste Chajman An",f_submitting:"&#9203; Ap voye...",
+  success_title:"Chajman Poste Avèk Siksè!",
+  success_msg:"Men kòd swivi ou ak kòd PIN yo. Kenbe yo an sekirite.",
+  pin_pickup:"PIN Ranmasaj",pin_delivery:"PIN Livrezon",
+  success_new:"&#10133; Poste Yon Lòt",
+  refresh_label:"Ap mete ajou otomatikman chak 30 segond",
+  filter_truck_all:"&#128666; Tout Tip Kamyon",filter_urg_all:"&#9889; Tout Ijan",
+  loading:"Ap chaje...",
+  empty_title:"Pa Gen Chajman Disponib",empty_sub:"Pa gen chajman ki disponib kounye a. Eseye ankò talè oswa poste yon chajman.",
+  card_weight:"Pwa",card_qty:"Kantite",card_truck:"Kamyon",card_contact:"Kontakte",
+  time_now:"kounye a",time_min:"min de sa",time_hr:"è de sa",time_day:"jou de sa",
+  err_required:"Tanpri ranpli tout chan obligatwa yo.",err_submit:"Erè nan soumisyon. Tanpri eseye ankò.",
+  footer_desc:"Platfòm livrezon ak transpò Ayiti a fè konfyans. Rapid, abodab, fyab. Yon platfòm HaitiBiznis.",
+  footer_links:"Lyen Rapid",footer_ecosystem:"Ekosistèm",eco_label:"Pati nan"
+},
+fr:{
+  nav_home:"Accueil",nav_services:"Services",nav_pricing:"Tarifs",nav_drivers:"Chauffeurs",nav_business:"Business",
+  nav_cta_post:"&#128666; Poster un Chargement",
+  hero_badge:"Logistique &amp; Transport de Marchandises",
+  hero_title:"MsouWout <em>Logistics</em>",
+  hero_sub:"Postez votre chargement pour le transport ou trouvez des marchandises a transporter. Connectez les entreprises et les proprietaires de camions a travers Haiti.",
+  tab_post:"&#128230; Poster Chargement",tab_browse:"&#128270; Voir Chargements",
+  f_name_label:"Votre Nom *",f_name_ph:"Ex: Jean Pierre",
+  f_phone_label:"Votre Telephone *",f_phone_ph:"+509 XXXX XXXX",
+  f_cargo_label:"Type de Marchandise *",f_cargo_default:"-- Choisir type --",
+  cargo_rice:"&#127834; Riz",cargo_cement:"&#127959; Ciment",cargo_fuel:"&#9981; Carburant",
+  cargo_construction:"&#128296; Construction",cargo_food:"&#127869; Nourriture",
+  cargo_merchandise:"&#128230; Marchandise",cargo_other:"&#128462; Autre",
+  f_desc_label:"Description (optionnel)",f_desc_ph:"Ex: 500 sacs de riz 50kg chacun...",
+  f_weight_label:"Poids en kg (optionnel)",f_weight_ph:"Ex: 25000",
+  f_qty_label:"Quantite (optionnel)",f_qty_ph:"Ex: 500 sacs",
+  f_truck_label:"Type de Camion Requis *",f_truck_default:"-- Choisir type de camion --",
+  truck_flatbed:"Flatbed / Plateau",truck_semi:"Semi-Remorque",
+  truck_dump:"Camion Benne",truck_container:"Container",
+  truck_pickup:"Pickup",truck_van:"Van",truck_any:"N'importe quel",
+  f_pickup_label:"Adresse de Ramassage *",f_pickup_ph:"Ex: Port-au-Prince, Rue Capois",
+  f_gps_hint:"&#128205; Recherche de votre position GPS...",f_gps_found:"&#128205; GPS trouve!",f_gps_fail:"&#128205; GPS indisponible",
+  f_dropoff_label:"Adresse de Livraison *",f_dropoff_ph:"Ex: Gonaives, Rue Gilbert",
+  f_price_label:"Prix Offert en HTG (optionnel)",f_price_ph:"Ex: 15000",
+  f_urgency_label:"Urgence *",
+  urg_normal:"&#128994; Normal",urg_urgent:"&#128992; Urgent",urg_emergency:"&#128308; Urgence",
+  f_notes_label:"Notes (optionnel)",f_notes_ph:"Ex: Besoin de camion frigo, arriver avant midi...",
+  f_submit:"&#128666; Poster le Chargement",f_submitting:"&#9203; Envoi en cours...",
+  success_title:"Chargement Poste avec Succes!",
+  success_msg:"Voici votre code de suivi et vos codes PIN. Gardez-les en securite.",
+  pin_pickup:"PIN Ramassage",pin_delivery:"PIN Livraison",
+  success_new:"&#10133; Poster un Autre",
+  refresh_label:"Mise a jour automatique toutes les 30 secondes",
+  filter_truck_all:"&#128666; Tous Types de Camion",filter_urg_all:"&#9889; Toutes Urgences",
+  loading:"Chargement...",
+  empty_title:"Aucun Chargement Disponible",empty_sub:"Aucun chargement disponible pour le moment. Reessayez plus tard ou postez un chargement.",
+  card_weight:"Poids",card_qty:"Quantite",card_truck:"Camion",card_contact:"Contacter",
+  time_now:"maintenant",time_min:"min",time_hr:"h",time_day:"j",
+  err_required:"Veuillez remplir tous les champs obligatoires.",err_submit:"Erreur lors de l'envoi. Veuillez reessayer.",
+  footer_desc:"La plateforme de livraison et transport de confiance d'Haiti. Rapide, abordable, fiable. Une plateforme HaitiBiznis.",
+  footer_links:"Liens Rapides",footer_ecosystem:"Ecosysteme",eco_label:"Partie de"
+},
+en:{
+  nav_home:"Home",nav_services:"Services",nav_pricing:"Pricing",nav_drivers:"Drivers",nav_business:"Business",
+  nav_cta_post:"&#128666; Post a Load",
+  hero_badge:"Logistics &amp; Freight Transport",
+  hero_title:"MsouWout <em>Logistics</em>",
+  hero_sub:"Post your cargo for transport or find loads to haul. Connecting businesses with truck owners across Haiti.",
+  tab_post:"&#128230; Post Load",tab_browse:"&#128270; Browse Loads",
+  f_name_label:"Your Name *",f_name_ph:"e.g. Jean Pierre",
+  f_phone_label:"Your Phone *",f_phone_ph:"+509 XXXX XXXX",
+  f_cargo_label:"Cargo Type *",f_cargo_default:"-- Select cargo type --",
+  cargo_rice:"&#127834; Rice",cargo_cement:"&#127959; Cement",cargo_fuel:"&#9981; Fuel",
+  cargo_construction:"&#128296; Construction",cargo_food:"&#127869; Food",
+  cargo_merchandise:"&#128230; Merchandise",cargo_other:"&#128462; Other",
+  f_desc_label:"Description (optional)",f_desc_ph:"e.g. 500 bags of rice, 50kg each...",
+  f_weight_label:"Weight in kg (optional)",f_weight_ph:"e.g. 25000",
+  f_qty_label:"Quantity (optional)",f_qty_ph:"e.g. 500 bags",
+  f_truck_label:"Truck Type Needed *",f_truck_default:"-- Select truck type --",
+  truck_flatbed:"Flatbed",truck_semi:"Semi-Truck",
+  truck_dump:"Dump Truck",truck_container:"Container",
+  truck_pickup:"Pickup",truck_van:"Van",truck_any:"Any",
+  f_pickup_label:"Pickup Address *",f_pickup_ph:"e.g. Port-au-Prince, Rue Capois",
+  f_gps_hint:"&#128205; Searching for your GPS position...",f_gps_found:"&#128205; GPS found!",f_gps_fail:"&#128205; GPS unavailable",
+  f_dropoff_label:"Dropoff Address *",f_dropoff_ph:"e.g. Gonaives, Rue Gilbert",
+  f_price_label:"Price Offered in HTG (optional)",f_price_ph:"e.g. 15000",
+  f_urgency_label:"Urgency *",
+  urg_normal:"&#128994; Normal",urg_urgent:"&#128992; Urgent",urg_emergency:"&#128308; Emergency",
+  f_notes_label:"Notes (optional)",f_notes_ph:"e.g. Need refrigerated truck, arrive before noon...",
+  f_submit:"&#128666; Post This Load",f_submitting:"&#9203; Submitting...",
+  success_title:"Load Posted Successfully!",
+  success_msg:"Here are your tracking code and PINs. Keep them safe.",
+  pin_pickup:"Pickup PIN",pin_delivery:"Delivery PIN",
+  success_new:"&#10133; Post Another",
+  refresh_label:"Auto-refreshing every 30 seconds",
+  filter_truck_all:"&#128666; All Truck Types",filter_urg_all:"&#9889; All Urgencies",
+  loading:"Loading...",
+  empty_title:"No Loads Available",empty_sub:"No loads available right now. Try again later or post a load.",
+  card_weight:"Weight",card_qty:"Quantity",card_truck:"Truck",card_contact:"Contact",
+  time_now:"just now",time_min:"min ago",time_hr:"hr ago",time_day:"d ago",
+  err_required:"Please fill in all required fields.",err_submit:"Error submitting. Please try again.",
+  footer_desc:"Haiti's trusted delivery and transport platform. Fast, affordable, reliable. A HaitiBiznis platform.",
+  footer_links:"Quick Links",footer_ecosystem:"Ecosystem",eco_label:"Part of"
+},
+es:{
+  nav_home:"Inicio",nav_services:"Servicios",nav_pricing:"Precios",nav_drivers:"Conductores",nav_business:"Negocios",
+  nav_cta_post:"&#128666; Publicar Carga",
+  hero_badge:"Logistica &amp; Transporte de Mercancia",
+  hero_title:"MsouWout <em>Logistics</em>",
+  hero_sub:"Publica tu carga para transporte o encuentra mercancias para transportar. Conectando negocios con duenos de camiones en todo Haiti.",
+  tab_post:"&#128230; Publicar Carga",tab_browse:"&#128270; Ver Cargas",
+  f_name_label:"Tu Nombre *",f_name_ph:"Ej: Jean Pierre",
+  f_phone_label:"Tu Telefono *",f_phone_ph:"+509 XXXX XXXX",
+  f_cargo_label:"Tipo de Mercancia *",f_cargo_default:"-- Elegir tipo --",
+  cargo_rice:"&#127834; Arroz",cargo_cement:"&#127959; Cemento",cargo_fuel:"&#9981; Combustible",
+  cargo_construction:"&#128296; Construccion",cargo_food:"&#127869; Comida",
+  cargo_merchandise:"&#128230; Mercancia",cargo_other:"&#128462; Otro",
+  f_desc_label:"Descripcion (opcional)",f_desc_ph:"Ej: 500 sacos de arroz 50kg cada uno...",
+  f_weight_label:"Peso en kg (opcional)",f_weight_ph:"Ej: 25000",
+  f_qty_label:"Cantidad (opcional)",f_qty_ph:"Ej: 500 sacos",
+  f_truck_label:"Tipo de Camion Necesario *",f_truck_default:"-- Elegir tipo de camion --",
+  truck_flatbed:"Plataforma",truck_semi:"Semi-Remolque",
+  truck_dump:"Camion Volquete",truck_container:"Contenedor",
+  truck_pickup:"Pickup",truck_van:"Van",truck_any:"Cualquiera",
+  f_pickup_label:"Direccion de Recogida *",f_pickup_ph:"Ej: Port-au-Prince, Rue Capois",
+  f_gps_hint:"&#128205; Buscando tu posicion GPS...",f_gps_found:"&#128205; GPS encontrado!",f_gps_fail:"&#128205; GPS no disponible",
+  f_dropoff_label:"Direccion de Entrega *",f_dropoff_ph:"Ej: Gonaives, Rue Gilbert",
+  f_price_label:"Precio Ofrecido en HTG (opcional)",f_price_ph:"Ej: 15000",
+  f_urgency_label:"Urgencia *",
+  urg_normal:"&#128994; Normal",urg_urgent:"&#128992; Urgente",urg_emergency:"&#128308; Emergencia",
+  f_notes_label:"Notas (opcional)",f_notes_ph:"Ej: Necesito camion refrigerado, llegar antes del mediodia...",
+  f_submit:"&#128666; Publicar esta Carga",f_submitting:"&#9203; Enviando...",
+  success_title:"Carga Publicada Exitosamente!",
+  success_msg:"Aqui estan tu codigo de seguimiento y tus PINs. Guardalos en un lugar seguro.",
+  pin_pickup:"PIN Recogida",pin_delivery:"PIN Entrega",
+  success_new:"&#10133; Publicar Otra",
+  refresh_label:"Actualizacion automatica cada 30 segundos",
+  filter_truck_all:"&#128666; Todos Tipos de Camion",filter_urg_all:"&#9889; Todas Urgencias",
+  loading:"Cargando...",
+  empty_title:"Sin Cargas Disponibles",empty_sub:"No hay cargas disponibles ahora. Intenta mas tarde o publica una carga.",
+  card_weight:"Peso",card_qty:"Cantidad",card_truck:"Camion",card_contact:"Contactar",
+  time_now:"ahora",time_min:"min",time_hr:"h",time_day:"d",
+  err_required:"Por favor complete todos los campos obligatorios.",err_submit:"Error al enviar. Por favor intente de nuevo.",
+  footer_desc:"La plataforma de entrega y transporte de confianza de Haiti. Rapido, asequible, confiable. Una plataforma HaitiBiznis.",
+  footer_links:"Enlaces Rapidos",footer_ecosystem:"Ecosistema",eco_label:"Parte de"
+}
+};
+
+var currentLang='ht';
+
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-bar a').forEach(function(a){a.classList.remove('active')});
+  var el=document.getElementById('lang-'+lang);
+  if(el) el.classList.add('active');
+  var t=T[lang]||T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key=el.getAttribute('data-i18n');
+    if(t[key]) el.innerHTML=t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
+    var key=el.getAttribute('data-i18n-placeholder');
+    if(t[key]) el.placeholder=t[key];
+  });
+  // Re-render load cards with new language
+  if(allLoads.length>0) renderLoads(getFilteredLoads());
+}
+
+function tx(key){var t=T[currentLang]||T.ht;return t[key]||T.ht[key]||key}
+
+/* ═══ MOBILE NAV ═══ */
+function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open')}
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
+
+/* ═══ TAB SWITCHING ═══ */
+function switchTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.getElementById('panel-'+tab).classList.add('active');
+  if(tab==='browse'){
+    fetchLoads();
+    startAutoRefresh();
+  } else {
+    stopAutoRefresh();
+  }
+}
+
+/* ═══ GPS ═══ */
+(function(){
+  var gpsEl=document.getElementById('gps-status');
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      function(pos){
+        document.getElementById('pickup_lat').value=pos.coords.latitude;
+        document.getElementById('pickup_lng').value=pos.coords.longitude;
+        gpsEl.innerHTML=tx('f_gps_found');
+        gpsEl.style.color='#1B8C3D';
+      },
+      function(){
+        document.getElementById('pickup_lat').value=DEFAULT_LAT;
+        document.getElementById('pickup_lng').value=DEFAULT_LNG;
+        gpsEl.innerHTML=tx('f_gps_fail');
+        gpsEl.style.color='#D4A017';
+      },
+      {timeout:8000,maximumAge:60000}
+    );
+  } else {
+    document.getElementById('pickup_lat').value=DEFAULT_LAT;
+    document.getElementById('pickup_lng').value=DEFAULT_LNG;
+    gpsEl.innerHTML=tx('f_gps_fail');
+    gpsEl.style.color='#D4A017';
+  }
+})();
+
+/* ═══ POST LOAD ═══ */
+function submitLoad(e){
+  e.preventDefault();
+  var t=T[currentLang]||T.ht;
+  var statusEl=document.getElementById('formStatus');
+  var btn=document.getElementById('submitBtn');
+  var origText=btn.innerHTML;
+
+  // Build payload
+  var payload={
+    posted_by_name:document.getElementById('posted_by_name').value.trim(),
+    posted_by_phone:document.getElementById('posted_by_phone').value.trim(),
+    cargo_type:document.getElementById('cargo_type').value,
+    cargo_description:document.getElementById('cargo_description').value.trim(),
+    weight_kg:document.getElementById('weight_kg').value?Number(document.getElementById('weight_kg').value):null,
+    quantity:document.getElementById('quantity').value.trim()||null,
+    truck_type_needed:document.getElementById('truck_type_needed').value,
+    pickup_address:document.getElementById('pickup_address').value.trim(),
+    pickup_lat:Number(document.getElementById('pickup_lat').value)||DEFAULT_LAT,
+    pickup_lng:Number(document.getElementById('pickup_lng').value)||DEFAULT_LNG,
+    dropoff_address:document.getElementById('dropoff_address').value.trim(),
+    dropoff_lat:Number(document.getElementById('dropoff_lat').value)||null,
+    dropoff_lng:Number(document.getElementById('dropoff_lng').value)||null,
+    price:document.getElementById('price').value?Number(document.getElementById('price').value):null,
+    urgency:document.querySelector('input[name="urgency"]:checked').value,
+    notes:document.getElementById('notes').value.trim()||null
+  };
+
+  // Disable button
+  btn.disabled=true;
+  btn.innerHTML=tx('f_submitting');
+  statusEl.className='form-status';
+  statusEl.style.display='none';
+
+  fetch(API+'/api/logistics/loads',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  })
+  .then(function(res){
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    return res.json();
+  })
+  .then(function(data){
+    btn.innerHTML=origText;
+    btn.disabled=false;
+
+    // Show success card
+    var load=data.load||data;
+    document.getElementById('trackingCode').textContent=load.tracking_code||load.id||'---';
+    document.getElementById('pickupPin').textContent=load.pickup_pin||'----';
+    document.getElementById('deliveryPin').textContent=load.delivery_pin||'----';
+    document.getElementById('loadForm').style.display='none';
+    document.getElementById('successCard').classList.add('show');
+    document.getElementById('successCard').scrollIntoView({behavior:'smooth',block:'center'});
+  })
+  .catch(function(err){
+    btn.innerHTML=origText;
+    btn.disabled=false;
+    statusEl.className='form-status error';
+    statusEl.textContent=tx('err_submit');
+    statusEl.style.display='block';
+    console.error('Post load error:',err);
+  });
+
+  return false;
+}
+
+function resetForm(){
+  document.getElementById('loadForm').reset();
+  document.getElementById('loadForm').style.display='block';
+  document.getElementById('successCard').classList.remove('show');
+  // Re-check urgency default
+  document.querySelector('input[name="urgency"][value="normal"]').checked=true;
+}
+
+/* ═══ FETCH & RENDER LOADS ═══ */
+function fetchLoads(){
+  var listEl=document.getElementById('loadsList');
+  // Show loading only on first load
+  if(allLoads.length===0){
+    listEl.innerHTML='<div class="loading-state"><div class="spinner"></div><p>'+tx('loading')+'</p></div>';
+  }
+
+  fetch(API+'/api/logistics/loads?status=posted')
+  .then(function(res){
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    return res.json();
+  })
+  .then(function(data){
+    allLoads=data.loads||data||[];
+    renderLoads(getFilteredLoads());
+  })
+  .catch(function(err){
+    console.error('Fetch loads error:',err);
+    if(allLoads.length===0){
+      listEl.innerHTML='<div class="empty-state"><div class="empty-icon">&#128666;</div><h3 class="empty-title">'+tx('empty_title')+'</h3><p class="empty-sub">'+tx('empty_sub')+'</p></div>';
+    }
+  });
+}
+
+function getFilteredLoads(){
+  var truck=document.getElementById('filterTruck').value;
+  var urgency=document.getElementById('filterUrgency').value;
+  return allLoads.filter(function(l){
+    if(truck && l.truck_type_needed!==truck) return false;
+    if(urgency && l.urgency!==urgency) return false;
+    return true;
+  });
+}
+
+function filterLoads(){
+  renderLoads(getFilteredLoads());
+}
+
+/* Cargo type emoji map */
+var cargoEmoji={
+  rice:'&#127834;',cement:'&#127959;',fuel:'&#9981;',
+  construction:'&#128296;',food:'&#127869;',merchandise:'&#128230;',other:'&#128462;'
+};
+var cargoI18n={
+  rice:'cargo_rice',cement:'cargo_cement',fuel:'cargo_fuel',
+  construction:'cargo_construction',food:'cargo_food',merchandise:'cargo_merchandise',other:'cargo_other'
+};
+var truckI18n={
+  flatbed:'truck_flatbed',semi_truck:'truck_semi',dump_truck:'truck_dump',
+  container:'truck_container',pickup:'truck_pickup',van:'truck_van',any:'truck_any'
+};
+
+function renderLoads(loads){
+  var listEl=document.getElementById('loadsList');
+
+  if(!loads||loads.length===0){
+    listEl.innerHTML='<div class="empty-state"><div class="empty-icon">&#128666;</div><h3 class="empty-title">'+tx('empty_title')+'</h3><p class="empty-sub">'+tx('empty_sub')+'</p></div>';
+    return;
+  }
+
+  var html='';
+  loads.forEach(function(load){
+    var urg=load.urgency||'normal';
+    var urgClass=urg==='urgent'?'urgent':urg==='emergency'?'emergency':'';
+    var emoji=cargoEmoji[load.cargo_type]||'&#128230;';
+    var cargoName=tx(cargoI18n[load.cargo_type]||'cargo_other');
+    var truckName=tx(truckI18n[load.truck_type_needed]||'truck_any');
+    var urgLabel=tx('urg_'+urg);
+    var urgBadgeClass=urg;
+    var timeStr=relativeTime(load.created_at);
+
+    html+='<div class="load-card '+urgClass+'">';
+    html+='<div class="load-header">';
+    html+='<div class="cargo-icon">'+emoji+'</div>';
+    html+='<div class="load-title"><h3>'+cargoName+'</h3>';
+    if(load.cargo_description) html+='<span class="load-meta">'+escHtml(load.cargo_description.substring(0,60))+(load.cargo_description.length>60?'...':'')+'</span>';
+    html+='</div>';
+    html+='<span class="urgency-badge '+urgBadgeClass+'">'+urgLabel+'</span>';
+    html+='</div>';
+
+    // Route
+    html+='<div class="load-route">';
+    html+='<div class="route-dots"><div class="rd g"></div><div class="rl"></div><div class="rd r"></div></div>';
+    html+='<div class="route-text"><strong>'+escHtml(load.pickup_address||'---')+'</strong>';
+    html+='&#8595; '+escHtml(load.dropoff_address||'---')+'</div>';
+    html+='</div>';
+
+    // Tags
+    html+='<div class="load-details">';
+    if(load.weight_kg) html+='<span class="load-tag">&#9878; '+tx('card_weight')+': '+formatNum(load.weight_kg)+' kg</span>';
+    if(load.quantity) html+='<span class="load-tag">&#128230; '+tx('card_qty')+': '+escHtml(load.quantity)+'</span>';
+    html+='<span class="load-tag">&#128666; '+tx('card_truck')+': '+truckName+'</span>';
+    if(load.price) html+='<span class="load-tag price">HTG '+formatNum(load.price)+'</span>';
+    html+='</div>';
+
+    // Footer
+    html+='<div class="load-footer">';
+    html+='<span class="load-time">&#128337; '+timeStr+'</span>';
+    var phone=(load.posted_by_phone||'').replace(/[^0-9+]/g,'');
+    if(phone){
+      var waMsg=encodeURIComponent('Bonjou! M enterese nan chajman ou sou MsouWout Logistics. ('+escHtml(load.pickup_address||'')+' -> '+escHtml(load.dropoff_address||'')+')');
+      html+='<a href="https://wa.me/'+phone.replace('+','')+'?text='+waMsg+'" target="_blank" class="contact-btn">&#128172; '+tx('card_contact')+'</a>';
+    }
+    html+='</div>';
+    html+='</div>';
+  });
+
+  listEl.innerHTML=html;
+}
+
+/* ═══ HELPERS ═══ */
+function relativeTime(ts){
+  if(!ts) return tx('time_now');
+  var now=Date.now();
+  var then=new Date(ts).getTime();
+  var diff=Math.floor((now-then)/1000);
+  if(diff<60) return tx('time_now');
+  if(diff<3600) return Math.floor(diff/60)+' '+tx('time_min');
+  if(diff<86400) return Math.floor(diff/3600)+' '+tx('time_hr');
+  return Math.floor(diff/86400)+' '+tx('time_day');
+}
+
+function formatNum(n){
+  if(!n) return '0';
+  return Number(n).toLocaleString();
+}
+
+function escHtml(str){
+  if(!str) return '';
+  var d=document.createElement('div');
+  d.textContent=str;
+  return d.innerHTML;
+}
+
+/* ═══ AUTO REFRESH ═══ */
+function startAutoRefresh(){
+  stopAutoRefresh();
+  refreshTimer=setInterval(function(){fetchLoads()},30000);
+}
+function stopAutoRefresh(){
+  if(refreshTimer){clearInterval(refreshTimer);refreshTimer=null}
+}
+
+/* ═══ INIT ═══ */
+// Set default language
+setLang('ht');
+</script>
+</body>
+</html>

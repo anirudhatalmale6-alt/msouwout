@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>MsouWout Logistics - Flòt Ou | Fleet Management</title>
+<meta name="description" content="Jere flòt kamyon ou, chofè, ak chajman sou MsouWout Logistics. Manage your trucks, drivers, and freight jobs.">
+<meta property="og:title" content="MsouWout Logistics - Fleet Management">
+<meta property="og:description" content="Jere flòt kamyon ou, chofè, ak chajman sou MsouWout Logistics.">
+<meta property="og:image" content="https://msouwout.com/assets/og-msouwout.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://msouwout.com/logistics-fleet.html">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D21034;--red-dark:#B00D2C;--red-light:#E8243F;
+  --blue:#00209F;--blue-dark:#001566;
+  --gold:#D4A017;--gold-light:#E8B82E;
+  --white:#FFFFFF;--off-white:#FFF8F8;--light-gray:#F0E8E8;
+  --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;--text-muted:#8A95AA;
+  --green:#1B8C3D;--green-dark:#156E30;--green-light:#22C55E;
+  --border:#E2E8F0;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --display:'DM Serif Display',Georgia,serif;
+  --radius:16px;--radius-lg:20px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button{font-family:var(--body);cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:var(--body)}
+
+/* LANG BAR */
+.lang-bar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;
+  background:var(--red);
+  padding:6px 20px;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;
+}
+.lang-bar a{
+  color:rgba(255,255,255,.7);font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:100px;
+  cursor:pointer;transition:all .2s;letter-spacing:.02em;
+}
+.lang-bar a:hover{color:#fff;background:rgba(255,255,255,.15)}
+.lang-bar a.active{color:var(--red);background:#fff}
+
+/* NAV */
+nav{
+  position:fixed;top:36px;left:0;right:0;z-index:1000;
+  background:var(--blue);border-bottom:3px solid var(--red);
+  padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.nav-logo span{font-family:var(--display);font-weight:900;font-size:1.25rem;color:#fff;letter-spacing:-.02em}
+.nav-links{display:flex;align-items:center;gap:20px}
+.nav-links a{color:rgba(255,255,255,.8);font-size:.82rem;font-weight:600;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  background:var(--red);color:#fff;padding:10px 22px;border-radius:100px;font-size:.82rem;
+  font-weight:700;transition:all .25s;border:none;cursor:pointer;
+}
+.nav-cta:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(210,16,52,.35)}
+.mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+.mobile-nav{display:none;position:fixed;top:100px;left:0;right:0;background:var(--blue);padding:24px;z-index:999;border-bottom:3px solid var(--red);flex-direction:column;gap:16px}
+.mobile-nav.open{display:flex}
+.mobile-nav a{color:rgba(255,255,255,.9);font-size:.95rem;font-weight:600;padding:8px 0}
+
+/* HERO */
+.hero{
+  min-height:38vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:130px 24px 50px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 60%,#000D4F 100%);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 20%,rgba(210,16,52,.08) 0%,transparent 60%),
+             radial-gradient(ellipse at 70% 80%,rgba(212,160,23,.06) 0%,transparent 50%);
+}
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:80px;
+  background:linear-gradient(to top,var(--off-white),transparent);pointer-events:none;
+}
+.hero *{position:relative;z-index:1}
+.hero h1{
+  font-family:var(--display);font-size:clamp(1.8rem,4.5vw,3rem);font-weight:900;
+  color:#fff;line-height:1.15;letter-spacing:-.02em;max-width:600px;
+  animation:fadeUp .7s ease both;
+}
+.hero h1 em{font-style:italic;color:var(--gold-light)}
+.hero-sub{
+  font-size:clamp(.9rem,1.8vw,1.05rem);color:rgba(255,255,255,.65);line-height:1.6;
+  max-width:440px;margin:16px auto 0;font-weight:400;
+  animation:fadeUp .7s .1s ease both;
+}
+.hero-icon{font-size:2.8rem;margin-bottom:12px;animation:fadeUp .5s ease both}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* LOGIN SECTION */
+.login-section{padding:0 24px 60px;margin-top:-40px;position:relative;z-index:2}
+.login-card{
+  max-width:420px;margin:0 auto;background:var(--white);border-radius:var(--radius-lg);
+  padding:40px 32px;box-shadow:0 20px 60px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.04);
+  border:1px solid rgba(0,0,0,.04);
+  animation:fadeUp .7s .2s ease both;
+}
+.login-card h2{
+  font-family:var(--display);font-size:1.5rem;color:var(--dark);text-align:center;margin-bottom:6px;
+}
+.login-card .login-sub{
+  font-size:.88rem;color:var(--text-light);text-align:center;margin-bottom:28px;line-height:1.5;
+}
+.phone-input-wrap{
+  position:relative;display:flex;align-items:center;
+  border:2px solid var(--border);border-radius:14px;overflow:hidden;
+  transition:border-color .2s;margin-bottom:16px;
+}
+.phone-input-wrap:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.08)}
+.phone-flag{
+  padding:14px 12px 14px 16px;font-size:.82rem;font-weight:700;
+  background:#f8fafc;border-right:1px solid var(--border);
+  display:flex;align-items:center;gap:6px;color:var(--text);flex-shrink:0;
+}
+.phone-input{
+  flex:1;padding:14px 16px;border:none;outline:none;font-size:1rem;
+  font-family:var(--body);font-weight:500;color:var(--dark);background:transparent;
+}
+.phone-input::placeholder{color:#b0b8c4;font-weight:400}
+.btn-login{
+  width:100%;padding:16px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--red),var(--red-dark));
+  color:#fff;font-size:1rem;font-weight:800;cursor:pointer;
+  font-family:var(--body);transition:all .25s;letter-spacing:.01em;
+}
+.btn-login:hover{box-shadow:0 8px 28px rgba(210,16,52,.35);transform:translateY(-1px)}
+.btn-login:active{transform:translateY(0)}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+.login-error{
+  background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;
+  padding:14px 16px;margin-bottom:16px;display:none;
+  font-size:.85rem;color:#991B1B;line-height:1.5;
+}
+.login-error a{color:var(--red);font-weight:700;text-decoration:underline}
+.login-footer{text-align:center;margin-top:20px;font-size:.82rem;color:var(--text-light)}
+.login-footer a{color:var(--blue);font-weight:700}
+.login-footer a:hover{text-decoration:underline}
+.spinner{
+  display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;
+  vertical-align:middle;margin-right:6px;
+}
+
+/* DASHBOARD */
+.dashboard{display:none;padding:120px 24px 60px;position:relative;z-index:2}
+.dashboard.active{display:block}
+.dash-inner{max-width:900px;margin:0 auto}
+
+/* WELCOME BAR */
+.welcome-bar{
+  background:var(--white);border-radius:var(--radius-lg);padding:24px;
+  box-shadow:0 12px 40px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.04);
+  margin-bottom:20px;display:flex;align-items:center;gap:16px;
+  animation:fadeUp .5s ease both;
+}
+.welcome-avatar{
+  width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;flex-shrink:0;
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;
+}
+.welcome-info h2{font-family:var(--display);font-size:1.3rem;color:var(--dark);line-height:1.2}
+.welcome-info p{font-size:.82rem;color:var(--text-light);margin-top:2px}
+.btn-logout{
+  margin-left:auto;padding:8px 18px;border-radius:100px;border:1.5px solid var(--border);
+  background:transparent;color:var(--text-light);font-size:.78rem;font-weight:700;
+  cursor:pointer;font-family:var(--body);transition:all .2s;flex-shrink:0;
+}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+/* STAT CARDS */
+.stats-row{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;
+  animation:fadeUp .5s .05s ease both;
+}
+.stat-card{
+  background:var(--white);border-radius:var(--radius);padding:20px;
+  box-shadow:0 4px 20px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);
+  display:flex;align-items:center;gap:14px;transition:transform .2s;
+}
+.stat-card:hover{transform:translateY(-2px)}
+.stat-icon{
+  width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;flex-shrink:0;
+}
+.stat-icon.blue{background:rgba(0,32,159,.08);color:var(--blue)}
+.stat-icon.green{background:rgba(27,140,61,.08);color:var(--green)}
+.stat-icon.gold{background:rgba(212,160,23,.08);color:var(--gold)}
+.stat-icon.red{background:rgba(210,16,52,.08);color:var(--red)}
+.stat-num{font-size:1.6rem;font-weight:900;color:var(--dark);line-height:1}
+.stat-label{font-size:.72rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+
+/* SECTION CARDS */
+.section-card{
+  background:var(--white);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;
+  box-shadow:0 8px 32px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);
+  animation:fadeUp .5s .1s ease both;
+}
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;
+}
+.section-header h3{
+  font-family:var(--display);font-size:1.15rem;color:var(--dark);
+  display:flex;align-items:center;gap:8px;
+}
+.btn-action{
+  padding:8px 18px;border-radius:100px;font-size:.78rem;font-weight:700;
+  transition:all .25s;cursor:pointer;border:none;
+}
+.btn-action.primary{background:var(--blue);color:#fff}
+.btn-action.primary:hover{background:var(--blue-dark);box-shadow:0 4px 16px rgba(0,32,159,.25)}
+.btn-action.red{background:var(--red);color:#fff}
+.btn-action.red:hover{background:var(--red-dark)}
+.btn-action.green{background:var(--green);color:#fff}
+.btn-action.green:hover{background:var(--green-dark)}
+.btn-action.gold{background:var(--gold);color:#fff}
+.btn-action.gold:hover{background:var(--gold-light)}
+.btn-action.outline{background:transparent;border:1.5px solid var(--border);color:var(--text-light)}
+.btn-action.outline:hover{border-color:var(--blue);color:var(--blue)}
+.btn-action:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* TRUCK CARDS */
+.truck-list{display:flex;flex-direction:column;gap:10px}
+.truck-card{
+  display:flex;align-items:center;gap:14px;padding:16px;
+  border-radius:14px;background:#F8FAFC;border:1px solid #F1F5F9;
+  transition:all .2s;
+}
+.truck-card:hover{border-color:var(--border);background:#fff}
+.truck-emoji{font-size:2rem;flex-shrink:0;width:48px;text-align:center}
+.truck-details{flex:1;min-width:0}
+.truck-details .truck-type{font-size:.72rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.04em}
+.truck-details .truck-name{font-size:.95rem;font-weight:700;color:var(--dark);margin:2px 0}
+.truck-details .truck-plate{font-size:.82rem;color:var(--text-light);font-weight:500}
+.truck-details .truck-driver{font-size:.78rem;color:var(--text-muted);margin-top:2px}
+.truck-status{
+  padding:5px 12px;border-radius:100px;font-size:.7rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.03em;flex-shrink:0;
+}
+.truck-status.available{background:#DCFCE7;color:#166534}
+.truck-status.busy{background:#FEE2E2;color:#991B1B}
+
+/* ADD TRUCK FORM */
+.add-truck-form{
+  display:none;margin-top:16px;padding:20px;border-radius:14px;
+  background:#F8FAFC;border:2px dashed var(--border);
+}
+.add-truck-form.active{display:block}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-group.full{grid-column:span 2}
+.form-group label{font-size:.72rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.04em}
+.form-group input,.form-group select{
+  padding:12px 14px;border:2px solid var(--border);border-radius:12px;
+  font-size:.9rem;font-weight:500;color:var(--dark);background:var(--white);
+  outline:none;transition:border-color .2s;
+}
+.form-group input:focus,.form-group select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.06)}
+.form-actions{display:flex;gap:10px;margin-top:16px}
+
+/* LOAD CARDS */
+.load-list{display:flex;flex-direction:column;gap:12px}
+.load-card{
+  background:var(--white);border-radius:14px;padding:18px;border:1px solid #F1F5F9;
+  border-left:4px solid var(--border);transition:all .2s;
+}
+.load-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.load-card.urgent-high{border-left-color:var(--red)}
+.load-card.urgent-medium{border-left-color:var(--gold)}
+.load-card.urgent-low{border-left-color:var(--green)}
+.load-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.load-tracking{font-size:.75rem;font-weight:800;color:var(--blue);letter-spacing:.03em}
+.load-badge{
+  padding:4px 10px;border-radius:100px;font-size:.68rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.03em;
+}
+.load-badge.posted{background:#F1F5F9;color:#64748B}
+.load-badge.assigned{background:#DBEAFE;color:#1E40AF}
+.load-badge.picked_up{background:#FEF9C3;color:#854D0E}
+.load-badge.in_transit{background:#DBEAFE;color:#1E40AF}
+.load-badge.delivered{background:#DCFCE7;color:#166534}
+.load-badge.cancelled{background:#FEE2E2;color:#991B1B}
+.load-badge.urgency-high{background:#FEE2E2;color:#991B1B}
+.load-badge.urgency-medium{background:#FEF9C3;color:#854D0E}
+.load-badge.urgency-low{background:#DCFCE7;color:#166534}
+.load-cargo{font-size:.95rem;font-weight:700;color:var(--dark);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.load-route{font-size:.82rem;color:var(--text-light);line-height:1.5;margin-bottom:8px}
+.load-route .dot{display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:middle;margin-right:4px}
+.load-route .dot.green{background:var(--green)}
+.load-route .dot.red{background:var(--red)}
+.load-meta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:12px}
+.load-price{font-size:1rem;font-weight:900;color:var(--dark)}
+.load-qty{font-size:.82rem;color:var(--text-light);font-weight:500}
+.load-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+
+/* STATUS FLOW */
+.status-flow{
+  display:flex;align-items:center;gap:4px;margin:14px 0 8px;padding:14px;
+  background:#F8FAFC;border-radius:12px;overflow-x:auto;
+}
+.flow-step{
+  font-size:.65rem;font-weight:700;padding:4px 10px;border-radius:100px;
+  white-space:nowrap;background:#E2E8F0;color:#64748B;
+}
+.flow-step.active{background:var(--blue);color:#fff}
+.flow-step.done{background:var(--green);color:#fff}
+.flow-arrow{color:var(--text-muted);font-size:.65rem;flex-shrink:0}
+
+/* TRUCK SELECTOR MODAL */
+.truck-selector{
+  margin-top:10px;padding:14px;background:#F8FAFC;border-radius:12px;
+  border:1px solid var(--border);display:none;
+}
+.truck-selector.active{display:block}
+.truck-selector select{
+  width:100%;padding:12px;border:2px solid var(--border);border-radius:10px;
+  font-size:.88rem;font-weight:600;color:var(--dark);background:var(--white);
+  margin-bottom:10px;outline:none;
+}
+.truck-selector select:focus{border-color:var(--blue)}
+
+/* PIN MODAL */
+.pin-modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;
+  align-items:center;justify-content:center;padding:24px;
+}
+.pin-modal-overlay.active{display:flex}
+.pin-modal{
+  background:var(--white);border-radius:var(--radius-lg);padding:32px;
+  max-width:380px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.2);
+  text-align:center;
+}
+.pin-modal h3{font-family:var(--display);font-size:1.2rem;color:var(--dark);margin-bottom:8px}
+.pin-modal p{font-size:.85rem;color:var(--text-light);margin-bottom:20px;line-height:1.5}
+.pin-modal input{
+  width:180px;padding:16px;border:2px solid var(--border);border-radius:14px;
+  text-align:center;font-size:1.8rem;font-weight:900;letter-spacing:.4em;
+  font-family:var(--body);color:var(--dark);outline:none;transition:border-color .2s;
+}
+.pin-modal input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(27,140,61,.12)}
+.pin-modal .name-input{
+  width:100%;padding:14px;border:2px solid var(--border);border-radius:14px;
+  font-size:.95rem;font-weight:500;color:var(--dark);outline:none;
+  margin-top:12px;letter-spacing:0;text-align:left;
+}
+.pin-modal .name-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.08)}
+.pin-modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:center}
+.pin-feedback{
+  border-radius:10px;padding:10px 14px;margin-top:12px;display:none;
+  font-size:.82rem;text-align:center;font-weight:600;
+}
+.pin-feedback.error{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;display:block}
+.pin-feedback.success{background:#DCFCE7;border:1px solid #86EFAC;color:#166534;display:block}
+
+/* EMPTY STATE */
+.empty-state{
+  text-align:center;padding:40px 16px;color:var(--text-light);font-size:.88rem;
+}
+.empty-state .empty-icon{font-size:2.5rem;margin-bottom:12px;opacity:.4}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);
+  background:var(--dark);color:#fff;padding:14px 24px;border-radius:100px;
+  font-size:.85rem;font-weight:700;z-index:3000;transition:transform .3s ease;
+  box-shadow:0 8px 32px rgba(0,0,0,.25);display:flex;align-items:center;gap:8px;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--green)}
+.toast.error{background:var(--red)}
+
+/* FOOTER */
+footer{
+  background:var(--blue);color:rgba(255,255,255,.7);text-align:center;
+  padding:32px 24px;font-size:.8rem;
+}
+footer a{color:var(--gold-light);font-weight:600}
+footer a:hover{text-decoration:underline}
+
+/* RESPONSIVE */
+@media(min-width:768px){
+  .stats-row{grid-template-columns:repeat(4,1fr)}
+  .form-row{grid-template-columns:1fr 1fr 1fr}
+  .form-group.full{grid-column:span 3}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .welcome-bar{flex-wrap:wrap}
+  .btn-logout{margin-left:0;margin-top:8px;width:100%;text-align:center}
+  .form-row{grid-template-columns:1fr}
+  .form-group.full{grid-column:span 1}
+  .truck-card{flex-wrap:wrap}
+  .load-actions{flex-direction:column}
+  .load-actions .btn-action{width:100%;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- LANG BAR -->
+<div class="lang-bar">
+  <a onclick="setLang('ht')" class="active" id="lang-ht">&#127469;&#127481; Kreyol</a>
+  <a onclick="setLang('fr')" id="lang-fr">&#127467;&#127479; Francais</a>
+  <a onclick="setLang('en')" id="lang-en">&#127468;&#127463; English</a>
+  <a onclick="setLang('es')" id="lang-es">&#127466;&#127480; Espanol</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="assets/msouwout-icon.png" alt="MsouWout Logo">
+    <span>MsouWout</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" data-i18n="nav_home">Akey</a>
+    <a href="track.html" data-i18n="nav_track">Swiv</a>
+    <a href="logistics-register.html" data-i18n="nav_register">Enskri Flot</a>
+  </div>
+  <a href="logistics-register.html" class="nav-cta" data-i18n="nav_register_cta">Enskri Flot Ou</a>
+  <button class="mobile-toggle" onclick="toggleMobile()">&#9776;</button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html" onclick="closeMobile()" data-i18n="nav_home">Akey</a>
+  <a href="track.html" onclick="closeMobile()" data-i18n="nav_track">Swiv</a>
+  <a href="logistics-register.html" onclick="closeMobile()" data-i18n="nav_register">Enskri Flot</a>
+  <a href="logistics-register.html" onclick="closeMobile()" class="nav-cta" style="text-align:center" data-i18n="nav_register_cta">Enskri Flot Ou</a>
+</div>
+
+<!-- HERO (login state) -->
+<section class="hero" id="heroSection">
+  <div class="hero-icon">&#128666;</div>
+  <h1 data-i18n="hero_title">MsouWout Logistics &mdash; <em>Flot Ou</em></h1>
+  <p class="hero-sub" data-i18n="hero_sub">Jere kamyon ou, chofe ou, ak chajman ou nan yon sèl plas.</p>
+</section>
+
+<!-- LOGIN FORM -->
+<section class="login-section" id="loginSection">
+  <div class="login-card">
+    <h2 data-i18n="login_title">Koneksyon Flot</h2>
+    <p class="login-sub" data-i18n="login_sub">Antre nimewo telefon ou pou konekte ak kont flot ou.</p>
+
+    <div class="login-error" id="loginError"></div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="phone-input-wrap">
+        <div class="phone-flag">&#127469;&#127481; +509</div>
+        <input type="tel" class="phone-input" id="phoneInput" placeholder="4685 9702" data-i18n-placeholder="phone_placeholder" required>
+      </div>
+      <button type="submit" class="btn-login" id="loginBtn" data-i18n="login_btn">Konekte</button>
+    </form>
+
+    <div class="login-footer">
+      <span data-i18n="no_account">Ou poko gen yon flot?</span>
+      <a href="logistics-register.html" data-i18n="register_link">Enskri kounye a</a>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="dashboard" id="dashboard">
+  <div class="dash-inner">
+
+    <!-- Welcome Bar -->
+    <div class="welcome-bar" id="welcomeBar">
+      <div class="welcome-avatar">&#128666;</div>
+      <div class="welcome-info">
+        <h2 id="fleetOwnerName"></h2>
+        <p id="fleetCompany"></p>
+      </div>
+      <button class="btn-logout" onclick="logout()" data-i18n="logout">Dekonekte</button>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row" id="statsRow">
+      <div class="stat-card">
+        <div class="stat-icon blue">&#128666;</div>
+        <div>
+          <div class="stat-num" id="statTotalTrucks">0</div>
+          <div class="stat-label" data-i18n="stat_total_trucks">Total Kamyon</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">&#9989;</div>
+        <div>
+          <div class="stat-num" id="statAvailTrucks">0</div>
+          <div class="stat-label" data-i18n="stat_avail_trucks">Disponib</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon gold">&#128230;</div>
+        <div>
+          <div class="stat-num" id="statActiveLoads">0</div>
+          <div class="stat-label" data-i18n="stat_active_loads">Chajman Aktif</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon red">&#9989;</div>
+        <div>
+          <div class="stat-num" id="statCompletedLoads">0</div>
+          <div class="stat-label" data-i18n="stat_completed">Fini</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MY TRUCKS -->
+    <div class="section-card" id="trucksSection">
+      <div class="section-header">
+        <h3>&#128666; <span data-i18n="trucks_title">Kamyon Mwen</span></h3>
+        <button class="btn-action primary" onclick="toggleAddTruck()" data-i18n="add_truck">+ Ajoute Kamyon</button>
+      </div>
+
+      <!-- Add Truck Form -->
+      <div class="add-truck-form" id="addTruckForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label data-i18n="lbl_truck_type">Tip Kamyon</label>
+            <select id="newTruckType">
+              <option value="flatbed">Flatbed</option>
+              <option value="semi_truck">Semi Truck</option>
+              <option value="dump_truck">Dump Truck</option>
+              <option value="container">Container</option>
+              <option value="pickup">Pickup</option>
+              <option value="van">Van</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="lbl_make_model">Mak / Modèl</label>
+            <input type="text" id="newTruckMake" placeholder="Toyota Dyna">
+          </div>
+          <div class="form-group">
+            <label data-i18n="lbl_plate">Plak</label>
+            <input type="text" id="newTruckPlate" placeholder="AA-12345">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label data-i18n="lbl_driver_name">Non Chofe</label>
+            <input type="text" id="newTruckDriver" placeholder="Jean Pierre">
+          </div>
+          <div class="form-group">
+            <label data-i18n="lbl_driver_phone">Telefon Chofe</label>
+            <input type="tel" id="newTruckDriverPhone" placeholder="+509 4685 9702">
+          </div>
+          <div class="form-group">
+            <label data-i18n="lbl_capacity">Kapasite (tons)</label>
+            <input type="number" id="newTruckCapacity" placeholder="10">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-action green" onclick="submitAddTruck()" id="btnSubmitTruck" data-i18n="save_truck">Anrejistre Kamyon</button>
+          <button class="btn-action outline" onclick="toggleAddTruck()" data-i18n="cancel">Anile</button>
+        </div>
+      </div>
+
+      <div class="truck-list" id="truckList">
+        <div class="empty-state"><div class="empty-icon">&#128666;</div><p data-i18n="no_trucks">Pa gen kamyon anko.</p></div>
+      </div>
+    </div>
+
+    <!-- ACTIVE LOADS -->
+    <div class="section-card" id="activeLoadsSection">
+      <div class="section-header">
+        <h3>&#128230; <span data-i18n="active_loads_title">Chajman Aktif</span></h3>
+        <span style="font-size:.75rem;color:var(--text-muted);font-weight:600" data-i18n="auto_refresh">Aktualize otomatik</span>
+      </div>
+      <div class="load-list" id="activeLoadList">
+        <div class="empty-state"><div class="empty-icon">&#128230;</div><p data-i18n="no_active_loads">Pa gen chajman aktif.</p></div>
+      </div>
+    </div>
+
+    <!-- AVAILABLE LOADS -->
+    <div class="section-card" id="availableLoadsSection">
+      <div class="section-header">
+        <h3>&#127981; <span data-i18n="available_loads_title">Chajman Disponib</span></h3>
+        <button class="btn-action outline" onclick="fetchAvailableLoads()" data-i18n="refresh">Aktualize</button>
+      </div>
+      <div class="load-list" id="availableLoadList">
+        <div class="empty-state"><div class="empty-icon">&#127981;</div><p data-i18n="no_available_loads">Pa gen chajman disponib pou kounye a.</p></div>
+      </div>
+    </div>
+
+    <!-- LOAD HISTORY -->
+    <div class="section-card" id="historySection">
+      <div class="section-header">
+        <h3>&#128203; <span data-i18n="history_title">Istwa Chajman</span></h3>
+      </div>
+      <div class="load-list" id="historyLoadList">
+        <div class="empty-state"><div class="empty-icon">&#128203;</div><p data-i18n="no_history">Pa gen istwa anko.</p></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PIN MODAL -->
+<div class="pin-modal-overlay" id="pinModal">
+  <div class="pin-modal">
+    <h3 id="pinModalTitle">Antre PIN</h3>
+    <p id="pinModalDesc">Mande moun ki voye chajman an pou kòd PIN nan.</p>
+    <input type="tel" maxlength="6" id="pinModalInput" placeholder="- - - -" inputmode="numeric">
+    <input type="text" class="name-input" id="pinModalName" placeholder="Non moun ki resevwa" style="display:none">
+    <div class="pin-feedback" id="pinModalFeedback"></div>
+    <div class="pin-modal-actions">
+      <button class="btn-action green" id="pinModalConfirm" onclick="confirmPinAction()">Konfime</button>
+      <button class="btn-action outline" onclick="closePinModal()">Anile</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2026 MsouWout Logistics &mdash; <span data-i18n="footer_part">Yon platfom</span> <a href="https://haitibiznis.com">HaitiBiznis</a></p>
+</footer>
+
+<script>
+const API='https://msouwout-backend.onrender.com';
+
+/* ========== i18n ========== */
+const T={
+  ht:{
+    nav_home:"Akey",nav_track:"Swiv",nav_register:"Enskri Flot",nav_register_cta:"Enskri Flot Ou",
+    hero_title:"MsouWout Logistics &mdash; <em>Flot Ou</em>",
+    hero_sub:"Jere kamyon ou, chofe ou, ak chajman ou nan yon sel plas.",
+    login_title:"Koneksyon Flot",login_sub:"Antre nimewo telefon ou pou konekte ak kont flot ou.",
+    phone_placeholder:"4685 9702",login_btn:"Konekte",
+    no_account:"Ou poko gen yon flot?",register_link:"Enskri kounye a",
+    logout:"Dekonekte",
+    stat_total_trucks:"Total Kamyon",stat_avail_trucks:"Disponib",stat_active_loads:"Chajman Aktif",stat_completed:"Fini",
+    trucks_title:"Kamyon Mwen",add_truck:"+ Ajoute Kamyon",
+    lbl_truck_type:"Tip Kamyon",lbl_make_model:"Mak / Model",lbl_plate:"Plak",
+    lbl_driver_name:"Non Chofe",lbl_driver_phone:"Telefon Chofe",lbl_capacity:"Kapasite (tons)",
+    save_truck:"Anrejistre Kamyon",cancel:"Anile",
+    no_trucks:"Pa gen kamyon anko.",
+    active_loads_title:"Chajman Aktif",auto_refresh:"Aktualize otomatik",
+    no_active_loads:"Pa gen chajman aktif.",
+    available_loads_title:"Chajman Disponib",refresh:"Aktualize",
+    no_available_loads:"Pa gen chajman disponib pou kounye a.",
+    history_title:"Istwa Chajman",no_history:"Pa gen istwa anko.",
+    footer_part:"Yon platfom",
+    btn_pickup:"Anbake",btn_transit:"Nan Wout",btn_deliver:"Livre",btn_claim:"Pran Chajman",
+    pickup_title:"Konfime Anbakman",pickup_desc:"Antre kod PIN pou konfime ou pran chajman an.",
+    deliver_title:"Konfime Livrezon",deliver_desc:"Antre PIN ak non moun ki resevwa chajman an.",
+    transit_confirm:"Ou seten ou vle make chajman sa a 'Nan Wout'?",
+    name_placeholder:"Non moun ki resevwa",
+    select_truck:"Chwazi yon kamyon",assign_btn:"Asiyen",
+    status_posted:"Poste",status_assigned:"Asiyen",status_picked_up:"Anbake",status_in_transit:"Nan Wout",status_delivered:"Livre",status_cancelled:"Anile",
+    err_login:"Nimewo sa a pa jwenn. Verifye oswa enskri flot ou.",
+    err_server:"Ere seve. Eseye anko.",err_network:"Pa gen koneksyon. Verifye entenet ou.",
+    loading:"Ap chache...",
+    toast_truck_added:"Kamyon ajoute avek sikse!",toast_load_assigned:"Chajman asiyen!",
+    toast_pickup:"Anbakman konfime!",toast_transit:"Nan wout!",toast_delivered:"Livrezon konfime!",
+    toast_error:"Ere. Eseye anko.",
+    truck_available:"Disponib",truck_busy:"Okipe",
+    urgency_high:"Ijan",urgency_medium:"Mwayen",urgency_low:"Nomal",
+    flow_posted:"Poste",flow_assigned:"Asiyen",flow_picked_up:"Anbake",flow_in_transit:"Nan Wout",flow_delivered:"Livre"
+  },
+  fr:{
+    nav_home:"Accueil",nav_track:"Suivre",nav_register:"Inscrire Flotte",nav_register_cta:"Inscrire Votre Flotte",
+    hero_title:"MsouWout Logistics &mdash; <em>Votre Flotte</em>",
+    hero_sub:"Gerez vos camions, chauffeurs et chargements en un seul endroit.",
+    login_title:"Connexion Flotte",login_sub:"Entrez votre numero de telephone pour acceder a votre compte flotte.",
+    phone_placeholder:"4685 9702",login_btn:"Se Connecter",
+    no_account:"Pas encore de flotte?",register_link:"S'inscrire maintenant",
+    logout:"Deconnexion",
+    stat_total_trucks:"Total Camions",stat_avail_trucks:"Disponibles",stat_active_loads:"Chargements Actifs",stat_completed:"Termines",
+    trucks_title:"Mes Camions",add_truck:"+ Ajouter Camion",
+    lbl_truck_type:"Type de Camion",lbl_make_model:"Marque / Modele",lbl_plate:"Plaque",
+    lbl_driver_name:"Nom du Chauffeur",lbl_driver_phone:"Tel Chauffeur",lbl_capacity:"Capacite (tonnes)",
+    save_truck:"Enregistrer Camion",cancel:"Annuler",
+    no_trucks:"Aucun camion pour l'instant.",
+    active_loads_title:"Chargements Actifs",auto_refresh:"Actualisation auto",
+    no_active_loads:"Aucun chargement actif.",
+    available_loads_title:"Chargements Disponibles",refresh:"Actualiser",
+    no_available_loads:"Aucun chargement disponible pour le moment.",
+    history_title:"Historique des Chargements",no_history:"Aucun historique.",
+    footer_part:"Une plateforme de",
+    btn_pickup:"Charger",btn_transit:"En Route",btn_deliver:"Livrer",btn_claim:"Prendre Chargement",
+    pickup_title:"Confirmer Chargement",pickup_desc:"Entrez le code PIN pour confirmer le chargement.",
+    deliver_title:"Confirmer Livraison",deliver_desc:"Entrez le PIN et le nom du destinataire.",
+    transit_confirm:"Etes-vous sur de marquer ce chargement 'En Route'?",
+    name_placeholder:"Nom du destinataire",
+    select_truck:"Choisir un camion",assign_btn:"Assigner",
+    status_posted:"Publie",status_assigned:"Assigne",status_picked_up:"Charge",status_in_transit:"En Route",status_delivered:"Livre",status_cancelled:"Annule",
+    err_login:"Ce numero n'est pas trouve. Verifiez ou inscrivez votre flotte.",
+    err_server:"Erreur serveur. Reessayez.",err_network:"Pas de connexion. Verifiez votre internet.",
+    loading:"Recherche...",
+    toast_truck_added:"Camion ajoute avec succes!",toast_load_assigned:"Chargement assigne!",
+    toast_pickup:"Chargement confirme!",toast_transit:"En route!",toast_delivered:"Livraison confirmee!",
+    toast_error:"Erreur. Reessayez.",
+    truck_available:"Disponible",truck_busy:"Occupe",
+    urgency_high:"Urgent",urgency_medium:"Moyen",urgency_low:"Normal",
+    flow_posted:"Publie",flow_assigned:"Assigne",flow_picked_up:"Charge",flow_in_transit:"En Route",flow_delivered:"Livre"
+  },
+  en:{
+    nav_home:"Home",nav_track:"Track",nav_register:"Register Fleet",nav_register_cta:"Register Your Fleet",
+    hero_title:"MsouWout Logistics &mdash; <em>Your Fleet</em>",
+    hero_sub:"Manage your trucks, drivers, and freight jobs in one place.",
+    login_title:"Fleet Login",login_sub:"Enter your phone number to access your fleet account.",
+    phone_placeholder:"4685 9702",login_btn:"Log In",
+    no_account:"Don't have a fleet yet?",register_link:"Register now",
+    logout:"Log Out",
+    stat_total_trucks:"Total Trucks",stat_avail_trucks:"Available",stat_active_loads:"Active Loads",stat_completed:"Completed",
+    trucks_title:"My Trucks",add_truck:"+ Add Truck",
+    lbl_truck_type:"Truck Type",lbl_make_model:"Make / Model",lbl_plate:"Plate",
+    lbl_driver_name:"Driver Name",lbl_driver_phone:"Driver Phone",lbl_capacity:"Capacity (tons)",
+    save_truck:"Save Truck",cancel:"Cancel",
+    no_trucks:"No trucks yet.",
+    active_loads_title:"Active Loads",auto_refresh:"Auto-refresh",
+    no_active_loads:"No active loads.",
+    available_loads_title:"Available Loads",refresh:"Refresh",
+    no_available_loads:"No available loads at the moment.",
+    history_title:"Load History",no_history:"No history yet.",
+    footer_part:"A platform by",
+    btn_pickup:"Pickup",btn_transit:"In Transit",btn_deliver:"Deliver",btn_claim:"Take Load",
+    pickup_title:"Confirm Pickup",pickup_desc:"Enter the PIN code to confirm pickup.",
+    deliver_title:"Confirm Delivery",deliver_desc:"Enter the PIN and the name of the person receiving.",
+    transit_confirm:"Are you sure you want to mark this load 'In Transit'?",
+    name_placeholder:"Recipient's name",
+    select_truck:"Choose a truck",assign_btn:"Assign",
+    status_posted:"Posted",status_assigned:"Assigned",status_picked_up:"Picked Up",status_in_transit:"In Transit",status_delivered:"Delivered",status_cancelled:"Cancelled",
+    err_login:"This number was not found. Check or register your fleet.",
+    err_server:"Server error. Please try again.",err_network:"No connection. Check your internet.",
+    loading:"Searching...",
+    toast_truck_added:"Truck added successfully!",toast_load_assigned:"Load assigned!",
+    toast_pickup:"Pickup confirmed!",toast_transit:"In transit!",toast_delivered:"Delivery confirmed!",
+    toast_error:"Error. Please try again.",
+    truck_available:"Available",truck_busy:"Busy",
+    urgency_high:"Urgent",urgency_medium:"Medium",urgency_low:"Normal",
+    flow_posted:"Posted",flow_assigned:"Assigned",flow_picked_up:"Picked Up",flow_in_transit:"In Transit",flow_delivered:"Delivered"
+  },
+  es:{
+    nav_home:"Inicio",nav_track:"Rastrear",nav_register:"Registrar Flota",nav_register_cta:"Registrar Tu Flota",
+    hero_title:"MsouWout Logistics &mdash; <em>Tu Flota</em>",
+    hero_sub:"Gestiona tus camiones, conductores y cargas en un solo lugar.",
+    login_title:"Acceso de Flota",login_sub:"Ingresa tu numero de telefono para acceder a tu cuenta de flota.",
+    phone_placeholder:"4685 9702",login_btn:"Iniciar Sesion",
+    no_account:"Aun no tienes flota?",register_link:"Registrate ahora",
+    logout:"Cerrar Sesion",
+    stat_total_trucks:"Total Camiones",stat_avail_trucks:"Disponibles",stat_active_loads:"Cargas Activas",stat_completed:"Completadas",
+    trucks_title:"Mis Camiones",add_truck:"+ Agregar Camion",
+    lbl_truck_type:"Tipo de Camion",lbl_make_model:"Marca / Modelo",lbl_plate:"Placa",
+    lbl_driver_name:"Nombre del Conductor",lbl_driver_phone:"Tel Conductor",lbl_capacity:"Capacidad (tons)",
+    save_truck:"Guardar Camion",cancel:"Cancelar",
+    no_trucks:"No hay camiones aun.",
+    active_loads_title:"Cargas Activas",auto_refresh:"Actualizacion auto",
+    no_active_loads:"No hay cargas activas.",
+    available_loads_title:"Cargas Disponibles",refresh:"Actualizar",
+    no_available_loads:"No hay cargas disponibles por el momento.",
+    history_title:"Historial de Cargas",no_history:"No hay historial aun.",
+    footer_part:"Una plataforma de",
+    btn_pickup:"Recoger",btn_transit:"En Ruta",btn_deliver:"Entregar",btn_claim:"Tomar Carga",
+    pickup_title:"Confirmar Recogida",pickup_desc:"Ingrese el codigo PIN para confirmar la recogida.",
+    deliver_title:"Confirmar Entrega",deliver_desc:"Ingrese el PIN y el nombre de quien recibe.",
+    transit_confirm:"Esta seguro de marcar esta carga 'En Ruta'?",
+    name_placeholder:"Nombre del destinatario",
+    select_truck:"Elegir un camion",assign_btn:"Asignar",
+    status_posted:"Publicado",status_assigned:"Asignado",status_picked_up:"Recogido",status_in_transit:"En Ruta",status_delivered:"Entregado",status_cancelled:"Cancelado",
+    err_login:"Este numero no fue encontrado. Verifique o registre su flota.",
+    err_server:"Error del servidor. Intente de nuevo.",err_network:"Sin conexion. Verifique su internet.",
+    loading:"Buscando...",
+    toast_truck_added:"Camion agregado exitosamente!",toast_load_assigned:"Carga asignada!",
+    toast_pickup:"Recogida confirmada!",toast_transit:"En ruta!",toast_delivered:"Entrega confirmada!",
+    toast_error:"Error. Intente de nuevo.",
+    truck_available:"Disponible",truck_busy:"Ocupado",
+    urgency_high:"Urgente",urgency_medium:"Medio",urgency_low:"Normal",
+    flow_posted:"Publicado",flow_assigned:"Asignado",flow_picked_up:"Recogido",flow_in_transit:"En Ruta",flow_delivered:"Entregado"
+  }
+};
+
+let currentLang='ht';
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-bar a').forEach(a=>a.classList.remove('active'));
+  const el=document.getElementById('lang-'+lang);
+  if(el) el.classList.add('active');
+  const tr=T[lang]||T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.getAttribute('data-i18n');
+    if(tr[key]) el.innerHTML=tr[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key=el.getAttribute('data-i18n-placeholder');
+    if(tr[key]) el.placeholder=tr[key];
+  });
+  if(fleetData) renderDashboard();
+}
+function t(key){return(T[currentLang]||T.ht)[key]||key}
+
+/* ========== NAV ========== */
+function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open')}
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
+
+/* ========== STATE ========== */
+let fleetData=null; // { fleet, trucks, loads }
+let availableLoads=[];
+let refreshInterval=null;
+let gpsInterval=null;
+let pendingPinAction=null; // { type, loadId, ... }
+
+const TRUCK_EMOJIS={
+  flatbed:'&#128667;',semi_truck:'&#128667;',dump_truck:'&#127959;',
+  container:'&#128230;',pickup:'&#128661;',van:'&#128656;'
+};
+const TRUCK_EMOJI_RAW={
+  flatbed:'\u{1F69B}',semi_truck:'\u{1F69B}',dump_truck:'\u{1F3D7}',
+  container:'\u{1F4E6}',pickup:'\u{1F699}',van:'\u{1F690}'
+};
+
+/* ========== LOGIN ========== */
+async function handleLogin(e){
+  e.preventDefault();
+  const phone=document.getElementById('phoneInput').value.trim();
+  if(!phone) return;
+
+  const btn=document.getElementById('loginBtn');
+  const errEl=document.getElementById('loginError');
+  errEl.style.display='none';
+  btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span> '+t('loading');
+
+  let fullPhone=phone.replace(/\s/g,'');
+  if(!fullPhone.startsWith('+')) fullPhone='+509'+fullPhone;
+
+  try{
+    const res=await fetch(API+'/api/logistics/fleets/login',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({phone:fullPhone})
+    });
+
+    if(!res.ok){
+      errEl.innerHTML=res.status===404?t('err_login'):t('err_server');
+      errEl.style.display='block';
+      btn.disabled=false;
+      btn.textContent=t('login_btn');
+      return;
+    }
+
+    const data=await res.json();
+    fleetData=data;
+    showDashboard();
+  }catch(err){
+    errEl.innerHTML=t('err_network');
+    errEl.style.display='block';
+    btn.disabled=false;
+    btn.textContent=t('login_btn');
+  }
+}
+
+function showDashboard(){
+  document.getElementById('heroSection').style.display='none';
+  document.getElementById('loginSection').style.display='none';
+  document.getElementById('dashboard').classList.add('active');
+  renderDashboard();
+  fetchAvailableLoads();
+  startAutoRefresh();
+  startGPSTracking();
+}
+
+function logout(){
+  fleetData=null;
+  availableLoads=[];
+  if(refreshInterval) clearInterval(refreshInterval);
+  if(gpsInterval) clearInterval(gpsInterval);
+  document.getElementById('heroSection').style.display='';
+  document.getElementById('loginSection').style.display='';
+  document.getElementById('dashboard').classList.remove('active');
+  document.getElementById('phoneInput').value='';
+  document.getElementById('loginBtn').disabled=false;
+  document.getElementById('loginBtn').textContent=t('login_btn');
+}
+
+/* ========== RENDER DASHBOARD ========== */
+function renderDashboard(){
+  if(!fleetData) return;
+  const fleet=fleetData.fleet||{};
+  const trucks=fleetData.trucks||[];
+  const loads=fleetData.loads||[];
+
+  // Welcome
+  document.getElementById('fleetOwnerName').textContent=fleet.owner_name||fleet.ownerName||'Fleet Owner';
+  document.getElementById('fleetCompany').textContent=fleet.company_name||fleet.companyName||fleet.name||'';
+
+  // Stats
+  const availTrucks=trucks.filter(t=>!t.current_load&&t.status!=='busy').length;
+  const activeLoads=loads.filter(l=>['assigned','picked_up','in_transit'].includes(l.status));
+  const completedLoads=loads.filter(l=>l.status==='delivered');
+
+  document.getElementById('statTotalTrucks').textContent=trucks.length;
+  document.getElementById('statAvailTrucks').textContent=availTrucks;
+  document.getElementById('statActiveLoads').textContent=activeLoads.length;
+  document.getElementById('statCompletedLoads').textContent=completedLoads.length;
+
+  // Trucks
+  renderTrucks(trucks);
+
+  // Active loads
+  renderActiveLoads(activeLoads);
+
+  // History
+  const historyLoads=loads.filter(l=>['delivered','cancelled'].includes(l.status));
+  renderHistoryLoads(historyLoads);
+}
+
+function renderTrucks(trucks){
+  const el=document.getElementById('truckList');
+  if(!trucks||trucks.length===0){
+    el.innerHTML='<div class="empty-state"><div class="empty-icon">&#128666;</div><p>'+t('no_trucks')+'</p></div>';
+    return;
+  }
+  el.innerHTML=trucks.map(tr=>{
+    const emoji=TRUCK_EMOJIS[tr.truck_type||tr.type]||'&#128666;';
+    const typeName=(tr.truck_type||tr.type||'truck').replace(/_/g,' ');
+    const isBusy=!!tr.current_load||tr.status==='busy';
+    const statusClass=isBusy?'busy':'available';
+    const statusText=isBusy?t('truck_busy'):t('truck_available');
+    const driverName=tr.driver_name||tr.driverName||'-';
+    return `<div class="truck-card">
+      <div class="truck-emoji">${emoji}</div>
+      <div class="truck-details">
+        <div class="truck-type">${typeName}</div>
+        <div class="truck-name">${tr.make||''} ${tr.model||''}</div>
+        <div class="truck-plate">&#128179; ${tr.plate||tr.license_plate||'-'}</div>
+        <div class="truck-driver">&#128100; ${driverName}</div>
+      </div>
+      <span class="truck-status ${statusClass}">${statusText}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderActiveLoads(loads){
+  const el=document.getElementById('activeLoadList');
+  if(!loads||loads.length===0){
+    el.innerHTML='<div class="empty-state"><div class="empty-icon">&#128230;</div><p>'+t('no_active_loads')+'</p></div>';
+    return;
+  }
+  el.innerHTML=loads.map(ld=>renderLoadCard(ld,'active')).join('');
+}
+
+function renderHistoryLoads(loads){
+  const el=document.getElementById('historyLoadList');
+  if(!loads||loads.length===0){
+    el.innerHTML='<div class="empty-state"><div class="empty-icon">&#128203;</div><p>'+t('no_history')+'</p></div>';
+    return;
+  }
+  el.innerHTML=loads.map(ld=>renderLoadCard(ld,'history')).join('');
+}
+
+function renderAvailableLoads(loads){
+  const el=document.getElementById('availableLoadList');
+  if(!loads||loads.length===0){
+    el.innerHTML='<div class="empty-state"><div class="empty-icon">&#127981;</div><p>'+t('no_available_loads')+'</p></div>';
+    return;
+  }
+  el.innerHTML=loads.map(ld=>renderLoadCard(ld,'available')).join('');
+}
+
+function renderLoadCard(ld,context){
+  const id=ld._id||ld.id;
+  const urgency=ld.urgency||'low';
+  const urgencyClass='urgent-'+urgency;
+  const statusBadge=`<span class="load-badge ${ld.status}">${t('status_'+ld.status)||ld.status}</span>`;
+  const urgencyBadge=context==='available'?`<span class="load-badge urgency-${urgency}">${t('urgency_'+urgency)||urgency}</span>`:'';
+
+  const pickup=ld.pickup_location||ld.pickupLocation||ld.pickup||'-';
+  const dropoff=ld.dropoff_location||ld.dropoffLocation||ld.dropoff||'-';
+  const cargo=ld.cargo_type||ld.cargoType||ld.cargo||'General';
+  const qty=ld.quantity||ld.weight||'';
+  const price=ld.price||ld.amount||0;
+  const tracking=ld.tracking_code||ld.trackingCode||'';
+
+  let actions='';
+  if(context==='active'){
+    // Status flow visual
+    const statuses=['posted','assigned','picked_up','in_transit','delivered'];
+    const currentIdx=statuses.indexOf(ld.status);
+    const flowHTML=statuses.map((s,i)=>{
+      let cls='flow-step';
+      if(i<currentIdx) cls+=' done';
+      else if(i===currentIdx) cls+=' active';
+      return `<span class="${cls}">${t('flow_'+s)}</span>`+(i<statuses.length-1?'<span class="flow-arrow">&#8594;</span>':'');
+    }).join('');
+    actions+=`<div class="status-flow">${flowHTML}</div>`;
+
+    // Action buttons based on status
+    actions+='<div class="load-actions">';
+    if(ld.status==='assigned'){
+      actions+=`<button class="btn-action gold" onclick="openPickupPin('${id}')">${t('btn_pickup')}</button>`;
+    }else if(ld.status==='picked_up'){
+      actions+=`<button class="btn-action primary" onclick="markTransit('${id}')">${t('btn_transit')}</button>`;
+    }else if(ld.status==='in_transit'){
+      actions+=`<button class="btn-action green" onclick="openDeliverPin('${id}')">${t('btn_deliver')}</button>`;
+    }
+    actions+='</div>';
+  }
+
+  if(context==='available'){
+    const trucks=(fleetData&&fleetData.trucks)||[];
+    const availTrucks=trucks.filter(tr=>!tr.current_load&&tr.status!=='busy');
+    actions+=`<div class="truck-selector" id="selector-${id}">
+      <select id="select-truck-${id}">
+        <option value="">${t('select_truck')}</option>
+        ${availTrucks.map(tr=>`<option value="${tr._id||tr.id}">${TRUCK_EMOJI_RAW[tr.truck_type||tr.type]||'\u{1F69A}'} ${tr.make||''} ${tr.model||''} - ${tr.plate||tr.license_plate||''}</option>`).join('')}
+      </select>
+      <button class="btn-action green" onclick="assignLoad('${id}')">${t('assign_btn')}</button>
+    </div>`;
+    actions+=`<div class="load-actions">
+      <button class="btn-action red" onclick="toggleTruckSelector('${id}')">${t('btn_claim')}</button>
+    </div>`;
+  }
+
+  return `<div class="load-card ${context==='available'?urgencyClass:''}">
+    <div class="load-top">
+      <span class="load-tracking">${tracking?'#'+tracking:''}</span>
+      ${statusBadge} ${urgencyBadge}
+    </div>
+    <div class="load-cargo">&#128230; ${cargo}</div>
+    <div class="load-route">
+      <span class="dot green"></span> ${pickup}<br>
+      <span class="dot red"></span> ${dropoff}
+    </div>
+    <div class="load-meta">
+      <span class="load-price">${price?price.toLocaleString()+' HTG':''}</span>
+      <span class="load-qty">${qty?qty+' units':''}</span>
+    </div>
+    ${actions}
+  </div>`;
+}
+
+/* ========== AVAILABLE LOADS ========== */
+async function fetchAvailableLoads(){
+  try{
+    const res=await fetch(API+'/api/logistics/loads?status=posted');
+    if(!res.ok) return;
+    const data=await res.json();
+    availableLoads=Array.isArray(data)?data:(data.loads||data.data||[]);
+    renderAvailableLoads(availableLoads);
+  }catch(e){
+    console.error('Failed to fetch available loads:',e);
+  }
+}
+
+/* ========== TRUCK ACTIONS ========== */
+function toggleAddTruck(){
+  const form=document.getElementById('addTruckForm');
+  form.classList.toggle('active');
+}
+
+async function submitAddTruck(){
+  const btn=document.getElementById('btnSubmitTruck');
+  btn.disabled=true;
+
+  const body={
+    fleet_id:(fleetData.fleet._id||fleetData.fleet.id),
+    truck_type:document.getElementById('newTruckType').value,
+    make:document.getElementById('newTruckMake').value.trim(),
+    plate:document.getElementById('newTruckPlate').value.trim(),
+    driver_name:document.getElementById('newTruckDriver').value.trim(),
+    driver_phone:document.getElementById('newTruckDriverPhone').value.trim(),
+    capacity:parseFloat(document.getElementById('newTruckCapacity').value)||0
+  };
+
+  // Split make into make/model if possible
+  const parts=body.make.split(' ');
+  if(parts.length>1){
+    body.make=parts[0];
+    body.model=parts.slice(1).join(' ');
+  }
+
+  try{
+    const res=await fetch(API+'/api/logistics/trucks',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    if(res.ok){
+      const newTruck=await res.json();
+      const truck=newTruck.truck||newTruck;
+      fleetData.trucks.push(truck);
+      renderDashboard();
+      toggleAddTruck();
+      showToast(t('toast_truck_added'),'success');
+      // Clear form
+      document.getElementById('newTruckMake').value='';
+      document.getElementById('newTruckPlate').value='';
+      document.getElementById('newTruckDriver').value='';
+      document.getElementById('newTruckDriverPhone').value='';
+      document.getElementById('newTruckCapacity').value='';
+    }else{
+      showToast(t('toast_error'),'error');
+    }
+  }catch(e){
+    showToast(t('toast_error'),'error');
+  }
+  btn.disabled=false;
+}
+
+/* ========== LOAD ACTIONS ========== */
+function toggleTruckSelector(loadId){
+  const el=document.getElementById('selector-'+loadId);
+  if(el) el.classList.toggle('active');
+}
+
+async function assignLoad(loadId){
+  const select=document.getElementById('select-truck-'+loadId);
+  const truckId=select?select.value:'';
+  if(!truckId){
+    showToast(t('select_truck'),'error');
+    return;
+  }
+
+  const fleet=fleetData.fleet;
+  try{
+    const res=await fetch(API+'/api/logistics/loads/'+loadId+'/assign',{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({truck_id:truckId,driver_id:fleet._id||fleet.id})
+    });
+    if(res.ok){
+      const updated=await res.json();
+      const load=updated.load||updated;
+      // Move from available to fleet loads
+      availableLoads=availableLoads.filter(l=>(l._id||l.id)!==loadId);
+      fleetData.loads.push(load);
+      renderDashboard();
+      renderAvailableLoads(availableLoads);
+      showToast(t('toast_load_assigned'),'success');
+    }else{
+      showToast(t('toast_error'),'error');
+    }
+  }catch(e){
+    showToast(t('toast_error'),'error');
+  }
+}
+
+/* ========== PIN MODAL ========== */
+function openPickupPin(loadId){
+  pendingPinAction={type:'pickup',loadId};
+  document.getElementById('pinModalTitle').textContent=t('pickup_title');
+  document.getElementById('pinModalDesc').textContent=t('pickup_desc');
+  document.getElementById('pinModalInput').value='';
+  document.getElementById('pinModalInput').style.display='';
+  document.getElementById('pinModalName').style.display='none';
+  document.getElementById('pinModalFeedback').className='pin-feedback';
+  document.getElementById('pinModalFeedback').style.display='none';
+  document.getElementById('pinModal').classList.add('active');
+  setTimeout(()=>document.getElementById('pinModalInput').focus(),100);
+}
+
+function openDeliverPin(loadId){
+  pendingPinAction={type:'deliver',loadId};
+  document.getElementById('pinModalTitle').textContent=t('deliver_title');
+  document.getElementById('pinModalDesc').textContent=t('deliver_desc');
+  document.getElementById('pinModalInput').value='';
+  document.getElementById('pinModalInput').style.display='';
+  document.getElementById('pinModalName').value='';
+  document.getElementById('pinModalName').style.display='';
+  document.getElementById('pinModalName').placeholder=t('name_placeholder');
+  document.getElementById('pinModalFeedback').className='pin-feedback';
+  document.getElementById('pinModalFeedback').style.display='none';
+  document.getElementById('pinModal').classList.add('active');
+  setTimeout(()=>document.getElementById('pinModalInput').focus(),100);
+}
+
+function closePinModal(){
+  document.getElementById('pinModal').classList.remove('active');
+  pendingPinAction=null;
+}
+
+async function confirmPinAction(){
+  if(!pendingPinAction) return;
+  const pin=document.getElementById('pinModalInput').value.trim();
+  const feedbackEl=document.getElementById('pinModalFeedback');
+
+  if(pendingPinAction.type==='pickup'){
+    if(!pin){
+      feedbackEl.className='pin-feedback error';
+      feedbackEl.textContent='PIN required';
+      return;
+    }
+    try{
+      const res=await fetch(API+'/api/logistics/loads/'+pendingPinAction.loadId+'/pickup',{
+        method:'PATCH',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({pin})
+      });
+      if(res.ok){
+        const updated=await res.json();
+        updateLoadInState(pendingPinAction.loadId,updated.load||updated);
+        closePinModal();
+        renderDashboard();
+        showToast(t('toast_pickup'),'success');
+      }else{
+        feedbackEl.className='pin-feedback error';
+        feedbackEl.textContent='Invalid PIN';
+      }
+    }catch(e){
+      feedbackEl.className='pin-feedback error';
+      feedbackEl.textContent=t('toast_error');
+    }
+  }
+
+  if(pendingPinAction.type==='deliver'){
+    const name=document.getElementById('pinModalName').value.trim();
+    if(!pin){
+      feedbackEl.className='pin-feedback error';
+      feedbackEl.textContent='PIN required';
+      return;
+    }
+    try{
+      const res=await fetch(API+'/api/logistics/loads/'+pendingPinAction.loadId+'/deliver',{
+        method:'PATCH',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({pin,confirmed_by_name:name})
+      });
+      if(res.ok){
+        const updated=await res.json();
+        updateLoadInState(pendingPinAction.loadId,updated.load||updated);
+        closePinModal();
+        renderDashboard();
+        showToast(t('toast_delivered'),'success');
+      }else{
+        feedbackEl.className='pin-feedback error';
+        feedbackEl.textContent='Invalid PIN';
+      }
+    }catch(e){
+      feedbackEl.className='pin-feedback error';
+      feedbackEl.textContent=t('toast_error');
+    }
+  }
+}
+
+async function markTransit(loadId){
+  if(!confirm(t('transit_confirm'))) return;
+  try{
+    const res=await fetch(API+'/api/logistics/loads/'+loadId+'/transit',{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'}
+    });
+    if(res.ok){
+      const updated=await res.json();
+      updateLoadInState(loadId,updated.load||updated);
+      renderDashboard();
+      showToast(t('toast_transit'),'success');
+    }else{
+      showToast(t('toast_error'),'error');
+    }
+  }catch(e){
+    showToast(t('toast_error'),'error');
+  }
+}
+
+function updateLoadInState(loadId,updatedLoad){
+  if(!fleetData||!fleetData.loads) return;
+  const idx=fleetData.loads.findIndex(l=>(l._id||l.id)===loadId);
+  if(idx>=0){
+    fleetData.loads[idx]=updatedLoad;
+  }else{
+    fleetData.loads.push(updatedLoad);
+  }
+}
+
+/* ========== AUTO REFRESH ========== */
+function startAutoRefresh(){
+  if(refreshInterval) clearInterval(refreshInterval);
+  refreshInterval=setInterval(async()=>{
+    if(!fleetData) return;
+    try{
+      const phone=fleetData.fleet.phone||fleetData.fleet.owner_phone;
+      if(!phone) return;
+      const res=await fetch(API+'/api/logistics/fleets/login',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({phone})
+      });
+      if(res.ok){
+        const data=await res.json();
+        fleetData=data;
+        renderDashboard();
+      }
+    }catch(e){}
+    fetchAvailableLoads();
+  },15000);
+}
+
+/* ========== GPS TRACKING ========== */
+function startGPSTracking(){
+  if(!navigator.geolocation) return;
+  if(gpsInterval) clearInterval(gpsInterval);
+  gpsInterval=setInterval(()=>{
+    if(!fleetData||!fleetData.trucks) return;
+    const activeTrucks=fleetData.trucks.filter(tr=>tr.current_load||tr.status==='busy');
+    if(activeTrucks.length===0) return;
+
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const lat=pos.coords.latitude;
+      const lng=pos.coords.longitude;
+      activeTrucks.forEach(tr=>{
+        const truckId=tr._id||tr.id;
+        fetch(API+'/api/logistics/trucks/'+truckId+'/location',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({lat,lng})
+        }).catch(()=>{});
+      });
+    },()=>{},{enableHighAccuracy:true,timeout:10000});
+  },30000);
+}
+
+/* ========== TOAST ========== */
+function showToast(msg,type){
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.className='toast '+(type||'');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+/* ========== INIT ========== */
+document.addEventListener('DOMContentLoaded',()=>{
+  setLang('ht');
+});
+</script>
+</body>
+</html>

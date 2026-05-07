@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MsouWout Logistics - Enregistrement Camion & Flotte | Truck & Fleet Registration</title>
+<meta name="description" content="Register your truck or fleet with MsouWout Logistics. Haul freight across Haiti with Haiti's trusted logistics network.">
+<meta property="og:title" content="MsouWout Logistics - Truck & Fleet Registration">
+<meta property="og:description" content="Register your truck or fleet for freight hauling across Haiti. A HaitiBiznis platform.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://msouwout.com/logistics-register.html">
+<meta property="og:image" content="https://msouwout.com/assets/og-msouwout.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="canonical" href="https://msouwout.com/logistics-register.html">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D21034;--red-dark:#B00D2C;--red-light:#E8243F;
+  --blue:#00209F;--blue-dark:#001566;
+  --gold:#D4A017;--gold-light:#E8B82E;
+  --green:#1B8C3D;--green-light:#22C55E;
+  --white:#FFFFFF;--off-white:#FFF8F8;--light-gray:#F0E8E8;
+  --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --display:'DM Serif Display',Georgia,serif;
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+/* LANGUAGE BAR */
+.lang-bar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;
+  background:var(--red);
+  padding:6px 20px;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;
+}
+.lang-bar a{
+  color:rgba(255,255,255,.7);font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:100px;
+  cursor:pointer;transition:all .2s;letter-spacing:.02em;
+}
+.lang-bar a:hover{color:#fff;background:rgba(255,255,255,.15)}
+.lang-bar a.active{color:var(--red);background:#fff}
+
+/* NAV */
+nav{
+  position:fixed;top:36px;left:0;right:0;z-index:1000;
+  background:var(--blue);border-bottom:3px solid var(--red);
+  padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.nav-logo span{font-family:var(--display);font-weight:900;font-size:1.25rem;color:#fff;letter-spacing:-.02em}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{color:rgba(255,255,255,.8);font-size:.82rem;font-weight:600;transition:color .2s;letter-spacing:.01em}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  background:var(--red);color:#fff;padding:10px 22px;border-radius:100px;font-size:.82rem;
+  font-weight:700;transition:all .25s;border:none;cursor:pointer;
+}
+.nav-cta:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(210,16,52,.35)}
+.mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+.mobile-nav{display:none;position:fixed;top:100px;left:0;right:0;background:var(--blue);padding:24px;z-index:999;border-bottom:3px solid var(--red);flex-direction:column;gap:16px}
+.mobile-nav.open{display:flex}
+.mobile-nav a{color:rgba(255,255,255,.9);font-size:.95rem;font-weight:600;padding:8px 0}
+
+/* HERO */
+.hero{
+  min-height:55vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:140px 24px 80px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 60%,#000D4F 100%);
+}
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:100px;
+  background:linear-gradient(to top,var(--off-white),transparent);pointer-events:none;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  padding:8px 20px;border-radius:100px;font-size:.78rem;font-weight:600;color:var(--gold-light);
+  margin-bottom:28px;letter-spacing:.03em;
+  animation:fadeUp .8s ease both;
+}
+.hero h1{
+  font-family:var(--display);font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;
+  color:#fff;line-height:1.1;letter-spacing:-.03em;max-width:800px;
+  animation:fadeUp .8s .1s ease both;
+}
+.hero h1 em{font-style:italic;color:var(--red-light)}
+.hero-sub{
+  font-size:clamp(.95rem,2vw,1.15rem);color:rgba(255,255,255,.75);line-height:1.7;
+  max-width:580px;margin:24px auto 0;font-weight:400;
+  animation:fadeUp .8s .2s ease both;
+}
+.hero-actions{
+  display:flex;gap:14px;margin-top:36px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp .8s .3s ease both;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:16px 32px;border-radius:100px;
+  font-weight:700;font-size:.92rem;cursor:pointer;border:none;transition:all .3s;
+  font-family:var(--body);letter-spacing:.01em;
+}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 4px 20px rgba(210,16,52,.3)}
+.btn-red:hover{background:var(--red-dark);transform:translateY(-2px);box-shadow:0 10px 32px rgba(210,16,52,.4)}
+.btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn-ghost:hover{background:rgba(255,255,255,.2);transform:translateY(-2px)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* SECTIONS */
+section{padding:80px 24px;position:relative}
+.section-inner{max-width:1080px;margin:0 auto}
+.section-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--red);margin-bottom:12px;
+}
+.section-title{
+  font-family:var(--display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;
+  color:var(--dark);line-height:1.1;letter-spacing:-.02em;
+}
+.section-sub{font-size:.95rem;color:var(--text-light);line-height:1.7;margin-top:12px;max-width:560px}
+
+/* FORM */
+.form-section{background:var(--off-white)}
+.form-card{
+  background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);
+  padding:40px 36px;max-width:680px;margin:40px auto 0;box-shadow:0 4px 24px rgba(0,0,0,.06);
+}
+.form-card input,.form-card select,.form-card textarea{
+  width:100%;padding:14px 18px;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;
+  font-size:.88rem;font-family:var(--body);margin-bottom:14px;transition:border .25s;
+  background:var(--white);color:var(--text);
+}
+.form-card input::placeholder,.form-card textarea::placeholder{color:var(--text-light)}
+.form-card select{color:var(--text-light);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236A5A5A' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.form-card select option{background:var(--white);color:var(--text)}
+.form-card input:focus,.form-card select:focus,.form-card textarea:focus{outline:none;border-color:var(--blue)}
+.form-card textarea{min-height:80px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-label{display:block;font-size:.82rem;font-weight:700;color:var(--dark);margin-bottom:6px;letter-spacing:.01em}
+.form-group{margin-bottom:14px}
+.form-group:last-child{margin-bottom:0}
+
+/* Phone input with prefix */
+.phone-input-wrap{
+  display:flex;align-items:stretch;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;
+  overflow:hidden;margin-bottom:14px;transition:border .25s;
+}
+.phone-input-wrap:focus-within{border-color:var(--blue)}
+.phone-prefix{
+  display:flex;align-items:center;padding:0 14px;
+  background:var(--off-white);border-right:1.5px solid rgba(0,0,0,.1);
+  font-size:.85rem;font-weight:700;color:var(--text);white-space:nowrap;gap:6px;
+}
+.phone-input-wrap input{
+  border:none!important;border-radius:0!important;margin-bottom:0!important;
+  flex:1;min-width:0;
+}
+.phone-input-wrap input:focus{outline:none}
+
+/* Step indicator */
+.step-header{
+  display:flex;align-items:center;gap:14px;margin-bottom:24px;
+  padding-bottom:18px;border-bottom:2px solid rgba(0,0,0,.06);
+}
+.step-num{
+  width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-weight:900;font-size:1rem;flex-shrink:0;
+  background:var(--blue);color:#fff;
+}
+.step-num.completed{background:var(--green)}
+.step-num.completed::after{content:'';display:none}
+.step-header h3{
+  font-family:var(--display);font-size:1.15rem;font-weight:900;color:var(--dark);letter-spacing:-.01em;
+}
+.step-header p{font-size:.8rem;color:var(--text-light);margin-top:2px}
+
+/* Step 2 initially hidden */
+#step2Card{display:none}
+#step2Card.visible{display:block;animation:fadeUp .5s ease both}
+
+/* Submit button */
+.btn-submit{
+  width:100%;justify-content:center;
+  background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 100%);
+  color:#fff;box-shadow:0 4px 20px rgba(210,16,52,.3);
+}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(210,16,52,.4)}
+
+/* Spinner */
+.btn-spinner{display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-loading .btn-spinner{display:inline-block}
+.btn-loading .btn-text{opacity:.6}
+
+/* Success card */
+.success-card{
+  display:none;background:linear-gradient(135deg,rgba(27,140,61,.06),rgba(27,140,61,.02));
+  border:2px solid rgba(27,140,61,.2);border-radius:20px;
+  padding:48px 32px;text-align:center;max-width:680px;margin:40px auto 0;
+}
+.success-card.visible{display:block;animation:fadeUp .6s ease both}
+.success-icon{font-size:3.5rem;margin-bottom:16px}
+.success-card h3{font-family:var(--display);font-size:1.6rem;color:var(--dark);margin-bottom:8px}
+.success-card p{font-size:.92rem;color:var(--text-light);line-height:1.7;max-width:480px;margin:0 auto}
+.success-card .tracking-box{
+  background:var(--white);border:1px solid rgba(0,0,0,.08);border-radius:14px;
+  padding:20px;margin:24px auto 0;max-width:400px;
+}
+.tracking-box .tracking-label{font-size:.75rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.tracking-box .tracking-id{font-family:var(--display);font-size:1.3rem;color:var(--blue);font-weight:900;letter-spacing:.02em}
+.tracking-box .tracking-note{font-size:.78rem;color:var(--text-light);margin-top:8px;line-height:1.5}
+
+/* Form error message */
+.form-error{
+  display:none;background:#FEF2F2;border:1px solid #FCA5A5;border-radius:12px;
+  padding:14px 16px;margin-bottom:16px;color:#991B1B;font-size:.85rem;font-weight:600;
+  line-height:1.5;text-align:center;
+}
+.form-error.visible{display:block}
+
+/* Step 1 completed state */
+.step1-summary{
+  display:none;background:rgba(27,140,61,.04);border:1.5px solid rgba(27,140,61,.15);
+  border-radius:14px;padding:18px 20px;margin-bottom:20px;
+}
+.step1-summary.visible{display:block}
+.step1-summary .summary-row{
+  display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--text);padding:3px 0;
+}
+.step1-summary .summary-row strong{color:var(--dark);min-width:100px}
+
+/* ECOSYSTEM */
+.ecosystem{background:var(--white);text-align:center}
+.eco-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:36px}
+.eco-card{
+  background:var(--off-white);border:1px solid rgba(0,0,0,.05);border-radius:14px;
+  padding:24px 20px;text-align:center;transition:all .3s;display:block;
+}
+.eco-card:hover{border-color:rgba(0,32,159,.2);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.06)}
+.eco-card .eco-icon{font-size:2rem;margin-bottom:10px}
+.eco-card h4{font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:4px}
+.eco-card p{font-size:.75rem;color:var(--text-light)}
+
+/* FOOTER */
+footer{
+  background:var(--dark);
+  padding:48px 24px 24px;
+}
+.footer-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px}
+.footer-brand h3{font-family:var(--display);font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:8px}
+.footer-brand p{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.7}
+.footer-col h4{font-size:.78rem;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.footer-col a{display:block;font-size:.82rem;color:rgba(255,255,255,.5);padding:4px 0;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{
+  max-width:1080px;margin:24px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);
+  display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:rgba(255,255,255,.4);
+}
+
+/* ECO BAR */
+.eco-bar{
+  background:var(--dark);
+  padding:14px 20px;text-align:center;position:fixed;bottom:0;left:0;right:0;z-index:999;
+}
+.eco-bar span{color:rgba(255,255,255,.4);font-size:.7rem;font-weight:500;margin-right:6px}
+.eco-bar a{color:rgba(255,255,255,.4);font-size:.72rem;font-weight:600;margin:0 8px;transition:color .2s}
+.eco-bar a:hover{color:#fff}
+
+/* WHATSAPP */
+.wa-float{
+  position:fixed;bottom:60px;right:20px;z-index:998;
+  width:56px;height:56px;border-radius:50%;
+  background:#25D366;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(37,211,102,.35);transition:all .3s;
+  font-size:1.6rem;
+}
+.wa-float:hover{transform:scale(1.08);box-shadow:0 8px 28px rgba(37,211,102,.5)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .form-row{grid-template-columns:1fr}
+  .footer-inner{grid-template-columns:1fr}
+  .form-card{padding:28px 20px}
+}
+@media(max-width:480px){
+  .hero h1{font-size:2rem}
+  .hero-actions{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <a onclick="setLang('ht')" class="active" id="lang-ht">&#127469;&#127481; Kreyol</a>
+  <a onclick="setLang('fr')" id="lang-fr">&#127467;&#127479; Francais</a>
+  <a onclick="setLang('en')" id="lang-en">&#127468;&#127463; English</a>
+  <a onclick="setLang('es')" id="lang-es">&#127466;&#127480; Espanol</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="assets/msouwout-icon.png" alt="MsouWout Logo">
+    <span>MsouWout</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" data-i18n="nav_home">Akèy</a>
+    <a href="index.html#services" data-i18n="nav_services">Sevis</a>
+    <a href="index.html#pricing" data-i18n="nav_pricing">Pri</a>
+    <a href="index.html#zones" data-i18n="nav_zones">Zon</a>
+    <a href="#register" data-i18n="nav_register">Enskri</a>
+  </div>
+  <a href="#register" class="nav-cta" data-i18n="nav_cta">Enskri Kamyon Ou</a>
+  <button class="mobile-toggle" onclick="toggleMobile()">&#9776;</button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html" onclick="closeMobile()" data-i18n="nav_home">Akèy</a>
+  <a href="index.html#services" onclick="closeMobile()" data-i18n="nav_services">Sevis</a>
+  <a href="index.html#pricing" onclick="closeMobile()" data-i18n="nav_pricing">Pri</a>
+  <a href="index.html#zones" onclick="closeMobile()" data-i18n="nav_zones">Zon</a>
+  <a href="#register" onclick="closeMobile()" data-i18n="nav_register">Enskri</a>
+  <a href="#register" onclick="closeMobile()" class="nav-cta" style="text-align:center" data-i18n="nav_cta">Enskri Kamyon Ou</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">&#128666; <span data-i18n="hero_badge">MsouWout Logistics - Rezo Transpotasyon Machandiz</span></div>
+  <h1 data-i18n="hero_title"><em>MsouWout</em> Logistics</h1>
+  <p class="hero-sub" data-i18n="hero_sub">Enskri kamyon ou oswa flot ou pou transpote machandiz atravè Ayiti. Rejwenn rezo lojistik ki pi fyab nan peyi a.</p>
+  <div class="hero-actions">
+    <a href="#register" class="btn btn-red" data-i18n="hero_cta1">&#128666; Enskri Kounye a</a>
+    <a href="index.html" class="btn btn-ghost" data-i18n="hero_cta2">&#128205; Tounen Akèy</a>
+  </div>
+</section>
+
+<!-- REGISTRATION FORM -->
+<section class="form-section" id="register">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-tag">&#128221; <span data-i18n="reg_tag">Enskripsyon Lojistik</span></div>
+    <h2 class="section-title" data-i18n="reg_title">Enskri Flot & Kamyon Ou</h2>
+    <p class="section-sub" style="margin:12px auto 0" data-i18n="reg_sub">Ranpli 2 etap sa yo pou enskri kamyon ou nan rezo MsouWout Logistics.</p>
+
+    <!-- ════ STEP 1: Fleet / Owner Info ════ -->
+    <div class="form-card" id="step1Card">
+      <div class="step-header">
+        <div class="step-num" id="step1Num">1</div>
+        <div style="text-align:left">
+          <h3 data-i18n="s1_title">Enfmasyon Pwopriyetè / Flot</h3>
+          <p data-i18n="s1_desc">Di nou kiyès ou ye ak koman pou nou kontakte ou.</p>
+        </div>
+      </div>
+
+      <div class="form-error" id="step1Error"></div>
+
+      <form id="fleetForm" onsubmit="return false">
+        <!-- Owner Name -->
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_owner_label">Non Pwopriyetè *</label>
+          <input type="text" id="ownerName" placeholder="Jean Pierre" data-i18n-placeholder="f_owner_ph" required>
+        </div>
+
+        <!-- Company Name -->
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_company_label">Non Konpayi (opsyonel)</label>
+          <input type="text" id="companyName" placeholder="Transpò Lakay SARL" data-i18n-placeholder="f_company_ph">
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_phone_label">Nimewo Telefon *</label>
+          <div class="phone-input-wrap">
+            <div class="phone-prefix">&#127469;&#127481; +509</div>
+            <input type="tel" id="ownerPhone" placeholder="XXXX XXXX" data-i18n-placeholder="f_phone_ph" required>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_email_label">Imèl (opsyonel)</label>
+          <input type="email" id="ownerEmail" placeholder="jean@example.com" data-i18n-placeholder="f_email_ph">
+        </div>
+
+        <!-- Address -->
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_address_label">Adrès (opsyonel)</label>
+          <input type="text" id="ownerAddress" placeholder="Ri, Vil, Depatman" data-i18n-placeholder="f_address_ph">
+        </div>
+
+        <!-- Submit Step 1 -->
+        <button type="button" class="btn btn-submit" id="step1Btn" onclick="submitStep1()">
+          <span class="btn-text" data-i18n="s1_submit">&#128640; Enskri Flot &rarr; Etap 2</span>
+          <span class="btn-spinner"></span>
+        </button>
+      </form>
+    </div>
+
+    <!-- ════ STEP 2: Truck Info ════ -->
+    <div class="form-card" id="step2Card">
+      <!-- Step 1 Summary -->
+      <div class="step1-summary visible" id="step1Summary">
+        <div class="summary-row"><span style="color:var(--green);font-size:1.1rem;margin-right:4px">&#9989;</span> <strong data-i18n="s1_done">Etap 1 Konplete</strong></div>
+        <div class="summary-row" id="summaryOwner"></div>
+        <div class="summary-row" id="summaryPhone"></div>
+      </div>
+
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div style="text-align:left">
+          <h3 data-i18n="s2_title">Enfmasyon Kamyon</h3>
+          <p data-i18n="s2_desc">Ajoute premye kamyon ou nan flot la.</p>
+        </div>
+      </div>
+
+      <div class="form-error" id="step2Error"></div>
+
+      <form id="truckForm" onsubmit="return false">
+        <!-- Truck Type -->
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_truck_type_label">Tip Kamyon *</label>
+          <select id="truckType" required>
+            <option value="" disabled selected data-i18n="f_truck_type_ph">-- Chwazi Tip Kamyon --</option>
+            <option value="flatbed" data-i18n="f_tt_flatbed">Flatbed</option>
+            <option value="semi_truck" data-i18n="f_tt_semi">Semi-Kamyon (Trelè)</option>
+            <option value="dump_truck" data-i18n="f_tt_dump">Kamyon Baskilant</option>
+            <option value="container" data-i18n="f_tt_container">Kontennè</option>
+            <option value="pickup" data-i18n="f_tt_pickup">Pickup</option>
+            <option value="van" data-i18n="f_tt_van">Van</option>
+          </select>
+        </div>
+
+        <!-- Make & Model -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" data-i18n="f_make_label">Mak (opsyonel)</label>
+            <input type="text" id="truckMake" placeholder="Toyota, Isuzu, Mack..." data-i18n-placeholder="f_make_ph">
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="f_model_label">Modèl (opsyonel)</label>
+            <input type="text" id="truckModel" placeholder="Dyna, NPR, Granite..." data-i18n-placeholder="f_model_ph">
+          </div>
+        </div>
+
+        <!-- Year & License Plate -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" data-i18n="f_year_label">Ane (opsyonel)</label>
+            <input type="number" id="truckYear" placeholder="2020" min="1990" max="2030">
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="f_plate_label">Plak Machin (opsyonel)</label>
+            <input type="text" id="truckPlate" placeholder="AB-12345" data-i18n-placeholder="f_plate_ph">
+          </div>
+        </div>
+
+        <!-- Payload Capacity -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" data-i18n="f_payload_label">Kapasite (kg, opsyonel)</label>
+            <input type="number" id="truckPayload" placeholder="5000" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="f_payload_desc_label">Deskripsyon Kapasite (opsyonel)</label>
+            <input type="text" id="truckPayloadDesc" placeholder="500 sak diri" data-i18n-placeholder="f_payload_desc_ph">
+          </div>
+        </div>
+
+        <!-- Submit Step 2 -->
+        <button type="button" class="btn btn-submit" id="step2Btn" onclick="submitStep2()">
+          <span class="btn-text" data-i18n="s2_submit">&#128666; Enskri Kamyon</span>
+          <span class="btn-spinner"></span>
+        </button>
+      </form>
+    </div>
+
+    <!-- ════ SUCCESS STATE ════ -->
+    <div class="success-card" id="successCard">
+      <div class="success-icon">&#9989;</div>
+      <h3 data-i18n="success_title">Enskripsyon Reyisi!</h3>
+      <p data-i18n="success_desc">Mèsi paske ou enskri nan MsouWout Logistics. Ekip nou ap kontakte ou via WhatsApp pou konfime detay yo.</p>
+      <div class="tracking-box">
+        <div class="tracking-label" data-i18n="track_label">Fleet ID Ou</div>
+        <div class="tracking-id" id="trackingId">--</div>
+        <div class="tracking-note" data-i18n="track_note">Konsève nimewo sa a. Ou kapab itilize li pou ajoute plis kamyon nan flot ou pita.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section class="ecosystem">
+  <div class="section-inner">
+    <div class="section-tag">&#127760; <span data-i18n="eco_tag">Ekosistèm HaitiBiznis</span></div>
+    <h2 class="section-title" data-i18n="eco_title">Pati nan Yon Bagay Pi Gwo</h2>
+    <p class="section-sub" style="margin:12px auto 0" data-i18n="eco_sub">MsouWout se kolon vètebral lojistik nan hub nimerik konekte Ayiti a.</p>
+    <div class="eco-grid">
+      <a href="https://48hoursready.com" class="eco-card" target="_blank">
+        <div class="eco-icon">&#128640;</div>
+        <h4>48HoursReady</h4>
+        <p data-i18n="eco_48">Lanse biznis ou nan 48 èdtan</p>
+      </a>
+      <a href="https://myplopplop.com" class="eco-card" target="_blank">
+        <div class="eco-icon">&#128722;</div>
+        <h4>MyPlopPlop</h4>
+        <p data-i18n="eco_plop">Mache nimerik Ayiti</p>
+      </a>
+      <a href="https://msouwout.com" class="eco-card" target="_blank" style="border-color:var(--blue)">
+        <div class="eco-icon">&#128663;</div>
+        <h4>MsouWout</h4>
+        <p data-i18n="eco_sou">Livrezon ak ridesharing</p>
+      </a>
+      <a href="https://prolakay.haitibiznis.com" class="eco-card" target="_blank">
+        <div class="eco-icon">&#128188;</div>
+        <h4>Pwofesyonel Lakay</h4>
+        <p data-i18n="eco_t4p">Pwofesyonel lakay ou</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>MsouWout</h3>
+      <p data-i18n="footer_desc">Platfom livrezon ak ridesharing Ayiti a fè konfyans. Rapid, abodab, fyab. Yon platfom HaitiBiznis.</p>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_links">Lyen Rapid</h4>
+      <a href="index.html" data-i18n="nav_home">Akèy</a>
+      <a href="index.html#services" data-i18n="nav_services">Sevis</a>
+      <a href="index.html#pricing" data-i18n="nav_pricing">Pri</a>
+      <a href="index.html#zones" data-i18n="nav_zones">Zon</a>
+      <a href="https://48hoursready.com/referral.html" data-i18n="footer_referral">Pwogram Referans</a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_ecosystem">Ekosistèm</h4>
+      <a href="https://haitibiznis.com" target="_blank">HaitiBiznis</a>
+      <a href="https://48hoursready.com" target="_blank">48HoursReady</a>
+      <a href="https://myplopplop.com" target="_blank">MyPlopPlop</a>
+      <a href="https://prolakay.haitibiznis.com" target="_blank">Pwofesyonel Lakay</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 MsouWout. A <a href="https://haitibiznis.com" style="color:var(--red)">HaitiBiznis</a> Platform.</span>
+    <span>WhatsApp: +509 4190 2005</span>
+  </div>
+</footer>
+
+<!-- ECO BAR -->
+<div class="eco-bar">
+  <span data-i18n="eco_label">Pati nan</span>
+  <a href="https://haitibiznis.com">HaitiBiznis</a>
+  <a href="https://48hoursready.com">48HoursReady</a>
+  <a href="https://myplopplop.com">MyPlopPlop</a>
+  <a href="https://msouwout.com" style="color:var(--red)">MsouWout</a>
+  <a href="https://prolakay.haitibiznis.com">Pwofesyonel Lakay</a>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/50941902005?text=Hello%20MsouWout!%20I%20want%20to%20register%20my%20truck%20for%20logistics" target="_blank" class="wa-float">&#128172;</a>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   TRANSLATIONS (ht, fr, en, es)
+   ═══════════════════════════════════════════════════ */
+var T = {
+  ht: {
+    nav_home:"Akèy", nav_services:"Sevis", nav_pricing:"Pri", nav_zones:"Zon",
+    nav_register:"Enskri", nav_cta:"Enskri Kamyon Ou",
+    hero_badge:"MsouWout Logistics - Rezo Transpotasyon Machandiz",
+    hero_title:"<em>MsouWout</em> Logistics",
+    hero_sub:"Enskri kamyon ou oswa flot ou pou transpote machandiz atravè Ayiti. Rejwenn rezo lojistik ki pi fyab nan peyi a.",
+    hero_cta1:"&#128666; Enskri Kounye a", hero_cta2:"&#128205; Tounen Akèy",
+    reg_tag:"Enskripsyon Lojistik", reg_title:"Enskri Flot & Kamyon Ou",
+    reg_sub:"Ranpli 2 etap sa yo pou enskri kamyon ou nan rezo MsouWout Logistics.",
+    s1_title:"Enfmasyon Pwopriyetè / Flot", s1_desc:"Di nou kiyès ou ye ak koman pou nou kontakte ou.",
+    f_owner_label:"Non Pwopriyetè *", f_owner_ph:"Jean Pierre",
+    f_company_label:"Non Konpayi (opsyonel)", f_company_ph:"Transpò Lakay SARL",
+    f_phone_label:"Nimewo Telefon *", f_phone_ph:"XXXX XXXX",
+    f_email_label:"Imèl (opsyonel)", f_email_ph:"jean@example.com",
+    f_address_label:"Adrès (opsyonel)", f_address_ph:"Ri, Vil, Depatman",
+    s1_submit:"&#128640; Enskri Flot &rarr; Etap 2",
+    s1_done:"Etap 1 Konplete",
+    s2_title:"Enfmasyon Kamyon", s2_desc:"Ajoute premye kamyon ou nan flot la.",
+    f_truck_type_label:"Tip Kamyon *", f_truck_type_ph:"-- Chwazi Tip Kamyon --",
+    f_tt_flatbed:"Flatbed", f_tt_semi:"Semi-Kamyon (Trelè)", f_tt_dump:"Kamyon Baskilant",
+    f_tt_container:"Kontennè", f_tt_pickup:"Pickup", f_tt_van:"Van",
+    f_make_label:"Mak (opsyonel)", f_make_ph:"Toyota, Isuzu, Mack...",
+    f_model_label:"Modèl (opsyonel)", f_model_ph:"Dyna, NPR, Granite...",
+    f_year_label:"Ane (opsyonel)",
+    f_plate_label:"Plak Machin (opsyonel)", f_plate_ph:"AB-12345",
+    f_payload_label:"Kapasite (kg, opsyonel)",
+    f_payload_desc_label:"Deskripsyon Kapasite (opsyonel)", f_payload_desc_ph:"500 sak diri",
+    s2_submit:"&#128666; Enskri Kamyon",
+    success_title:"Enskripsyon Reyisi!",
+    success_desc:"Mèsi paske ou enskri nan MsouWout Logistics. Ekip nou ap kontakte ou via WhatsApp pou konfime detay yo.",
+    track_label:"Fleet ID Ou", track_note:"Konsève nimewo sa a. Ou kapab itilize li pou ajoute plis kamyon nan flot ou pita.",
+    err_owner_required:"Tanpri mete non pwopriyetè a.",
+    err_phone_required:"Tanpri mete nimewo telefon.",
+    err_truck_type_required:"Tanpri chwazi tip kamyon.",
+    err_api:"Erè nan soumisyon. Tanpri eseye ankò oswa kontakte nou via WhatsApp.",
+    eco_tag:"Ekosistèm HaitiBiznis", eco_title:"Pati nan Yon Bagay Pi Gwo",
+    eco_sub:"MsouWout se kolon vètebral lojistik nan hub nimerik konekte Ayiti a.",
+    eco_48:"Lanse biznis ou nan 48 èdtan", eco_plop:"Mache nimerik Ayiti",
+    eco_sou:"Livrezon ak ridesharing", eco_t4p:"Pwofesyonèl lakay ou",
+    footer_desc:"Platfom livrezon ak ridesharing Ayiti a fè konfyans. Rapid, abodab, fyab. Yon platfom HaitiBiznis.",
+    footer_links:"Lyen Rapid", footer_ecosystem:"Ekosistèm", footer_referral:"Pwogram Referans",
+    eco_label:"Pati nan"
+  },
+  fr: {
+    nav_home:"Accueil", nav_services:"Services", nav_pricing:"Tarifs", nav_zones:"Zones",
+    nav_register:"Inscription", nav_cta:"Enregistrer Votre Camion",
+    hero_badge:"MsouWout Logistics - Reseau de Transport de Marchandises",
+    hero_title:"<em>MsouWout</em> Logistics",
+    hero_sub:"Enregistrez votre camion ou flotte pour transporter des marchandises a travers Haiti. Rejoignez le reseau logistique le plus fiable du pays.",
+    hero_cta1:"&#128666; S'inscrire Maintenant", hero_cta2:"&#128205; Retour a l'Accueil",
+    reg_tag:"Inscription Logistique", reg_title:"Enregistrez Votre Flotte & Camion",
+    reg_sub:"Completez ces 2 etapes pour enregistrer votre camion dans le reseau MsouWout Logistics.",
+    s1_title:"Informations Proprietaire / Flotte", s1_desc:"Dites-nous qui vous etes et comment vous contacter.",
+    f_owner_label:"Nom du Proprietaire *", f_owner_ph:"Jean Pierre",
+    f_company_label:"Nom de l'Entreprise (optionnel)", f_company_ph:"Transport Lakay SARL",
+    f_phone_label:"Numero de Telephone *", f_phone_ph:"XXXX XXXX",
+    f_email_label:"Email (optionnel)", f_email_ph:"jean@example.com",
+    f_address_label:"Adresse (optionnel)", f_address_ph:"Rue, Ville, Departement",
+    s1_submit:"&#128640; Enregistrer Flotte &rarr; Etape 2",
+    s1_done:"Etape 1 Terminee",
+    s2_title:"Informations du Camion", s2_desc:"Ajoutez votre premier camion a la flotte.",
+    f_truck_type_label:"Type de Camion *", f_truck_type_ph:"-- Selectionnez le Type --",
+    f_tt_flatbed:"Plateau", f_tt_semi:"Semi-Remorque", f_tt_dump:"Camion Benne",
+    f_tt_container:"Conteneur", f_tt_pickup:"Pickup", f_tt_van:"Van",
+    f_make_label:"Marque (optionnel)", f_make_ph:"Toyota, Isuzu, Mack...",
+    f_model_label:"Modele (optionnel)", f_model_ph:"Dyna, NPR, Granite...",
+    f_year_label:"Annee (optionnel)",
+    f_plate_label:"Plaque d'Immatriculation (optionnel)", f_plate_ph:"AB-12345",
+    f_payload_label:"Capacite (kg, optionnel)",
+    f_payload_desc_label:"Description Capacite (optionnel)", f_payload_desc_ph:"500 sacs de riz",
+    s2_submit:"&#128666; Enregistrer le Camion",
+    success_title:"Inscription Reussie!",
+    success_desc:"Merci de vous etre inscrit a MsouWout Logistics. Notre equipe vous contactera via WhatsApp pour confirmer les details.",
+    track_label:"Votre Fleet ID", track_note:"Conservez ce numero. Vous pouvez l'utiliser pour ajouter d'autres camions plus tard.",
+    err_owner_required:"Veuillez entrer le nom du proprietaire.",
+    err_phone_required:"Veuillez entrer le numero de telephone.",
+    err_truck_type_required:"Veuillez selectionner le type de camion.",
+    err_api:"Erreur lors de l'envoi. Veuillez reessayer ou nous contacter via WhatsApp.",
+    eco_tag:"Ecosysteme HaitiBiznis", eco_title:"Partie de Quelque Chose de Plus Grand",
+    eco_sub:"MsouWout est la colonne vertebrale logistique du hub numerique d'Haiti.",
+    eco_48:"Lancez votre entreprise en 48h", eco_plop:"Le marketplace numerique d'Haiti",
+    eco_sou:"Livraison et covoiturage", eco_t4p:"Professionnels a domicile",
+    footer_desc:"La plateforme de livraison et covoiturage de confiance d'Haiti. Rapide, abordable, fiable. Une plateforme HaitiBiznis.",
+    footer_links:"Liens Rapides", footer_ecosystem:"Ecosysteme", footer_referral:"Programme de Parrainage",
+    eco_label:"Partie de"
+  },
+  en: {
+    nav_home:"Home", nav_services:"Services", nav_pricing:"Pricing", nav_zones:"Zones",
+    nav_register:"Register", nav_cta:"Register Your Truck",
+    hero_badge:"MsouWout Logistics - Freight Transportation Network",
+    hero_title:"<em>MsouWout</em> Logistics",
+    hero_sub:"Register your truck or fleet to haul freight across Haiti. Join the most reliable logistics network in the country.",
+    hero_cta1:"&#128666; Register Now", hero_cta2:"&#128205; Back to Home",
+    reg_tag:"Logistics Registration", reg_title:"Register Your Fleet & Truck",
+    reg_sub:"Complete these 2 steps to register your truck in the MsouWout Logistics network.",
+    s1_title:"Owner / Fleet Information", s1_desc:"Tell us who you are and how to contact you.",
+    f_owner_label:"Owner Name *", f_owner_ph:"Jean Pierre",
+    f_company_label:"Company Name (optional)", f_company_ph:"Transport Lakay SARL",
+    f_phone_label:"Phone Number *", f_phone_ph:"XXXX XXXX",
+    f_email_label:"Email (optional)", f_email_ph:"jean@example.com",
+    f_address_label:"Address (optional)", f_address_ph:"Street, City, Department",
+    s1_submit:"&#128640; Register Fleet &rarr; Step 2",
+    s1_done:"Step 1 Complete",
+    s2_title:"Truck Information", s2_desc:"Add your first truck to the fleet.",
+    f_truck_type_label:"Truck Type *", f_truck_type_ph:"-- Select Truck Type --",
+    f_tt_flatbed:"Flatbed", f_tt_semi:"Semi-Truck (Trailer)", f_tt_dump:"Dump Truck",
+    f_tt_container:"Container", f_tt_pickup:"Pickup", f_tt_van:"Van",
+    f_make_label:"Make (optional)", f_make_ph:"Toyota, Isuzu, Mack...",
+    f_model_label:"Model (optional)", f_model_ph:"Dyna, NPR, Granite...",
+    f_year_label:"Year (optional)",
+    f_plate_label:"License Plate (optional)", f_plate_ph:"AB-12345",
+    f_payload_label:"Payload Capacity (kg, optional)",
+    f_payload_desc_label:"Capacity Description (optional)", f_payload_desc_ph:"500 sacks of rice",
+    s2_submit:"&#128666; Register Truck",
+    success_title:"Registration Successful!",
+    success_desc:"Thank you for registering with MsouWout Logistics. Our team will contact you via WhatsApp to confirm the details.",
+    track_label:"Your Fleet ID", track_note:"Keep this number safe. You can use it to add more trucks to your fleet later.",
+    err_owner_required:"Please enter the owner name.",
+    err_phone_required:"Please enter the phone number.",
+    err_truck_type_required:"Please select a truck type.",
+    err_api:"Error submitting. Please try again or contact us via WhatsApp.",
+    eco_tag:"HaitiBiznis Ecosystem", eco_title:"Part of Something Bigger",
+    eco_sub:"MsouWout is the logistics backbone of Haiti's connected digital platform hub.",
+    eco_48:"Launch your business in 48 hours", eco_plop:"Haiti's digital marketplace",
+    eco_sou:"Delivery & ridesharing", eco_t4p:"Home professionals",
+    footer_desc:"Haiti's trusted delivery and ridesharing platform. Fast, affordable, reliable. A HaitiBiznis platform.",
+    footer_links:"Quick Links", footer_ecosystem:"Ecosystem", footer_referral:"Referral Program",
+    eco_label:"Part of"
+  },
+  es: {
+    nav_home:"Inicio", nav_services:"Servicios", nav_pricing:"Precios", nav_zones:"Zonas",
+    nav_register:"Registro", nav_cta:"Registra Tu Camion",
+    hero_badge:"MsouWout Logistics - Red de Transporte de Carga",
+    hero_title:"<em>MsouWout</em> Logistics",
+    hero_sub:"Registra tu camion o flota para transportar carga por Haiti. Unete a la red logistica mas confiable del pais.",
+    hero_cta1:"&#128666; Registrarse Ahora", hero_cta2:"&#128205; Volver al Inicio",
+    reg_tag:"Registro Logistico", reg_title:"Registra Tu Flota & Camion",
+    reg_sub:"Completa estos 2 pasos para registrar tu camion en la red MsouWout Logistics.",
+    s1_title:"Informacion del Propietario / Flota", s1_desc:"Dinos quien eres y como contactarte.",
+    f_owner_label:"Nombre del Propietario *", f_owner_ph:"Jean Pierre",
+    f_company_label:"Nombre de Empresa (opcional)", f_company_ph:"Transporte Lakay SARL",
+    f_phone_label:"Numero de Telefono *", f_phone_ph:"XXXX XXXX",
+    f_email_label:"Email (opcional)", f_email_ph:"jean@example.com",
+    f_address_label:"Direccion (opcional)", f_address_ph:"Calle, Ciudad, Departamento",
+    s1_submit:"&#128640; Registrar Flota &rarr; Paso 2",
+    s1_done:"Paso 1 Completado",
+    s2_title:"Informacion del Camion", s2_desc:"Agrega tu primer camion a la flota.",
+    f_truck_type_label:"Tipo de Camion *", f_truck_type_ph:"-- Seleccionar Tipo --",
+    f_tt_flatbed:"Plataforma", f_tt_semi:"Semi-Remolque", f_tt_dump:"Camion Volquete",
+    f_tt_container:"Contenedor", f_tt_pickup:"Pickup", f_tt_van:"Van",
+    f_make_label:"Marca (opcional)", f_make_ph:"Toyota, Isuzu, Mack...",
+    f_model_label:"Modelo (opcional)", f_model_ph:"Dyna, NPR, Granite...",
+    f_year_label:"Ano (opcional)",
+    f_plate_label:"Placa del Vehiculo (opcional)", f_plate_ph:"AB-12345",
+    f_payload_label:"Capacidad de Carga (kg, opcional)",
+    f_payload_desc_label:"Descripcion de Capacidad (opcional)", f_payload_desc_ph:"500 sacos de arroz",
+    s2_submit:"&#128666; Registrar Camion",
+    success_title:"Registro Exitoso!",
+    success_desc:"Gracias por registrarte en MsouWout Logistics. Nuestro equipo te contactara via WhatsApp para confirmar los detalles.",
+    track_label:"Tu Fleet ID", track_note:"Guarda este numero. Puedes usarlo para agregar mas camiones a tu flota mas tarde.",
+    err_owner_required:"Por favor ingresa el nombre del propietario.",
+    err_phone_required:"Por favor ingresa el numero de telefono.",
+    err_truck_type_required:"Por favor selecciona un tipo de camion.",
+    err_api:"Error al enviar. Intenta de nuevo o contactanos via WhatsApp.",
+    eco_tag:"Ecosistema HaitiBiznis", eco_title:"Parte de Algo Mas Grande",
+    eco_sub:"MsouWout es la columna vertebral logistica del hub digital de Haiti.",
+    eco_48:"Lanza tu negocio en 48 horas", eco_plop:"El marketplace digital de Haiti",
+    eco_sou:"Entrega y transporte compartido", eco_t4p:"Profesionales a domicilio",
+    footer_desc:"La plataforma de entrega y transporte de confianza de Haiti. Rapido, asequible, confiable. Una plataforma HaitiBiznis.",
+    footer_links:"Enlaces Rapidos", footer_ecosystem:"Ecosistema", footer_referral:"Programa de Referidos",
+    eco_label:"Parte de"
+  }
+};
+
+/* ═══════════════════════════════════════════════════
+   i18n ENGINE
+   ═══════════════════════════════════════════════════ */
+var currentLang = 'ht';
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-bar a').forEach(function(a){ a.classList.remove('active') });
+  var el = document.getElementById('lang-' + lang);
+  if (el) el.classList.add('active');
+  var t = T[lang] || T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (t[key]) el.innerHTML = t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-placeholder');
+    if (t[key]) el.placeholder = t[key];
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE NAV
+   ═══════════════════════════════════════════════════ */
+function toggleMobile() { document.getElementById('mobileNav').classList.toggle('open') }
+function closeMobile() { document.getElementById('mobileNav').classList.remove('open') }
+
+/* ═══════════════════════════════════════════════════
+   API CONFIG
+   ═══════════════════════════════════════════════════ */
+var API_BASE = 'https://msouwout-backend.onrender.com';
+var fleetId = null;
+
+/* ═══════════════════════════════════════════════════
+   STEP 1: Register Fleet
+   ═══════════════════════════════════════════════════ */
+function submitStep1() {
+  var t = T[currentLang] || T.ht;
+  var errEl = document.getElementById('step1Error');
+  errEl.classList.remove('visible');
+
+  var ownerName = document.getElementById('ownerName').value.trim();
+  var companyName = document.getElementById('companyName').value.trim();
+  var phone = document.getElementById('ownerPhone').value.trim();
+  var email = document.getElementById('ownerEmail').value.trim();
+  var address = document.getElementById('ownerAddress').value.trim();
+
+  // Validation
+  if (!ownerName) {
+    errEl.textContent = t.err_owner_required;
+    errEl.classList.add('visible');
+    document.getElementById('ownerName').focus();
+    return;
+  }
+  if (!phone) {
+    errEl.textContent = t.err_phone_required;
+    errEl.classList.add('visible');
+    document.getElementById('ownerPhone').focus();
+    return;
+  }
+
+  var fullPhone = '+509' + phone.replace(/\s/g, '');
+
+  var payload = {
+    owner_name: ownerName,
+    phone: fullPhone
+  };
+  if (companyName) payload.company_name = companyName;
+  if (email) payload.email = email;
+  if (address) payload.address = address;
+
+  // Loading state
+  var btn = document.getElementById('step1Btn');
+  btn.classList.add('btn-loading');
+  btn.disabled = true;
+
+  fetch(API_BASE + '/api/logistics/fleets', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(function(res) {
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  })
+  .then(function(data) {
+    // Extract fleet_id from response
+    fleetId = data.id || data.fleet_id || data._id || null;
+
+    // Mark step 1 as completed
+    document.getElementById('step1Num').classList.add('completed');
+    document.getElementById('step1Num').innerHTML = '&#10003;';
+
+    // Disable step 1 form
+    var form = document.getElementById('fleetForm');
+    var inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(function(inp) { inp.disabled = true; inp.style.opacity = '0.6' });
+    btn.style.display = 'none';
+
+    // Show summary in step 2
+    document.getElementById('summaryOwner').innerHTML = '<strong>' + (t.f_owner_label || 'Owner:') + '</strong> ' + ownerName;
+    document.getElementById('summaryPhone').innerHTML = '<strong>' + (t.f_phone_label || 'Phone:') + '</strong> ' + fullPhone;
+
+    // Show step 2
+    var step2 = document.getElementById('step2Card');
+    step2.classList.add('visible');
+
+    // Scroll to step 2
+    setTimeout(function() {
+      step2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 200);
+  })
+  .catch(function(err) {
+    errEl.textContent = t.err_api;
+    errEl.classList.add('visible');
+  })
+  .finally(function() {
+    btn.classList.remove('btn-loading');
+    btn.disabled = false;
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   STEP 2: Register Truck
+   ═══════════════════════════════════════════════════ */
+function submitStep2() {
+  var t = T[currentLang] || T.ht;
+  var errEl = document.getElementById('step2Error');
+  errEl.classList.remove('visible');
+
+  var truckType = document.getElementById('truckType').value;
+  var make = document.getElementById('truckMake').value.trim();
+  var model = document.getElementById('truckModel').value.trim();
+  var year = document.getElementById('truckYear').value.trim();
+  var plate = document.getElementById('truckPlate').value.trim();
+  var payloadKg = document.getElementById('truckPayload').value.trim();
+  var payloadDesc = document.getElementById('truckPayloadDesc').value.trim();
+
+  // Validation
+  if (!truckType) {
+    errEl.textContent = t.err_truck_type_required;
+    errEl.classList.add('visible');
+    document.getElementById('truckType').focus();
+    return;
+  }
+
+  var payload = {
+    fleet_id: fleetId,
+    truck_type: truckType
+  };
+  if (make) payload.make = make;
+  if (model) payload.model = model;
+  if (year) payload.year = parseInt(year, 10);
+  if (plate) payload.license_plate = plate;
+  if (payloadKg) payload.payload_capacity_kg = parseInt(payloadKg, 10);
+  if (payloadDesc) payload.payload_capacity_desc = payloadDesc;
+
+  // Loading state
+  var btn = document.getElementById('step2Btn');
+  btn.classList.add('btn-loading');
+  btn.disabled = true;
+
+  fetch(API_BASE + '/api/logistics/trucks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(function(res) {
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  })
+  .then(function(data) {
+    // Hide both form cards
+    document.getElementById('step1Card').style.display = 'none';
+    document.getElementById('step2Card').style.display = 'none';
+
+    // Show success card
+    var successCard = document.getElementById('successCard');
+    successCard.classList.add('visible');
+    document.getElementById('trackingId').textContent = fleetId || '--';
+
+    // Scroll to success
+    setTimeout(function() {
+      successCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 200);
+  })
+  .catch(function(err) {
+    errEl.textContent = t.err_api;
+    errEl.classList.add('visible');
+  })
+  .finally(function() {
+    btn.classList.remove('btn-loading');
+    btn.disabled = false;
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   SCROLL ANIMATIONS
+   ═══════════════════════════════════════════════════ */
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.eco-card').forEach(function(el) {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity .6s ease, transform .6s ease';
+  observer.observe(el);
+});
+
+/* Initialize language */
+setLang('ht');
+</script>
+</body>
+</html>
