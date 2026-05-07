@@ -471,6 +471,7 @@ footer{
           <option value="container" data-i18n="truck_container">Container / Kontenè</option>
           <option value="pickup" data-i18n="truck_pickup">Pickup</option>
           <option value="van" data-i18n="truck_van">Van</option>
+          <option value="bus" data-i18n="truck_bus">Otobis / Bus</option>
           <option value="any" data-i18n="truck_any">Nenpòt / Any</option>
         </select>
       </div>
@@ -659,7 +660,7 @@ ht:{
   f_truck_label:"Tip Kamyon Bezwen *",f_truck_default:"-- Chwazi tip kamyon --",
   truck_flatbed:"Flatbed / Plato",truck_semi:"Semi-Truck / Gwo Kamyon",
   truck_dump:"Dump Truck / Kamyon Benè",truck_container:"Container / Kontenè",
-  truck_pickup:"Pickup",truck_van:"Van",truck_any:"Nenpòt / Any",
+  truck_pickup:"Pickup",truck_van:"Van",truck_bus:"Otobis",truck_any:"Nenpòt / Any",
   f_pickup_label:"Adrès Ranmasaj (Pickup) *",f_pickup_ph:"Ex: Pòtoprens, Ri Capois",
   f_gps_hint:"&#128205; Ap chèche pozisyon GPS ou...",f_gps_found:"&#128205; GPS jwenn!",f_gps_fail:"&#128205; GPS pa disponib, mete kòdonnen manyèlman",
   f_dropoff_label:"Adrès Livrezon (Dropoff) *",f_dropoff_ph:"Ex: Gonayiv, Ri Jilbè",
@@ -701,7 +702,7 @@ fr:{
   f_truck_label:"Type de Camion Requis *",f_truck_default:"-- Choisir type de camion --",
   truck_flatbed:"Flatbed / Plateau",truck_semi:"Semi-Remorque",
   truck_dump:"Camion Benne",truck_container:"Container",
-  truck_pickup:"Pickup",truck_van:"Van",truck_any:"N'importe quel",
+  truck_pickup:"Pickup",truck_van:"Van",truck_bus:"Autobus",truck_any:"N'importe quel",
   f_pickup_label:"Adresse de Ramassage *",f_pickup_ph:"Ex: Port-au-Prince, Rue Capois",
   f_gps_hint:"&#128205; Recherche de votre position GPS...",f_gps_found:"&#128205; GPS trouve!",f_gps_fail:"&#128205; GPS indisponible",
   f_dropoff_label:"Adresse de Livraison *",f_dropoff_ph:"Ex: Gonaives, Rue Gilbert",
@@ -743,7 +744,7 @@ en:{
   f_truck_label:"Truck Type Needed *",f_truck_default:"-- Select truck type --",
   truck_flatbed:"Flatbed",truck_semi:"Semi-Truck",
   truck_dump:"Dump Truck",truck_container:"Container",
-  truck_pickup:"Pickup",truck_van:"Van",truck_any:"Any",
+  truck_pickup:"Pickup",truck_van:"Van",truck_bus:"Bus",truck_any:"Any",
   f_pickup_label:"Pickup Address *",f_pickup_ph:"e.g. Port-au-Prince, Rue Capois",
   f_gps_hint:"&#128205; Searching for your GPS position...",f_gps_found:"&#128205; GPS found!",f_gps_fail:"&#128205; GPS unavailable",
   f_dropoff_label:"Dropoff Address *",f_dropoff_ph:"e.g. Gonaives, Rue Gilbert",
@@ -785,7 +786,7 @@ es:{
   f_truck_label:"Tipo de Camion Necesario *",f_truck_default:"-- Elegir tipo de camion --",
   truck_flatbed:"Plataforma",truck_semi:"Semi-Remolque",
   truck_dump:"Camion Volquete",truck_container:"Contenedor",
-  truck_pickup:"Pickup",truck_van:"Van",truck_any:"Cualquiera",
+  truck_pickup:"Pickup",truck_van:"Van",truck_bus:"Autobus",truck_any:"Cualquiera",
   f_pickup_label:"Direccion de Recogida *",f_pickup_ph:"Ej: Port-au-Prince, Rue Capois",
   f_gps_hint:"&#128205; Buscando tu posicion GPS...",f_gps_found:"&#128205; GPS encontrado!",f_gps_fail:"&#128205; GPS no disponible",
   f_dropoff_label:"Direccion de Entrega *",f_dropoff_ph:"Ej: Gonaives, Rue Gilbert",
@@ -1003,7 +1004,7 @@ var cargoI18n={
 };
 var truckI18n={
   flatbed:'truck_flatbed',semi_truck:'truck_semi',dump_truck:'truck_dump',
-  container:'truck_container',pickup:'truck_pickup',van:'truck_van',any:'truck_any'
+  container:'truck_container',pickup:'truck_pickup',van:'truck_van',bus:'truck_bus',any:'truck_any'
 };
 
 function renderLoads(loads){

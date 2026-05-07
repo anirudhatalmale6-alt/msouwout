@@ -539,6 +539,7 @@ footer a:hover{text-decoration:underline}
               <option value="container">Container</option>
               <option value="pickup">Pickup</option>
               <option value="van">Van</option>
+              <option value="bus">Otobis / Bus</option>
             </select>
           </div>
           <div class="form-group">
@@ -820,11 +821,11 @@ let pendingPinAction=null; // { type, loadId, ... }
 
 const TRUCK_EMOJIS={
   flatbed:'&#128667;',semi_truck:'&#128667;',dump_truck:'&#127959;',
-  container:'&#128230;',pickup:'&#128661;',van:'&#128656;'
+  container:'&#128230;',pickup:'&#128661;',van:'&#128656;',bus:'&#128652;'
 };
 const TRUCK_EMOJI_RAW={
   flatbed:'\u{1F69B}',semi_truck:'\u{1F69B}',dump_truck:'\u{1F3D7}',
-  container:'\u{1F4E6}',pickup:'\u{1F699}',van:'\u{1F690}'
+  container:'\u{1F4E6}',pickup:'\u{1F699}',van:'\u{1F690}',bus:'\u{1F68C}'
 };
 
 /* ========== LOGIN ========== */
