@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>MsouWout Logistics — Dispatch Center | Sant Dispatching</title>
+<meta name="description" content="Internal dispatch center for MsouWout Logistics operations. Manage loads, trucks, fleets, and SOS alerts in real-time.">
+<meta property="og:title" content="MsouWout Logistics — Dispatch Center">
+<meta property="og:description" content="Sant dispatching entèn pou operasyon lojistik MsouWout.">
+<meta property="og:image" content="https://msouwout.com/assets/og-msouwout.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://msouwout.com/logistics-dispatch.html">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#0B1F66;--primary-dark:#061040;
+  --red:#E31C3D;--red-dark:#C4162F;--red-light:#F04058;
+  --gold:#F5B400;--gold-light:#FFCA28;
+  --green:#1B8C3D;--green-dark:#156E30;--green-light:#22C55E;
+  --white:#FFFFFF;--off-white:#F5F7FA;--light-gray:#EDF0F5;
+  --dark:#0A0E1A;--text:#1A2340;--text-light:#5A6580;--text-muted:#8A95AA;
+  --border:#DEE3EF;
+  --body:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  --display:'DM Serif Display',Georgia,serif;
+  --radius:16px;--radius-lg:20px;
+  --shadow:0 2px 12px rgba(11,31,102,.08);
+  --shadow-md:0 4px 24px rgba(11,31,102,.12);
+  --shadow-lg:0 8px 40px rgba(11,31,102,.16);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--body);background:var(--off-white);color:var(--text);
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  padding-top:56px;padding-bottom:calc(64px + var(--safe-bottom));
+}
+a{text-decoration:none;color:inherit}
+button{font-family:var(--body);cursor:pointer;border:none;background:none}
+img{max-width:100%}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.6)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══ TOP BAR ═══ */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;
+  background:var(--dark);
+  height:56px;padding:0 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 16px rgba(6,16,64,.3);
+}
+.topbar-logo{display:flex;align-items:center;gap:8px}
+.topbar-logo img{width:32px;height:32px;border-radius:8px;object-fit:cover}
+.topbar-logo-text{color:#fff;font-size:.92rem;font-weight:800;letter-spacing:-.02em}
+.topbar-logo-text span{color:var(--gold);font-weight:600;font-size:.65rem;display:block;margin-top:-2px;letter-spacing:.04em}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.lang-switch{
+  display:flex;align-items:center;gap:2px;
+  background:rgba(255,255,255,.1);border-radius:100px;padding:3px 4px;
+}
+.lang-switch a{
+  color:rgba(255,255,255,.55);font-size:.6rem;font-weight:700;
+  padding:4px 7px;border-radius:100px;cursor:pointer;
+  transition:all .2s;letter-spacing:.03em;
+}
+.lang-switch a:hover{color:#fff;background:rgba(255,255,255,.12)}
+.lang-switch a.active{color:var(--dark);background:#fff}
+.refresh-indicator{
+  width:8px;height:8px;border-radius:50%;background:var(--green-light);
+  animation:pulse 2s infinite;flex-shrink:0;
+}
+
+/* ═══ MAP ═══ */
+.map-wrap{width:100%;height:45vh;min-height:280px;position:relative;z-index:1}
+#dispatch-map{width:100%;height:100%}
+.map-overlay{
+  position:absolute;top:12px;left:12px;z-index:800;
+  background:rgba(10,14,26,.85);backdrop-filter:blur(8px);
+  padding:8px 14px;border-radius:10px;
+  color:#fff;font-size:.72rem;font-weight:600;
+  display:flex;align-items:center;gap:6px;
+}
+.map-overlay .live-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--green-light);
+  animation:pulse 2s infinite;
+}
+.map-legend{
+  position:absolute;bottom:12px;left:12px;z-index:800;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  padding:8px 12px;border-radius:10px;
+  display:flex;gap:12px;font-size:.65rem;font-weight:600;color:var(--text);
+}
+.legend-item{display:flex;align-items:center;gap:4px}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.legend-dot.blue{background:var(--primary)}
+.legend-dot.green{background:var(--green)}
+.legend-dot.red{background:var(--red)}
+
+/* ═══ STATS BAR ═══ */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  padding:16px;
+}
+.stat-card{
+  background:var(--white);border-radius:14px;padding:14px 12px;text-align:center;
+  box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04);
+  transition:transform .2s;
+}
+.stat-card:hover{transform:translateY(-2px)}
+.stat-icon{font-size:1.3rem;margin-bottom:4px}
+.stat-num{font-size:1.4rem;font-weight:900;color:var(--primary);line-height:1.1}
+.stat-label{font-size:.6rem;font-weight:600;color:var(--text-muted);margin-top:2px;letter-spacing:.02em}
+
+/* ═══ PANELS ═══ */
+.panels{padding:0 16px 24px;display:flex;flex-direction:column;gap:16px}
+.panel{
+  background:var(--white);border-radius:var(--radius);
+  box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04);
+  overflow:hidden;animation:fadeUp .6s ease both;
+}
+.panel-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px 12px;border-bottom:1px solid var(--border);
+}
+.panel-title{
+  font-size:.88rem;font-weight:800;color:var(--text);
+  display:flex;align-items:center;gap:8px;
+}
+.panel-title .icon{font-size:1.1rem}
+.panel-badge{
+  font-size:.6rem;font-weight:700;padding:3px 8px;border-radius:100px;
+  background:var(--off-white);color:var(--text-muted);
+}
+.panel-body{padding:14px 18px 18px}
+
+/* ═══ URGENT LOADS ═══ */
+.urgent-item{
+  padding:12px;border-radius:12px;margin-bottom:10px;
+  border:2px solid var(--gold);background:rgba(245,180,0,.04);
+  display:flex;flex-direction:column;gap:6px;
+  animation:fadeUp .4s ease both;
+}
+.urgent-item.emergency{border-color:var(--red);background:rgba(227,28,61,.04)}
+.urgent-top{display:flex;align-items:center;justify-content:space-between}
+.urgent-badge{
+  font-size:.58rem;font-weight:800;padding:3px 8px;border-radius:100px;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+.urgent-badge.emergency{background:var(--red);color:#fff}
+.urgent-badge.urgent{background:var(--gold);color:var(--dark)}
+.urgent-time{font-size:.65rem;color:var(--text-muted);font-weight:500}
+.urgent-cargo{font-size:.82rem;font-weight:700;color:var(--text)}
+.urgent-route{font-size:.72rem;color:var(--text-light);font-weight:500}
+.urgent-route span{font-weight:700}
+.btn-assign{
+  align-self:flex-end;
+  padding:7px 16px;border-radius:100px;
+  background:var(--primary);color:#fff;
+  font-size:.7rem;font-weight:700;
+  transition:all .2s;
+}
+.btn-assign:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(11,31,102,.3)}
+.empty-state{
+  text-align:center;padding:24px 16px;
+  color:var(--text-muted);font-size:.82rem;font-weight:500;
+}
+
+/* ═══ AVAILABLE TRUCKS ═══ */
+.truck-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--light-gray);
+}
+.truck-item:last-child{border-bottom:none}
+.truck-emoji{font-size:1.5rem}
+.truck-info{flex:1}
+.truck-plate{font-size:.78rem;font-weight:800;color:var(--text)}
+.truck-driver{font-size:.68rem;color:var(--text-light);font-weight:500}
+.truck-status{
+  width:8px;height:8px;border-radius:50%;background:var(--green-light);
+  flex-shrink:0;
+}
+
+/* ═══ ALL LOADS TABLE ═══ */
+.filters-row{
+  display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;
+}
+.filter-btn{
+  padding:6px 12px;border-radius:100px;
+  font-size:.65rem;font-weight:700;
+  background:var(--off-white);color:var(--text-muted);
+  border:1px solid transparent;
+  transition:all .2s;
+}
+.filter-btn.active{
+  background:var(--primary);color:#fff;
+  border-color:var(--primary);
+}
+.filter-btn:hover:not(.active){background:var(--light-gray);color:var(--text)}
+.load-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--light-gray);
+  font-size:.76rem;
+}
+.load-row:last-child{border-bottom:none}
+.load-code{font-weight:800;color:var(--primary);font-size:.7rem;min-width:60px}
+.load-cargo{flex:1;font-weight:600;color:var(--text)}
+.load-route-col{font-size:.65rem;color:var(--text-light);flex:1;font-weight:500}
+.load-price{font-weight:800;color:var(--green);font-size:.72rem;min-width:50px;text-align:right}
+.status-badge{
+  font-size:.55rem;font-weight:800;padding:3px 8px;border-radius:100px;
+  text-transform:uppercase;letter-spacing:.03em;white-space:nowrap;
+}
+.status-badge.posted{background:#e8ecf2;color:#6b7280}
+.status-badge.assigned{background:#dbeafe;color:#1d4ed8}
+.status-badge.picked_up{background:#fef3c7;color:#92400e}
+.status-badge.in_transit{background:#dbeafe;color:#1d4ed8}
+.status-badge.delivered{background:#d1fae5;color:#065f46}
+.status-badge.cancelled{background:#fde8e8;color:#991b1b}
+
+/* ═══ SOS PANEL ═══ */
+.sos-header{
+  display:flex;align-items:center;gap:8px;
+}
+.sos-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--red);
+  animation:pulse 1.5s infinite;
+}
+.sos-empty{
+  text-align:center;padding:28px 16px;
+  color:var(--text-muted);font-size:.82rem;font-weight:500;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.sos-empty .shield{font-size:2rem;opacity:.4}
+
+/* ═══ FLEET STATUS ═══ */
+.fleet-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--light-gray);
+}
+.fleet-item:last-child{border-bottom:none}
+.fleet-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;color:#fff;
+}
+.fleet-info{flex:1}
+.fleet-name{font-size:.78rem;font-weight:800;color:var(--text);display:flex;align-items:center;gap:6px}
+.fleet-verified{
+  font-size:.5rem;font-weight:800;padding:2px 6px;border-radius:100px;
+  background:var(--green);color:#fff;text-transform:uppercase;letter-spacing:.03em;
+}
+.fleet-meta{font-size:.65rem;color:var(--text-light);font-weight:500}
+
+/* ═══ BOTTOM NAVIGATION ═══ */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:1100;
+  background:var(--white);
+  border-top:1px solid var(--border);
+  box-shadow:0 -2px 16px rgba(11,31,102,.08);
+  display:flex;align-items:stretch;justify-content:space-around;
+  height:calc(60px + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom);
+}
+.bnav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;padding:8px 0;cursor:pointer;
+  transition:color .2s;color:var(--text-muted);text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.bnav-item.active{color:var(--primary)}
+.bnav-item:hover{color:var(--primary)}
+.bnav-icon{font-size:1.3rem;line-height:1}
+.bnav-label{font-size:.62rem;font-weight:700;letter-spacing:.02em}
+
+/* ═══ SCROLLBAR ═══ */
+.panel-body::-webkit-scrollbar{width:4px}
+.panel-body::-webkit-scrollbar-track{background:transparent}
+.panel-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* ═══ LOADING SPINNER ═══ */
+.spinner{
+  width:24px;height:24px;border:3px solid var(--border);
+  border-top-color:var(--primary);border-radius:50%;
+  animation:spin .8s linear infinite;margin:20px auto;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media(min-width:600px){
+  .stats-bar{gap:14px;padding:16px 20px}
+  .stat-card{padding:18px 14px}
+  .stat-num{font-size:1.6rem}
+  .panels{padding:0 20px 28px}
+  .map-wrap{height:45vh;min-height:340px}
+}
+@media(min-width:960px){
+  .panels{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  .panel-all-loads{grid-column:1/-1}
+  .stats-bar{max-width:900px;margin:0 auto;padding:20px 24px}
+  .panels{max-width:900px;margin:0 auto}
+}
+@media(min-width:1200px){
+  .panels{
+    grid-template-columns:1fr 1fr 1fr;
+    max-width:1200px;
+  }
+  .panel-all-loads{grid-column:1/-1}
+  .panel-sos{grid-column:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ TOP BAR ═══ -->
+<header class="topbar">
+  <a href="logistics.html" class="topbar-logo">
+    <img src="assets/msouwout-icon.png" alt="MsouWout">
+    <div class="topbar-logo-text">
+      MsouWout <span data-i18n="dispatch_title">DISPATCH CENTER</span>
+    </div>
+  </a>
+  <div class="topbar-right">
+    <div class="refresh-indicator" id="liveIndicator" title="Live"></div>
+    <div class="lang-switch">
+      <a onclick="setLang('ht')" class="active" id="lang-ht">HT</a>
+      <a onclick="setLang('fr')" id="lang-fr">FR</a>
+      <a onclick="setLang('en')" id="lang-en">EN</a>
+      <a onclick="setLang('es')" id="lang-es">ES</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ LIVE OPERATIONS MAP ═══ -->
+<div class="map-wrap">
+  <div id="dispatch-map"></div>
+  <div class="map-overlay">
+    <span class="live-dot"></span>
+    <span data-i18n="map_live">LIVE</span>
+  </div>
+  <div class="map-legend">
+    <div class="legend-item"><div class="legend-dot blue"></div><span data-i18n="legend_trucks">Kamyon</span></div>
+    <div class="legend-item"><div class="legend-dot green"></div><span data-i18n="legend_pickup">Pickup</span></div>
+    <div class="legend-item"><div class="legend-dot red"></div><span data-i18n="legend_dropoff">Dropoff</span></div>
+  </div>
+</div>
+
+<!-- ═══ STATS BAR ═══ -->
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="stat-icon">&#128230;</div>
+    <div class="stat-num" id="stat-loads">--</div>
+    <div class="stat-label" data-i18n="stat_loads">Chajman Aktif</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">&#128666;</div>
+    <div class="stat-num" id="stat-fleets">--</div>
+    <div class="stat-label" data-i18n="stat_fleets">Flòt Verifye</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">&#128763;</div>
+    <div class="stat-num" id="stat-trucks">--</div>
+    <div class="stat-label" data-i18n="stat_trucks">Kamyon An Liy</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">&#9973;</div>
+    <div class="stat-num" id="stat-boats">--</div>
+    <div class="stat-label" data-i18n="stat_boats">Bato Aktif</div>
+  </div>
+</div>
+
+<!-- ═══ OPERATION PANELS ═══ -->
+<div class="panels">
+
+  <!-- URGENT/DELAYED LOADS -->
+  <div class="panel" style="animation-delay:.1s">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="icon">&#9888;&#65039;</span>
+        <span data-i18n="urgent_loads">Chajman Ijan</span>
+      </div>
+      <span class="panel-badge" id="urgent-count">0</span>
+    </div>
+    <div class="panel-body" id="urgentPanel" style="max-height:320px;overflow-y:auto">
+      <div class="spinner" id="urgentSpinner"></div>
+    </div>
+  </div>
+
+  <!-- AVAILABLE TRUCKS -->
+  <div class="panel" style="animation-delay:.2s">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="icon">&#128666;</span>
+        <span data-i18n="available_trucks">Kamyon Disponib</span>
+      </div>
+      <span class="panel-badge" id="trucks-count">0</span>
+    </div>
+    <div class="panel-body" id="trucksPanel" style="max-height:320px;overflow-y:auto">
+      <div class="spinner" id="trucksSpinner"></div>
+    </div>
+  </div>
+
+  <!-- ALL LOADS -->
+  <div class="panel panel-all-loads" style="animation-delay:.3s">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="icon">&#128203;</span>
+        <span data-i18n="all_loads">Tout Chajman</span>
+      </div>
+      <span class="panel-badge" id="all-loads-count">0</span>
+    </div>
+    <div class="panel-body" id="loadsPanel">
+      <div class="filters-row" id="filtersRow">
+        <button class="filter-btn active" data-filter="all" data-i18n="filter_all">Tout</button>
+        <button class="filter-btn" data-filter="posted" data-i18n="filter_posted">Poste</button>
+        <button class="filter-btn" data-filter="assigned" data-i18n="filter_assigned">Asiyen</button>
+        <button class="filter-btn" data-filter="picked_up" data-i18n="filter_picked_up">Ranmase</button>
+        <button class="filter-btn" data-filter="in_transit" data-i18n="filter_in_transit">An Wout</button>
+        <button class="filter-btn" data-filter="delivered" data-i18n="filter_delivered">Livre</button>
+        <button class="filter-btn" data-filter="cancelled" data-i18n="filter_cancelled">Anile</button>
+      </div>
+      <div id="loadsTable" style="max-height:400px;overflow-y:auto">
+        <div class="spinner" id="loadsSpinner"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOS ALERTS -->
+  <div class="panel panel-sos" style="animation-delay:.4s">
+    <div class="panel-header">
+      <div class="panel-title sos-header">
+        <span class="sos-dot"></span>
+        <span data-i18n="sos_alerts">Alèt SOS</span>
+      </div>
+    </div>
+    <div class="panel-body" id="sosPanel">
+      <div class="sos-empty">
+        <span class="shield">&#128737;&#65039;</span>
+        <span data-i18n="no_sos">Pa gen alèt SOS</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLEET STATUS -->
+  <div class="panel" style="animation-delay:.5s">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="icon">&#128666;</span>
+        <span data-i18n="fleet_status">Eta Flòt</span>
+      </div>
+    </div>
+    <div class="panel-body" id="fleetPanel" style="max-height:320px;overflow-y:auto">
+      <div class="spinner" id="fleetSpinner"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ BOTTOM NAVIGATION ═══ -->
+<nav class="bottom-nav">
+  <a href="logistics.html" class="bnav-item">
+    <span class="bnav-icon">&#127968;</span>
+    <span class="bnav-label" data-i18n="nav_home">Akèy</span>
+  </a>
+  <a href="logistics-board.html" class="bnav-item">
+    <span class="bnav-icon">&#128230;</span>
+    <span class="bnav-label" data-i18n="nav_loads">Chajman</span>
+  </a>
+  <a href="logistics-fleet.html" class="bnav-item">
+    <span class="bnav-icon">&#128666;</span>
+    <span class="bnav-label" data-i18n="nav_fleet">Flòt</span>
+  </a>
+  <a href="logistics-track.html" class="bnav-item">
+    <span class="bnav-icon">&#128205;</span>
+    <span class="bnav-label" data-i18n="nav_track">Swiv</span>
+  </a>
+  <a href="logistics-fleet.html" class="bnav-item">
+    <span class="bnav-icon">&#128100;</span>
+    <span class="bnav-label" data-i18n="nav_account">Kont</span>
+  </a>
+</nav>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ═══════════════════════════════════════
+   API & CONFIG
+   ═══════════════════════════════════════ */
+var API='https://msouwout-backend.onrender.com';
+var REFRESH_INTERVAL=15000;
+var refreshTimer=null;
+
+/* ═══════════════════════════════════════
+   i18n TRANSLATIONS
+   ═══════════════════════════════════════ */
+var T={
+ht:{
+  dispatch_title:"SANT DISPATCHING",
+  map_live:"LIVE",
+  legend_trucks:"Kamyon",legend_pickup:"Pickup",legend_dropoff:"Dropoff",
+  stat_loads:"Chajman Aktif",stat_fleets:"Flòt Verifye",
+  stat_trucks:"Kamyon An Liy",stat_boats:"Bato Aktif",
+  urgent_loads:"Chajman Ijan",available_trucks:"Kamyon Disponib",
+  all_loads:"Tout Chajman",sos_alerts:"Alèt SOS",fleet_status:"Eta Flòt",
+  no_sos:"Pa gen alèt SOS",
+  filter_all:"Tout",filter_posted:"Poste",filter_assigned:"Asiyen",
+  filter_picked_up:"Ranmase",filter_in_transit:"An Wout",
+  filter_delivered:"Livre",filter_cancelled:"Anile",
+  btn_assign:"Asiyen Kamyon",
+  no_urgent:"Pa gen chajman ijan",
+  no_trucks:"Pa gen kamyon disponib",
+  no_loads:"Pa gen chajman",
+  no_fleets:"Pa gen flòt anrejistre",
+  status_posted:"Poste",status_assigned:"Asiyen",status_picked_up:"Ranmase",
+  status_in_transit:"An Wout",status_delivered:"Livre",status_cancelled:"Anile",
+  nav_home:"Akèy",nav_loads:"Chajman",nav_fleet:"Flòt",nav_track:"Swiv",nav_account:"Kont",
+  time_ago_m:"min de sa",time_ago_h:"è de sa",time_ago_d:"j de sa",time_ago_now:"kounye a"
+},
+fr:{
+  dispatch_title:"CENTRE DE DISPATCHING",
+  map_live:"EN DIRECT",
+  legend_trucks:"Camions",legend_pickup:"Enlev.",legend_dropoff:"Livr.",
+  stat_loads:"Charges Actives",stat_fleets:"Flottes Verifiees",
+  stat_trucks:"Camions En Ligne",stat_boats:"Bateaux Actifs",
+  urgent_loads:"Chargements Urgents",available_trucks:"Camions Disponibles",
+  all_loads:"Tous les Chargements",sos_alerts:"Alertes SOS",fleet_status:"Statut des Flottes",
+  no_sos:"Aucune alerte SOS",
+  filter_all:"Tous",filter_posted:"Publie",filter_assigned:"Assigne",
+  filter_picked_up:"Enleve",filter_in_transit:"En Route",
+  filter_delivered:"Livre",filter_cancelled:"Annule",
+  btn_assign:"Assigner Camion",
+  no_urgent:"Aucun chargement urgent",
+  no_trucks:"Aucun camion disponible",
+  no_loads:"Aucun chargement",
+  no_fleets:"Aucune flotte enregistree",
+  status_posted:"Publie",status_assigned:"Assigne",status_picked_up:"Enleve",
+  status_in_transit:"En Route",status_delivered:"Livre",status_cancelled:"Annule",
+  nav_home:"Accueil",nav_loads:"Charges",nav_fleet:"Flotte",nav_track:"Suivi",nav_account:"Compte",
+  time_ago_m:"min",time_ago_h:"h",time_ago_d:"j",time_ago_now:"maintenant"
+},
+en:{
+  dispatch_title:"DISPATCH CENTER",
+  map_live:"LIVE",
+  legend_trucks:"Trucks",legend_pickup:"Pickup",legend_dropoff:"Dropoff",
+  stat_loads:"Active Loads",stat_fleets:"Verified Fleets",
+  stat_trucks:"Trucks Online",stat_boats:"Active Boats",
+  urgent_loads:"Urgent Loads",available_trucks:"Available Trucks",
+  all_loads:"All Loads",sos_alerts:"SOS Alerts",fleet_status:"Fleet Status",
+  no_sos:"No SOS alerts",
+  filter_all:"All",filter_posted:"Posted",filter_assigned:"Assigned",
+  filter_picked_up:"Picked Up",filter_in_transit:"In Transit",
+  filter_delivered:"Delivered",filter_cancelled:"Cancelled",
+  btn_assign:"Assign Truck",
+  no_urgent:"No urgent loads",
+  no_trucks:"No trucks available",
+  no_loads:"No loads",
+  no_fleets:"No fleets registered",
+  status_posted:"Posted",status_assigned:"Assigned",status_picked_up:"Picked Up",
+  status_in_transit:"In Transit",status_delivered:"Delivered",status_cancelled:"Cancelled",
+  nav_home:"Home",nav_loads:"Loads",nav_fleet:"Fleet",nav_track:"Track",nav_account:"Account",
+  time_ago_m:"min ago",time_ago_h:"h ago",time_ago_d:"d ago",time_ago_now:"just now"
+},
+es:{
+  dispatch_title:"CENTRO DE DESPACHO",
+  map_live:"EN VIVO",
+  legend_trucks:"Camiones",legend_pickup:"Recogida",legend_dropoff:"Entrega",
+  stat_loads:"Cargas Activas",stat_fleets:"Flotas Verificadas",
+  stat_trucks:"Camiones En Linea",stat_boats:"Barcos Activos",
+  urgent_loads:"Cargas Urgentes",available_trucks:"Camiones Disponibles",
+  all_loads:"Todas las Cargas",sos_alerts:"Alertas SOS",fleet_status:"Estado de Flotas",
+  no_sos:"Sin alertas SOS",
+  filter_all:"Todas",filter_posted:"Publicada",filter_assigned:"Asignada",
+  filter_picked_up:"Recogida",filter_in_transit:"En Ruta",
+  filter_delivered:"Entregada",filter_cancelled:"Cancelada",
+  btn_assign:"Asignar Camion",
+  no_urgent:"Sin cargas urgentes",
+  no_trucks:"Sin camiones disponibles",
+  no_loads:"Sin cargas",
+  no_fleets:"Sin flotas registradas",
+  status_posted:"Publicada",status_assigned:"Asignada",status_picked_up:"Recogida",
+  status_in_transit:"En Ruta",status_delivered:"Entregada",status_cancelled:"Cancelada",
+  nav_home:"Inicio",nav_loads:"Cargas",nav_fleet:"Flota",nav_track:"Seguir",nav_account:"Cuenta",
+  time_ago_m:"min",time_ago_h:"h",time_ago_d:"d",time_ago_now:"ahora"
+}
+};
+
+var currentLang='ht';
+
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-switch a').forEach(function(a){a.classList.remove('active')});
+  var el=document.getElementById('lang-'+lang);
+  if(el) el.classList.add('active');
+  var t=T[lang]||T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key=el.getAttribute('data-i18n');
+    if(t[key]) el.innerHTML=t[key];
+  });
+  // Re-render panels with new language
+  if(cachedLoads.length>0){
+    renderUrgentLoads(cachedLoads);
+    renderAllLoads(cachedLoads);
+  }
+  if(cachedFleets.length>0) renderFleets(cachedFleets);
+  if(cachedTrucks.length>0) renderTrucks(cachedTrucks);
+}
+
+function tx(key){var t=T[currentLang]||T.ht;return t[key]||T.ht[key]||key}
+
+/* ═══════════════════════════════════════
+   TIME HELPERS
+   ═══════════════════════════════════════ */
+function timeAgo(dateStr){
+  if(!dateStr) return '';
+  var now=new Date();
+  var then=new Date(dateStr);
+  var diff=Math.floor((now-then)/1000);
+  if(diff<60) return tx('time_ago_now');
+  if(diff<3600) return Math.floor(diff/60)+' '+tx('time_ago_m');
+  if(diff<86400) return Math.floor(diff/3600)+' '+tx('time_ago_h');
+  return Math.floor(diff/86400)+' '+tx('time_ago_d');
+}
+
+/* ═══════════════════════════════════════
+   TRUCK TYPE EMOJIS
+   ═══════════════════════════════════════ */
+function truckEmoji(type){
+  var map={
+    flatbed:'\u{1F6FB}',container:'\u{1F4E6}',delivery:'\u{1F69A}',
+    dump:'\u{1F6FB}',van:'\u{1F690}',refrigerated:'\u{2744}️',
+    bus:'\u{1F68C}',boat:'\u{26F5}',tanker:'\u{1F6E2}️'
+  };
+  return map[(type||'').toLowerCase()]||'\u{1F69A}';
+}
+
+/* ═══════════════════════════════════════
+   MAP SETUP
+   ═══════════════════════════════════════ */
+var map;
+var mapMarkers=[];
+
+function initMap(){
+  map=L.map('dispatch-map',{
+    zoomControl:false,
+    attributionControl:false
+  }).setView([18.5392,-72.3350],10);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:18,
+    attribution:'&copy; OpenStreetMap'
+  }).addTo(map);
+
+  L.control.zoom({position:'topright'}).addTo(map);
+  L.control.attribution({position:'bottomright',prefix:false}).addTo(map);
+}
+
+function clearMapMarkers(){
+  mapMarkers.forEach(function(m){map.removeLayer(m)});
+  mapMarkers=[];
+}
+
+function addLoadMarkers(loads){
+  clearMapMarkers();
+  loads.forEach(function(load){
+    // Pickup marker (green)
+    if(load.pickup_lat && load.pickup_lng){
+      var pickupIcon=L.divIcon({
+        className:'',
+        html:'<div style="width:14px;height:14px;border-radius:50%;background:#1B8C3D;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3)"></div>',
+        iconSize:[14,14],iconAnchor:[7,7]
+      });
+      var pm=L.marker([load.pickup_lat,load.pickup_lng],{icon:pickupIcon}).addTo(map);
+      pm.bindPopup(
+        '<div style="font-family:Plus Jakarta Sans,sans-serif;font-size:.78rem;min-width:160px">'+
+        '<strong style="color:#1B8C3D">&#128994; Pickup</strong><br>'+
+        '<strong>'+(load.cargo_type||'Cargo')+'</strong><br>'+
+        '<span style="color:#6b7280">'+(load.pickup_location||'')+'</span><br>'+
+        '<span style="font-size:.65rem;color:#9ca3af">'+
+        (load.tracking_code||'')+'</span></div>'
+      );
+      mapMarkers.push(pm);
+    }
+    // Dropoff marker (red)
+    if(load.dropoff_lat && load.dropoff_lng){
+      var dropoffIcon=L.divIcon({
+        className:'',
+        html:'<div style="width:14px;height:14px;border-radius:50%;background:#E31C3D;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3)"></div>',
+        iconSize:[14,14],iconAnchor:[7,7]
+      });
+      var dm=L.marker([load.dropoff_lat,load.dropoff_lng],{icon:dropoffIcon}).addTo(map);
+      dm.bindPopup(
+        '<div style="font-family:Plus Jakarta Sans,sans-serif;font-size:.78rem;min-width:160px">'+
+        '<strong style="color:#E31C3D">&#128308; Dropoff</strong><br>'+
+        '<strong>'+(load.cargo_type||'Cargo')+'</strong><br>'+
+        '<span style="color:#6b7280">'+(load.dropoff_location||'')+'</span><br>'+
+        '<span style="font-size:.65rem;color:#9ca3af">'+
+        (load.tracking_code||'')+'</span></div>'
+      );
+      mapMarkers.push(dm);
+    }
+  });
+
+  // Simulated truck markers (based on active loads with in_transit status)
+  var inTransit=loads.filter(function(l){return l.status==='in_transit'||l.status==='picked_up'});
+  inTransit.forEach(function(load){
+    var lat=(load.pickup_lat&&load.dropoff_lat)?
+      (load.pickup_lat+load.dropoff_lat)/2+((Math.random()-.5)*.02):
+      18.5392+((Math.random()-.5)*.05);
+    var lng=(load.pickup_lng&&load.dropoff_lng)?
+      (load.pickup_lng+load.dropoff_lng)/2+((Math.random()-.5)*.02):
+      -72.3350+((Math.random()-.5)*.05);
+    var truckIcon=L.divIcon({
+      className:'',
+      html:'<div style="font-size:1.4rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))">&#128666;</div>',
+      iconSize:[24,24],iconAnchor:[12,12]
+    });
+    var tm=L.marker([lat,lng],{icon:truckIcon}).addTo(map);
+    tm.bindPopup(
+      '<div style="font-family:Plus Jakarta Sans,sans-serif;font-size:.78rem;min-width:160px">'+
+      '<strong style="color:#0B1F66">&#128666; '+tx('legend_trucks')+'</strong><br>'+
+      '<strong>'+(load.cargo_type||'Cargo')+'</strong><br>'+
+      '<span style="color:#6b7280">'+(load.pickup_location||'')+' &rarr; '+(load.dropoff_location||'')+'</span><br>'+
+      '<span class="status-badge in_transit" style="display:inline-block;margin-top:4px;font-size:.6rem;padding:2px 6px;border-radius:100px;background:#dbeafe;color:#1d4ed8;font-weight:700">'+
+      tx('status_in_transit')+'</span></div>'
+    );
+    mapMarkers.push(tm);
+  });
+}
+
+/* ═══════════════════════════════════════
+   COUNT-UP ANIMATION
+   ═══════════════════════════════════════ */
+function animateCount(el,target){
+  if(!el) return;
+  if(target===0){el.textContent='0';return;}
+  var start=0;
+  var duration=1000;
+  var startTime=null;
+  function step(timestamp){
+    if(!startTime) startTime=timestamp;
+    var progress=Math.min((timestamp-startTime)/duration,1);
+    var eased=1-Math.pow(1-progress,3);
+    el.textContent=Math.round(eased*target).toLocaleString();
+    if(progress<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ═══════════════════════════════════════
+   DATA CACHE
+   ═══════════════════════════════════════ */
+var cachedLoads=[];
+var cachedFleets=[];
+var cachedTrucks=[];
+var currentFilter='all';
+
+/* ═══════════════════════════════════════
+   RENDER: URGENT LOADS
+   ═══════════════════════════════════════ */
+function renderUrgentLoads(loads){
+  var panel=document.getElementById('urgentPanel');
+  var urgent=loads.filter(function(l){
+    return l.urgency==='urgent'||l.urgency==='emergency';
+  });
+  document.getElementById('urgent-count').textContent=urgent.length;
+
+  if(urgent.length===0){
+    panel.innerHTML='<div class="empty-state">'+tx('no_urgent')+'</div>';
+    return;
+  }
+
+  var html='';
+  urgent.forEach(function(l){
+    var isEmergency=l.urgency==='emergency';
+    html+='<div class="urgent-item'+(isEmergency?' emergency':'')+'">';
+    html+='<div class="urgent-top">';
+    html+='<span class="urgent-badge '+(isEmergency?'emergency':'urgent')+'">'+(isEmergency?'EMERGENCY':'URGENT')+'</span>';
+    html+='<span class="urgent-time">'+timeAgo(l.created_at||l.posted_at)+'</span>';
+    html+='</div>';
+    html+='<div class="urgent-cargo">'+(l.cargo_type||'Cargo')+'</div>';
+    html+='<div class="urgent-route"><span>'+(l.pickup_location||'?')+'</span> &rarr; <span>'+(l.dropoff_location||'?')+'</span></div>';
+    html+='<button class="btn-assign" onclick="assignTruck(\''+l.id+'\')">'+tx('btn_assign')+'</button>';
+    html+='</div>';
+  });
+  panel.innerHTML=html;
+}
+
+/* ═══════════════════════════════════════
+   RENDER: AVAILABLE TRUCKS
+   ═══════════════════════════════════════ */
+function renderTrucks(trucks){
+  var panel=document.getElementById('trucksPanel');
+  cachedTrucks=trucks;
+
+  var available=trucks.filter(function(t){
+    return t.status==='online'||t.status==='available';
+  });
+  document.getElementById('trucks-count').textContent=available.length;
+
+  if(available.length===0){
+    panel.innerHTML='<div class="empty-state">'+tx('no_trucks')+'</div>';
+    return;
+  }
+
+  var html='';
+  available.forEach(function(t){
+    html+='<div class="truck-item">';
+    html+='<span class="truck-emoji">'+truckEmoji(t.truck_type)+'</span>';
+    html+='<div class="truck-info">';
+    html+='<div class="truck-plate">'+(t.plate||t.license_plate||'---')+'</div>';
+    html+='<div class="truck-driver">'+(t.driver_name||t.driver||'')+'</div>';
+    html+='</div>';
+    html+='<div class="truck-status"></div>';
+    html+='</div>';
+  });
+  panel.innerHTML=html;
+}
+
+/* ═══════════════════════════════════════
+   RENDER: ALL LOADS
+   ═══════════════════════════════════════ */
+function renderAllLoads(loads){
+  var table=document.getElementById('loadsTable');
+  var filtered=(currentFilter==='all')?loads:loads.filter(function(l){
+    return l.status===currentFilter;
+  });
+
+  document.getElementById('all-loads-count').textContent=loads.length;
+
+  if(filtered.length===0){
+    table.innerHTML='<div class="empty-state">'+tx('no_loads')+'</div>';
+    return;
+  }
+
+  var html='';
+  filtered.forEach(function(l){
+    var status=l.status||'posted';
+    var statusLabel=tx('status_'+status)||status;
+    html+='<div class="load-row">';
+    html+='<span class="load-code">'+(l.tracking_code||'---')+'</span>';
+    html+='<span class="load-cargo">'+(l.cargo_type||'Cargo')+'</span>';
+    html+='<span class="load-route-col">'+(l.pickup_location||'?')+' &rarr; '+(l.dropoff_location||'?')+'</span>';
+    html+='<span class="status-badge '+status+'">'+statusLabel+'</span>';
+    html+='<span class="load-price">'+(l.price?('$'+Number(l.price).toLocaleString()):'--')+'</span>';
+    html+='</div>';
+  });
+  table.innerHTML=html;
+}
+
+/* ═══════════════════════════════════════
+   RENDER: FLEETS
+   ═══════════════════════════════════════ */
+function renderFleets(fleets){
+  var panel=document.getElementById('fleetPanel');
+  cachedFleets=fleets;
+
+  if(fleets.length===0){
+    panel.innerHTML='<div class="empty-state">'+tx('no_fleets')+'</div>';
+    return;
+  }
+
+  var html='';
+  fleets.forEach(function(f){
+    html+='<div class="fleet-item">';
+    html+='<div class="fleet-icon">&#128666;</div>';
+    html+='<div class="fleet-info">';
+    html+='<div class="fleet-name">'+(f.company_name||f.name||'Fleet');
+    if(f.verified) html+=' <span class="fleet-verified">&#10003; Verified</span>';
+    html+='</div>';
+    html+='<div class="fleet-meta">'+(f.truck_count||0)+' trucks &bull; '+(f.active_loads||0)+' loads</div>';
+    html+='</div>';
+    html+='</div>';
+  });
+  panel.innerHTML=html;
+}
+
+/* ═══════════════════════════════════════
+   FILTER HANDLERS
+   ═══════════════════════════════════════ */
+document.getElementById('filtersRow').addEventListener('click',function(e){
+  var btn=e.target.closest('.filter-btn');
+  if(!btn) return;
+  currentFilter=btn.getAttribute('data-filter');
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  renderAllLoads(cachedLoads);
+});
+
+/* ═══════════════════════════════════════
+   ASSIGN TRUCK (placeholder)
+   ═══════════════════════════════════════ */
+function assignTruck(loadId){
+  alert(tx('btn_assign')+': Load #'+loadId);
+}
+
+/* ═══════════════════════════════════════
+   FETCH DATA
+   ═══════════════════════════════════════ */
+function fetchAll(){
+  // Flash the live indicator
+  var ind=document.getElementById('liveIndicator');
+  ind.style.background='var(--gold)';
+  setTimeout(function(){ind.style.background='var(--green-light)'},600);
+
+  // Fetch stats
+  fetch(API+'/api/logistics/stats')
+    .then(function(r){return r.json()})
+    .then(function(data){
+      animateCount(document.getElementById('stat-loads'),data.active_loads||0);
+      animateCount(document.getElementById('stat-fleets'),data.verified_fleets||0);
+      animateCount(document.getElementById('stat-trucks'),data.online_trucks||0);
+      animateCount(document.getElementById('stat-boats'),data.active_boats||0);
+    })
+    .catch(function(err){console.error('Stats fetch error:',err)});
+
+  // Fetch all loads (non-delivered for map, all for table)
+  fetch(API+'/api/logistics/loads')
+    .then(function(r){return r.json()})
+    .then(function(data){
+      var loads=data.loads||data||[];
+      cachedLoads=loads;
+
+      // Remove spinners
+      var s1=document.getElementById('urgentSpinner');
+      var s2=document.getElementById('loadsSpinner');
+      if(s1) s1.remove();
+      if(s2) s2.remove();
+
+      renderUrgentLoads(loads);
+      renderAllLoads(loads);
+
+      // Update map
+      var activeLoads=loads.filter(function(l){
+        return l.status!=='delivered'&&l.status!=='cancelled';
+      });
+      addLoadMarkers(activeLoads);
+    })
+    .catch(function(err){
+      console.error('Loads fetch error:',err);
+      var s1=document.getElementById('urgentSpinner');
+      var s2=document.getElementById('loadsSpinner');
+      if(s1) s1.remove();
+      if(s2) s2.remove();
+      document.getElementById('urgentPanel').innerHTML='<div class="empty-state">'+tx('no_urgent')+'</div>';
+      document.getElementById('loadsTable').innerHTML='<div class="empty-state">'+tx('no_loads')+'</div>';
+    });
+
+  // Fetch fleets
+  fetch(API+'/api/logistics/fleets')
+    .then(function(r){return r.json()})
+    .then(function(data){
+      var fleets=data.fleets||data||[];
+      cachedFleets=fleets;
+      var s=document.getElementById('fleetSpinner');
+      if(s) s.remove();
+      renderFleets(fleets);
+    })
+    .catch(function(err){
+      console.error('Fleets fetch error:',err);
+      var s=document.getElementById('fleetSpinner');
+      if(s) s.remove();
+      document.getElementById('fleetPanel').innerHTML='<div class="empty-state">'+tx('no_fleets')+'</div>';
+    });
+
+  // Fetch trucks
+  fetch(API+'/api/logistics/trucks')
+    .then(function(r){return r.json()})
+    .then(function(data){
+      var trucks=data.trucks||data||[];
+      cachedTrucks=trucks;
+      var s=document.getElementById('trucksSpinner');
+      if(s) s.remove();
+      renderTrucks(trucks);
+    })
+    .catch(function(err){
+      console.error('Trucks fetch error:',err);
+      var s=document.getElementById('trucksSpinner');
+      if(s) s.remove();
+      document.getElementById('trucksPanel').innerHTML='<div class="empty-state">'+tx('no_trucks')+'</div>';
+    });
+}
+
+/* ═══════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════ */
+initMap();
+fetchAll();
+
+// Auto-refresh every 15 seconds
+refreshTimer=setInterval(fetchAll,REFRESH_INTERVAL);
+
+// Visibility API: pause refresh when tab is hidden
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){
+    if(refreshTimer){clearInterval(refreshTimer);refreshTimer=null}
+  } else {
+    fetchAll();
+    refreshTimer=setInterval(fetchAll,REFRESH_INTERVAL);
+  }
+});
+</script>
+</body>
+</html>

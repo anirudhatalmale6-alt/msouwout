@@ -20,10 +20,10 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --red:#D21034;--red-dark:#B00D2C;--red-light:#E8243F;
-  --blue:#00209F;--blue-dark:#001566;
-  --gold:#D4A017;--gold-light:#E8B82E;
-  --white:#FFFFFF;--off-white:#FFF8F8;--light-gray:#F0E8E8;
+  --red:#E31C3D;--red-dark:#C4162F;--red-light:#F0354F;
+  --blue:#0B1F66;--blue-dark:#071445;
+  --gold:#F5B400;--gold-light:#FFCC33;
+  --white:#FFFFFF;--off-white:#F5F7FA;--light-gray:#E8ECF2;
   --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;
   --green:#1B8C3D;--green-light:#22C55E;
   --body:'Plus Jakarta Sans',system-ui,sans-serif;
@@ -65,7 +65,7 @@ nav{
   background:var(--red);color:#fff;padding:10px 22px;border-radius:100px;font-size:.82rem;
   font-weight:700;transition:all .25s;border:none;cursor:pointer;
 }
-.nav-cta:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(210,16,52,.35)}
+.nav-cta:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(227,28,61,.35)}
 .mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
 .mobile-nav{display:none;position:fixed;top:100px;left:0;right:0;background:var(--blue);padding:24px;z-index:999;border-bottom:3px solid var(--red);flex-direction:column;gap:16px}
 .mobile-nav.open{display:flex}
@@ -121,9 +121,9 @@ nav{
 }
 .tab-btn.active{
   background:var(--blue);color:#fff;
-  box-shadow:0 4px 16px rgba(0,32,159,.3);
+  box-shadow:0 4px 16px rgba(11,31,102,.3);
 }
-.tab-btn:not(.active):hover{background:rgba(0,32,159,.05);color:var(--blue)}
+.tab-btn:not(.active):hover{background:rgba(11,31,102,.05);color:var(--blue)}
 
 /* ═══ TAB PANELS ═══ */
 .tab-panel{display:none}
@@ -147,7 +147,7 @@ nav{
 }
 .form-card select option{background:var(--white);color:var(--text)}
 .form-card input:focus,.form-card select:focus,.form-card textarea:focus{
-  outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.1);
+  outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,31,102,.1);
 }
 .form-card textarea{min-height:80px;resize:vertical}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -164,9 +164,9 @@ nav{
   background:var(--off-white);padding:10px 16px;border-radius:12px;
   border:2px solid rgba(0,0,0,.06);transition:all .25s;flex:1;min-width:100px;
 }
-.urgency-option:hover{border-color:var(--blue);background:rgba(0,32,159,.03)}
+.urgency-option:hover{border-color:var(--blue);background:rgba(11,31,102,.03)}
 .urgency-option input{accent-color:var(--blue);width:16px;height:16px;cursor:pointer}
-.urgency-option:has(input:checked){border-color:var(--blue);background:rgba(0,32,159,.06)}
+.urgency-option:has(input:checked){border-color:var(--blue);background:rgba(11,31,102,.06)}
 
 /* Submit button */
 .submit-btn{
@@ -174,9 +174,9 @@ nav{
   background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;
   font-size:1rem;font-weight:800;font-family:var(--body);
   transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;
-  box-shadow:0 4px 20px rgba(210,16,52,.3);margin-top:8px;
+  box-shadow:0 4px 20px rgba(227,28,61,.3);margin-top:8px;
 }
-.submit-btn:hover:not(:disabled){background:linear-gradient(135deg,var(--red-dark),#8a0920);transform:translateY(-2px);box-shadow:0 10px 32px rgba(210,16,52,.4)}
+.submit-btn:hover:not(:disabled){background:linear-gradient(135deg,var(--red-dark),#8a0920);transform:translateY(-2px);box-shadow:0 10px 32px rgba(227,28,61,.4)}
 .submit-btn:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
 
 /* Success card */
@@ -214,7 +214,31 @@ nav{
   background-repeat:no-repeat;background-position:right 14px center;
   transition:border .25s;cursor:pointer;
 }
-.filter-bar select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.1)}
+.filter-bar select:focus,.filter-bar input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,31,102,.1)}
+.filter-bar input{
+  flex:1;min-width:140px;padding:12px 16px;border:2px solid rgba(0,0,0,.08);border-radius:14px;
+  font-size:.85rem;font-family:var(--body);font-weight:600;
+  background:var(--white);color:var(--text);transition:border .25s;
+}
+.filter-bar input::placeholder{color:var(--text-light);font-weight:400}
+
+/* Verified badge */
+.verified-badge{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:.68rem;font-weight:700;color:var(--green);
+  background:rgba(27,140,61,.08);padding:2px 8px;border-radius:100px;
+  margin-left:6px;vertical-align:middle;
+}
+.verified-badge svg{width:12px;height:12px;fill:var(--green);flex-shrink:0}
+
+/* Dispatch button */
+.dispatch-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:100px;
+  background:var(--blue);color:#fff;font-size:.82rem;font-weight:700;border:none;cursor:pointer;
+  transition:all .3s;box-shadow:0 2px 12px rgba(11,31,102,.25);
+}
+.dispatch-btn:hover{background:var(--blue-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(11,31,102,.35)}
+.load-footer .btn-group{display:flex;gap:8px;flex-wrap:wrap}
 
 /* Load cards */
 .loads-list{display:flex;flex-direction:column;gap:14px}
@@ -232,7 +256,7 @@ nav{
 .load-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .cargo-icon{
   width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
-  font-size:1.5rem;background:rgba(0,32,159,.06);flex-shrink:0;
+  font-size:1.5rem;background:rgba(11,31,102,.06);flex-shrink:0;
 }
 .load-title{flex:1;min-width:0}
 .load-title h3{font-size:.95rem;font-weight:800;color:var(--dark);margin-bottom:2px}
@@ -243,8 +267,8 @@ nav{
   font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;
 }
 .urgency-badge.normal{background:rgba(0,0,0,.05);color:#6A7A8A}
-.urgency-badge.urgent{background:rgba(212,160,23,.12);color:#9A7A0A}
-.urgency-badge.emergency{background:rgba(210,16,52,.1);color:var(--red)}
+.urgency-badge.urgent{background:rgba(245,180,0,.12);color:#9A7A0A}
+.urgency-badge.emergency{background:rgba(227,28,61,.1);color:var(--red)}
 
 .load-route{
   display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;
@@ -262,7 +286,7 @@ nav{
 .load-tag{
   display:inline-flex;align-items:center;gap:4px;
   padding:5px 12px;border-radius:8px;font-size:.73rem;font-weight:600;
-  background:rgba(0,32,159,.05);color:var(--blue);
+  background:rgba(11,31,102,.05);color:var(--blue);
 }
 .load-tag.price{background:rgba(27,140,61,.08);color:var(--green);font-weight:800;font-size:.82rem}
 
@@ -292,7 +316,7 @@ nav{
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* Loading spinner */
-.spinner{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(0,32,159,.15);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+.spinner{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(11,31,102,.15);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-state{text-align:center;padding:40px 20px}
 .loading-state p{font-size:.85rem;color:var(--text-light);margin-top:12px}
@@ -302,7 +326,7 @@ nav{
   display:none;text-align:center;padding:14px;border-radius:12px;margin-top:14px;
   font-size:.85rem;font-weight:600;
 }
-.form-status.error{display:block;background:rgba(210,16,52,.08);color:var(--red);border:1px solid rgba(210,16,52,.15)}
+.form-status.error{display:block;background:rgba(227,28,61,.08);color:var(--red);border:1px solid rgba(227,28,61,.15)}
 
 /* ═══ FOOTER ═══ */
 footer{
@@ -349,7 +373,8 @@ footer{
   .form-card{padding:24px 18px}
   .filter-bar{flex-direction:column}
   .load-footer{flex-direction:column;align-items:stretch}
-  .load-footer .contact-btn{justify-content:center}
+  .load-footer .contact-btn,.load-footer .dispatch-btn{justify-content:center;flex:1}
+  .load-footer .btn-group{flex-direction:column}
 }
 @media(max-width:480px){
   .hero h1{font-size:1.8rem}
@@ -576,6 +601,17 @@ footer{
 
     <!-- Filters -->
     <div class="filter-bar">
+      <input type="text" id="filterLocation" oninput="filterLoads()" placeholder="Chèche pa zòn..." data-i18n-placeholder="filter_location_ph">
+      <select id="filterCargo" onchange="filterLoads()">
+        <option value="" data-i18n="filter_cargo_all">&#128230; Tout Machandiz</option>
+        <option value="rice" data-i18n="cargo_rice">&#127834; Diri</option>
+        <option value="cement" data-i18n="cargo_cement">&#127959; Siman</option>
+        <option value="fuel" data-i18n="cargo_fuel">&#9981; Gaz</option>
+        <option value="construction" data-i18n="cargo_construction">&#128296; Konstriksyon</option>
+        <option value="food" data-i18n="cargo_food">&#127869; Manje</option>
+        <option value="merchandise" data-i18n="cargo_merchandise">&#128230; Machandiz</option>
+        <option value="other" data-i18n="cargo_other">&#128462; Lòt</option>
+      </select>
       <select id="filterTruck" onchange="filterLoads()">
         <option value="" data-i18n="filter_truck_all">&#128666; Tout Tip Kamyon</option>
         <option value="flatbed" data-i18n="truck_flatbed">Flatbed / Plato</option>
@@ -714,9 +750,11 @@ ht:{
   success_new:"&#10133; Poste Yon Lòt",
   refresh_label:"Ap mete ajou otomatikman chak 30 segond",
   filter_truck_all:"&#128666; Tout Tip Kamyon",filter_urg_all:"&#9889; Tout Ijan",
+  filter_location_ph:"Chèche pa zòn...",filter_cargo_all:"&#128230; Tout Machandiz",
   loading:"Ap chaje...",
   empty_title:"Pa Gen Chajman Disponib",empty_sub:"Pa gen chajman ki disponib kounye a. Eseye ankò talè oswa poste yon chajman.",
   card_weight:"Pwa",card_qty:"Kantite",card_truck:"Kamyon",card_contact:"Kontakte",
+  card_verified:"Verifye",card_dispatch:"Mesaj Dispatch",
   time_now:"kounye a",time_min:"min de sa",time_hr:"è de sa",time_day:"jou de sa",
   err_required:"Tanpri ranpli tout chan obligatwa yo.",err_submit:"Erè nan soumisyon. Tanpri eseye ankò.",
   footer_desc:"Platfòm livrezon ak transpò Ayiti a fè konfyans. Rapid, abodab, fyab. Yon platfòm HaitiBiznis.",
@@ -756,9 +794,11 @@ fr:{
   success_new:"&#10133; Poster un Autre",
   refresh_label:"Mise a jour automatique toutes les 30 secondes",
   filter_truck_all:"&#128666; Tous Types de Camion",filter_urg_all:"&#9889; Toutes Urgences",
+  filter_location_ph:"Rechercher par zone...",filter_cargo_all:"&#128230; Toutes Marchandises",
   loading:"Chargement...",
   empty_title:"Aucun Chargement Disponible",empty_sub:"Aucun chargement disponible pour le moment. Reessayez plus tard ou postez un chargement.",
   card_weight:"Poids",card_qty:"Quantite",card_truck:"Camion",card_contact:"Contacter",
+  card_verified:"Verifie",card_dispatch:"Message Dispatch",
   time_now:"maintenant",time_min:"min",time_hr:"h",time_day:"j",
   err_required:"Veuillez remplir tous les champs obligatoires.",err_submit:"Erreur lors de l'envoi. Veuillez reessayer.",
   footer_desc:"La plateforme de livraison et transport de confiance d'Haiti. Rapide, abordable, fiable. Une plateforme HaitiBiznis.",
@@ -798,9 +838,11 @@ en:{
   success_new:"&#10133; Post Another",
   refresh_label:"Auto-refreshing every 30 seconds",
   filter_truck_all:"&#128666; All Truck Types",filter_urg_all:"&#9889; All Urgencies",
+  filter_location_ph:"Search by area...",filter_cargo_all:"&#128230; All Cargo",
   loading:"Loading...",
   empty_title:"No Loads Available",empty_sub:"No loads available right now. Try again later or post a load.",
   card_weight:"Weight",card_qty:"Quantity",card_truck:"Truck",card_contact:"Contact",
+  card_verified:"Verified",card_dispatch:"Message Dispatch",
   time_now:"just now",time_min:"min ago",time_hr:"hr ago",time_day:"d ago",
   err_required:"Please fill in all required fields.",err_submit:"Error submitting. Please try again.",
   footer_desc:"Haiti's trusted delivery and transport platform. Fast, affordable, reliable. A HaitiBiznis platform.",
@@ -840,9 +882,11 @@ es:{
   success_new:"&#10133; Publicar Otra",
   refresh_label:"Actualizacion automatica cada 30 segundos",
   filter_truck_all:"&#128666; Todos Tipos de Camion",filter_urg_all:"&#9889; Todas Urgencias",
+  filter_location_ph:"Buscar por zona...",filter_cargo_all:"&#128230; Toda Mercancia",
   loading:"Cargando...",
   empty_title:"Sin Cargas Disponibles",empty_sub:"No hay cargas disponibles ahora. Intenta mas tarde o publica una carga.",
   card_weight:"Peso",card_qty:"Cantidad",card_truck:"Camion",card_contact:"Contactar",
+  card_verified:"Verificado",card_dispatch:"Mensaje Despacho",
   time_now:"ahora",time_min:"min",time_hr:"h",time_day:"d",
   err_required:"Por favor complete todos los campos obligatorios.",err_submit:"Error al enviar. Por favor intente de nuevo.",
   footer_desc:"La plataforma de entrega y transporte de confianza de Haiti. Rapido, asequible, confiable. Una plataforma HaitiBiznis.",
@@ -1021,9 +1065,17 @@ function fetchLoads(){
 function getFilteredLoads(){
   var truck=document.getElementById('filterTruck').value;
   var urgency=document.getElementById('filterUrgency').value;
+  var cargo=document.getElementById('filterCargo').value;
+  var location=(document.getElementById('filterLocation').value||'').trim().toLowerCase();
   return allLoads.filter(function(l){
     if(truck && l.truck_type_needed!==truck) return false;
     if(urgency && l.urgency!==urgency) return false;
+    if(cargo && l.cargo_type!==cargo) return false;
+    if(location){
+      var pickup=(l.pickup_address||'').toLowerCase();
+      var dropoff=(l.dropoff_address||'').toLowerCase();
+      if(pickup.indexOf(location)===-1 && dropoff.indexOf(location)===-1) return false;
+    }
     return true;
   });
 }
@@ -1068,8 +1120,10 @@ function renderLoads(loads){
     html+='<div class="load-card '+urgClass+'">';
     html+='<div class="load-header">';
     html+='<div class="cargo-icon">'+emoji+'</div>';
-    html+='<div class="load-title"><h3>'+cargoName+'</h3>';
-    if(load.cargo_description) html+='<span class="load-meta">'+escHtml(load.cargo_description.substring(0,60))+(load.cargo_description.length>60?'...':'')+'</span>';
+    html+='<div class="load-title"><h3>'+cargoName+'<span class="verified-badge"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> '+tx('card_verified')+'</span></h3>';
+    var posterName=load.posted_by_name?escHtml(load.posted_by_name):'';
+    if(load.cargo_description) html+='<span class="load-meta">'+(posterName?posterName+' &mdash; ':'')+escHtml(load.cargo_description.substring(0,60))+(load.cargo_description.length>60?'...':'')+'</span>';
+    else if(posterName) html+='<span class="load-meta">'+posterName+'</span>';
     html+='</div>';
     html+='<span class="urgency-badge '+urgBadgeClass+'">'+urgLabel+'</span>';
     html+='</div>';
@@ -1092,11 +1146,15 @@ function renderLoads(loads){
     // Footer
     html+='<div class="load-footer">';
     html+='<span class="load-time">&#128337; '+timeStr+'</span>';
+    html+='<div class="btn-group">';
     var phone=(load.posted_by_phone||'').replace(/[^0-9+]/g,'');
     if(phone){
       var waMsg=encodeURIComponent('Bonjou! M enterese nan chajman ou sou MsouWout Logistics. ('+escHtml(load.pickup_address||'')+' -> '+escHtml(load.dropoff_address||'')+')');
       html+='<a href="https://wa.me/'+phone.replace('+','')+'?text='+waMsg+'" target="_blank" class="contact-btn">&#128172; '+tx('card_contact')+'</a>';
     }
+    var dispatchMsg=encodeURIComponent('Bonjou MsouWout Dispatch! M enterese nan chajman sa: '+escHtml(load.cargo_type||'')+' ('+escHtml(load.pickup_address||'')+' -> '+escHtml(load.dropoff_address||'')+') Tracking: '+(load.tracking_code||load.id||'N/A'));
+    html+='<a href="https://wa.me/50941902005?text='+dispatchMsg+'" target="_blank" class="dispatch-btn">&#128232; '+tx('card_dispatch')+'</a>';
+    html+='</div>';
     html+='</div>';
     html+='</div>';
   });

@@ -17,13 +17,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --red:#D21034;--red-dark:#B00D2C;--red-light:#E8243F;
-  --blue:#00209F;--blue-dark:#001566;
-  --gold:#D4A017;--gold-light:#E8B82E;
-  --white:#FFFFFF;--off-white:#FFF8F8;--light-gray:#F0E8E8;
+  --red:#E31C3D;--red-dark:#C4162F;--red-light:#F04058;
+  --blue:#0B1F66;--blue-dark:#071242;
+  --gold:#F5B400;--gold-light:#FFCA28;
+  --white:#FFFFFF;--off-white:#F5F7FA;--light-gray:#EDF0F5;
   --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;--text-muted:#8A95AA;
   --green:#1B8C3D;--green-dark:#156E30;--green-light:#22C55E;
   --border:#E2E8F0;
@@ -66,7 +67,7 @@ nav{
   background:var(--red);color:#fff;padding:10px 22px;border-radius:100px;font-size:.82rem;
   font-weight:700;transition:all .25s;border:none;cursor:pointer;
 }
-.nav-cta:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(210,16,52,.35)}
+.nav-cta:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(227,28,61,.35)}
 .mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
 .mobile-nav{display:none;position:fixed;top:100px;left:0;right:0;background:var(--blue);padding:24px;z-index:999;border-bottom:3px solid var(--red);flex-direction:column;gap:16px}
 .mobile-nav.open{display:flex}
@@ -80,8 +81,8 @@ nav{
 }
 .hero::before{
   content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 30% 20%,rgba(210,16,52,.08) 0%,transparent 60%),
-             radial-gradient(ellipse at 70% 80%,rgba(212,160,23,.06) 0%,transparent 50%);
+  background:radial-gradient(ellipse at 30% 20%,rgba(227,28,61,.08) 0%,transparent 60%),
+             radial-gradient(ellipse at 70% 80%,rgba(245,180,0,.06) 0%,transparent 50%);
 }
 .hero::after{
   content:'';position:absolute;bottom:0;left:0;right:0;height:80px;
@@ -124,7 +125,7 @@ nav{
   border:2px solid var(--border);border-radius:14px;overflow:hidden;
   transition:border-color .2s;margin-bottom:16px;
 }
-.phone-input-wrap:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.08)}
+.phone-input-wrap:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,31,102,.08)}
 .phone-flag{
   padding:14px 12px 14px 16px;font-size:.82rem;font-weight:700;
   background:#f8fafc;border-right:1px solid var(--border);
@@ -141,7 +142,7 @@ nav{
   color:#fff;font-size:1rem;font-weight:800;cursor:pointer;
   font-family:var(--body);transition:all .25s;letter-spacing:.01em;
 }
-.btn-login:hover{box-shadow:0 8px 28px rgba(210,16,52,.35);transform:translateY(-1px)}
+.btn-login:hover{box-shadow:0 8px 28px rgba(227,28,61,.35);transform:translateY(-1px)}
 .btn-login:active{transform:translateY(0)}
 .btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
 .login-error{
@@ -200,10 +201,10 @@ nav{
   width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;
   font-size:1.4rem;flex-shrink:0;
 }
-.stat-icon.blue{background:rgba(0,32,159,.08);color:var(--blue)}
+.stat-icon.blue{background:rgba(11,31,102,.08);color:var(--blue)}
 .stat-icon.green{background:rgba(27,140,61,.08);color:var(--green)}
-.stat-icon.gold{background:rgba(212,160,23,.08);color:var(--gold)}
-.stat-icon.red{background:rgba(210,16,52,.08);color:var(--red)}
+.stat-icon.gold{background:rgba(245,180,0,.08);color:var(--gold)}
+.stat-icon.red{background:rgba(227,28,61,.08);color:var(--red)}
 .stat-num{font-size:1.6rem;font-weight:900;color:var(--dark);line-height:1}
 .stat-label{font-size:.72rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
 
@@ -225,7 +226,7 @@ nav{
   transition:all .25s;cursor:pointer;border:none;
 }
 .btn-action.primary{background:var(--blue);color:#fff}
-.btn-action.primary:hover{background:var(--blue-dark);box-shadow:0 4px 16px rgba(0,32,159,.25)}
+.btn-action.primary:hover{background:var(--blue-dark);box-shadow:0 4px 16px rgba(11,31,102,.25)}
 .btn-action.red{background:var(--red);color:#fff}
 .btn-action.red:hover{background:var(--red-dark)}
 .btn-action.green{background:var(--green);color:#fff}
@@ -272,7 +273,7 @@ nav{
   font-size:.9rem;font-weight:500;color:var(--dark);background:var(--white);
   outline:none;transition:border-color .2s;
 }
-.form-group input:focus,.form-group select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.06)}
+.form-group input:focus,.form-group select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,31,102,.06)}
 .form-actions{display:flex;gap:10px;margin-top:16px}
 
 /* LOAD CARDS */
@@ -360,7 +361,7 @@ nav{
   font-size:.95rem;font-weight:500;color:var(--dark);outline:none;
   margin-top:12px;letter-spacing:0;text-align:left;
 }
-.pin-modal .name-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,32,159,.08)}
+.pin-modal .name-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,31,102,.08)}
 .pin-modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:center}
 .pin-feedback{
   border-radius:10px;padding:10px 14px;margin-top:12px;display:none;
@@ -427,6 +428,77 @@ footer a:hover{text-decoration:underline}
 .bnav-item:hover{color:#0B1F66}
 .bnav-icon{font-size:1.3rem;line-height:1}
 .bnav-label{font-size:.62rem;font-weight:700;letter-spacing:.02em}
+
+/* EARNINGS SECTION */
+.earnings-card{
+  background:var(--white);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;
+  box-shadow:0 8px 32px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);
+  animation:fadeUp .5s .08s ease both;
+}
+.earnings-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.earnings-header h3{
+  font-family:var(--display);font-size:1.15rem;color:var(--dark);
+  display:flex;align-items:center;gap:8px;
+}
+.earnings-toggles{display:flex;gap:6px}
+.earnings-toggle{
+  padding:7px 16px;border-radius:100px;font-size:.72rem;font-weight:700;
+  border:1.5px solid var(--border);background:transparent;color:var(--text-light);
+  cursor:pointer;transition:all .2s;
+}
+.earnings-toggle.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.earnings-toggle:hover:not(.active){border-color:var(--blue);color:var(--blue)}
+.earnings-display{text-align:center;padding:20px 0 10px}
+.earnings-amount{font-size:2.6rem;font-weight:900;color:var(--dark);line-height:1}
+.earnings-currency{font-size:1rem;font-weight:700;color:var(--text-muted);margin-left:4px}
+.earnings-deliveries{font-size:.85rem;color:var(--text-light);margin-top:8px;font-weight:500}
+
+/* GPS MINI-MAP */
+.gps-card{
+  background:var(--white);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;
+  box-shadow:0 8px 32px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);
+  animation:fadeUp .5s .1s ease both;
+}
+.gps-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.gps-header h3{
+  font-family:var(--display);font-size:1.15rem;color:var(--dark);
+  display:flex;align-items:center;gap:8px;
+}
+#fleetMap{width:100%;height:200px;border-radius:14px;z-index:1}
+
+/* QUICK ACTIONS */
+.quick-actions-card{
+  background:var(--white);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;
+  box-shadow:0 8px 32px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);
+  animation:fadeUp .5s .09s ease both;
+}
+.quick-actions-header{margin-bottom:14px}
+.quick-actions-header h3{
+  font-family:var(--display);font-size:1.15rem;color:var(--dark);
+  display:flex;align-items:center;gap:8px;
+}
+.quick-actions-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.qa-btn{
+  padding:14px 10px;border-radius:14px;font-size:.82rem;font-weight:700;
+  color:#fff;border:none;cursor:pointer;transition:all .25s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.qa-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.qa-btn.qa-red{background:var(--red)}
+.qa-btn.qa-red:hover{background:var(--red-dark)}
+.qa-btn.qa-gold{background:var(--gold);color:var(--dark)}
+.qa-btn.qa-gold:hover{background:var(--gold-light)}
+.qa-btn.qa-blue{background:var(--blue)}
+.qa-btn.qa-blue:hover{background:var(--blue-dark)}
+.qa-btn.qa-green{background:var(--green)}
+.qa-btn.qa-green:hover{background:var(--green-dark)}
+@media(max-width:768px){
+  .quick-actions-row{grid-template-columns:1fr 1fr}
+  .earnings-header{flex-direction:column;align-items:flex-start;gap:10px}
+}
+@media(max-width:420px){
+  .quick-actions-row{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -536,6 +608,30 @@ footer a:hover{text-decoration:underline}
       </div>
     </div>
 
+    <!-- EARNINGS SECTION -->
+    <div class="earnings-card" id="earningsSection">
+      <div class="earnings-header">
+        <h3>&#128176; <span data-i18n="earnings_title">Revni</span></h3>
+        <div class="earnings-toggles">
+          <button class="earnings-toggle active" data-period="today" onclick="setEarningsPeriod('today')" data-i18n="earnings_today">Jodi a</button>
+          <button class="earnings-toggle" data-period="week" onclick="setEarningsPeriod('week')" data-i18n="earnings_week">Semen</button>
+          <button class="earnings-toggle" data-period="month" onclick="setEarningsPeriod('month')" data-i18n="earnings_month">Mwa</button>
+        </div>
+      </div>
+      <div class="earnings-display">
+        <span class="earnings-amount" id="earningsAmount">0</span><span class="earnings-currency">HTG</span>
+        <div class="earnings-deliveries" id="earningsDeliveries">0 <span data-i18n="earnings_deliveries">livrezon fini</span></div>
+      </div>
+    </div>
+
+    <!-- GPS MINI-MAP -->
+    <div class="gps-card" id="gpsSection">
+      <div class="gps-header">
+        <h3>&#128225; <span data-i18n="gps_title">GPS An Direk</span></h3>
+      </div>
+      <div id="fleetMap"></div>
+    </div>
+
     <!-- MY TRUCKS -->
     <div class="section-card" id="trucksSection">
       <div class="section-header">
@@ -589,6 +685,19 @@ footer a:hover{text-decoration:underline}
 
       <div class="truck-list" id="truckList">
         <div class="empty-state"><div class="empty-icon">&#128666;</div><p data-i18n="no_trucks">Pa gen kamyon anko.</p></div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="quick-actions-card" id="quickActionsSection">
+      <div class="quick-actions-header">
+        <h3>&#9889; <span data-i18n="quick_actions_title">Aksyon Rapid</span></h3>
+      </div>
+      <div class="quick-actions-row">
+        <button class="qa-btn qa-red" onclick="document.getElementById('availableLoadsSection').scrollIntoView({behavior:'smooth'})">&#128230; <span data-i18n="qa_claim">Pran Chajman</span></button>
+        <button class="qa-btn qa-gold" onclick="document.getElementById('activeLoadsSection').scrollIntoView({behavior:'smooth'})">&#128666; <span data-i18n="qa_start">Komanse Livrezon</span></button>
+        <button class="qa-btn qa-blue" onclick="document.getElementById('activeLoadsSection').scrollIntoView({behavior:'smooth'})">&#9989; <span data-i18n="qa_pickup">Konfime Anbakman</span></button>
+        <button class="qa-btn qa-green" onclick="document.getElementById('activeLoadsSection').scrollIntoView({behavior:'smooth'})">&#127919; <span data-i18n="qa_deliver">Konfime Livrezon</span></button>
       </div>
     </div>
 
@@ -673,6 +782,7 @@ footer a:hover{text-decoration:underline}
   </a>
 </nav>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const API='https://msouwout-backend.onrender.com';
 
@@ -713,7 +823,12 @@ const T={
     toast_error:"Ere. Eseye anko.",
     truck_available:"Disponib",truck_busy:"Okipe",
     urgency_high:"Ijan",urgency_medium:"Mwayen",urgency_low:"Nomal",
-    flow_posted:"Poste",flow_assigned:"Asiyen",flow_picked_up:"Anbake",flow_in_transit:"Nan Wout",flow_delivered:"Livre"
+    flow_posted:"Poste",flow_assigned:"Asiyen",flow_picked_up:"Anbake",flow_in_transit:"Nan Wout",flow_delivered:"Livre",
+    earnings_title:"Revni",earnings_today:"Jodi a",earnings_week:"Semen",earnings_month:"Mwa",
+    earnings_deliveries:"livrezon fini",
+    gps_title:"GPS An Direk",
+    quick_actions_title:"Aksyon Rapid",
+    qa_claim:"Pran Chajman",qa_start:"Komanse Livrezon",qa_pickup:"Konfime Anbakman",qa_deliver:"Konfime Livrezon"
   },
   fr:{
     nav_home:"Accueil",nav_track:"Suivre",nav_register:"Inscrire Flotte",nav_register_cta:"Inscrire Votre Flotte",
@@ -750,7 +865,12 @@ const T={
     toast_error:"Erreur. Reessayez.",
     truck_available:"Disponible",truck_busy:"Occupe",
     urgency_high:"Urgent",urgency_medium:"Moyen",urgency_low:"Normal",
-    flow_posted:"Publie",flow_assigned:"Assigne",flow_picked_up:"Charge",flow_in_transit:"En Route",flow_delivered:"Livre"
+    flow_posted:"Publie",flow_assigned:"Assigne",flow_picked_up:"Charge",flow_in_transit:"En Route",flow_delivered:"Livre",
+    earnings_title:"Revenus",earnings_today:"Aujourd'hui",earnings_week:"Semaine",earnings_month:"Mois",
+    earnings_deliveries:"livraisons terminees",
+    gps_title:"GPS en Direct",
+    quick_actions_title:"Actions Rapides",
+    qa_claim:"Prendre Chargement",qa_start:"Demarrer Livraison",qa_pickup:"Confirmer Chargement",qa_deliver:"Confirmer Livraison"
   },
   en:{
     nav_home:"Home",nav_track:"Track",nav_register:"Register Fleet",nav_register_cta:"Register Your Fleet",
@@ -787,7 +907,12 @@ const T={
     toast_error:"Error. Please try again.",
     truck_available:"Available",truck_busy:"Busy",
     urgency_high:"Urgent",urgency_medium:"Medium",urgency_low:"Normal",
-    flow_posted:"Posted",flow_assigned:"Assigned",flow_picked_up:"Picked Up",flow_in_transit:"In Transit",flow_delivered:"Delivered"
+    flow_posted:"Posted",flow_assigned:"Assigned",flow_picked_up:"Picked Up",flow_in_transit:"In Transit",flow_delivered:"Delivered",
+    earnings_title:"Earnings",earnings_today:"Today",earnings_week:"Week",earnings_month:"Month",
+    earnings_deliveries:"deliveries completed",
+    gps_title:"Live GPS",
+    quick_actions_title:"Quick Actions",
+    qa_claim:"Claim Load",qa_start:"Start Delivery",qa_pickup:"Confirm Pickup",qa_deliver:"Confirm Delivery"
   },
   es:{
     nav_home:"Inicio",nav_track:"Rastrear",nav_register:"Registrar Flota",nav_register_cta:"Registrar Tu Flota",
@@ -824,7 +949,12 @@ const T={
     toast_error:"Error. Intente de nuevo.",
     truck_available:"Disponible",truck_busy:"Ocupado",
     urgency_high:"Urgente",urgency_medium:"Medio",urgency_low:"Normal",
-    flow_posted:"Publicado",flow_assigned:"Asignado",flow_picked_up:"Recogido",flow_in_transit:"En Ruta",flow_delivered:"Entregado"
+    flow_posted:"Publicado",flow_assigned:"Asignado",flow_picked_up:"Recogido",flow_in_transit:"En Ruta",flow_delivered:"Entregado",
+    earnings_title:"Ingresos",earnings_today:"Hoy",earnings_week:"Semana",earnings_month:"Mes",
+    earnings_deliveries:"entregas completadas",
+    gps_title:"GPS en Vivo",
+    quick_actions_title:"Acciones Rapidas",
+    qa_claim:"Tomar Carga",qa_start:"Iniciar Entrega",qa_pickup:"Confirmar Recogida",qa_deliver:"Confirmar Entrega"
   }
 };
 
@@ -1376,6 +1506,128 @@ function showToast(msg,type){
   el.classList.add('show');
   setTimeout(()=>el.classList.remove('show'),3000);
 }
+
+/* ========== EARNINGS ========== */
+let earningsPeriod='today';
+
+function setEarningsPeriod(period){
+  earningsPeriod=period;
+  document.querySelectorAll('.earnings-toggle').forEach(btn=>{
+    btn.classList.toggle('active',btn.getAttribute('data-period')===period);
+  });
+  renderEarnings();
+}
+
+function renderEarnings(){
+  if(!fleetData) return;
+  const loads=fleetData.loads||[];
+  const delivered=loads.filter(l=>l.status==='delivered');
+  const now=new Date();
+
+  let filtered=delivered;
+  if(earningsPeriod==='today'){
+    const todayStr=now.toISOString().slice(0,10);
+    filtered=delivered.filter(l=>{
+      const d=l.delivered_at||l.updated_at||l.createdAt||'';
+      return d.slice(0,10)===todayStr;
+    });
+  }else if(earningsPeriod==='week'){
+    const weekAgo=new Date(now);weekAgo.setDate(weekAgo.getDate()-7);
+    filtered=delivered.filter(l=>{
+      const d=new Date(l.delivered_at||l.updated_at||l.createdAt||0);
+      return d>=weekAgo;
+    });
+  }else if(earningsPeriod==='month'){
+    const monthAgo=new Date(now);monthAgo.setMonth(monthAgo.getMonth()-1);
+    filtered=delivered.filter(l=>{
+      const d=new Date(l.delivered_at||l.updated_at||l.createdAt||0);
+      return d>=monthAgo;
+    });
+  }
+
+  const totalEarnings=filtered.reduce((sum,l)=>sum+(l.price||l.amount||0),0);
+  document.getElementById('earningsAmount').textContent=totalEarnings.toLocaleString();
+  const delCountEl=document.getElementById('earningsDeliveries');
+  delCountEl.innerHTML=filtered.length+' <span data-i18n="earnings_deliveries">'+t('earnings_deliveries')+'</span>';
+}
+
+/* ========== GPS MINI-MAP ========== */
+let fleetMap=null;
+let mapMarkers=[];
+
+function initFleetMap(){
+  if(fleetMap) return;
+  const mapEl=document.getElementById('fleetMap');
+  if(!mapEl) return;
+  if(typeof L==='undefined') return;
+
+  fleetMap=L.map('fleetMap',{
+    center:[18.5392,-72.3350],
+    zoom:11,
+    zoomControl:true,
+    attributionControl:true
+  });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'&copy; OpenStreetMap',
+    maxZoom:18
+  }).addTo(fleetMap);
+}
+
+function updateFleetMapMarkers(){
+  if(!fleetMap||!fleetData) return;
+  const trucks=fleetData.trucks||[];
+
+  // Clear old markers
+  mapMarkers.forEach(m=>fleetMap.removeLayer(m));
+  mapMarkers=[];
+
+  const bounds=[];
+  trucks.forEach(tr=>{
+    const lat=tr.lat||tr.latitude||(tr.location&&tr.location.lat);
+    const lng=tr.lng||tr.longitude||(tr.location&&tr.location.lng);
+    if(!lat||!lng) return;
+
+    const emojiChar=TRUCK_EMOJI_RAW[tr.truck_type||tr.type]||'\u{1F69A}';
+    const plate=tr.plate||tr.license_plate||'?';
+
+    const icon=L.divIcon({
+      className:'',
+      html:'<div style="font-size:1.6rem;text-align:center;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))">'+emojiChar+'</div>',
+      iconSize:[32,32],
+      iconAnchor:[16,16]
+    });
+
+    const marker=L.marker([lat,lng],{icon}).addTo(fleetMap);
+    marker.bindPopup('<b>'+emojiChar+' '+plate+'</b><br>'+(tr.driver_name||tr.driverName||''));
+    mapMarkers.push(marker);
+    bounds.push([lat,lng]);
+  });
+
+  if(bounds.length>0){
+    fleetMap.fitBounds(bounds,{padding:[30,30],maxZoom:14});
+  }
+}
+
+/* ========== EXTEND renderDashboard ========== */
+const _origRenderDashboard=renderDashboard;
+renderDashboard=function(){
+  _origRenderDashboard();
+  renderEarnings();
+  if(fleetMap){
+    updateFleetMapMarkers();
+  }
+};
+
+/* ========== EXTEND showDashboard ========== */
+const _origShowDashboard=showDashboard;
+showDashboard=function(){
+  _origShowDashboard();
+  setTimeout(()=>{
+    initFleetMap();
+    updateFleetMapMarkers();
+    if(fleetMap) fleetMap.invalidateSize();
+  },300);
+};
 
 /* ========== INIT ========== */
 document.addEventListener('DOMContentLoaded',()=>{
