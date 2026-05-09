@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>MsouWout Logistics — Lojistik Maritim ak Bato | Maritime & Boat Logistics</title>
+<meta name="description" content="Transport maritime across Haiti. Ship cargo by boat between coastal cities and islands. MsouWout Maritime Logistics — reliable sea freight.">
+<meta property="og:title" content="MsouWout Logistics — Maritime & Boat Logistics">
+<meta property="og:description" content="Transpote machandiz sou lanmè atravè Ayiti. Ship cargo by boat between coastal cities and islands.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://msouwout.com/logistics-maritime.html">
+<meta property="og:image" content="https://msouwout.com/assets/og-msouwout.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="canonical" href="https://msouwout.com/logistics-maritime.html">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#0B1F66;
+  --red:#E31C3D;--red-dark:#C4162F;
+  --white:#FFFFFF;
+  --gold:#F5B400;--gold-light:#FFD54F;
+  --light-bg:#F5F7FA;
+  --teal:#0A3D62;--teal-light:#0E6251;
+  --dark:#0B1225;--text:#1A2340;--text-light:#5A6580;--text-muted:#8A95AA;
+  --green:#1B8C3D;--green-light:#22C55E;
+  --ocean-start:#0B1F66;--ocean-end:#0A3D62;
+  --body:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  --radius:16px;--radius-lg:20px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--light-bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;padding-bottom:70px}
+a{text-decoration:none;color:inherit}
+button{font-family:var(--body);cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:var(--body)}
+
+/* ═══ TOP BAR ═══ */
+.top-bar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;
+  background:var(--primary);
+  padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 16px rgba(11,31,102,.3);
+}
+.top-logo{font-weight:900;font-size:1.15rem;color:#fff;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.top-logo span{opacity:.6;font-weight:500;font-size:.8rem}
+.top-right{display:flex;align-items:center;gap:12px}
+.lang-switch{display:flex;gap:2px;background:rgba(255,255,255,.1);border-radius:100px;padding:3px}
+.lang-switch a{
+  color:rgba(255,255,255,.6);font-size:.65rem;font-weight:700;padding:5px 10px;border-radius:100px;
+  cursor:pointer;transition:all .2s;letter-spacing:.03em;
+}
+.lang-switch a:hover{color:#fff;background:rgba(255,255,255,.1)}
+.lang-switch a.active{color:var(--primary);background:#fff}
+.hamburger{
+  display:flex;flex-direction:column;gap:4px;padding:8px;cursor:pointer;
+  background:rgba(255,255,255,.1);border-radius:10px;
+}
+.hamburger span{display:block;width:20px;height:2px;background:#fff;border-radius:2px;transition:all .3s}
+.mobile-menu{
+  display:none;position:fixed;top:56px;left:0;right:0;background:var(--primary);
+  padding:20px;z-index:1099;border-bottom:3px solid var(--red);flex-direction:column;gap:12px;
+}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:rgba(255,255,255,.85);font-size:.9rem;font-weight:600;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.mobile-menu a:last-child{border-bottom:none}
+
+/* ═══ HERO ═══ */
+.hero{
+  min-height:50vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:100px 24px 70px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--ocean-start) 0%,var(--ocean-end) 60%,#063B4F 100%);
+}
+.hero::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:120px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='%23F5F7FA' d='M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,120L0,120Z'/%3E%3C/svg%3E") no-repeat bottom center;
+  background-size:cover;pointer-events:none;
+}
+.hero::after{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse at 50% 80%,rgba(10,61,98,.3) 0%,transparent 70%);pointer-events:none;
+}
+.hero-ship{font-size:128px;line-height:1;margin-bottom:20px;animation:float 4s ease-in-out infinite;position:relative;z-index:1;filter:drop-shadow(0 8px 24px rgba(0,0,0,.3))}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{
+  font-weight:900;font-size:clamp(1.4rem,4.5vw,2.2rem);
+  color:#fff;line-height:1.2;letter-spacing:-.02em;max-width:600px;position:relative;z-index:1;
+}
+.hero-sub{
+  font-size:clamp(.85rem,2vw,1rem);color:rgba(255,255,255,.6);line-height:1.6;
+  max-width:480px;margin:14px auto 0;font-weight:400;position:relative;z-index:1;
+}
+
+/* ═══ SECTIONS ═══ */
+section{padding:60px 20px;position:relative}
+.section-inner{max-width:680px;margin:0 auto}
+.section-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:10px;
+}
+.section-title{
+  font-weight:900;font-size:clamp(1.3rem,4vw,1.8rem);
+  color:var(--text);line-height:1.2;letter-spacing:-.02em;
+}
+.section-sub{font-size:.88rem;color:var(--text-light);line-height:1.6;margin-top:8px}
+
+/* ═══ SERVICES ═══ */
+.services{background:var(--white)}
+.services-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px;
+}
+.service-card{
+  background:var(--light-bg);border:1px solid rgba(11,31,102,.06);
+  border-radius:var(--radius);padding:24px 18px;text-align:center;
+  transition:all .3s;cursor:default;
+}
+.service-card:hover{
+  transform:translateY(-4px);box-shadow:0 12px 32px rgba(11,31,102,.1);
+  border-color:rgba(11,31,102,.15);
+}
+.service-icon{font-size:2.2rem;margin-bottom:10px;display:block}
+.service-card h4{font-size:.88rem;font-weight:800;color:var(--text);margin-bottom:6px}
+.service-card p{font-size:.75rem;color:var(--text-light);line-height:1.5}
+
+/* ═══ BOAT TYPES ═══ */
+.boat-types{background:var(--light-bg)}
+.boat-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px;
+}
+.boat-card{
+  background:var(--white);border:2px solid rgba(11,31,102,.08);
+  border-radius:var(--radius);padding:20px 16px;text-align:center;
+  transition:all .3s;cursor:pointer;position:relative;
+}
+.boat-card:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,61,98,.12)}
+.boat-card.selected{border-color:var(--teal);background:rgba(10,61,98,.04);box-shadow:0 4px 16px rgba(10,61,98,.15)}
+.boat-card.selected::after{
+  content:'\2713';position:absolute;top:8px;right:10px;
+  background:var(--teal);color:#fff;width:22px;height:22px;border-radius:50%;
+  font-size:.7rem;display:flex;align-items:center;justify-content:center;font-weight:900;
+}
+.boat-icon{font-size:2.4rem;margin-bottom:8px;display:block}
+.boat-card h4{font-size:.82rem;font-weight:800;color:var(--text)}
+.boat-card p{font-size:.7rem;color:var(--text-muted);margin-top:4px}
+
+/* ═══ REQUEST FORM ═══ */
+.form-section{background:var(--white)}
+.form-card{
+  background:var(--light-bg);border:1px solid rgba(11,31,102,.06);border-radius:var(--radius-lg);
+  padding:32px 24px;margin-top:28px;
+}
+.form-card input,.form-card select,.form-card textarea{
+  width:100%;padding:14px 16px;border:1.5px solid rgba(11,31,102,.12);border-radius:12px;
+  font-size:.88rem;font-family:var(--body);margin-bottom:0;transition:all .25s;
+  background:var(--white);color:var(--text);
+}
+.form-card input::placeholder,.form-card textarea::placeholder{color:var(--text-muted)}
+.form-card select{
+  color:var(--text-muted);appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235A6580' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+}
+.form-card select option{background:var(--white);color:var(--text)}
+.form-card input:focus,.form-card select:focus,.form-card textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(10,61,98,.1)}
+.form-card textarea{min-height:70px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-label{display:block;font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:.01em}
+.form-group{margin-bottom:14px}
+.form-hint{font-size:.72rem;color:var(--text-muted);margin-top:4px}
+
+/* Phone input */
+.phone-wrap{
+  display:flex;align-items:stretch;border:1.5px solid rgba(11,31,102,.12);border-radius:12px;
+  overflow:hidden;transition:all .25s;background:var(--white);
+}
+.phone-wrap:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(10,61,98,.1)}
+.phone-prefix{
+  display:flex;align-items:center;padding:0 12px;
+  background:rgba(11,31,102,.04);border-right:1.5px solid rgba(11,31,102,.08);
+  font-size:.82rem;font-weight:700;color:var(--text);white-space:nowrap;gap:6px;
+}
+.phone-wrap input{border:none!important;border-radius:0!important;box-shadow:none!important}
+.phone-wrap input:focus{outline:none;border:none!important;box-shadow:none!important}
+
+/* Urgency radio */
+.urgency-group{display:flex;gap:8px;flex-wrap:wrap}
+.urgency-option{display:flex;align-items:center;gap:6px;cursor:pointer}
+.urgency-option input[type=radio]{display:none}
+.urgency-option span{
+  padding:10px 16px;border-radius:100px;font-size:.8rem;font-weight:700;
+  border:2px solid rgba(11,31,102,.1);background:var(--white);color:var(--text-light);
+  transition:all .25s;
+}
+.urgency-option input:checked+span{border-color:var(--teal);background:rgba(10,61,98,.06);color:var(--teal)}
+
+/* Submit */
+.btn-submit{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:16px 32px;border-radius:100px;
+  font-weight:800;font-size:.92rem;cursor:pointer;border:none;
+  background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 100%);
+  color:#fff;box-shadow:0 6px 24px rgba(227,28,61,.3);
+  transition:all .3s;margin-top:6px;
+}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(227,28,61,.4)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-spinner{display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-loading .btn-spinner{display:inline-block}
+.btn-loading .btn-text{opacity:.7}
+
+/* Status */
+.form-status{
+  display:none;border-radius:12px;padding:14px 16px;margin-top:14px;
+  font-size:.85rem;font-weight:600;line-height:1.5;text-align:center;
+}
+.form-status.error{display:block;background:#FEF2F2;border:1px solid #FCA5A5;color:#991B1B}
+.form-status.success{display:block;background:#F0FDF4;border:1px solid #86EFAC;color:#166534}
+
+/* Success card */
+.success-card{
+  display:none;background:linear-gradient(135deg,rgba(27,140,61,.04),rgba(27,140,61,.01));
+  border:2px solid rgba(27,140,61,.2);border-radius:var(--radius-lg);
+  padding:40px 24px;text-align:center;margin-top:28px;
+}
+.success-card.show{display:block;animation:fadeUp .6s ease both}
+.success-icon{font-size:3rem;margin-bottom:14px}
+.success-card h3{font-weight:900;font-size:1.4rem;color:var(--text);margin-bottom:8px}
+.success-card p{font-size:.88rem;color:var(--text-light);line-height:1.6;max-width:420px;margin:0 auto}
+.tracking-box{
+  background:var(--white);border:1px solid rgba(11,31,102,.08);border-radius:14px;
+  padding:18px;margin:20px auto 0;max-width:360px;
+}
+.tracking-label{font-size:.72rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.tracking-value{font-weight:900;font-size:1.2rem;color:var(--primary);letter-spacing:.03em}
+.pin-row{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.pin-box{
+  background:var(--white);border:1px solid rgba(11,31,102,.08);border-radius:10px;
+  padding:10px 16px;text-align:center;min-width:120px;
+}
+.pin-label{display:block;font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.pin-value{font-weight:900;font-size:1.1rem;color:var(--teal)}
+
+/* ═══ WHY MARITIME ═══ */
+.why-maritime{
+  background:linear-gradient(135deg,var(--dark) 0%,#0B2845 100%);
+  position:relative;overflow:hidden;
+}
+.why-maritime::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:80px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80'%3E%3Cpath fill='rgba(255,255,255,0.03)' d='M0,48L60,42.7C120,37,240,27,360,32C480,37,600,59,720,64C840,69,960,59,1080,48C1200,37,1320,27,1380,21.3L1440,16L1440,80L0,80Z'/%3E%3C/svg%3E") no-repeat bottom center;
+  background-size:cover;pointer-events:none;
+}
+.why-maritime .section-tag{color:var(--gold)}
+.why-maritime .section-title{color:#fff}
+.why-stats{display:flex;flex-direction:column;gap:16px;margin-top:28px}
+.stat-card{
+  display:flex;align-items:flex-start;gap:14px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radius);padding:20px 18px;
+  transition:all .3s;
+}
+.stat-card:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15)}
+.stat-icon{font-size:1.8rem;flex-shrink:0;margin-top:2px}
+.stat-card h4{font-size:.9rem;font-weight:800;color:#fff;margin-bottom:4px}
+.stat-card p{font-size:.78rem;color:rgba(255,255,255,.55);line-height:1.5}
+
+/* ═══ BOTTOM NAV ═══ */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:1100;
+  background:var(--white);border-top:1px solid rgba(11,31,102,.08);
+  display:flex;align-items:center;justify-content:space-around;
+  height:60px;box-shadow:0 -4px 16px rgba(0,0,0,.06);
+  padding:0 8px;
+}
+.bottom-nav a{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:.62rem;font-weight:700;color:var(--text-muted);
+  padding:6px 10px;border-radius:10px;transition:all .2s;
+  text-decoration:none;min-width:54px;
+}
+.bottom-nav a .nav-icon{font-size:1.3rem;line-height:1}
+.bottom-nav a:hover,.bottom-nav a.active{color:var(--primary);background:rgba(11,31,102,.04)}
+
+/* ═══ FOOTER ═══ */
+footer{
+  background:var(--dark);padding:40px 20px 24px;
+}
+.footer-inner{max-width:680px;margin:0 auto;text-align:center}
+.footer-brand{font-weight:900;font-size:1.1rem;color:#fff;margin-bottom:8px}
+.footer-desc{font-size:.78rem;color:rgba(255,255,255,.4);line-height:1.6;max-width:400px;margin:0 auto}
+.footer-links{display:flex;justify-content:center;gap:20px;margin-top:16px;flex-wrap:wrap}
+.footer-links a{font-size:.75rem;color:rgba(255,255,255,.35);transition:color .2s}
+.footer-links a:hover{color:#fff}
+.footer-bottom{
+  max-width:680px;margin:20px auto 0;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);
+  text-align:center;font-size:.7rem;color:rgba(255,255,255,.3);
+}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.fade-up{animation:fadeUp .6s ease both}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:480px){
+  .form-row{grid-template-columns:1fr}
+  .form-card{padding:24px 18px}
+  .lang-switch a{padding:4px 7px;font-size:.6rem}
+  .services-grid{gap:10px}
+  .service-card{padding:18px 14px}
+  .boat-grid{gap:10px}
+}
+@media(min-width:768px){
+  .services-grid{grid-template-columns:repeat(4,1fr)}
+  .boat-grid{grid-template-columns:repeat(4,1fr)}
+  .why-stats{flex-direction:row;gap:14px}
+  .stat-card{flex:1}
+  .hamburger{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ TOP BAR ═══ -->
+<div class="top-bar">
+  <div class="top-logo">MsouWout <span>Logistics</span></div>
+  <div class="top-right">
+    <div class="lang-switch">
+      <a onclick="setLang('ht')" class="active" id="lang-ht">HT</a>
+      <a onclick="setLang('fr')" id="lang-fr">FR</a>
+      <a onclick="setLang('en')" id="lang-en">EN</a>
+      <a onclick="setLang('es')" id="lang-es">ES</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" data-i18n="nav_home">Akèy</a>
+  <a href="logistics-board.html" data-i18n="nav_loads">Tablo Chajman</a>
+  <a href="logistics-fleet.html" data-i18n="nav_fleet">Flòt</a>
+  <a href="track.html" data-i18n="nav_tracking">Swiv Chajman</a>
+  <a href="logistics-register.html" data-i18n="nav_register">Enskri Kamyon</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-ship">&#128674;</div>
+  <h1 data-i18n="hero_title">Lojistik Maritim ak Bato</h1>
+  <p class="hero-sub" data-i18n="hero_sub">Transpote machandiz sou lanmè atravè Ayiti</p>
+</section>
+
+<!-- ═══ SERVICES ═══ -->
+<section class="services">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-tag">&#9875; <span data-i18n="svc_tag">Sèvis Maritim</span></div>
+    <h2 class="section-title" data-i18n="svc_title">Sèvis Nou</h2>
+    <p class="section-sub" style="margin:8px auto 0" data-i18n="svc_sub">Solisyon transpò maritim konplè pou tout bezwen ou</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <span class="service-icon">&#128674;</span>
+        <h4 data-i18n="svc_coastal">Kago Kotyè</h4>
+        <p data-i18n="svc_coastal_desc">Transpote machandiz ant vil kotyè Ayiti yo</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">&#127965;</span>
+        <h4 data-i18n="svc_island">Transpò Ant Zile</h4>
+        <p data-i18n="svc_island_desc">Konekte zile yo ak tè prensipal la</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">&#128230;</span>
+        <h4 data-i18n="svc_bulk">Machandiz an Gwo</h4>
+        <p data-i18n="svc_bulk_desc">Transpò gwo kantite machandiz sou lanmè</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">&#9881;</span>
+        <h4 data-i18n="svc_equip">Transpò Ekipman</h4>
+        <p data-i18n="svc_equip_desc">Deplase ekipman lou ak machinri pa bato</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BOAT TYPES ═══ -->
+<section class="boat-types">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-tag">&#128674; <span data-i18n="boat_tag">Tip Bato</span></div>
+    <h2 class="section-title" data-i18n="boat_title">Chwazi Tip Bato</h2>
+    <p class="section-sub" style="margin:8px auto 0" data-i18n="boat_sub">Chwazi bato ki pi bon pou chajman ou an</p>
+    <div class="boat-grid">
+      <div class="boat-card" data-boat="boat_cargo" onclick="selectBoat(this)">
+        <span class="boat-icon">&#128674;</span>
+        <h4 data-i18n="boat_cargo">Bato Kago</h4>
+        <p data-i18n="boat_cargo_desc">Kago jeneral</p>
+      </div>
+      <div class="boat-card" data-boat="boat_ferry" onclick="selectBoat(this)">
+        <span class="boat-icon">&#9973;</span>
+        <h4 data-i18n="boat_ferry">Feri</h4>
+        <p data-i18n="boat_ferry_desc">Pasaje ak machandiz</p>
+      </div>
+      <div class="boat-card" data-boat="boat_container" onclick="selectBoat(this)">
+        <span class="boat-icon">&#128259;</span>
+        <h4 data-i18n="boat_container">Bato Kontenè</h4>
+        <p data-i18n="boat_container_desc">Kontenè estanda</p>
+      </div>
+      <div class="boat-card" data-boat="fishing_vessel" onclick="selectBoat(this)">
+        <span class="boat-icon">&#127907;</span>
+        <h4 data-i18n="boat_fishing">Bato Pechè</h4>
+        <p data-i18n="boat_fishing_desc">Ti chajman kotyè</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ REQUEST FORM ═══ -->
+<section class="form-section" id="requestForm">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-tag">&#128221; <span data-i18n="form_tag">Demann Transpò</span></div>
+    <h2 class="section-title" data-i18n="form_title">Mande Transpò Maritim</h2>
+    <p class="section-sub" style="margin:8px auto 0" data-i18n="form_sub">Ranpli fòm sa a pou mande yon bato pou chajman ou</p>
+
+    <form class="form-card" id="maritimeForm" onsubmit="return submitMaritime(event)">
+
+      <!-- Name -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_name">Non Ou *</label>
+        <input type="text" id="posted_by_name" required placeholder="Ex: Jean Pierre" data-i18n-placeholder="f_name_ph">
+      </div>
+
+      <!-- Phone -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_phone">Telefòn *</label>
+        <div class="phone-wrap">
+          <div class="phone-prefix">&#127469;&#127481; +509</div>
+          <input type="tel" id="posted_by_phone" required placeholder="XXXX XXXX" data-i18n-placeholder="f_phone_ph">
+        </div>
+      </div>
+
+      <!-- Cargo Type -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_cargo">Tip Machandiz *</label>
+        <select id="cargo_type" required>
+          <option value="" disabled selected data-i18n="f_cargo_default">-- Chwazi tip machandiz --</option>
+          <option value="rice" data-i18n="cargo_rice">&#127834; Diri</option>
+          <option value="cement" data-i18n="cargo_cement">&#127959; Siman</option>
+          <option value="fuel" data-i18n="cargo_fuel">&#9981; Gaz</option>
+          <option value="construction" data-i18n="cargo_construction">&#128296; Konstriksyon</option>
+          <option value="food" data-i18n="cargo_food">&#127869; Manje</option>
+          <option value="merchandise" data-i18n="cargo_merchandise">&#128230; Machandiz</option>
+          <option value="equipment" data-i18n="cargo_equipment">&#9881; Ekipman</option>
+          <option value="other" data-i18n="cargo_other">&#128462; Lòt</option>
+        </select>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_desc">Deskripsyon (opsyonèl)</label>
+        <textarea id="cargo_description" rows="2" placeholder="Ex: 200 sak diri 50kg chak..." data-i18n-placeholder="f_desc_ph"></textarea>
+      </div>
+
+      <!-- Weight & Quantity -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_weight">Pwa an kg (opsyonèl)</label>
+          <input type="number" id="weight_kg" min="0" placeholder="Ex: 10000">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_qty">Kantite (opsyonèl)</label>
+          <input type="text" id="quantity" placeholder="Ex: 200 sak">
+        </div>
+      </div>
+
+      <!-- Boat Type -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_boat_type">Tip Bato Bezwen *</label>
+        <select id="truck_type_needed" required>
+          <option value="" disabled selected data-i18n="f_boat_default">-- Chwazi tip bato --</option>
+          <option value="boat_cargo" data-i18n="boat_cargo">&#128674; Bato Kago</option>
+          <option value="boat_ferry" data-i18n="boat_ferry">&#9973; Feri</option>
+          <option value="boat_container" data-i18n="boat_container">&#128259; Bato Kontenè</option>
+          <option value="fishing_vessel" data-i18n="boat_fishing">&#127907; Bato Pechè</option>
+        </select>
+      </div>
+
+      <!-- Pickup Port -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_pickup">Pò / Kote Ranmasaj *</label>
+        <input type="text" id="pickup_address" required placeholder="Ex: Pò Pòtoprens" data-i18n-placeholder="f_pickup_ph">
+        <input type="hidden" id="pickup_lat" value="18.5432">
+        <input type="hidden" id="pickup_lng" value="-72.3388">
+        <p class="form-hint" id="gps-status" data-i18n="f_gps_hint">&#128205; Ap chèche pozisyon GPS ou...</p>
+      </div>
+
+      <!-- Delivery Port -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_dropoff">Pò / Kote Livrezon *</label>
+        <input type="text" id="dropoff_address" required placeholder="Ex: Pò Jeremi" data-i18n-placeholder="f_dropoff_ph">
+        <input type="hidden" id="dropoff_lat">
+        <input type="hidden" id="dropoff_lng">
+      </div>
+
+      <!-- Urgency -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_urgency">Ijan *</label>
+        <div class="urgency-group">
+          <label class="urgency-option">
+            <input type="radio" name="urgency" value="normal" checked>
+            <span data-i18n="urg_normal">&#128994; Nòmal</span>
+          </label>
+          <label class="urgency-option">
+            <input type="radio" name="urgency" value="urgent">
+            <span data-i18n="urg_urgent">&#128992; Ijan</span>
+          </label>
+          <label class="urgency-option">
+            <input type="radio" name="urgency" value="emergency">
+            <span data-i18n="urg_emergency">&#128308; Ijans</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Budget -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_budget">Bidjè an HTG (opsyonèl)</label>
+        <input type="number" id="price" min="0" placeholder="Ex: 25000" data-i18n-placeholder="f_budget_ph">
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_notes">Nòt (opsyonèl)</label>
+        <textarea id="notes" rows="2" placeholder="Ex: Bezwen kite bato a nan pò a pou 2 jou..." data-i18n-placeholder="f_notes_ph"></textarea>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <span class="btn-text" data-i18n="f_submit">&#128674; Mande Transpò Maritim</span>
+        <span class="btn-spinner"></span>
+      </button>
+
+      <div class="form-status" id="formStatus"></div>
+    </form>
+
+    <!-- Success Card -->
+    <div class="success-card" id="successCard">
+      <div class="success-icon">&#9989;</div>
+      <h3 data-i18n="success_title">Demann Poste Avèk Siksè!</h3>
+      <p data-i18n="success_msg">Men kòd swivi ou ak kòd PIN yo. Kenbe yo an sekirite.</p>
+      <div class="tracking-box">
+        <div class="tracking-label" data-i18n="track_label">Kòd Swivi</div>
+        <div class="tracking-value" id="trackingCode">---</div>
+      </div>
+      <div class="pin-row">
+        <div class="pin-box">
+          <span class="pin-label" data-i18n="pin_pickup">PIN Ranmasaj</span>
+          <span class="pin-value" id="pickupPin">--</span>
+        </div>
+        <div class="pin-box">
+          <span class="pin-label" data-i18n="pin_delivery">PIN Livrezon</span>
+          <span class="pin-value" id="deliveryPin">--</span>
+        </div>
+      </div>
+      <button onclick="resetForm()" style="margin-top:20px;padding:12px 28px;border-radius:100px;background:var(--primary);color:#fff;font-size:.85rem;font-weight:700;border:none;cursor:pointer" data-i18n="success_new">&#10133; Mande Yon Lòt</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WHY MARITIME ═══ -->
+<section class="why-maritime">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-tag">&#127754; <span data-i18n="why_tag">Poukisa Maritim</span></div>
+    <h2 class="section-title" data-i18n="why_title">Poukisa Chwazi Transpò Maritim?</h2>
+    <div class="why-stats">
+      <div class="stat-card">
+        <span class="stat-icon">&#127758;</span>
+        <div>
+          <h4 data-i18n="stat1_title">1,800+ km Kotyè</h4>
+          <p data-i18n="stat1_desc">Ayiti gen plis pase 1,800km kotyè ki konekte tout rejyon yo</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">&#128176;</span>
+        <div>
+          <h4 data-i18n="stat2_title">Pi Bon Mache</h4>
+          <p data-i18n="stat2_desc">Transpò maritim pi bon mache pou gwo chajman an kantite</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">&#128279;</span>
+        <div>
+          <h4 data-i18n="stat3_title">Konekte Tout Vil</h4>
+          <p data-i18n="stat3_desc">Konekte tout vil kotyè yo: Jeremi, Okay, Jacmel, Gonayiv, Okap</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">MsouWout Logistics</div>
+    <p class="footer-desc" data-i18n="footer_desc">Platfom lojistik maritim ak transpò machandiz Ayiti a fè konfyans. Yon platfom HaitiBiznis.</p>
+    <div class="footer-links">
+      <a href="index.html" data-i18n="nav_home">Akèy</a>
+      <a href="logistics-board.html" data-i18n="nav_loads">Chajman</a>
+      <a href="logistics-fleet.html" data-i18n="nav_fleet">Flòt</a>
+      <a href="track.html" data-i18n="nav_tracking">Swiv</a>
+      <a href="https://wa.me/50941902005" target="_blank">WhatsApp</a>
+    </div>
+    <div class="footer-bottom">&copy; 2026 MsouWout. A <a href="https://haitibiznis.com" style="color:var(--gold)">HaitiBiznis</a> Platform.</div>
+  </div>
+</footer>
+
+<!-- ═══ BOTTOM NAV ═══ -->
+<div class="bottom-nav">
+  <a href="index.html" data-i18n="bnav_home">
+    <span class="nav-icon">&#127968;</span>
+    <span>Akèy</span>
+  </a>
+  <a href="logistics-board.html" data-i18n="bnav_loads">
+    <span class="nav-icon">&#128230;</span>
+    <span>Chajman</span>
+  </a>
+  <a href="logistics-fleet.html" data-i18n="bnav_fleet">
+    <span class="nav-icon">&#128674;</span>
+    <span>Flòt</span>
+  </a>
+  <a href="track.html" data-i18n="bnav_tracking">
+    <span class="nav-icon">&#128205;</span>
+    <span>Swiv</span>
+  </a>
+  <a href="user-login.html" data-i18n="bnav_account">
+    <span class="nav-icon">&#128100;</span>
+    <span>Kont</span>
+  </a>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   CONFIGURATION
+   ═══════════════════════════════════════════════════ */
+var API='https://msouwout-backend.onrender.com';
+var DEFAULT_LAT=18.5432;
+var DEFAULT_LNG=-72.3388;
+var currentLang='ht';
+
+/* ═══════════════════════════════════════════════════
+   TRANSLATIONS
+   ═══════════════════════════════════════════════════ */
+var T={
+  ht:{
+    nav_home:"Akèy",nav_loads:"Tablo Chajman",nav_fleet:"Flòt",nav_tracking:"Swiv Chajman",nav_register:"Enskri Kamyon",
+    hero_title:"Lojistik Maritim ak Bato",
+    hero_sub:"Transpote machandiz sou lanmè atravè Ayiti",
+    svc_tag:"Sèvis Maritim",svc_title:"Sèvis Nou",svc_sub:"Solisyon transpò maritim konplè pou tout bezwen ou",
+    svc_coastal:"Kago Kotyè",svc_coastal_desc:"Transpote machandiz ant vil kotyè Ayiti yo",
+    svc_island:"Transpò Ant Zile",svc_island_desc:"Konekte zile yo ak tè prensipal la",
+    svc_bulk:"Machandiz an Gwo",svc_bulk_desc:"Transpò gwo kantite machandiz sou lanmè",
+    svc_equip:"Transpò Ekipman",svc_equip_desc:"Deplase ekipman lou ak machinri pa bato",
+    boat_tag:"Tip Bato",boat_title:"Chwazi Tip Bato",boat_sub:"Chwazi bato ki pi bon pou chajman ou an",
+    boat_cargo:"Bato Kago",boat_cargo_desc:"Kago jeneral",
+    boat_ferry:"Feri",boat_ferry_desc:"Pasaje ak machandiz",
+    boat_container:"Bato Kontenè",boat_container_desc:"Kontenè estanda",
+    boat_fishing:"Bato Pechè",boat_fishing_desc:"Ti chajman kotyè",
+    form_tag:"Demann Transpò",form_title:"Mande Transpò Maritim",form_sub:"Ranpli fòm sa a pou mande yon bato pou chajman ou",
+    f_name:"Non Ou *",f_name_ph:"Ex: Jean Pierre",
+    f_phone:"Telefòn *",f_phone_ph:"XXXX XXXX",
+    f_cargo:"Tip Machandiz *",f_cargo_default:"-- Chwazi tip machandiz --",
+    cargo_rice:"🍚 Diri",cargo_cement:"🏟 Siman",cargo_fuel:"⛽ Gaz",
+    cargo_construction:"🔨 Konstriksyon",cargo_food:"🍽 Manje",
+    cargo_merchandise:"📦 Machandiz",cargo_equipment:"⚙ Ekipman",cargo_other:"📎 Lòt",
+    f_desc:"Deskripsyon (opsyonèl)",f_desc_ph:"Ex: 200 sak diri 50kg chak...",
+    f_weight:"Pwa an kg (opsyonèl)",f_qty:"Kantite (opsyonèl)",
+    f_boat_type:"Tip Bato Bezwen *",f_boat_default:"-- Chwazi tip bato --",
+    f_pickup:"Pò / Kote Ranmasaj *",f_pickup_ph:"Ex: Pò Pòtoprens",
+    f_dropoff:"Pò / Kote Livrezon *",f_dropoff_ph:"Ex: Pò Jeremi",
+    f_gps_hint:"📍 Ap chèche pozisyon GPS ou...",f_gps_ok:"✅ Pozisyon GPS jwenn",f_gps_fail:"⚠ GPS pa disponib, itilize adrès manyèlman",
+    f_urgency:"Ijan *",urg_normal:"🟢 Nòmal",urg_urgent:"🟠 Ijan",urg_emergency:"🔴 Ijans",
+    f_budget:"Bidjè an HTG (opsyonèl)",f_budget_ph:"Ex: 25000",
+    f_notes:"Nòt (opsyonèl)",f_notes_ph:"Ex: Bezwen kite bato a nan pò a pou 2 jou...",
+    f_submit:"⛵ Mande Transpò Maritim",f_submitting:"Ap soumèt...",
+    success_title:"Demann Poste Avèk Siksè!",success_msg:"Men kòd swivi ou ak kòd PIN yo. Kenbe yo an sekirite.",
+    track_label:"Kòd Swivi",pin_pickup:"PIN Ranmasaj",pin_delivery:"PIN Livrezon",success_new:"➕ Mande Yon Lòt",
+    err_submit:"Erè nan soumisyon. Tanpri eseye ankò oswa kontakte nou via WhatsApp.",
+    why_tag:"Poukisa Maritim",why_title:"Poukisa Chwazi Transpò Maritim?",
+    stat1_title:"1,800+ km Kotyè",stat1_desc:"Ayiti gen plis pase 1,800km kotyè ki konekte tout rejyon yo",
+    stat2_title:"Pi Bon Mache",stat2_desc:"Transpò maritim pi bon mache pou gwo chajman an kantite",
+    stat3_title:"Konekte Tout Vil",stat3_desc:"Konekte tout vil kotyè yo: Jeremi, Okay, Jacmel, Gonayiv, Okap",
+    footer_desc:"Platfom lojistik maritim ak transpò machandiz Ayiti a fè konfyans. Yon platfom HaitiBiznis.",
+    bnav_home:"Akèy",bnav_loads:"Chajman",bnav_fleet:"Flòt",bnav_tracking:"Swiv",bnav_account:"Kont"
+  },
+  fr:{
+    nav_home:"Accueil",nav_loads:"Tableau Charges",nav_fleet:"Flotte",nav_tracking:"Suivi",nav_register:"Inscrire Camion",
+    hero_title:"Logistique Maritime et Bateaux",
+    hero_sub:"Transport de marchandises par mer a travers Haiti",
+    svc_tag:"Services Maritimes",svc_title:"Nos Services",svc_sub:"Solutions completes de transport maritime pour tous vos besoins",
+    svc_coastal:"Fret Cotier",svc_coastal_desc:"Transport de marchandises entre les villes cotieres d'Haiti",
+    svc_island:"Transport Inter-Iles",svc_island_desc:"Connexion des iles avec le continent",
+    svc_bulk:"Marchandises en Vrac",svc_bulk_desc:"Transport de grandes quantites de marchandises par mer",
+    svc_equip:"Transport d'Equipement",svc_equip_desc:"Deplacement d'equipements lourds et machines par bateau",
+    boat_tag:"Types de Bateaux",boat_title:"Choisir le Type de Bateau",boat_sub:"Selectionnez le bateau le plus adapte a votre cargaison",
+    boat_cargo:"Cargo",boat_cargo_desc:"Fret general",
+    boat_ferry:"Ferry",boat_ferry_desc:"Passagers et marchandises",
+    boat_container:"Porte-Conteneurs",boat_container_desc:"Conteneurs standards",
+    boat_fishing:"Bateau de Peche",boat_fishing_desc:"Petites cargaisons cotieres",
+    form_tag:"Demande de Transport",form_title:"Demander un Transport Maritime",form_sub:"Remplissez ce formulaire pour demander un bateau pour votre cargaison",
+    f_name:"Votre Nom *",f_name_ph:"Ex: Jean Pierre",
+    f_phone:"Telephone *",f_phone_ph:"XXXX XXXX",
+    f_cargo:"Type de Marchandise *",f_cargo_default:"-- Choisir le type --",
+    cargo_rice:"🍚 Riz",cargo_cement:"🏟 Ciment",cargo_fuel:"⛽ Carburant",
+    cargo_construction:"🔨 Construction",cargo_food:"🍽 Nourriture",
+    cargo_merchandise:"📦 Marchandise",cargo_equipment:"⚙ Equipement",cargo_other:"📎 Autre",
+    f_desc:"Description (optionnel)",f_desc_ph:"Ex: 200 sacs de riz 50kg chacun...",
+    f_weight:"Poids en kg (optionnel)",f_qty:"Quantite (optionnel)",
+    f_boat_type:"Type de Bateau Requis *",f_boat_default:"-- Choisir le type de bateau --",
+    f_pickup:"Port / Lieu d'Enlevement *",f_pickup_ph:"Ex: Port de Port-au-Prince",
+    f_dropoff:"Port / Lieu de Livraison *",f_dropoff_ph:"Ex: Port de Jeremie",
+    f_gps_hint:"📍 Recherche de votre position GPS...",f_gps_ok:"✅ Position GPS trouvee",f_gps_fail:"⚠ GPS non disponible, entrez l'adresse manuellement",
+    f_urgency:"Urgence *",urg_normal:"🟢 Normal",urg_urgent:"🟠 Urgent",urg_emergency:"🔴 Urgence",
+    f_budget:"Budget en HTG (optionnel)",f_budget_ph:"Ex: 25000",
+    f_notes:"Notes (optionnel)",f_notes_ph:"Ex: Besoin de laisser le bateau au port pendant 2 jours...",
+    f_submit:"⛵ Demander un Transport Maritime",f_submitting:"En cours de soumission...",
+    success_title:"Demande Soumise avec Succes!",success_msg:"Voici votre code de suivi et vos codes PIN. Gardez-les en securite.",
+    track_label:"Code de Suivi",pin_pickup:"PIN Enlevement",pin_delivery:"PIN Livraison",success_new:"➕ Faire une Autre Demande",
+    err_submit:"Erreur de soumission. Veuillez reessayer ou nous contacter via WhatsApp.",
+    why_tag:"Pourquoi Maritime",why_title:"Pourquoi Choisir le Transport Maritime?",
+    stat1_title:"1,800+ km de Cote",stat1_desc:"Haiti possede plus de 1,800km de cote reliant toutes les regions",
+    stat2_title:"Plus Economique",stat2_desc:"Le transport maritime est plus economique pour les grosses cargaisons",
+    stat3_title:"Relie Toutes les Villes",stat3_desc:"Connecte toutes les villes cotieres: Jeremie, Les Cayes, Jacmel, Gonaives, Cap-Haitien",
+    footer_desc:"Plateforme logistique maritime et de transport de marchandises de confiance en Haiti. Une plateforme HaitiBiznis.",
+    bnav_home:"Accueil",bnav_loads:"Charges",bnav_fleet:"Flotte",bnav_tracking:"Suivi",bnav_account:"Compte"
+  },
+  en:{
+    nav_home:"Home",nav_loads:"Load Board",nav_fleet:"Fleet",nav_tracking:"Track Loads",nav_register:"Register Truck",
+    hero_title:"Maritime & Boat Logistics",
+    hero_sub:"Ship cargo across Haiti by sea",
+    svc_tag:"Maritime Services",svc_title:"Our Services",svc_sub:"Complete maritime transport solutions for all your needs",
+    svc_coastal:"Coastal Cargo",svc_coastal_desc:"Transport goods between Haiti's coastal cities",
+    svc_island:"Island Transport",svc_island_desc:"Connect islands with the mainland",
+    svc_bulk:"Bulk Goods",svc_bulk_desc:"Large quantity freight transport by sea",
+    svc_equip:"Equipment Transport",svc_equip_desc:"Move heavy equipment and machinery by boat",
+    boat_tag:"Boat Types",boat_title:"Choose Boat Type",boat_sub:"Select the best boat for your cargo",
+    boat_cargo:"Cargo Boat",boat_cargo_desc:"General cargo",
+    boat_ferry:"Ferry",boat_ferry_desc:"Passengers & goods",
+    boat_container:"Container Boat",boat_container_desc:"Standard containers",
+    boat_fishing:"Fishing Vessel",boat_fishing_desc:"Small coastal shipments",
+    form_tag:"Transport Request",form_title:"Request Maritime Transport",form_sub:"Fill out this form to request a boat for your cargo",
+    f_name:"Your Name *",f_name_ph:"Ex: Jean Pierre",
+    f_phone:"Phone *",f_phone_ph:"XXXX XXXX",
+    f_cargo:"Cargo Type *",f_cargo_default:"-- Select cargo type --",
+    cargo_rice:"🍚 Rice",cargo_cement:"🏟 Cement",cargo_fuel:"⛽ Fuel",
+    cargo_construction:"🔨 Construction",cargo_food:"🍽 Food",
+    cargo_merchandise:"📦 Merchandise",cargo_equipment:"⚙ Equipment",cargo_other:"📎 Other",
+    f_desc:"Description (optional)",f_desc_ph:"Ex: 200 bags of rice 50kg each...",
+    f_weight:"Weight in kg (optional)",f_qty:"Quantity (optional)",
+    f_boat_type:"Boat Type Needed *",f_boat_default:"-- Select boat type --",
+    f_pickup:"Port / Pickup Location *",f_pickup_ph:"Ex: Port-au-Prince Port",
+    f_dropoff:"Port / Delivery Location *",f_dropoff_ph:"Ex: Jeremie Port",
+    f_gps_hint:"📍 Searching for your GPS position...",f_gps_ok:"✅ GPS position found",f_gps_fail:"⚠ GPS not available, enter address manually",
+    f_urgency:"Urgency *",urg_normal:"🟢 Normal",urg_urgent:"🟠 Urgent",urg_emergency:"🔴 Emergency",
+    f_budget:"Budget in HTG (optional)",f_budget_ph:"Ex: 25000",
+    f_notes:"Notes (optional)",f_notes_ph:"Ex: Need to leave the boat at port for 2 days...",
+    f_submit:"⛵ Request Maritime Transport",f_submitting:"Submitting...",
+    success_title:"Request Submitted Successfully!",success_msg:"Here are your tracking code and PIN codes. Keep them safe.",
+    track_label:"Tracking Code",pin_pickup:"Pickup PIN",pin_delivery:"Delivery PIN",success_new:"➕ Make Another Request",
+    err_submit:"Submission error. Please try again or contact us via WhatsApp.",
+    why_tag:"Why Maritime",why_title:"Why Choose Maritime Transport?",
+    stat1_title:"1,800+ km Coastline",stat1_desc:"Haiti has over 1,800km of coastline connecting all regions",
+    stat2_title:"More Affordable",stat2_desc:"Maritime transport is cheaper for large bulk shipments",
+    stat3_title:"Connects All Cities",stat3_desc:"Connects all coastal cities: Jeremie, Les Cayes, Jacmel, Gonaives, Cap-Haitien",
+    footer_desc:"Haiti's trusted maritime logistics and cargo transport platform. A HaitiBiznis platform.",
+    bnav_home:"Home",bnav_loads:"Loads",bnav_fleet:"Fleet",bnav_tracking:"Track",bnav_account:"Account"
+  },
+  es:{
+    nav_home:"Inicio",nav_loads:"Tablero Cargas",nav_fleet:"Flota",nav_tracking:"Seguimiento",nav_register:"Registrar Camion",
+    hero_title:"Logistica Maritima y Barcos",
+    hero_sub:"Transporte de mercancias por mar a traves de Haiti",
+    svc_tag:"Servicios Maritimos",svc_title:"Nuestros Servicios",svc_sub:"Soluciones completas de transporte maritimo para todas sus necesidades",
+    svc_coastal:"Carga Costera",svc_coastal_desc:"Transporte de mercancias entre ciudades costeras de Haiti",
+    svc_island:"Transporte Inter-Islas",svc_island_desc:"Conexion de islas con el continente",
+    svc_bulk:"Mercancias a Granel",svc_bulk_desc:"Transporte de grandes cantidades por mar",
+    svc_equip:"Transporte de Equipos",svc_equip_desc:"Mover equipos pesados y maquinaria por barco",
+    boat_tag:"Tipos de Barco",boat_title:"Elegir Tipo de Barco",boat_sub:"Seleccione el barco mas adecuado para su carga",
+    boat_cargo:"Barco de Carga",boat_cargo_desc:"Carga general",
+    boat_ferry:"Ferry",boat_ferry_desc:"Pasajeros y mercancias",
+    boat_container:"Portacontenedores",boat_container_desc:"Contenedores estandar",
+    boat_fishing:"Barco Pesquero",boat_fishing_desc:"Envios costeros pequenos",
+    form_tag:"Solicitud de Transporte",form_title:"Solicitar Transporte Maritimo",form_sub:"Complete este formulario para solicitar un barco para su carga",
+    f_name:"Su Nombre *",f_name_ph:"Ej: Jean Pierre",
+    f_phone:"Telefono *",f_phone_ph:"XXXX XXXX",
+    f_cargo:"Tipo de Carga *",f_cargo_default:"-- Seleccionar tipo de carga --",
+    cargo_rice:"🍚 Arroz",cargo_cement:"🏟 Cemento",cargo_fuel:"⛽ Combustible",
+    cargo_construction:"🔨 Construccion",cargo_food:"🍽 Comida",
+    cargo_merchandise:"📦 Mercancia",cargo_equipment:"⚙ Equipo",cargo_other:"📎 Otro",
+    f_desc:"Descripcion (opcional)",f_desc_ph:"Ej: 200 sacos de arroz 50kg cada uno...",
+    f_weight:"Peso en kg (opcional)",f_qty:"Cantidad (opcional)",
+    f_boat_type:"Tipo de Barco Requerido *",f_boat_default:"-- Seleccionar tipo de barco --",
+    f_pickup:"Puerto / Lugar de Recogida *",f_pickup_ph:"Ej: Puerto de Puerto Principe",
+    f_dropoff:"Puerto / Lugar de Entrega *",f_dropoff_ph:"Ej: Puerto de Jeremie",
+    f_gps_hint:"📍 Buscando su posicion GPS...",f_gps_ok:"✅ Posicion GPS encontrada",f_gps_fail:"⚠ GPS no disponible, ingrese la direccion manualmente",
+    f_urgency:"Urgencia *",urg_normal:"🟢 Normal",urg_urgent:"🟠 Urgente",urg_emergency:"🔴 Emergencia",
+    f_budget:"Presupuesto en HTG (opcional)",f_budget_ph:"Ej: 25000",
+    f_notes:"Notas (opcional)",f_notes_ph:"Ej: Necesito dejar el barco en el puerto 2 dias...",
+    f_submit:"⛵ Solicitar Transporte Maritimo",f_submitting:"Enviando...",
+    success_title:"Solicitud Enviada con Exito!",success_msg:"Aqui estan su codigo de seguimiento y codigos PIN. Guardelos de forma segura.",
+    track_label:"Codigo de Seguimiento",pin_pickup:"PIN de Recogida",pin_delivery:"PIN de Entrega",success_new:"➕ Hacer Otra Solicitud",
+    err_submit:"Error al enviar. Por favor intente de nuevo o contactenos via WhatsApp.",
+    why_tag:"Por Que Maritimo",why_title:"Por Que Elegir Transporte Maritimo?",
+    stat1_title:"1,800+ km de Costa",stat1_desc:"Haiti tiene mas de 1,800km de costa que conecta todas las regiones",
+    stat2_title:"Mas Economico",stat2_desc:"El transporte maritimo es mas barato para grandes envios a granel",
+    stat3_title:"Conecta Todas las Ciudades",stat3_desc:"Conecta todas las ciudades costeras: Jeremie, Les Cayes, Jacmel, Gonaives, Cap-Haitien",
+    footer_desc:"Plataforma de logistica maritima y transporte de carga de confianza de Haiti. Una plataforma HaitiBiznis.",
+    bnav_home:"Inicio",bnav_loads:"Cargas",bnav_fleet:"Flota",bnav_tracking:"Seguir",bnav_account:"Cuenta"
+  }
+};
+
+/* ═══ TRANSLATION ENGINE ═══ */
+function tx(key){
+  var t=T[currentLang]||T.ht;
+  return t[key]||T.ht[key]||key;
+}
+
+function setLang(lang){
+  currentLang=lang;
+  try{localStorage.setItem('msouwout_lang',lang)}catch(e){}
+
+  // Update lang switcher
+  document.querySelectorAll('.lang-switch a').forEach(function(a){a.classList.remove('active')});
+  var el=document.getElementById('lang-'+lang);
+  if(el)el.classList.add('active');
+
+  // Update data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key=el.getAttribute('data-i18n');
+    var val=tx(key);
+    if(val) el.innerHTML=val;
+  });
+
+  // Update placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
+    var key=el.getAttribute('data-i18n-placeholder');
+    var val=tx(key);
+    if(val) el.placeholder=val;
+  });
+
+  // Update select options
+  document.querySelectorAll('select option[data-i18n]').forEach(function(opt){
+    var key=opt.getAttribute('data-i18n');
+    var val=tx(key);
+    if(val) opt.textContent=val;
+  });
+}
+
+/* ═══ MOBILE MENU ═══ */
+function toggleMenu(){
+  var menu=document.getElementById('mobileMenu');
+  menu.classList.toggle('open');
+}
+
+/* ═══ BOAT SELECTION ═══ */
+function selectBoat(card){
+  // Remove selected from all
+  document.querySelectorAll('.boat-card').forEach(function(c){c.classList.remove('selected')});
+  // Select this one
+  card.classList.add('selected');
+  // Update dropdown
+  var boatType=card.getAttribute('data-boat');
+  var select=document.getElementById('truck_type_needed');
+  if(select){
+    select.value=boatType;
+    // Change color to indicate selection
+    select.style.color=getComputedStyle(document.documentElement).getPropertyValue('--text');
+  }
+}
+
+/* ═══ GPS ═══ */
+(function(){
+  var gpsEl=document.getElementById('gps-status');
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      function(pos){
+        document.getElementById('pickup_lat').value=pos.coords.latitude;
+        document.getElementById('pickup_lng').value=pos.coords.longitude;
+        if(gpsEl){gpsEl.innerHTML=tx('f_gps_ok');gpsEl.style.color='#1B8C3D'}
+      },
+      function(){
+        document.getElementById('pickup_lat').value=DEFAULT_LAT;
+        document.getElementById('pickup_lng').value=DEFAULT_LNG;
+        if(gpsEl){gpsEl.innerHTML=tx('f_gps_fail');gpsEl.style.color='#F5B400'}
+      },
+      {timeout:8000,maximumAge:60000}
+    );
+  } else {
+    document.getElementById('pickup_lat').value=DEFAULT_LAT;
+    document.getElementById('pickup_lng').value=DEFAULT_LNG;
+    if(gpsEl){gpsEl.innerHTML=tx('f_gps_fail');gpsEl.style.color='#F5B400'}
+  }
+})();
+
+/* ═══ SUBMIT FORM ═══ */
+function submitMaritime(e){
+  e.preventDefault();
+  var statusEl=document.getElementById('formStatus');
+  var btn=document.getElementById('submitBtn');
+  var origHTML=btn.innerHTML;
+
+  var phone=document.getElementById('posted_by_phone').value.trim();
+  if(phone&&phone.indexOf('+509')!==0){phone='+509'+phone}
+
+  var payload={
+    posted_by_name:document.getElementById('posted_by_name').value.trim(),
+    posted_by_phone:phone,
+    cargo_type:document.getElementById('cargo_type').value,
+    cargo_description:document.getElementById('cargo_description').value.trim()||null,
+    weight_kg:document.getElementById('weight_kg').value?Number(document.getElementById('weight_kg').value):null,
+    quantity:document.getElementById('quantity').value.trim()||null,
+    truck_type_needed:document.getElementById('truck_type_needed').value,
+    pickup_address:document.getElementById('pickup_address').value.trim(),
+    pickup_lat:Number(document.getElementById('pickup_lat').value)||DEFAULT_LAT,
+    pickup_lng:Number(document.getElementById('pickup_lng').value)||DEFAULT_LNG,
+    dropoff_address:document.getElementById('dropoff_address').value.trim(),
+    dropoff_lat:Number(document.getElementById('dropoff_lat').value)||null,
+    dropoff_lng:Number(document.getElementById('dropoff_lng').value)||null,
+    price:document.getElementById('price').value?Number(document.getElementById('price').value):null,
+    urgency:document.querySelector('input[name="urgency"]:checked').value,
+    notes:document.getElementById('notes').value.trim()||null
+  };
+
+  // Disable button
+  btn.disabled=true;
+  btn.classList.add('btn-loading');
+  btn.querySelector('.btn-text').innerHTML=tx('f_submitting');
+  statusEl.className='form-status';
+  statusEl.style.display='none';
+
+  fetch(API+'/api/logistics/loads',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  })
+  .then(function(res){
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    return res.json();
+  })
+  .then(function(data){
+    btn.innerHTML=origHTML;
+    btn.disabled=false;
+    btn.classList.remove('btn-loading');
+
+    var load=data.load||data;
+    document.getElementById('trackingCode').textContent=load.tracking_code||load.id||'---';
+    document.getElementById('pickupPin').textContent=load.pickup_pin||'----';
+    document.getElementById('deliveryPin').textContent=load.delivery_pin||'----';
+    document.getElementById('maritimeForm').style.display='none';
+    document.getElementById('successCard').classList.add('show');
+    document.getElementById('successCard').scrollIntoView({behavior:'smooth',block:'center'});
+  })
+  .catch(function(err){
+    btn.innerHTML=origHTML;
+    btn.disabled=false;
+    btn.classList.remove('btn-loading');
+    statusEl.className='form-status error';
+    statusEl.textContent=tx('err_submit');
+    statusEl.style.display='block';
+    console.error('Maritime load error:',err);
+  });
+
+  return false;
+}
+
+function resetForm(){
+  document.getElementById('maritimeForm').reset();
+  document.getElementById('maritimeForm').style.display='block';
+  document.getElementById('successCard').classList.remove('show');
+  document.querySelector('input[name="urgency"][value="normal"]').checked=true;
+  // Reset boat card selections
+  document.querySelectorAll('.boat-card').forEach(function(c){c.classList.remove('selected')});
+}
+
+/* ═══ INIT ═══ */
+(function(){
+  try{
+    var saved=localStorage.getItem('msouwout_lang');
+    if(saved&&T[saved])setLang(saved);
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

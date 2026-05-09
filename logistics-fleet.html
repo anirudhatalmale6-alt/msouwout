@@ -32,7 +32,7 @@
   --radius:16px;--radius-lg:20px;
 }
 html{scroll-behavior:smooth}
-body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;padding-bottom:70px}
 a{text-decoration:none;color:inherit}
 button{font-family:var(--body);cursor:pointer;border:none;background:none}
 input,select,textarea{font-family:var(--body)}
@@ -411,6 +411,22 @@ footer a:hover{text-decoration:underline}
   .load-actions{flex-direction:column}
   .load-actions .btn-action{width:100%;text-align:center}
 }
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:1100;
+  background:#fff;border-top:1px solid #e2e8f0;
+  box-shadow:0 -2px 16px rgba(11,31,102,.08);
+  display:flex;align-items:stretch;justify-content:space-around;
+  height:60px;
+}
+.bnav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;padding:8px 0;cursor:pointer;
+  transition:color .2s;color:#8A95AA;text-decoration:none;
+}
+.bnav-item.active{color:#0B1F66}
+.bnav-item:hover{color:#0B1F66}
+.bnav-icon{font-size:1.3rem;line-height:1}
+.bnav-label{font-size:.62rem;font-weight:700;letter-spacing:.02em}
 </style>
 </head>
 <body>
@@ -633,6 +649,29 @@ footer a:hover{text-decoration:underline}
 <footer>
   <p>&copy; 2026 MsouWout Logistics &mdash; <span data-i18n="footer_part">Yon platfom</span> <a href="https://haitibiznis.com">HaitiBiznis</a></p>
 </footer>
+
+<nav class="bottom-nav">
+  <a href="logistics.html" class="bnav-item">
+    <span class="bnav-icon">&#127968;</span>
+    <span class="bnav-label">Akèy</span>
+  </a>
+  <a href="logistics-board.html" class="bnav-item">
+    <span class="bnav-icon">&#128230;</span>
+    <span class="bnav-label">Chajman</span>
+  </a>
+  <a href="logistics-fleet.html" class="bnav-item active">
+    <span class="bnav-icon">&#128666;</span>
+    <span class="bnav-label">Flòt</span>
+  </a>
+  <a href="logistics-track.html" class="bnav-item">
+    <span class="bnav-icon">&#128205;</span>
+    <span class="bnav-label">Swiv</span>
+  </a>
+  <a href="logistics-fleet.html" class="bnav-item">
+    <span class="bnav-icon">&#128100;</span>
+    <span class="bnav-label">Kont</span>
+  </a>
+</nav>
 
 <script>
 const API='https://msouwout-backend.onrender.com';

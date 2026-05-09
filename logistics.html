@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>MsouWout Logistics — Enfrastrikti Lojistik Dijital Ayiti</title>
+<meta name="description" content="Platfom lojistik dijital Ayiti. Konekte chajman ak transpotè verifye — kamyon, kontene, bato. MsouWout Logistics by HaitiBiznis.">
+<meta property="og:title" content="MsouWout Logistics — Haiti's Digital Logistics Infrastructure">
+<meta property="og:description" content="Konekte chajman ak transpotè verifye toupatou nan Ayiti. Kamyon, kontene, bato ak lojistik.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://msouwout.com/logistics.html">
+<meta property="og:image" content="https://msouwout.com/assets/og-msouwout.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="canonical" href="https://msouwout.com/logistics.html">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B1F66">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#0B1F66;
+  --primary-dark:#061040;
+  --red:#E31C3D;
+  --red-dark:#C4162F;
+  --gold:#F5B400;
+  --gold-light:#FFD54F;
+  --green:#1B8C3D;
+  --green-light:#22C55E;
+  --white:#FFFFFF;
+  --off-white:#F5F7FA;
+  --light-gray:#EDF0F7;
+  --dark:#060B1F;
+  --text:#1A2340;
+  --text-light:#5A6580;
+  --text-muted:#8A92A8;
+  --border:#DEE3EF;
+  --body:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  --radius:16px;
+  --radius-lg:20px;
+  --shadow:0 2px 12px rgba(11,31,102,.08);
+  --shadow-md:0 4px 24px rgba(11,31,102,.12);
+  --shadow-lg:0 8px 40px rgba(11,31,102,.16);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--body);background:var(--off-white);color:var(--text);
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  padding-top:56px;padding-bottom:calc(64px + var(--safe-bottom));
+}
+a{text-decoration:none;color:inherit}
+button{font-family:var(--body);cursor:pointer;border:none;background:none}
+img{max-width:100%}
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════ */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(28px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.5;transform:scale(1.4)}
+}
+@keyframes slideInRight{
+  from{opacity:0;transform:translateX(30px)}
+  to{opacity:1;transform:translateX(0)}
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+@keyframes shimmer{
+  0%{background-position:-200% 0}
+  100%{background-position:200% 0}
+}
+.animate-on-scroll{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.animate-on-scroll.visible{opacity:1;transform:translateY(0)}
+
+/* ═══════════════════════════════════════
+   TOP BAR (FIXED)
+   ═══════════════════════════════════════ */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;
+  background:var(--primary);
+  height:56px;padding:0 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 16px rgba(6,16,64,.3);
+}
+.topbar-logo{
+  display:flex;align-items:center;gap:8px;
+}
+.topbar-logo-icon{
+  width:32px;height:32px;background:var(--red);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;font-weight:900;color:#fff;
+}
+.topbar-logo-text{
+  color:#fff;font-size:1rem;font-weight:800;letter-spacing:-.02em;
+}
+.topbar-logo-text span{color:var(--gold);font-weight:600;font-size:.7rem;display:block;margin-top:-2px;letter-spacing:.04em}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.lang-switch{
+  display:flex;align-items:center;gap:2px;
+  background:rgba(255,255,255,.1);border-radius:100px;padding:3px 4px;
+}
+.lang-switch a{
+  color:rgba(255,255,255,.55);font-size:.65rem;font-weight:700;
+  padding:4px 8px;border-radius:100px;cursor:pointer;
+  transition:all .2s;letter-spacing:.03em;
+}
+.lang-switch a:hover{color:#fff;background:rgba(255,255,255,.12)}
+.lang-switch a.active{color:var(--primary);background:#fff}
+.hamburger{
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.1);border-radius:10px;cursor:pointer;
+  transition:background .2s;
+}
+.hamburger:hover{background:rgba(255,255,255,.2)}
+.hamburger svg{width:20px;height:20px;stroke:#fff;stroke-width:2;fill:none;stroke-linecap:round}
+.mobile-menu{
+  display:none;position:fixed;top:56px;left:0;right:0;bottom:0;
+  background:var(--primary);z-index:1050;padding:24px;
+  flex-direction:column;gap:8px;
+  animation:fadeIn .2s ease;
+}
+.mobile-menu.open{display:flex}
+.mobile-menu a{
+  color:rgba(255,255,255,.85);font-size:1rem;font-weight:600;
+  padding:14px 16px;border-radius:12px;transition:background .2s;
+  display:flex;align-items:center;gap:12px;
+}
+.mobile-menu a:hover,.mobile-menu a.active-link{background:rgba(255,255,255,.1);color:#fff}
+.mobile-menu a .mi{font-size:1.2rem;width:28px;text-align:center}
+
+/* ═══════════════════════════════════════
+   HERO SECTION
+   ═══════════════════════════════════════ */
+.hero{
+  background:linear-gradient(165deg,var(--primary) 0%,var(--primary-dark) 55%,#040A2E 100%);
+  padding:48px 20px 40px;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-60%;right:-40%;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,180,0,.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero::after{
+  content:'';position:absolute;bottom:-40%;left:-30%;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(227,28,61,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-icon{
+  font-size:5rem;line-height:1;margin-bottom:16px;
+  animation:float 3s ease-in-out infinite;
+  filter:drop-shadow(0 8px 24px rgba(0,0,0,.3));
+}
+.hero h1{
+  color:#fff;font-size:1.8rem;font-weight:900;line-height:1.15;
+  letter-spacing:-.03em;margin-bottom:10px;
+  animation:fadeUp .8s cubic-bezier(.22,1,.36,1) .1s both;
+}
+.hero-sub{
+  color:rgba(255,255,255,.6);font-size:.95rem;font-weight:500;
+  line-height:1.5;max-width:360px;margin:0 auto 28px;
+  animation:fadeUp .8s cubic-bezier(.22,1,.36,1) .25s both;
+}
+.hero-actions{
+  display:flex;flex-direction:column;gap:12px;padding:0 4px;
+  animation:fadeUp .8s cubic-bezier(.22,1,.36,1) .4s both;
+}
+.btn-hero{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px 24px;border-radius:14px;
+  font-size:1rem;font-weight:700;border:none;cursor:pointer;
+  transition:all .25s cubic-bezier(.22,1,.36,1);
+  min-height:52px;position:relative;overflow:hidden;
+}
+.btn-hero::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);
+  background-size:200% 100%;
+  animation:shimmer 3s linear infinite;
+  opacity:0;transition:opacity .3s;
+}
+.btn-hero:hover::after{opacity:1}
+.btn-hero-red{
+  background:var(--red);color:#fff;
+  box-shadow:0 4px 20px rgba(227,28,61,.35);
+}
+.btn-hero-red:hover{background:var(--red-dark);transform:translateY(-2px);box-shadow:0 8px 32px rgba(227,28,61,.45)}
+.btn-hero-blue{
+  background:rgba(255,255,255,.12);color:#fff;
+  border:1.5px solid rgba(255,255,255,.25);
+  backdrop-filter:blur(8px);
+}
+.btn-hero-blue:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4);transform:translateY(-2px)}
+.btn-emoji{font-size:1.3rem}
+
+/* ═══════════════════════════════════════
+   SECTION COMMON
+   ═══════════════════════════════════════ */
+.section{padding:32px 16px}
+.section-title{
+  font-size:1.15rem;font-weight:800;color:var(--text);
+  margin-bottom:16px;letter-spacing:-.02em;
+}
+.section-title-light{color:#fff}
+
+/* ═══════════════════════════════════════
+   TRANSPORT TYPES (HORIZONTAL SCROLL)
+   ═══════════════════════════════════════ */
+.transport-section{padding:28px 0 28px 16px;background:var(--white)}
+.transport-scroll{
+  display:flex;gap:10px;overflow-x:auto;padding:4px 16px 12px 0;
+  -webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+}
+.transport-scroll::-webkit-scrollbar{display:none}
+.transport-card{
+  flex:0 0 auto;width:96px;
+  background:var(--off-white);border-radius:14px;
+  padding:16px 8px 14px;text-align:center;
+  cursor:pointer;transition:all .25s cubic-bezier(.22,1,.36,1);
+  scroll-snap-align:start;border:1.5px solid transparent;
+}
+.transport-card:hover{
+  background:#fff;border-color:var(--primary);
+  transform:translateY(-3px);box-shadow:var(--shadow-md);
+}
+.transport-card:active{transform:scale(.96)}
+.transport-icon{font-size:2rem;margin-bottom:6px;display:block}
+.transport-label{font-size:.72rem;font-weight:700;color:var(--text);line-height:1.2}
+
+/* ═══════════════════════════════════════
+   LIVE STATS
+   ═══════════════════════════════════════ */
+.stats-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.stat-card{
+  background:var(--white);border-radius:var(--radius);padding:18px 16px;
+  position:relative;overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:transform .25s,box-shadow .25s;
+}
+.stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.stat-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
+  border-radius:0 4px 4px 0;
+}
+.stat-card:nth-child(1)::before{background:var(--green)}
+.stat-card:nth-child(2)::before{background:var(--primary)}
+.stat-card:nth-child(3)::before{background:var(--gold)}
+.stat-card:nth-child(4)::before{background:var(--red)}
+.stat-number{
+  font-size:2rem;font-weight:900;color:var(--text);line-height:1;
+  margin-bottom:4px;letter-spacing:-.03em;
+  display:flex;align-items:center;gap:8px;
+}
+.stat-label{font-size:.75rem;font-weight:600;color:var(--text-light)}
+.stat-pulse{
+  width:8px;height:8px;border-radius:50%;display:inline-block;
+  animation:pulse 2s ease-in-out infinite;
+}
+.stat-pulse-green{background:var(--green)}
+.stat-pulse-blue{background:var(--primary)}
+.stat-pulse-gold{background:var(--gold)}
+.stat-pulse-red{background:var(--red)}
+
+/* ═══════════════════════════════════════
+   LOAD BOARD PREVIEW
+   ═══════════════════════════════════════ */
+.loads-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.loads-header .section-title{margin-bottom:0}
+.loads-see-all{
+  font-size:.8rem;font-weight:700;color:var(--primary);
+  display:flex;align-items:center;gap:4px;
+  padding:6px 14px;border-radius:100px;
+  background:rgba(11,31,102,.06);transition:all .2s;
+}
+.loads-see-all:hover{background:rgba(11,31,102,.12)}
+.load-card{
+  background:var(--white);border-radius:var(--radius);
+  padding:16px;margin-bottom:12px;
+  box-shadow:var(--shadow);position:relative;overflow:hidden;
+  transition:transform .25s,box-shadow .25s;
+  border-left:4px solid var(--border);
+}
+.load-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.load-card.urgency-normal{border-left-color:var(--green)}
+.load-card.urgency-urgent{border-left-color:var(--gold)}
+.load-card.urgency-emergency{border-left-color:var(--red)}
+.load-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.load-emoji{
+  font-size:1.8rem;width:44px;height:44px;
+  background:var(--off-white);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.load-info{flex:1;min-width:0}
+.load-type{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.load-route{
+  font-size:.78rem;font-weight:600;color:var(--text-light);
+  display:flex;align-items:center;gap:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.load-route-arrow{color:var(--primary);font-weight:800;flex-shrink:0}
+.load-meta{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;
+}
+.load-badge{
+  font-size:.68rem;font-weight:700;padding:4px 10px;border-radius:100px;
+  display:inline-flex;align-items:center;gap:4px;
+}
+.badge-price{background:rgba(245,180,0,.15);color:#9A7000}
+.badge-urgency-normal{background:rgba(27,140,61,.1);color:var(--green)}
+.badge-urgency-urgent{background:rgba(245,180,0,.15);color:#9A7000}
+.badge-urgency-emergency{background:rgba(227,28,61,.1);color:var(--red)}
+.badge-weight{background:var(--off-white);color:var(--text-light)}
+.load-actions{display:flex;gap:8px}
+.load-btn{
+  flex:1;padding:10px;border-radius:10px;font-size:.78rem;font-weight:700;
+  text-align:center;transition:all .2s;min-height:40px;
+  display:flex;align-items:center;justify-content:center;
+}
+.load-btn-view{background:var(--off-white);color:var(--text)}
+.load-btn-view:hover{background:var(--light-gray)}
+.load-btn-claim{background:var(--primary);color:#fff}
+.load-btn-claim:hover{background:var(--primary-dark);transform:translateY(-1px)}
+.loads-empty{
+  text-align:center;padding:32px 16px;color:var(--text-muted);
+  font-size:.88rem;font-weight:600;
+}
+.load-skeleton{
+  background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;
+  box-shadow:var(--shadow);
+}
+.skel-line{
+  height:14px;border-radius:7px;margin-bottom:10px;
+  background:linear-gradient(90deg,var(--off-white) 25%,var(--light-gray) 50%,var(--off-white) 75%);
+  background-size:200% 100%;animation:shimmer 1.5s linear infinite;
+}
+.skel-line-short{width:60%}
+.skel-line-med{width:80%}
+.skel-line-full{width:100%}
+
+/* ═══════════════════════════════════════
+   TRUST & SECURITY
+   ═══════════════════════════════════════ */
+.trust-section{
+  background:linear-gradient(165deg,var(--primary) 0%,var(--primary-dark) 100%);
+  padding:36px 16px;
+}
+.trust-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.trust-card{
+  background:rgba(255,255,255,.07);border-radius:14px;
+  padding:18px 14px;text-align:center;
+  border:1px solid rgba(255,255,255,.08);
+  transition:background .25s,transform .25s;
+}
+.trust-card:hover{background:rgba(255,255,255,.12);transform:translateY(-2px)}
+.trust-icon{
+  font-size:1.6rem;margin-bottom:8px;display:block;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,.2));
+}
+.trust-label{font-size:.75rem;font-weight:700;color:rgba(255,255,255,.9);line-height:1.3}
+
+/* ═══════════════════════════════════════
+   INDUSTRIES
+   ═══════════════════════════════════════ */
+.industry-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+@media(min-width:480px){
+  .industry-grid,.trust-grid{grid-template-columns:1fr 1fr 1fr}
+}
+.industry-card{
+  background:var(--white);border-radius:var(--radius);
+  padding:20px 14px;text-align:center;
+  box-shadow:var(--shadow);
+  transition:all .25s cubic-bezier(.22,1,.36,1);
+  cursor:default;
+}
+.industry-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.industry-icon{font-size:1.8rem;margin-bottom:8px;display:block}
+.industry-name{font-size:.78rem;font-weight:700;color:var(--text)}
+
+/* ═══════════════════════════════════════
+   BOTTOM NAVIGATION
+   ═══════════════════════════════════════ */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:1100;
+  background:var(--white);
+  border-top:1px solid var(--border);
+  box-shadow:0 -2px 16px rgba(11,31,102,.08);
+  display:flex;align-items:stretch;justify-content:space-around;
+  height:calc(60px + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom);
+}
+.bnav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;padding:8px 0;cursor:pointer;
+  transition:color .2s;color:var(--text-muted);text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.bnav-item.active{color:var(--primary)}
+.bnav-item:hover{color:var(--primary)}
+.bnav-icon{font-size:1.3rem;line-height:1}
+.bnav-label{font-size:.62rem;font-weight:700;letter-spacing:.02em}
+
+/* ═══════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════ */
+.footer{
+  background:var(--dark);padding:32px 16px 24px;text-align:center;
+}
+.footer-logo{
+  font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:6px;
+  letter-spacing:-.02em;
+}
+.footer-logo span{color:var(--gold)}
+.footer-sub{font-size:.72rem;font-weight:500;color:rgba(255,255,255,.4);margin-bottom:4px}
+.footer-copy{font-size:.65rem;color:rgba(255,255,255,.25);font-weight:500}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE (TABLET+)
+   ═══════════════════════════════════════ */
+@media(min-width:600px){
+  .hero h1{font-size:2.4rem}
+  .hero-sub{font-size:1.05rem;max-width:460px}
+  .hero-actions{flex-direction:row;max-width:480px;margin:0 auto}
+  .btn-hero{flex:1}
+  .stats-grid{grid-template-columns:repeat(4,1fr)}
+  .section{padding:40px 24px}
+  .transport-section{padding-left:24px}
+  .load-card{padding:20px}
+}
+@media(min-width:960px){
+  body{max-width:480px;margin:0 auto;box-shadow:0 0 60px rgba(11,31,102,.08)}
+  .topbar{max-width:480px;left:50%;transform:translateX(-50%)}
+  .bottom-nav{max-width:480px;left:50%;transform:translateX(-50%)}
+  .mobile-menu{max-width:480px;left:50%;transform:translateX(-50%)}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     TOP BAR
+     ═══════════════════════════════════════ -->
+<header class="topbar">
+  <a href="logistics.html" class="topbar-logo">
+    <div class="topbar-logo-icon">M</div>
+    <div class="topbar-logo-text">
+      MsouWout <span>LOGISTICS</span>
+    </div>
+  </a>
+  <div class="topbar-right">
+    <div class="lang-switch">
+      <a onclick="setLang('ht')" class="active" id="lang-ht">HT</a>
+      <a onclick="setLang('fr')" id="lang-fr">FR</a>
+      <a onclick="setLang('en')" id="lang-en">EN</a>
+      <a onclick="setLang('es')" id="lang-es">ES</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="logistics.html" class="active-link"><span class="mi">&#127968;</span> <span data-i18n="menu_home">Akèy</span></a>
+  <a href="logistics-board.html"><span class="mi">&#128230;</span> <span data-i18n="menu_loads">Tablo Chajman</span></a>
+  <a href="logistics-fleet.html"><span class="mi">&#128666;</span> <span data-i18n="menu_fleet">Flòt Mwen</span></a>
+  <a href="logistics-track.html"><span class="mi">&#128205;</span> <span data-i18n="menu_track">Swiv Chajman</span></a>
+  <a href="logistics-register.html"><span class="mi">&#128100;</span> <span data-i18n="menu_register">Enskri</span></a>
+  <a href="index.html"><span class="mi">&#128663;</span> <span data-i18n="menu_rides">MsouWout Rides</span></a>
+</div>
+
+<!-- ═══════════════════════════════════════
+     HERO SECTION
+     ═══════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-icon">&#128666;</div>
+  <h1 data-i18n="hero_title">Konekte Chajman Ak Transpotè Verifye</h1>
+  <p class="hero-sub" data-i18n="hero_sub">Kamyon, kontene, bato ak lojistik atrave Ayiti.</p>
+  <div class="hero-actions">
+    <a href="logistics-board.html#post" class="btn-hero btn-hero-red">
+      <span class="btn-emoji">&#128230;</span>
+      <span data-i18n="hero_btn_post">Poste Chajman</span>
+    </a>
+    <a href="logistics-board.html" class="btn-hero btn-hero-blue">
+      <span class="btn-emoji">&#128270;</span>
+      <span data-i18n="hero_btn_browse">Wè Chajman</span>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     TRANSPORT TYPES
+     ═══════════════════════════════════════ -->
+<section class="transport-section animate-on-scroll">
+  <h2 class="section-title" style="padding-right:16px" data-i18n="transport_title">Tip Transpotasyon</h2>
+  <div class="transport-scroll">
+    <a href="logistics-board.html?type=flatbed" class="transport-card">
+      <span class="transport-icon">&#128666;</span>
+      <span class="transport-label" data-i18n="t_flatbed">Flatbed</span>
+    </a>
+    <a href="logistics-board.html?type=container" class="transport-card">
+      <span class="transport-icon">&#128230;</span>
+      <span class="transport-label" data-i18n="t_container">Kontene</span>
+    </a>
+    <a href="logistics-board.html?type=delivery" class="transport-card">
+      <span class="transport-icon">&#128667;</span>
+      <span class="transport-label" data-i18n="t_delivery">Kamyon Livrezon</span>
+    </a>
+    <a href="logistics-board.html?type=dump" class="transport-card">
+      <span class="transport-icon">&#127959;</span>
+      <span class="transport-label" data-i18n="t_dump">Kamyon Baskilant</span>
+    </a>
+    <a href="logistics-board.html?type=boat" class="transport-card">
+      <span class="transport-icon">&#128674;</span>
+      <span class="transport-label" data-i18n="t_boat">Bato</span>
+    </a>
+    <a href="logistics-board.html?type=van" class="transport-card">
+      <span class="transport-icon">&#128656;</span>
+      <span class="transport-label" data-i18n="t_van">Van</span>
+    </a>
+    <a href="logistics-board.html?type=refrigerated" class="transport-card">
+      <span class="transport-icon">&#10052;&#65039;</span>
+      <span class="transport-label" data-i18n="t_fridge">Frijidife</span>
+    </a>
+    <a href="logistics-board.html?type=bus" class="transport-card">
+      <span class="transport-icon">&#128653;</span>
+      <span class="transport-label" data-i18n="t_bus">Otobis</span>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     LIVE STATS
+     ═══════════════════════════════════════ -->
+<section class="section animate-on-scroll">
+  <h2 class="section-title" data-i18n="stats_title">Sistèm Aktif</h2>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number">
+        <span class="stat-pulse stat-pulse-green"></span>
+        <span id="stat-loads" class="stat-count" data-target="0">0</span>
+      </div>
+      <div class="stat-label" data-i18n="stat_loads">Chajman Aktif</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">
+        <span class="stat-pulse stat-pulse-blue"></span>
+        <span id="stat-fleets" class="stat-count" data-target="0">0</span>
+      </div>
+      <div class="stat-label" data-i18n="stat_fleets">Flòt Verifye</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">
+        <span class="stat-pulse stat-pulse-gold"></span>
+        <span id="stat-trucks" class="stat-count" data-target="0">0</span>
+      </div>
+      <div class="stat-label" data-i18n="stat_trucks">Kamyon An Liy</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">
+        <span class="stat-pulse stat-pulse-red"></span>
+        <span id="stat-boats" class="stat-count" data-target="0">0</span>
+      </div>
+      <div class="stat-label" data-i18n="stat_boats">Bato Aktif</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     LOAD BOARD PREVIEW
+     ═══════════════════════════════════════ -->
+<section class="section animate-on-scroll">
+  <div class="loads-header">
+    <h2 class="section-title" data-i18n="loads_title">Chajman Disponib</h2>
+    <a href="logistics-board.html" class="loads-see-all" data-i18n="loads_see_all">Wè Tout &#8594;</a>
+  </div>
+  <div id="loadsContainer">
+    <!-- Skeleton loaders -->
+    <div class="load-skeleton"><div class="skel-line skel-line-med"></div><div class="skel-line skel-line-full"></div><div class="skel-line skel-line-short"></div></div>
+    <div class="load-skeleton"><div class="skel-line skel-line-med"></div><div class="skel-line skel-line-full"></div><div class="skel-line skel-line-short"></div></div>
+    <div class="load-skeleton"><div class="skel-line skel-line-med"></div><div class="skel-line skel-line-full"></div><div class="skel-line skel-line-short"></div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     TRUST & SECURITY
+     ═══════════════════════════════════════ -->
+<section class="trust-section animate-on-scroll">
+  <h2 class="section-title section-title-light" data-i18n="trust_title">Sekirite ak Konfyans</h2>
+  <div class="trust-grid">
+    <div class="trust-card">
+      <span class="trust-icon">&#9989;</span>
+      <div class="trust-label" data-i18n="trust_verified">Flòt Verifye</div>
+    </div>
+    <div class="trust-card">
+      <span class="trust-icon">&#128205;</span>
+      <div class="trust-label" data-i18n="trust_gps">Swiv GPS</div>
+    </div>
+    <div class="trust-card">
+      <span class="trust-icon">&#128274;</span>
+      <div class="trust-label" data-i18n="trust_pin">PIN Livrezon</div>
+    </div>
+    <div class="trust-card">
+      <span class="trust-icon">&#128680;</span>
+      <div class="trust-label" data-i18n="trust_sos">Sipò SOS</div>
+    </div>
+    <div class="trust-card">
+      <span class="trust-icon">&#128230;</span>
+      <div class="trust-label" data-i18n="trust_cargo">Swiv Machandiz</div>
+    </div>
+    <div class="trust-card">
+      <span class="trust-icon">&#128179;</span>
+      <div class="trust-label" data-i18n="trust_driver">Verifikasyon Chofè</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     INDUSTRIES WE SERVE
+     ═══════════════════════════════════════ -->
+<section class="section animate-on-scroll">
+  <h2 class="section-title" data-i18n="industry_title">Endistri Nou Sèvi</h2>
+  <div class="industry-grid">
+    <div class="industry-card">
+      <span class="industry-icon">&#127806;</span>
+      <div class="industry-name" data-i18n="ind_agri">Agrikilti</div>
+    </div>
+    <div class="industry-card">
+      <span class="industry-icon">&#127959;</span>
+      <div class="industry-name" data-i18n="ind_construct">Konstriksyon</div>
+    </div>
+    <div class="industry-card">
+      <span class="industry-icon">&#127760;</span>
+      <div class="industry-name" data-i18n="ind_import">Enpòtasyon / Ekspòtasyon</div>
+    </div>
+    <div class="industry-card">
+      <span class="industry-icon">&#128722;</span>
+      <div class="industry-name" data-i18n="ind_commerce">Komès</div>
+    </div>
+    <div class="industry-card">
+      <span class="industry-icon">&#127981;</span>
+      <div class="industry-name" data-i18n="ind_industrial">Endistriyèl</div>
+    </div>
+    <div class="industry-card">
+      <span class="industry-icon">&#128674;</span>
+      <div class="industry-name" data-i18n="ind_maritime">Maritim</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-logo">MsouWout <span>Logistics</span></div>
+  <div class="footer-sub" data-i18n="footer_sub">Yon platfòm HaitiBiznis</div>
+  <div class="footer-copy">&copy; 2026 MsouWout. Tout dwa rezève.</div>
+</footer>
+
+<!-- ═══════════════════════════════════════
+     BOTTOM NAVIGATION
+     ═══════════════════════════════════════ -->
+<nav class="bottom-nav">
+  <a href="logistics.html" class="bnav-item active">
+    <span class="bnav-icon">&#127968;</span>
+    <span class="bnav-label" data-i18n="nav_home">Akèy</span>
+  </a>
+  <a href="logistics-board.html" class="bnav-item">
+    <span class="bnav-icon">&#128230;</span>
+    <span class="bnav-label" data-i18n="nav_loads">Chajman</span>
+  </a>
+  <a href="logistics-fleet.html" class="bnav-item">
+    <span class="bnav-icon">&#128666;</span>
+    <span class="bnav-label" data-i18n="nav_fleet">Flòt</span>
+  </a>
+  <a href="logistics-track.html" class="bnav-item">
+    <span class="bnav-icon">&#128205;</span>
+    <span class="bnav-label" data-i18n="nav_track">Swiv</span>
+  </a>
+  <a href="logistics-fleet.html" class="bnav-item">
+    <span class="bnav-icon">&#128100;</span>
+    <span class="bnav-label" data-i18n="nav_account">Kont</span>
+  </a>
+</nav>
+
+<script>
+/* ═══════════════════════════════════════
+   API & CONFIG
+   ═══════════════════════════════════════ */
+var API='https://msouwout-backend.onrender.com';
+
+/* ═══════════════════════════════════════
+   i18n TRANSLATIONS
+   ═══════════════════════════════════════ */
+var T={
+ht:{
+  menu_home:"Akèy",menu_loads:"Tablo Chajman",menu_fleet:"Flòt Mwen",
+  menu_track:"Swiv Chajman",menu_register:"Enskri",menu_rides:"MsouWout Rides",
+  hero_title:"Konekte Chajman Ak Transpotè Verifye",
+  hero_sub:"Kamyon, kontene, bato ak lojistik atrave Ayiti.",
+  hero_btn_post:"Poste Chajman",hero_btn_browse:"Wè Chajman",
+  transport_title:"Tip Transpotasyon",
+  t_flatbed:"Flatbed",t_container:"Kontene",t_delivery:"Kamyon Livrezon",
+  t_dump:"Kamyon Baskilant",t_boat:"Bato",t_van:"Van",t_fridge:"Frijidife",t_bus:"Otobis",
+  stats_title:"Sistèm Aktif",
+  stat_loads:"Chajman Aktif",stat_fleets:"Flòt Verifye",
+  stat_trucks:"Kamyon An Liy",stat_boats:"Bato Aktif",
+  loads_title:"Chajman Disponib",loads_see_all:"Wè Tout &#8594;",
+  load_view:"Wè",load_claim:"Reklame",
+  loads_empty:"Pa gen chajman disponib pou kounye a.",
+  trust_title:"Sekirite ak Konfyans",
+  trust_verified:"Flòt Verifye",trust_gps:"Swiv GPS",trust_pin:"PIN Livrezon",
+  trust_sos:"Sipò SOS",trust_cargo:"Swiv Machandiz",trust_driver:"Verifikasyon Chofè",
+  industry_title:"Endistri Nou Sèvi",
+  ind_agri:"Agrikilti",ind_construct:"Konstriksyon",
+  ind_import:"Enpòtasyon / Ekspòtasyon",ind_commerce:"Komès",
+  ind_industrial:"Endistriyèl",ind_maritime:"Maritim",
+  footer_sub:"Yon platfòm HaitiBiznis",
+  nav_home:"Akèy",nav_loads:"Chajman",nav_fleet:"Flòt",nav_track:"Swiv",nav_account:"Kont"
+},
+fr:{
+  menu_home:"Accueil",menu_loads:"Tableau de Charges",menu_fleet:"Ma Flotte",
+  menu_track:"Suivi",menu_register:"Inscription",menu_rides:"MsouWout Courses",
+  hero_title:"Connectez Chargements et Transporteurs Verifies",
+  hero_sub:"Camions, conteneurs, bateaux et logistique a travers Haiti.",
+  hero_btn_post:"Poster un Chargement",hero_btn_browse:"Voir les Charges",
+  transport_title:"Types de Transport",
+  t_flatbed:"Plateau",t_container:"Conteneur",t_delivery:"Camion de Livraison",
+  t_dump:"Camion Benne",t_boat:"Bateau",t_van:"Fourgonnette",t_fridge:"Refrigere",t_bus:"Autobus",
+  stats_title:"Systeme Actif",
+  stat_loads:"Charges Actives",stat_fleets:"Flottes Verifiees",
+  stat_trucks:"Camions En Ligne",stat_boats:"Bateaux Actifs",
+  loads_title:"Charges Disponibles",loads_see_all:"Voir Tout &#8594;",
+  load_view:"Voir",load_claim:"Reclamer",
+  loads_empty:"Aucune charge disponible pour le moment.",
+  trust_title:"Securite et Confiance",
+  trust_verified:"Flottes Verifiees",trust_gps:"Suivi GPS",trust_pin:"PIN de Livraison",
+  trust_sos:"Support SOS",trust_cargo:"Suivi de Marchandise",trust_driver:"Verification Chauffeur",
+  industry_title:"Industries Servies",
+  ind_agri:"Agriculture",ind_construct:"Construction",
+  ind_import:"Import / Export",ind_commerce:"Commerce",
+  ind_industrial:"Industriel",ind_maritime:"Maritime",
+  footer_sub:"Une plateforme HaitiBiznis",
+  nav_home:"Accueil",nav_loads:"Charges",nav_fleet:"Flotte",nav_track:"Suivi",nav_account:"Compte"
+},
+en:{
+  menu_home:"Home",menu_loads:"Load Board",menu_fleet:"My Fleet",
+  menu_track:"Track Cargo",menu_register:"Register",menu_rides:"MsouWout Rides",
+  hero_title:"Connect Cargo With Verified Transporters",
+  hero_sub:"Trucks, containers, boats and logistics across Haiti.",
+  hero_btn_post:"Post a Load",hero_btn_browse:"Browse Loads",
+  transport_title:"Transport Types",
+  t_flatbed:"Flatbed",t_container:"Container",t_delivery:"Delivery Truck",
+  t_dump:"Dump Truck",t_boat:"Boat",t_van:"Van",t_fridge:"Refrigerated",t_bus:"Bus",
+  stats_title:"System Active",
+  stat_loads:"Active Loads",stat_fleets:"Verified Fleets",
+  stat_trucks:"Trucks Online",stat_boats:"Active Boats",
+  loads_title:"Available Loads",loads_see_all:"See All &#8594;",
+  load_view:"View",load_claim:"Claim",
+  loads_empty:"No loads available at this time.",
+  trust_title:"Security & Trust",
+  trust_verified:"Verified Fleets",trust_gps:"GPS Tracking",trust_pin:"Delivery PIN",
+  trust_sos:"SOS Support",trust_cargo:"Cargo Tracking",trust_driver:"Driver Verification",
+  industry_title:"Industries We Serve",
+  ind_agri:"Agriculture",ind_construct:"Construction",
+  ind_import:"Import / Export",ind_commerce:"Commerce",
+  ind_industrial:"Industrial",ind_maritime:"Maritime",
+  footer_sub:"A HaitiBiznis Platform",
+  nav_home:"Home",nav_loads:"Loads",nav_fleet:"Fleet",nav_track:"Track",nav_account:"Account"
+},
+es:{
+  menu_home:"Inicio",menu_loads:"Tabla de Cargas",menu_fleet:"Mi Flota",
+  menu_track:"Seguimiento",menu_register:"Registro",menu_rides:"MsouWout Viajes",
+  hero_title:"Conecta Cargas Con Transportistas Verificados",
+  hero_sub:"Camiones, contenedores, barcos y logistica en todo Haiti.",
+  hero_btn_post:"Publicar Carga",hero_btn_browse:"Ver Cargas",
+  transport_title:"Tipos de Transporte",
+  t_flatbed:"Plataforma",t_container:"Contenedor",t_delivery:"Camion de Reparto",
+  t_dump:"Camion Volquete",t_boat:"Barco",t_van:"Furgoneta",t_fridge:"Refrigerado",t_bus:"Autobus",
+  stats_title:"Sistema Activo",
+  stat_loads:"Cargas Activas",stat_fleets:"Flotas Verificadas",
+  stat_trucks:"Camiones En Linea",stat_boats:"Barcos Activos",
+  loads_title:"Cargas Disponibles",loads_see_all:"Ver Todo &#8594;",
+  load_view:"Ver",load_claim:"Reclamar",
+  loads_empty:"No hay cargas disponibles en este momento.",
+  trust_title:"Seguridad y Confianza",
+  trust_verified:"Flotas Verificadas",trust_gps:"Seguimiento GPS",trust_pin:"PIN de Entrega",
+  trust_sos:"Soporte SOS",trust_cargo:"Seguimiento de Carga",trust_driver:"Verificacion de Conductor",
+  industry_title:"Industrias que Servimos",
+  ind_agri:"Agricultura",ind_construct:"Construccion",
+  ind_import:"Importacion / Exportacion",ind_commerce:"Comercio",
+  ind_industrial:"Industrial",ind_maritime:"Maritimo",
+  footer_sub:"Una plataforma HaitiBiznis",
+  nav_home:"Inicio",nav_loads:"Cargas",nav_fleet:"Flota",nav_track:"Seguir",nav_account:"Cuenta"
+}
+};
+
+var currentLang='ht';
+
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-switch a').forEach(function(a){a.classList.remove('active')});
+  var el=document.getElementById('lang-'+lang);
+  if(el) el.classList.add('active');
+  var t=T[lang]||T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key=el.getAttribute('data-i18n');
+    if(t[key]) el.innerHTML=t[key];
+  });
+  // Re-render loads with new language
+  if(cachedLoads.length>0) renderLoads(cachedLoads);
+}
+
+function tx(key){var t=T[currentLang]||T.ht;return t[key]||T.ht[key]||key}
+
+/* ═══════════════════════════════════════
+   MOBILE MENU
+   ═══════════════════════════════════════ */
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+/* ═══════════════════════════════════════
+   SCROLL ANIMATIONS
+   ═══════════════════════════════════════ */
+(function(){
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.animate-on-scroll').forEach(function(el){
+    observer.observe(el);
+  });
+})();
+
+/* ═══════════════════════════════════════
+   COUNT-UP ANIMATION
+   ═══════════════════════════════════════ */
+function animateCount(el,target){
+  if(target===0){el.textContent='0';return;}
+  var start=0;
+  var duration=1200;
+  var startTime=null;
+  function step(timestamp){
+    if(!startTime) startTime=timestamp;
+    var progress=Math.min((timestamp-startTime)/duration,1);
+    var eased=1-Math.pow(1-progress,3); // ease-out cubic
+    var current=Math.round(eased*target);
+    el.textContent=current.toLocaleString();
+    if(progress<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ═══════════════════════════════════════
+   FETCH STATS
+   ═══════════════════════════════════════ */
+var cachedLoads=[];
+
+function fetchStats(){
+  fetch(API+'/api/logistics/stats')
+    .then(function(r){return r.json()})
+    .then(function(data){
+      // Animate stat numbers
+      var loadsEl=document.getElementById('stat-loads');
+      var fleetsEl=document.getElementById('stat-fleets');
+      var trucksEl=document.getElementById('stat-trucks');
+      var boatsEl=document.getElementById('stat-boats');
+
+      animateCount(loadsEl,data.active_loads||0);
+      animateCount(fleetsEl,data.verified_fleets||0);
+      animateCount(trucksEl,data.online_trucks||0);
+      animateCount(boatsEl,data.active_boats||0);
+
+      // Render recent loads
+      if(data.recent_loads&&data.recent_loads.length>0){
+        cachedLoads=data.recent_loads.slice(0,4);
+        renderLoads(cachedLoads);
+      } else {
+        fetchLoadsFromBoard();
+      }
+    })
+    .catch(function(){
+      // Graceful fallback with placeholder numbers
+      animateCount(document.getElementById('stat-loads'),12);
+      animateCount(document.getElementById('stat-fleets'),8);
+      animateCount(document.getElementById('stat-trucks'),34);
+      animateCount(document.getElementById('stat-boats'),5);
+      fetchLoadsFromBoard();
+    });
+}
+
+function fetchLoadsFromBoard(){
+  fetch(API+'/api/logistics/loads?status=posted&limit=4')
+    .then(function(r){return r.json()})
+    .then(function(data){
+      var loads=Array.isArray(data)?data:(data.loads||data.data||[]);
+      if(loads.length>0){
+        cachedLoads=loads.slice(0,4);
+        renderLoads(cachedLoads);
+      } else {
+        renderLoadsEmpty();
+      }
+    })
+    .catch(function(){
+      renderLoadsEmpty();
+    });
+}
+
+/* ═══════════════════════════════════════
+   RENDER LOADS
+   ═══════════════════════════════════════ */
+var cargoEmojis={
+  rice:'&#127834;',cement:'&#127959;',fuel:'&#9981;',
+  construction:'&#128296;',food:'&#127869;',merchandise:'&#128230;',
+  other:'&#128462;',general:'&#128230;',
+  default:'&#128666;'
+};
+
+function getCargoEmoji(type){
+  if(!type) return cargoEmojis.default;
+  var key=type.toLowerCase().replace(/\s+/g,'_');
+  return cargoEmojis[key]||cargoEmojis.default;
+}
+
+function getUrgencyClass(urg){
+  if(!urg) return 'normal';
+  var u=urg.toLowerCase();
+  if(u==='emergency'||u==='urgence') return 'emergency';
+  if(u==='urgent') return 'urgent';
+  return 'normal';
+}
+
+function getUrgencyLabel(urg){
+  var u=getUrgencyClass(urg);
+  if(u==='emergency') return '&#128308; Ijan';
+  if(u==='urgent') return '&#128992; Ijan';
+  return '&#128994; Nòmal';
+}
+
+function renderLoads(loads){
+  var container=document.getElementById('loadsContainer');
+  if(!loads||loads.length===0){renderLoadsEmpty();return;}
+
+  var html='';
+  loads.forEach(function(load,i){
+    var urgClass=getUrgencyClass(load.urgency);
+    var emoji=getCargoEmoji(load.cargo_type);
+    var pickup=load.pickup_address||load.pickup||'—';
+    var dropoff=load.dropoff_address||load.dropoff||'—';
+    var price=load.price||load.price_htg;
+    var weight=load.weight_kg;
+    var qty=load.quantity;
+    var cargoName=load.cargo_type?(load.cargo_type.charAt(0).toUpperCase()+load.cargo_type.slice(1)):'Machandiz';
+    var trackCode=load.tracking_code||load.id||'';
+
+    html+='<div class="load-card urgency-'+urgClass+'" style="animation:fadeUp .5s cubic-bezier(.22,1,.36,1) '+(i*0.1)+'s both">';
+    html+='<div class="load-top">';
+    html+='<div class="load-emoji">'+emoji+'</div>';
+    html+='<div class="load-info">';
+    html+='<div class="load-type">'+cargoName+'</div>';
+    html+='<div class="load-route">'+pickup+' <span class="load-route-arrow">&#8594;</span> '+dropoff+'</div>';
+    html+='</div></div>';
+    html+='<div class="load-meta">';
+    if(price) html+='<span class="load-badge badge-price">&#128176; '+Number(price).toLocaleString()+' HTG</span>';
+    html+='<span class="load-badge badge-urgency-'+urgClass+'">'+getUrgencyLabel(load.urgency)+'</span>';
+    if(weight) html+='<span class="load-badge badge-weight">'+Number(weight).toLocaleString()+' kg</span>';
+    if(qty) html+='<span class="load-badge badge-weight">'+qty+'</span>';
+    html+='</div>';
+    html+='<div class="load-actions">';
+    html+='<a href="logistics-board.html'+(trackCode?'?track='+trackCode:'')+'" class="load-btn load-btn-view">'+tx('load_view')+'</a>';
+    html+='<a href="logistics-board.html'+(trackCode?'?claim='+trackCode:'#post')+'" class="load-btn load-btn-claim">'+tx('load_claim')+'</a>';
+    html+='</div></div>';
+  });
+  container.innerHTML=html;
+}
+
+function renderLoadsEmpty(){
+  var container=document.getElementById('loadsContainer');
+  container.innerHTML='<div class="loads-empty">&#128666; '+tx('loads_empty')+'</div>';
+}
+
+/* ═══════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded',function(){
+  fetchStats();
+
+  // Close mobile menu on outside click
+  document.addEventListener('click',function(e){
+    var menu=document.getElementById('mobileMenu');
+    var hamburger=document.querySelector('.hamburger');
+    if(menu.classList.contains('open')&&!menu.contains(e.target)&&!hamburger.contains(e.target)){
+      menu.classList.remove('open');
+    }
+  });
+});
+</script>
+</body>
+</html>

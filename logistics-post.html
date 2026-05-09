@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>MsouWout Logistics — Poste Chajman | Post Load</title>
+<meta name="description" content="Post freight loads on MsouWout Logistics. Connect with truck owners across Haiti for reliable cargo transport.">
+<meta property="og:title" content="MsouWout Logistics — Post Load">
+<meta property="og:description" content="Post your cargo for transport across Haiti. A HaitiBiznis platform.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://msouwout.com/logistics-post.html">
+<meta property="og:image" content="https://msouwout.com/assets/og-msouwout.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="canonical" href="https://msouwout.com/logistics-post.html">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#0B1F66;
+  --primary-light:#1A3199;
+  --primary-dark:#071544;
+  --red:#E31C3D;
+  --red-dark:#C41530;
+  --red-gradient:linear-gradient(135deg,#E31C3D,#C41530);
+  --gold:#F5B400;
+  --gold-light:#FFD040;
+  --white:#FFFFFF;
+  --bg:#F5F7FA;
+  --bg-card:#FFFFFF;
+  --text:#1A1D2B;
+  --text-secondary:#5A6178;
+  --text-muted:#8C92A8;
+  --border:#E2E8F0;
+  --border-focus:#0B1F66;
+  --green:#0D9F4F;
+  --green-light:#E8F8F0;
+  --green-dark:#0A7A3C;
+  --shadow-sm:0 1px 3px rgba(11,31,102,.06);
+  --shadow-md:0 4px 16px rgba(11,31,102,.08);
+  --shadow-lg:0 8px 32px rgba(11,31,102,.12);
+  --shadow-xl:0 16px 48px rgba(11,31,102,.16);
+  --radius:14px;
+  --radius-lg:20px;
+  --radius-xl:24px;
+  --font:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--text);
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  padding-bottom:80px;padding-top:56px;
+}
+a{text-decoration:none;color:inherit}
+button{font-family:var(--font);cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:var(--font)}
+
+/* ===== TOP BAR ===== */
+.top-bar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;
+  background:var(--primary);height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px 0 20px;
+  box-shadow:0 2px 12px rgba(11,31,102,.25);
+}
+.top-bar-brand{
+  display:flex;align-items:center;gap:10px;
+  font-weight:800;font-size:1rem;color:var(--white);letter-spacing:-.02em;
+}
+.top-bar-brand svg{flex-shrink:0}
+.lang-switch{display:flex;align-items:center;gap:2px}
+.lang-switch a{
+  color:rgba(255,255,255,.55);font-size:.7rem;font-weight:700;
+  padding:5px 10px;border-radius:100px;cursor:pointer;transition:all .2s;
+  letter-spacing:.03em;
+}
+.lang-switch a:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.1)}
+.lang-switch a.active{color:var(--primary);background:var(--white)}
+
+/* ===== PAGE HEADER ===== */
+.page-header{
+  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);
+  padding:24px 20px 40px;position:relative;overflow:hidden;
+}
+.page-header::before{
+  content:'';position:absolute;top:-60%;right:-20%;width:300px;height:300px;
+  background:radial-gradient(circle,rgba(245,180,0,.12) 0%,transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.page-header::after{
+  content:'';position:absolute;bottom:-40%;left:-15%;width:250px;height:250px;
+  background:radial-gradient(circle,rgba(227,28,61,.1) 0%,transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.header-back{
+  display:inline-flex;align-items:center;gap:8px;
+  color:rgba(255,255,255,.7);font-size:.82rem;font-weight:600;
+  margin-bottom:16px;transition:color .2s;padding:4px 0;
+  min-height:44px;
+}
+.header-back:hover{color:#fff}
+.header-back svg{flex-shrink:0}
+.page-header h1{
+  font-size:clamp(1.6rem,5vw,2.2rem);font-weight:900;color:var(--white);
+  line-height:1.15;letter-spacing:-.03em;position:relative;
+}
+.page-header .subtitle{
+  font-size:.92rem;color:rgba(255,255,255,.65);margin-top:8px;
+  font-weight:400;line-height:1.5;position:relative;
+}
+
+/* ===== FORM CONTAINER ===== */
+.form-container{
+  max-width:640px;margin:-20px auto 0;padding:0 16px 32px;position:relative;z-index:2;
+}
+
+/* ===== SECTION CARDS ===== */
+.section-card{
+  background:var(--bg-card);border-radius:var(--radius-lg);
+  padding:24px 20px;margin-bottom:16px;position:relative;
+  box-shadow:var(--shadow-md);border:1px solid rgba(226,232,240,.6);
+  transition:box-shadow .3s;
+}
+.section-card:hover{box-shadow:var(--shadow-lg)}
+.section-badge{
+  position:absolute;top:-10px;left:20px;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--primary);color:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.82rem;font-weight:800;
+  box-shadow:0 3px 10px rgba(11,31,102,.3);
+}
+.section-header{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:18px;padding-top:6px;
+}
+.section-icon{
+  width:40px;height:40px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;flex-shrink:0;
+}
+.section-icon.client{background:rgba(11,31,102,.08);color:var(--primary)}
+.section-icon.cargo{background:rgba(245,180,0,.12);color:#B8860B}
+.section-icon.truck{background:rgba(227,28,61,.08);color:var(--red)}
+.section-icon.route{background:rgba(13,159,79,.08);color:var(--green)}
+.section-icon.time{background:rgba(139,92,246,.08);color:#7C3AED}
+.section-icon.price{background:rgba(245,180,0,.12);color:#B8860B}
+.section-title{font-size:1rem;font-weight:800;color:var(--text);letter-spacing:-.02em}
+
+/* ===== FORM ELEMENTS ===== */
+.form-group{margin-bottom:16px}
+.form-group:last-child{margin-bottom:0}
+.form-label{
+  display:block;font-size:.78rem;font-weight:700;color:var(--text);
+  margin-bottom:6px;letter-spacing:.02em;
+}
+.form-label .req{color:var(--red);margin-left:2px}
+.form-input,.form-select,.form-textarea{
+  width:100%;padding:14px 16px;
+  border:2px solid var(--border);border-radius:var(--radius);
+  font-size:.88rem;font-family:var(--font);font-weight:500;
+  color:var(--text);background:var(--white);
+  transition:all .25s;-webkit-appearance:none;appearance:none;
+}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--text-muted);font-weight:400}
+.form-input:focus,.form-select:focus,.form-textarea:focus{
+  outline:none;border-color:var(--border-focus);
+  box-shadow:0 0 0 4px rgba(11,31,102,.08);
+}
+.form-select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235A6178' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 16px center;
+  padding-right:40px;cursor:pointer;
+}
+.form-select option{background:var(--white);color:var(--text)}
+.form-textarea{min-height:80px;resize:vertical;line-height:1.5}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-hint{font-size:.72rem;color:var(--text-muted);margin-top:5px;display:flex;align-items:center;gap:4px}
+
+/* Phone prefix group */
+.phone-group{display:flex;gap:0}
+.phone-prefix{
+  flex-shrink:0;width:72px;padding:14px 8px 14px 14px;
+  border:2px solid var(--border);border-right:none;
+  border-radius:var(--radius) 0 0 var(--radius);
+  font-size:.85rem;font-weight:700;color:var(--primary);
+  background:var(--bg);text-align:center;
+  display:flex;align-items:center;justify-content:center;
+}
+.phone-group .form-input{
+  border-radius:0 var(--radius) var(--radius) 0;
+  border-left:1px solid var(--border);
+}
+
+/* ===== VISUAL CARD SELECTORS ===== */
+.card-grid{display:grid;gap:10px}
+.card-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.card-grid.cols-2{grid-template-columns:repeat(2,1fr)}
+
+.select-card{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;padding:16px 8px;
+  border:2px solid var(--border);border-radius:16px;
+  background:var(--white);cursor:pointer;
+  transition:all .25s;min-height:90px;position:relative;
+  -webkit-tap-highlight-color:transparent;
+}
+.select-card:hover{border-color:rgba(11,31,102,.25);background:rgba(11,31,102,.02)}
+.select-card.selected{
+  border-color:var(--primary);background:rgba(11,31,102,.04);
+  box-shadow:0 0 0 3px rgba(11,31,102,.1);
+}
+.select-card.selected::after{
+  content:'';position:absolute;top:8px;right:8px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--primary);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M13.485 2.929a1 1 0 0 1 0 1.414l-7.071 7.071a1 1 0 0 1-1.414 0L1.929 8.343a1 1 0 1 1 1.414-1.414L5.5 9.086l6.364-6.364a1 1 0 0 1 1.414.207z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:center;background-size:10px;
+}
+.select-card-icon{font-size:1.6rem;line-height:1}
+.select-card-label{font-size:.72rem;font-weight:700;color:var(--text-secondary);text-align:center;line-height:1.2}
+.select-card.selected .select-card-label{color:var(--primary)}
+
+/* Urgency card variants */
+.select-card.urg-standard{border-color:#D1D5DB}
+.select-card.urg-standard.selected{border-color:#6B7280;background:rgba(107,114,128,.06);box-shadow:0 0 0 3px rgba(107,114,128,.1)}
+.select-card.urg-standard.selected::after{background:#6B7280;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M13.485 2.929a1 1 0 0 1 0 1.414l-7.071 7.071a1 1 0 0 1-1.414 0L1.929 8.343a1 1 0 1 1 1.414-1.414L5.5 9.086l6.364-6.364a1 1 0 0 1 1.414.207z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:10px}
+
+.select-card.urg-urgent{border-color:rgba(245,180,0,.3)}
+.select-card.urg-urgent.selected{border-color:var(--gold);background:rgba(245,180,0,.06);box-shadow:0 0 0 3px rgba(245,180,0,.15)}
+.select-card.urg-urgent.selected::after{background:var(--gold);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M13.485 2.929a1 1 0 0 1 0 1.414l-7.071 7.071a1 1 0 0 1-1.414 0L1.929 8.343a1 1 0 1 1 1.414-1.414L5.5 9.086l6.364-6.364a1 1 0 0 1 1.414.207z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:10px}
+
+.select-card.urg-sameday{border-color:rgba(227,28,61,.2)}
+.select-card.urg-sameday.selected{border-color:var(--red);background:rgba(227,28,61,.04);box-shadow:0 0 0 3px rgba(227,28,61,.1)}
+.select-card.urg-sameday.selected::after{background:var(--red);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M13.485 2.929a1 1 0 0 1 0 1.414l-7.071 7.071a1 1 0 0 1-1.414 0L1.929 8.343a1 1 0 1 1 1.414-1.414L5.5 9.086l6.364-6.364a1 1 0 0 1 1.414.207z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:10px}
+
+.select-card.urg-scheduled{border-color:rgba(11,31,102,.2)}
+.select-card.urg-scheduled.selected{border-color:var(--primary);background:rgba(11,31,102,.04);box-shadow:0 0 0 3px rgba(11,31,102,.1)}
+
+/* Schedule date picker */
+.schedule-picker{
+  display:none;margin-top:12px;padding:14px;
+  background:rgba(11,31,102,.03);border-radius:var(--radius);
+  border:1px solid rgba(11,31,102,.1);
+}
+.schedule-picker.show{display:block;animation:slideDown .3s ease}
+
+/* Pricing option cards */
+.price-card{
+  display:flex;align-items:center;gap:12px;
+  padding:16px;border:2px solid var(--border);border-radius:16px;
+  background:var(--white);cursor:pointer;transition:all .25s;
+  min-height:60px;position:relative;
+  -webkit-tap-highlight-color:transparent;
+}
+.price-card:hover{border-color:rgba(11,31,102,.2)}
+.price-card.selected{border-color:var(--primary);background:rgba(11,31,102,.03);box-shadow:0 0 0 3px rgba(11,31,102,.08)}
+.price-radio{
+  width:22px;height:22px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:all .2s;
+}
+.price-card.selected .price-radio{border-color:var(--primary);background:var(--primary)}
+.price-card.selected .price-radio::after{
+  content:'';width:8px;height:8px;border-radius:50%;background:var(--white);
+}
+.price-card-icon{font-size:1.3rem}
+.price-card-text{flex:1}
+.price-card-title{font-size:.88rem;font-weight:700;color:var(--text)}
+.price-card-desc{font-size:.72rem;color:var(--text-muted);margin-top:2px}
+
+.price-input-wrap{
+  display:none;margin-top:12px;position:relative;
+}
+.price-input-wrap.show{display:block;animation:slideDown .3s ease}
+.price-currency{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  font-size:.85rem;font-weight:800;color:var(--primary);
+}
+.price-input-wrap .form-input{padding-left:54px}
+
+/* Route divider */
+.route-divider{
+  display:flex;align-items:center;justify-content:center;
+  gap:8px;margin:20px 0;color:var(--text-muted);
+}
+.route-divider-line{flex:1;height:1px;background:var(--border)}
+.route-divider-icon{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;
+}
+
+/* ===== SUBMIT BUTTON ===== */
+.submit-btn{
+  width:100%;height:56px;border-radius:100px;border:none;cursor:pointer;
+  background:var(--red-gradient);color:var(--white);
+  font-size:1rem;font-weight:800;font-family:var(--font);
+  letter-spacing:.02em;
+  transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 6px 24px rgba(227,28,61,.3);
+  margin-top:8px;
+}
+.submit-btn:hover:not(:disabled){
+  transform:translateY(-2px);
+  box-shadow:0 10px 36px rgba(227,28,61,.4);
+}
+.submit-btn:active:not(:disabled){transform:translateY(0)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.submit-spinner{
+  display:none;width:20px;height:20px;
+  border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;
+  border-radius:50%;animation:spin .7s linear infinite;
+}
+.submit-btn.loading .submit-spinner{display:block}
+.submit-btn.loading .submit-text{display:none}
+
+/* ===== FORM STATUS ===== */
+.form-status{
+  display:none;text-align:center;padding:14px;border-radius:var(--radius);
+  margin-top:14px;font-size:.85rem;font-weight:600;
+}
+.form-status.error{display:block;background:rgba(227,28,61,.06);color:var(--red);border:1px solid rgba(227,28,61,.15)}
+
+/* ===== SUCCESS STATE ===== */
+.success-overlay{
+  display:none;position:relative;z-index:10;
+}
+.success-overlay.show{display:block;animation:fadeUp .5s ease both}
+.success-card{
+  background:var(--white);border-radius:var(--radius-xl);
+  padding:36px 24px;text-align:center;
+  box-shadow:var(--shadow-xl);border:2px solid rgba(13,159,79,.2);
+  position:relative;overflow:hidden;
+}
+.success-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--green),var(--green-dark));
+}
+.success-check{
+  width:64px;height:64px;border-radius:50%;margin:0 auto 16px;
+  background:var(--green-light);display:flex;align-items:center;justify-content:center;
+}
+.success-check svg{color:var(--green)}
+.success-title{font-size:1.4rem;font-weight:900;color:var(--green);margin-bottom:6px;letter-spacing:-.02em}
+.success-sub{font-size:.88rem;color:var(--text-secondary);line-height:1.5;margin-bottom:20px}
+.tracking-badge{
+  display:inline-block;background:var(--text);color:var(--gold);
+  padding:10px 24px;border-radius:100px;font-size:1rem;font-weight:900;
+  letter-spacing:2px;margin-bottom:20px;
+}
+.pin-row{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+.pin-box{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  background:var(--bg);border:1px solid var(--border);border-radius:14px;
+  padding:14px 24px;min-width:130px;
+}
+.pin-label{font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em}
+.pin-value{font-size:1.5rem;font-weight:900;color:var(--primary);letter-spacing:5px;font-variant-numeric:tabular-nums}
+.success-actions{display:flex;flex-direction:column;gap:10px;align-items:center}
+.btn-primary{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 32px;border-radius:100px;min-height:48px;
+  background:var(--primary);color:var(--white);
+  font-size:.9rem;font-weight:700;border:none;cursor:pointer;
+  transition:all .25s;box-shadow:0 4px 16px rgba(11,31,102,.2);
+}
+.btn-primary:hover{background:var(--primary-light);transform:translateY(-1px);box-shadow:0 6px 24px rgba(11,31,102,.25)}
+.btn-link{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--primary);font-size:.85rem;font-weight:700;
+  padding:8px 0;cursor:pointer;transition:color .2s;background:none;border:none;
+}
+.btn-link:hover{color:var(--primary-light)}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:1000;
+  background:var(--white);height:64px;
+  display:flex;align-items:center;justify-content:space-around;
+  box-shadow:0 -2px 16px rgba(11,31,102,.08);
+  border-top:1px solid rgba(226,232,240,.8);
+  padding:0 8px;
+}
+.bottom-nav a{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:var(--text-muted);font-size:.65rem;font-weight:600;
+  padding:6px 12px;border-radius:12px;transition:all .2s;
+  min-width:56px;min-height:44px;justify-content:center;
+  text-decoration:none;-webkit-tap-highlight-color:transparent;
+}
+.bottom-nav a:hover,.bottom-nav a.active{color:var(--primary)}
+.bottom-nav a.active{background:rgba(11,31,102,.06)}
+.bottom-nav svg{flex-shrink:0}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes slideDown{from{opacity:0;max-height:0;padding:0 14px}to{opacity:1;max-height:200px}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.section-card{animation:fadeUp .4s ease both}
+.section-card:nth-child(1){animation-delay:.05s}
+.section-card:nth-child(2){animation-delay:.1s}
+.section-card:nth-child(3){animation-delay:.15s}
+.section-card:nth-child(4){animation-delay:.2s}
+.section-card:nth-child(5){animation-delay:.25s}
+.section-card:nth-child(6){animation-delay:.3s}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:480px){
+  .form-row{grid-template-columns:1fr}
+  .card-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+  .select-card{padding:12px 6px;min-height:80px}
+  .select-card-icon{font-size:1.3rem}
+  .select-card-label{font-size:.66rem}
+  .section-card{padding:20px 16px}
+  .page-header h1{font-size:1.5rem}
+  .pin-box{min-width:110px;padding:12px 16px}
+  .pin-value{font-size:1.3rem;letter-spacing:4px}
+}
+@media(min-width:481px) and (max-width:768px){
+  .card-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+}
+@media(min-width:769px){
+  .form-container{padding:0 24px 32px}
+  .section-card{padding:28px 28px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div class="top-bar">
+  <div class="top-bar-brand">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    <span>MsouWout Logistics</span>
+  </div>
+  <div class="lang-switch">
+    <a onclick="setLang('ht')" class="active" id="lang-ht">HT</a>
+    <a onclick="setLang('fr')" id="lang-fr">FR</a>
+    <a onclick="setLang('en')" id="lang-en">EN</a>
+    <a onclick="setLang('es')" id="lang-es">ES</a>
+  </div>
+</div>
+
+<!-- ===== PAGE HEADER ===== -->
+<div class="page-header">
+  <a href="logistics-board.html" class="header-back" data-i18n="back_link">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    <span data-i18n="back_text">Retounen</span>
+  </a>
+  <h1 data-i18n="page_title">Poste Chajman</h1>
+  <p class="subtitle" data-i18n="page_subtitle">Mete chajman ou sou platfom nan</p>
+</div>
+
+<!-- ===== FORM ===== -->
+<div class="form-container">
+  <form id="loadForm" onsubmit="return submitLoad(event)">
+
+    <!-- SECTION 1: CLIENT INFO -->
+    <div class="section-card">
+      <div class="section-badge">1</div>
+      <div class="section-header">
+        <div class="section-icon client">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <span class="section-title" data-i18n="s1_title">Enfomasyon Kliyan</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_business_label">Non Biznis <span style="font-weight:400;color:var(--text-muted)" data-i18n="f_optional">(opsyonel)</span></label>
+        <input type="text" id="business_name" class="form-input" placeholder="Ex: Komesyan Jilbè SARL" data-i18n-placeholder="f_business_ph">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><span data-i18n="f_contact_label">Non Kontak</span> <span class="req">*</span></label>
+        <input type="text" id="posted_by_name" class="form-input" required placeholder="Ex: Jean Pierre" data-i18n-placeholder="f_contact_ph">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><span data-i18n="f_phone_label">Telefon</span> <span class="req">*</span></label>
+        <div class="phone-group">
+          <div class="phone-prefix">+509</div>
+          <input type="tel" id="posted_by_phone" class="form-input" required placeholder="XXXX XXXX" data-i18n-placeholder="f_phone_ph" pattern="[0-9\s\-]{7,12}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_email_label">Imel <span style="font-weight:400;color:var(--text-muted)" data-i18n="f_optional">(opsyonel)</span></label>
+        <input type="email" id="contact_email" class="form-input" placeholder="Ex: jean@email.com" data-i18n-placeholder="f_email_ph">
+      </div>
+    </div>
+
+    <!-- SECTION 2: LOAD DETAILS -->
+    <div class="section-card">
+      <div class="section-badge">2</div>
+      <div class="section-header">
+        <div class="section-icon cargo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <span class="section-title" data-i18n="s2_title">Detay Chajman</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><span data-i18n="f_cargo_label">Tip Machandiz</span> <span class="req">*</span></label>
+        <select id="cargo_type" class="form-select" required>
+          <option value="" disabled selected data-i18n="f_cargo_default">-- Chwazi tip machandiz --</option>
+          <option value="rice">&#127834; Diri / Rice</option>
+          <option value="cement">&#127959; Siman / Cement</option>
+          <option value="fuel">&#9981; Gaz / Fuel</option>
+          <option value="construction">&#128296; Konstriksyon / Construction</option>
+          <option value="food">&#127869; Manje / Food</option>
+          <option value="merchandise">&#128230; Machandiz / Merchandise</option>
+          <option value="equipment">&#9881; Ekipman / Equipment</option>
+          <option value="other">&#128462; Lot / Other</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_weight_label">Pwa an kg</label>
+          <input type="number" id="weight_kg" class="form-input" min="0" placeholder="Ex: 25000" data-i18n-placeholder="f_weight_ph">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_qty_label">Kantite</label>
+          <input type="text" id="quantity" class="form-input" placeholder="Ex: 500 sak diri" data-i18n-placeholder="f_qty_ph">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_desc_label">Deskripsyon / Enstriksyon Espesyal</label>
+        <textarea id="cargo_description" class="form-textarea" rows="3" placeholder="Ex: 500 sak diri 50kg chak, pa mouye..." data-i18n-placeholder="f_desc_ph"></textarea>
+      </div>
+    </div>
+
+    <!-- SECTION 3: TRANSPORT TYPE -->
+    <div class="section-card">
+      <div class="section-badge">3</div>
+      <div class="section-header">
+        <div class="section-icon truck">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <span class="section-title" data-i18n="s3_title">Tip Transpò</span>
+      </div>
+
+      <input type="hidden" id="truck_type_needed" value="">
+      <div class="card-grid cols-3" id="truckGrid">
+        <div class="select-card" data-value="flatbed" onclick="selectTruck(this)">
+          <div class="select-card-icon">&#128679;</div>
+          <div class="select-card-label" data-i18n="truck_flatbed">Flatbed</div>
+        </div>
+        <div class="select-card" data-value="semi_truck" onclick="selectTruck(this)">
+          <div class="select-card-icon">&#128666;</div>
+          <div class="select-card-label" data-i18n="truck_semi">Semi Truck</div>
+        </div>
+        <div class="select-card" data-value="container" onclick="selectTruck(this)">
+          <div class="select-card-icon">&#128230;</div>
+          <div class="select-card-label" data-i18n="truck_container">Kontene</div>
+        </div>
+        <div class="select-card" data-value="dump_truck" onclick="selectTruck(this)">
+          <div class="select-card-icon">&#127959;</div>
+          <div class="select-card-label" data-i18n="truck_dump">Kamyon Bene</div>
+        </div>
+        <div class="select-card" data-value="boat" onclick="selectTruck(this)">
+          <div class="select-card-icon">&#9973;</div>
+          <div class="select-card-label" data-i18n="truck_boat">Bato</div>
+        </div>
+        <div class="select-card" data-value="van" onclick="selectTruck(this)">
+          <div class="select-card-icon">&#128656;</div>
+          <div class="select-card-label" data-i18n="truck_van">Van</div>
+        </div>
+        <div class="select-card" data-value="pickup" onclick="selectTruck(this)">
+          <div class="select-card-icon">&#128663;</div>
+          <div class="select-card-label" data-i18n="truck_pickup">Pickup</div>
+        </div>
+        <div class="select-card" data-value="bus" onclick="selectTruck(this)">
+          <div class="select-card-icon">&#128652;</div>
+          <div class="select-card-label" data-i18n="truck_bus">Otobis</div>
+        </div>
+        <div class="select-card" data-value="refrigerated" onclick="selectTruck(this)">
+          <div class="select-card-icon">&#10052;</div>
+          <div class="select-card-label" data-i18n="truck_refrigerated">Fridgo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: ROUTE -->
+    <div class="section-card">
+      <div class="section-badge">4</div>
+      <div class="section-header">
+        <div class="section-icon route">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span class="section-title" data-i18n="s4_title">Wout</span>
+      </div>
+
+      <!-- Pickup -->
+      <div style="margin-bottom:4px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--green);flex-shrink:0"></div>
+          <span style="font-size:.82rem;font-weight:700;color:var(--green)" data-i18n="f_pickup_title">RANMASAJ (Pickup)</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"><span data-i18n="f_pickup_label">Adres Ranmasaj</span> <span class="req">*</span></label>
+          <input type="text" id="pickup_address" class="form-input" required placeholder="Ex: Potoprens, Ri Capois" data-i18n-placeholder="f_pickup_ph">
+          <input type="hidden" id="pickup_lat">
+          <input type="hidden" id="pickup_lng">
+          <p class="form-hint" id="gps-status">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span data-i18n="f_gps_hint">Ap cheche pozisyon GPS ou...</span>
+          </p>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" data-i18n="f_pickup_contact">Non Kontak Ranmasaj</label>
+            <input type="text" id="pickup_contact" class="form-input" placeholder="Ex: Matant Mari" data-i18n-placeholder="f_pickup_contact_ph">
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="f_pickup_phone">Telefon Ranmasaj</label>
+            <input type="tel" id="pickup_phone" class="form-input" placeholder="+509 XXXX XXXX" data-i18n-placeholder="f_pickup_phone_ph">
+          </div>
+        </div>
+      </div>
+
+      <!-- Route divider -->
+      <div class="route-divider">
+        <div class="route-divider-line"></div>
+        <div class="route-divider-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        </div>
+        <div class="route-divider-line"></div>
+      </div>
+
+      <!-- Dropoff -->
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--red);flex-shrink:0"></div>
+          <span style="font-size:.82rem;font-weight:700;color:var(--red)" data-i18n="f_dropoff_title">LIVREZON (Delivery)</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"><span data-i18n="f_dropoff_label">Adres Livrezon</span> <span class="req">*</span></label>
+          <input type="text" id="dropoff_address" class="form-input" required placeholder="Ex: Gonayiv, Ri Jilbe" data-i18n-placeholder="f_dropoff_ph">
+          <input type="hidden" id="dropoff_lat">
+          <input type="hidden" id="dropoff_lng">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" data-i18n="f_dropoff_contact">Non Kontak Livrezon</label>
+            <input type="text" id="dropoff_contact" class="form-input" placeholder="Ex: Bos Jilbe" data-i18n-placeholder="f_dropoff_contact_ph">
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="f_dropoff_phone">Telefon Livrezon</label>
+            <input type="tel" id="dropoff_phone" class="form-input" placeholder="+509 XXXX XXXX" data-i18n-placeholder="f_dropoff_phone_ph">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: DELIVERY OPTIONS -->
+    <div class="section-card">
+      <div class="section-badge">5</div>
+      <div class="section-header">
+        <div class="section-icon time">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <span class="section-title" data-i18n="s5_title">Opsyon Livrezon</span>
+      </div>
+
+      <input type="hidden" id="urgency" value="normal">
+      <div class="card-grid cols-2" id="urgencyGrid">
+        <div class="select-card urg-standard selected" data-value="normal" onclick="selectUrgency(this)">
+          <div class="select-card-icon">&#128197;</div>
+          <div class="select-card-label" data-i18n="urg_standard">Nomal</div>
+        </div>
+        <div class="select-card urg-urgent" data-value="urgent" onclick="selectUrgency(this)">
+          <div class="select-card-icon">&#9889;</div>
+          <div class="select-card-label" data-i18n="urg_urgent">Ijan</div>
+        </div>
+        <div class="select-card urg-sameday" data-value="same_day" onclick="selectUrgency(this)">
+          <div class="select-card-icon">&#9200;</div>
+          <div class="select-card-label" data-i18n="urg_sameday">Menm Jou</div>
+        </div>
+        <div class="select-card urg-scheduled" data-value="scheduled" onclick="selectUrgency(this)">
+          <div class="select-card-icon">&#128198;</div>
+          <div class="select-card-label" data-i18n="urg_scheduled">Pwograme</div>
+        </div>
+      </div>
+
+      <div class="schedule-picker" id="schedulePicker">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label"><span data-i18n="f_pickup_date">Dat ak Le Ranmasaj</span> <span class="req">*</span></label>
+          <input type="datetime-local" id="pickup_date" class="form-input">
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: PRICING -->
+    <div class="section-card">
+      <div class="section-badge">6</div>
+      <div class="section-header">
+        <div class="section-icon price">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <span class="section-title" data-i18n="s6_title">Pri</span>
+      </div>
+
+      <input type="hidden" id="price_mode" value="budget">
+      <div style="display:flex;flex-direction:column;gap:10px" id="priceOptions">
+        <div class="price-card selected" data-value="budget" onclick="selectPriceMode(this)">
+          <div class="price-radio"></div>
+          <div class="price-card-icon">&#128176;</div>
+          <div class="price-card-text">
+            <div class="price-card-title" data-i18n="price_budget">Bidjè</div>
+            <div class="price-card-desc" data-i18n="price_budget_desc">Antre pri ou vle peye a</div>
+          </div>
+        </div>
+        <div class="price-card" data-value="quote" onclick="selectPriceMode(this)">
+          <div class="price-radio"></div>
+          <div class="price-card-icon">&#128172;</div>
+          <div class="price-card-text">
+            <div class="price-card-title" data-i18n="price_quote">Mande Devis</div>
+            <div class="price-card-desc" data-i18n="price_quote_desc">Kite chofe yo bay pri yo</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="price-input-wrap show" id="priceInputWrap">
+        <div class="price-currency">HTG</div>
+        <input type="number" id="price" class="form-input" min="0" placeholder="Ex: 15,000" data-i18n-placeholder="f_price_ph">
+      </div>
+    </div>
+
+    <!-- NOTES (optional, inside last card) -->
+    <div class="section-card" style="margin-bottom:20px">
+      <div class="section-header" style="padding-top:0">
+        <div class="section-icon" style="background:rgba(11,31,102,.06);color:var(--primary)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <span class="section-title" data-i18n="s_notes_title">Not Adisyonel</span>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <textarea id="notes" class="form-textarea" rows="3" placeholder="Ex: Bezwen kamyon fridgo, rive anvan midi, pa kite machandiz anba lapli..." data-i18n-placeholder="f_notes_ph"></textarea>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <button type="submit" class="submit-btn" id="submitBtn" disabled>
+      <span class="submit-text" data-i18n="f_submit">POSTE CHAJMAN</span>
+      <div class="submit-spinner"></div>
+    </button>
+
+    <div class="form-status" id="formStatus"></div>
+  </form>
+
+  <!-- SUCCESS STATE -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-card">
+      <div class="success-check">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 class="success-title" data-i18n="success_title">Chajman Poste!</h2>
+      <p class="success-sub" data-i18n="success_msg">Men kod swivi ou ak kod PIN yo. Kenbe yo an sekirite.</p>
+      <div class="tracking-badge" id="trackingCode">---</div>
+      <div class="pin-row">
+        <div class="pin-box">
+          <span class="pin-label" data-i18n="pin_pickup">PIN Ranmasaj</span>
+          <span class="pin-value" id="pickupPin">--</span>
+        </div>
+        <div class="pin-box">
+          <span class="pin-label" data-i18n="pin_delivery">PIN Livrezon</span>
+          <span class="pin-value" id="deliveryPin">--</span>
+        </div>
+      </div>
+      <div class="success-actions">
+        <button class="btn-primary" onclick="resetForm()" data-i18n="success_new">Poste yon Lot</button>
+        <a href="logistics-board.html" class="btn-link" data-i18n="success_browse">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          We Chajman Yo
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BOTTOM NAVIGATION ===== -->
+<div class="bottom-nav">
+  <a href="index.html" data-i18n-title="nav_home">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span data-i18n="nav_home">Akay</span>
+  </a>
+  <a href="logistics-board.html" data-i18n-title="nav_loads">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+    <span data-i18n="nav_loads">Chajman</span>
+  </a>
+  <a href="logistics-fleet.html" data-i18n-title="nav_fleet">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    <span data-i18n="nav_fleet">Flot</span>
+  </a>
+  <a href="track.html" data-i18n-title="nav_tracking">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    <span data-i18n="nav_tracking">Swivi</span>
+  </a>
+  <a href="user-login.html" data-i18n-title="nav_account">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span data-i18n="nav_account">Kont</span>
+  </a>
+</div>
+
+<script>
+/* ===== CONFIG ===== */
+var API='https://msouwout-backend.onrender.com';
+var DEFAULT_LAT=18.5392, DEFAULT_LNG=-72.3350;
+var currentLang='ht';
+
+/* ===== TRANSLATIONS ===== */
+var T={
+ht:{
+  back_text:"Retounen",
+  page_title:"Poste Chajman",
+  page_subtitle:"Mete chajman ou sou platfom nan",
+  s1_title:"Enfomasyon Kliyan",
+  s2_title:"Detay Chajman",
+  s3_title:"Tip Transpo",
+  s4_title:"Wout",
+  s5_title:"Opsyon Livrezon",
+  s6_title:"Pri",
+  s_notes_title:"Not Adisyonel",
+  f_optional:"(opsyonel)",
+  f_business_label:"Non Biznis",f_business_ph:"Ex: Komesyan Jilbe SARL",
+  f_contact_label:"Non Kontak",f_contact_ph:"Ex: Jean Pierre",
+  f_phone_label:"Telefon",f_phone_ph:"XXXX XXXX",
+  f_email_label:"Imel",f_email_ph:"Ex: jean@email.com",
+  f_cargo_label:"Tip Machandiz",f_cargo_default:"-- Chwazi tip machandiz --",
+  f_weight_label:"Pwa an kg",f_weight_ph:"Ex: 25000",
+  f_qty_label:"Kantite",f_qty_ph:"Ex: 500 sak diri",
+  f_desc_label:"Deskripsyon / Enstriksyon Espesyal",f_desc_ph:"Ex: 500 sak diri 50kg chak, pa mouye...",
+  truck_flatbed:"Flatbed",truck_semi:"Semi Truck",truck_container:"Kontene",
+  truck_dump:"Kamyon Bene",truck_boat:"Bato",truck_van:"Van",
+  truck_pickup:"Pickup",truck_bus:"Otobis",truck_refrigerated:"Fridgo",
+  f_pickup_title:"RANMASAJ (Pickup)",
+  f_pickup_label:"Adres Ranmasaj",f_pickup_ph:"Ex: Potoprens, Ri Capois",
+  f_gps_hint:"Ap cheche pozisyon GPS ou...",f_gps_found:"GPS jwenn!",f_gps_fail:"GPS pa disponib",
+  f_pickup_contact:"Non Kontak Ranmasaj",f_pickup_contact_ph:"Ex: Matant Mari",
+  f_pickup_phone:"Telefon Ranmasaj",f_pickup_phone_ph:"+509 XXXX XXXX",
+  f_dropoff_title:"LIVREZON (Delivery)",
+  f_dropoff_label:"Adres Livrezon",f_dropoff_ph:"Ex: Gonayiv, Ri Jilbe",
+  f_dropoff_contact:"Non Kontak Livrezon",f_dropoff_contact_ph:"Ex: Bos Jilbe",
+  f_dropoff_phone:"Telefon Livrezon",f_dropoff_phone_ph:"+509 XXXX XXXX",
+  urg_standard:"Nomal",urg_urgent:"Ijan",urg_sameday:"Menm Jou",urg_scheduled:"Pwograme",
+  f_pickup_date:"Dat ak Le Ranmasaj",
+  price_budget:"Bidjè",price_budget_desc:"Antre pri ou vle peye a",
+  price_quote:"Mande Devis",price_quote_desc:"Kite chofe yo bay pri yo",
+  f_price_ph:"Ex: 15,000",
+  f_notes_ph:"Ex: Bezwen kamyon fridgo, rive anvan midi...",
+  f_submit:"POSTE CHAJMAN",f_submitting:"AP VOYE...",
+  success_title:"Chajman Poste!",
+  success_msg:"Men kod swivi ou ak kod PIN yo. Kenbe yo an sekirite.",
+  pin_pickup:"PIN Ranmasaj",pin_delivery:"PIN Livrezon",
+  success_new:"Poste yon Lot",success_browse:"We Chajman Yo",
+  err_required:"Tanpri ranpli tout chan obligatwa yo.",
+  err_truck:"Tanpri chwazi yon tip transpo.",
+  err_submit:"Ere nan soumisyon. Tanpri eseye anko.",
+  nav_home:"Akay",nav_loads:"Chajman",nav_fleet:"Flot",nav_tracking:"Swivi",nav_account:"Kont"
+},
+fr:{
+  back_text:"Retour",
+  page_title:"Poster un Chargement",
+  page_subtitle:"Publiez votre chargement sur la plateforme",
+  s1_title:"Informations Client",
+  s2_title:"Détails du Chargement",
+  s3_title:"Type de Transport",
+  s4_title:"Itinéraire",
+  s5_title:"Options de Livraison",
+  s6_title:"Tarification",
+  s_notes_title:"Notes Supplémentaires",
+  f_optional:"(optionnel)",
+  f_business_label:"Nom de l'Entreprise",f_business_ph:"Ex: Entreprise XYZ SARL",
+  f_contact_label:"Nom du Contact",f_contact_ph:"Ex: Jean Pierre",
+  f_phone_label:"Téléphone",f_phone_ph:"XXXX XXXX",
+  f_email_label:"Email",f_email_ph:"Ex: jean@email.com",
+  f_cargo_label:"Type de Marchandise",f_cargo_default:"-- Choisir le type --",
+  f_weight_label:"Poids en kg",f_weight_ph:"Ex: 25000",
+  f_qty_label:"Quantité",f_qty_ph:"Ex: 500 sacs de riz",
+  f_desc_label:"Description / Instructions Spéciales",f_desc_ph:"Ex: 500 sacs de riz 50kg chacun, ne pas mouiller...",
+  truck_flatbed:"Plateau",truck_semi:"Semi-Remorque",truck_container:"Conteneur",
+  truck_dump:"Camion Benne",truck_boat:"Bateau",truck_van:"Van",
+  truck_pickup:"Pickup",truck_bus:"Autobus",truck_refrigerated:"Réfrigéré",
+  f_pickup_title:"RAMASSAGE (Pickup)",
+  f_pickup_label:"Adresse de Ramassage",f_pickup_ph:"Ex: Port-au-Prince, Rue Capois",
+  f_gps_hint:"Recherche de votre position GPS...",f_gps_found:"GPS trouvé!",f_gps_fail:"GPS indisponible",
+  f_pickup_contact:"Contact de Ramassage",f_pickup_contact_ph:"Ex: Mme Marie",
+  f_pickup_phone:"Téléphone Ramassage",f_pickup_phone_ph:"+509 XXXX XXXX",
+  f_dropoff_title:"LIVRAISON (Delivery)",
+  f_dropoff_label:"Adresse de Livraison",f_dropoff_ph:"Ex: Gonaïves, Rue Gilbert",
+  f_dropoff_contact:"Contact de Livraison",f_dropoff_contact_ph:"Ex: M. Gilbert",
+  f_dropoff_phone:"Téléphone Livraison",f_dropoff_phone_ph:"+509 XXXX XXXX",
+  urg_standard:"Standard",urg_urgent:"Urgent",urg_sameday:"Même Jour",urg_scheduled:"Planifié",
+  f_pickup_date:"Date et Heure de Ramassage",
+  price_budget:"Budget",price_budget_desc:"Entrez le prix que vous souhaitez payer",
+  price_quote:"Demander un Devis",price_quote_desc:"Laissez les chauffeurs proposer un prix",
+  f_price_ph:"Ex: 15,000",
+  f_notes_ph:"Ex: Besoin de camion réfrigéré, arriver avant midi...",
+  f_submit:"POSTER LE CHARGEMENT",f_submitting:"ENVOI EN COURS...",
+  success_title:"Chargement Posté!",
+  success_msg:"Voici votre code de suivi et vos codes PIN. Gardez-les en sécurité.",
+  pin_pickup:"PIN Ramassage",pin_delivery:"PIN Livraison",
+  success_new:"Poster un Autre",success_browse:"Voir les Chargements",
+  err_required:"Veuillez remplir tous les champs obligatoires.",
+  err_truck:"Veuillez choisir un type de transport.",
+  err_submit:"Erreur lors de l'envoi. Veuillez réessayer.",
+  nav_home:"Accueil",nav_loads:"Chargements",nav_fleet:"Flotte",nav_tracking:"Suivi",nav_account:"Compte"
+},
+en:{
+  back_text:"Go Back",
+  page_title:"Post a Load",
+  page_subtitle:"List your freight on the platform",
+  s1_title:"Client Information",
+  s2_title:"Load Details",
+  s3_title:"Transport Type",
+  s4_title:"Route",
+  s5_title:"Delivery Options",
+  s6_title:"Pricing",
+  s_notes_title:"Additional Notes",
+  f_optional:"(optional)",
+  f_business_label:"Business Name",f_business_ph:"e.g. XYZ Logistics LLC",
+  f_contact_label:"Contact Name",f_contact_ph:"e.g. Jean Pierre",
+  f_phone_label:"Phone",f_phone_ph:"XXXX XXXX",
+  f_email_label:"Email",f_email_ph:"e.g. jean@email.com",
+  f_cargo_label:"Cargo Type",f_cargo_default:"-- Select cargo type --",
+  f_weight_label:"Weight in kg",f_weight_ph:"e.g. 25000",
+  f_qty_label:"Quantity",f_qty_ph:"e.g. 500 bags of rice",
+  f_desc_label:"Description / Special Instructions",f_desc_ph:"e.g. 500 bags of rice 50kg each, keep dry...",
+  truck_flatbed:"Flatbed",truck_semi:"Semi Truck",truck_container:"Container",
+  truck_dump:"Dump Truck",truck_boat:"Boat",truck_van:"Van",
+  truck_pickup:"Pickup",truck_bus:"Bus",truck_refrigerated:"Refrigerated",
+  f_pickup_title:"PICKUP",
+  f_pickup_label:"Pickup Address",f_pickup_ph:"e.g. Port-au-Prince, Rue Capois",
+  f_gps_hint:"Searching for your GPS position...",f_gps_found:"GPS found!",f_gps_fail:"GPS unavailable",
+  f_pickup_contact:"Pickup Contact Name",f_pickup_contact_ph:"e.g. Aunt Marie",
+  f_pickup_phone:"Pickup Phone",f_pickup_phone_ph:"+509 XXXX XXXX",
+  f_dropoff_title:"DELIVERY",
+  f_dropoff_label:"Delivery Address",f_dropoff_ph:"e.g. Gonaives, Rue Gilbert",
+  f_dropoff_contact:"Delivery Contact Name",f_dropoff_contact_ph:"e.g. Mr. Gilbert",
+  f_dropoff_phone:"Delivery Phone",f_dropoff_phone_ph:"+509 XXXX XXXX",
+  urg_standard:"Standard",urg_urgent:"Urgent",urg_sameday:"Same Day",urg_scheduled:"Scheduled",
+  f_pickup_date:"Pickup Date & Time",
+  price_budget:"Budget",price_budget_desc:"Enter the price you want to pay",
+  price_quote:"Request Quote",price_quote_desc:"Let drivers propose their price",
+  f_price_ph:"e.g. 15,000",
+  f_notes_ph:"e.g. Need refrigerated truck, arrive before noon...",
+  f_submit:"POST LOAD",f_submitting:"SUBMITTING...",
+  success_title:"Load Posted!",
+  success_msg:"Here are your tracking code and PINs. Keep them safe.",
+  pin_pickup:"Pickup PIN",pin_delivery:"Delivery PIN",
+  success_new:"Post Another",success_browse:"Browse Loads",
+  err_required:"Please fill in all required fields.",
+  err_truck:"Please select a transport type.",
+  err_submit:"Error submitting. Please try again.",
+  nav_home:"Home",nav_loads:"Loads",nav_fleet:"Fleet",nav_tracking:"Tracking",nav_account:"Account"
+},
+es:{
+  back_text:"Volver",
+  page_title:"Publicar Carga",
+  page_subtitle:"Publica tu carga en la plataforma",
+  s1_title:"Información del Cliente",
+  s2_title:"Detalles de la Carga",
+  s3_title:"Tipo de Transporte",
+  s4_title:"Ruta",
+  s5_title:"Opciones de Entrega",
+  s6_title:"Precio",
+  s_notes_title:"Notas Adicionales",
+  f_optional:"(opcional)",
+  f_business_label:"Nombre del Negocio",f_business_ph:"Ej: Empresa XYZ SRL",
+  f_contact_label:"Nombre del Contacto",f_contact_ph:"Ej: Jean Pierre",
+  f_phone_label:"Teléfono",f_phone_ph:"XXXX XXXX",
+  f_email_label:"Correo",f_email_ph:"Ej: jean@email.com",
+  f_cargo_label:"Tipo de Mercancía",f_cargo_default:"-- Elegir tipo --",
+  f_weight_label:"Peso en kg",f_weight_ph:"Ej: 25000",
+  f_qty_label:"Cantidad",f_qty_ph:"Ej: 500 sacos de arroz",
+  f_desc_label:"Descripción / Instrucciones Especiales",f_desc_ph:"Ej: 500 sacos de arroz 50kg c/u, no mojar...",
+  truck_flatbed:"Plataforma",truck_semi:"Semi-Remolque",truck_container:"Contenedor",
+  truck_dump:"Volquete",truck_boat:"Barco",truck_van:"Van",
+  truck_pickup:"Pickup",truck_bus:"Autobús",truck_refrigerated:"Refrigerado",
+  f_pickup_title:"RECOGIDA (Pickup)",
+  f_pickup_label:"Dirección de Recogida",f_pickup_ph:"Ej: Port-au-Prince, Rue Capois",
+  f_gps_hint:"Buscando su posición GPS...",f_gps_found:"¡GPS encontrado!",f_gps_fail:"GPS no disponible",
+  f_pickup_contact:"Contacto de Recogida",f_pickup_contact_ph:"Ej: Tía María",
+  f_pickup_phone:"Teléfono Recogida",f_pickup_phone_ph:"+509 XXXX XXXX",
+  f_dropoff_title:"ENTREGA (Delivery)",
+  f_dropoff_label:"Dirección de Entrega",f_dropoff_ph:"Ej: Gonaïves, Rue Gilbert",
+  f_dropoff_contact:"Contacto de Entrega",f_dropoff_contact_ph:"Ej: Sr. Gilbert",
+  f_dropoff_phone:"Teléfono Entrega",f_dropoff_phone_ph:"+509 XXXX XXXX",
+  urg_standard:"Estándar",urg_urgent:"Urgente",urg_sameday:"Mismo Día",urg_scheduled:"Programado",
+  f_pickup_date:"Fecha y Hora de Recogida",
+  price_budget:"Presupuesto",price_budget_desc:"Ingrese el precio que desea pagar",
+  price_quote:"Solicitar Cotización",price_quote_desc:"Deje que los conductores propongan un precio",
+  f_price_ph:"Ej: 15,000",
+  f_notes_ph:"Ej: Necesito camión refrigerado, llegar antes del mediodía...",
+  f_submit:"PUBLICAR CARGA",f_submitting:"ENVIANDO...",
+  success_title:"¡Carga Publicada!",
+  success_msg:"Aquí están su código de seguimiento y PINs. Guárdelos en un lugar seguro.",
+  pin_pickup:"PIN Recogida",pin_delivery:"PIN Entrega",
+  success_new:"Publicar Otra",success_browse:"Ver Cargas",
+  err_required:"Por favor complete todos los campos obligatorios.",
+  err_truck:"Por favor seleccione un tipo de transporte.",
+  err_submit:"Error al enviar. Por favor intente de nuevo.",
+  nav_home:"Inicio",nav_loads:"Cargas",nav_fleet:"Flota",nav_tracking:"Seguimiento",nav_account:"Cuenta"
+}
+};
+
+/* ===== i18n ===== */
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-switch a').forEach(function(a){a.classList.remove('active')});
+  var el=document.getElementById('lang-'+lang);
+  if(el) el.classList.add('active');
+  applyTranslations();
+}
+
+function applyTranslations(){
+  var t=T[currentLang]||T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key=el.getAttribute('data-i18n');
+    if(t[key]!==undefined) el.innerHTML=t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
+    var key=el.getAttribute('data-i18n-placeholder');
+    if(t[key]!==undefined) el.placeholder=t[key];
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(function(el){
+    var key=el.getAttribute('data-i18n-title');
+    if(t[key]!==undefined) el.title=t[key];
+  });
+}
+
+function tx(key){var t=T[currentLang]||T.ht;return t[key]||T.ht[key]||key}
+
+/* ===== TRUCK TYPE SELECTOR ===== */
+function selectTruck(card){
+  document.querySelectorAll('#truckGrid .select-card').forEach(function(c){c.classList.remove('selected')});
+  card.classList.add('selected');
+  document.getElementById('truck_type_needed').value=card.getAttribute('data-value');
+  validateForm();
+}
+
+/* ===== URGENCY SELECTOR ===== */
+function selectUrgency(card){
+  document.querySelectorAll('#urgencyGrid .select-card').forEach(function(c){c.classList.remove('selected')});
+  card.classList.add('selected');
+  var val=card.getAttribute('data-value');
+  document.getElementById('urgency').value=val;
+
+  var picker=document.getElementById('schedulePicker');
+  if(val==='scheduled'){
+    picker.classList.add('show');
+  } else {
+    picker.classList.remove('show');
+    document.getElementById('pickup_date').value='';
+  }
+}
+
+/* ===== PRICE MODE SELECTOR ===== */
+function selectPriceMode(card){
+  document.querySelectorAll('#priceOptions .price-card').forEach(function(c){c.classList.remove('selected')});
+  card.classList.add('selected');
+  var val=card.getAttribute('data-value');
+  document.getElementById('price_mode').value=val;
+
+  var wrap=document.getElementById('priceInputWrap');
+  if(val==='budget'){
+    wrap.classList.add('show');
+  } else {
+    wrap.classList.remove('show');
+    document.getElementById('price').value='';
+  }
+}
+
+/* ===== FORM VALIDATION ===== */
+function validateForm(){
+  var name=document.getElementById('posted_by_name').value.trim();
+  var phone=document.getElementById('posted_by_phone').value.trim();
+  var cargo=document.getElementById('cargo_type').value;
+  var truck=document.getElementById('truck_type_needed').value;
+  var pickup=document.getElementById('pickup_address').value.trim();
+  var dropoff=document.getElementById('dropoff_address').value.trim();
+
+  var valid=name&&phone&&cargo&&truck&&pickup&&dropoff;
+
+  // If scheduled, check date
+  if(document.getElementById('urgency').value==='scheduled'){
+    valid=valid&&document.getElementById('pickup_date').value;
+  }
+
+  document.getElementById('submitBtn').disabled=!valid;
+  return valid;
+}
+
+// Attach validation to inputs
+document.addEventListener('DOMContentLoaded',function(){
+  var inputs=document.querySelectorAll('#loadForm input,#loadForm select,#loadForm textarea');
+  inputs.forEach(function(inp){
+    inp.addEventListener('input',validateForm);
+    inp.addEventListener('change',validateForm);
+  });
+});
+
+/* ===== GPS ===== */
+(function(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      function(pos){
+        document.getElementById('pickup_lat').value=pos.coords.latitude;
+        document.getElementById('pickup_lng').value=pos.coords.longitude;
+        var hint=document.getElementById('gps-status');
+        hint.querySelector('[data-i18n]').setAttribute('data-i18n','f_gps_found');
+        hint.querySelector('[data-i18n]').textContent=tx('f_gps_found');
+        hint.style.color='#0D9F4F';
+      },
+      function(){
+        document.getElementById('pickup_lat').value=DEFAULT_LAT;
+        document.getElementById('pickup_lng').value=DEFAULT_LNG;
+        var hint=document.getElementById('gps-status');
+        hint.querySelector('[data-i18n]').setAttribute('data-i18n','f_gps_fail');
+        hint.querySelector('[data-i18n]').textContent=tx('f_gps_fail');
+        hint.style.color='#F5B400';
+      },
+      {timeout:8000,maximumAge:60000}
+    );
+  } else {
+    document.getElementById('pickup_lat').value=DEFAULT_LAT;
+    document.getElementById('pickup_lng').value=DEFAULT_LNG;
+    var hint=document.getElementById('gps-status');
+    hint.querySelector('[data-i18n]').setAttribute('data-i18n','f_gps_fail');
+    hint.querySelector('[data-i18n]').textContent=tx('f_gps_fail');
+    hint.style.color='#F5B400';
+  }
+})();
+
+/* ===== SUBMIT LOAD ===== */
+function submitLoad(e){
+  e.preventDefault();
+  var statusEl=document.getElementById('formStatus');
+  var btn=document.getElementById('submitBtn');
+
+  // Validate truck selection
+  if(!document.getElementById('truck_type_needed').value){
+    statusEl.className='form-status error';
+    statusEl.textContent=tx('err_truck');
+    return false;
+  }
+
+  if(!validateForm()){
+    statusEl.className='form-status error';
+    statusEl.textContent=tx('err_required');
+    return false;
+  }
+
+  // Build phone with prefix
+  var rawPhone=document.getElementById('posted_by_phone').value.trim();
+  var fullPhone=rawPhone.startsWith('+')? rawPhone : '+509'+rawPhone.replace(/\s/g,'');
+
+  // Urgency mapping
+  var urgencyVal=document.getElementById('urgency').value;
+  var urgencyMap={normal:'normal',urgent:'urgent',same_day:'emergency',scheduled:'normal'};
+  var apiUrgency=urgencyMap[urgencyVal]||'normal';
+
+  var payload={
+    posted_by_name:document.getElementById('posted_by_name').value.trim(),
+    posted_by_phone:fullPhone,
+    business_id:document.getElementById('business_name').value.trim()||null,
+    cargo_type:document.getElementById('cargo_type').value,
+    cargo_description:document.getElementById('cargo_description').value.trim()||null,
+    weight_kg:document.getElementById('weight_kg').value?Number(document.getElementById('weight_kg').value):null,
+    quantity:document.getElementById('quantity').value.trim()||null,
+    truck_type_needed:document.getElementById('truck_type_needed').value,
+    pickup_address:document.getElementById('pickup_address').value.trim(),
+    pickup_lat:Number(document.getElementById('pickup_lat').value)||DEFAULT_LAT,
+    pickup_lng:Number(document.getElementById('pickup_lng').value)||DEFAULT_LNG,
+    pickup_contact:document.getElementById('pickup_contact').value.trim()||null,
+    pickup_phone:document.getElementById('pickup_phone').value.trim()||null,
+    dropoff_address:document.getElementById('dropoff_address').value.trim(),
+    dropoff_lat:Number(document.getElementById('dropoff_lat').value)||null,
+    dropoff_lng:Number(document.getElementById('dropoff_lng').value)||null,
+    dropoff_contact:document.getElementById('dropoff_contact').value.trim()||null,
+    dropoff_phone:document.getElementById('dropoff_phone').value.trim()||null,
+    price:document.getElementById('price_mode').value==='quote'?null:(document.getElementById('price').value?Number(document.getElementById('price').value):null),
+    urgency:apiUrgency,
+    pickup_date:document.getElementById('pickup_date').value||null,
+    notes:document.getElementById('notes').value.trim()||null
+  };
+
+  // Loading state
+  btn.disabled=true;
+  btn.classList.add('loading');
+  statusEl.className='form-status';
+  statusEl.style.display='none';
+
+  fetch(API+'/api/logistics/loads',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  })
+  .then(function(res){return res.json()})
+  .then(function(data){
+    btn.classList.remove('loading');
+    if(data.load||data.tracking_code||data.id){
+      var load=data.load||data;
+      // Show success
+      document.getElementById('loadForm').style.display='none';
+      // Hide all section cards and notes
+      document.querySelectorAll('.section-card').forEach(function(c){c.style.display='none'});
+
+      var overlay=document.getElementById('successOverlay');
+      overlay.classList.add('show');
+      document.getElementById('trackingCode').textContent=load.tracking_code||load.id||'---';
+      document.getElementById('pickupPin').textContent=load.pickup_pin||load.pickup_verification_code||'----';
+      document.getElementById('deliveryPin').textContent=load.delivery_pin||load.delivery_verification_code||'----';
+      window.scrollTo({top:0,behavior:'smooth'});
+    } else {
+      btn.disabled=false;
+      statusEl.className='form-status error';
+      statusEl.textContent=data.detail||data.message||tx('err_submit');
+    }
+  })
+  .catch(function(err){
+    btn.classList.remove('loading');
+    btn.disabled=false;
+    statusEl.className='form-status error';
+    statusEl.textContent=tx('err_submit');
+    console.error('Submit error:',err);
+  });
+
+  return false;
+}
+
+/* ===== RESET FORM ===== */
+function resetForm(){
+  document.getElementById('loadForm').reset();
+  document.getElementById('loadForm').style.display='block';
+  document.querySelectorAll('.section-card').forEach(function(c){c.style.display='block'});
+  document.getElementById('successOverlay').classList.remove('show');
+  document.getElementById('formStatus').style.display='none';
+  document.getElementById('truck_type_needed').value='';
+  document.getElementById('urgency').value='normal';
+  document.getElementById('price_mode').value='budget';
+
+  // Reset truck grid
+  document.querySelectorAll('#truckGrid .select-card').forEach(function(c){c.classList.remove('selected')});
+
+  // Reset urgency grid
+  document.querySelectorAll('#urgencyGrid .select-card').forEach(function(c){c.classList.remove('selected')});
+  document.querySelector('#urgencyGrid .select-card[data-value="normal"]').classList.add('selected');
+  document.getElementById('schedulePicker').classList.remove('show');
+
+  // Reset price mode
+  document.querySelectorAll('#priceOptions .price-card').forEach(function(c){c.classList.remove('selected')});
+  document.querySelector('#priceOptions .price-card[data-value="budget"]').classList.add('selected');
+  document.getElementById('priceInputWrap').classList.add('show');
+
+  document.getElementById('submitBtn').disabled=true;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Swiv Chajman — MsouWout Logistics</title>
+<meta name="description" content="Swiv chajman ou an tan reyèl sou MsouWout Logistics. Track your shipment live with GPS.">
+<meta property="og:title" content="MsouWout Logistics — Shipment Tracking">
+<meta property="og:description" content="Track your cargo shipment in real-time across Haiti.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://msouwout.com/logistics-track.html">
+<meta property="og:image" content="https://msouwout.com/assets/og-msouwout.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="canonical" href="https://msouwout.com/logistics-track.html">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#0B1F66;--primary-dark:#081650;--primary-light:#1A3399;
+  --red:#E31C3D;--red-dark:#C4162F;
+  --gold:#F5B400;--gold-light:#FFD54F;
+  --white:#FFFFFF;--off-white:#F5F7FA;--light-gray:#E8ECF2;
+  --dark:#0A0E1A;--text:#1A2A4A;--text-light:#5A6B8A;--text-muted:#8A95AA;
+  --green:#1B8C3D;--green-light:#22C55E;
+  --border:#E2E8F0;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --radius:16px;--radius-lg:20px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;padding-bottom:70px}
+a{text-decoration:none;color:inherit}
+button{font-family:var(--body);cursor:pointer;border:none;background:none}
+input{font-family:var(--body)}
+
+/* ========== TOP BAR ========== */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:1100;
+  background:var(--primary);height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;
+  box-shadow:0 2px 12px rgba(11,31,102,.3);
+}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-logo{font-size:1.15rem;font-weight:900;color:#fff;letter-spacing:-.02em}
+.topbar-logo span{color:var(--gold)}
+.topbar-sub{font-size:.6rem;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em}
+.lang-sw{display:flex;gap:2px}
+.lang-sw button{
+  color:rgba(255,255,255,.45);font-size:.62rem;font-weight:700;
+  padding:4px 8px;border-radius:6px;transition:all .2s;text-transform:uppercase;
+}
+.lang-sw button:hover{color:rgba(255,255,255,.7)}
+.lang-sw button.active{color:#fff;background:rgba(255,255,255,.15)}
+
+/* ========== SEARCH STATE ========== */
+.search-state{
+  display:flex;align-items:center;justify-content:center;
+  min-height:calc(100vh - 56px - 60px);
+  padding:24px 16px;margin-top:56px;
+}
+.search-card{
+  background:var(--white);border-radius:var(--radius-lg);
+  padding:40px 28px 36px;width:100%;max-width:420px;
+  box-shadow:0 8px 40px rgba(11,31,102,.08);
+  text-align:center;
+}
+.search-card .search-emoji{font-size:3.5rem;margin-bottom:16px;display:block}
+.search-card h1{
+  font-size:1.35rem;font-weight:900;color:var(--primary);
+  margin-bottom:4px;line-height:1.2;
+}
+.search-card .search-sub{
+  font-size:.85rem;color:var(--text-light);margin-bottom:28px;font-weight:400;
+}
+.search-input-group{position:relative;margin-bottom:14px}
+.search-input-group input{
+  width:100%;padding:16px 20px;border:2px solid var(--border);border-radius:14px;
+  font-size:1rem;font-weight:600;color:var(--text);
+  transition:all .25s;text-align:center;letter-spacing:1px;
+  background:var(--off-white);
+}
+.search-input-group input::placeholder{color:var(--text-muted);font-weight:400;letter-spacing:0}
+.search-input-group input:focus{
+  outline:none;border-color:var(--primary);
+  box-shadow:0 0 0 4px rgba(11,31,102,.1);background:var(--white);
+}
+.search-input-group .input-label{
+  position:absolute;top:-8px;left:18px;
+  font-size:.65rem;font-weight:700;color:var(--primary);
+  background:var(--white);padding:0 6px;letter-spacing:.03em;
+}
+.or-divider{
+  display:flex;align-items:center;gap:14px;margin:0 0 14px;
+  color:var(--text-muted);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.search-btn{
+  width:100%;padding:16px;border-radius:100px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;
+  font-size:1rem;font-weight:800;font-family:var(--body);
+  transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 20px rgba(227,28,61,.3);margin-top:20px;
+}
+.search-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 32px rgba(227,28,61,.4)}
+.search-btn:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+.search-btn .spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+
+/* ========== RESULT STATE ========== */
+.result-state{display:none;margin-top:56px}
+
+/* MAP */
+.map-wrap{position:relative;width:100%;height:50vh;min-height:300px;max-height:500px}
+#map{width:100%;height:100%;z-index:1}
+.map-overlay-badge{
+  position:absolute;top:12px;left:12px;z-index:500;
+  background:var(--white);padding:6px 14px;border-radius:100px;
+  font-size:.7rem;font-weight:700;color:var(--primary);
+  box-shadow:0 2px 12px rgba(0,0,0,.12);display:flex;align-items:center;gap:6px;
+}
+.map-overlay-badge .live-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--green-light);
+  animation:livePulse 2s infinite;
+}
+@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+
+/* MARKERS */
+.pickup-marker{width:14px;height:14px;background:var(--green);border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.dropoff-marker{width:14px;height:14px;background:var(--red);border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.truck-marker{
+  width:20px;height:20px;background:var(--primary);border:3px solid #fff;
+  border-radius:50%;box-shadow:0 2px 10px rgba(0,0,0,.3);
+  animation:truckPulse 2s infinite;
+}
+@keyframes truckPulse{
+  0%{box-shadow:0 0 0 0 rgba(11,31,102,.5)}
+  70%{box-shadow:0 0 0 16px rgba(11,31,102,0)}
+  100%{box-shadow:0 0 0 0 rgba(11,31,102,0)}
+}
+
+/* STATUS FLOW BAR */
+.status-flow{
+  background:var(--white);padding:20px 16px 16px;
+  border-bottom:1px solid var(--border);
+  overflow-x:auto;
+}
+.status-steps{display:flex;position:relative;min-width:420px}
+.status-step{flex:1;text-align:center;position:relative;padding-top:28px}
+.status-step::before{
+  content:'';position:absolute;top:12px;left:0;right:0;height:3px;
+  background:var(--light-gray);z-index:0;transition:background .5s;
+}
+.status-step:first-child::before{left:50%}
+.status-step:last-child::before{right:50%}
+.status-dot{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--light-gray);
+  position:absolute;top:1px;left:50%;transform:translateX(-50%);
+  z-index:1;transition:all .5s;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;color:#fff;font-weight:800;
+}
+.status-step.done .status-dot{background:var(--green);box-shadow:0 0 0 4px rgba(27,140,61,.15)}
+.status-step.done::before{background:var(--green)}
+.status-step.active-step .status-dot{background:var(--primary);animation:truckPulse 2s infinite}
+.status-step.active-step::before{background:var(--primary)}
+.status-label{font-size:.62rem;font-weight:700;color:var(--text-muted);margin-top:8px;white-space:nowrap}
+.status-step.done .status-label{color:var(--green)}
+.status-step.active-step .status-label{color:var(--primary);font-weight:800}
+.status-time{font-size:.55rem;font-weight:500;color:var(--text-muted);margin-top:2px}
+
+/* DELIVERED BANNER */
+.delivered-banner{
+  display:none;background:linear-gradient(135deg,rgba(27,140,61,.08),rgba(27,140,61,.04));
+  border:1px solid rgba(27,140,61,.15);padding:18px 16px;text-align:center;
+  margin:12px 16px;border-radius:var(--radius);
+}
+.delivered-banner.show{display:block;animation:fadeUp .5s ease both}
+.delivered-banner .d-icon{font-size:2.2rem;margin-bottom:6px}
+.delivered-banner .d-title{font-size:1.1rem;font-weight:900;color:var(--green);margin-bottom:2px}
+.delivered-banner .d-sub{font-size:.78rem;color:var(--text-light)}
+
+/* CANCELLED BANNER */
+.cancelled-banner{
+  display:none;background:rgba(227,28,61,.06);
+  border:1px solid rgba(227,28,61,.15);padding:18px 16px;text-align:center;
+  margin:12px 16px;border-radius:var(--radius);
+}
+.cancelled-banner.show{display:block;animation:fadeUp .5s ease both}
+.cancelled-banner .c-icon{font-size:2.2rem;margin-bottom:6px}
+.cancelled-banner .c-title{font-size:1.1rem;font-weight:900;color:var(--red);margin-bottom:2px}
+.cancelled-banner .c-sub{font-size:.78rem;color:var(--text-light)}
+
+/* INFO CARDS */
+.info-section{padding:12px 16px 0}
+.info-card{
+  background:var(--white);border-radius:var(--radius);
+  padding:20px;box-shadow:0 2px 16px rgba(0,0,0,.05);
+  border:1px solid rgba(0,0,0,.04);margin-bottom:12px;
+}
+.info-card-title{
+  font-size:.68rem;font-weight:700;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;
+  display:flex;align-items:center;gap:6px;
+}
+.tracking-code-display{
+  font-size:1.3rem;font-weight:900;color:var(--gold);
+  letter-spacing:1.5px;margin-bottom:12px;
+}
+.info-row{
+  display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;
+}
+.info-row:last-child{margin-bottom:0}
+.info-row .ir-icon{font-size:.9rem;flex-shrink:0;margin-top:1px}
+.info-row .ir-label{font-size:.72rem;font-weight:600;color:var(--text-muted)}
+.info-row .ir-value{font-size:.85rem;font-weight:700;color:var(--text)}
+
+.route-visual{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:14px;background:var(--off-white);border-radius:12px;margin-bottom:10px;
+}
+.route-dots{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;padding-top:3px}
+.route-dots .rd{width:10px;height:10px;border-radius:50%}
+.route-dots .rd.g{background:var(--green)}
+.route-dots .rd.r{background:var(--red)}
+.route-dots .rl{width:2px;height:18px;background:var(--border)}
+.route-text{flex:1;min-width:0}
+.route-text .rt-from,.route-text .rt-to{font-size:.82rem;font-weight:600;color:var(--text);line-height:1.4}
+.route-text .rt-arrow{font-size:.7rem;color:var(--text-muted);margin:4px 0}
+
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.detail-item{
+  background:var(--off-white);border-radius:12px;padding:12px;text-align:center;
+}
+.detail-item .di-value{font-size:.95rem;font-weight:800;color:var(--text)}
+.detail-item .di-label{font-size:.62rem;font-weight:600;color:var(--text-muted);margin-top:2px}
+
+/* DRIVER CARD */
+.driver-card{
+  display:flex;align-items:center;gap:14px;margin-bottom:12px;
+}
+.driver-avatar{
+  width:48px;height:48px;border-radius:50%;
+  background:var(--primary);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;font-weight:900;flex-shrink:0;
+}
+.driver-details{flex:1;min-width:0}
+.driver-details .dd-name{font-size:.9rem;font-weight:800;color:var(--text)}
+.driver-details .dd-fleet{font-size:.72rem;font-weight:500;color:var(--text-light);margin-top:1px}
+.driver-phone-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:8px 16px;border-radius:100px;
+  background:rgba(11,31,102,.06);color:var(--primary);
+  font-size:.78rem;font-weight:700;margin-top:6px;
+  transition:all .2s;
+}
+.driver-phone-btn:hover{background:rgba(11,31,102,.12)}
+
+.truck-info{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;
+}
+.truck-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:5px 12px;border-radius:8px;font-size:.72rem;font-weight:700;
+  background:rgba(11,31,102,.06);color:var(--primary);
+}
+.gps-update{
+  font-size:.68rem;font-weight:500;color:var(--text-muted);margin-top:8px;
+  display:flex;align-items:center;gap:4px;
+}
+
+/* ACTION BUTTONS */
+.action-btns{
+  display:flex;gap:8px;padding:4px 16px 16px;
+}
+.act-btn{
+  flex:1;padding:14px 8px;border-radius:14px;
+  font-size:.78rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .25s;color:#fff;border:none;cursor:pointer;
+}
+.act-share{background:var(--green)}
+.act-share:active{background:#14702F}
+.act-call{background:var(--primary)}
+.act-call:active{background:var(--primary-dark)}
+.act-call.disabled{background:var(--text-muted);pointer-events:none}
+.act-sos{background:linear-gradient(135deg,var(--red),var(--red-dark))}
+.act-sos:active{background:var(--red-dark)}
+
+/* ERROR STATE */
+.error-state{
+  display:none;text-align:center;padding:60px 24px;margin-top:56px;
+}
+.error-state .err-icon{font-size:3rem;margin-bottom:16px;opacity:.6}
+.error-state .err-title{font-size:1.1rem;font-weight:900;color:var(--text);margin-bottom:6px}
+.error-state .err-sub{font-size:.85rem;color:var(--text-light);margin-bottom:24px;line-height:1.5}
+.retry-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:14px 32px;border-radius:100px;
+  background:var(--primary);color:#fff;
+  font-size:.88rem;font-weight:700;transition:all .25s;
+}
+.retry-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(11,31,102,.25)}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:1000;
+  background:var(--white);height:60px;
+  display:flex;align-items:center;justify-content:space-around;
+  box-shadow:0 -2px 16px rgba(0,0,0,.08);
+  border-top:1px solid var(--border);
+}
+.bnav-item{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:6px 12px;color:var(--text-muted);font-size:.58rem;font-weight:600;
+  transition:color .2s;text-decoration:none;
+}
+.bnav-item .bnav-icon{font-size:1.2rem}
+.bnav-item.active{color:var(--primary)}
+.bnav-item.active .bnav-icon{transform:scale(1.1)}
+
+/* FOOTER */
+.site-footer{
+  background:var(--dark);padding:32px 16px 20px;text-align:center;
+}
+.site-footer p{font-size:.7rem;color:rgba(255,255,255,.35);line-height:1.6}
+.site-footer a{color:rgba(255,255,255,.5);transition:color .2s}
+.site-footer a:hover{color:#fff}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+
+/* RESPONSIVE */
+@media(min-width:768px){
+  .search-card{padding:48px 40px 44px}
+  .info-section{max-width:600px;margin:0 auto;padding:12px 20px 0}
+  .action-btns{max-width:600px;margin:0 auto;padding:4px 20px 16px}
+  .status-flow{max-width:600px;margin:0 auto}
+  .delivered-banner,.cancelled-banner{max-width:600px;margin:12px auto}
+}
+@media(max-width:380px){
+  .search-card{padding:28px 18px 24px}
+  .search-card h1{font-size:1.15rem}
+  .detail-grid{grid-template-columns:1fr}
+}
+
+/* HIDE STATES */
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- ========== TOP BAR ========== -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <div>
+      <div class="topbar-logo">Msou<span>Wout</span> Logistics</div>
+    </div>
+  </div>
+  <div class="lang-sw">
+    <button onclick="setLang('ht')" class="active" id="lang-ht">HT</button>
+    <button onclick="setLang('fr')" id="lang-fr">FR</button>
+    <button onclick="setLang('en')" id="lang-en">EN</button>
+    <button onclick="setLang('es')" id="lang-es">ES</button>
+  </div>
+</header>
+
+<!-- ========== SEARCH STATE ========== -->
+<section class="search-state" id="searchState">
+  <div class="search-card">
+    <span class="search-emoji">&#128230;</span>
+    <h1 data-i18n="search_title">Swiv Chajman Ou</h1>
+    <p class="search-sub" data-i18n="search_sub">Antre kòd swivi ou pou wè kote chajman ou ye</p>
+
+    <div class="search-input-group">
+      <span class="input-label" data-i18n="label_tracking">Kòd Swivi</span>
+      <input type="text" id="inputCode" placeholder="FL-XXXXXX" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="or-divider"><span data-i18n="or_text">OSWA</span></div>
+
+    <div class="search-input-group">
+      <span class="input-label" data-i18n="label_pin">PIN Livrezon</span>
+      <input type="text" id="inputPin" placeholder="123456" maxlength="6" inputmode="numeric" autocomplete="off">
+    </div>
+
+    <button class="search-btn" id="searchBtn" onclick="doSearch()">
+      <span data-i18n="search_btn">&#128270; Chache</span>
+    </button>
+
+    <div id="searchError" style="display:none;margin-top:14px;padding:10px;border-radius:10px;background:rgba(227,28,61,.07);color:var(--red);font-size:.8rem;font-weight:600"></div>
+  </div>
+</section>
+
+<!-- ========== RESULT STATE ========== -->
+<section class="result-state" id="resultState">
+
+  <!-- MAP -->
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div class="map-overlay-badge" id="liveBadge" style="display:none">
+      <span class="live-dot"></span>
+      <span data-i18n="live_tracking">Swivi an dirèk</span>
+    </div>
+  </div>
+
+  <!-- STATUS FLOW -->
+  <div class="status-flow">
+    <div class="status-steps" id="statusSteps">
+      <div class="status-step" id="step-posted">
+        <div class="status-dot">1</div>
+        <div class="status-label" data-i18n="st_posted">Poste</div>
+        <div class="status-time" id="time-posted"></div>
+      </div>
+      <div class="status-step" id="step-assigned">
+        <div class="status-dot">2</div>
+        <div class="status-label" data-i18n="st_assigned">Asiyen</div>
+        <div class="status-time" id="time-assigned"></div>
+      </div>
+      <div class="status-step" id="step-picked_up">
+        <div class="status-dot">3</div>
+        <div class="status-label" data-i18n="st_picked_up">Ranmase</div>
+        <div class="status-time" id="time-picked_up"></div>
+      </div>
+      <div class="status-step" id="step-in_transit">
+        <div class="status-dot">4</div>
+        <div class="status-label" data-i18n="st_in_transit">An Wout</div>
+        <div class="status-time" id="time-in_transit"></div>
+      </div>
+      <div class="status-step" id="step-delivered">
+        <div class="status-dot">5</div>
+        <div class="status-label" data-i18n="st_delivered">Livre</div>
+        <div class="status-time" id="time-delivered"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELIVERED BANNER -->
+  <div class="delivered-banner" id="deliveredBanner">
+    <div class="d-icon">&#127881;</div>
+    <div class="d-title" data-i18n="delivered_title">Chajman Livre!</div>
+    <div class="d-sub" id="deliveredTime"></div>
+  </div>
+
+  <!-- CANCELLED BANNER -->
+  <div class="cancelled-banner" id="cancelledBanner">
+    <div class="c-icon">&#10060;</div>
+    <div class="c-title" data-i18n="cancelled_title">Chajman Anile</div>
+    <div class="c-sub" data-i18n="cancelled_sub">Chajman sa a te anile.</div>
+  </div>
+
+  <!-- SHIPMENT INFO -->
+  <div class="info-section">
+    <div class="info-card">
+      <div class="info-card-title">&#128230; <span data-i18n="card_shipment">Enfòmasyon Chajman</span></div>
+      <div class="tracking-code-display" id="dispCode"></div>
+
+      <div class="route-visual">
+        <div class="route-dots">
+          <div class="rd g"></div>
+          <div class="rl"></div>
+          <div class="rd r"></div>
+        </div>
+        <div class="route-text">
+          <div class="rt-from" id="dispPickup">—</div>
+          <div class="rt-arrow">&#8595;</div>
+          <div class="rt-to" id="dispDropoff">—</div>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <div class="di-value" id="dispCargo">—</div>
+          <div class="di-label" data-i18n="lbl_cargo">Machandiz</div>
+        </div>
+        <div class="detail-item">
+          <div class="di-value" id="dispQty">—</div>
+          <div class="di-label" data-i18n="lbl_quantity">Kantite</div>
+        </div>
+        <div class="detail-item">
+          <div class="di-value" id="dispDistance">—</div>
+          <div class="di-label" data-i18n="lbl_distance">Distans</div>
+        </div>
+        <div class="detail-item">
+          <div class="di-value" id="dispPrice">—</div>
+          <div class="di-label" data-i18n="lbl_price">Pri</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRIVER / TRUCK INFO -->
+    <div class="info-card" id="driverCard" style="display:none">
+      <div class="info-card-title">&#128666; <span data-i18n="card_driver">Chofè & Kamyon</span></div>
+      <div class="driver-card">
+        <div class="driver-avatar" id="driverAvatar">?</div>
+        <div class="driver-details">
+          <div class="dd-name" id="dispDriverName">—</div>
+          <div class="dd-fleet" id="dispFleet">—</div>
+          <a class="driver-phone-btn" id="driverPhoneBtn" href="tel:">
+            &#128222; <span data-i18n="btn_call_driver">Rele Chofè</span>
+          </a>
+        </div>
+      </div>
+      <div class="truck-info" id="truckInfo">
+        <span class="truck-tag" id="dispTruckType">—</span>
+        <span class="truck-tag" id="dispPlate">—</span>
+      </div>
+      <div class="gps-update" id="gpsUpdate">
+        &#128225; <span data-i18n="lbl_last_gps">Dènye pozisyon:</span> <span id="dispGpsTime">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTION BUTTONS -->
+  <div class="action-btns" id="actionBtns">
+    <button class="act-btn act-share" onclick="shareWhatsApp()">
+      &#128172; <span data-i18n="btn_share">Pataje</span>
+    </button>
+    <a class="act-btn act-call disabled" id="callBtn" href="tel:">
+      &#128222; <span data-i18n="btn_call">Rele Chofè</span>
+    </a>
+    <button class="act-btn act-sos" onclick="triggerSOS()">
+      &#127384; SOS
+    </button>
+  </div>
+</section>
+
+<!-- ========== ERROR STATE ========== -->
+<section class="error-state" id="errorState">
+  <div class="err-icon">&#128531;</div>
+  <div class="err-title" data-i18n="err_title">Chajman pa jwenn</div>
+  <div class="err-sub" data-i18n="err_sub">Kòd swivi ou pa kòrèk oswa chajman sa a pa egziste.</div>
+  <button class="retry-btn" onclick="goBack()">
+    &#128260; <span data-i18n="btn_retry">Eseye Ankò</span>
+  </button>
+</section>
+
+<!-- ========== BOTTOM NAV ========== -->
+<nav class="bottom-nav">
+  <a href="index.html" class="bnav-item">
+    <span class="bnav-icon">&#127968;</span>
+    <span data-i18n="nav_home">Akèy</span>
+  </a>
+  <a href="logistics-board.html" class="bnav-item">
+    <span class="bnav-icon">&#128230;</span>
+    <span data-i18n="nav_loads">Chajman</span>
+  </a>
+  <a href="logistics-fleet.html" class="bnav-item">
+    <span class="bnav-icon">&#128666;</span>
+    <span data-i18n="nav_fleet">Flòt</span>
+  </a>
+  <a href="logistics-track.html" class="bnav-item active">
+    <span class="bnav-icon">&#128205;</span>
+    <span data-i18n="nav_tracking">Swivi</span>
+  </a>
+  <a href="user-login.html" class="bnav-item">
+    <span class="bnav-icon">&#128100;</span>
+    <span data-i18n="nav_account">Kont</span>
+  </a>
+</nav>
+
+<!-- ========== FOOTER ========== -->
+<footer class="site-footer" id="siteFooter">
+  <p>&copy; 2025 MsouWout Logistics &mdash; Yon platfòm <a href="https://msouwout.com">HaitiBiznis</a></p>
+</footer>
+
+<script>
+/* ========== i18n ========== */
+var currentLang='ht';
+var T={
+  ht:{
+    search_title:'Swiv Chajman Ou',
+    search_sub:'Antre kòd swivi ou pou wè kote chajman ou ye',
+    label_tracking:'Kòd Swivi',
+    label_pin:'PIN Livrezon',
+    or_text:'OSWA',
+    search_btn:'&#128270; Chache',
+    live_tracking:'Swivi an dirèk',
+    st_posted:'Poste',st_assigned:'Asiyen',st_picked_up:'Ranmase',st_in_transit:'An Wout',st_delivered:'Livre',
+    delivered_title:'Chajman Livre!',
+    cancelled_title:'Chajman Anile',cancelled_sub:'Chajman sa a te anile.',
+    card_shipment:'Enfòmasyon Chajman',
+    card_driver:'Chofè & Kamyon',
+    lbl_cargo:'Machandiz',lbl_quantity:'Kantite',lbl_distance:'Distans',lbl_price:'Pri',
+    btn_call_driver:'Rele Chofè',
+    lbl_last_gps:'Dènye pozisyon:',
+    btn_share:'Pataje',btn_call:'Rele Chofè',
+    btn_retry:'Eseye Ankò',
+    err_title:'Chajman pa jwenn',
+    err_sub:'Kòd swivi ou pa kòrèk oswa chajman sa a pa egziste.',
+    nav_home:'Akèy',nav_loads:'Chajman',nav_fleet:'Flòt',nav_tracking:'Swivi',nav_account:'Kont',
+    delivered_at_label:'Livre a',
+    searching:'Ap chache...',
+    err_network:'Erè rezo. Tanpri eseye ankò.',
+    share_text:'Swiv chajman mwen sou MsouWout Logistics:'
+  },
+  fr:{
+    search_title:'Suivre Votre Envoi',
+    search_sub:'Entrez votre code de suivi pour localiser votre cargaison',
+    label_tracking:'Code de Suivi',
+    label_pin:'PIN de Livraison',
+    or_text:'OU',
+    search_btn:'&#128270; Rechercher',
+    live_tracking:'Suivi en direct',
+    st_posted:'Publie',st_assigned:'Assigne',st_picked_up:'Ramasse',st_in_transit:'En Route',st_delivered:'Livre',
+    delivered_title:'Envoi Livre !',
+    cancelled_title:'Envoi Annule',cancelled_sub:'Cet envoi a ete annule.',
+    card_shipment:'Details de l\'Envoi',
+    card_driver:'Chauffeur & Vehicule',
+    lbl_cargo:'Cargaison',lbl_quantity:'Quantite',lbl_distance:'Distance',lbl_price:'Prix',
+    btn_call_driver:'Appeler Chauffeur',
+    lbl_last_gps:'Derniere position :',
+    btn_share:'Partager',btn_call:'Appeler',
+    btn_retry:'Reessayer',
+    err_title:'Envoi introuvable',
+    err_sub:'Le code de suivi est incorrect ou cet envoi n\'existe pas.',
+    nav_home:'Accueil',nav_loads:'Charges',nav_fleet:'Flotte',nav_tracking:'Suivi',nav_account:'Compte',
+    delivered_at_label:'Livre a',
+    searching:'Recherche en cours...',
+    err_network:'Erreur reseau. Veuillez reessayer.',
+    share_text:'Suivez mon envoi sur MsouWout Logistics :'
+  },
+  en:{
+    search_title:'Track Your Shipment',
+    search_sub:'Enter your tracking code to see where your cargo is',
+    label_tracking:'Tracking Code',
+    label_pin:'Delivery PIN',
+    or_text:'OR',
+    search_btn:'&#128270; Search',
+    live_tracking:'Live tracking',
+    st_posted:'Posted',st_assigned:'Assigned',st_picked_up:'Picked Up',st_in_transit:'In Transit',st_delivered:'Delivered',
+    delivered_title:'Shipment Delivered!',
+    cancelled_title:'Shipment Cancelled',cancelled_sub:'This shipment has been cancelled.',
+    card_shipment:'Shipment Details',
+    card_driver:'Driver & Truck',
+    lbl_cargo:'Cargo',lbl_quantity:'Quantity',lbl_distance:'Distance',lbl_price:'Price',
+    btn_call_driver:'Call Driver',
+    lbl_last_gps:'Last GPS update:',
+    btn_share:'Share',btn_call:'Call Driver',
+    btn_retry:'Try Again',
+    err_title:'Shipment not found',
+    err_sub:'The tracking code is incorrect or this shipment does not exist.',
+    nav_home:'Home',nav_loads:'Loads',nav_fleet:'Fleet',nav_tracking:'Tracking',nav_account:'Account',
+    delivered_at_label:'Delivered at',
+    searching:'Searching...',
+    err_network:'Network error. Please try again.',
+    share_text:'Track my shipment on MsouWout Logistics:'
+  },
+  es:{
+    search_title:'Rastrear tu Envio',
+    search_sub:'Ingresa tu codigo de seguimiento para ver donde esta tu carga',
+    label_tracking:'Codigo de Rastreo',
+    label_pin:'PIN de Entrega',
+    or_text:'O',
+    search_btn:'&#128270; Buscar',
+    live_tracking:'Rastreo en vivo',
+    st_posted:'Publicado',st_assigned:'Asignado',st_picked_up:'Recogido',st_in_transit:'En Ruta',st_delivered:'Entregado',
+    delivered_title:'Envio Entregado!',
+    cancelled_title:'Envio Cancelado',cancelled_sub:'Este envio ha sido cancelado.',
+    card_shipment:'Detalles del Envio',
+    card_driver:'Conductor & Vehiculo',
+    lbl_cargo:'Carga',lbl_quantity:'Cantidad',lbl_distance:'Distancia',lbl_price:'Precio',
+    btn_call_driver:'Llamar Conductor',
+    lbl_last_gps:'Ultima posicion:',
+    btn_share:'Compartir',btn_call:'Llamar',
+    btn_retry:'Intentar de Nuevo',
+    err_title:'Envio no encontrado',
+    err_sub:'El codigo de seguimiento es incorrecto o el envio no existe.',
+    nav_home:'Inicio',nav_loads:'Cargas',nav_fleet:'Flota',nav_tracking:'Rastreo',nav_account:'Cuenta',
+    delivered_at_label:'Entregado a las',
+    searching:'Buscando...',
+    err_network:'Error de red. Por favor intenta de nuevo.',
+    share_text:'Rastrea mi envio en MsouWout Logistics:'
+  }
+};
+
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-sw button').forEach(function(b){b.classList.remove('active')});
+  var el=document.getElementById('lang-'+lang);
+  if(el) el.classList.add('active');
+  var t=T[lang]||T.ht;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key=el.getAttribute('data-i18n');
+    if(t[key]) el.innerHTML=t[key];
+  });
+}
+
+function tx(key){var t=T[currentLang]||T.ht;return t[key]||T.ht[key]||key}
+
+/* ========== CONFIG ========== */
+var API='https://msouwout-backend.onrender.com';
+var map=null;
+var pickupMarker=null, dropoffMarker=null, truckMarker=null, routeLine=null;
+var currentData=null;
+var pollTimer=null;
+var searchCode='';
+
+/* ========== SEARCH ========== */
+function doSearch(){
+  var code=document.getElementById('inputCode').value.trim();
+  var pin=document.getElementById('inputPin').value.trim();
+  var query=code||pin;
+  if(!query){
+    showSearchError(tx('err_title'));
+    return;
+  }
+  searchCode=query;
+  var btn=document.getElementById('searchBtn');
+  btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span> '+tx('searching');
+  hideSearchError();
+
+  fetchTracking(query,function(ok){
+    btn.disabled=false;
+    btn.innerHTML='<span>'+tx('search_btn')+'</span>';
+  });
+}
+
+function fetchTracking(code,cb){
+  fetch(API+'/api/logistics/loads/'+encodeURIComponent(code)+'/track')
+    .then(function(res){
+      if(!res.ok) throw new Error('Not found');
+      return res.json();
+    })
+    .then(function(data){
+      currentData=data;
+      showResult(data);
+      if(cb) cb(true);
+    })
+    .catch(function(err){
+      showError();
+      if(cb) cb(false);
+    });
+}
+
+function showSearchError(msg){
+  var el=document.getElementById('searchError');
+  el.textContent=msg;
+  el.style.display='block';
+}
+function hideSearchError(){
+  document.getElementById('searchError').style.display='none';
+}
+
+/* ========== SHOW RESULT ========== */
+function showResult(d){
+  document.getElementById('searchState').style.display='none';
+  document.getElementById('errorState').style.display='none';
+  document.getElementById('resultState').style.display='block';
+  document.getElementById('siteFooter').style.display='none';
+
+  // Tracking code
+  document.getElementById('dispCode').textContent=d.tracking_code||searchCode;
+
+  // Route
+  document.getElementById('dispPickup').textContent=d.pickup_address||'—';
+  document.getElementById('dispDropoff').textContent=d.dropoff_address||'—';
+
+  // Details
+  document.getElementById('dispCargo').textContent=formatCargo(d.cargo_type)||'—';
+  document.getElementById('dispQty').textContent=d.quantity||'—';
+  document.getElementById('dispDistance').textContent=d.distance_km?d.distance_km+' km':'—';
+  document.getElementById('dispPrice').textContent=d.price?'HTG '+Number(d.price).toLocaleString():'—';
+
+  // Status flow
+  updateStatusFlow(d);
+
+  // Delivered / Cancelled banners
+  document.getElementById('deliveredBanner').classList.remove('show');
+  document.getElementById('cancelledBanner').classList.remove('show');
+
+  if(d.status==='delivered'){
+    document.getElementById('deliveredBanner').classList.add('show');
+    document.getElementById('deliveredTime').textContent=
+      tx('delivered_at_label')+' '+formatTime(d.delivered_at);
+  } else if(d.status==='cancelled'){
+    document.getElementById('cancelledBanner').classList.add('show');
+  }
+
+  // Driver card
+  var driverCard=document.getElementById('driverCard');
+  if(d.driver_name||d.truck_plate){
+    driverCard.style.display='block';
+    document.getElementById('dispDriverName').textContent=d.driver_name||'—';
+    document.getElementById('driverAvatar').textContent=d.driver_name?d.driver_name.charAt(0).toUpperCase():'?';
+    document.getElementById('dispFleet').textContent=d.fleet_name||'';
+
+    if(d.driver_phone){
+      var cleanPhone=d.driver_phone.replace(/[^0-9+]/g,'');
+      document.getElementById('driverPhoneBtn').href='tel:'+cleanPhone;
+      document.getElementById('driverPhoneBtn').style.display='inline-flex';
+      document.getElementById('callBtn').href='tel:'+cleanPhone;
+      document.getElementById('callBtn').classList.remove('disabled');
+    } else {
+      document.getElementById('driverPhoneBtn').style.display='none';
+      document.getElementById('callBtn').classList.add('disabled');
+    }
+
+    document.getElementById('dispTruckType').textContent=d.assigned_truck_type||'—';
+    document.getElementById('dispPlate').textContent=d.truck_plate?'&#128203; '+d.truck_plate:'';
+
+    if(d.last_location_update){
+      document.getElementById('dispGpsTime').textContent=formatTime(d.last_location_update);
+      document.getElementById('gpsUpdate').style.display='flex';
+    } else {
+      document.getElementById('gpsUpdate').style.display='none';
+    }
+  } else {
+    driverCard.style.display='none';
+    document.getElementById('callBtn').classList.add('disabled');
+  }
+
+  // Map
+  initMap(d);
+
+  // Polling for live updates
+  startPolling(d);
+
+  // Update URL without reload
+  var url=new URL(window.location);
+  url.searchParams.set('code',d.tracking_code||searchCode);
+  window.history.replaceState({},'',url);
+}
+
+/* ========== STATUS FLOW ========== */
+var statusOrder=['posted','assigned','picked_up','in_transit','delivered'];
+
+function updateStatusFlow(d){
+  var current=d.status||'posted';
+  var currentIdx=statusOrder.indexOf(current);
+  if(currentIdx===-1) currentIdx=0;
+
+  var timestamps={
+    posted:d.assigned_at||d.created_at||null,
+    assigned:d.assigned_at,
+    picked_up:d.picked_up_at,
+    in_transit:d.in_transit_at,
+    delivered:d.delivered_at
+  };
+
+  statusOrder.forEach(function(step,i){
+    var el=document.getElementById('step-'+step);
+    var timeEl=document.getElementById('time-'+step);
+    el.classList.remove('done','active-step');
+
+    if(i<currentIdx){
+      el.classList.add('done');
+      el.querySelector('.status-dot').innerHTML='&#10003;';
+    } else if(i===currentIdx){
+      el.classList.add('active-step');
+      el.querySelector('.status-dot').textContent=''+(i+1);
+    } else {
+      el.querySelector('.status-dot').textContent=''+(i+1);
+    }
+
+    if(timestamps[step]){
+      timeEl.textContent=formatTimeShort(timestamps[step]);
+    } else {
+      timeEl.textContent='';
+    }
+  });
+}
+
+/* ========== MAP ========== */
+function initMap(d){
+  if(!map){
+    map=L.map('map',{zoomControl:false,attributionControl:false});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      maxZoom:19,
+      attribution:'&copy; OpenStreetMap'
+    }).addTo(map);
+    L.control.zoom({position:'topright'}).addTo(map);
+    L.control.attribution({position:'bottomright',prefix:false}).addTo(map);
+  }
+
+  // Clear existing markers
+  if(pickupMarker){map.removeLayer(pickupMarker);pickupMarker=null}
+  if(dropoffMarker){map.removeLayer(dropoffMarker);dropoffMarker=null}
+  if(truckMarker){map.removeLayer(truckMarker);truckMarker=null}
+  if(routeLine){map.removeLayer(routeLine);routeLine=null}
+
+  var bounds=[];
+
+  // Pickup marker
+  if(d.pickup_lat&&d.pickup_lng){
+    var pickupIcon=L.divIcon({className:'',html:'<div class="pickup-marker"></div>',iconSize:[14,14],iconAnchor:[7,7]});
+    pickupMarker=L.marker([d.pickup_lat,d.pickup_lng],{icon:pickupIcon})
+      .bindPopup('<b>&#128994; '+tx('st_picked_up')+'</b><br>'+escHtml(d.pickup_address||''))
+      .addTo(map);
+    bounds.push([d.pickup_lat,d.pickup_lng]);
+  }
+
+  // Dropoff marker
+  if(d.dropoff_lat&&d.dropoff_lng){
+    var dropoffIcon=L.divIcon({className:'',html:'<div class="dropoff-marker"></div>',iconSize:[14,14],iconAnchor:[7,7]});
+    dropoffMarker=L.marker([d.dropoff_lat,d.dropoff_lng],{icon:dropoffIcon})
+      .bindPopup('<b>&#128308; '+tx('st_delivered')+'</b><br>'+escHtml(d.dropoff_address||''))
+      .addTo(map);
+    bounds.push([d.dropoff_lat,d.dropoff_lng]);
+  }
+
+  // Route line (dashed)
+  if(d.pickup_lat&&d.pickup_lng&&d.dropoff_lat&&d.dropoff_lng){
+    routeLine=L.polyline(
+      [[d.pickup_lat,d.pickup_lng],[d.dropoff_lat,d.dropoff_lng]],
+      {color:'#0B1F66',weight:3,opacity:.4,dashArray:'8,8'}
+    ).addTo(map);
+  }
+
+  // Truck marker
+  if(d.truck_lat&&d.truck_lng){
+    var truckIcon=L.divIcon({className:'',html:'<div class="truck-marker"></div>',iconSize:[20,20],iconAnchor:[10,10]});
+    truckMarker=L.marker([d.truck_lat,d.truck_lng],{icon:truckIcon})
+      .bindPopup('<b>&#128666; '+escHtml(d.driver_name||'')+'</b><br>'+escHtml(d.truck_plate||''))
+      .addTo(map);
+    bounds.push([d.truck_lat,d.truck_lng]);
+    document.getElementById('liveBadge').style.display='flex';
+  } else {
+    document.getElementById('liveBadge').style.display='none';
+  }
+
+  // Fit bounds
+  if(bounds.length>1){
+    map.fitBounds(bounds,{padding:[40,40],maxZoom:14});
+  } else if(bounds.length===1){
+    map.setView(bounds[0],13);
+  } else {
+    // Default to Haiti
+    map.setView([18.94,-72.31],8);
+  }
+}
+
+function updateTruckPosition(d){
+  if(!d.truck_lat||!d.truck_lng) return;
+
+  if(truckMarker){
+    truckMarker.setLatLng([d.truck_lat,d.truck_lng]);
+  } else {
+    var truckIcon=L.divIcon({className:'',html:'<div class="truck-marker"></div>',iconSize:[20,20],iconAnchor:[10,10]});
+    truckMarker=L.marker([d.truck_lat,d.truck_lng],{icon:truckIcon})
+      .bindPopup('<b>&#128666; '+escHtml(d.driver_name||'')+'</b><br>'+escHtml(d.truck_plate||''))
+      .addTo(map);
+  }
+
+  map.panTo([d.truck_lat,d.truck_lng],{animate:true,duration:.8});
+  document.getElementById('liveBadge').style.display='flex';
+
+  if(d.last_location_update){
+    document.getElementById('dispGpsTime').textContent=formatTime(d.last_location_update);
+  }
+}
+
+/* ========== POLLING ========== */
+function startPolling(d){
+  stopPolling();
+  var status=d.status;
+  if(status==='assigned'||status==='picked_up'||status==='in_transit'){
+    pollTimer=setInterval(function(){
+      fetch(API+'/api/logistics/loads/'+encodeURIComponent(searchCode)+'/track')
+        .then(function(res){
+          if(!res.ok) throw new Error('err');
+          return res.json();
+        })
+        .then(function(newData){
+          currentData=newData;
+          updateStatusFlow(newData);
+          updateTruckPosition(newData);
+
+          // Check if delivered/cancelled
+          if(newData.status==='delivered'){
+            document.getElementById('deliveredBanner').classList.add('show');
+            document.getElementById('deliveredTime').textContent=
+              tx('delivered_at_label')+' '+formatTime(newData.delivered_at);
+            stopPolling();
+          } else if(newData.status==='cancelled'){
+            document.getElementById('cancelledBanner').classList.add('show');
+            stopPolling();
+          }
+
+          // Update driver info if changed
+          if(newData.driver_name){
+            document.getElementById('dispDriverName').textContent=newData.driver_name;
+            document.getElementById('driverAvatar').textContent=newData.driver_name.charAt(0).toUpperCase();
+          }
+        })
+        .catch(function(){});
+    },10000);
+  }
+}
+
+function stopPolling(){
+  if(pollTimer){clearInterval(pollTimer);pollTimer=null}
+}
+
+/* ========== ACTIONS ========== */
+function shareWhatsApp(){
+  var code=currentData?currentData.tracking_code||searchCode:searchCode;
+  var url=window.location.origin+'/logistics-track.html?code='+encodeURIComponent(code);
+  var msg=encodeURIComponent(tx('share_text')+' '+url);
+  window.open('https://wa.me/?text='+msg,'_blank');
+}
+
+function triggerSOS(){
+  if(currentData&&currentData.driver_phone){
+    var phone=currentData.driver_phone.replace(/[^0-9+]/g,'');
+    if(confirm('SOS: '+tx('btn_call')+' ?')){
+      window.location.href='tel:'+phone;
+    }
+  } else {
+    window.location.href='tel:114';
+  }
+}
+
+function goBack(){
+  document.getElementById('errorState').style.display='none';
+  document.getElementById('resultState').style.display='none';
+  document.getElementById('siteFooter').style.display='';
+  document.getElementById('searchState').style.display='flex';
+  stopPolling();
+}
+
+/* ========== HELPERS ========== */
+function formatTime(ts){
+  if(!ts) return '—';
+  var d=new Date(ts);
+  if(isNaN(d.getTime())) return '—';
+  var day=d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
+  var h=d.getHours();var m=d.getMinutes();
+  var ampm=h>=12?'PM':'AM';
+  h=h%12;if(h===0)h=12;
+  return day+' '+h+':'+(m<10?'0':'')+m+' '+ampm;
+}
+
+function formatTimeShort(ts){
+  if(!ts) return '';
+  var d=new Date(ts);
+  if(isNaN(d.getTime())) return '';
+  var h=d.getHours();var m=d.getMinutes();
+  var ampm=h>=12?'PM':'AM';
+  h=h%12;if(h===0)h=12;
+  return h+':'+(m<10?'0':'')+m+' '+ampm;
+}
+
+function formatCargo(type){
+  if(!type) return '—';
+  var map={
+    rice:'Diri',cement:'Siman',fuel:'Gaz',construction:'Konstriksyon',
+    food:'Manje',merchandise:'Machandiz',vehicles:'Machin',
+    livestock:'Bèt',humanitarian:'Imanitè',other:'Lòt'
+  };
+  return map[type]||type.charAt(0).toUpperCase()+type.slice(1);
+}
+
+function escHtml(str){
+  if(!str) return '';
+  var d=document.createElement('div');
+  d.textContent=str;
+  return d.innerHTML;
+}
+
+function showError(){
+  document.getElementById('searchState').style.display='none';
+  document.getElementById('resultState').style.display='none';
+  document.getElementById('siteFooter').style.display='';
+  document.getElementById('errorState').style.display='block';
+}
+
+/* ========== INIT ========== */
+(function(){
+  setLang('ht');
+
+  // Check URL params
+  var params=new URLSearchParams(window.location.search);
+  var code=params.get('code')||params.get('tracking')||params.get('pin')||'';
+  if(code){
+    document.getElementById('inputCode').value=code;
+    searchCode=code;
+    var btn=document.getElementById('searchBtn');
+    btn.disabled=true;
+    btn.innerHTML='<span class="spinner"></span> '+tx('searching');
+    fetchTracking(code,function(){
+      btn.disabled=false;
+      btn.innerHTML='<span>'+tx('search_btn')+'</span>';
+    });
+  }
+
+  // Enter key on inputs
+  document.getElementById('inputCode').addEventListener('keydown',function(e){
+    if(e.key==='Enter') doSearch();
+  });
+  document.getElementById('inputPin').addEventListener('keydown',function(e){
+    if(e.key==='Enter') doSearch();
+  });
+
+  // Pin input: digits only
+  document.getElementById('inputPin').addEventListener('input',function(){
+    this.value=this.value.replace(/[^0-9]/g,'').slice(0,6);
+  });
+})();
+</script>
+</body>
+</html>
