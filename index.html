@@ -353,41 +353,94 @@ a{text-decoration:none;color:inherit}
   .main-q{font-size:2.6rem}
 }
 /* INSTALL BANNER */
-.install-banner{
-  display:none;position:fixed;bottom:70px;left:12px;right:12px;z-index:9999;
-  background:linear-gradient(135deg,var(--blue),#001570);
-  border-radius:16px;padding:14px 16px;
-  box-shadow:0 8px 32px rgba(0,0,0,.3);
+.install-overlay{
+  display:none;position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+  align-items:flex-end;justify-content:center;
+  animation:fadeIn .3s ease;
+}
+.install-overlay.show{display:flex}
+.install-sheet{
+  background:#fff;border-radius:24px 24px 0 0;padding:28px 20px 32px;
+  width:100%;max-width:420px;position:relative;
   animation:slideUp .4s ease;
 }
-.install-banner.show{display:flex;align-items:center;gap:12px}
-.install-banner-icon{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
-.install-banner-text{flex:1;color:#fff}
-.install-banner-title{font-weight:800;font-size:.9rem}
-.install-banner-sub{font-size:.72rem;opacity:.7;margin-top:2px}
-.install-banner-btn{
-  background:#fff;color:var(--blue);border:none;border-radius:10px;
-  padding:10px 18px;font-weight:800;font-size:.82rem;cursor:pointer;
-  flex-shrink:0;font-family:var(--body);
+.install-sheet-handle{width:40px;height:4px;background:#ddd;border-radius:4px;margin:0 auto 20px}
+.install-sheet-icon{width:64px;height:64px;border-radius:16px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px;box-shadow:0 4px 16px rgba(0,32,159,.3)}
+.install-sheet h3{text-align:center;font-size:1.2rem;font-weight:800;margin-bottom:4px}
+.install-sheet p{text-align:center;font-size:.82rem;color:#666;margin-bottom:20px}
+.install-main-btn{
+  display:block;width:100%;padding:16px;border:none;border-radius:14px;
+  background:var(--blue);color:#fff;font-size:1rem;font-weight:800;
+  cursor:pointer;font-family:var(--body);margin-bottom:12px;
+  box-shadow:0 4px 16px rgba(0,32,159,.3);
 }
-.install-banner-close{
-  position:absolute;top:8px;right:10px;background:none;border:none;
-  color:rgba(255,255,255,.5);font-size:1.1rem;cursor:pointer;padding:4px;
+.install-main-btn:active{transform:scale(.98)}
+.install-ios-steps{
+  background:#f5f7fa;border-radius:14px;padding:16px;margin-bottom:12px;
 }
+.install-ios-steps .step{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:.82rem}
+.install-ios-steps .step:not(:last-child){border-bottom:1px solid #e8eaee}
+.install-ios-steps .step-num{width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;flex-shrink:0}
+.install-skip{
+  display:block;width:100%;padding:12px;border:none;border-radius:10px;
+  background:none;color:#999;font-size:.82rem;cursor:pointer;font-family:var(--body);
+}
+/* SHARE FAB */
+.share-fab{
+  position:fixed;bottom:76px;right:14px;z-index:999;
+  width:48px;height:48px;border-radius:50%;border:none;
+  background:var(--blue);color:#fff;cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,32,159,.4);
+  display:flex;align-items:center;justify-content:center;
+}
+.share-fab svg{width:22px;height:22px}
+.share-menu{
+  display:none;position:fixed;bottom:132px;right:14px;z-index:999;
+  background:#fff;border-radius:14px;padding:8px;min-width:200px;
+  box-shadow:0 8px 32px rgba(0,0,0,.15);
+}
+.share-menu.show{display:block}
+.share-menu a,.share-menu button{
+  display:flex;align-items:center;gap:10px;padding:12px;width:100%;
+  border:none;background:none;font-size:.85rem;font-weight:600;
+  cursor:pointer;border-radius:10px;font-family:var(--body);color:#333;text-decoration:none;
+}
+.share-menu a:hover,.share-menu button:hover{background:#f5f7fa}
 @keyframes slideUp{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 <body>
 
-<!-- PWA Install Banner -->
-<div class="install-banner" id="installBanner">
-  <div class="install-banner-icon">📲</div>
-  <div class="install-banner-text">
-    <div class="install-banner-title" data-i18n="install_title">Enstale MsouWout</div>
-    <div class="install-banner-sub" data-i18n="install_sub">Ajoute sou ekran ou pou akse rapid</div>
+<!-- PWA Install Overlay -->
+<div class="install-overlay" id="installOverlay" onclick="if(event.target===this)closeInstall()">
+  <div class="install-sheet">
+    <div class="install-sheet-handle"></div>
+    <div class="install-sheet-icon">🚗</div>
+    <h3 data-i18n="install_title">Enstale MsouWout</h3>
+    <p data-i18n="install_desc">Mete app la sou telefòn ou pou jwenn kous pi vit!</p>
+    <button class="install-main-btn" id="installBtn" data-i18n="install_btn">📲 Enstale Kounye a</button>
+    <div class="install-ios-steps" id="iosSteps" style="display:none">
+      <div class="step"><span class="step-num">1</span> <span data-i18n="ios_step1">Tape sou bouton Pataje ⬆ anba ekran an</span></div>
+      <div class="step"><span class="step-num">2</span> <span data-i18n="ios_step2">Desann epi tape "Add to Home Screen"</span></div>
+      <div class="step"><span class="step-num">3</span> <span data-i18n="ios_step3">Tape "Add" — MsouWout ap parèt sou ekran ou!</span></div>
+    </div>
+    <button class="install-skip" id="installSkip" data-i18n="install_skip">Pa kounye a</button>
   </div>
-  <button class="install-banner-btn" id="installBtn" data-i18n="install_btn">Enstale</button>
-  <button class="install-banner-close" id="installClose">&times;</button>
+</div>
+
+<!-- Share FAB (visible when URL bar is hidden in standalone mode) -->
+<button class="share-fab" id="shareFab" style="display:none" onclick="toggleShareMenu()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+</button>
+<div class="share-menu" id="shareMenu">
+  <a href="https://wa.me/?text=Jwenn%20yon%20kous%20rapid%20sou%20MsouWout!%20🚗%20https://msouwout.com" target="_blank">
+    <span style="font-size:1.2rem">💬</span> Pataje sou WhatsApp
+  </a>
+  <button onclick="copyShareLink()">
+    <span style="font-size:1.2rem">📋</span> <span id="copyShareText">Kopye Lyen</span>
+  </button>
 </div>
 
 <div class="lang-bar">
@@ -716,8 +769,12 @@ var T={
     surge_rain:'Lapli',
     surge_demand:'Demand wo',
     install_title:'Enstale MsouWout',
-    install_sub:'Ajoute sou ekran ou pou akse rapid',
-    install_btn:'Enstale'
+    install_desc:'Mete app la sou telefòn ou pou jwenn kous pi vit!',
+    install_btn:'📲 Enstale Kounye a',
+    install_skip:'Pa kounye a',
+    ios_step1:'Tape sou bouton Pataje ⬆ anba ekran an',
+    ios_step2:'Desann epi tape "Add to Home Screen"',
+    ios_step3:'Tape "Add" — MsouWout ap parèt sou ekran ou!'
   },
   fr:{
     main_q:'Trouvez un Trajet <em>en 2 Minutes</em>',
@@ -795,8 +852,12 @@ var T={
     surge_rain:'Pluie',
     surge_demand:'Forte demande',
     install_title:'Installer MsouWout',
-    install_sub:'Ajoutez sur votre écran pour un accès rapide',
-    install_btn:'Installer'
+    install_desc:'Installez l\'app pour trouver un trajet plus vite!',
+    install_btn:'📲 Installer Maintenant',
+    install_skip:'Pas maintenant',
+    ios_step1:'Appuyez sur le bouton Partager ⬆ en bas',
+    ios_step2:'Faites défiler et appuyez "Sur l\'écran d\'accueil"',
+    ios_step3:'Appuyez "Ajouter" — MsouWout apparaîtra sur votre écran!'
   },
   en:{
     main_q:'Get a Ride <em>in 2 Minutes</em>',
@@ -874,8 +935,12 @@ var T={
     surge_rain:'Rain',
     surge_demand:'High demand',
     install_title:'Install MsouWout',
-    install_sub:'Add to your home screen for quick access',
-    install_btn:'Install'
+    install_desc:'Install the app to find rides faster!',
+    install_btn:'📲 Install Now',
+    install_skip:'Not now',
+    ios_step1:'Tap the Share button ⬆ at the bottom',
+    ios_step2:'Scroll down and tap "Add to Home Screen"',
+    ios_step3:'Tap "Add" — MsouWout will appear on your screen!'
   },
   es:{
     main_q:'Consigue un Viaje <em>en 2 Minutos</em>',
@@ -953,8 +1018,12 @@ var T={
     surge_rain:'Lluvia',
     surge_demand:'Alta demanda',
     install_title:'Instalar MsouWout',
-    install_sub:'Agrega a tu pantalla para acceso rápido',
-    install_btn:'Instalar'
+    install_desc:'Instala la app para encontrar viajes mas rapido!',
+    install_btn:'📲 Instalar Ahora',
+    install_skip:'Ahora no',
+    ios_step1:'Toca el boton Compartir ⬆ en la parte inferior',
+    ios_step2:'Desplaza y toca "Agregar a pantalla de inicio"',
+    ios_step3:'Toca "Agregar" — MsouWout aparecera en tu pantalla!'
   }
 };
 
@@ -1284,53 +1353,77 @@ if(savedLang&&T[savedLang]) setLang(savedLang);
 if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}
 
 var deferredPrompt=null;
-var banner=document.getElementById('installBanner');
+var overlay=document.getElementById('installOverlay');
 var installBtn=document.getElementById('installBtn');
-var installClose=document.getElementById('installClose');
+var installSkip=document.getElementById('installSkip');
+var iosSteps=document.getElementById('iosSteps');
+var shareFab=document.getElementById('shareFab');
+var shareMenu=document.getElementById('shareMenu');
+var isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
+var isStandalone=window.matchMedia('(display-mode:standalone)').matches||window.navigator.standalone;
+
+if(isStandalone&&shareFab) shareFab.style.display='flex';
 
 window.addEventListener('beforeinstallprompt',function(e){
   e.preventDefault();
   deferredPrompt=e;
-  if(!localStorage.getItem('msw_install_dismissed')){
-    banner.classList.add('show');
+  if(!localStorage.getItem('msw_install_dismissed')&&!isStandalone){
+    overlay.classList.add('show');
   }
 });
+
+function closeInstall(){
+  overlay.classList.remove('show');
+  localStorage.setItem('msw_install_dismissed','1');
+}
 
 if(installBtn) installBtn.addEventListener('click',function(){
   if(deferredPrompt){
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then(function(r){
-      if(r.outcome==='accepted') banner.classList.remove('show');
+      if(r.outcome==='accepted'){overlay.classList.remove('show');localStorage.setItem('msw_installed','1');}
       deferredPrompt=null;
     });
+  } else if(isIOS){
+    iosSteps.style.display='block';
+    installBtn.style.display='none';
   } else {
-    var ua=navigator.userAgent||'';
-    if(/iPhone|iPad/.test(ua)){
-      alert('Tape sou bouton Pataje (⬆) anba ekran an, epi chwazi "Add to Home Screen"');
-    } else {
-      alert('Tape sou menu ⋮ anlè adwat, epi chwazi "Add to Home Screen"');
-    }
-    banner.classList.remove('show');
+    iosSteps.style.display='block';
+    installBtn.style.display='none';
   }
 });
 
-if(installClose) installClose.addEventListener('click',function(){
-  banner.classList.remove('show');
-  localStorage.setItem('msw_install_dismissed','1');
-});
+if(installSkip) installSkip.addEventListener('click',closeInstall);
 
 window.addEventListener('appinstalled',function(){
-  banner.classList.remove('show');
+  overlay.classList.remove('show');
   localStorage.setItem('msw_installed','1');
 });
 
-if(window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone){
-  // Already installed as PWA, don't show banner
-} else if(!localStorage.getItem('msw_install_dismissed') && !localStorage.getItem('msw_installed')){
-  setTimeout(function(){
-    if(!deferredPrompt) banner.classList.add('show');
-  }, 3000);
+if(!isStandalone&&!localStorage.getItem('msw_install_dismissed')&&!localStorage.getItem('msw_installed')){
+  if(isIOS){
+    setTimeout(function(){overlay.classList.add('show');},2000);
+  } else {
+    setTimeout(function(){
+      if(!deferredPrompt) overlay.classList.add('show');
+    },3000);
+  }
 }
+
+function toggleShareMenu(){
+  shareMenu.classList.toggle('show');
+}
+function copyShareLink(){
+  navigator.clipboard.writeText('https://msouwout.com').then(function(){
+    document.getElementById('copyShareText').textContent='Kopye!';
+    setTimeout(function(){document.getElementById('copyShareText').textContent='Kopye Lyen';shareMenu.classList.remove('show');},1500);
+  });
+}
+document.addEventListener('click',function(e){
+  if(shareMenu.classList.contains('show')&&!shareMenu.contains(e.target)&&e.target!==shareFab&&!shareFab.contains(e.target)){
+    shareMenu.classList.remove('show');
+  }
+});
 </script>
 </body>
 </html>
