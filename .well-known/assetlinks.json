@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.haitibiznis.msouwout",
+      "sha256_cert_fingerprints": [
+        "05:A1:21:41:7F:BD:CC:F0:DD:44:F0:02:94:95:42:21:CF:9F:0C:8B:D3:0F:72:46:75:CB:75:EC:82:C7:2D:49"
+      ]
+    }
+  }
+]
