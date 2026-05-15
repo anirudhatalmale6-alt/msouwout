@@ -352,9 +352,43 @@ a{text-decoration:none;color:inherit}
   .step1-top{padding:48px 40px 16px}
   .main-q{font-size:2.6rem}
 }
+/* INSTALL BANNER */
+.install-banner{
+  display:none;position:fixed;bottom:70px;left:12px;right:12px;z-index:9999;
+  background:linear-gradient(135deg,var(--blue),#001570);
+  border-radius:16px;padding:14px 16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.3);
+  animation:slideUp .4s ease;
+}
+.install-banner.show{display:flex;align-items:center;gap:12px}
+.install-banner-icon{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.install-banner-text{flex:1;color:#fff}
+.install-banner-title{font-weight:800;font-size:.9rem}
+.install-banner-sub{font-size:.72rem;opacity:.7;margin-top:2px}
+.install-banner-btn{
+  background:#fff;color:var(--blue);border:none;border-radius:10px;
+  padding:10px 18px;font-weight:800;font-size:.82rem;cursor:pointer;
+  flex-shrink:0;font-family:var(--body);
+}
+.install-banner-close{
+  position:absolute;top:8px;right:10px;background:none;border:none;
+  color:rgba(255,255,255,.5);font-size:1.1rem;cursor:pointer;padding:4px;
+}
+@keyframes slideUp{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
 </style>
 </head>
 <body>
+
+<!-- PWA Install Banner -->
+<div class="install-banner" id="installBanner">
+  <div class="install-banner-icon">📲</div>
+  <div class="install-banner-text">
+    <div class="install-banner-title" data-i18n="install_title">Enstale MsouWout</div>
+    <div class="install-banner-sub" data-i18n="install_sub">Ajoute sou ekran ou pou akse rapid</div>
+  </div>
+  <button class="install-banner-btn" id="installBtn" data-i18n="install_btn">Enstale</button>
+  <button class="install-banner-close" id="installClose">&times;</button>
+</div>
 
 <div class="lang-bar">
   <a class="active" data-lang="ht">Kreyòl</a>
@@ -680,7 +714,10 @@ var T={
     surge_peak_traffic:'Trafik wo',
     surge_night:'Lannwit',
     surge_rain:'Lapli',
-    surge_demand:'Demand wo'
+    surge_demand:'Demand wo',
+    install_title:'Enstale MsouWout',
+    install_sub:'Ajoute sou ekran ou pou akse rapid',
+    install_btn:'Enstale'
   },
   fr:{
     main_q:'Trouvez un Trajet <em>en 2 Minutes</em>',
@@ -756,7 +793,10 @@ var T={
     surge_peak_traffic:'Trafic élevé',
     surge_night:'Nuit',
     surge_rain:'Pluie',
-    surge_demand:'Forte demande'
+    surge_demand:'Forte demande',
+    install_title:'Installer MsouWout',
+    install_sub:'Ajoutez sur votre écran pour un accès rapide',
+    install_btn:'Installer'
   },
   en:{
     main_q:'Get a Ride <em>in 2 Minutes</em>',
@@ -832,7 +872,10 @@ var T={
     surge_peak_traffic:'Heavy traffic',
     surge_night:'Late night',
     surge_rain:'Rain',
-    surge_demand:'High demand'
+    surge_demand:'High demand',
+    install_title:'Install MsouWout',
+    install_sub:'Add to your home screen for quick access',
+    install_btn:'Install'
   },
   es:{
     main_q:'Consigue un Viaje <em>en 2 Minutos</em>',
@@ -908,7 +951,10 @@ var T={
     surge_peak_traffic:'Tráfico alto',
     surge_night:'Noche',
     surge_rain:'Lluvia',
-    surge_demand:'Alta demanda'
+    surge_demand:'Alta demanda',
+    install_title:'Instalar MsouWout',
+    install_sub:'Agrega a tu pantalla para acceso rápido',
+    install_btn:'Instalar'
   }
 };
 
@@ -1234,6 +1280,57 @@ document.addEventListener('click',function(e){
 var savedLang=localStorage.getItem('hb_lang');
 if(savedLang&&T[savedLang]) setLang(savedLang);
 </script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
+<script>
+if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}
+
+var deferredPrompt=null;
+var banner=document.getElementById('installBanner');
+var installBtn=document.getElementById('installBtn');
+var installClose=document.getElementById('installClose');
+
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();
+  deferredPrompt=e;
+  if(!localStorage.getItem('msw_install_dismissed')){
+    banner.classList.add('show');
+  }
+});
+
+if(installBtn) installBtn.addEventListener('click',function(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function(r){
+      if(r.outcome==='accepted') banner.classList.remove('show');
+      deferredPrompt=null;
+    });
+  } else {
+    var ua=navigator.userAgent||'';
+    if(/iPhone|iPad/.test(ua)){
+      alert('Tape sou bouton Pataje (⬆) anba ekran an, epi chwazi "Add to Home Screen"');
+    } else {
+      alert('Tape sou menu ⋮ anlè adwat, epi chwazi "Add to Home Screen"');
+    }
+    banner.classList.remove('show');
+  }
+});
+
+if(installClose) installClose.addEventListener('click',function(){
+  banner.classList.remove('show');
+  localStorage.setItem('msw_install_dismissed','1');
+});
+
+window.addEventListener('appinstalled',function(){
+  banner.classList.remove('show');
+  localStorage.setItem('msw_installed','1');
+});
+
+if(window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone){
+  // Already installed as PWA, don't show banner
+} else if(!localStorage.getItem('msw_install_dismissed') && !localStorage.getItem('msw_installed')){
+  setTimeout(function(){
+    if(!deferredPrompt) banner.classList.add('show');
+  }, 3000);
+}
+</script>
 </body>
 </html>
