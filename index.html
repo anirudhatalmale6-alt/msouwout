@@ -426,6 +426,12 @@ a{text-decoration:none;color:inherit}
       <div class="step"><span class="step-num">2</span> <span data-i18n="ios_step2">Desann epi tape "Add to Home Screen"</span></div>
       <div class="step"><span class="step-num">3</span> <span data-i18n="ios_step3">Tape "Add" — MsouWout ap parèt sou ekran ou!</span></div>
     </div>
+    <div class="install-ios-steps" id="androidSteps" style="display:none">
+      <div class="step"><span class="step-num">1</span> <span data-i18n="android_step1">Ouvri Chrome (navigatè Google la)</span></div>
+      <div class="step"><span class="step-num">2</span> <span data-i18n="android_step2">Tape sou 3 ti pwen ⋮ anwo adwat la</span></div>
+      <div class="step"><span class="step-num">3</span> <span data-i18n="android_step3">Tape "Add to Home screen" oswa "Install app"</span></div>
+      <div class="step"><span class="step-num">4</span> <span data-i18n="android_step4">Tape "Add" — MsouWout ap parèt sou ekran ou!</span></div>
+    </div>
     <button class="install-skip" id="installSkip" data-i18n="install_skip">Pa kounye a</button>
   </div>
 </div>
@@ -774,7 +780,11 @@ var T={
     install_skip:'Pa kounye a',
     ios_step1:'Tape sou bouton Pataje ⬆ anba ekran an',
     ios_step2:'Desann epi tape "Add to Home Screen"',
-    ios_step3:'Tape "Add" — MsouWout ap parèt sou ekran ou!'
+    ios_step3:'Tape "Add" — MsouWout ap parèt sou ekran ou!',
+    android_step1:'Ouvri Chrome (navigatè Google la)',
+    android_step2:'Tape sou 3 ti pwen ⋮ anwo adwat la',
+    android_step3:'Tape "Add to Home screen" oswa "Install app"',
+    android_step4:'Tape "Add" — MsouWout ap parèt sou ekran ou!'
   },
   fr:{
     main_q:'Trouvez un Trajet <em>en 2 Minutes</em>',
@@ -857,7 +867,11 @@ var T={
     install_skip:'Pas maintenant',
     ios_step1:'Appuyez sur le bouton Partager ⬆ en bas',
     ios_step2:'Faites défiler et appuyez "Sur l\'écran d\'accueil"',
-    ios_step3:'Appuyez "Ajouter" — MsouWout apparaîtra sur votre écran!'
+    ios_step3:'Appuyez "Ajouter" — MsouWout apparaîtra sur votre écran!',
+    android_step1:'Ouvrez Chrome (le navigateur Google)',
+    android_step2:'Appuyez sur les 3 points ⋮ en haut à droite',
+    android_step3:'Appuyez "Ajouter à l\'écran d\'accueil" ou "Installer l\'appli"',
+    android_step4:'Appuyez "Ajouter" — MsouWout apparaîtra sur votre écran!'
   },
   en:{
     main_q:'Get a Ride <em>in 2 Minutes</em>',
@@ -940,7 +954,11 @@ var T={
     install_skip:'Not now',
     ios_step1:'Tap the Share button ⬆ at the bottom',
     ios_step2:'Scroll down and tap "Add to Home Screen"',
-    ios_step3:'Tap "Add" — MsouWout will appear on your screen!'
+    ios_step3:'Tap "Add" — MsouWout will appear on your screen!',
+    android_step1:'Open Chrome (Google browser)',
+    android_step2:'Tap the 3 dots ⋮ at the top right',
+    android_step3:'Tap "Add to Home screen" or "Install app"',
+    android_step4:'Tap "Add" — MsouWout will appear on your screen!'
   },
   es:{
     main_q:'Consigue un Viaje <em>en 2 Minutos</em>',
@@ -1023,7 +1041,11 @@ var T={
     install_skip:'Ahora no',
     ios_step1:'Toca el boton Compartir ⬆ en la parte inferior',
     ios_step2:'Desplaza y toca "Agregar a pantalla de inicio"',
-    ios_step3:'Toca "Agregar" — MsouWout aparecera en tu pantalla!'
+    ios_step3:'Toca "Agregar" — MsouWout aparecera en tu pantalla!',
+    android_step1:'Abre Chrome (el navegador de Google)',
+    android_step2:'Toca los 3 puntos ⋮ arriba a la derecha',
+    android_step3:'Toca "Agregar a pantalla de inicio" o "Instalar app"',
+    android_step4:'Toca "Agregar" — MsouWout aparecera en tu pantalla!'
   }
 };
 
@@ -1377,6 +1399,7 @@ function closeInstall(){
   localStorage.setItem('msw_install_dismissed','1');
 }
 
+var androidSteps=document.getElementById('androidSteps');
 if(installBtn) installBtn.addEventListener('click',function(){
   if(deferredPrompt){
     deferredPrompt.prompt();
@@ -1388,7 +1411,7 @@ if(installBtn) installBtn.addEventListener('click',function(){
     iosSteps.style.display='block';
     installBtn.style.display='none';
   } else {
-    iosSteps.style.display='block';
+    androidSteps.style.display='block';
     installBtn.style.display='none';
   }
 });
