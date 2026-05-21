@@ -464,11 +464,12 @@ a{text-decoration:none;color:inherit}
   <div class="header-links">
     <a href="https://haitibiznis.com" class="header-link">HaitiBiznis</a>
     <div style="position:relative">
-      <button class="header-login" onclick="toggleLoginMenu()" data-i18n="login_btn">Konekte</button>
+      <button class="header-login" onclick="toggleLoginMenu()" id="loginBtn" data-i18n="login_btn">Konekte</button>
       <div class="login-dropdown" id="loginDropdown">
         <a href="user-login.html"><span>👤</span> <span data-i18n="login_rider">Kliyan / Pasaje</span></a>
         <a href="driver-login.html"><span>🚗</span> <span data-i18n="login_driver">Chofe</span></a>
         <a href="logistics.html"><span>🚛</span> <span data-i18n="login_logistics">Logistics</span></a>
+        <a href="#" id="logoutLink" onclick="doLogout();return false;" style="display:none;border-top:1px solid #eee;color:#D21034"><span>🚪</span> <span data-i18n="logout_btn">Dekonekte</span></a>
       </div>
     </div>
   </div>
@@ -722,6 +723,7 @@ var T={
     login_rider:'Kliyan / Pasaje',
     login_driver:'Chofe',
     login_logistics:'Logistics',
+    logout_btn:'Dekonekte',
     edit:'Chanje',
     vtype_label:'KALITE MACHIN',
     moto_price:'Pi rapid, pi abodab',
@@ -809,6 +811,7 @@ var T={
     login_rider:'Client / Passager',
     login_driver:'Chauffeur',
     login_logistics:'Logistique',
+    logout_btn:'Déconnexion',
     edit:'Modifier',
     vtype_label:'TYPE DE VÉHICULE',
     moto_price:'Plus rapide, plus abordable',
@@ -896,6 +899,7 @@ var T={
     login_rider:'Customer / Passenger',
     login_driver:'Driver',
     login_logistics:'Logistics',
+    logout_btn:'Log Out',
     edit:'Change',
     vtype_label:'VEHICLE TYPE',
     moto_price:'Faster, more affordable',
@@ -983,6 +987,7 @@ var T={
     login_rider:'Cliente / Pasajero',
     login_driver:'Conductor',
     login_logistics:'Logistica',
+    logout_btn:'Cerrar Sesión',
     edit:'Cambiar',
     vtype_label:'TIPO DE VEHÍCULO',
     moto_price:'Más rápido, más económico',
@@ -1353,6 +1358,29 @@ document.addEventListener('click',function(e){
     dd.classList.remove('show');
   }
 });
+function updateLoginUI(){
+  var name=localStorage.getItem('msw_user_name');
+  var btn=document.getElementById('loginBtn');
+  var logoutLink=document.getElementById('logoutLink');
+  if(name&&btn){
+    btn.textContent=name.split(' ')[0];
+    btn.removeAttribute('data-i18n');
+    if(logoutLink) logoutLink.style.display='';
+  } else if(btn){
+    btn.setAttribute('data-i18n','login_btn');
+    btn.textContent=t('login_btn');
+    if(logoutLink) logoutLink.style.display='none';
+  }
+}
+function doLogout(){
+  localStorage.removeItem('msw_user_name');
+  localStorage.removeItem('msw_phone');
+  localStorage.removeItem('msw_installed');
+  localStorage.removeItem('msw_install_dismissed');
+  updateLoginUI();
+  document.getElementById('loginDropdown').classList.remove('show');
+}
+updateLoginUI();
 
 /* AUTO GPS ON PAGE LOAD — always try */
 (function(){
