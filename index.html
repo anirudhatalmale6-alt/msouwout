@@ -409,7 +409,11 @@ a{text-decoration:none;color:inherit}
 .share-menu a:hover,.share-menu button:hover{background:#f5f7fa}
 @keyframes slideUp{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-#acToggle:checked+span{background:var(--blue)}
+.ac-switch{position:relative;width:48px;height:26px;cursor:pointer;display:block;flex-shrink:0}
+.ac-switch input{opacity:0;width:0;height:0;position:absolute}
+.ac-slider{position:absolute;inset:0;background:#ccc;border-radius:26px;transition:.3s}
+.ac-knob{position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+#acToggle:checked+.ac-slider{background:var(--blue)}
 #acToggle:checked~.ac-knob{left:25px}
 </style>
 </head>
@@ -578,10 +582,10 @@ a{text-decoration:none;color:inherit}
             <div style="font-size:.72rem;color:var(--text-muted)" data-i18n="ac_desc">Machin ak klima</div>
           </div>
         </div>
-        <label style="position:relative;width:48px;height:26px;cursor:pointer">
-          <input type="checkbox" id="acToggle" checked style="opacity:0;width:0;height:0">
-          <span style="position:absolute;inset:0;background:#ccc;border-radius:26px;transition:.3s"></span>
-          <span class="ac-knob" style="position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.2)"></span>
+        <label class="ac-switch">
+          <input type="checkbox" id="acToggle">
+          <span class="ac-slider"></span>
+          <span class="ac-knob"></span>
         </label>
       </div>
     </div>
