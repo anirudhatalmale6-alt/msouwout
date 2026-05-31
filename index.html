@@ -409,6 +409,8 @@ a{text-decoration:none;color:inherit}
 .share-menu a:hover,.share-menu button:hover{background:#f5f7fa}
 @keyframes slideUp{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+#acToggle:checked+span{background:var(--blue)}
+#acToggle:checked~.ac-knob{left:25px}
 </style>
 </head>
 <body>
@@ -564,6 +566,23 @@ a{text-decoration:none;color:inherit}
         <span class="vt-icon">&#128663;</span>
         <span class="vt-name" data-i18n="car_name">Machin</span>
         <span class="vt-price" data-i18n="car_price">Konfortab, AC</span>
+      </div>
+    </div>
+
+    <div class="ac-option" id="acOption" style="display:none;margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--white);border:2px solid var(--border);border-radius:var(--radius)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.3rem">&#10052;&#65039;</span>
+          <div>
+            <div style="font-size:.88rem;font-weight:700;color:var(--text)" data-i18n="ac_label">A/C (Klimatizasyon)</div>
+            <div style="font-size:.72rem;color:var(--text-muted)" data-i18n="ac_desc">Machin ak klima</div>
+          </div>
+        </div>
+        <label style="position:relative;width:48px;height:26px;cursor:pointer">
+          <input type="checkbox" id="acToggle" checked style="opacity:0;width:0;height:0">
+          <span style="position:absolute;inset:0;background:#ccc;border-radius:26px;transition:.3s"></span>
+          <span class="ac-knob" style="position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.2)"></span>
+        </label>
       </div>
     </div>
 
@@ -786,7 +805,9 @@ var T={
     android_step1:'Ouvri Chrome (navigatè Google la)',
     android_step2:'Tape sou 3 ti pwen ⋮ anwo adwat la',
     android_step3:'Tape "Add to Home screen" oswa "Install app"',
-    android_step4:'Tape "Add" — MsouWout ap parèt sou ekran ou!'
+    android_step4:'Tape "Add" — MsouWout ap parèt sou ekran ou!',
+    ac_label:'A/C (Klimatizasyon)',
+    ac_desc:'Machin ak klima'
   },
   fr:{
     main_q:'Trouvez un Trajet <em>en 2 Minutes</em>',
@@ -874,7 +895,9 @@ var T={
     android_step1:'Ouvrez Chrome (le navigateur Google)',
     android_step2:'Appuyez sur les 3 points ⋮ en haut à droite',
     android_step3:'Appuyez "Ajouter à l\'écran d\'accueil" ou "Installer l\'appli"',
-    android_step4:'Appuyez "Ajouter" — MsouWout apparaîtra sur votre écran!'
+    android_step4:'Appuyez "Ajouter" — MsouWout apparaîtra sur votre écran!',
+    ac_label:'A/C (Climatisation)',
+    ac_desc:'Voiture avec climatisation'
   },
   en:{
     main_q:'Get a Ride <em>in 2 Minutes</em>',
@@ -962,7 +985,9 @@ var T={
     android_step1:'Open Chrome (Google browser)',
     android_step2:'Tap the 3 dots ⋮ at the top right',
     android_step3:'Tap "Add to Home screen" or "Install app"',
-    android_step4:'Tap "Add" — MsouWout will appear on your screen!'
+    android_step4:'Tap "Add" — MsouWout will appear on your screen!',
+    ac_label:'A/C (Air Conditioning)',
+    ac_desc:'Car with air conditioning'
   },
   es:{
     main_q:'Consigue un Viaje <em>en 2 Minutos</em>',
@@ -1050,7 +1075,9 @@ var T={
     android_step1:'Abre Chrome (el navegador de Google)',
     android_step2:'Toca los 3 puntos ⋮ arriba a la derecha',
     android_step3:'Toca "Agregar a pantalla de inicio" o "Instalar app"',
-    android_step4:'Toca "Agregar" — MsouWout aparecera en tu pantalla!'
+    android_step4:'Toca "Agregar" — MsouWout aparecera en tu pantalla!',
+    ac_label:'A/C (Aire Acondicionado)',
+    ac_desc:'Carro con aire acondicionado'
   }
 };
 
@@ -1125,6 +1152,7 @@ function selectVehicle(type,el){
   vehicleType=type;
   document.querySelectorAll('.vt-btn').forEach(function(b){b.classList.remove('sel')});
   el.classList.add('sel');
+  document.getElementById('acOption').style.display=type==='car'?'block':'none';
   updateFare();
 }
 
@@ -1203,10 +1231,12 @@ function doSubmitRide(name,phone){
   if(!phone) phone=document.getElementById('rPhone').value.trim();
   if(!phone){showStep(2);document.getElementById('rPhone').focus();return}
 
+  var wantAC=vehicleType==='car'&&document.getElementById('acToggle').checked;
   rideData={
     riderPhone:phone,
     riderName:name||'',
     vehicleType:vehicleType,
+    acRequested:wantAC,
     pickupAddress:pickupEl.value.trim(),
     dropoffAddress:dropEl.value.trim(),
     pickupLat:window._pickupLat||null,
@@ -1248,7 +1278,9 @@ function showWaitlist(){
 
 function contactWhatsApp(){
   var vName=vehicleType==='car'?t('vehicle_car').toLowerCase():t('vehicle_moto').toLowerCase();
-  var msg=t('wa_msg_prefix')+' '+vName+' '+t('wa_msg_from')+' '+pickupEl.value+' '+t('wa_msg_to')+' '+dropEl.value;
+  var msg=t('wa_msg_prefix')+' '+vName;
+  if(rideData.acRequested) msg+=' (AC)';
+  msg+=' '+t('wa_msg_from')+' '+pickupEl.value+' '+t('wa_msg_to')+' '+dropEl.value;
   if(rideData.id) msg+='. Ref: '+rideData.id;
   window.open('https://wa.me/50941902005?text='+encodeURIComponent(msg),'_blank');
 }

@@ -445,13 +445,24 @@ footer{
       <!-- Vehicle Type -->
       <div class="form-group">
         <label class="form-label" data-i18n="f_vehicle_label">Vehicle Type *</label>
-        <select name="Vehicle Type" required>
+        <select name="Vehicle Type" id="vehicleTypeSelect" required onchange="toggleACField()">
           <option value="" disabled selected data-i18n="f_vehicle_ph">-- Select Vehicle Type --</option>
           <option value="Motorcycle" data-i18n="f_v_moto">Motorcycle</option>
           <option value="Car" data-i18n="f_v_car">Car</option>
           <option value="Van" data-i18n="f_v_van">Van</option>
           <option value="Truck" data-i18n="f_v_truck">Truck</option>
         </select>
+      </div>
+
+      <!-- A/C Option (shown for Car/Van) -->
+      <div class="form-group" id="acFieldGroup" style="display:none">
+        <div style="background:rgba(0,32,159,.04);border:1.5px solid rgba(0,32,159,.15);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
+          <span style="font-size:1.4rem">&#10052;&#65039;</span>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;flex:1;margin:0">
+            <input type="checkbox" name="Has AC" value="Yes" id="hasACCheck" style="width:18px;height:18px;accent-color:var(--blue)">
+            <span style="font-size:.88rem;font-weight:600;color:var(--text)" data-i18n="f_ac_label">Wi, machin mwen gen A/C (Klimatizasyon)</span>
+          </label>
+        </div>
       </div>
 
       <!-- License Plate & Driver's License -->
@@ -521,6 +532,22 @@ footer{
           <label><input type="checkbox" name="Zones" value="Guy Malari Airport"><span>Guy Malari Airport</span></label>
           <label><input type="checkbox" name="Zones" value="Toussaint Louverture Airport"><span>Toussaint Louverture Airport</span></label>
         </div>
+      </div>
+
+      <!-- Vehicle Condition Video -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_video_label">Vehicle Condition Video (5 sec max)</label>
+        <div id="videoUploadArea" style="border:2px dashed rgba(0,0,0,.12);border-radius:14px;padding:24px 16px;text-align:center;cursor:pointer;transition:all .25s;background:var(--off-white)" onclick="document.getElementById('vehicleVideo').click()">
+          <div style="font-size:2.2rem;margin-bottom:8px">&#127909;</div>
+          <div style="font-size:.88rem;font-weight:700;color:var(--text)" data-i18n="f_video_title">Anrejistre yon videyo 5 segonn</div>
+          <div style="font-size:.78rem;color:var(--text-light);margin-top:4px;line-height:1.5" data-i18n="f_video_desc">Montre eta machin/moto ou pou verifye kondisyon li</div>
+          <input type="file" id="vehicleVideo" name="Vehicle Video" accept="video/*" capture="environment" style="display:none" onchange="handleVideoUpload(this)">
+        </div>
+        <div id="videoPreview" style="display:none;margin-top:12px;border-radius:12px;overflow:hidden;position:relative">
+          <video id="videoPlayer" style="width:100%;border-radius:12px;max-height:200px;object-fit:cover" controls></video>
+          <button type="button" onclick="removeVideo()" style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;border:none;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center">&#10005;</button>
+        </div>
+        <div id="videoError" style="display:none;margin-top:8px;font-size:.82rem;color:var(--red);font-weight:600;text-align:center"></div>
       </div>
 
       <!-- Terms -->
@@ -656,6 +683,10 @@ const T = {
     f_zones_label:"Zones Preferees", f_select_all:"Tout Selectionner",
     f_z_delmas:"Delmas 19 a Petion-Ville", f_z_kenscoff:"Kenscoff a Le Florville",
     f_terms:"J'accepte les exigences des chauffeurs MsouWout: pas de transactions en especes, identite verifiee, suivi GPS en direct pendant le service, et heures de service de jour (6h - 20h).",
+    f_ac_label:"Oui, mon vehicule a la climatisation (A/C)",
+    f_video_label:"Video de l'etat du vehicule (5 sec max)",
+    f_video_title:"Enregistrez une video de 5 secondes",
+    f_video_desc:"Montrez l'etat de votre vehicule pour verifier sa condition",
     f_submit:"&#128663; Soumettre l'Inscription",
     success_title:"Inscription Soumise!", success_desc:"Merci d'avoir postule pour conduire avec MsouWout. Notre equipe examinera votre candidature et vous contactera via WhatsApp dans les 24 heures.",
     eco_tag:"Ecosysteme HaitiBiznis", eco_title:"Partie de Quelque Chose de Plus Grand",
@@ -699,6 +730,10 @@ const T = {
     f_zones_label:"Preferred Zones", f_select_all:"Select All",
     f_z_delmas:"Delmas 19 to Petion-Ville", f_z_kenscoff:"Kenscoff to Le Florville",
     f_terms:"I agree to MsouWout's driver requirements: no cash transactions, verified identity, live GPS tracking during service, and daytime service hours (6am - 8pm).",
+    f_ac_label:"Yes, my vehicle has A/C (Air Conditioning)",
+    f_video_label:"Vehicle Condition Video (5 sec max)",
+    f_video_title:"Record a 5-second video",
+    f_video_desc:"Show the condition of your vehicle for verification",
     f_submit:"&#128663; Submit Registration",
     success_title:"Registration Submitted!", success_desc:"Thank you for applying to drive with MsouWout. Our team will review your application and contact you via WhatsApp within 24 hours.",
     eco_tag:"HaitiBiznis Ecosystem", eco_title:"Part of Something Bigger",
@@ -742,6 +777,10 @@ const T = {
     f_zones_label:"Zon Prefere", f_select_all:"Tout Seleksyone",
     f_z_delmas:"Delmas 19 a Petion-Ville", f_z_kenscoff:"Kenscoff a Le Florville",
     f_terms:"Mwen aksepte egzijans chofe MsouWout: pa gen tranzaksyon lajan kach, idantite verifye, swivi GPS an dirèk pandan sevis, ak ore sevis lajounen (6am - 8pm).",
+    f_ac_label:"Wi, machin mwen gen A/C (Klimatizasyon)",
+    f_video_label:"Videyo Kondisyon Machin (5 segonn maks)",
+    f_video_title:"Anrejistre yon videyo 5 segonn",
+    f_video_desc:"Montre eta machin/moto ou pou verifye kondisyon li",
     f_submit:"&#128663; Soumèt Enskrisyon",
     success_title:"Enskrisyon Soumèt!", success_desc:"Mesi paske ou aplike pou kondwi ak MsouWout. Ekip nou ap revize aplikasyon ou epi kontakte ou via WhatsApp nan 24 edtan.",
     eco_tag:"Ekosistem HaitiBiznis", eco_title:"Pati nan Yon Bagay Pi Gwo",
@@ -785,6 +824,10 @@ const T = {
     f_zones_label:"Zonas Preferidas", f_select_all:"Seleccionar Todo",
     f_z_delmas:"Delmas 19 a Petion-Ville", f_z_kenscoff:"Kenscoff a Le Florville",
     f_terms:"Acepto los requisitos de conductores de MsouWout: sin transacciones en efectivo, identidad verificada, rastreo GPS en vivo durante el servicio, y horario de servicio diurno (6am - 8pm).",
+    f_ac_label:"Si, mi vehiculo tiene A/C (Aire Acondicionado)",
+    f_video_label:"Video de Condicion del Vehiculo (5 seg max)",
+    f_video_title:"Graba un video de 5 segundos",
+    f_video_desc:"Muestra la condicion de tu vehiculo para verificacion",
     f_submit:"&#128663; Enviar Registro",
     success_title:"Registro Enviado!", success_desc:"Gracias por aplicar para conducir con MsouWout. Nuestro equipo revisara tu solicitud y te contactara via WhatsApp en 24 horas.",
     eco_tag:"Ecosistema HaitiBiznis", eco_title:"Parte de Algo Mas Grande",
@@ -948,6 +991,54 @@ function toggleAllZones(btn){
     });
   });
 })();
+
+/* ═══ A/C FIELD TOGGLE ═══ */
+function toggleACField(){
+  var sel=document.getElementById('vehicleTypeSelect');
+  var acGroup=document.getElementById('acFieldGroup');
+  var val=sel.value;
+  acGroup.style.display=(val==='Car'||val==='Van')?'block':'none';
+  if(val!=='Car'&&val!=='Van') document.getElementById('hasACCheck').checked=false;
+}
+
+/* ═══ VIDEO UPLOAD ═══ */
+function handleVideoUpload(input){
+  var file=input.files[0];
+  if(!file) return;
+  var errEl=document.getElementById('videoError');
+  errEl.style.display='none';
+
+  if(file.size>50*1024*1024){
+    errEl.textContent='Fichye a two gwo (maks 50MB)';
+    errEl.style.display='block';
+    input.value='';return;
+  }
+
+  var url=URL.createObjectURL(file);
+  var vid=document.getElementById('videoPlayer');
+  vid.src=url;
+  vid.onloadedmetadata=function(){
+    if(vid.duration>5.5){
+      errEl.textContent='Videyo a two long! Maks 5 segonn. Pa '+Math.round(vid.duration)+' segonn.';
+      errEl.style.display='block';
+      document.getElementById('videoPreview').style.display='none';
+      input.value='';
+      URL.revokeObjectURL(url);
+    } else {
+      document.getElementById('videoPreview').style.display='block';
+      document.getElementById('videoUploadArea').style.borderColor='var(--green)';
+      document.getElementById('videoUploadArea').style.background='rgba(27,140,61,.04)';
+    }
+  };
+}
+function removeVideo(){
+  document.getElementById('vehicleVideo').value='';
+  document.getElementById('videoPreview').style.display='none';
+  document.getElementById('videoUploadArea').style.borderColor='';
+  document.getElementById('videoUploadArea').style.background='';
+  var vid=document.getElementById('videoPlayer');
+  if(vid.src){URL.revokeObjectURL(vid.src);vid.src='';}
+}
 
 /* ═══ REFERRAL TRACKING ═══ */
 (function(){
