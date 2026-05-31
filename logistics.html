@@ -220,6 +220,22 @@ img{max-width:100%}
 .btn-hero-jl .jl-mark .j{color:#D21034}
 .btn-hero-jl .jl-mark .l{color:#fff}
 .btn-emoji{font-size:1.3rem}
+.jl-dropdown{
+  display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;
+  background:var(--primary-dark);border:1.5px solid rgba(210,16,52,.3);
+  border-radius:14px;padding:8px;z-index:10;
+  box-shadow:0 12px 40px rgba(0,0,0,.5);
+  animation:fadeUp .25s cubic-bezier(.22,1,.36,1);
+}
+.jl-dropdown.open{display:block}
+.jl-dropdown a{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;border-radius:10px;
+  color:rgba(255,255,255,.85);font-size:.9rem;font-weight:600;
+  transition:background .2s;
+}
+.jl-dropdown a:hover{background:rgba(255,255,255,.1);color:#fff}
+.jl-dropdown a span:first-child{font-size:1.1rem;width:24px;text-align:center}
 
 /* ═══════════════════════════════════════
    SECTION COMMON
@@ -512,20 +528,32 @@ img{max-width:100%}
      ═══════════════════════════════════════ -->
 <section class="hero">
   <div class="hero-icon">&#128666;</div>
-  <h1 data-i18n="hero_title">Konekte Chajman Ak Transpotè Verifye</h1>
-  <p class="hero-sub" data-i18n="hero_sub">Kamyon, kontene, bato ak lojistik atrave Ayiti.</p>
+  <h1>Move Cargo Faster Across Haiti</h1>
+  <p class="hero-sub">Connect with verified trucks, containers, flatbeds, cranes, and logistics partners through one platform.</p>
   <div class="hero-actions">
-    <a href="logistics-board.html#post" class="btn-hero btn-hero-red">
+    <a href="logistics-post.html" class="btn-hero btn-hero-red">
+      <span class="btn-emoji">&#128666;</span>
+      <span>Request Transport</span>
+    </a>
+    <div class="jl-network-wrapper" style="position:relative">
+      <button class="btn-hero btn-hero-jl" onclick="toggleJLMenu()" style="width:100%">
+        <span class="btn-emoji">&#127760;</span>
+        <span><span class="jl-mark"><span class="j">J</span><span class="l">L</span></span> Logistics Network</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-left:4px;transition:transform .3s" id="jlChevron"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="jl-dropdown" id="jlDropdown">
+        <a href="logistics-post.html"><span>&#128221;</span> Request a Quote</a>
+        <a href="logistics-board.html?type=flatbed"><span>&#128666;</span> Find a Truck</a>
+        <a href="logistics-board.html?type=flatbed"><span>&#128679;</span> Find a Flatbed</a>
+        <a href="logistics-board.html?type=container"><span>&#128230;</span> Find a Container Carrier</a>
+        <a href="logistics-fleet.html"><span>&#128743;</span> Find a Crane</a>
+        <a href="logistics-fleet.html"><span>&#127970;</span> Find a Warehouse</a>
+        <a href="logistics-dispatch.html"><span>&#128222;</span> Contact a Dispatcher</a>
+      </div>
+    </div>
+    <a href="logistics-track.html" class="btn-hero btn-hero-blue">
       <span class="btn-emoji">&#128230;</span>
-      <span data-i18n="hero_btn_post">Poste Chajman</span>
-    </a>
-    <a href="https://haitibiznis.com/jl-logistics.html" class="btn-hero btn-hero-jl">
-      <span class="jl-mark"><span class="j">J</span><span class="l">L</span></span>
-      <span data-i18n="hero_btn_jl">Rezo JL</span>
-    </a>
-    <a href="logistics-board.html" class="btn-hero btn-hero-blue">
-      <span class="btn-emoji">&#128270;</span>
-      <span data-i18n="hero_btn_browse">Wè Chajman</span>
+      <span>Track My Shipment</span>
     </a>
   </div>
 </section>
@@ -897,6 +925,21 @@ function tx(key){var t=T[currentLang]||T.ht;return t[key]||T.ht[key]||key}
 function toggleMenu(){
   document.getElementById('mobileMenu').classList.toggle('open');
 }
+
+function toggleJLMenu(){
+  var dd=document.getElementById('jlDropdown');
+  var ch=document.getElementById('jlChevron');
+  dd.classList.toggle('open');
+  ch.style.transform=dd.classList.contains('open')?'rotate(180deg)':'';
+}
+document.addEventListener('click',function(e){
+  var dd=document.getElementById('jlDropdown');
+  var wrapper=document.querySelector('.jl-network-wrapper');
+  if(dd && wrapper && !wrapper.contains(e.target)){
+    dd.classList.remove('open');
+    document.getElementById('jlChevron').style.transform='';
+  }
+});
 
 /* ═══════════════════════════════════════
    SCROLL ANIMATIONS
