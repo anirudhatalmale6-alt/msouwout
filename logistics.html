@@ -151,7 +151,7 @@ img{max-width:100%}
    ═══════════════════════════════════════ */
 .hero{
   background:linear-gradient(165deg,var(--primary) 0%,var(--primary-dark) 55%,#040A2E 100%);
-  padding:48px 20px 40px;text-align:center;position:relative;overflow:hidden;
+  padding:48px 20px 40px;text-align:center;position:relative;
 }
 .hero::before{
   content:'';position:absolute;top:-60%;right:-40%;
@@ -183,6 +183,7 @@ img{max-width:100%}
 .hero-actions{
   display:flex;flex-direction:column;gap:12px;padding:0 4px;
   animation:fadeUp .8s cubic-bezier(.22,1,.36,1) .4s both;
+  position:relative;z-index:10;
 }
 .btn-hero{
   display:flex;align-items:center;justify-content:center;gap:10px;
