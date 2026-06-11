@@ -665,6 +665,16 @@ body.stealth .stealth-exit{display:block}
       </button>
     </div>
 
+    <!-- DASH Medical Emergency -->
+    <a href="#" id="dashEmergencyBtn" class="dash-emer-btn" style="display:none;text-decoration:none;margin:12px 16px;padding:14px 16px;background:rgba(210,16,52,.06);border:1.5px solid rgba(210,16,52,.2);border-radius:var(--radius);align-items:center;gap:10px">
+      <span style="font-size:1.3rem">&#128657;</span>
+      <div style="flex:1">
+        <div style="font-size:.82rem;font-weight:700;color:var(--red)">Asistans Medikal DASH</div>
+        <div style="font-size:.68rem;color:var(--text-light)">Aksidan? Tape pou jwenn èd imedya</div>
+      </div>
+      <span style="font-size:1.1rem;color:var(--red)">&#8594;</span>
+    </a>
+
     <div class="end-state" id="endCompleted">
       <div class="end-icon">&#9989;</div>
       <div class="end-title" data-i18n="ride_done">Kous Fini!</div>
@@ -954,7 +964,9 @@ function updateUI(data) {
   if (status === 'completed') {
     hideActiveElements();
     document.getElementById('endCompleted').classList.add('show');
-    document.getElementById('endPrice').textContent = (data.price || '--') + ' HTG';
+    var priceText = (data.price || '--') + ' HTG';
+    if (data.medical_fee) priceText += ' (+ ' + data.medical_fee + ' DASH)';
+    document.getElementById('endPrice').textContent = priceText;
     stopPolling();
   } else if (status === 'cancelled') {
     hideActiveElements();
@@ -969,6 +981,17 @@ function updateUI(data) {
     document.getElementById('rideDetails').style.display = '';
     document.getElementById('actionBtns').style.display = '';
     document.getElementById('safetyBtns').style.display = '';
+  }
+
+  // Show DASH emergency button for active rides
+  var dashBtn = document.getElementById('dashEmergencyBtn');
+  if (dashBtn) {
+    if (['accepted','in_progress','emergency'].includes(status)) {
+      dashBtn.style.display = 'flex';
+      dashBtn.href = 'emergency-dash.html?ride=' + encodeURIComponent(data.ride_id || '');
+    } else {
+      dashBtn.style.display = 'none';
+    }
   }
 
   updateMap(data);

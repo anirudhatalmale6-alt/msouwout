@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Ijans Medikal — DASH x MsouWout</title>
+<meta name="description" content="Asistans medikal ijans DASH pou pasaje ak chofe MsouWout.">
+<meta name="theme-color" content="#D21034">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#00209F;--red:#D21034;--red-dark:#B00D2C;
+  --gold:#D4A017;--green:#1B8C3D;
+  --white:#FFFFFF;--off-white:#F5F7FA;
+  --dark:#0A0E1A;--text:#1A2A4A;--text-light:#5A6B8A;
+  --border:#E2E8F0;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --radius:14px;
+}
+html,body{height:100%}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);-webkit-font-smoothing:antialiased}
+button{font-family:var(--body);cursor:pointer;border:none;background:none}
+
+.emergency-header{
+  background:var(--red);padding:16px 20px;text-align:center;
+  border-bottom:3px solid var(--red-dark);
+}
+.emergency-header h1{color:#fff;font-size:1.1rem;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px}
+.emergency-header p{color:rgba(255,255,255,.75);font-size:.78rem;margin-top:4px}
+
+.content{max-width:480px;margin:0 auto;padding:16px}
+
+.alert-card{
+  background:#fff;border-radius:var(--radius);padding:20px;margin-bottom:16px;
+  border:2px solid var(--red);box-shadow:0 4px 16px rgba(210,16,52,.15);
+  text-align:center;
+}
+.alert-icon{font-size:3rem;margin-bottom:8px}
+.alert-title{font-size:1.1rem;font-weight:800;color:var(--red);margin-bottom:8px}
+.alert-msg{font-size:.85rem;color:var(--text-light);line-height:1.6}
+
+.call-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:18px;border-radius:var(--radius);
+  background:var(--red);color:#fff;font-size:1.1rem;font-weight:800;
+  margin-bottom:12px;box-shadow:0 4px 16px rgba(210,16,52,.3);
+  transition:all .2s;text-decoration:none;
+}
+.call-btn:hover{background:var(--red-dark);transform:translateY(-1px)}
+
+.wa-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px;border-radius:var(--radius);
+  background:#25D366;color:#fff;font-size:1rem;font-weight:800;
+  margin-bottom:16px;transition:all .2s;text-decoration:none;
+}
+.wa-btn:hover{background:#1DA851}
+
+.section-title{font-size:.72rem;font-weight:800;color:var(--text-light);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+
+.facility-card{
+  background:#fff;border-radius:var(--radius);padding:14px 16px;
+  border:1px solid var(--border);margin-bottom:10px;
+}
+.facility-name{font-size:.88rem;font-weight:700;margin-bottom:4px}
+.facility-addr{font-size:.78rem;color:var(--text-light);margin-bottom:6px}
+.facility-dist{font-size:.72rem;font-weight:700;color:var(--blue);margin-bottom:8px}
+.facility-actions{display:flex;gap:8px}
+.fac-btn{
+  flex:1;padding:10px;border-radius:10px;font-size:.78rem;font-weight:700;
+  text-align:center;transition:all .2s;text-decoration:none;
+}
+.fac-call{background:var(--red);color:#fff}
+.fac-dir{background:var(--blue);color:#fff}
+
+.report-section{
+  background:#fff;border-radius:var(--radius);padding:20px;
+  border:1px solid var(--border);margin-bottom:16px;
+}
+.report-section textarea{
+  width:100%;padding:12px;border:2px solid var(--border);border-radius:10px;
+  font-size:.88rem;font-family:var(--body);min-height:80px;resize:vertical;
+  margin-bottom:12px;
+}
+.report-section textarea:focus{outline:none;border-color:var(--blue)}
+.report-btn{
+  width:100%;padding:14px;border-radius:var(--radius);
+  background:var(--blue);color:#fff;font-size:.9rem;font-weight:800;
+  transition:all .2s;
+}
+.report-btn:hover{opacity:.9}
+.report-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.info-box{
+  background:rgba(0,32,159,.04);border:1px solid rgba(0,32,159,.12);
+  border-radius:var(--radius);padding:14px;margin-bottom:16px;
+  font-size:.8rem;color:var(--text);line-height:1.6;
+}
+
+.back-link{
+  display:block;text-align:center;padding:14px;
+  font-size:.82rem;font-weight:700;color:var(--blue);
+}
+
+.loading{text-align:center;padding:40px;color:var(--text-light);font-size:.85rem}
+#locationStatus{font-size:.72rem;color:var(--text-light);text-align:center;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<div class="emergency-header">
+  <h1>&#128680; Ijans Medikal DASH</h1>
+  <p>Asistans medikal imedya pou aksidan</p>
+</div>
+
+<div class="content">
+
+  <div class="alert-card">
+    <div class="alert-icon">&#127973;</div>
+    <div class="alert-title" id="alertTitle">Nou regrèt aksidan ki rive a.</div>
+    <div class="alert-msg" id="alertMsg">Pou asistans medikal imedya, tanpri kontakte DASH oswa ale nan sant medikal DASH ki pi pre w la. Klike isit la pou wè direksyon ak enfòmasyon sant la.</div>
+  </div>
+
+  <a href="tel:+50941000000" class="call-btn" id="callBtn">
+    &#128222; Rele DASH Kounye A
+  </a>
+
+  <a href="#" class="wa-btn" id="waBtn" target="_blank">
+    &#128172; WhatsApp DASH
+  </a>
+
+  <div id="locationStatus">&#8987; Chache pozisyon ou...</div>
+
+  <div class="section-title">Sant Medikal DASH Pi Pre</div>
+  <div id="facilities">
+    <div class="loading">Chaje sant medikal yo...</div>
+  </div>
+
+  <div class="section-title" style="margin-top:20px">Rapòte Aksidan</div>
+  <div class="report-section">
+    <textarea id="accidentDesc" placeholder="Dekri sa k pase a (opsyonèl)..."></textarea>
+    <select id="severity" style="width:100%;padding:12px;border:2px solid var(--border);border-radius:10px;font-size:.88rem;font-family:var(--body);margin-bottom:12px;background:#fff">
+      <option value="minor">Ti blesi (Minor)</option>
+      <option value="moderate" selected>Mwayen (Moderate)</option>
+      <option value="severe">Grav (Severe)</option>
+      <option value="critical">Kritik (Critical)</option>
+    </select>
+    <button class="report-btn" id="reportBtn" onclick="submitReport()">Voye Rapò Aksidan</button>
+  </div>
+
+  <div class="info-box">
+    <strong>Pwoteksyon DASH enkli nan chak kous MsouWout.</strong><br>
+    Frè pwoteksyon 5% la kouvri asistans medikal pou pasaje ak chofe yo.
+    Si ou gen yon aksidan, DASH ap ede ou jwenn swen medikal pi vit posib.
+  </div>
+
+  <a href="index.html" class="back-link">&#8592; Retounen sou MsouWout</a>
+</div>
+
+<script>
+var API_URL='https://msouwout-backend.onrender.com';
+var rideId=null;
+var userLat=null;
+var userLng=null;
+
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  rideId=params.get('ride')||params.get('ride_id');
+
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(function(pos){
+      userLat=pos.coords.latitude;
+      userLng=pos.coords.longitude;
+      document.getElementById('locationStatus').textContent='Pozisyon jwenn!';
+      loadFacilities();
+    },function(){
+      document.getElementById('locationStatus').textContent='Pa ka jwenn pozisyon. Montre tout sant yo.';
+      loadFacilities();
+    },{enableHighAccuracy:true,timeout:10000});
+  } else {
+    document.getElementById('locationStatus').textContent='GPS pa disponib.';
+    loadFacilities();
+  }
+})();
+
+function loadFacilities(){
+  var url=API_URL+'/api/medical/dash-info';
+  if(userLat&&userLng) url+='?lat='+userLat+'&lng='+userLng;
+
+  fetch(url).then(function(r){return r.json()}).then(function(data){
+    document.getElementById('callBtn').href='tel:'+data.emergency_phone;
+
+    var waMsg='Ijans! Mwen bezwen asistans medikal. ';
+    if(userLat&&userLng) waMsg+='GPS: '+userLat.toFixed(5)+','+userLng.toFixed(5);
+    if(rideId) waMsg+=' Ref kous: '+rideId;
+    document.getElementById('waBtn').href='https://wa.me/'+data.emergency_whatsapp.replace('+','')+'?text='+encodeURIComponent(waMsg);
+
+    var html='';
+    (data.facilities||[]).forEach(function(f){
+      var mapsUrl='https://www.google.com/maps/dir/?api=1&destination='+f.lat+','+f.lng;
+      if(userLat&&userLng) mapsUrl+='&origin='+userLat+','+userLng;
+      html+='<div class="facility-card">';
+      html+='<div class="facility-name">'+f.name+'</div>';
+      html+='<div class="facility-addr">'+f.address+'</div>';
+      if(f.distance_km) html+='<div class="facility-dist">&#128205; '+f.distance_km+' km</div>';
+      html+='<div class="facility-actions">';
+      html+='<a href="tel:'+f.phone+'" class="fac-btn fac-call">&#128222; Rele</a>';
+      html+='<a href="'+mapsUrl+'" target="_blank" class="fac-btn fac-dir">&#128506; Direksyon</a>';
+      html+='</div></div>';
+    });
+    document.getElementById('facilities').innerHTML=html||'<div class="loading">Pa gen sant disponib.</div>';
+  }).catch(function(){
+    document.getElementById('facilities').innerHTML='<div class="loading">Pa ka chaje sant yo. Rele DASH dirèkteman.</div>';
+  });
+}
+
+function submitReport(){
+  if(!rideId){
+    alert('Pa gen referans kous. Tanpri rele DASH dirèkteman.');
+    return;
+  }
+  var btn=document.getElementById('reportBtn');
+  btn.disabled=true;
+  btn.textContent='Ap voye...';
+
+  fetch(API_URL+'/api/medical/accident',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      ride_id:rideId,
+      reporter_type:'passenger',
+      description:document.getElementById('accidentDesc').value||'Aksidan rapòte via app',
+      lat:userLat,
+      lng:userLng,
+      severity:document.getElementById('severity').value
+    })
+  }).then(function(r){return r.json()}).then(function(data){
+    btn.textContent='Rapò Voye!';
+    btn.style.background='var(--green)';
+    if(data.emergency&&data.emergency.nearest_facilities&&data.emergency.nearest_facilities.length>0){
+      var f=data.emergency.nearest_facilities[0];
+      alert('Rapò anrejistre! Sant pi pre: '+f.name+' ('+f.distance_km+'km)');
+    } else {
+      alert('Rapò anrejistre! Kontakte DASH pou asistans imedya.');
+    }
+  }).catch(function(){
+    btn.disabled=false;
+    btn.textContent='Voye Rapò Aksidan';
+    alert('Erè. Tanpri rele DASH dirèkteman.');
+  });
+}
+</script>
+</body>
+</html>

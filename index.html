@@ -604,6 +604,28 @@ a{text-decoration:none;color:inherit}
       <div class="fe-label" data-i18n="est_label">Estimasyon pri</div>
       <div class="fe-price" id="farePrice">~75-150 HTG</div>
       <div class="surge-tags" id="surgeTags"></div>
+      <div id="fareBreakdown" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,.08);font-size:.78rem;text-align:left">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span data-i18n="fare_ride">Kous</span>
+          <span id="fareBase" style="font-weight:700"></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;color:var(--blue)">
+          <span data-i18n="fare_protection">Pwoteksyon DASH (5%)</span>
+          <span id="fareMedical" style="font-weight:700"></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-weight:800;font-size:.85rem;padding-top:6px;border-top:1px dashed rgba(0,0,0,.1)">
+          <span>Total</span>
+          <span id="fareTotal"></span>
+        </div>
+      </div>
+    </div>
+
+    <div id="dashBadge" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(0,32,159,.04);border:1px solid rgba(0,32,159,.12);border-radius:var(--radius);margin-bottom:16px">
+      <span style="font-size:1.4rem;flex-shrink:0">&#128657;</span>
+      <div>
+        <div style="font-size:.82rem;font-weight:700;color:var(--blue)" data-i18n="dash_title">Pwoteksyon & Asistans Medikal DASH</div>
+        <div style="font-size:.72rem;color:var(--text-light);margin-top:2px" data-i18n="dash_desc">Pwoteksyon & Asistans Medikal DASH enkli nan kous sa a.</div>
+      </div>
     </div>
 
     <div class="opt-label" data-i18n="phone_label">NIMEWO POU KONTAKTE OU</div>
@@ -811,7 +833,12 @@ var T={
     android_step3:'Tape "Add to Home screen" oswa "Install app"',
     android_step4:'Tape "Add" — MsouWout ap parèt sou ekran ou!',
     ac_label:'A/C (Klimatizasyon)',
-    ac_desc:'Machin ak klima'
+    ac_desc:'Machin ak klima',
+    dash_title:'Pwoteksyon & Asistans Medikal DASH',
+    dash_desc:'Pwoteksyon & Asistans Medikal DASH enkli nan kous sa a.',
+    fare_ride:'Kous',
+    fare_protection:'Pwoteksyon DASH (5%)',
+    fare_total:'Total'
   },
   fr:{
     main_q:'Trouvez un Trajet <em>en 2 Minutes</em>',
@@ -901,7 +928,12 @@ var T={
     android_step3:'Appuyez "Ajouter à l\'écran d\'accueil" ou "Installer l\'appli"',
     android_step4:'Appuyez "Ajouter" — MsouWout apparaîtra sur votre écran!',
     ac_label:'A/C (Climatisation)',
-    ac_desc:'Voiture avec climatisation'
+    ac_desc:'Voiture avec climatisation',
+    dash_title:'Protection & Assistance Medicale DASH',
+    dash_desc:'La Protection & Assistance Medicale DASH est incluse dans cette course.',
+    fare_ride:'Course',
+    fare_protection:'Protection DASH (5%)',
+    fare_total:'Total'
   },
   en:{
     main_q:'Get a Ride <em>in 2 Minutes</em>',
@@ -991,7 +1023,12 @@ var T={
     android_step3:'Tap "Add to Home screen" or "Install app"',
     android_step4:'Tap "Add" — MsouWout will appear on your screen!',
     ac_label:'A/C (Air Conditioning)',
-    ac_desc:'Car with air conditioning'
+    ac_desc:'Car with air conditioning',
+    dash_title:'DASH Protection & Medical Assistance',
+    dash_desc:'DASH Protection & Medical Assistance is included in this ride.',
+    fare_ride:'Ride Fare',
+    fare_protection:'DASH Protection (5%)',
+    fare_total:'Total'
   },
   es:{
     main_q:'Consigue un Viaje <em>en 2 Minutos</em>',
@@ -1081,7 +1118,12 @@ var T={
     android_step3:'Toca "Agregar a pantalla de inicio" o "Instalar app"',
     android_step4:'Toca "Agregar" — MsouWout aparecera en tu pantalla!',
     ac_label:'A/C (Aire Acondicionado)',
-    ac_desc:'Carro con aire acondicionado'
+    ac_desc:'Carro con aire acondicionado',
+    dash_title:'Proteccion y Asistencia Medica DASH',
+    dash_desc:'La Proteccion y Asistencia Medica DASH esta incluida en este viaje.',
+    fare_ride:'Viaje',
+    fare_protection:'Proteccion DASH (5%)',
+    fare_total:'Total'
   }
 };
 
@@ -1179,7 +1221,17 @@ function updateFare(){
   var mult=surgeData&&surgeData.multiplier>1?surgeData.multiplier:1;
   low=Math.round(low*mult);
   high=Math.round(high*mult);
+  var avg=Math.round((low+high)/2);
+  var medFee=Math.round(avg*0.05);
   document.getElementById('farePrice').textContent='~'+low+'-'+high+' HTG';
+  // Show DASH protection breakdown
+  var bd=document.getElementById('fareBreakdown');
+  if(bd){
+    bd.style.display='block';
+    document.getElementById('fareBase').textContent='~'+low+'-'+high+' HTG';
+    document.getElementById('fareMedical').textContent='+'+Math.round(low*0.05)+'-'+Math.round(high*0.05)+' HTG';
+    document.getElementById('fareTotal').textContent='~'+Math.round(low*1.05)+'-'+Math.round(high*1.05)+' HTG';
+  }
   var fareBox=document.getElementById('fareEst');
   var tagsEl=document.getElementById('surgeTags');
   if(surgeData&&surgeData.factors&&surgeData.factors.length>0){
@@ -1241,6 +1293,7 @@ function doSubmitRide(name,phone){
     riderName:name||'',
     vehicleType:vehicleType,
     acRequested:wantAC,
+    medical_protection:true,
     pickupAddress:pickupEl.value.trim(),
     dropoffAddress:dropEl.value.trim(),
     pickupLat:window._pickupLat||null,
