@@ -1543,11 +1543,9 @@ window.addEventListener('appinstalled',function(){
 if(!isStandalone&&!localStorage.getItem('msw_install_dismissed')&&!localStorage.getItem('msw_installed')){
   if(isIOS){
     setTimeout(function(){overlay.classList.add('show');},2000);
-  } else {
-    setTimeout(function(){
-      if(!deferredPrompt) overlay.classList.add('show');
-    },3000);
   }
+  // On Android, only show if beforeinstallprompt fired (deferredPrompt is set)
+  // Don't show manual steps that confuse users
 }
 
 function toggleShareMenu(){

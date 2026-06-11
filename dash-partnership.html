@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MsouWout x DASH — Partenariat Protection Medicale</title>
+<meta name="description" content="Partenariat strategique MsouWout x DASH pour la protection medicale de chaque usager en Haiti.">
+<meta property="og:title" content="MsouWout x DASH — Partenariat Protection Medicale">
+<meta property="og:description" content="Chaque course MsouWout inclut une protection medicale DASH obligatoire. Decouvrez le systeme.">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#00209F;--navy-deep:#001566;--red:#D21034;--red-dark:#A80D2A;
+  --green:#0D9B5C;--green-light:#E8F7F0;--green-dark:#087A48;
+  --gold:#D4A017;
+  --white:#FFFFFF;--off:#F7F8FB;--ghost:#EEF0F6;
+  --dark:#0A0E1A;--text:#1E2A42;--text-mid:#4A5B78;--text-light:#7A8BA8;
+  --border:#DCE1EC;
+  --display:'Fraunces',Georgia,serif;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);color:var(--text);background:var(--white);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* GRAIN OVERLAY */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  opacity:.028;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* REVEAL ANIMATION */
+.rv{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.23,1,.32,1),transform .7s cubic-bezier(.23,1,.32,1)}
+.rv.vis{opacity:1;transform:translateY(0)}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}.rv.d4{transition-delay:.4s}
+
+/* HERO */
+.hero{
+  background:var(--navy-deep);position:relative;overflow:hidden;
+  padding:80px 24px 72px;text-align:center;
+  min-height:85vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 80%,rgba(13,155,92,.12) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 40% at 85% 20%,rgba(210,16,52,.08) 0%,transparent 60%),
+    radial-gradient(ellipse 80% 60% at 50% 50%,rgba(0,32,159,.15) 0%,transparent 50%);
+}
+.hero-content{position:relative;z-index:2;max-width:800px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 20px;border-radius:100px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  font-size:.72rem;font-weight:700;color:rgba(255,255,255,.6);
+  text-transform:uppercase;letter-spacing:.12em;margin-bottom:32px;
+}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{
+  font-family:var(--display);font-size:clamp(2.4rem,6vw,4.2rem);font-weight:900;
+  color:var(--white);line-height:1.05;margin-bottom:24px;
+  font-style:italic;
+}
+.hero h1 .x{
+  font-style:normal;font-family:var(--body);font-weight:400;
+  color:rgba(255,255,255,.3);font-size:.6em;vertical-align:middle;
+  margin:0 .15em;
+}
+.hero-sub{
+  font-size:clamp(1rem,2.2vw,1.35rem);color:rgba(255,255,255,.55);
+  line-height:1.5;margin-bottom:40px;max-width:600px;margin-left:auto;margin-right:auto;
+  font-weight:500;
+}
+.hero-stat-row{
+  display:flex;flex-wrap:wrap;gap:0;justify-content:center;
+}
+.hero-stat{
+  padding:24px 36px;border:1px solid rgba(255,255,255,.08);
+  text-align:center;min-width:160px;
+}
+.hero-stat:first-child{border-radius:var(--radius) 0 0 var(--radius)}
+.hero-stat:last-child{border-radius:0 var(--radius) var(--radius) 0}
+.hero-stat .hs-num{font-family:var(--display);font-size:2.2rem;font-weight:900;color:var(--white);font-style:italic}
+.hero-stat .hs-num .pct{color:var(--green);font-size:.7em}
+.hero-stat .hs-label{font-size:.68rem;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+.hero-stripe{
+  position:absolute;bottom:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--navy) 40%,var(--red) 40% 50%,var(--green) 50%);
+}
+.hero-scroll{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  color:rgba(255,255,255,.25);font-size:.7rem;font-weight:600;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  animation:bob 2s infinite ease-in-out;
+}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+
+/* SECTIONS */
+section{padding:80px 24px}
+.container{max-width:1000px;margin:0 auto}
+.section-label{
+  font-size:.68rem;font-weight:800;color:var(--navy);text-transform:uppercase;
+  letter-spacing:.14em;margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-label::before{content:'';width:24px;height:2px;background:var(--navy);border-radius:2px}
+.section-title{
+  font-family:var(--display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;
+  font-style:italic;line-height:1.1;margin-bottom:16px;color:var(--dark);
+}
+.section-desc{font-size:1rem;color:var(--text-mid);line-height:1.7;max-width:640px;margin-bottom:48px}
+
+/* FEE SPLIT VISUAL */
+.split-grid{display:grid;grid-template-columns:1fr 280px;gap:48px;align-items:center}
+.split-info{display:flex;flex-direction:column;gap:20px}
+.split-item{
+  padding:24px;border-radius:var(--radius);border:1px solid var(--border);
+  background:var(--white);position:relative;overflow:hidden;
+  transition:all .3s ease;
+}
+.split-item:hover{border-color:var(--navy);box-shadow:0 8px 32px rgba(0,32,159,.06)}
+.split-item::before{
+  content:'';position:absolute;top:0;left:0;bottom:0;width:4px;border-radius:4px 0 0 4px;
+}
+.split-dash::before{background:var(--green)}
+.split-msw::before{background:var(--navy)}
+.split-item .si-pct{
+  font-family:var(--display);font-size:2.4rem;font-weight:900;font-style:italic;
+  line-height:1;margin-bottom:4px;
+}
+.split-dash .si-pct{color:var(--green)}
+.split-msw .si-pct{color:var(--navy)}
+.split-item .si-name{font-size:.88rem;font-weight:700;color:var(--text)}
+.split-item .si-desc{font-size:.78rem;color:var(--text-light);margin-top:4px}
+
+/* DONUT */
+.donut-wrap{display:flex;align-items:center;justify-content:center}
+.donut{position:relative;width:220px;height:220px}
+.donut svg{width:100%;height:100%;transform:rotate(-90deg)}
+.donut-bg{fill:none;stroke:var(--ghost);stroke-width:28}
+.donut-dash{fill:none;stroke:var(--green);stroke-width:28;stroke-dasharray:251.2;stroke-dashoffset:50.24;stroke-linecap:butt;transition:stroke-dashoffset 1.2s ease}
+.donut-msw{fill:none;stroke:var(--navy);stroke-width:28;stroke-dasharray:251.2;stroke-dashoffset:238.64;stroke-linecap:butt;transition:stroke-dashoffset 1.2s ease}
+.donut-center{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.donut-big{font-family:var(--display);font-size:2.8rem;font-weight:900;font-style:italic;color:var(--dark)}
+.donut-sub{font-size:.68rem;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+
+.payment-row{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+.pay-chip{
+  display:flex;align-items:center;gap:6px;padding:10px 18px;
+  border-radius:100px;background:var(--ghost);font-size:.78rem;font-weight:700;color:var(--text);
+}
+.pay-chip .pc-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+
+.settlement-badge{
+  margin-top:16px;padding:14px 20px;border-radius:var(--radius);
+  background:var(--green-light);border:1px solid rgba(13,155,92,.15);
+  display:flex;align-items:center;gap:10px;font-size:.82rem;font-weight:600;color:var(--green-dark);
+}
+
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:step}
+.step-card{
+  padding:32px 20px;text-align:center;position:relative;
+  border:1px solid var(--border);border-right:none;
+  background:var(--white);
+}
+.step-card:first-child{border-radius:var(--radius) 0 0 var(--radius)}
+.step-card:last-child{border-radius:0 var(--radius) var(--radius) 0;border-right:1px solid var(--border)}
+.step-num{
+  counter-increment:step;
+  width:40px;height:40px;border-radius:50%;
+  background:var(--navy);color:var(--white);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:.82rem;font-weight:800;margin-bottom:16px;
+}
+.step-num::after{content:counter(step)}
+.step-icon{font-size:2rem;margin-bottom:12px;display:block}
+.step-title{font-size:.85rem;font-weight:800;margin-bottom:6px;color:var(--dark)}
+.step-desc{font-size:.75rem;color:var(--text-light);line-height:1.5}
+.step-card .step-arrow{
+  position:absolute;right:-10px;top:50%;transform:translateY(-50%);
+  width:20px;height:20px;background:var(--white);border:1px solid var(--border);
+  border-left:none;border-bottom:none;
+  transform:translateY(-50%) rotate(45deg);z-index:2;
+}
+.step-card:last-child .step-arrow{display:none}
+
+/* BOOKING MOCKUP */
+.booking-section{background:var(--off)}
+.mockup-frame{
+  max-width:360px;margin:0 auto;
+  background:var(--white);border-radius:24px;
+  box-shadow:0 24px 64px rgba(0,0,0,.08),0 0 0 1px rgba(0,0,0,.04);
+  overflow:hidden;padding:0;
+}
+.mock-header{background:var(--dark);padding:14px 20px;display:flex;align-items:center;gap:8px}
+.mock-header .mh-dot{width:10px;height:10px;border-radius:50%;background:var(--navy)}
+.mock-header span{color:#fff;font-size:.82rem;font-weight:700}
+.mock-body{padding:24px 20px}
+.mock-route{
+  display:flex;align-items:center;gap:10px;margin-bottom:20px;
+  padding:14px;background:var(--off);border-radius:12px;
+}
+.mock-route .mr-dots{display:flex;flex-direction:column;align-items:center;gap:2px}
+.mock-route .mr-dot{width:8px;height:8px;border-radius:50%}
+.mock-route .mr-dot.g{background:var(--green)}
+.mock-route .mr-dot.r{background:var(--red)}
+.mock-route .mr-line{width:1px;height:10px;background:var(--border)}
+.mock-route .mr-text{font-size:.78rem;line-height:1.6;color:var(--text-mid)}
+.mock-route .mr-text strong{color:var(--text);display:block}
+
+.mock-dash-badge{
+  display:flex;align-items:flex-start;gap:10px;padding:12px 14px;
+  background:rgba(0,32,159,.04);border:1px solid rgba(0,32,159,.12);
+  border-radius:12px;margin-bottom:20px;
+}
+.mock-dash-badge .mdb-icon{font-size:1.2rem;flex-shrink:0}
+.mock-dash-badge .mdb-title{font-size:.75rem;font-weight:700;color:var(--navy)}
+.mock-dash-badge .mdb-sub{font-size:.65rem;color:var(--text-light)}
+
+.mock-breakdown{
+  padding:16px;background:rgba(13,155,92,.04);border:1px solid rgba(13,155,92,.12);
+  border-radius:12px;margin-bottom:20px;
+}
+.mock-row{display:flex;justify-content:space-between;padding:6px 0;font-size:.8rem}
+.mock-row .mr-label{color:var(--text-mid)}
+.mock-row .mr-val{font-weight:700;color:var(--text)}
+.mock-row.total{border-top:1px dashed var(--border);padding-top:10px;margin-top:4px;font-weight:800}
+.mock-row.total .mr-val{color:var(--dark);font-size:.88rem}
+.mock-row.dash .mr-label{color:var(--navy)}
+.mock-row.dash .mr-val{color:var(--navy)}
+
+.mock-btn{
+  width:100%;padding:14px;border-radius:12px;background:var(--red);
+  color:#fff;font-size:.9rem;font-weight:800;text-align:center;border:none;
+}
+
+/* EMERGENCY MODULE */
+.emergency-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.emer-card{
+  padding:24px;border-radius:var(--radius);border:1px solid var(--border);
+  background:var(--white);
+}
+.emer-card .ec-icon{font-size:2rem;margin-bottom:12px}
+.emer-card .ec-title{font-size:.92rem;font-weight:800;color:var(--dark);margin-bottom:6px}
+.emer-card .ec-desc{font-size:.78rem;color:var(--text-light);line-height:1.6}
+.emer-card.highlight{
+  border-color:var(--red);background:rgba(210,16,52,.02);
+}
+.emer-card.highlight .ec-title{color:var(--red)}
+
+.notif-example{
+  margin-top:32px;padding:20px 24px;border-radius:var(--radius);
+  background:var(--dark);color:rgba(255,255,255,.7);font-size:.78rem;
+  font-family:'Courier New',monospace;line-height:1.8;white-space:pre-line;
+  position:relative;overflow:hidden;
+}
+.notif-example::before{
+  content:'SMS / WHATSAPP';position:absolute;top:12px;right:16px;
+  font-family:var(--body);font-size:.58rem;font-weight:700;
+  color:rgba(255,255,255,.2);text-transform:uppercase;letter-spacing:.1em;
+}
+
+/* FACILITIES */
+.fac-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.fac-card{
+  padding:16px 20px;border-radius:12px;border:1px solid var(--border);
+  display:flex;align-items:center;gap:14px;transition:all .2s;
+  background:var(--white);
+}
+.fac-card:hover{border-color:var(--navy);box-shadow:0 4px 16px rgba(0,32,159,.06)}
+.fac-type{
+  width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;flex-shrink:0;
+}
+.fac-type.hospital{background:rgba(210,16,52,.06)}
+.fac-type.clinic{background:var(--green-light)}
+.fac-info .fi-name{font-size:.82rem;font-weight:700;color:var(--dark)}
+.fac-info .fi-addr{font-size:.72rem;color:var(--text-light);margin-top:2px}
+.fac-tag{
+  margin-left:auto;font-size:.58rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.06em;padding:4px 10px;border-radius:100px;flex-shrink:0;
+}
+.fac-tag.h{background:rgba(210,16,52,.06);color:var(--red)}
+.fac-tag.c{background:var(--green-light);color:var(--green-dark)}
+
+.fac-subtitle{
+  font-size:.72rem;font-weight:800;color:var(--text-light);text-transform:uppercase;
+  letter-spacing:.08em;margin:24px 0 12px;
+  padding-bottom:8px;border-bottom:1px solid var(--border);
+}
+
+/* DASHBOARD */
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.dash-card{
+  padding:24px;border-radius:var(--radius);border:1px solid var(--border);
+  background:var(--white);text-align:center;
+}
+.dash-card .dc-num{
+  font-family:var(--display);font-size:2rem;font-weight:900;font-style:italic;
+  color:var(--dark);margin-bottom:4px;
+}
+.dash-card .dc-label{font-size:.68rem;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.dash-card.green .dc-num{color:var(--green)}
+.dash-card.navy .dc-num{color:var(--navy)}
+.dash-card.red .dc-num{color:var(--red)}
+
+.dash-features{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.df-item{
+  display:flex;align-items:flex-start;gap:12px;padding:16px;
+  border-radius:12px;background:var(--off);
+}
+.df-item .dfi-icon{
+  width:32px;height:32px;border-radius:8px;background:var(--navy);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-size:.9rem;
+}
+.df-item .dfi-title{font-size:.82rem;font-weight:700;color:var(--dark);margin-bottom:2px}
+.df-item .dfi-desc{font-size:.72rem;color:var(--text-light);line-height:1.5}
+
+/* AUDIT */
+.audit-section{background:var(--off)}
+.audit-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.audit-item{
+  display:flex;align-items:center;gap:10px;padding:16px 20px;
+  border-radius:12px;background:var(--white);border:1px solid var(--border);
+}
+.audit-item .ai-check{
+  width:24px;height:24px;border-radius:50%;background:var(--green);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  color:#fff;font-size:.7rem;font-weight:900;
+}
+.audit-item .ai-text{font-size:.82rem;font-weight:600;color:var(--text)}
+
+/* CONTACT */
+.contact-section{background:var(--navy-deep);color:var(--white);text-align:center}
+.contact-section .section-label{color:rgba(255,255,255,.4)}
+.contact-section .section-label::before{background:rgba(255,255,255,.2)}
+.contact-section .section-title{color:var(--white)}
+.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.contact-card{
+  padding:32px 20px;border-radius:var(--radius);
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+}
+.contact-card .cc-icon{font-size:2rem;margin-bottom:12px}
+.contact-card .cc-title{font-size:.88rem;font-weight:700;margin-bottom:8px}
+.contact-card .cc-info{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.6}
+.contact-card a{color:var(--green);text-decoration:none;font-weight:700}
+
+.footer{
+  padding:24px;text-align:center;background:var(--dark);
+  font-size:.68rem;color:rgba(255,255,255,.2);
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .split-grid{grid-template-columns:1fr;gap:32px}
+  .donut-wrap{order:-1}
+  .steps{grid-template-columns:1fr 1fr;gap:0}
+  .step-card{border-right:1px solid var(--border)}
+  .step-card:first-child{border-radius:var(--radius) 0 0 0}
+  .step-card:nth-child(2){border-radius:0 var(--radius) 0 0}
+  .step-card:nth-child(3){border-radius:0 0 0 var(--radius);border-top:none}
+  .step-card:last-child{border-radius:0 0 var(--radius) 0;border-top:none}
+  .step-card .step-arrow{display:none}
+  .emergency-grid{grid-template-columns:1fr}
+  .dash-grid{grid-template-columns:1fr}
+  .dash-features{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .hero-stat-row{flex-direction:column}
+  .hero-stat{border-radius:0!important}
+  .hero-stat:first-child{border-radius:var(--radius) var(--radius) 0 0!important}
+  .hero-stat:last-child{border-radius:0 0 var(--radius) var(--radius)!important}
+  section{padding:56px 20px}
+}
+@media(max-width:480px){
+  .fac-grid{grid-template-columns:1fr}
+  .audit-list{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════ HERO ══════ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge rv"><span class="dot"></span> Partenariat Actif 2026</div>
+    <h1 class="rv d1">MsouWout <span class="x">&times;</span> DASH</h1>
+    <p class="hero-sub rv d2">Partenariat Strategique pour la Protection Medicale de Chaque Usager en Haiti</p>
+    <div class="hero-stat-row rv d3">
+      <div class="hero-stat">
+        <div class="hs-num"><span class="pct">5%</span></div>
+        <div class="hs-label">Frais de Protection</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hs-num">12</div>
+        <div class="hs-label">Facilites Medicales</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hs-num">24h</div>
+        <div class="hs-label">Delai de Transfert</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-stripe"></div>
+  <div class="hero-scroll">Defiler &#8595;</div>
+</section>
+
+<!-- ══════ STRUCTURE DU PARTENARIAT ══════ -->
+<section>
+  <div class="container">
+    <div class="section-label rv">01 &mdash; Structure</div>
+    <h2 class="section-title rv d1">Repartition des Frais de Protection</h2>
+    <p class="section-desc rv d2">Chaque course reservee via MsouWout inclut un frais de protection medicale obligatoire de 5%, reparti de maniere transparente entre DASH et MsouWout.</p>
+
+    <div class="split-grid">
+      <div class="split-info">
+        <div class="split-item split-dash rv">
+          <div class="si-pct">4%</div>
+          <div class="si-name">DASH Medical Assistance</div>
+          <div class="si-desc">Transfere au compte bancaire designe de DASH dans les 24 heures suivant la reception du paiement.</div>
+        </div>
+        <div class="split-item split-msw rv d1">
+          <div class="si-pct">1%</div>
+          <div class="si-name">MsouWout</div>
+          <div class="si-desc">Frais d'administration de la plateforme pour le traitement et la collecte automatique des paiements.</div>
+        </div>
+
+        <div class="payment-row rv d2">
+          <div class="pay-chip"><span class="pc-dot"></span> MonCash</div>
+          <div class="pay-chip"><span class="pc-dot"></span> NatCash</div>
+          <div class="pay-chip"><span class="pc-dot"></span> Carte de Credit</div>
+        </div>
+
+        <div class="settlement-badge rv d3">
+          <span style="font-size:1.2rem">&#9889;</span>
+          Reglement: la part de DASH (4%) est transferee dans les 24 heures apres reception du paiement.
+        </div>
+      </div>
+
+      <div class="donut-wrap rv d2">
+        <div class="donut">
+          <svg viewBox="0 0 100 100">
+            <circle class="donut-bg" cx="50" cy="50" r="40"/>
+            <circle class="donut-dash" cx="50" cy="50" r="40"/>
+            <circle class="donut-msw" cx="50" cy="50" r="40"/>
+          </svg>
+          <div class="donut-center">
+            <div class="donut-big">5%</div>
+            <div class="donut-sub">Par course</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ COMMENT CA FONCTIONNE ══════ -->
+<section style="background:var(--off)">
+  <div class="container">
+    <div class="section-label rv">02 &mdash; Processus</div>
+    <h2 class="section-title rv d1">Comment Ca Fonctionne</h2>
+    <p class="section-desc rv d2">Un flux entierement automatise, de la reservation a l'assistance d'urgence.</p>
+
+    <div class="steps rv d3">
+      <div class="step-card">
+        <div class="step-num"></div>
+        <span class="step-icon">&#128241;</span>
+        <div class="step-title">Reservation</div>
+        <div class="step-desc">Le passager reserve une course sur MsouWout.</div>
+        <div class="step-arrow"></div>
+      </div>
+      <div class="step-card">
+        <div class="step-num"></div>
+        <span class="step-icon">&#128176;</span>
+        <div class="step-title">Calcul Automatique</div>
+        <div class="step-desc">Le frais de protection de 5% est automatiquement calcule et collecte.</div>
+        <div class="step-arrow"></div>
+      </div>
+      <div class="step-card">
+        <div class="step-num"></div>
+        <span class="step-icon">&#127974;</span>
+        <div class="step-title">Transfert 24h</div>
+        <div class="step-desc">La part de DASH (4%) est transferee dans les 24 heures.</div>
+        <div class="step-arrow"></div>
+      </div>
+      <div class="step-card">
+        <div class="step-num"></div>
+        <span class="step-icon">&#128657;</span>
+        <div class="step-title">Assistance d'Urgence</div>
+        <div class="step-desc">En cas d'accident, l'assistance DASH s'active automatiquement.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ ECRAN DE RESERVATION ══════ -->
+<section class="booking-section">
+  <div class="container">
+    <div class="section-label rv">03 &mdash; Interface Usager</div>
+    <h2 class="section-title rv d1">Ecran de Reservation</h2>
+    <p class="section-desc rv d2">Voici exactement ce que le passager voit lors de la reservation d'une course. La protection DASH est clairement affichee et obligatoire.</p>
+
+    <div class="mockup-frame rv d3">
+      <div class="mock-header">
+        <div class="mh-dot"></div>
+        <span>MsouWout</span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-route">
+          <div class="mr-dots">
+            <div class="mr-dot g"></div><div class="mr-line"></div><div class="mr-dot r"></div>
+          </div>
+          <div class="mr-text">
+            <strong>Petion-Ville</strong>
+            <strong style="color:var(--red)">Aeroport Toussaint</strong>
+          </div>
+        </div>
+
+        <div class="mock-dash-badge">
+          <span class="mdb-icon">&#128657;</span>
+          <div>
+            <div class="mdb-title">Pwoteksyon & Asistans Medikal DASH</div>
+            <div class="mdb-sub">Pwoteksyon & Asistans Medikal DASH enkli nan kous sa a.</div>
+          </div>
+        </div>
+
+        <div class="mock-breakdown">
+          <div class="mock-row"><span class="mr-label">Kous (Moto)</span><span class="mr-val">250 HTG</span></div>
+          <div class="mock-row dash"><span class="mr-label">Pwoteksyon DASH (5%)</span><span class="mr-val">+13 HTG</span></div>
+          <div class="mock-row total"><span class="mr-label">Total</span><span class="mr-val">263 HTG</span></div>
+        </div>
+
+        <div class="mock-btn">&#128308; Mande Kous</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ MODULE D'ASSISTANCE ══════ -->
+<section>
+  <div class="container">
+    <div class="section-label rv">04 &mdash; Urgences</div>
+    <h2 class="section-title rv d1">Module d'Assistance en Cas d'Accident</h2>
+    <p class="section-desc rv d2">Si un conducteur ou un passager signale un accident, le systeme active automatiquement le protocole d'urgence DASH.</p>
+
+    <div class="emergency-grid">
+      <div class="emer-card highlight rv">
+        <div class="ec-icon">&#128680;</div>
+        <div class="ec-title">Ecran d'Urgence Immediat</div>
+        <div class="ec-desc">Un ecran d'assistance d'urgence s'affiche automatiquement avec les coordonnees de DASH et les instructions de premiers secours.</div>
+      </div>
+      <div class="emer-card rv d1">
+        <div class="ec-icon">&#128222;</div>
+        <div class="ec-title">Appel en Un Clic</div>
+        <div class="ec-desc">Bouton d'appel direct au numero d'urgence DASH: (509) 3333-DASH — accessible immediatement sans navigation.</div>
+      </div>
+      <div class="emer-card rv d2">
+        <div class="ec-icon">&#128506;</div>
+        <div class="ec-title">Localisation des Facilites</div>
+        <div class="ec-desc">Le systeme localise automatiquement la clinique ou l'hopital DASH le plus proche avec itineraire GPS et numero de telephone.</div>
+      </div>
+      <div class="emer-card rv d3">
+        <div class="ec-icon">&#128172;</div>
+        <div class="ec-title">Notification Automatique</div>
+        <div class="ec-desc">SMS et WhatsApp envoyes automatiquement avec toutes les informations critiques de l'incident.</div>
+      </div>
+    </div>
+
+    <div class="notif-example rv d4">ALERTE ACCIDENT — MsouWout x DASH
+Passager: Jean-Pierre (+509 37 12 3456)
+Chauffeur: Marc Antoine (+509 48 56 7890)
+Vehicule: Moto — AB-1234
+Position GPS: 18.5425, -72.3386
+Heure: 11/06/2026 14:32
+Facilite la plus proche: DASH Tabarre (1.2 km)</div>
+  </div>
+</section>
+
+<!-- ══════ RESEAU DE FACILITES ══════ -->
+<section style="background:var(--off)">
+  <div class="container">
+    <div class="section-label rv">05 &mdash; Reseau Medical</div>
+    <h2 class="section-title rv d1">Reseau de Facilites DASH</h2>
+    <p class="section-desc rv d2">12 etablissements medicaux partenaires a travers Haiti, accessibles en un clic depuis l'application MsouWout.</p>
+
+    <div class="fac-subtitle">Hopitaux Partenaires (7)</div>
+    <div class="fac-grid rv">
+      <div class="fac-card"><div class="fac-type hospital">&#127973;</div><div class="fac-info"><div class="fi-name">Hopital Jude Anne</div><div class="fi-addr">Delmas 18</div></div><div class="fac-tag h">Hopital</div></div>
+      <div class="fac-card"><div class="fac-type hospital">&#127973;</div><div class="fac-info"><div class="fi-name">Hopital St-Landry</div><div class="fi-addr">Petion-Ville</div></div><div class="fac-tag h">Hopital</div></div>
+      <div class="fac-card"><div class="fac-type hospital">&#127973;</div><div class="fac-info"><div class="fi-name">Hopital Saint Esprit</div><div class="fi-addr">Delmas 31</div></div><div class="fac-tag h">Hopital</div></div>
+      <div class="fac-card"><div class="fac-type hospital">&#127973;</div><div class="fac-info"><div class="fi-name">Hopital Sainte Claire</div><div class="fi-addr">Delmas 31</div></div><div class="fac-tag h">Hopital</div></div>
+      <div class="fac-card"><div class="fac-type hospital">&#127973;</div><div class="fac-info"><div class="fi-name">Hopital Sainte Gene</div><div class="fi-addr">Route de Freres</div></div><div class="fac-tag h">Hopital</div></div>
+      <div class="fac-card"><div class="fac-type hospital">&#127973;</div><div class="fac-info"><div class="fi-name">Hopital Mont-Carmel</div><div class="fi-addr">Petion-Ville, Bois Verna</div></div><div class="fac-tag h">Hopital</div></div>
+      <div class="fac-card"><div class="fac-type hospital">&#127973;</div><div class="fac-info"><div class="fi-name">Hopital Christ du Nord</div><div class="fi-addr">Cap-Haitien</div></div><div class="fac-tag h">Hopital</div></div>
+    </div>
+
+    <div class="fac-subtitle">Cliniques & Centres DASH (5)</div>
+    <div class="fac-grid rv">
+      <div class="fac-card"><div class="fac-type clinic">&#127974;</div><div class="fac-info"><div class="fi-name">La Croix Dieu</div><div class="fi-addr">Delmas 48</div></div><div class="fac-tag c">Clinique</div></div>
+      <div class="fac-card"><div class="fac-type clinic">&#127974;</div><div class="fac-info"><div class="fi-name">DASH Centre-Ville CMC</div><div class="fi-addr">#91 Rue Oswald Durand</div></div><div class="fac-tag c">Clinique</div></div>
+      <div class="fac-card"><div class="fac-type clinic">&#127974;</div><div class="fac-info"><div class="fi-name">DASH Tabarre</div><div class="fi-addr">Route de Santo, Tabarre</div></div><div class="fac-tag c">Clinique</div></div>
+      <div class="fac-card"><div class="fac-type clinic">&#127974;</div><div class="fac-info"><div class="fi-name">DASH Carries</div><div class="fi-addr">Baie de Henne / Gonaives</div></div><div class="fac-tag c">Clinique</div></div>
+      <div class="fac-card"><div class="fac-type clinic">&#127974;</div><div class="fac-info"><div class="fi-name">DASH Montrouis</div><div class="fi-addr">Entree de Montrouis</div></div><div class="fac-tag c">Clinique</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ TABLEAU DE BORD ══════ -->
+<section>
+  <div class="container">
+    <div class="section-label rv">06 &mdash; Reporting</div>
+    <h2 class="section-title rv d1">Tableau de Bord Administratif</h2>
+    <p class="section-desc rv d2">Un tableau de bord complet pour suivre les frais, les reglements, et les rapports d'incidents en temps reel.</p>
+
+    <div class="dash-grid rv">
+      <div class="dash-card navy"><div class="dc-num">1,247</div><div class="dc-label">Total Courses</div></div>
+      <div class="dash-card green"><div class="dc-num">62,350 HTG</div><div class="dc-label">Frais Collectes</div></div>
+      <div class="dash-card red"><div class="dc-num">49,880 HTG</div><div class="dc-label">Du a DASH (4%)</div></div>
+    </div>
+
+    <div class="dash-features rv d1">
+      <div class="df-item">
+        <div class="dfi-icon">&#128202;</div>
+        <div><div class="dfi-title">Suivi des Reglements</div><div class="dfi-desc">Historique complet des transferts: en attente, en cours, completes. Reference bancaire pour chaque transfert.</div></div>
+      </div>
+      <div class="df-item">
+        <div class="dfi-icon">&#128176;</div>
+        <div><div class="dfi-title">Repartition Financiere</div><div class="dfi-desc">Montant du a DASH, montant retenu par MsouWout, ventilation mensuelle detaillee.</div></div>
+      </div>
+      <div class="df-item">
+        <div class="dfi-icon">&#128680;</div>
+        <div><div class="dfi-title">Rapports d'Accidents</div><div class="dfi-desc">Tous les incidents signales avec details: severite, localisation, facilite la plus proche, statut du traitement.</div></div>
+      </div>
+      <div class="df-item">
+        <div class="dfi-icon">&#128190;</div>
+        <div><div class="dfi-title">Export Conformite</div><div class="dfi-desc">Exportation de tous les registres en JSON pour audit comptable et verification de conformite.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ AUDIT & CONFORMITE ══════ -->
+<section class="audit-section">
+  <div class="container">
+    <div class="section-label rv">07 &mdash; Conformite</div>
+    <h2 class="section-title rv d1">Audit & Conformite</h2>
+    <p class="section-desc rv d2">Le systeme conserve des registres complets, consultables et exportables pour la comptabilite et la conformite.</p>
+
+    <div class="audit-list rv">
+      <div class="audit-item"><div class="ai-check">&#10003;</div><div class="ai-text">Journaux de transactions</div></div>
+      <div class="audit-item"><div class="ai-check">&#10003;</div><div class="ai-text">Registres de paiements</div></div>
+      <div class="audit-item"><div class="ai-check">&#10003;</div><div class="ai-text">Registres de reglements</div></div>
+      <div class="audit-item"><div class="ai-check">&#10003;</div><div class="ai-text">Rapports d'accidents</div></div>
+      <div class="audit-item"><div class="ai-check">&#10003;</div><div class="ai-text">Demandes d'assistance</div></div>
+      <div class="audit-item"><div class="ai-check">&#10003;</div><div class="ai-text">Export JSON / CSV</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ CONTACT ══════ -->
+<section class="contact-section">
+  <div class="container">
+    <div class="section-label rv">08 &mdash; Contact</div>
+    <h2 class="section-title rv d1">Informations de Contact</h2>
+
+    <div class="contact-grid rv d1">
+      <div class="contact-card">
+        <div class="cc-icon">&#128680;</div>
+        <div class="cc-title">DASH Urgences</div>
+        <div class="cc-info">
+          <a href="tel:+50933333274">(509) 3333-DASH</a><br>
+          (509) 3333-3274<br><br>
+          <a href="https://www.dashhaiti.org" target="_blank">www.dashhaiti.org</a>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="cc-icon">&#128663;</div>
+        <div class="cc-title">MsouWout</div>
+        <div class="cc-info">
+          <a href="https://msouwout.com" target="_blank">msouwout.com</a><br><br>
+          Plateforme de transport<br>et logistique en Haiti
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="cc-icon">&#127758;</div>
+        <div class="cc-title">HaitiBiznis Ecosystem</div>
+        <div class="cc-info">
+          <a href="https://haitibiznis.com" target="_blank">haitibiznis.com</a><br><br>
+          Ecosysteme numerique<br>pour Haiti
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">&copy; 2026 MsouWout &times; DASH Medical Assistance &mdash; HaitiBiznis Ecosystem</div>
+
+<script>
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.rv').forEach(function(el) { obs.observe(el); });
+</script>
+</body>
+</html>
