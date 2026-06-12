@@ -165,6 +165,18 @@ section{padding:80px 24px}
   display:flex;align-items:center;gap:10px;font-size:.82rem;font-weight:600;color:var(--green-dark);
 }
 
+.bank-info{
+  margin-top:20px;padding:20px 24px;border-radius:var(--radius);
+  background:var(--white);border:1px solid var(--border);
+  box-shadow:0 2px 12px rgba(0,32,159,.04);
+}
+.bank-info-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.bank-info-title::before{content:'';width:18px;height:2px;background:var(--navy);border-radius:2px}
+.bank-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--ghost)}
+.bank-row:last-child{border-bottom:none}
+.bank-label{font-size:.78rem;color:var(--text-light);font-weight:600}
+.bank-value{font-size:.85rem;color:var(--dark);font-weight:700;text-align:right}
+
 /* STEPS */
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:step}
 .step-card{
@@ -450,6 +462,13 @@ section{padding:80px 24px}
         <div class="settlement-badge rv d3">
           <span style="font-size:1.2rem">&#9889;</span>
           Reglement: la part de DASH (4%) est transferee dans les 24 heures apres reception du paiement.
+        </div>
+
+        <div class="bank-info rv d4">
+          <div class="bank-info-title">Coordonnees Bancaires DASH</div>
+          <div class="bank-row"><span class="bank-label">Banque</span><span class="bank-value">Unibank</span></div>
+          <div class="bank-row"><span class="bank-label">No de compte</span><span class="bank-value">270-1021-801253</span></div>
+          <div class="bank-row"><span class="bank-label">Nom du compte</span><span class="bank-value">DEVELOPMENT ACTIVITIES AND SERVICES FOR HEALTH</span></div>
         </div>
       </div>
 
