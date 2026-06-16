@@ -438,12 +438,6 @@ footer{
         </select>
       </div>
 
-      <!-- Referral Code -->
-      <div class="form-group" id="referralCodeGroup">
-        <label class="form-label" data-i18n="f_refcode_label">Referral Code</label>
-        <input type="text" name="Referral Code" id="referralCode" placeholder="Ex: FTPH-001, COT-001" data-i18n-placeholder="f_refcode_ph">
-      </div>
-
       <!-- Full Name & Phone -->
       <div class="form-row">
         <div class="form-group">
@@ -692,7 +686,6 @@ const T = {
     reg_sub:"Remplissez le formulaire ci-dessous et notre equipe vous contactera dans les 24 heures pour completer votre integration.",
     f_partner_label:"Partenaire de Reference *", f_partner_ph:"-- Comment avez-vous entendu parler de MsouWout? --",
     f_partner_friend:"Ami / Famille", f_partner_other:"Autre",
-    f_refcode_label:"Code de Reference", f_refcode_ph:"Ex: FTPH-001, COT-001",
     f_name_label:"Nom Complet *", f_name_ph:"Jean Pierre",
     f_phone_label:"Numero de Telephone *", f_phone_ph:"+509 XXXX XXXX",
     f_email_label:"Email (optionnel)", f_email_ph:"jean@example.com",
@@ -742,7 +735,6 @@ const T = {
     reg_sub:"Fill out the form below and our team will contact you within 24 hours to complete your onboarding.",
     f_partner_label:"Referral Partner *", f_partner_ph:"-- How did you hear about MsouWout? --",
     f_partner_friend:"Friend / Family", f_partner_other:"Other",
-    f_refcode_label:"Referral Code", f_refcode_ph:"Ex: FTPH-001, COT-001",
     f_name_label:"Full Name *", f_name_ph:"Jean Pierre",
     f_phone_label:"Phone Number *", f_phone_ph:"+509 XXXX XXXX",
     f_email_label:"Email (optional)", f_email_ph:"jean@example.com",
@@ -792,7 +784,6 @@ const T = {
     reg_sub:"Ranpli fom anba a epi ekip nou ap kontakte ou nan 24 edtan pou konplete entegrasyon ou.",
     f_partner_label:"Patnè Referans *", f_partner_ph:"-- Kijan ou te tande pale de MsouWout? --",
     f_partner_friend:"Zanmi / Fanmi", f_partner_other:"Lòt",
-    f_refcode_label:"Kòd Referans", f_refcode_ph:"Ex: FTPH-001, COT-001",
     f_name_label:"Non Konple *", f_name_ph:"Jean Pierre",
     f_phone_label:"Nimewo Telefon *", f_phone_ph:"+509 XXXX XXXX",
     f_email_label:"Imel (opsyonel)", f_email_ph:"jean@example.com",
@@ -842,7 +833,6 @@ const T = {
     reg_sub:"Completa el formulario y nuestro equipo te contactara en 24 horas para completar tu incorporacion.",
     f_partner_label:"Socio de Referencia *", f_partner_ph:"-- Como se entero de MsouWout? --",
     f_partner_friend:"Amigo / Familia", f_partner_other:"Otro",
-    f_refcode_label:"Codigo de Referencia", f_refcode_ph:"Ex: FTPH-001, COT-001",
     f_name_label:"Nombre Completo *", f_name_ph:"Jean Pierre",
     f_phone_label:"Numero de Telefono *", f_phone_ph:"+509 XXXX XXXX",
     f_email_label:"Email (opcional)", f_email_ph:"jean@example.com",
@@ -962,7 +952,6 @@ function toggleAllZones(btn){
     jsonData['Submitted At'] = new Date().toISOString();
     jsonData['Source'] = 'driver-register.html';
     jsonData['referral_partner'] = formData.get('Referral Partner') || '';
-    jsonData['referral_code'] = formData.get('Referral Code') || '';
 
     // Show loading state
     submitBtn.classList.add('btn-loading');
@@ -1106,15 +1095,6 @@ function removeVideo(){
         var saved=sessionStorage.getItem('msou_ref');
         if(saved) document.getElementById('referralField').value=saved;
       }
-    }catch(e){}
-  }
-  if(code){
-    document.getElementById('referralCode').value=code;
-    try{sessionStorage.setItem('msou_code',code)}catch(e){}
-  }else{
-    try{
-      var savedCode=sessionStorage.getItem('msou_code');
-      if(savedCode) document.getElementById('referralCode').value=savedCode;
     }catch(e){}
   }
 })();
