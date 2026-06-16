@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -26,6 +26,18 @@
 html{scroll-behavior:smooth}
 body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{text-decoration:none;color:inherit}
+
+/* LANG BAR */
+.lang-bar{
+  background:var(--red);
+  padding:6px 20px;display:flex;align-items:center;justify-content:center;gap:6px;height:36px;
+}
+.lang-bar a{
+  color:rgba(255,255,255,.7);font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:100px;
+  cursor:pointer;transition:all .2s;letter-spacing:.02em;
+}
+.lang-bar a:hover{color:#fff;background:rgba(255,255,255,.15)}
+.lang-bar a.active{color:var(--red);background:#fff}
 
 /* NAV */
 nav{
@@ -142,20 +154,28 @@ footer a{color:var(--red)}
 </head>
 <body>
 
+<!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <a onclick="setLang('fr')" class="active" id="lang-fr">&#127467;&#127479; Fran&#231;ais</a>
+  <a onclick="setLang('en')" id="lang-en">&#127468;&#127463; English</a>
+  <a onclick="setLang('ht')" id="lang-ht">&#127469;&#127481; Krey&#242;l</a>
+  <a onclick="setLang('es')" id="lang-es">&#127466;&#127480; Espa&#241;ol</a>
+</div>
+
 <!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo">
     <img src="assets/msouwout-icon.png" alt="MsouWout">
     <span>MsouWout</span>
   </a>
-  <span class="nav-badge">Partner Dashboard</span>
+  <span class="nav-badge" data-i18n="nav_badge">Partner Dashboard</span>
 </nav>
 
 <!-- PARTNER SELECTOR -->
 <div class="partner-bar">
-  <label for="partnerFilter">Partner:</label>
+  <label for="partnerFilter" data-i18n="filter_label">Partner:</label>
   <select class="partner-select" id="partnerFilter" onchange="loadDashboard()">
-    <option value="">All Partners</option>
+    <option value="" data-i18n="filter_all">All Partners</option>
     <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
   </select>
   <div class="partner-links">
@@ -168,8 +188,8 @@ footer a{color:var(--red)}
 <!-- DASHBOARD -->
 <div class="dashboard">
   <div class="dash-header">
-    <h1>Referral Partner Dashboard</h1>
-    <p>Track driver registrations and performance by referral partner</p>
+    <h1 data-i18n="dash_title">Referral Partner Dashboard</h1>
+    <p data-i18n="dash_sub">Track driver registrations and performance by referral partner</p>
   </div>
 
   <!-- STATS -->
@@ -177,50 +197,50 @@ footer a{color:var(--red)}
     <div class="stat-card blue">
       <div class="stat-icon">&#128100;</div>
       <div class="stat-value" id="statRegistered">--</div>
-      <div class="stat-label">Total Drivers Registered</div>
+      <div class="stat-label" data-i18n="stat_registered">Total Drivers Registered</div>
     </div>
     <div class="stat-card green">
       <div class="stat-icon">&#9989;</div>
       <div class="stat-value" id="statVerified">--</div>
-      <div class="stat-label">Total Verified Drivers</div>
+      <div class="stat-label" data-i18n="stat_verified">Total Verified Drivers</div>
     </div>
     <div class="stat-card gold">
       <div class="stat-icon">&#128663;</div>
       <div class="stat-value" id="statActive">--</div>
-      <div class="stat-label">Active Drivers</div>
+      <div class="stat-label" data-i18n="stat_active">Active Drivers</div>
     </div>
     <div class="stat-card purple">
       <div class="stat-icon">&#128205;</div>
       <div class="stat-value" id="statTrips">--</div>
-      <div class="stat-label">Total Trips Completed</div>
+      <div class="stat-label" data-i18n="stat_trips">Total Trips Completed</div>
     </div>
     <div class="stat-card red">
       <div class="stat-icon">&#128176;</div>
       <div class="stat-value" id="statRevenue">--</div>
-      <div class="stat-label">Revenue Generated (HTG)</div>
+      <div class="stat-label" data-i18n="stat_revenue">Revenue Generated (HTG)</div>
     </div>
     <div class="stat-card orange">
       <div class="stat-icon">&#128184;</div>
       <div class="stat-value" id="statCommission">--</div>
-      <div class="stat-label">Commission Owed (HTG)</div>
+      <div class="stat-label" data-i18n="stat_commission">Commission Owed (HTG)</div>
     </div>
   </div>
 
   <!-- PARTNER BREAKDOWN TABLE -->
   <div class="table-section" id="breakdownSection">
     <div class="table-header">
-      <h2>Partner Breakdown</h2>
+      <h2 data-i18n="tbl_breakdown">Partner Breakdown</h2>
     </div>
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>Partner</th>
-            <th>Registered</th>
-            <th>Verified</th>
-            <th>Active</th>
-            <th>Trips</th>
-            <th>Revenue (HTG)</th>
+            <th data-i18n="th_partner">Partner</th>
+            <th data-i18n="th_registered">Registered</th>
+            <th data-i18n="th_verified">Verified</th>
+            <th data-i18n="th_active">Active</th>
+            <th data-i18n="th_trips">Trips</th>
+            <th data-i18n="th_revenue">Revenue (HTG)</th>
           </tr>
         </thead>
         <tbody id="breakdownBody">
@@ -233,21 +253,21 @@ footer a{color:var(--red)}
   <!-- DRIVERS TABLE -->
   <div class="table-section" id="driversSection" style="display:none">
     <div class="table-header">
-      <h2 id="driversTitle">Partner Drivers</h2>
-      <input type="text" class="table-search" placeholder="Search drivers..." id="driverSearch" oninput="filterDrivers()">
+      <h2 id="driversTitle" data-i18n="tbl_drivers">Partner Drivers</h2>
+      <input type="text" class="table-search" placeholder="Search drivers..." data-i18n-placeholder="search_ph" id="driverSearch" oninput="filterDrivers()">
     </div>
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>Driver Name</th>
-            <th>Phone</th>
-            <th>Vehicle</th>
-            <th>Status</th>
-            <th>Referral Code</th>
-            <th>Trips</th>
-            <th>Revenue (HTG)</th>
-            <th>Registered</th>
+            <th data-i18n="th_driver">Driver Name</th>
+            <th data-i18n="th_phone">Phone</th>
+            <th data-i18n="th_vehicle">Vehicle</th>
+            <th data-i18n="th_status">Status</th>
+            <th data-i18n="th_refcode">Referral Code</th>
+            <th data-i18n="th_trips">Trips</th>
+            <th data-i18n="th_revenue">Revenue (HTG)</th>
+            <th data-i18n="th_date">Registered</th>
           </tr>
         </thead>
         <tbody id="driversBody">
@@ -258,8 +278,8 @@ footer a{color:var(--red)}
 
   <!-- REGISTRATION LINKS -->
   <div style="margin-top:40px;background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);padding:28px 24px">
-    <h3 style="font-family:var(--display);font-size:1.2rem;margin-bottom:16px;color:var(--dark)">Dedicated Registration Links</h3>
-    <p style="font-size:.85rem;color:var(--text-light);line-height:1.7;margin-bottom:20px">
+    <h3 style="font-family:var(--display);font-size:1.2rem;margin-bottom:16px;color:var(--dark)" data-i18n="links_title">Dedicated Registration Links</h3>
+    <p style="font-size:.85rem;color:var(--text-light);line-height:1.7;margin-bottom:20px" data-i18n="links_desc">
       Share these links with your partners. When drivers register through a partner link, the system automatically tracks which partner referred them.
     </p>
     <div style="display:flex;flex-direction:column;gap:12px">
@@ -277,6 +297,105 @@ footer a{color:var(--red)}
 </footer>
 
 <script>
+/* ═══ TRANSLATIONS ═══ */
+var T = {
+  fr: {
+    nav_badge:"Tableau de Bord Partenaire",
+    filter_label:"Partenaire:", filter_all:"Tous les Partenaires",
+    dash_title:"Tableau de Bord Partenaire", dash_sub:"Suivre les inscriptions et performances des chauffeurs par partenaire de reference",
+    stat_registered:"Total Chauffeurs Inscrits", stat_verified:"Total Chauffeurs Verifies",
+    stat_active:"Chauffeurs Actifs", stat_trips:"Total Courses Completees",
+    stat_revenue:"Revenus Generes (HTG)", stat_commission:"Commission Due (HTG)",
+    tbl_breakdown:"Repartition par Partenaire", tbl_drivers:"Chauffeurs du Partenaire",
+    th_partner:"Partenaire", th_registered:"Inscrits", th_verified:"Verifies", th_active:"Actifs",
+    th_trips:"Courses", th_revenue:"Revenus (HTG)", th_driver:"Nom du Chauffeur",
+    th_phone:"Telephone", th_vehicle:"Vehicule", th_status:"Statut", th_refcode:"Code de Reference",
+    th_date:"Date d'Inscription", search_ph:"Rechercher des chauffeurs...",
+    links_title:"Liens d'Inscription Dedies",
+    links_desc:"Partagez ces liens avec vos partenaires. Quand les chauffeurs s'inscrivent via un lien partenaire, le systeme suit automatiquement le partenaire qui les a referes.",
+    empty_title:"Pas encore de donnees", empty_desc:"Les donnees de reference des partenaires apparaitront ici une fois que les chauffeurs s'inscriront.",
+    empty_drivers_title:"Pas encore de chauffeurs", empty_drivers_desc:"Les chauffeurs referes par ce partenaire apparaitront ici.",
+    loading_data:"Chargement des donnees...", loading_drivers:"Chargement des chauffeurs...",
+    error_data:"Impossible de charger les donnees. Le serveur demarre peut-etre - reessayez dans un instant.",
+    error_drivers:"Impossible de charger les chauffeurs."
+  },
+  en: {
+    nav_badge:"Partner Dashboard",
+    filter_label:"Partner:", filter_all:"All Partners",
+    dash_title:"Referral Partner Dashboard", dash_sub:"Track driver registrations and performance by referral partner",
+    stat_registered:"Total Drivers Registered", stat_verified:"Total Verified Drivers",
+    stat_active:"Active Drivers", stat_trips:"Total Trips Completed",
+    stat_revenue:"Revenue Generated (HTG)", stat_commission:"Commission Owed (HTG)",
+    tbl_breakdown:"Partner Breakdown", tbl_drivers:"Partner Drivers",
+    th_partner:"Partner", th_registered:"Registered", th_verified:"Verified", th_active:"Active",
+    th_trips:"Trips", th_revenue:"Revenue (HTG)", th_driver:"Driver Name",
+    th_phone:"Phone", th_vehicle:"Vehicle", th_status:"Status", th_refcode:"Referral Code",
+    th_date:"Registered", search_ph:"Search drivers...",
+    links_title:"Dedicated Registration Links",
+    links_desc:"Share these links with your partners. When drivers register through a partner link, the system automatically tracks which partner referred them.",
+    empty_title:"No data yet", empty_desc:"Partner referral data will appear here once drivers register.",
+    empty_drivers_title:"No drivers yet", empty_drivers_desc:"Drivers referred by this partner will appear here.",
+    loading_data:"Loading data...", loading_drivers:"Loading drivers...",
+    error_data:"Could not load data. Backend may be starting up - try again in a moment.",
+    error_drivers:"Could not load drivers."
+  },
+  ht: {
+    nav_badge:"Tablo Patnè",
+    filter_label:"Patnè:", filter_all:"Tout Patnè",
+    dash_title:"Tablo Patnè Referans", dash_sub:"Swiv enskrisyon chofe ak pefomans pa patnè referans",
+    stat_registered:"Total Chofe Enskri", stat_verified:"Total Chofe Verifye",
+    stat_active:"Chofe Aktif", stat_trips:"Total Kous Konplete",
+    stat_revenue:"Revni Jenere (HTG)", stat_commission:"Komisyon Dwe (HTG)",
+    tbl_breakdown:"Rezime pa Patnè", tbl_drivers:"Chofe Patnè a",
+    th_partner:"Patnè", th_registered:"Enskri", th_verified:"Verifye", th_active:"Aktif",
+    th_trips:"Kous", th_revenue:"Revni (HTG)", th_driver:"Non Chofe",
+    th_phone:"Telefon", th_vehicle:"Machin", th_status:"Estati", th_refcode:"Kod Referans",
+    th_date:"Dat Enskrisyon", search_ph:"Chache chofe...",
+    links_title:"Lyen Enskrisyon Dedye",
+    links_desc:"Pataje lyen sa yo ak patnè ou. Le chofe enskri atravè yon lyen patnè, sistèm nan otomatikman swiv ki patnè ki refere yo.",
+    empty_title:"Pa gen done ankò", empty_desc:"Done referans patnè ap parèt isit la yon fwa chofe enskri.",
+    empty_drivers_title:"Pa gen chofe ankò", empty_drivers_desc:"Chofe ke patnè sa a refere ap parèt isit la.",
+    loading_data:"Ap chaje done...", loading_drivers:"Ap chaje chofe...",
+    error_data:"Pa kapab chaje done. Sèvè a ka ap demarre - eseye ankò nan yon moman.",
+    error_drivers:"Pa kapab chaje chofe."
+  },
+  es: {
+    nav_badge:"Panel de Socios",
+    filter_label:"Socio:", filter_all:"Todos los Socios",
+    dash_title:"Panel de Socios de Referencia", dash_sub:"Seguimiento de registros y rendimiento de conductores por socio de referencia",
+    stat_registered:"Total Conductores Registrados", stat_verified:"Total Conductores Verificados",
+    stat_active:"Conductores Activos", stat_trips:"Total Viajes Completados",
+    stat_revenue:"Ingresos Generados (HTG)", stat_commission:"Comision Adeudada (HTG)",
+    tbl_breakdown:"Desglose por Socio", tbl_drivers:"Conductores del Socio",
+    th_partner:"Socio", th_registered:"Registrados", th_verified:"Verificados", th_active:"Activos",
+    th_trips:"Viajes", th_revenue:"Ingresos (HTG)", th_driver:"Nombre del Conductor",
+    th_phone:"Telefono", th_vehicle:"Vehiculo", th_status:"Estado", th_refcode:"Codigo de Referencia",
+    th_date:"Fecha de Registro", search_ph:"Buscar conductores...",
+    links_title:"Enlaces de Registro Dedicados",
+    links_desc:"Comparta estos enlaces con sus socios. Cuando los conductores se registran a traves de un enlace de socio, el sistema rastrea automaticamente que socio los refirio.",
+    empty_title:"Sin datos aun", empty_desc:"Los datos de referencia de socios apareceran aqui una vez que los conductores se registren.",
+    empty_drivers_title:"Sin conductores aun", empty_drivers_desc:"Los conductores referidos por este socio apareceran aqui.",
+    loading_data:"Cargando datos...", loading_drivers:"Cargando conductores...",
+    error_data:"No se pudieron cargar los datos. El servidor puede estar iniciando - intente de nuevo en un momento.",
+    error_drivers:"No se pudieron cargar los conductores."
+  }
+};
+var currentLang='fr';
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-bar a').forEach(function(a){a.classList.remove('active')});
+  document.getElementById('lang-'+lang).classList.add('active');
+  var t=T[lang]||T.fr;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key=el.getAttribute('data-i18n');
+    if(t[key]) el.innerHTML=t[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
+    var key=el.getAttribute('data-i18n-placeholder');
+    if(t[key]) el.placeholder=t[key];
+  });
+}
+
 var API = 'https://msouwout-backend.onrender.com/api';
 var allDrivers = [];
 
@@ -330,7 +449,7 @@ function loadStats(partner){
           html+='<td>'+d.total_revenue.toLocaleString()+'</td>';
           html+='</tr>';
         });
-        if(!html) html='<tr><td colspan="6" class="empty-state"><div class="icon">&#128203;</div><h3>No data yet</h3><p>Partner referral data will appear here once drivers register.</p></td></tr>';
+        if(!html){var t=T[currentLang]||T.fr;html='<tr><td colspan="6" class="empty-state"><div class="icon">&#128203;</div><h3>'+t.empty_title+'</h3><p>'+t.empty_desc+'</p></td></tr>';}
         document.getElementById('breakdownBody').innerHTML=html;
       }
     })
@@ -343,14 +462,14 @@ function loadStats(partner){
       document.getElementById('statRevenue').textContent='0';
       document.getElementById('statCommission').textContent='0';
       if(!partner){
-        document.getElementById('breakdownBody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:#991B1B">Could not load data. Backend may be starting up - try again in a moment.</td></tr>';
+        var t=T[currentLang]||T.fr;document.getElementById('breakdownBody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:#991B1B">'+t.error_data+'</td></tr>';
       }
     });
 }
 
 function loadDrivers(partner){
   var body=document.getElementById('driversBody');
-  body.innerHTML='<tr><td colspan="8" class="loading"><div class="loading-spin"></div><br>Loading drivers...</td></tr>';
+  var t=T[currentLang]||T.fr;body.innerHTML='<tr><td colspan="8" class="loading"><div class="loading-spin"></div><br>'+t.loading_drivers+'</td></tr>';
 
   fetch(API+'/drivers/partner-drivers?partner='+encodeURIComponent(partner))
     .then(function(r){return r.json()})
@@ -360,7 +479,7 @@ function loadDrivers(partner){
     })
     .catch(function(err){
       console.error('Drivers error:',err);
-      body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:#991B1B">Could not load drivers.</td></tr>';
+      var t=T[currentLang]||T.fr;body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:#991B1B">'+t.error_drivers+'</td></tr>';
     });
 }
 
@@ -383,7 +502,7 @@ function renderDrivers(list){
     html+='<td>'+new Date(d.created_at).toLocaleDateString()+'</td>';
     html+='</tr>';
   });
-  if(!html) html='<tr><td colspan="8"><div class="empty-state"><div class="icon">&#128100;</div><h3>No drivers yet</h3><p>Drivers referred by this partner will appear here.</p></div></td></tr>';
+  if(!html){var t=T[currentLang]||T.fr;html='<tr><td colspan="8"><div class="empty-state"><div class="icon">&#128100;</div><h3>'+t.empty_drivers_title+'</h3><p>'+t.empty_drivers_desc+'</p></div></td></tr>';}
   document.getElementById('driversBody').innerHTML=html;
 }
 
@@ -438,6 +557,7 @@ function esc(s){
     }
   }
   loadDashboard();
+  setLang('fr');
 })();
 </script>
 </body>
