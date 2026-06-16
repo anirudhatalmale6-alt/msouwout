@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MsouWout - Syndicate Dashboard</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D21034;--red-dark:#B00D2C;
+  --blue:#00209F;--blue-dark:#001566;
+  --gold:#D4A017;--gold-light:#E8B82E;
+  --white:#FFFFFF;--off-white:#FFF8F8;--light-gray:#F0E8E8;
+  --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;
+  --green:#22C55E;--green-bg:#F0FDF4;
+  --orange:#F59E0B;--orange-bg:#FFFBEB;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --display:'DM Serif Display',Georgia,serif;
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+.lang-bar{background:var(--red);padding:6px 20px;display:flex;align-items:center;justify-content:center;gap:6px;height:36px}
+.lang-bar a{color:rgba(255,255,255,.7);font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:100px;cursor:pointer;transition:all .2s;letter-spacing:.02em}
+.lang-bar a:hover{color:#fff;background:rgba(255,255,255,.15)}
+.lang-bar a.active{color:var(--red);background:#fff}
+nav{background:var(--blue);border-bottom:3px solid var(--red);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.nav-logo span{font-family:var(--display);font-weight:900;font-size:1.25rem;color:#fff;letter-spacing:-.02em}
+.nav-badge{background:var(--gold);color:var(--dark);padding:5px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.filter-bar{background:var(--white);border-bottom:1px solid rgba(0,0,0,.06);padding:16px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.filter-bar label{font-size:.82rem;font-weight:700;color:var(--dark)}
+.filter-select{padding:10px 36px 10px 16px;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;font-size:.88rem;font-family:var(--body);color:var(--text);appearance:none;background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236A5A5A' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;min-width:200px}
+.filter-select:focus{outline:none;border-color:var(--blue)}
+.dashboard{max-width:1200px;margin:0 auto;padding:32px 24px}
+.dash-header{margin-bottom:32px;display:flex;align-items:center;gap:20px}
+.dash-logos{display:flex;gap:10px;flex-shrink:0}
+.dash-logos img{width:68px;height:68px;border-radius:50%;object-fit:cover;border:3px solid var(--blue)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px}
+.stat-card{background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);padding:24px 20px;position:relative;overflow:hidden;transition:all .3s}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.stat-card.blue::before{background:var(--blue)}
+.stat-card.green::before{background:var(--green)}
+.stat-card.gold::before{background:var(--gold)}
+.stat-card.red::before{background:var(--red)}
+.stat-card.orange::before{background:var(--orange)}
+.stat-card.purple::before{background:#8B5CF6}
+.stat-icon{font-size:1.8rem;margin-bottom:10px}
+.stat-value{font-size:1.8rem;font-weight:800;color:var(--dark);letter-spacing:-.02em}
+.stat-label{font-size:.78rem;color:var(--text-light);font-weight:600;margin-top:4px;text-transform:uppercase;letter-spacing:.04em}
+.commission-highlight{background:linear-gradient(135deg,rgba(212,160,23,.08),rgba(210,16,52,.06));border:1.5px solid var(--gold)}
+.commission-highlight .stat-value{color:var(--red-dark)}
+.table-section{margin-top:32px}
+.table-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.table-header h2{font-family:var(--display);font-size:1.4rem;color:var(--dark)}
+.table-search{padding:10px 16px;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;font-size:.85rem;font-family:var(--body);min-width:240px}
+.table-search:focus{outline:none;border-color:var(--blue)}
+.table-wrap{background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+thead{background:rgba(0,32,159,.04)}
+th{padding:14px 16px;text-align:left;font-weight:700;color:var(--dark);font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+td{padding:14px 16px;border-top:1px solid rgba(0,0,0,.05);white-space:nowrap}
+tr:hover td{background:rgba(0,32,159,.02)}
+.badge{display:inline-flex;padding:4px 10px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.02em}
+.badge-green{background:var(--green-bg);color:#166534}
+.badge-orange{background:var(--orange-bg);color:#92400E}
+.badge-red{background:#FEF2F2;color:#991B1B}
+.badge-gray{background:#F3F4F6;color:#374151}
+.loading{text-align:center;padding:60px 20px;color:var(--text-light);font-size:.92rem}
+.loading-spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(0,0,0,.1);border-top-color:var(--blue);border-radius:50%;animation:spin .6s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty-state{text-align:center;padding:60px 20px}
+.empty-state .icon{font-size:3rem;margin-bottom:12px}
+.empty-state h3{font-size:1.1rem;color:var(--dark);margin-bottom:6px}
+.empty-state p{font-size:.85rem;color:var(--text-light)}
+footer{background:var(--dark);padding:24px;text-align:center;margin-top:60px}
+footer p{color:rgba(255,255,255,.4);font-size:.78rem}
+footer a{color:var(--red)}
+@media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}.table-search{min-width:100%}.nav-badge{display:none}}
+@media(max-width:480px){.stats-grid{grid-template-columns:1fr}.filter-bar{flex-direction:column;align-items:flex-start}.filter-select{width:100%}.dash-header{flex-direction:column;text-align:center}.dash-logos{justify-content:center}}
+</style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <a onclick="setLang('fr')" class="active" id="lang-fr">&#127467;&#127479; Fran&#231;ais</a>
+  <a onclick="setLang('en')" id="lang-en">&#127468;&#127463; English</a>
+  <a onclick="setLang('ht')" id="lang-ht">&#127469;&#127481; Krey&#242;l</a>
+  <a onclick="setLang('es')" id="lang-es">&#127466;&#127480; Espa&#241;ol</a>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="assets/msouwout-icon.png" alt="MsouWout">
+    <span>MsouWout</span>
+  </a>
+  <span class="nav-badge" data-i18n="nav_badge">Syndicate Dashboard</span>
+</nav>
+
+<div class="filter-bar">
+  <label for="syndicateFilter" data-i18n="filter_label">Syndicate:</label>
+  <select class="filter-select" id="syndicateFilter" onchange="loadDashboard()">
+    <option value="" data-i18n="filter_all">All Syndicates</option>
+    <option value="FTPH">FTPH</option>
+    <option value="COTRASMOTHA">COTRASMOTHA</option>
+    <option value="Syndicate A">Syndicate A</option>
+    <option value="Syndicate B">Syndicate B</option>
+    <option value="Independent" data-i18n="filter_indep">Independent Drivers</option>
+  </select>
+</div>
+
+<div class="dashboard">
+  <div class="dash-header">
+    <div class="dash-logos">
+      <img src="assets/ftph-logo.jpg" alt="FTPH">
+      <img src="assets/cotrasmotha-logo.jpg" alt="COTRASMOTHA" style="border-color:var(--green)">
+    </div>
+    <div>
+      <h1 data-i18n="dash_title">Syndicate Dashboard</h1>
+      <p style="font-size:.88rem;color:var(--text-light);margin-top:4px" data-i18n="dash_sub">Track drivers, trips, revenue and 2% syndicate commission by syndicate</p>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card blue">
+      <div class="stat-icon">&#128100;</div>
+      <div class="stat-value" id="statRegistered">--</div>
+      <div class="stat-label" data-i18n="stat_registered">Total Drivers Registered</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-icon">&#9989;</div>
+      <div class="stat-value" id="statVerified">--</div>
+      <div class="stat-label" data-i18n="stat_verified">Verified Drivers</div>
+    </div>
+    <div class="stat-card gold">
+      <div class="stat-icon">&#128663;</div>
+      <div class="stat-value" id="statActive">--</div>
+      <div class="stat-label" data-i18n="stat_active">Active Drivers</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="stat-icon">&#128205;</div>
+      <div class="stat-value" id="statTrips">--</div>
+      <div class="stat-label" data-i18n="stat_trips">Trips Completed</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-icon">&#128176;</div>
+      <div class="stat-value" id="statRevenue">--</div>
+      <div class="stat-label" data-i18n="stat_revenue">Revenue Generated (HTG)</div>
+    </div>
+    <div class="stat-card commission-highlight orange">
+      <div class="stat-icon">&#128184;</div>
+      <div class="stat-value" id="statCommission">--</div>
+      <div class="stat-label" data-i18n="stat_commission">2% Syndicate Share Owed (HTG)</div>
+    </div>
+  </div>
+
+  <!-- SYNDICATE BREAKDOWN -->
+  <div class="table-section" id="breakdownSection">
+    <div class="table-header">
+      <h2 data-i18n="tbl_breakdown">Revenue by Syndicate</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="th_syndicate">Syndicate</th>
+            <th data-i18n="th_registered">Registered</th>
+            <th data-i18n="th_verified">Verified</th>
+            <th data-i18n="th_active">Active</th>
+            <th data-i18n="th_trips">Trips</th>
+            <th data-i18n="th_revenue">Revenue (HTG)</th>
+            <th data-i18n="th_commission">2% Share (HTG)</th>
+          </tr>
+        </thead>
+        <tbody id="breakdownBody">
+          <tr><td colspan="7" class="loading"><div class="loading-spin"></div><br>Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DRIVERS TABLE -->
+  <div class="table-section" id="driversSection" style="display:none">
+    <div class="table-header">
+      <h2 id="driversTitle" data-i18n="tbl_drivers">Syndicate Drivers</h2>
+      <input type="text" class="table-search" placeholder="Search drivers..." data-i18n-placeholder="search_ph" id="driverSearch" oninput="filterDrivers()">
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="th_driver">Driver Name</th>
+            <th data-i18n="th_phone">Phone</th>
+            <th data-i18n="th_vehicle">Vehicle</th>
+            <th data-i18n="th_status">Status</th>
+            <th data-i18n="th_trips">Trips</th>
+            <th data-i18n="th_revenue">Revenue (HTG)</th>
+            <th data-i18n="th_commission">2% Share (HTG)</th>
+            <th data-i18n="th_date">Registered</th>
+          </tr>
+        </thead>
+        <tbody id="driversBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 MsouWout. A <a href="https://haitibiznis.com">HaitiBiznis</a> Platform. | Syndicate Dashboard</p>
+</footer>
+
+<script>
+var T={
+  fr:{
+    nav_badge:"Tableau de Bord Syndicat",filter_label:"Syndicat:",filter_all:"Tous les Syndicats",filter_indep:"Chauffeurs Independants",
+    dash_title:"Tableau de Bord Syndicat",dash_sub:"Suivre les chauffeurs, courses, revenus et commission syndicale de 2% par syndicat",
+    stat_registered:"Total Chauffeurs Inscrits",stat_verified:"Chauffeurs Verifies",stat_active:"Chauffeurs Actifs",
+    stat_trips:"Courses Completees",stat_revenue:"Revenus Generes (HTG)",stat_commission:"Part Syndicale 2% Due (HTG)",
+    tbl_breakdown:"Revenus par Syndicat",tbl_drivers:"Chauffeurs du Syndicat",
+    th_syndicate:"Syndicat",th_registered:"Inscrits",th_verified:"Verifies",th_active:"Actifs",
+    th_trips:"Courses",th_revenue:"Revenus (HTG)",th_commission:"Part 2% (HTG)",
+    th_driver:"Nom du Chauffeur",th_phone:"Telephone",th_vehicle:"Vehicule",th_status:"Statut",th_date:"Date d'Inscription",
+    search_ph:"Rechercher des chauffeurs..."
+  },
+  en:{
+    nav_badge:"Syndicate Dashboard",filter_label:"Syndicate:",filter_all:"All Syndicates",filter_indep:"Independent Drivers",
+    dash_title:"Syndicate Dashboard",dash_sub:"Track drivers, trips, revenue and 2% syndicate commission by syndicate",
+    stat_registered:"Total Drivers Registered",stat_verified:"Verified Drivers",stat_active:"Active Drivers",
+    stat_trips:"Trips Completed",stat_revenue:"Revenue Generated (HTG)",stat_commission:"2% Syndicate Share Owed (HTG)",
+    tbl_breakdown:"Revenue by Syndicate",tbl_drivers:"Syndicate Drivers",
+    th_syndicate:"Syndicate",th_registered:"Registered",th_verified:"Verified",th_active:"Active",
+    th_trips:"Trips",th_revenue:"Revenue (HTG)",th_commission:"2% Share (HTG)",
+    th_driver:"Driver Name",th_phone:"Phone",th_vehicle:"Vehicle",th_status:"Status",th_date:"Registered",
+    search_ph:"Search drivers..."
+  },
+  ht:{
+    nav_badge:"Tablo Sendika",filter_label:"Sendika:",filter_all:"Tout Sendika",filter_indep:"Chofe Endepandan",
+    dash_title:"Tablo Sendika",dash_sub:"Swiv chofe, kous, revni ak komisyon sendika 2% pa sendika",
+    stat_registered:"Total Chofe Enskri",stat_verified:"Chofe Verifye",stat_active:"Chofe Aktif",
+    stat_trips:"Kous Konplete",stat_revenue:"Revni Jenere (HTG)",stat_commission:"Pati Sendika 2% Dwe (HTG)",
+    tbl_breakdown:"Revni pa Sendika",tbl_drivers:"Chofe Sendika a",
+    th_syndicate:"Sendika",th_registered:"Enskri",th_verified:"Verifye",th_active:"Aktif",
+    th_trips:"Kous",th_revenue:"Revni (HTG)",th_commission:"Pati 2% (HTG)",
+    th_driver:"Non Chofe",th_phone:"Telefon",th_vehicle:"Machin",th_status:"Estati",th_date:"Dat Enskrisyon",
+    search_ph:"Chache chofe..."
+  },
+  es:{
+    nav_badge:"Panel de Sindicatos",filter_label:"Sindicato:",filter_all:"Todos los Sindicatos",filter_indep:"Conductores Independientes",
+    dash_title:"Panel de Sindicatos",dash_sub:"Seguimiento de conductores, viajes, ingresos y comision sindical del 2% por sindicato",
+    stat_registered:"Total Conductores Registrados",stat_verified:"Conductores Verificados",stat_active:"Conductores Activos",
+    stat_trips:"Viajes Completados",stat_revenue:"Ingresos Generados (HTG)",stat_commission:"Parte Sindical 2% Adeudada (HTG)",
+    tbl_breakdown:"Ingresos por Sindicato",tbl_drivers:"Conductores del Sindicato",
+    th_syndicate:"Sindicato",th_registered:"Registrados",th_verified:"Verificados",th_active:"Activos",
+    th_trips:"Viajes",th_revenue:"Ingresos (HTG)",th_commission:"Parte 2% (HTG)",
+    th_driver:"Nombre del Conductor",th_phone:"Telefono",th_vehicle:"Vehiculo",th_status:"Estado",th_date:"Fecha de Registro",
+    search_ph:"Buscar conductores..."
+  }
+};
+var currentLang='fr';
+function setLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-bar a').forEach(function(a){a.classList.remove('active')});
+  document.getElementById('lang-'+lang).classList.add('active');
+  var t=T[lang]||T.fr;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n');if(t[k])el.innerHTML=t[k]});
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){var k=el.getAttribute('data-i18n-placeholder');if(t[k])el.placeholder=t[k]});
+}
+
+var API='https://msouwout-backend.onrender.com/api';
+var allDrivers=[];
+
+function loadDashboard(){
+  var syn=document.getElementById('syndicateFilter').value;
+  loadStats(syn);
+  if(syn){
+    document.getElementById('breakdownSection').style.display='none';
+    document.getElementById('driversSection').style.display='block';
+    document.getElementById('driversTitle').textContent=(T[currentLang]||T.fr).tbl_drivers;
+    loadDrivers(syn);
+  }else{
+    document.getElementById('breakdownSection').style.display='block';
+    document.getElementById('driversSection').style.display='none';
+  }
+}
+
+function loadStats(syn){
+  var url=API+'/drivers/syndicate-stats';
+  if(syn) url+='?syndicate='+encodeURIComponent(syn);
+  fetch(url).then(function(r){return r.json()}).then(function(data){
+    if(!Array.isArray(data)) data=[];
+    var tot={reg:0,ver:0,act:0,trips:0,rev:0,share:0};
+    data.forEach(function(d){
+      tot.reg+=d.total_registered;tot.ver+=d.total_verified;tot.act+=d.active_drivers;
+      tot.trips+=d.total_trips;tot.rev+=d.total_revenue;tot.share+=d.syndicate_share;
+    });
+    document.getElementById('statRegistered').textContent=tot.reg.toLocaleString();
+    document.getElementById('statVerified').textContent=tot.ver.toLocaleString();
+    document.getElementById('statActive').textContent=tot.act.toLocaleString();
+    document.getElementById('statTrips').textContent=tot.trips.toLocaleString();
+    document.getElementById('statRevenue').textContent=tot.rev.toLocaleString();
+    document.getElementById('statCommission').textContent=tot.share.toLocaleString();
+    if(!syn){
+      var html='';
+      data.forEach(function(d){
+        html+='<tr><td><strong>'+esc(d.syndicate)+'</strong></td>';
+        html+='<td>'+d.total_registered+'</td><td>'+d.total_verified+'</td><td>'+d.active_drivers+'</td>';
+        html+='<td>'+d.total_trips+'</td><td>'+d.total_revenue.toLocaleString()+'</td>';
+        html+='<td><strong>'+d.syndicate_share.toLocaleString()+'</strong></td></tr>';
+      });
+      if(!html) html='<tr><td colspan="7" class="empty-state"><div class="icon">&#128203;</div><h3>No data yet</h3></td></tr>';
+      document.getElementById('breakdownBody').innerHTML=html;
+    }
+  }).catch(function(){
+    ['statRegistered','statVerified','statActive','statTrips','statRevenue','statCommission'].forEach(function(id){document.getElementById(id).textContent='0'});
+    if(!syn) document.getElementById('breakdownBody').innerHTML='<tr><td colspan="7" style="text-align:center;padding:24px;color:#991B1B">Backend starting up - try again in a moment.</td></tr>';
+  });
+}
+
+function loadDrivers(syn){
+  var body=document.getElementById('driversBody');
+  body.innerHTML='<tr><td colspan="8" class="loading"><div class="loading-spin"></div><br>Loading...</td></tr>';
+  fetch(API+'/drivers/syndicate-drivers?syndicate='+encodeURIComponent(syn))
+    .then(function(r){return r.json()})
+    .then(function(data){allDrivers=Array.isArray(data)?data:[];renderDrivers(allDrivers)})
+    .catch(function(){body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:#991B1B">Could not load drivers.</td></tr>'});
+}
+
+function renderDrivers(list){
+  var html='';
+  list.forEach(function(d){
+    var sc='badge-gray';
+    if(d.status==='approved')sc='badge-green';else if(d.status==='pending')sc='badge-orange';else if(d.status==='rejected'||d.status==='suspended')sc='badge-red';
+    var rev=parseInt(d.revenue||0);
+    var fee=parseInt(d.platform_fee||0);
+    var share=Math.round(fee*0.02);
+    html+='<tr><td><strong>'+esc(d.full_name)+'</strong></td><td>'+esc(d.phone)+'</td><td>'+esc(d.vehicle_type)+'</td>';
+    html+='<td><span class="badge '+sc+'">'+esc(d.status)+'</span></td>';
+    html+='<td>'+parseInt(d.trip_count||0)+'</td><td>'+rev.toLocaleString()+'</td>';
+    html+='<td><strong>'+share.toLocaleString()+'</strong></td>';
+    html+='<td>'+new Date(d.created_at).toLocaleDateString()+'</td></tr>';
+  });
+  if(!html) html='<tr><td colspan="8"><div class="empty-state"><div class="icon">&#128100;</div><h3>No drivers yet</h3></div></td></tr>';
+  document.getElementById('driversBody').innerHTML=html;
+}
+
+function filterDrivers(){
+  var q=document.getElementById('driverSearch').value.toLowerCase();
+  if(!q){renderDrivers(allDrivers);return}
+  renderDrivers(allDrivers.filter(function(d){
+    return (d.full_name||'').toLowerCase().indexOf(q)!==-1||(d.phone||'').indexOf(q)!==-1;
+  }));
+}
+
+function esc(s){if(!s)return'';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+(function(){
+  var p=new URLSearchParams(window.location.search).get('syndicate');
+  if(p){var sel=document.getElementById('syndicateFilter');for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===p){sel.selectedIndex=i;break}}}
+  loadDashboard();
+  setLang('fr');
+})();
+</script>
+</body>
+</html>
