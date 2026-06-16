@@ -424,10 +424,17 @@ footer{
       <input type="hidden" name="_next" value="https://msouwout.com/driver-success.html">
       <input type="hidden" name="Referred By" id="referralField" value="">
 
+      <!-- Partner Logo Banner (shown for FTPH/COTRASMOTHA) -->
+      <div id="partnerBanner" style="display:none;text-align:center;margin-bottom:18px;padding:20px;background:linear-gradient(135deg,rgba(0,32,159,.04),rgba(210,16,52,.04));border:1.5px solid rgba(0,32,159,.12);border-radius:16px">
+        <img src="assets/ftph-logo.jpg" alt="FTPH" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--blue);margin-bottom:10px">
+        <div style="font-size:.88rem;font-weight:700;color:var(--blue)">FTPH/COTRASMOTHA</div>
+        <div style="font-size:.78rem;color:var(--text-light);margin-top:2px" data-i18n="partner_banner_sub">Official Partner Registration</div>
+      </div>
+
       <!-- Referral Partner -->
       <div class="form-group">
         <label class="form-label" data-i18n="f_partner_label">Referral Partner *</label>
-        <select name="Referral Partner" id="referralPartner" required>
+        <select name="Referral Partner" id="referralPartner" required onchange="togglePartnerBanner()">
           <option value="" disabled selected data-i18n="f_partner_ph">-- How did you hear about MsouWout? --</option>
           <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
           <option value="Facebook">Facebook</option>
@@ -683,6 +690,7 @@ const T = {
     req4_title:"Smartphone", req4_desc:"Android ou iPhone avec WhatsApp et donnees mobiles. Necessaire pour recevoir les commandes et le suivi GPS.",
     reg_tag:"Inscription Chauffeur", reg_title:"Inscrivez-vous comme Chauffeur",
     reg_sub:"Remplissez le formulaire ci-dessous et notre equipe vous contactera dans les 24 heures pour completer votre integration.",
+    partner_banner_sub:"Inscription Officielle du Partenaire",
     f_partner_label:"Partenaire de Reference *", f_partner_ph:"-- Comment avez-vous entendu parler de MsouWout? --",
     f_partner_friend:"Ami / Famille", f_partner_other:"Autre",
     f_name_label:"Nom Complet *", f_name_ph:"Jean Pierre",
@@ -732,6 +740,7 @@ const T = {
     req4_title:"Smartphone", req4_desc:"Android or iPhone with WhatsApp and mobile data. Needed for receiving orders and live GPS tracking.",
     reg_tag:"Driver Registration", reg_title:"Register as a Driver",
     reg_sub:"Fill out the form below and our team will contact you within 24 hours to complete your onboarding.",
+    partner_banner_sub:"Official Partner Registration",
     f_partner_label:"Referral Partner *", f_partner_ph:"-- How did you hear about MsouWout? --",
     f_partner_friend:"Friend / Family", f_partner_other:"Other",
     f_name_label:"Full Name *", f_name_ph:"Jean Pierre",
@@ -781,6 +790,7 @@ const T = {
     req4_title:"Smartphone", req4_desc:"Android oswa iPhone ak WhatsApp ak done mobil. Nesesè pou resevwa komand ak swivi GPS.",
     reg_tag:"Enskrisyon Chofe", reg_title:"Enskri kom Chofe",
     reg_sub:"Ranpli fom anba a epi ekip nou ap kontakte ou nan 24 edtan pou konplete entegrasyon ou.",
+    partner_banner_sub:"Enskrisyon Ofisyel Patnè",
     f_partner_label:"Patnè Referans *", f_partner_ph:"-- Kijan ou te tande pale de MsouWout? --",
     f_partner_friend:"Zanmi / Fanmi", f_partner_other:"Lòt",
     f_name_label:"Non Konple *", f_name_ph:"Jean Pierre",
@@ -830,6 +840,7 @@ const T = {
     req4_title:"Smartphone", req4_desc:"Android o iPhone con WhatsApp y datos moviles. Necesario para recibir pedidos y seguimiento GPS en vivo.",
     reg_tag:"Registro de Conductor", reg_title:"Registrate como Conductor",
     reg_sub:"Completa el formulario y nuestro equipo te contactara en 24 horas para completar tu incorporacion.",
+    partner_banner_sub:"Registro Oficial del Socio",
     f_partner_label:"Socio de Referencia *", f_partner_ph:"-- Como se entero de MsouWout? --",
     f_partner_friend:"Amigo / Familia", f_partner_other:"Otro",
     f_name_label:"Nombre Completo *", f_name_ph:"Jean Pierre",
@@ -1014,6 +1025,13 @@ function toggleAllZones(btn){
   });
 })();
 
+/* ═══ PARTNER BANNER TOGGLE ═══ */
+function togglePartnerBanner(){
+  var sel=document.getElementById('referralPartner');
+  var banner=document.getElementById('partnerBanner');
+  banner.style.display=(sel.value==='FTPH/COTRASMOTHA')?'block':'none';
+}
+
 /* ═══ A/C FIELD TOGGLE ═══ */
 function toggleACField(){
   var sel=document.getElementById('vehicleTypeSelect');
@@ -1101,6 +1119,7 @@ function removeVideo(){
       }
     }catch(e){}
   }
+  togglePartnerBanner();
 })();
 
 /* ═══ SCROLL ANIMATIONS ═══ */
