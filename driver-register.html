@@ -429,8 +429,7 @@ footer{
         <label class="form-label" data-i18n="f_partner_label">Referral Partner *</label>
         <select name="Referral Partner" id="referralPartner" required>
           <option value="" disabled selected data-i18n="f_partner_ph">-- How did you hear about MsouWout? --</option>
-          <option value="FTPH">FTPH</option>
-          <option value="COTRASMOTHA">COTRASMOTHA</option>
+          <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
           <option value="Facebook">Facebook</option>
           <option value="WhatsApp">WhatsApp</option>
           <option value="Friend/Family" data-i18n="f_partner_friend">Friend / Family</option>
@@ -1068,7 +1067,12 @@ function removeVideo(){
   var params=new URLSearchParams(window.location.search);
   var partner=params.get('partner');
   var ref=params.get('ref');
-  var code=params.get('code');
+
+  // Map FTPH or COTRASMOTHA to the combined value
+  if(partner){
+    var pu=partner.toUpperCase();
+    if(pu==='FTPH'||pu==='COTRASMOTHA'||pu==='FTPH/COTRASMOTHA') partner='FTPH/COTRASMOTHA';
+  }
 
   if(partner){
     var sel=document.getElementById('referralPartner');

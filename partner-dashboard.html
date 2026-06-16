@@ -156,15 +156,11 @@ footer a{color:var(--red)}
   <label for="partnerFilter">Partner:</label>
   <select class="partner-select" id="partnerFilter" onchange="loadDashboard()">
     <option value="">All Partners</option>
-    <option value="FTPH">FTPH</option>
-    <option value="COTRASMOTHA">COTRASMOTHA</option>
+    <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
   </select>
   <div class="partner-links">
-    <button class="copy-link-btn" onclick="copyPartnerLink('FTPH')" id="copyFTPH">
-      &#128279; Copy FTPH Link
-    </button>
-    <button class="copy-link-btn" onclick="copyPartnerLink('COTRASMOTHA')" id="copyCOT">
-      &#128279; Copy COTRASMOTHA Link
+    <button class="copy-link-btn" onclick="copyPartnerLink('FTPH/COTRASMOTHA')" id="copyPartner">
+      &#128279; Copy Partner Link
     </button>
   </div>
 </div>
@@ -268,14 +264,9 @@ footer a{color:var(--red)}
     </p>
     <div style="display:flex;flex-direction:column;gap:12px">
       <div style="display:flex;align-items:center;gap:12px;background:var(--off-white);padding:14px 16px;border-radius:12px;flex-wrap:wrap">
-        <strong style="font-size:.85rem;min-width:130px">FTPH:</strong>
-        <code style="font-size:.82rem;color:var(--blue);word-break:break-all;flex:1" id="linkFTPH">msouwout.com/driver-register.html?partner=FTPH</code>
-        <button class="copy-link-btn" onclick="copyText('linkFTPH',this)">&#128203; Copy</button>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px;background:var(--off-white);padding:14px 16px;border-radius:12px;flex-wrap:wrap">
-        <strong style="font-size:.85rem;min-width:130px">COTRASMOTHA:</strong>
-        <code style="font-size:.82rem;color:var(--blue);word-break:break-all;flex:1" id="linkCOT">msouwout.com/driver-register.html?partner=COTRASMOTHA</code>
-        <button class="copy-link-btn" onclick="copyText('linkCOT',this)">&#128203; Copy</button>
+        <strong style="font-size:.85rem;min-width:170px">FTPH/COTRASMOTHA:</strong>
+        <code style="font-size:.82rem;color:var(--blue);word-break:break-all;flex:1" id="linkPartner">msouwout.com/driver-register.html?partner=FTPH/COTRASMOTHA</code>
+        <button class="copy-link-btn" onclick="copyText('linkPartner',this)">&#128203; Copy</button>
       </div>
     </div>
   </div>
@@ -408,12 +399,12 @@ function filterDrivers(){
 }
 
 function copyPartnerLink(partner){
-  var url='https://msouwout.com/driver-register.html?partner='+partner;
+  var url='https://msouwout.com/driver-register.html?partner='+encodeURIComponent(partner);
   copyToClipboard(url);
-  var btn=document.getElementById(partner==='FTPH'?'copyFTPH':'copyCOT');
+  var btn=document.getElementById('copyPartner');
   btn.classList.add('copied');
   btn.innerHTML='&#9989; Copied!';
-  setTimeout(function(){btn.classList.remove('copied');btn.innerHTML='&#128279; Copy '+partner+' Link'},2000);
+  setTimeout(function(){btn.classList.remove('copied');btn.innerHTML='&#128279; Copy Partner Link'},2000);
 }
 
 function copyText(elId,btn){
