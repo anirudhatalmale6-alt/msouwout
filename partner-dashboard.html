@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MsouWout - Partner Dashboard</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D21034;--red-dark:#B00D2C;
+  --blue:#00209F;--blue-dark:#001566;
+  --gold:#D4A017;--gold-light:#E8B82E;
+  --white:#FFFFFF;--off-white:#FFF8F8;--light-gray:#F0E8E8;
+  --dark:#1A0C0C;--text:#2A1A1A;--text-light:#6A5A5A;
+  --green:#22C55E;--green-bg:#F0FDF4;
+  --orange:#F59E0B;--orange-bg:#FFFBEB;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --display:'DM Serif Display',Georgia,serif;
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off-white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+nav{
+  background:var(--blue);border-bottom:3px solid var(--red);
+  padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.nav-logo span{font-family:var(--display);font-weight:900;font-size:1.25rem;color:#fff;letter-spacing:-.02em}
+.nav-badge{background:var(--gold);color:var(--dark);padding:5px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+
+/* PARTNER SELECTOR */
+.partner-bar{
+  background:var(--white);border-bottom:1px solid rgba(0,0,0,.06);
+  padding:16px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.partner-bar label{font-size:.82rem;font-weight:700;color:var(--dark)}
+.partner-select{
+  padding:10px 36px 10px 16px;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;
+  font-size:.88rem;font-family:var(--body);color:var(--text);
+  appearance:none;background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236A5A5A' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E") no-repeat right 12px center;
+  cursor:pointer;min-width:200px;
+}
+.partner-select:focus{outline:none;border-color:var(--blue)}
+.partner-links{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.copy-link-btn{
+  background:rgba(0,32,159,.08);color:var(--blue);border:none;padding:8px 16px;border-radius:100px;
+  font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--body);transition:all .2s;
+  display:flex;align-items:center;gap:6px;
+}
+.copy-link-btn:hover{background:rgba(0,32,159,.15)}
+.copy-link-btn.copied{background:var(--green-bg);color:#166534}
+
+/* DASHBOARD */
+.dashboard{max-width:1200px;margin:0 auto;padding:32px 24px}
+.dash-header{margin-bottom:32px}
+.dash-header h1{font-family:var(--display);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--dark);letter-spacing:-.02em}
+.dash-header p{font-size:.88rem;color:var(--text-light);margin-top:4px}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px}
+.stat-card{
+  background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);
+  padding:24px 20px;position:relative;overflow:hidden;transition:all .3s;
+}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+}
+.stat-card.blue::before{background:var(--blue)}
+.stat-card.green::before{background:var(--green)}
+.stat-card.gold::before{background:var(--gold)}
+.stat-card.red::before{background:var(--red)}
+.stat-card.orange::before{background:var(--orange)}
+.stat-card.purple::before{background:#8B5CF6}
+.stat-icon{font-size:1.8rem;margin-bottom:10px}
+.stat-value{font-size:1.8rem;font-weight:800;color:var(--dark);letter-spacing:-.02em}
+.stat-label{font-size:.78rem;color:var(--text-light);font-weight:600;margin-top:4px;text-transform:uppercase;letter-spacing:.04em}
+
+/* TABLE */
+.table-section{margin-top:32px}
+.table-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.table-header h2{font-family:var(--display);font-size:1.4rem;color:var(--dark)}
+.table-search{
+  padding:10px 16px;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;
+  font-size:.85rem;font-family:var(--body);min-width:240px;
+}
+.table-search:focus{outline:none;border-color:var(--blue)}
+.table-wrap{
+  background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);
+  overflow-x:auto;
+}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+thead{background:rgba(0,32,159,.04)}
+th{padding:14px 16px;text-align:left;font-weight:700;color:var(--dark);font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+td{padding:14px 16px;border-top:1px solid rgba(0,0,0,.05);white-space:nowrap}
+tr:hover td{background:rgba(0,32,159,.02)}
+.badge{display:inline-flex;padding:4px 10px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.02em}
+.badge-green{background:var(--green-bg);color:#166534}
+.badge-orange{background:var(--orange-bg);color:#92400E}
+.badge-red{background:#FEF2F2;color:#991B1B}
+.badge-blue{background:rgba(0,32,159,.08);color:var(--blue)}
+.badge-gray{background:#F3F4F6;color:#374151}
+
+/* LOADING */
+.loading{text-align:center;padding:60px 20px;color:var(--text-light);font-size:.92rem}
+.loading-spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(0,0,0,.1);border-top-color:var(--blue);border-radius:50%;animation:spin .6s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 20px}
+.empty-state .icon{font-size:3rem;margin-bottom:12px}
+.empty-state h3{font-size:1.1rem;color:var(--dark);margin-bottom:6px}
+.empty-state p{font-size:.85rem;color:var(--text-light)}
+
+/* FOOTER */
+footer{background:var(--dark);padding:24px;text-align:center;margin-top:60px}
+footer p{color:rgba(255,255,255,.4);font-size:.78rem}
+footer a{color:var(--red)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .partner-links{margin-left:0;width:100%}
+  .table-search{min-width:100%}
+  .nav-badge{display:none}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr}
+  .partner-bar{flex-direction:column;align-items:flex-start}
+  .partner-select{width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="assets/msouwout-icon.png" alt="MsouWout">
+    <span>MsouWout</span>
+  </a>
+  <span class="nav-badge">Partner Dashboard</span>
+</nav>
+
+<!-- PARTNER SELECTOR -->
+<div class="partner-bar">
+  <label for="partnerFilter">Partner:</label>
+  <select class="partner-select" id="partnerFilter" onchange="loadDashboard()">
+    <option value="">All Partners</option>
+    <option value="FTPH">FTPH</option>
+    <option value="COTRASMOTHA">COTRASMOTHA</option>
+  </select>
+  <div class="partner-links">
+    <button class="copy-link-btn" onclick="copyPartnerLink('FTPH')" id="copyFTPH">
+      &#128279; Copy FTPH Link
+    </button>
+    <button class="copy-link-btn" onclick="copyPartnerLink('COTRASMOTHA')" id="copyCOT">
+      &#128279; Copy COTRASMOTHA Link
+    </button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard">
+  <div class="dash-header">
+    <h1>Referral Partner Dashboard</h1>
+    <p>Track driver registrations and performance by referral partner</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-card blue">
+      <div class="stat-icon">&#128100;</div>
+      <div class="stat-value" id="statRegistered">--</div>
+      <div class="stat-label">Total Drivers Registered</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-icon">&#9989;</div>
+      <div class="stat-value" id="statVerified">--</div>
+      <div class="stat-label">Total Verified Drivers</div>
+    </div>
+    <div class="stat-card gold">
+      <div class="stat-icon">&#128663;</div>
+      <div class="stat-value" id="statActive">--</div>
+      <div class="stat-label">Active Drivers</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="stat-icon">&#128205;</div>
+      <div class="stat-value" id="statTrips">--</div>
+      <div class="stat-label">Total Trips Completed</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-icon">&#128176;</div>
+      <div class="stat-value" id="statRevenue">--</div>
+      <div class="stat-label">Revenue Generated (HTG)</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-icon">&#128184;</div>
+      <div class="stat-value" id="statCommission">--</div>
+      <div class="stat-label">Commission Owed (HTG)</div>
+    </div>
+  </div>
+
+  <!-- PARTNER BREAKDOWN TABLE -->
+  <div class="table-section" id="breakdownSection">
+    <div class="table-header">
+      <h2>Partner Breakdown</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Partner</th>
+            <th>Registered</th>
+            <th>Verified</th>
+            <th>Active</th>
+            <th>Trips</th>
+            <th>Revenue (HTG)</th>
+          </tr>
+        </thead>
+        <tbody id="breakdownBody">
+          <tr><td colspan="6" class="loading"><div class="loading-spin"></div><br>Loading data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DRIVERS TABLE -->
+  <div class="table-section" id="driversSection" style="display:none">
+    <div class="table-header">
+      <h2 id="driversTitle">Partner Drivers</h2>
+      <input type="text" class="table-search" placeholder="Search drivers..." id="driverSearch" oninput="filterDrivers()">
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Driver Name</th>
+            <th>Phone</th>
+            <th>Vehicle</th>
+            <th>Status</th>
+            <th>Referral Code</th>
+            <th>Trips</th>
+            <th>Revenue (HTG)</th>
+            <th>Registered</th>
+          </tr>
+        </thead>
+        <tbody id="driversBody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- REGISTRATION LINKS -->
+  <div style="margin-top:40px;background:var(--white);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);padding:28px 24px">
+    <h3 style="font-family:var(--display);font-size:1.2rem;margin-bottom:16px;color:var(--dark)">Dedicated Registration Links</h3>
+    <p style="font-size:.85rem;color:var(--text-light);line-height:1.7;margin-bottom:20px">
+      Share these links with your partners. When drivers register through a partner link, the system automatically tracks which partner referred them.
+    </p>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:12px;background:var(--off-white);padding:14px 16px;border-radius:12px;flex-wrap:wrap">
+        <strong style="font-size:.85rem;min-width:130px">FTPH:</strong>
+        <code style="font-size:.82rem;color:var(--blue);word-break:break-all;flex:1" id="linkFTPH">msouwout.com/driver-register.html?partner=FTPH</code>
+        <button class="copy-link-btn" onclick="copyText('linkFTPH',this)">&#128203; Copy</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:var(--off-white);padding:14px 16px;border-radius:12px;flex-wrap:wrap">
+        <strong style="font-size:.85rem;min-width:130px">COTRASMOTHA:</strong>
+        <code style="font-size:.82rem;color:var(--blue);word-break:break-all;flex:1" id="linkCOT">msouwout.com/driver-register.html?partner=COTRASMOTHA</code>
+        <button class="copy-link-btn" onclick="copyText('linkCOT',this)">&#128203; Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 MsouWout. A <a href="https://haitibiznis.com">HaitiBiznis</a> Platform. | Partner Dashboard</p>
+</footer>
+
+<script>
+var API = 'https://msouwout-backend.onrender.com/api';
+var allDrivers = [];
+
+function loadDashboard(){
+  var partner = document.getElementById('partnerFilter').value;
+  loadStats(partner);
+  if(partner){
+    document.getElementById('breakdownSection').style.display='none';
+    document.getElementById('driversSection').style.display='block';
+    document.getElementById('driversTitle').textContent=partner+' Drivers';
+    loadDrivers(partner);
+  }else{
+    document.getElementById('breakdownSection').style.display='block';
+    document.getElementById('driversSection').style.display='none';
+  }
+}
+
+function loadStats(partner){
+  var url=API+'/drivers/partner-stats';
+  if(partner) url+='?partner='+encodeURIComponent(partner);
+
+  fetch(url)
+    .then(function(r){return r.json()})
+    .then(function(data){
+      if(!Array.isArray(data)){data=[];}
+      var totals={registered:0,verified:0,active:0,trips:0,revenue:0,fee:0};
+      data.forEach(function(d){
+        totals.registered+=d.total_registered;
+        totals.verified+=d.total_verified;
+        totals.active+=d.active_drivers;
+        totals.trips+=d.total_trips;
+        totals.revenue+=d.total_revenue;
+        totals.fee+=d.total_platform_fee;
+      });
+      document.getElementById('statRegistered').textContent=totals.registered.toLocaleString();
+      document.getElementById('statVerified').textContent=totals.verified.toLocaleString();
+      document.getElementById('statActive').textContent=totals.active.toLocaleString();
+      document.getElementById('statTrips').textContent=totals.trips.toLocaleString();
+      document.getElementById('statRevenue').textContent=totals.revenue.toLocaleString();
+      document.getElementById('statCommission').textContent=Math.round(totals.fee*0.1).toLocaleString();
+
+      if(!partner){
+        var html='';
+        data.forEach(function(d){
+          html+='<tr>';
+          html+='<td><strong>'+esc(d.partner)+'</strong></td>';
+          html+='<td>'+d.total_registered+'</td>';
+          html+='<td>'+d.total_verified+'</td>';
+          html+='<td>'+d.active_drivers+'</td>';
+          html+='<td>'+d.total_trips+'</td>';
+          html+='<td>'+d.total_revenue.toLocaleString()+'</td>';
+          html+='</tr>';
+        });
+        if(!html) html='<tr><td colspan="6" class="empty-state"><div class="icon">&#128203;</div><h3>No data yet</h3><p>Partner referral data will appear here once drivers register.</p></td></tr>';
+        document.getElementById('breakdownBody').innerHTML=html;
+      }
+    })
+    .catch(function(err){
+      console.error('Stats error:',err);
+      document.getElementById('statRegistered').textContent='0';
+      document.getElementById('statVerified').textContent='0';
+      document.getElementById('statActive').textContent='0';
+      document.getElementById('statTrips').textContent='0';
+      document.getElementById('statRevenue').textContent='0';
+      document.getElementById('statCommission').textContent='0';
+      if(!partner){
+        document.getElementById('breakdownBody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:#991B1B">Could not load data. Backend may be starting up - try again in a moment.</td></tr>';
+      }
+    });
+}
+
+function loadDrivers(partner){
+  var body=document.getElementById('driversBody');
+  body.innerHTML='<tr><td colspan="8" class="loading"><div class="loading-spin"></div><br>Loading drivers...</td></tr>';
+
+  fetch(API+'/drivers/partner-drivers?partner='+encodeURIComponent(partner))
+    .then(function(r){return r.json()})
+    .then(function(data){
+      allDrivers=Array.isArray(data)?data:[];
+      renderDrivers(allDrivers);
+    })
+    .catch(function(err){
+      console.error('Drivers error:',err);
+      body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:#991B1B">Could not load drivers.</td></tr>';
+    });
+}
+
+function renderDrivers(list){
+  var html='';
+  list.forEach(function(d){
+    var statusClass='badge-gray';
+    if(d.status==='approved') statusClass='badge-green';
+    else if(d.status==='pending') statusClass='badge-orange';
+    else if(d.status==='rejected'||d.status==='suspended') statusClass='badge-red';
+
+    html+='<tr>';
+    html+='<td><strong>'+esc(d.full_name)+'</strong></td>';
+    html+='<td>'+esc(d.phone)+'</td>';
+    html+='<td>'+esc(d.vehicle_type)+'</td>';
+    html+='<td><span class="badge '+statusClass+'">'+esc(d.status)+'</span></td>';
+    html+='<td>'+(d.referral_code?esc(d.referral_code):'-')+'</td>';
+    html+='<td>'+parseInt(d.trip_count||0)+'</td>';
+    html+='<td>'+parseInt(d.revenue||0).toLocaleString()+'</td>';
+    html+='<td>'+new Date(d.created_at).toLocaleDateString()+'</td>';
+    html+='</tr>';
+  });
+  if(!html) html='<tr><td colspan="8"><div class="empty-state"><div class="icon">&#128100;</div><h3>No drivers yet</h3><p>Drivers referred by this partner will appear here.</p></div></td></tr>';
+  document.getElementById('driversBody').innerHTML=html;
+}
+
+function filterDrivers(){
+  var q=document.getElementById('driverSearch').value.toLowerCase();
+  if(!q){renderDrivers(allDrivers);return;}
+  var filtered=allDrivers.filter(function(d){
+    return (d.full_name||'').toLowerCase().indexOf(q)!==-1 ||
+           (d.phone||'').indexOf(q)!==-1 ||
+           (d.referral_code||'').toLowerCase().indexOf(q)!==-1;
+  });
+  renderDrivers(filtered);
+}
+
+function copyPartnerLink(partner){
+  var url='https://msouwout.com/driver-register.html?partner='+partner;
+  copyToClipboard(url);
+  var btn=document.getElementById(partner==='FTPH'?'copyFTPH':'copyCOT');
+  btn.classList.add('copied');
+  btn.innerHTML='&#9989; Copied!';
+  setTimeout(function(){btn.classList.remove('copied');btn.innerHTML='&#128279; Copy '+partner+' Link'},2000);
+}
+
+function copyText(elId,btn){
+  var text=document.getElementById(elId).textContent;
+  copyToClipboard('https://'+text);
+  btn.classList.add('copied');
+  btn.innerHTML='&#9989; Copied!';
+  setTimeout(function(){btn.classList.remove('copied');btn.innerHTML='&#128203; Copy'},2000);
+}
+
+function copyToClipboard(text){
+  if(navigator.clipboard){navigator.clipboard.writeText(text);return;}
+  var ta=document.createElement('textarea');ta.value=text;
+  ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);
+  ta.select();document.execCommand('copy');document.body.removeChild(ta);
+}
+
+function esc(s){
+  if(!s) return '';
+  var d=document.createElement('div');d.textContent=s;return d.innerHTML;
+}
+
+// Auto-select partner from URL
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var p=params.get('partner');
+  if(p){
+    var sel=document.getElementById('partnerFilter');
+    for(var i=0;i<sel.options.length;i++){
+      if(sel.options[i].value.toUpperCase()===p.toUpperCase()){sel.selectedIndex=i;break;}
+    }
+  }
+  loadDashboard();
+})();
+</script>
+</body>
+</html>
