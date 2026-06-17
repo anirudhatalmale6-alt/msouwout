@@ -450,14 +450,18 @@ footer{
       <!-- Syndicate -->
       <div class="form-group">
         <label class="form-label" data-i18n="f_syndicate_label">Syndicate *</label>
-        <select name="Syndicate" id="syndicateSelect" required>
+        <select name="Syndicate Select" id="syndicateSelect" required onchange="toggleSyndicateOther()">
           <option value="" disabled selected data-i18n="f_syndicate_ph">-- Select your Syndicate --</option>
           <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
-          <option value="Syndicate A">Syndicate A</option>
-          <option value="Syndicate B">Syndicate B</option>
           <option value="Independent" data-i18n="f_syndicate_indep">Independent Driver</option>
+          <option value="Other" data-i18n="f_syndicate_other">Other Syndicate</option>
         </select>
       </div>
+      <div class="form-group" id="syndicateOtherGroup" style="display:none">
+        <label class="form-label" data-i18n="f_syndicate_name_label">Syndicate Name *</label>
+        <input type="text" name="Syndicate Other" id="syndicateOtherInput" placeholder="Enter your syndicate name" data-i18n-placeholder="f_syndicate_name_ph">
+      </div>
+      <input type="hidden" name="Syndicate" id="syndicateFinal" value="">
 
       <!-- Full Name & Phone -->
       <div class="form-row">
@@ -705,7 +709,7 @@ const T = {
     req4_title:"Smartphone", req4_desc:"Android ou iPhone avec WhatsApp et donnees mobiles. Necessaire pour recevoir les commandes et le suivi GPS.",
     reg_tag:"Inscription Chauffeur", reg_title:"Inscrivez-vous comme Chauffeur",
     reg_sub:"Remplissez le formulaire ci-dessous et notre equipe vous contactera dans les 24 heures pour completer votre integration.",
-    f_syndicate_label:"Syndicat *", f_syndicate_ph:"-- Selectionnez votre Syndicat --", f_syndicate_indep:"Chauffeur Independant",
+    f_syndicate_label:"Syndicat *", f_syndicate_ph:"-- Selectionnez votre Syndicat --", f_syndicate_indep:"Chauffeur Independant", f_syndicate_other:"Autre Syndicat", f_syndicate_name_label:"Nom du Syndicat *", f_syndicate_name_ph:"Entrez le nom de votre syndicat",
     partner_banner_sub:"Inscription Officielle du Partenaire",
     f_partner_label:"Partenaire de Reference *", f_partner_ph:"-- Comment avez-vous entendu parler de MsouWout? --",
     f_partner_friend:"Ami / Famille", f_partner_other:"Autre",
@@ -756,7 +760,7 @@ const T = {
     req4_title:"Smartphone", req4_desc:"Android or iPhone with WhatsApp and mobile data. Needed for receiving orders and live GPS tracking.",
     reg_tag:"Driver Registration", reg_title:"Register as a Driver",
     reg_sub:"Fill out the form below and our team will contact you within 24 hours to complete your onboarding.",
-    f_syndicate_label:"Syndicate *", f_syndicate_ph:"-- Select your Syndicate --", f_syndicate_indep:"Independent Driver",
+    f_syndicate_label:"Syndicate *", f_syndicate_ph:"-- Select your Syndicate --", f_syndicate_indep:"Independent Driver", f_syndicate_other:"Other Syndicate", f_syndicate_name_label:"Syndicate Name *", f_syndicate_name_ph:"Enter your syndicate name",
     partner_banner_sub:"Official Partner Registration",
     f_partner_label:"Referral Partner *", f_partner_ph:"-- How did you hear about MsouWout? --",
     f_partner_friend:"Friend / Family", f_partner_other:"Other",
@@ -807,7 +811,7 @@ const T = {
     req4_title:"Smartphone", req4_desc:"Android oswa iPhone ak WhatsApp ak done mobil. Nesesè pou resevwa komand ak swivi GPS.",
     reg_tag:"Enskrisyon Chofe", reg_title:"Enskri kom Chofe",
     reg_sub:"Ranpli fom anba a epi ekip nou ap kontakte ou nan 24 edtan pou konplete entegrasyon ou.",
-    f_syndicate_label:"Sendika *", f_syndicate_ph:"-- Chwazi Sendika ou --", f_syndicate_indep:"Chofe Endepandan",
+    f_syndicate_label:"Sendika *", f_syndicate_ph:"-- Chwazi Sendika ou --", f_syndicate_indep:"Chofe Endepandan", f_syndicate_other:"Lòt Sendika", f_syndicate_name_label:"Non Sendika *", f_syndicate_name_ph:"Antre non sendika ou",
     partner_banner_sub:"Enskrisyon Ofisyel Patnè",
     f_partner_label:"Patnè Referans *", f_partner_ph:"-- Kijan ou te tande pale de MsouWout? --",
     f_partner_friend:"Zanmi / Fanmi", f_partner_other:"Lòt",
@@ -858,7 +862,7 @@ const T = {
     req4_title:"Smartphone", req4_desc:"Android o iPhone con WhatsApp y datos moviles. Necesario para recibir pedidos y seguimiento GPS en vivo.",
     reg_tag:"Registro de Conductor", reg_title:"Registrate como Conductor",
     reg_sub:"Completa el formulario y nuestro equipo te contactara en 24 horas para completar tu incorporacion.",
-    f_syndicate_label:"Sindicato *", f_syndicate_ph:"-- Seleccione su Sindicato --", f_syndicate_indep:"Conductor Independiente",
+    f_syndicate_label:"Sindicato *", f_syndicate_ph:"-- Seleccione su Sindicato --", f_syndicate_indep:"Conductor Independiente", f_syndicate_other:"Otro Sindicato", f_syndicate_name_label:"Nombre del Sindicato *", f_syndicate_name_ph:"Ingrese el nombre de su sindicato",
     partner_banner_sub:"Registro Oficial del Socio",
     f_partner_label:"Socio de Referencia *", f_partner_ph:"-- Como se entero de MsouWout? --",
     f_partner_friend:"Amigo / Familia", f_partner_other:"Otro",
@@ -981,7 +985,11 @@ function toggleAllZones(btn){
     jsonData['Submitted At'] = new Date().toISOString();
     jsonData['Source'] = 'driver-register.html';
     jsonData['referral_partner'] = formData.get('Referral Partner') || '';
-    jsonData['syndicate'] = formData.get('Syndicate') || '';
+    var synSel = document.getElementById('syndicateSelect').value;
+    var synOther = document.getElementById('syndicateOtherInput').value.trim();
+    var synFinal = (synSel === 'Other' && synOther) ? synOther : synSel;
+    document.getElementById('syndicateFinal').value = synFinal;
+    jsonData['syndicate'] = synFinal;
 
     // Show loading state
     submitBtn.classList.add('btn-loading');
@@ -1044,6 +1052,21 @@ function toggleAllZones(btn){
     });
   });
 })();
+
+/* ═══ SYNDICATE OTHER TOGGLE ═══ */
+function toggleSyndicateOther(){
+  var sel=document.getElementById('syndicateSelect');
+  var grp=document.getElementById('syndicateOtherGroup');
+  var inp=document.getElementById('syndicateOtherInput');
+  if(sel.value==='Other'){
+    grp.style.display='block';
+    inp.required=true;
+  }else{
+    grp.style.display='none';
+    inp.required=false;
+    inp.value='';
+  }
+}
 
 /* ═══ PARTNER BANNER TOGGLE ═══ */
 function togglePartnerBanner(){

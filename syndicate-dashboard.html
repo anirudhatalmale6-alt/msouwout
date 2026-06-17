@@ -110,8 +110,6 @@ footer a{color:var(--red)}
   <select class="filter-select" id="syndicateFilter" onchange="loadDashboard()">
     <option value="" data-i18n="filter_all">All Syndicates</option>
     <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
-    <option value="Syndicate A">Syndicate A</option>
-    <option value="Syndicate B">Syndicate B</option>
     <option value="Independent" data-i18n="filter_indep">Independent Drivers</option>
   </select>
 </div>
@@ -306,6 +304,9 @@ function loadStats(syn){
     document.getElementById('statTrips').textContent=tot.trips.toLocaleString();
     document.getElementById('statRevenue').textContent=tot.rev.toLocaleString();
     document.getElementById('statCommission').textContent=tot.share.toLocaleString();
+    var sel=document.getElementById('syndicateFilter');
+    var existing={};for(var i=0;i<sel.options.length;i++)existing[sel.options[i].value]=true;
+    data.forEach(function(d){if(d.syndicate&&!existing[d.syndicate]){var opt=document.createElement('option');opt.value=d.syndicate;opt.textContent=d.syndicate;sel.appendChild(opt);existing[d.syndicate]=true}});
     if(!syn){
       var html='';
       data.forEach(function(d){
