@@ -447,21 +447,31 @@ footer{
         </select>
       </div>
 
-      <!-- Syndicate -->
-      <div class="form-group">
-        <label class="form-label" data-i18n="f_syndicate_label">Syndicate *</label>
-        <select name="Syndicate Select" id="syndicateSelect" required onchange="toggleSyndicateOther()">
-          <option value="" disabled selected data-i18n="f_syndicate_ph">-- Select your Syndicate --</option>
-          <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
-          <option value="Independent" data-i18n="f_syndicate_indep">Independent Driver</option>
-          <option value="Other" data-i18n="f_syndicate_other">Other Syndicate</option>
-        </select>
-      </div>
-      <div class="form-group" id="syndicateOtherGroup" style="display:none">
-        <label class="form-label" data-i18n="f_syndicate_name_label">Syndicate Name *</label>
-        <input type="text" name="Syndicate Other" id="syndicateOtherInput" placeholder="Enter your syndicate name" data-i18n-placeholder="f_syndicate_name_ph">
+      <!-- Syndicate (only for FTPH/COTRASMOTHA) -->
+      <div id="syndicateSection" style="display:none">
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_syndicate_label">Syndicate *</label>
+          <select name="Syndicate Select" id="syndicateSelect" onchange="toggleSyndicateOther()">
+            <option value="" disabled selected data-i18n="f_syndicate_ph">-- Select your Syndicate --</option>
+            <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
+            <option value="Independent" data-i18n="f_syndicate_indep">Independent Driver</option>
+            <option value="Other" data-i18n="f_syndicate_other">Other Syndicate</option>
+          </select>
+        </div>
+        <div class="form-group" id="syndicateOtherGroup" style="display:none">
+          <label class="form-label" data-i18n="f_syndicate_name_label">Syndicate Name *</label>
+          <input type="text" name="Syndicate Other" id="syndicateOtherInput" placeholder="Enter your syndicate name" data-i18n-placeholder="f_syndicate_name_ph">
+        </div>
       </div>
       <input type="hidden" name="Syndicate" id="syndicateFinal" value="">
+
+      <!-- Referral Code (for Friend/Family, Parenaj Biznis, Other) -->
+      <div id="referralCodeSection" style="display:none">
+        <div class="form-group">
+          <label class="form-label" data-i18n="f_refcode_label">Referral Code (optional)</label>
+          <input type="text" name="Referral Code" id="referralCodeInput" placeholder="Enter referral code if you have one" data-i18n-placeholder="f_refcode_ph">
+        </div>
+      </div>
 
       <!-- Full Name & Phone -->
       <div class="form-row">
@@ -713,6 +723,7 @@ const T = {
     partner_banner_sub:"Inscription Officielle du Partenaire",
     f_partner_label:"Partenaire de Reference *", f_partner_ph:"-- Comment avez-vous entendu parler de MsouWout? --",
     f_partner_friend:"Ami / Famille", f_partner_other:"Autre",
+    f_refcode_label:"Code de Reference (optionnel)", f_refcode_ph:"Entrez votre code de reference si vous en avez un",
     f_name_label:"Nom Complet *", f_name_ph:"Jean Pierre",
     f_phone_label:"Numero de Telephone *", f_phone_ph:"+509 XXXX XXXX",
     f_email_label:"Email (optionnel)", f_email_ph:"jean@example.com",
@@ -764,6 +775,7 @@ const T = {
     partner_banner_sub:"Official Partner Registration",
     f_partner_label:"Referral Partner *", f_partner_ph:"-- How did you hear about MsouWout? --",
     f_partner_friend:"Friend / Family", f_partner_other:"Other",
+    f_refcode_label:"Referral Code (optional)", f_refcode_ph:"Enter referral code if you have one",
     f_name_label:"Full Name *", f_name_ph:"Jean Pierre",
     f_phone_label:"Phone Number *", f_phone_ph:"+509 XXXX XXXX",
     f_email_label:"Email (optional)", f_email_ph:"jean@example.com",
@@ -815,6 +827,7 @@ const T = {
     partner_banner_sub:"Enskrisyon Ofisyel Patnè",
     f_partner_label:"Patnè Referans *", f_partner_ph:"-- Kijan ou te tande pale de MsouWout? --",
     f_partner_friend:"Zanmi / Fanmi", f_partner_other:"Lòt",
+    f_refcode_label:"Kòd Referans (opsyonel)", f_refcode_ph:"Antre kòd referans ou si ou genyen youn",
     f_name_label:"Non Konple *", f_name_ph:"Jean Pierre",
     f_phone_label:"Nimewo Telefon *", f_phone_ph:"+509 XXXX XXXX",
     f_email_label:"Imel (opsyonel)", f_email_ph:"jean@example.com",
@@ -866,6 +879,7 @@ const T = {
     partner_banner_sub:"Registro Oficial del Socio",
     f_partner_label:"Socio de Referencia *", f_partner_ph:"-- Como se entero de MsouWout? --",
     f_partner_friend:"Amigo / Familia", f_partner_other:"Otro",
+    f_refcode_label:"Codigo de Referencia (opcional)", f_refcode_ph:"Ingrese su codigo de referencia si tiene uno",
     f_name_label:"Nombre Completo *", f_name_ph:"Jean Pierre",
     f_phone_label:"Numero de Telefono *", f_phone_ph:"+509 XXXX XXXX",
     f_email_label:"Email (opcional)", f_email_ph:"jean@example.com",
@@ -985,9 +999,10 @@ function toggleAllZones(btn){
     jsonData['Submitted At'] = new Date().toISOString();
     jsonData['Source'] = 'driver-register.html';
     jsonData['referral_partner'] = formData.get('Referral Partner') || '';
+    jsonData['referral_code'] = document.getElementById('referralCodeInput').value.trim() || '';
     var synSel = document.getElementById('syndicateSelect').value;
     var synOther = document.getElementById('syndicateOtherInput').value.trim();
-    var synFinal = (synSel === 'Other' && synOther) ? synOther : synSel;
+    var synFinal = (synSel === 'Other' && synOther) ? synOther : (synSel || '');
     document.getElementById('syndicateFinal').value = synFinal;
     jsonData['syndicate'] = synFinal;
 
@@ -1072,7 +1087,23 @@ function toggleSyndicateOther(){
 function togglePartnerBanner(){
   var sel=document.getElementById('referralPartner');
   var banner=document.getElementById('partnerBanner');
-  banner.style.display=(sel.value==='FTPH/COTRASMOTHA')?'block':'none';
+  var synSection=document.getElementById('syndicateSection');
+  var synSelect=document.getElementById('syndicateSelect');
+  var refCodeSection=document.getElementById('referralCodeSection');
+  var isFTPH=(sel.value==='FTPH/COTRASMOTHA');
+  banner.style.display=isFTPH?'block':'none';
+  synSection.style.display=isFTPH?'block':'none';
+  if(isFTPH){
+    synSelect.required=true;
+    refCodeSection.style.display='none';
+  }else{
+    synSelect.required=false;
+    synSelect.selectedIndex=0;
+    document.getElementById('syndicateOtherGroup').style.display='none';
+    document.getElementById('syndicateOtherInput').required=false;
+    document.getElementById('syndicateOtherInput').value='';
+    refCodeSection.style.display=(sel.value&&sel.value!=='')?'block':'none';
+  }
 }
 
 /* ═══ A/C FIELD TOGGLE ═══ */
