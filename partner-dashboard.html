@@ -228,7 +228,7 @@ footer a{color:var(--red)}
     <div class="stat-card orange">
       <div class="stat-icon">&#128184;</div>
       <div class="stat-value" id="statCommission">--</div>
-      <div class="stat-label" data-i18n="stat_commission">Commission Owed (HTG)</div>
+      <div class="stat-label" data-i18n="stat_commission">3% Commission Owed (HTG)</div>
     </div>
   </div>
 
@@ -311,7 +311,7 @@ var T = {
     dash_title:"Tableau de Bord Partenaire", dash_sub:"Suivre les inscriptions et performances des chauffeurs par partenaire de reference",
     stat_registered:"Total Chauffeurs Inscrits", stat_verified:"Total Chauffeurs Verifies",
     stat_active:"Chauffeurs Actifs", stat_trips:"Total Courses Completees",
-    stat_revenue:"Revenus Generes (HTG)", stat_commission:"Commission Due (HTG)",
+    stat_revenue:"Revenus Generes (HTG)", stat_commission:"Commission 3% Due (HTG)",
     tbl_breakdown:"Repartition par Partenaire", tbl_drivers:"Chauffeurs du Partenaire",
     th_partner:"Partenaire", th_registered:"Inscrits", th_verified:"Verifies", th_active:"Actifs",
     th_trips:"Courses", th_revenue:"Revenus (HTG)", th_driver:"Nom du Chauffeur",
@@ -331,7 +331,7 @@ var T = {
     dash_title:"Referral Partner Dashboard", dash_sub:"Track driver registrations and performance by referral partner",
     stat_registered:"Total Drivers Registered", stat_verified:"Total Verified Drivers",
     stat_active:"Active Drivers", stat_trips:"Total Trips Completed",
-    stat_revenue:"Revenue Generated (HTG)", stat_commission:"Commission Owed (HTG)",
+    stat_revenue:"Revenue Generated (HTG)", stat_commission:"3% 3% Commission Owed (HTG)",
     tbl_breakdown:"Partner Breakdown", tbl_drivers:"Partner Drivers",
     th_partner:"Partner", th_registered:"Registered", th_verified:"Verified", th_active:"Active",
     th_trips:"Trips", th_revenue:"Revenue (HTG)", th_driver:"Driver Name",
@@ -351,7 +351,7 @@ var T = {
     dash_title:"Tablo Patnè Referans", dash_sub:"Swiv enskrisyon chofe ak pefomans pa patnè referans",
     stat_registered:"Total Chofe Enskri", stat_verified:"Total Chofe Verifye",
     stat_active:"Chofe Aktif", stat_trips:"Total Kous Konplete",
-    stat_revenue:"Revni Jenere (HTG)", stat_commission:"Komisyon Dwe (HTG)",
+    stat_revenue:"Revni Jenere (HTG)", stat_commission:"Komisyon 3% Dwe (HTG)",
     tbl_breakdown:"Rezime pa Patnè", tbl_drivers:"Chofe Patnè a",
     th_partner:"Patnè", th_registered:"Enskri", th_verified:"Verifye", th_active:"Aktif",
     th_trips:"Kous", th_revenue:"Revni (HTG)", th_driver:"Non Chofe",
@@ -371,7 +371,7 @@ var T = {
     dash_title:"Panel de Socios de Referencia", dash_sub:"Seguimiento de registros y rendimiento de conductores por socio de referencia",
     stat_registered:"Total Conductores Registrados", stat_verified:"Total Conductores Verificados",
     stat_active:"Conductores Activos", stat_trips:"Total Viajes Completados",
-    stat_revenue:"Ingresos Generados (HTG)", stat_commission:"Comision Adeudada (HTG)",
+    stat_revenue:"Ingresos Generados (HTG)", stat_commission:"Comision 3% Adeudada (HTG)",
     tbl_breakdown:"Desglose por Socio", tbl_drivers:"Conductores del Socio",
     th_partner:"Socio", th_registered:"Registrados", th_verified:"Verificados", th_active:"Activos",
     th_trips:"Viajes", th_revenue:"Ingresos (HTG)", th_driver:"Nombre del Conductor",
@@ -441,7 +441,7 @@ function loadStats(partner){
       document.getElementById('statActive').textContent=totals.active.toLocaleString();
       document.getElementById('statTrips').textContent=totals.trips.toLocaleString();
       document.getElementById('statRevenue').textContent=totals.revenue.toLocaleString();
-      document.getElementById('statCommission').textContent=Math.round(totals.fee*0.1).toLocaleString();
+      document.getElementById('statCommission').textContent=Math.round(totals.fee*0.03).toLocaleString();
 
       if(!partner){
         var html='';
