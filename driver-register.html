@@ -1098,16 +1098,19 @@ function togglePartnerBanner(){
   var isSPAP=(sel.value==='SPAP');
   var isPartner=isFTPH||isSPAP;
   banner.style.display=isPartner?'block':'none';
-  synSection.style.display=isPartner?'block':'none';
+  synSection.style.display=isFTPH?'block':'none';
   if(isFTPH){
     logos.innerHTML='<img src="assets/ftph-logo.jpg" alt="FTPH" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--blue)"><img src="assets/cotrasmotha-logo.jpg" alt="COTRASMOTHA" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--green)">';
     pName.textContent='FTPH/COTRASMOTHA';
+    synSelect.required=true;
   }else if(isSPAP){
     logos.innerHTML='<img src="assets/spap-logo.jpg" alt="SPAP" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #2E7D32">';
     pName.textContent='SPAP';
+    synSelect.required=false;
   }
-  if(isPartner){
-    synSelect.required=true;
+  if(isFTPH){
+    refCodeSection.style.display='none';
+  }else if(isSPAP){
     refCodeSection.style.display='none';
   }else{
     synSelect.required=false;
