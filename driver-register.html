@@ -424,13 +424,13 @@ footer{
       <input type="hidden" name="_next" value="https://msouwout.com/driver-success.html">
       <input type="hidden" name="Referred By" id="referralField" value="">
 
-      <!-- Partner Logo Banner (shown for FTPH/COTRASMOTHA) -->
+      <!-- Partner Logo Banner (shown for FTPH/COTRASMOTHA or SPAP) -->
       <div id="partnerBanner" style="display:none;text-align:center;margin-bottom:18px;padding:20px;background:linear-gradient(135deg,rgba(0,32,159,.04),rgba(210,16,52,.04));border:1.5px solid rgba(0,32,159,.12);border-radius:16px">
-        <div style="display:flex;justify-content:center;gap:12px;margin-bottom:10px">
+        <div id="partnerLogos" style="display:flex;justify-content:center;gap:12px;margin-bottom:10px">
           <img src="assets/ftph-logo.jpg" alt="FTPH" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--blue)">
           <img src="assets/cotrasmotha-logo.jpg" alt="COTRASMOTHA" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--green)">
         </div>
-        <div style="font-size:.88rem;font-weight:700;color:var(--blue)">FTPH/COTRASMOTHA</div>
+        <div id="partnerName" style="font-size:.88rem;font-weight:700;color:var(--blue)">FTPH/COTRASMOTHA</div>
         <div style="font-size:.78rem;color:var(--text-light);margin-top:2px" data-i18n="partner_banner_sub">Official Partner Registration</div>
       </div>
 
@@ -440,6 +440,7 @@ footer{
         <select name="Referral Partner" id="referralPartner" required onchange="togglePartnerBanner()">
           <option value="" disabled selected data-i18n="f_partner_ph">-- How did you hear about MsouWout? --</option>
           <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
+          <option value="SPAP">SPAP</option>
           <option value="Facebook">Facebook</option>
           <option value="WhatsApp">WhatsApp</option>
           <option value="Friend/Family" data-i18n="f_partner_friend">Friend / Family</option>
@@ -454,6 +455,7 @@ footer{
           <select name="Syndicate Select" id="syndicateSelect" onchange="toggleSyndicateOther()">
             <option value="" disabled selected data-i18n="f_syndicate_ph">-- Select your Syndicate --</option>
             <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
+            <option value="SPAP">SPAP</option>
             <option value="Independent" data-i18n="f_syndicate_indep">Independent Driver</option>
             <option value="Other" data-i18n="f_syndicate_other">Other Syndicate</option>
           </select>
@@ -1090,11 +1092,25 @@ function togglePartnerBanner(){
   var synSection=document.getElementById('syndicateSection');
   var synSelect=document.getElementById('syndicateSelect');
   var refCodeSection=document.getElementById('referralCodeSection');
+  var logos=document.getElementById('partnerLogos');
+  var pName=document.getElementById('partnerName');
   var isFTPH=(sel.value==='FTPH/COTRASMOTHA');
-  banner.style.display=isFTPH?'block':'none';
+  var isSPAP=(sel.value==='SPAP');
+  var isPartner=isFTPH||isSPAP;
+  banner.style.display=isPartner?'block':'none';
   synSection.style.display=isFTPH?'block':'none';
   if(isFTPH){
+    logos.innerHTML='<img src="assets/ftph-logo.jpg" alt="FTPH" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--blue)"><img src="assets/cotrasmotha-logo.jpg" alt="COTRASMOTHA" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--green)">';
+    pName.textContent='FTPH/COTRASMOTHA';
     synSelect.required=true;
+  }else if(isSPAP){
+    logos.innerHTML='<img src="assets/spap-logo.jpg" alt="SPAP" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #2E7D32">';
+    pName.textContent='SPAP';
+    synSelect.required=false;
+  }
+  if(isFTPH){
+    refCodeSection.style.display='none';
+  }else if(isSPAP){
     refCodeSection.style.display='none';
   }else{
     synSelect.required=false;
