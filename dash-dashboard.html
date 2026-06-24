@@ -280,12 +280,12 @@ tbody tr:last-child td{border-bottom:none}
     <div class="stat-card green anim d3">
       <span class="stat-icon">&#128176;</span>
       <div class="stat-value">0 <small style="font-size:.5em;font-style:normal;font-family:var(--body)">HTG</small></div>
-      <div class="stat-label" data-i18n="stat_collected">Frais Collectes</div>
+      <div class="stat-label" data-i18n="stat_collected">Frais Collectes (25 HTG/course)</div>
     </div>
     <div class="stat-card gold anim d4">
       <span class="stat-icon">&#127974;</span>
       <div class="stat-value">0 <small style="font-size:.5em;font-style:normal;font-family:var(--body)">HTG</small></div>
-      <div class="stat-label" data-i18n="stat_owed">Du a DASH</div>
+      <div class="stat-label" data-i18n="stat_owed">Du a DASH (virement 48h)</div>
     </div>
     <div class="stat-card red anim d5">
       <span class="stat-icon">&#128680;</span>
@@ -321,7 +321,7 @@ tbody tr:last-child td{border-bottom:none}
           <th data-i18n="th_period">Periode</th>
           <th data-i18n="th_rides">Courses</th>
           <th data-i18n="th_collected">Frais Collectes</th>
-          <th data-i18n="th_dash_share">Part DASH (4% du 10%)</th>
+          <th data-i18n="th_dash_share">Part DASH</th>
           <th data-i18n="th_status">Statut</th>
         </tr>
       </thead>
@@ -350,6 +350,28 @@ tbody tr:last-child td{border-bottom:none}
       </div>
       <div class="empty-title" data-i18n="inc_empty">Aucun incident declare</div>
       <div class="empty-desc" data-i18n="inc_empty_desc">Les incidents signales lors des courses MsouWout apparaitront ici avec tous les details.</div>
+    </div>
+  </div>
+
+  <!-- BANKING INFO -->
+  <div class="section-label anim d5" data-i18n="section_bank">Informations Bancaires</div>
+  <div class="table-card anim d5">
+    <div class="table-card-header">
+      <h3 data-i18n="bank_title">Virement Bancaire DASH</h3>
+      <span class="badge badge-green">48h</span>
+    </div>
+    <div style="padding:20px 22px">
+      <div style="background:var(--off);border-radius:12px;padding:18px;border:1px solid var(--ghost)">
+        <div style="font-size:.75rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px" data-i18n="bank_sub">Coordonnees Bancaires</div>
+        <div style="display:grid;gap:10px">
+          <div style="display:flex;justify-content:space-between;font-size:.85rem"><span style="color:var(--text-mid)" data-i18n="bank_name">Banque</span><strong>Unibank</strong></div>
+          <div style="display:flex;justify-content:space-between;font-size:.85rem"><span style="color:var(--text-mid)" data-i18n="bank_account">No de compte</span><strong>270-1021-801253</strong></div>
+          <div style="font-size:.85rem"><span style="color:var(--text-mid)" data-i18n="bank_holder">Nom du compte</span><br><strong style="font-size:.8rem">DEVELOPMENT ACTIVITIES AND SERVICES FOR HEALTH</strong></div>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:.78rem;color:var(--text-light);display:flex;align-items:center;gap:6px">
+        <span>&#9201;</span> <span data-i18n="bank_delay">Les virements sont effectues dans un delai de 48 heures apres la periode de reglement.</span>
+      </div>
     </div>
   </div>
 
@@ -423,12 +445,14 @@ var translations = {
     btn_export:'Exporter Rapport (JSON)',btn_contact:'Contacter MsouWout',btn_partnership:'Voir Partenariat',
     section_financial:'Resume Financier',
     fin_title:'Releve Mensuel',fin_badge:'Mensuel',
-    th_period:'Periode',th_rides:'Courses',th_collected:'Frais Collectes',th_dash_share:'Part DASH (4% du 10%)',th_status:'Statut',
+    th_period:'Periode',th_rides:'Courses',th_collected:'Frais Collectes',th_dash_share:'Part DASH',th_status:'Statut',
     status_pending:'En attente',
     section_incidents:'Rapports d\'Incidents',
     inc_title:'Incidents & Assistance',inc_empty:'Aucun incident declare',inc_empty_desc:'Les incidents signales lors des courses MsouWout apparaitront ici avec tous les details.',
     section_settlements:'Historique des Reglements',
     set_title:'Reglements',set_badge:'Historique',set_empty:'Aucun reglement effectue',set_empty_desc:'Les transferts et paiements vers DASH seront enregistres ici avec references bancaires.',
+    section_bank:'Informations Bancaires',bank_title:'Virement Bancaire DASH',bank_sub:'Coordonnees Bancaires',bank_name:'Banque',bank_account:'No de compte',bank_holder:'Nom du compte',bank_delay:'Les virements sont effectues dans un delai de 48 heures apres la periode de reglement.',
+    section_clinics:'Cliniques Partenaires',clinic_title:'Localisation des Cliniques',clinic_badge:'12 Centres',clinic_desc:'En cas d\'accident, le systeme dirige automatiquement vers la clinique partenaire la plus proche selon la position GPS.',clinic_btn:'Ouvrir Localisateur d\'Urgence',
     footer_desc:'Partenariat Protection Medicale'
   },
   en: {
@@ -442,12 +466,14 @@ var translations = {
     btn_export:'Export Report (JSON)',btn_contact:'Contact MsouWout',btn_partnership:'View Partnership',
     section_financial:'Financial Summary',
     fin_title:'Monthly Statement',fin_badge:'Monthly',
-    th_period:'Period',th_rides:'Rides',th_collected:'Fees Collected',th_dash_share:'DASH Share (4% of 10%)',th_status:'Status',
+    th_period:'Period',th_rides:'Rides',th_collected:'Fees Collected',th_dash_share:'DASH Share',th_status:'Status',
     status_pending:'Pending',
     section_incidents:'Incident Reports',
     inc_title:'Incidents & Assistance',inc_empty:'No incidents reported',inc_empty_desc:'Incidents reported during MsouWout rides will appear here with full details.',
     section_settlements:'Settlement History',
     set_title:'Settlements',set_badge:'History',set_empty:'No settlements yet',set_empty_desc:'Transfers and payments to DASH will be recorded here with bank references.',
+    section_bank:'Banking Information',bank_title:'DASH Wire Transfer',bank_sub:'Bank Details',bank_name:'Bank',bank_account:'Account No',bank_holder:'Account Name',bank_delay:'Wire transfers are processed within 48 hours after the settlement period.',
+    section_clinics:'Partner Clinics',clinic_title:'Clinic Locator',clinic_badge:'12 Centers',clinic_desc:'In case of accident, the system automatically directs to the nearest partner clinic based on GPS.',clinic_btn:'Open Emergency Locator',
     footer_desc:'Medical Protection Partnership'
   },
   ht: {
@@ -461,12 +487,14 @@ var translations = {
     btn_export:'Ekspote Rapò (JSON)',btn_contact:'Kontakte MsouWout',btn_partnership:'Wè Patenarya',
     section_financial:'Rezime Finansye',
     fin_title:'Relve Mansyèl',fin_badge:'Mansyèl',
-    th_period:'Peryòd',th_rides:'Kous',th_collected:'Frè Kolekte',th_dash_share:'Pa DASH (4% nan 10%)',th_status:'Estati',
+    th_period:'Peryòd',th_rides:'Kous',th_collected:'Frè Kolekte',th_dash_share:'Pa DASH',th_status:'Estati',
     status_pending:'An atant',
     section_incidents:'Rapò Ensidan',
     inc_title:'Ensidan & Asistans',inc_empty:'Okenn ensidan deklare',inc_empty_desc:'Ensidan ki rive pandan kous MsouWout ap parèt isit la ak tout detay.',
     section_settlements:'Istwa Règleman',
     set_title:'Règleman yo',set_badge:'Istwa',set_empty:'Okenn règleman ankò',set_empty_desc:'Transfè ak peman bay DASH ap anrejistre isit la ak referans bank.',
+    section_bank:'Enfomasyon Bank',bank_title:'Viman Bank DASH',bank_sub:'Detay Bank',bank_name:'Bank',bank_account:'No kont',bank_holder:'Non kont',bank_delay:'Viman yo fèt nan 48 èdtan apre peryòd règleman an.',
+    section_clinics:'Klinik Patnè',clinic_title:'Lokalizasyon Klinik',clinic_badge:'12 Sant',clinic_desc:'An ka aksidan, sistèm nan dirije otomatikman nan klinik patnè ki pi pre selon pozisyon GPS.',clinic_btn:'Ouvri Lokalizatè Ijans',
     footer_desc:'Patenarya Pwoteksyon Medikal'
   }
 };
