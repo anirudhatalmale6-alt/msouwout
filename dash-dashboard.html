@@ -353,6 +353,34 @@ tbody tr:last-child td{border-bottom:none}
     </div>
   </div>
 
+  <!-- CLINIC LOCATOR -->
+  <div class="section-label anim d5" data-i18n="section_clinics">Cliniques Partenaires</div>
+  <div class="table-card anim d6" style="overflow:visible">
+    <div class="table-card-header">
+      <h3 data-i18n="clinic_title">Localisation des Cliniques</h3>
+      <span class="badge badge-green" data-i18n="clinic_badge">12 Centres</span>
+    </div>
+    <div style="padding:20px 22px">
+      <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:16px" data-i18n="clinic_desc">En cas d'accident, le systeme dirige automatiquement vers la clinique partenaire la plus proche selon la position GPS.</p>
+      <div id="clinicList" style="display:grid;gap:10px">
+        <div class="clinic-item"><span class="ci-dot blue"></span><div><strong>Hopital Universite d'Etat d'Haiti (HUEH)</strong><br><span class="ci-addr">Rue Oswald Durand, Port-au-Prince</span></div></div>
+        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Hopital Bernard Mevs</strong><br><span class="ci-addr">Bicentenaire, Port-au-Prince</span></div></div>
+        <div class="clinic-item"><span class="ci-dot blue"></span><div><strong>Clinique Lambert Sante</strong><br><span class="ci-addr">Delmas 33, Port-au-Prince</span></div></div>
+        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Hopital de la Communaute Haitienne</strong><br><span class="ci-addr">Petionville, Port-au-Prince</span></div></div>
+        <div class="clinic-item"><span class="ci-dot blue"></span><div><strong>Medika Mamba / Zanmi Lasante</strong><br><span class="ci-addr">Tabarre, Port-au-Prince</span></div></div>
+        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Hopital St. Luc</strong><br><span class="ci-addr">Tabarre, Port-au-Prince</span></div></div>
+      </div>
+      <a href="emergency-dash.html" class="action-btn primary" style="margin-top:16px;display:inline-flex;font-size:.8rem;padding:10px 20px" data-i18n="clinic_btn">Ouvrir Localisateur d'Urgence</a>
+    </div>
+  </div>
+  <style>
+    .clinic-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:10px;background:var(--off);font-size:.82rem}
+    .clinic-item strong{font-size:.82rem;color:var(--dark)}
+    .ci-addr{font-size:.72rem;color:var(--text-light)}
+    .ci-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+    .ci-dot.blue{background:var(--navy)}.ci-dot.green{background:var(--green)}
+  </style>
+
   <!-- SETTLEMENT HISTORY -->
   <div class="section-label anim d6" data-i18n="section_settlements">Historique des Reglements</div>
   <div class="table-card anim d6">
