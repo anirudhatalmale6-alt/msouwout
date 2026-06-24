@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DASH Partner Portal — MsouWout</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Tableau de bord partenaire DASH — Protection medicale pour chaque course MsouWout.">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#00209F;--navy-deep:#001566;--navy-glow:rgba(0,32,159,.08);
+  --red:#D21034;--red-soft:#FEF2F4;
+  --green:#0D9B5C;--green-deep:#087A48;--green-soft:#E8F7F0;--green-glow:rgba(13,155,92,.1);
+  --gold:#D4A017;--gold-soft:#FDF8E8;
+  --white:#FFFFFF;--off:#F4F6FA;--ghost:#EAECF2;
+  --dark:#0A0E1A;--text:#1E2A42;--text-mid:#5A6A84;--text-light:#8A96AC;
+  --border:#D8DDE8;
+  --display:'DM Serif Display',Georgia,serif;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --radius:14px;--radius-sm:8px;
+  --shadow-sm:0 1px 3px rgba(10,14,26,.06);
+  --shadow-md:0 4px 16px rgba(10,14,26,.08);
+  --shadow-lg:0 12px 40px rgba(10,14,26,.1);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--off);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
+
+/* GRAIN */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.02;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes countUp{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.anim{opacity:0;animation:fadeUp .6s cubic-bezier(.22,1,.36,1) forwards}
+.anim.d1{animation-delay:.08s}.anim.d2{animation-delay:.16s}.anim.d3{animation-delay:.24s}
+.anim.d4{animation-delay:.32s}.anim.d5{animation-delay:.4s}.anim.d6{animation-delay:.48s}
+
+/* TOP BAR */
+.top-bar{
+  background:var(--navy-deep);height:40px;display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:0 20px;
+}
+.lang-btn{
+  color:rgba(255,255,255,.5);font-size:.68rem;font-weight:700;padding:4px 12px;border-radius:100px;
+  cursor:pointer;border:none;background:none;font-family:var(--body);transition:all .2s;letter-spacing:.03em;
+}
+.lang-btn:hover{color:rgba(255,255,255,.8)}
+.lang-btn.active{color:var(--navy-deep);background:#fff}
+
+/* NAV */
+.nav{
+  background:var(--white);border-bottom:1px solid var(--border);
+  padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  box-shadow:var(--shadow-sm);
+}
+.nav-left{display:flex;align-items:center;gap:12px}
+.nav-logo{font-family:var(--display);font-weight:900;font-size:1.15rem;color:var(--navy);letter-spacing:-.02em}
+.nav-sep{width:1px;height:28px;background:var(--border);margin:0 4px}
+.nav-badge{
+  background:var(--green);color:#fff;padding:5px 14px;border-radius:100px;
+  font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+}
+
+/* PARTNER HERO */
+.partner-hero{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 60%,#0D1B3E 100%);
+  padding:40px 24px 36px;position:relative;overflow:hidden;
+}
+.partner-hero::before{
+  content:'';position:absolute;top:-60%;right:-20%;width:500px;height:500px;
+  background:radial-gradient(circle,rgba(13,155,92,.15) 0%,transparent 70%);border-radius:50%;
+}
+.partner-hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--navy) 33%,var(--red) 33% 50%,var(--green) 50%);
+}
+.hero-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:24px;position:relative;z-index:2}
+.dash-emblem{
+  width:72px;height:72px;border-radius:50%;flex-shrink:0;
+  background:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 4px rgba(13,155,92,.3),0 8px 24px rgba(0,0,0,.2);
+}
+.dash-emblem svg{width:36px;height:36px}
+.hero-text h1{font-family:var(--display);font-size:clamp(1.4rem,3.5vw,2rem);color:#fff;margin-bottom:4px;font-style:italic}
+.hero-text p{font-size:.82rem;color:rgba(255,255,255,.5);font-weight:500}
+.hero-status{
+  display:inline-flex;align-items:center;gap:6px;margin-top:10px;
+  padding:6px 14px;border-radius:100px;
+  background:rgba(13,155,92,.15);border:1px solid rgba(13,155,92,.25);
+  font-size:.72rem;font-weight:700;color:var(--green);
+}
+.hero-status .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse-dot 2s infinite}
+
+/* MAIN */
+.main{max-width:960px;margin:0 auto;padding:28px 20px 60px}
+
+/* SECTION LABELS */
+.section-label{
+  font-size:.68rem;font-weight:800;color:var(--text-light);text-transform:uppercase;letter-spacing:.1em;
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.section-label::after{content:'';flex:1;height:1px;background:var(--ghost)}
+
+/* STAT CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:32px}
+.stat-card{
+  background:var(--white);border-radius:var(--radius);padding:22px 20px;
+  border:1px solid var(--border);position:relative;overflow:hidden;
+  box-shadow:var(--shadow-sm);transition:transform .2s,box-shadow .2s;
+}
+.stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+}
+.stat-card.blue::before{background:var(--navy)}
+.stat-card.green::before{background:var(--green)}
+.stat-card.gold::before{background:var(--gold)}
+.stat-card.red::before{background:var(--red)}
+.stat-icon{font-size:1.6rem;margin-bottom:10px;display:block;line-height:1}
+.stat-value{font-family:var(--display);font-size:2rem;font-weight:900;color:var(--dark);line-height:1;margin-bottom:4px;font-style:italic}
+.stat-label{font-size:.72rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.04em}
+
+/* TABLE CARDS */
+.table-card{
+  background:var(--white);border-radius:var(--radius);border:1px solid var(--border);
+  overflow:hidden;margin-bottom:24px;box-shadow:var(--shadow-sm);
+}
+.table-card-header{
+  padding:18px 22px;border-bottom:1px solid var(--ghost);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.table-card-header h3{font-family:var(--display);font-size:1.1rem;color:var(--dark);font-style:italic}
+.table-card-header .badge{
+  font-size:.65rem;font-weight:800;padding:4px 10px;border-radius:100px;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.badge-blue{background:var(--navy-glow);color:var(--navy)}
+.badge-green{background:var(--green-soft);color:var(--green-deep)}
+.badge-gold{background:var(--gold-soft);color:var(--gold)}
+.badge-red{background:var(--red-soft);color:var(--red)}
+
+table{width:100%;border-collapse:collapse}
+thead th{
+  padding:12px 18px;text-align:left;font-size:.7rem;font-weight:700;
+  color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;
+  background:var(--off);border-bottom:1px solid var(--ghost);
+}
+tbody td{
+  padding:14px 18px;font-size:.85rem;border-bottom:1px solid var(--ghost);color:var(--text);
+}
+tbody tr:last-child td{border-bottom:none}
+.status-pill{
+  display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:100px;
+  font-size:.7rem;font-weight:700;
+}
+.status-pending{background:var(--gold-soft);color:var(--gold)}
+.status-paid{background:var(--green-soft);color:var(--green-deep)}
+
+/* EMPTY STATE */
+.empty-state{
+  padding:48px 24px;text-align:center;
+}
+.empty-icon{
+  width:64px;height:64px;border-radius:50%;margin:0 auto 16px;
+  background:var(--ghost);display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;
+}
+.empty-title{font-family:var(--display);font-size:1.05rem;color:var(--dark);margin-bottom:6px;font-style:italic}
+.empty-desc{font-size:.82rem;color:var(--text-light);max-width:320px;margin:0 auto}
+
+/* ACTIONS */
+.actions-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px}
+.action-btn{
+  display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:100px;
+  font-size:.82rem;font-weight:700;font-family:var(--body);cursor:pointer;transition:all .2s;
+  border:none;text-decoration:none;
+}
+.action-btn.primary{background:var(--green);color:#fff;box-shadow:0 4px 12px rgba(13,155,92,.25)}
+.action-btn.primary:hover{background:var(--green-deep);transform:translateY(-1px)}
+.action-btn.secondary{background:var(--white);color:var(--navy);border:1.5px solid var(--border)}
+.action-btn.secondary:hover{border-color:var(--navy);background:var(--navy-glow)}
+.action-btn.outline{background:transparent;color:var(--text-mid);border:1.5px solid var(--border)}
+.action-btn.outline:hover{border-color:var(--text-mid)}
+
+/* FOOTER */
+.footer{
+  background:var(--dark);padding:32px 24px;text-align:center;
+}
+.footer-brand{
+  font-family:var(--display);font-size:1rem;color:rgba(255,255,255,.8);
+  margin-bottom:8px;font-style:italic;
+}
+.footer-brand .x{font-style:normal;color:rgba(255,255,255,.2);font-family:var(--body);font-weight:400;font-size:.8em;margin:0 .2em}
+.footer-line{font-size:.75rem;color:rgba(255,255,255,.35);margin-bottom:4px}
+.footer-line a{color:var(--green);text-decoration:none}
+.footer-line a:hover{text-decoration:underline}
+
+/* RESPONSIVE */
+@media(max-width:560px){
+  .stats-row{grid-template-columns:1fr 1fr;gap:10px}
+  .stat-card{padding:18px 16px}
+  .stat-value{font-size:1.6rem}
+  .hero-inner{flex-direction:column;text-align:center}
+  .hero-status{margin-top:8px}
+  table{font-size:.78rem}
+  thead th,tbody td{padding:10px 12px}
+  .actions-row{flex-direction:column}
+  .action-btn{justify-content:center;width:100%}
+}
+@media(min-width:561px) and (max-width:768px){
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+}
+@media(min-width:769px){
+  .stats-row{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <button class="lang-btn active" onclick="setLang('fr')" id="lang-fr">FR</button>
+  <button class="lang-btn" onclick="setLang('en')" id="lang-en">EN</button>
+  <button class="lang-btn" onclick="setLang('ht')" id="lang-ht">KR</button>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">MsouWout</a>
+    <div class="nav-sep"></div>
+    <span class="nav-badge" data-i18n="nav_badge">Portail DASH</span>
+  </div>
+</div>
+
+<!-- PARTNER HERO -->
+<div class="partner-hero">
+  <div class="hero-inner anim">
+    <div class="dash-emblem">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="16" y="8" width="8" height="24" rx="2" fill="white"/>
+        <rect x="8" y="16" width="24" height="8" rx="2" fill="white"/>
+      </svg>
+    </div>
+    <div class="hero-text">
+      <h1 data-i18n="hero_title">DASH Haiti</h1>
+      <p data-i18n="hero_sub">Protection Medicale &amp; Assistance d'Urgence</p>
+      <div class="hero-status">
+        <span class="dot"></span>
+        <span data-i18n="hero_status">Partenariat actif depuis Juin 2026</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- STATS -->
+  <div class="section-label anim d1" data-i18n="section_overview">Vue d'ensemble</div>
+  <div class="stats-row">
+    <div class="stat-card blue anim d2">
+      <span class="stat-icon">&#128663;</span>
+      <div class="stat-value">0</div>
+      <div class="stat-label" data-i18n="stat_rides">Courses Couvertes</div>
+    </div>
+    <div class="stat-card green anim d3">
+      <span class="stat-icon">&#128176;</span>
+      <div class="stat-value">0 <small style="font-size:.5em;font-style:normal;font-family:var(--body)">HTG</small></div>
+      <div class="stat-label" data-i18n="stat_collected">Frais Collectes</div>
+    </div>
+    <div class="stat-card gold anim d4">
+      <span class="stat-icon">&#127974;</span>
+      <div class="stat-value">0 <small style="font-size:.5em;font-style:normal;font-family:var(--body)">HTG</small></div>
+      <div class="stat-label" data-i18n="stat_owed">Du a DASH (4%)</div>
+    </div>
+    <div class="stat-card red anim d5">
+      <span class="stat-icon">&#128680;</span>
+      <div class="stat-value">0</div>
+      <div class="stat-label" data-i18n="stat_incidents">Incidents Declares</div>
+    </div>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="section-label anim d3" data-i18n="section_actions">Actions Rapides</div>
+  <div class="actions-row anim d4">
+    <button class="action-btn primary" onclick="exportJSON()">
+      <span>&#128190;</span> <span data-i18n="btn_export">Exporter Rapport (JSON)</span>
+    </button>
+    <a href="https://wa.me/50946859702?text=Bonjour%20MsouWout%2C%20je%20suis%20DASH%20Haiti.%20" target="_blank" class="action-btn secondary">
+      <span>&#128172;</span> <span data-i18n="btn_contact">Contacter MsouWout</span>
+    </a>
+    <a href="dash-partnership.html" class="action-btn outline">
+      <span>&#128196;</span> <span data-i18n="btn_partnership">Voir Partenariat</span>
+    </a>
+  </div>
+
+  <!-- FINANCIAL SUMMARY -->
+  <div class="section-label anim d4" data-i18n="section_financial">Resume Financier</div>
+  <div class="table-card anim d5">
+    <div class="table-card-header">
+      <h3 data-i18n="fin_title">Releve Mensuel</h3>
+      <span class="badge badge-blue" data-i18n="fin_badge">Mensuel</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th data-i18n="th_period">Periode</th>
+          <th data-i18n="th_rides">Courses</th>
+          <th data-i18n="th_collected">Frais Collectes</th>
+          <th data-i18n="th_dash_share">Part DASH (4%)</th>
+          <th data-i18n="th_status">Statut</th>
+        </tr>
+      </thead>
+      <tbody id="financialBody">
+        <tr>
+          <td style="font-weight:600">Juin 2026</td>
+          <td>0</td>
+          <td>0 HTG</td>
+          <td style="font-weight:700;color:var(--green)">0 HTG</td>
+          <td><span class="status-pill status-pending" data-i18n="status_pending">En attente</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- INCIDENT REPORTS -->
+  <div class="section-label anim d5" data-i18n="section_incidents">Rapports d'Incidents</div>
+  <div class="table-card anim d6">
+    <div class="table-card-header">
+      <h3 data-i18n="inc_title">Incidents &amp; Assistance</h3>
+      <span class="badge badge-red">0</span>
+    </div>
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg width="28" height="28" viewBox="0 0 40 40" fill="none"><rect x="16" y="8" width="8" height="24" rx="2" fill="#D8DDE8"/><rect x="8" y="16" width="24" height="8" rx="2" fill="#D8DDE8"/></svg>
+      </div>
+      <div class="empty-title" data-i18n="inc_empty">Aucun incident declare</div>
+      <div class="empty-desc" data-i18n="inc_empty_desc">Les incidents signales lors des courses MsouWout apparaitront ici avec tous les details.</div>
+    </div>
+  </div>
+
+  <!-- SETTLEMENT HISTORY -->
+  <div class="section-label anim d6" data-i18n="section_settlements">Historique des Reglements</div>
+  <div class="table-card anim d6">
+    <div class="table-card-header">
+      <h3 data-i18n="set_title">Reglements</h3>
+      <span class="badge badge-green" data-i18n="set_badge">Historique</span>
+    </div>
+    <div class="empty-state">
+      <div class="empty-icon">&#128179;</div>
+      <div class="empty-title" data-i18n="set_empty">Aucun reglement effectue</div>
+      <div class="empty-desc" data-i18n="set_empty_desc">Les transferts et paiements vers DASH seront enregistres ici avec references bancaires.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">MsouWout <span class="x">&times;</span> DASH</div>
+  <div class="footer-line" data-i18n="footer_desc">Partenariat Protection Medicale</div>
+  <div class="footer-line" style="margin-top:12px">
+    &#128222; Urgence DASH: <a href="tel:+50933333274">(509) 3333-DASH</a>
+  </div>
+  <div class="footer-line">
+    <a href="https://www.dashhaiti.org" target="_blank">www.dashhaiti.org</a> &middot;
+    <a href="https://msouwout.com" target="_blank">msouwout.com</a>
+  </div>
+</footer>
+
+<script>
+var translations = {
+  fr: {
+    nav_badge:'Portail DASH',
+    hero_title:'DASH Haiti',
+    hero_sub:'Protection Medicale & Assistance d\'Urgence',
+    hero_status:'Partenariat actif depuis Juin 2026',
+    section_overview:'Vue d\'ensemble',
+    stat_rides:'Courses Couvertes',stat_collected:'Frais Collectes',stat_owed:'Du a DASH (4%)',stat_incidents:'Incidents Declares',
+    section_actions:'Actions Rapides',
+    btn_export:'Exporter Rapport (JSON)',btn_contact:'Contacter MsouWout',btn_partnership:'Voir Partenariat',
+    section_financial:'Resume Financier',
+    fin_title:'Releve Mensuel',fin_badge:'Mensuel',
+    th_period:'Periode',th_rides:'Courses',th_collected:'Frais Collectes',th_dash_share:'Part DASH (4%)',th_status:'Statut',
+    status_pending:'En attente',
+    section_incidents:'Rapports d\'Incidents',
+    inc_title:'Incidents & Assistance',inc_empty:'Aucun incident declare',inc_empty_desc:'Les incidents signales lors des courses MsouWout apparaitront ici avec tous les details.',
+    section_settlements:'Historique des Reglements',
+    set_title:'Reglements',set_badge:'Historique',set_empty:'Aucun reglement effectue',set_empty_desc:'Les transferts et paiements vers DASH seront enregistres ici avec references bancaires.',
+    footer_desc:'Partenariat Protection Medicale'
+  },
+  en: {
+    nav_badge:'DASH Portal',
+    hero_title:'DASH Haiti',
+    hero_sub:'Medical Protection & Emergency Assistance',
+    hero_status:'Partnership active since June 2026',
+    section_overview:'Overview',
+    stat_rides:'Covered Rides',stat_collected:'Fees Collected',stat_owed:'Owed to DASH (4%)',stat_incidents:'Reported Incidents',
+    section_actions:'Quick Actions',
+    btn_export:'Export Report (JSON)',btn_contact:'Contact MsouWout',btn_partnership:'View Partnership',
+    section_financial:'Financial Summary',
+    fin_title:'Monthly Statement',fin_badge:'Monthly',
+    th_period:'Period',th_rides:'Rides',th_collected:'Fees Collected',th_dash_share:'DASH Share (4%)',th_status:'Status',
+    status_pending:'Pending',
+    section_incidents:'Incident Reports',
+    inc_title:'Incidents & Assistance',inc_empty:'No incidents reported',inc_empty_desc:'Incidents reported during MsouWout rides will appear here with full details.',
+    section_settlements:'Settlement History',
+    set_title:'Settlements',set_badge:'History',set_empty:'No settlements yet',set_empty_desc:'Transfers and payments to DASH will be recorded here with bank references.',
+    footer_desc:'Medical Protection Partnership'
+  },
+  ht: {
+    nav_badge:'Potal DASH',
+    hero_title:'DASH Ayiti',
+    hero_sub:'Pwoteksyon Medikal & Asistans Dijans',
+    hero_status:'Patenarya aktif depi Jen 2026',
+    section_overview:'Apesi Jeneral',
+    stat_rides:'Kous Kouvri',stat_collected:'Frè Kolekte',stat_owed:'Dwe DASH (4%)',stat_incidents:'Ensidan Deklare',
+    section_actions:'Aksyon Rapid',
+    btn_export:'Ekspote Rapò (JSON)',btn_contact:'Kontakte MsouWout',btn_partnership:'Wè Patenarya',
+    section_financial:'Rezime Finansye',
+    fin_title:'Relve Mansyèl',fin_badge:'Mansyèl',
+    th_period:'Peryòd',th_rides:'Kous',th_collected:'Frè Kolekte',th_dash_share:'Pa DASH (4%)',th_status:'Estati',
+    status_pending:'An atant',
+    section_incidents:'Rapò Ensidan',
+    inc_title:'Ensidan & Asistans',inc_empty:'Okenn ensidan deklare',inc_empty_desc:'Ensidan ki rive pandan kous MsouWout ap parèt isit la ak tout detay.',
+    section_settlements:'Istwa Règleman',
+    set_title:'Règleman yo',set_badge:'Istwa',set_empty:'Okenn règleman ankò',set_empty_desc:'Transfè ak peman bay DASH ap anrejistre isit la ak referans bank.',
+    footer_desc:'Patenarya Pwoteksyon Medikal'
+  }
+};
+
+var currentLang = 'fr';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.remove('active')});
+  document.getElementById('lang-' + lang).classList.add('active');
+  var t = translations[lang] || translations.fr;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+}
+
+function exportJSON() {
+  var report = {
+    partner: 'DASH Haiti',
+    generated: new Date().toISOString(),
+    period: 'Juin 2026',
+    totalRides: 0,
+    feesCollected: 0,
+    dashShare: 0,
+    incidents: 0,
+    settlements: []
+  };
+  var blob = new Blob([JSON.stringify(report, null, 2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'dash-report-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Trigger animations on load
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('.anim').forEach(function(el){
+    el.style.animationPlayState = 'running';
+  });
+});
+</script>
+</body>
+</html>
