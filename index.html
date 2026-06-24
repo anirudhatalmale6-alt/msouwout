@@ -512,6 +512,37 @@ a{text-decoration:none;color:inherit}
 
     <button class="find-btn" id="findBtn" onclick="goStep2()" disabled data-i18n="find_btn">&#128308; Mande Kous Kounye A</button>
 
+    <!-- DASH SAFETY STRIP -->
+    <div class="dash-safety-strip" style="margin:20px 0 0;background:linear-gradient(135deg,#0D2818 0%,#0D3B1F 50%,#0A2A15 100%);border-radius:14px;padding:18px 16px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(13,155,92,.2) 0%,transparent 70%);border-radius:50%"></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;position:relative">
+        <img src="assets/dash-logo.jpg" alt="DASH" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#fff;padding:2px">
+        <div>
+          <div style="font-size:.82rem;font-weight:800;color:#fff;letter-spacing:-.01em" data-i18n="dash_strip_title">&#128737;&#65039; Sekirite + Pwoteksyon Medikal</div>
+          <div style="font-size:.65rem;color:rgba(255,255,255,.45);font-weight:600">DASH x MsouWout</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;position:relative">
+        <div style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:rgba(255,255,255,.85);font-weight:600">
+          <span style="width:22px;height:22px;border-radius:6px;background:rgba(13,155,92,.25);display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0">&#9989;</span>
+          <span data-i18n="dash_s1">Chofe Verifye pa DCPR</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:rgba(255,255,255,.85);font-weight:600">
+          <span style="width:22px;height:22px;border-radius:6px;background:rgba(13,155,92,.25);display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0">&#127973;</span>
+          <span data-i18n="dash_s2">Pwoteksyon Medikal DASH</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:rgba(255,255,255,.85);font-weight:600">
+          <span style="width:22px;height:22px;border-radius:6px;background:rgba(13,155,92,.25);display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0">&#128205;</span>
+          <span data-i18n="dash_s3">Swivi GPS an tan reyel</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:rgba(255,255,255,.85);font-weight:600">
+          <span style="width:22px;height:22px;border-radius:6px;background:rgba(210,16,52,.25);display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0">&#128680;</span>
+          <span data-i18n="dash_s4">Bouton Ijans</span>
+        </div>
+      </div>
+      <a href="dash-partnership.html" style="display:block;text-align:center;margin-top:14px;font-size:.68rem;color:rgba(255,255,255,.35);font-weight:600;text-decoration:none" data-i18n="dash_s_link">Aprann plis sou pwoteksyon DASH &#8594;</a>
+    </div>
+
     <div class="quick-opts" style="margin-top:20px">
       <h3 data-i18n="popular">Kote popile</h3>
       <div class="quick-row">
@@ -752,6 +783,9 @@ var T={
     ph_drop:'Ki kote ou prale?',
     gps_btn:'Sevi ak pozisyon mwen',
     find_btn:'&#128308; Mande Kous Kounye A',
+    dash_strip_title:'&#128737;&#65039; Sekirite + Pwoteksyon Medikal',
+    dash_s1:'Chofe Verifye pa DCPR',dash_s2:'Pwoteksyon Medikal DASH',dash_s3:'Swivi GPS an tan reyel',dash_s4:'Bouton Ijans',
+    dash_s_link:'Aprann plis sou pwoteksyon DASH &#8594;',
     popular:'Kote popile',
     loc_airport:'&#9992;&#65039; Ayewopo Toussaint',
     loc_petionville:'&#127978; Petyonvil',
@@ -847,6 +881,9 @@ var T={
     ph_drop:'Où allez-vous ?',
     gps_btn:'Utiliser ma position',
     find_btn:'&#128308; Demander un Trajet Maintenant',
+    dash_strip_title:'&#128737;&#65039; Securite + Protection Medicale',
+    dash_s1:'Chauffeurs Verifies DCPR',dash_s2:'Protection Medicale DASH',dash_s3:'Suivi GPS en temps reel',dash_s4:'Bouton d\'Urgence',
+    dash_s_link:'En savoir plus sur la protection DASH &#8594;',
     popular:'Destinations populaires',
     loc_airport:'&#9992;&#65039; Aéroport Toussaint',
     loc_petionville:'&#127978; Pétion-Ville',
@@ -942,6 +979,9 @@ var T={
     ph_drop:'Where are you going?',
     gps_btn:'Use my location',
     find_btn:'&#128308; Request a Ride Now',
+    dash_strip_title:'&#128737;&#65039; Safety + Medical Protection',
+    dash_s1:'DCPR Verified Drivers',dash_s2:'DASH Medical Protection',dash_s3:'Real-time GPS Tracking',dash_s4:'Emergency Button',
+    dash_s_link:'Learn more about DASH protection &#8594;',
     popular:'Popular destinations',
     loc_airport:'&#9992;&#65039; Toussaint Airport',
     loc_petionville:'&#127978; Pétion-Ville',
@@ -1037,6 +1077,9 @@ var T={
     ph_drop:'¿A dónde vas?',
     gps_btn:'Usar mi ubicación',
     find_btn:'&#128308; Pedir Viaje Ahora',
+    dash_strip_title:'&#128737;&#65039; Seguridad + Proteccion Medica',
+    dash_s1:'Conductores Verificados DCPR',dash_s2:'Proteccion Medica DASH',dash_s3:'Seguimiento GPS en tiempo real',dash_s4:'Boton de Emergencia',
+    dash_s_link:'Mas sobre la proteccion DASH &#8594;',
     popular:'Destinos populares',
     loc_airport:'&#9992;&#65039; Aeropuerto Toussaint',
     loc_petionville:'&#127978; Pétion-Ville',
