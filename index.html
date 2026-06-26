@@ -768,6 +768,7 @@ a{text-decoration:none;color:inherit}
 
 <script>
 var API_URL='https://msouwout-backend.onrender.com';
+function apiFetch(url,opts){var c=new AbortController();setTimeout(function(){c.abort()},5000);opts=opts||{};opts.signal=c.signal;return fetch(url,opts)}
 var vehicleType='moto';
 var timeMode='now';
 var rideData={};
@@ -1294,7 +1295,7 @@ function updateFare(){
 }
 
 function fetchSurge(){
-  fetch(API_URL+'/api/pricing/surge').then(function(r){return r.json()}).then(function(d){
+  apiFetch(API_URL+'/api/pricing/surge').then(function(r){return r.json()}).then(function(d){
     surgeData=d;
     updateFare();
   }).catch(function(){});
@@ -1351,7 +1352,7 @@ function doSubmitRide(name,phone){
 
   showStep(3);
 
-  fetch(API_URL+'/api/rides/request',{
+  apiFetch(API_URL+'/api/rides/request',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify(rideData)
@@ -1407,7 +1408,7 @@ function newRide(){
 
   var eventId=params.get('event');
   if(eventId){
-    fetch(API_URL+'/api/events/'+eventId)
+    apiFetch(API_URL+'/api/events/'+eventId)
       .then(function(r){return r.json()})
       .then(function(ev){
         eventData=ev;
