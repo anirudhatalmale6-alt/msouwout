@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Sipote & Kontak — MsouWout | Ride-Hailing Haiti</title>
+<meta name="description" content="Jwenn repons pou kesyon ou yo sou MsouWout. Kontak ekip sipote nou, FAQ, sekirite, ak enfasyon DASH medikal.">
+<meta property="og:title" content="Sipote & Kontak — MsouWout">
+<meta property="og:description" content="Jwenn repons pou kesyon ou yo sou MsouWout. Kontak ekip sipote nou.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://msouwout.com/support.html">
+<meta property="og:image" content="https://msouwout.com/assets/og-msouwout.jpg?v=2">
+<link rel="canonical" href="https://msouwout.com/support.html">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#1a1a2e;--bg-light:#16213e;--bg-card:#0f3460;
+  --gold:#f5a623;--gold-dark:#d4900a;--gold-light:#ffd369;
+  --red:#D21034;--red-dark:#B00D2C;
+  --green:#25D366;--blue:#00209F;
+  --white:#FFFFFF;--off-white:#F5F7FA;
+  --text:#E8E8E8;--text-light:#A0AAC0;--text-muted:#6B7899;
+  --border:rgba(255,255,255,.08);
+  --body:'Poppins',system-ui,sans-serif;
+  --radius:14px;--radius-lg:20px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+button{font-family:var(--body);cursor:pointer;border:none;background:none}
+a{text-decoration:none;color:inherit}
+img{max-width:100%}
+
+/* FLAG STRIPE */
+.flag-stripe{height:4px;background:linear-gradient(90deg,#00209F 50%,#D21034 50%)}
+
+/* HEADER */
+.header{
+  background:rgba(26,26,46,.95);backdrop-filter:blur(12px);
+  padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);
+}
+.header-left{display:flex;align-items:center;gap:10px}
+.back-link{
+  display:flex;align-items:center;gap:6px;color:var(--gold);font-size:.82rem;font-weight:600;
+  padding:6px 14px;border-radius:100px;background:rgba(245,166,35,.08);
+  border:1px solid rgba(245,166,35,.2);transition:all .25s;
+}
+.back-link:hover{background:rgba(245,166,35,.18);border-color:rgba(245,166,35,.4)}
+.back-arrow{font-size:1rem}
+.header-title{color:var(--white);font-size:.95rem;font-weight:700;letter-spacing:-.01em}
+
+/* LANGUAGE TOGGLE */
+.lang-bar{
+  display:flex;gap:4px;padding:3px;background:rgba(255,255,255,.06);
+  border-radius:100px;border:1px solid var(--border);
+}
+.lang-btn{
+  padding:5px 12px;border-radius:100px;font-size:.7rem;font-weight:600;
+  color:var(--text-muted);transition:all .25s;letter-spacing:.02em;
+}
+.lang-btn.active{background:var(--gold);color:#1a1a2e;font-weight:700}
+.lang-btn:hover:not(.active){color:var(--white);background:rgba(255,255,255,.08)}
+
+/* HERO */
+.hero{
+  text-align:center;padding:48px 20px 32px;
+  background:linear-gradient(180deg,rgba(15,52,96,.5) 0%,transparent 100%);
+}
+.hero-icon{font-size:3rem;margin-bottom:12px;filter:drop-shadow(0 4px 16px rgba(245,166,35,.3))}
+.hero-title{font-size:clamp(1.6rem,5vw,2.2rem);font-weight:800;color:var(--white);margin-bottom:8px;line-height:1.15}
+.hero-title span{color:var(--gold)}
+.hero-sub{font-size:.9rem;color:var(--text-light);max-width:420px;margin:0 auto;line-height:1.6}
+
+/* CONTAINER */
+.container{max-width:720px;margin:0 auto;padding:0 16px 40px}
+
+/* SECTION */
+.section{margin-bottom:36px}
+.section-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.68rem;font-weight:700;color:var(--gold);text-transform:uppercase;
+  letter-spacing:.1em;margin-bottom:14px;
+  padding:4px 12px;border-radius:100px;
+  background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.15);
+}
+.section-heading{font-size:1.3rem;font-weight:800;color:var(--white);margin-bottom:20px}
+
+/* FAQ */
+.faq-item{
+  background:var(--bg-light);border:1px solid var(--border);
+  border-radius:var(--radius);margin-bottom:10px;overflow:hidden;
+  transition:all .3s;
+}
+.faq-item:hover{border-color:rgba(245,166,35,.2)}
+.faq-item.open{border-color:rgba(245,166,35,.3);background:rgba(15,52,96,.4)}
+.faq-q{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:16px 18px;cursor:pointer;transition:all .2s;width:100%;text-align:left;
+}
+.faq-q:hover{background:rgba(255,255,255,.03)}
+.faq-q-text{font-size:.88rem;font-weight:600;color:var(--white);line-height:1.4;flex:1}
+.faq-chevron{
+  width:24px;height:24px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;background:rgba(245,166,35,.1);color:var(--gold);
+  font-size:.75rem;transition:transform .3s;flex-shrink:0;
+}
+.faq-item.open .faq-chevron{transform:rotate(180deg)}
+.faq-a{
+  max-height:0;overflow:hidden;transition:max-height .35s ease;
+}
+.faq-a-inner{
+  padding:0 18px 16px;font-size:.82rem;color:var(--text-light);line-height:1.7;
+  border-top:1px solid var(--border);padding-top:14px;margin:0 18px;
+}
+.faq-a-inner a{color:var(--gold);text-decoration:underline;text-underline-offset:2px}
+
+/* CONTACT CARDS */
+.contact-grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:500px){.contact-grid{grid-template-columns:1fr 1fr}}
+.contact-card{
+  background:var(--bg-light);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px;text-align:center;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.contact-card:hover{border-color:rgba(245,166,35,.25);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.contact-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--gold);opacity:0;transition:opacity .3s;
+}
+.contact-card:hover::before{opacity:1}
+.contact-icon{font-size:2rem;margin-bottom:10px}
+.contact-label{font-size:.7rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.contact-value{font-size:1rem;font-weight:700;color:var(--white);margin-bottom:10px}
+.contact-desc{font-size:.78rem;color:var(--text-light);margin-bottom:14px;line-height:1.5}
+.contact-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 24px;border-radius:100px;font-size:.82rem;font-weight:700;
+  transition:all .25s;
+}
+.btn-whatsapp{background:#25D366;color:#fff}
+.btn-whatsapp:hover{background:#1DA851;transform:translateY(-1px)}
+.btn-phone{background:var(--gold);color:#1a1a2e}
+.btn-phone:hover{background:var(--gold-dark);transform:translateY(-1px)}
+.btn-email{background:rgba(245,166,35,.12);color:var(--gold);border:1px solid rgba(245,166,35,.3)}
+.btn-email:hover{background:rgba(245,166,35,.22)}
+
+/* EMERGENCY BANNER */
+.emergency-banner{
+  background:linear-gradient(135deg,#D21034 0%,#8B0000 100%);
+  border-radius:var(--radius-lg);padding:24px;margin-bottom:36px;
+  position:relative;overflow:hidden;
+  border:1px solid rgba(210,16,52,.5);
+  box-shadow:0 8px 32px rgba(210,16,52,.25);
+}
+.emergency-banner::before{
+  content:'';position:absolute;top:-50%;right:-30%;width:200px;height:200px;
+  background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 70%);
+  border-radius:50%;
+}
+.emergency-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.emergency-badge{
+  font-size:.65rem;font-weight:800;color:#fff;text-transform:uppercase;
+  letter-spacing:.1em;padding:4px 10px;border-radius:100px;
+  background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);
+}
+.emergency-title{font-size:1.15rem;font-weight:800;color:#fff;margin-bottom:6px}
+.emergency-desc{font-size:.82rem;color:rgba(255,255,255,.8);line-height:1.6;margin-bottom:16px}
+.emergency-partner{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.72rem;font-weight:600;color:rgba(255,255,255,.7);
+  margin-bottom:16px;
+}
+.emergency-partner strong{color:#fff}
+.emergency-actions{display:flex;gap:10px;flex-wrap:wrap}
+.em-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 22px;border-radius:100px;font-size:.85rem;font-weight:700;
+  transition:all .25s;
+}
+.em-call{background:#fff;color:#D21034}
+.em-call:hover{background:#f0f0f0;transform:translateY(-1px)}
+.em-info{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.em-info:hover{background:rgba(255,255,255,.25)}
+
+/* SAFETY SECTION */
+.safety-grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:500px){.safety-grid{grid-template-columns:1fr 1fr}}
+.safety-card{
+  background:var(--bg-light);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px;transition:all .3s;
+}
+.safety-card:hover{border-color:rgba(245,166,35,.2)}
+.safety-icon{font-size:1.6rem;margin-bottom:8px}
+.safety-title{font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:6px}
+.safety-desc{font-size:.78rem;color:var(--text-light);line-height:1.6}
+
+/* HOURS */
+.hours-card{
+  background:var(--bg-light);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:16px;
+}
+.hours-icon{font-size:2.2rem}
+.hours-info h3{font-size:.95rem;font-weight:700;color:var(--white);margin-bottom:4px}
+.hours-info p{font-size:.82rem;color:var(--text-light);line-height:1.5}
+
+/* FOOTER */
+.footer{
+  background:rgba(15,52,96,.3);border-top:1px solid var(--border);
+  padding:24px 20px;text-align:center;
+}
+.footer-brand{font-size:.82rem;font-weight:700;color:var(--white);margin-bottom:4px}
+.footer-brand span{color:var(--gold)}
+.footer-sub{font-size:.72rem;color:var(--text-muted);margin-bottom:12px}
+.footer-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+.footer-link{font-size:.72rem;color:var(--text-light);transition:color .2s}
+.footer-link:hover{color:var(--gold)}
+.footer-copy{font-size:.65rem;color:var(--text-muted)}
+
+/* HIDDEN LANG */
+[data-lang]{display:none}
+[data-lang].visible{display:block}
+.faq-q [data-lang].visible{display:inline}
+.contact-desc [data-lang].visible,.faq-a-inner [data-lang].visible{display:inline}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(245,166,35,.3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(245,166,35,.5)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.section{animation:fadeUp .5s ease both}
+.section:nth-child(2){animation-delay:.1s}
+.section:nth-child(3){animation-delay:.2s}
+.section:nth-child(4){animation-delay:.3s}
+</style>
+</head>
+<body>
+
+<!-- Flag Stripe -->
+<div class="flag-stripe"></div>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-left">
+    <a href="https://msouwout.com" class="back-link">
+      <span class="back-arrow">&#8592;</span>
+      <span data-lang="ht" class="visible">Retounen</span>
+      <span data-lang="fr">Retour</span>
+      <span data-lang="en">Back</span>
+      <span data-lang="es">Volver</span>
+    </a>
+    <span class="header-title">MsouWout</span>
+  </div>
+  <div class="lang-bar">
+    <button class="lang-btn active" onclick="setLang('ht')">HT</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('es')">ES</button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-icon">&#128172;</div>
+  <h1 class="hero-title">
+    <span data-lang="ht" class="visible">Sipote & <span>Kontak</span></span>
+    <span data-lang="fr">Support & <span>Contact</span></span>
+    <span data-lang="en">Support & <span>Contact</span></span>
+    <span data-lang="es">Soporte y <span>Contacto</span></span>
+  </h1>
+  <p class="hero-sub">
+    <span data-lang="ht" class="visible">Nou la pou ede ou. Jwenn repons pou kesyon ou yo oswa kontakte ekip nou direkteman.</span>
+    <span data-lang="fr">Nous sommes ici pour vous aider. Trouvez des reponses ou contactez notre equipe directement.</span>
+    <span data-lang="en">We're here to help. Find answers to your questions or contact our team directly.</span>
+    <span data-lang="es">Estamos aqui para ayudarte. Encuentra respuestas o contacta a nuestro equipo directamente.</span>
+  </p>
+</section>
+
+<div class="container">
+
+  <!-- EMERGENCY BANNER -->
+  <div class="emergency-banner">
+    <div class="emergency-top">
+      <span class="emergency-badge">&#9888; IJANS / EMERGENCY</span>
+    </div>
+    <div class="emergency-title">
+      <span data-lang="ht" class="visible">Ijans Medikal? Rele DASH touswit!</span>
+      <span data-lang="fr">Urgence Medicale? Appelez DASH immediatement!</span>
+      <span data-lang="en">Medical Emergency? Call DASH immediately!</span>
+      <span data-lang="es">Emergencia Medica? Llame a DASH inmediatamente!</span>
+    </div>
+    <p class="emergency-desc">
+      <span data-lang="ht" class="visible">DASH se patnere medikal ofisyel MsouWout. Tout pasaje ak chofe gen aksè a pwoteksyon medikal DASH. Nan ka ijans pandan yon kous, rele liy ijans lan direkteman.</span>
+      <span data-lang="fr">DASH est le partenaire medical officiel de MsouWout. Tous les passagers et chauffeurs beneficient de la protection medicale DASH. En cas d'urgence pendant un trajet, appelez la ligne d'urgence.</span>
+      <span data-lang="en">DASH is MsouWout's official medical partner. All passengers and drivers have access to DASH medical protection. In case of emergency during a ride, call the emergency line directly.</span>
+      <span data-lang="es">DASH es el socio medico oficial de MsouWout. Todos los pasajeros y conductores tienen acceso a la proteccion medica DASH. En caso de emergencia durante un viaje, llame a la linea de emergencia.</span>
+    </p>
+    <div class="emergency-partner">
+      <span data-lang="ht" class="visible">Patnere: <strong>DASH Medical Protection</strong></span>
+      <span data-lang="fr">Partenaire: <strong>DASH Medical Protection</strong></span>
+      <span data-lang="en">Partner: <strong>DASH Medical Protection</strong></span>
+      <span data-lang="es">Socio: <strong>DASH Medical Protection</strong></span>
+    </div>
+    <div class="emergency-actions">
+      <a href="tel:+50933333274" class="em-btn em-call">&#128222; (509) 3333-DASH</a>
+      <a href="emergency-dash.html" class="em-btn em-info">
+        <span data-lang="ht" class="visible">Plis Enfo</span>
+        <span data-lang="fr">Plus d'infos</span>
+        <span data-lang="en">More Info</span>
+        <span data-lang="es">Mas Info</span>
+        &#8594;
+      </a>
+    </div>
+  </div>
+
+  <!-- FAQ SECTION -->
+  <section class="section">
+    <div class="section-label">
+      &#10067;
+      <span data-lang="ht" class="visible">Kesyon Souvan</span>
+      <span data-lang="fr">Questions Frequentes</span>
+      <span data-lang="en">FAQ</span>
+      <span data-lang="es">Preguntas Frecuentes</span>
+    </div>
+    <h2 class="section-heading">
+      <span data-lang="ht" class="visible">Repons pou kesyon ou yo</span>
+      <span data-lang="fr">Reponses a vos questions</span>
+      <span data-lang="en">Answers to your questions</span>
+      <span data-lang="es">Respuestas a tus preguntas</span>
+    </h2>
+
+    <!-- FAQ 1: How to book -->
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">
+          <span data-lang="ht" class="visible">Koman pou m rezeve yon kous sou MsouWout?</span>
+          <span data-lang="fr">Comment reserver un trajet sur MsouWout?</span>
+          <span data-lang="en">How do I book a ride on MsouWout?</span>
+          <span data-lang="es">Como reservo un viaje en MsouWout?</span>
+        </span>
+        <span class="faq-chevron">&#9660;</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          <span data-lang="ht" class="visible">Ale sou <a href="https://msouwout.com">msouwout.com</a>, antre kote ou ye a ak kote ou prale. Chwazi tip kous ou vle (estanda, premium, oswa moto), konfime pri a, epi yon chofe verifye ap rive nan 2 minit. Ou ka peye ak lajan kach oswa Moncash.</span>
+          <span data-lang="fr">Allez sur <a href="https://msouwout.com">msouwout.com</a>, entrez votre point de depart et votre destination. Choisissez le type de trajet (standard, premium, ou moto), confirmez le prix, et un chauffeur verifie arrivera en 2 minutes. Paiement en especes ou Moncash.</span>
+          <span data-lang="en">Go to <a href="https://msouwout.com">msouwout.com</a>, enter your pickup and drop-off locations. Choose your ride type (standard, premium, or moto), confirm the price, and a verified driver will arrive in 2 minutes. Pay with cash or Moncash.</span>
+          <span data-lang="es">Vaya a <a href="https://msouwout.com">msouwout.com</a>, ingrese su punto de recogida y destino. Elija el tipo de viaje (estandar, premium o moto), confirme el precio, y un conductor verificado llegara en 2 minutos. Pague en efectivo o Moncash.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 2: Pricing -->
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">
+          <span data-lang="ht" class="visible">Kijan pri a kalkile? Eske gen kout kache?</span>
+          <span data-lang="fr">Comment le prix est-il calcule? Y a-t-il des frais caches?</span>
+          <span data-lang="en">How is pricing calculated? Are there hidden fees?</span>
+          <span data-lang="es">Como se calcula el precio? Hay tarifas ocultas?</span>
+        </span>
+        <span class="faq-chevron">&#9660;</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          <span data-lang="ht" class="visible">Pri ou wè avan ou konfime kous la se pri final la. Pa gen kout kache. Pri a kalkile sou distans, tip machin nan, ak demann nan moman an. Nan lè pik (maten bonè ak apremidi), pri a ka monte tikalè. Ou toujou wè pri total la avan ou aksepte.</span>
+          <span data-lang="fr">Le prix que vous voyez avant de confirmer est le prix final. Pas de frais caches. Le tarif est calcule selon la distance, le type de vehicule et la demande actuelle. Aux heures de pointe (matin et apres-midi), le prix peut legèrement augmenter. Vous voyez toujours le prix total avant d'accepter.</span>
+          <span data-lang="en">The price you see before confirming is the final price. No hidden fees. Pricing is calculated based on distance, vehicle type, and current demand. During peak hours (early morning and afternoon), prices may increase slightly. You always see the total price before accepting.</span>
+          <span data-lang="es">El precio que ve antes de confirmar es el precio final. Sin tarifas ocultas. El precio se calcula segun la distancia, tipo de vehiculo y demanda actual. En horas pico (manana temprano y tarde), los precios pueden aumentar ligeramente. Siempre ve el precio total antes de aceptar.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 3: Safety -->
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">
+          <span data-lang="ht" class="visible">Ki jan MsouWout garanti sekirite mwen?</span>
+          <span data-lang="fr">Comment MsouWout garantit-il ma securite?</span>
+          <span data-lang="en">How does MsouWout ensure my safety?</span>
+          <span data-lang="es">Como garantiza MsouWout mi seguridad?</span>
+        </span>
+        <span class="faq-chevron">&#9660;</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          <span data-lang="ht" class="visible">Tout chofe MsouWout pase yon verifikasyon konplè (background check), ki gen ladan kazye jidisyè ak eksperyans kondui. Machin yo enspekte regilyèman. Pandan chak kous, ou ka pataje pozisyon ou an dirèk ak fanmi ou. Nou gen yon bouton ijans nan aplikasyon an ki konekte dirèkteman ak DASH pou asistans medikal.</span>
+          <span data-lang="fr">Tous les chauffeurs MsouWout passent une verification complete (antecedents judiciaires et experience de conduite). Les vehicules sont inspectes regulierement. Pendant chaque trajet, vous pouvez partager votre position en temps reel avec votre famille. Nous avons un bouton d'urgence qui connecte directement avec DASH pour l'assistance medicale.</span>
+          <span data-lang="en">All MsouWout drivers pass a complete background check including criminal record and driving experience verification. Vehicles are inspected regularly. During every ride, you can share your live location with family. We have an emergency button that connects directly to DASH for medical assistance.</span>
+          <span data-lang="es">Todos los conductores de MsouWout pasan una verificacion completa de antecedentes, incluyendo registro criminal y experiencia de conduccion. Los vehiculos se inspeccionan regularmente. Durante cada viaje, puede compartir su ubicacion en vivo con su familia. Tenemos un boton de emergencia que conecta directamente con DASH para asistencia medica.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 4: DASH Protection -->
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">
+          <span data-lang="ht" class="visible">Kisa pwoteksyon medikal DASH ye?</span>
+          <span data-lang="fr">Qu'est-ce que la protection medicale DASH?</span>
+          <span data-lang="en">What is DASH medical protection?</span>
+          <span data-lang="es">Que es la proteccion medica DASH?</span>
+        </span>
+        <span class="faq-chevron">&#9660;</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          <span data-lang="ht" class="visible">DASH se patnere medikal ofisyel MsouWout. Chak pasaje ak chofe otomatikman gen aksè a sèvis ijans DASH pandan yon kous. Si gen yon aksidan oswa ijans medikal, DASH bay repons rapid, transpote lopital, ak premye swen. Rele <strong>(509) 3333-DASH</strong> pou nenpòt ijans medikal pandan yon kous MsouWout.</span>
+          <span data-lang="fr">DASH est le partenaire medical officiel de MsouWout. Chaque passager et chauffeur a automatiquement acces aux services d'urgence DASH pendant un trajet. En cas d'accident ou d'urgence medicale, DASH fournit une reponse rapide, le transport hospitalier et les premiers soins. Appelez le <strong>(509) 3333-DASH</strong> pour toute urgence medicale pendant un trajet MsouWout.</span>
+          <span data-lang="en">DASH is MsouWout's official medical partner. Every passenger and driver automatically has access to DASH emergency services during a ride. In case of an accident or medical emergency, DASH provides rapid response, hospital transport, and first aid. Call <strong>(509) 3333-DASH</strong> for any medical emergency during a MsouWout ride.</span>
+          <span data-lang="es">DASH es el socio medico oficial de MsouWout. Cada pasajero y conductor tiene automaticamente acceso a los servicios de emergencia DASH durante un viaje. En caso de accidente o emergencia medica, DASH proporciona respuesta rapida, transporte hospitalario y primeros auxilios. Llame al <strong>(509) 3333-DASH</strong> para cualquier emergencia medica durante un viaje MsouWout.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 5: Payment -->
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">
+          <span data-lang="ht" class="visible">Ki metòd peman MsouWout aksepte?</span>
+          <span data-lang="fr">Quels modes de paiement MsouWout accepte-t-il?</span>
+          <span data-lang="en">What payment methods does MsouWout accept?</span>
+          <span data-lang="es">Que metodos de pago acepta MsouWout?</span>
+        </span>
+        <span class="faq-chevron">&#9660;</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          <span data-lang="ht" class="visible">MsouWout aksepte plizyè fason pou peye: lajan kach dirèkteman bay chofe a, Moncash (transfè mobil), ak kat debi/kredi. Pou lajan kach, asire w gen monnen paske chofe a pa oblije gen chanj. Moncash se metòd ki pi popilè nan Ayiti.</span>
+          <span data-lang="fr">MsouWout accepte plusieurs modes de paiement: especes directement au chauffeur, Moncash (transfert mobile) et cartes de debit/credit. Pour les especes, assurez-vous d'avoir la monnaie car le chauffeur n'est pas oblige d'avoir du change. Moncash est le mode le plus populaire en Haiti.</span>
+          <span data-lang="en">MsouWout accepts multiple payment methods: cash directly to the driver, Moncash (mobile transfer), and debit/credit cards. For cash payments, make sure to have exact change as drivers are not required to carry change. Moncash is the most popular method in Haiti.</span>
+          <span data-lang="es">MsouWout acepta multiples metodos de pago: efectivo directamente al conductor, Moncash (transferencia movil) y tarjetas de debito/credito. Para pagos en efectivo, asegurese de tener el monto exacto ya que los conductores no estan obligados a llevar cambio. Moncash es el metodo mas popular en Haiti.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 6: Cancel -->
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">
+          <span data-lang="ht" class="visible">Eske m ka anile yon kous? Eske gen frè pou anilasyon?</span>
+          <span data-lang="fr">Puis-je annuler un trajet? Y a-t-il des frais d'annulation?</span>
+          <span data-lang="en">Can I cancel a ride? Are there cancellation fees?</span>
+          <span data-lang="es">Puedo cancelar un viaje? Hay tarifas de cancelacion?</span>
+        </span>
+        <span class="faq-chevron">&#9660;</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          <span data-lang="ht" class="visible">Wi, ou ka anile yon kous nenpòt lè avan chofe a rive. Si ou anile nan premye 2 minit apre ou fè demann lan, pa gen okenn frè. Apre 2 minit oswa si chofe a deja rive, yon ti frè anilasyon ka aplike pou konpanse chofe a pou tan ak gazolin li.</span>
+          <span data-lang="fr">Oui, vous pouvez annuler un trajet a tout moment avant l'arrivee du chauffeur. Si vous annulez dans les 2 premieres minutes apres la demande, il n'y a aucun frais. Apres 2 minutes ou si le chauffeur est deja arrive, de petits frais d'annulation peuvent s'appliquer pour compenser le chauffeur pour son temps et son carburant.</span>
+          <span data-lang="en">Yes, you can cancel a ride at any time before the driver arrives. If you cancel within the first 2 minutes after requesting, there are no fees. After 2 minutes or if the driver has already arrived, a small cancellation fee may apply to compensate the driver for their time and fuel.</span>
+          <span data-lang="es">Si, puede cancelar un viaje en cualquier momento antes de que llegue el conductor. Si cancela dentro de los primeros 2 minutos despues de solicitar, no hay tarifas. Despues de 2 minutos o si el conductor ya llego, puede aplicarse una pequena tarifa de cancelacion para compensar al conductor por su tiempo y combustible.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT SECTION -->
+  <section class="section">
+    <div class="section-label">
+      &#128222;
+      <span data-lang="ht" class="visible">Kontakte Nou</span>
+      <span data-lang="fr">Contactez-nous</span>
+      <span data-lang="en">Contact Us</span>
+      <span data-lang="es">Contactenos</span>
+    </div>
+    <h2 class="section-heading">
+      <span data-lang="ht" class="visible">Pale ak ekip sipote nou</span>
+      <span data-lang="fr">Parlez a notre equipe de support</span>
+      <span data-lang="en">Talk to our support team</span>
+      <span data-lang="es">Hable con nuestro equipo de soporte</span>
+    </h2>
+
+    <div class="contact-grid">
+      <!-- WhatsApp -->
+      <div class="contact-card">
+        <div class="contact-icon">&#128172;</div>
+        <div class="contact-label">WhatsApp</div>
+        <div class="contact-value">+509 4685 9702</div>
+        <p class="contact-desc">
+          <span data-lang="ht" class="visible">Repons pi rapid. Ekri nou sou WhatsApp pou sipote an dirèk.</span>
+          <span data-lang="fr">Reponse la plus rapide. Ecrivez-nous sur WhatsApp pour un support direct.</span>
+          <span data-lang="en">Fastest response. Message us on WhatsApp for direct support.</span>
+          <span data-lang="es">Respuesta mas rapida. Escribanos por WhatsApp para soporte directo.</span>
+        </p>
+        <a href="https://wa.me/50946859702" target="_blank" rel="noopener" class="contact-btn btn-whatsapp">
+          &#128172;
+          <span data-lang="ht" class="visible">Voye Mesaj</span>
+          <span data-lang="fr">Envoyer Message</span>
+          <span data-lang="en">Send Message</span>
+          <span data-lang="es">Enviar Mensaje</span>
+        </a>
+      </div>
+
+      <!-- Phone -->
+      <div class="contact-card">
+        <div class="contact-icon">&#128222;</div>
+        <div class="contact-label">
+          <span data-lang="ht" class="visible">Telefon</span>
+          <span data-lang="fr">Telephone</span>
+          <span data-lang="en">Phone</span>
+          <span data-lang="es">Telefono</span>
+        </div>
+        <div class="contact-value">+509 4685 9702</div>
+        <p class="contact-desc">
+          <span data-lang="ht" class="visible">Rele nou dirèkteman pou asistans imedya.</span>
+          <span data-lang="fr">Appelez-nous directement pour une assistance immediate.</span>
+          <span data-lang="en">Call us directly for immediate assistance.</span>
+          <span data-lang="es">Llamenos directamente para asistencia inmediata.</span>
+        </p>
+        <a href="tel:+50946859702" class="contact-btn btn-phone">
+          &#128222;
+          <span data-lang="ht" class="visible">Rele Kounye a</span>
+          <span data-lang="fr">Appeler Maintenant</span>
+          <span data-lang="en">Call Now</span>
+          <span data-lang="es">Llamar Ahora</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAFETY SECTION -->
+  <section class="section">
+    <div class="section-label">
+      &#128737;
+      <span data-lang="ht" class="visible">Sekirite</span>
+      <span data-lang="fr">Securite</span>
+      <span data-lang="en">Safety</span>
+      <span data-lang="es">Seguridad</span>
+    </div>
+    <h2 class="section-heading">
+      <span data-lang="ht" class="visible">Sekirite ou se priyorite #1 nou</span>
+      <span data-lang="fr">Votre securite est notre priorite #1</span>
+      <span data-lang="en">Your safety is our #1 priority</span>
+      <span data-lang="es">Tu seguridad es nuestra prioridad #1</span>
+    </h2>
+
+    <div class="safety-grid">
+      <div class="safety-card">
+        <div class="safety-icon">&#9989;</div>
+        <div class="safety-title">
+          <span data-lang="ht" class="visible">Chofe Verifye</span>
+          <span data-lang="fr">Chauffeurs Verifies</span>
+          <span data-lang="en">Verified Drivers</span>
+          <span data-lang="es">Conductores Verificados</span>
+        </div>
+        <p class="safety-desc">
+          <span data-lang="ht" class="visible">Tout chofe pase yon background check konplè, verifikasyon lisans, ak fòmasyon sekirite.</span>
+          <span data-lang="fr">Tous les chauffeurs passent une verification complete des antecedents, verification du permis et formation securite.</span>
+          <span data-lang="en">All drivers undergo complete background checks, license verification, and safety training.</span>
+          <span data-lang="es">Todos los conductores pasan verificacion completa de antecedentes, verificacion de licencia y capacitacion en seguridad.</span>
+        </p>
+      </div>
+
+      <div class="safety-card">
+        <div class="safety-icon">&#128205;</div>
+        <div class="safety-title">
+          <span data-lang="ht" class="visible">Pataj Pozisyon an Dirèk</span>
+          <span data-lang="fr">Partage de Position en Direct</span>
+          <span data-lang="en">Live Location Sharing</span>
+          <span data-lang="es">Compartir Ubicacion en Vivo</span>
+        </div>
+        <p class="safety-desc">
+          <span data-lang="ht" class="visible">Pataje pozisyon ou an dirèk ak fanmi oswa zanmi ou pandan tout kous la.</span>
+          <span data-lang="fr">Partagez votre position en temps reel avec votre famille ou vos amis pendant tout le trajet.</span>
+          <span data-lang="en">Share your real-time location with family or friends throughout your entire ride.</span>
+          <span data-lang="es">Comparta su ubicacion en tiempo real con familia o amigos durante todo el viaje.</span>
+        </p>
+      </div>
+
+      <div class="safety-card">
+        <div class="safety-icon">&#127973;</div>
+        <div class="safety-title">
+          <span data-lang="ht" class="visible">DASH Pwoteksyon Medikal</span>
+          <span data-lang="fr">DASH Protection Medicale</span>
+          <span data-lang="en">DASH Medical Protection</span>
+          <span data-lang="es">DASH Proteccion Medica</span>
+        </div>
+        <p class="safety-desc">
+          <span data-lang="ht" class="visible">Patnè medikal ofisyel. Aksè a sèvis ijans 24/7 pou tout pasaje ak chofe.</span>
+          <span data-lang="fr">Partenaire medical officiel. Acces aux services d'urgence 24/7 pour tous les passagers et chauffeurs.</span>
+          <span data-lang="en">Official medical partner. 24/7 emergency service access for all passengers and drivers.</span>
+          <span data-lang="es">Socio medico oficial. Acceso a servicios de emergencia 24/7 para todos los pasajeros y conductores.</span>
+        </p>
+      </div>
+
+      <div class="safety-card">
+        <div class="safety-icon">&#128663;</div>
+        <div class="safety-title">
+          <span data-lang="ht" class="visible">Machin Enspekte</span>
+          <span data-lang="fr">Vehicules Inspectes</span>
+          <span data-lang="en">Inspected Vehicles</span>
+          <span data-lang="es">Vehiculos Inspeccionados</span>
+        </div>
+        <p class="safety-desc">
+          <span data-lang="ht" class="visible">Tout machin nan flòt MsouWout enspekte regilyèman pou konfòm ak estanda sekirite.</span>
+          <span data-lang="fr">Tous les vehicules de la flotte MsouWout sont regulierement inspectes pour respecter les normes de securite.</span>
+          <span data-lang="en">All vehicles in the MsouWout fleet are regularly inspected to meet safety standards.</span>
+          <span data-lang="es">Todos los vehiculos de la flota MsouWout se inspeccionan regularmente para cumplir con los estandares de seguridad.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOURS -->
+  <section class="section">
+    <div class="section-label">
+      &#128336;
+      <span data-lang="ht" class="visible">Lè Sipote</span>
+      <span data-lang="fr">Heures de Support</span>
+      <span data-lang="en">Support Hours</span>
+      <span data-lang="es">Horario de Soporte</span>
+    </div>
+    <div class="hours-card">
+      <div class="hours-icon">&#9200;</div>
+      <div class="hours-info">
+        <h3>
+          <span data-lang="ht" class="visible">Lendi - Samdi: 6AM - 10PM</span>
+          <span data-lang="fr">Lundi - Samedi: 6h - 22h</span>
+          <span data-lang="en">Monday - Saturday: 6AM - 10PM</span>
+          <span data-lang="es">Lunes - Sabado: 6AM - 10PM</span>
+        </h3>
+        <p>
+          <span data-lang="ht" class="visible">Sipote WhatsApp ak telefon disponib pandan lè sa yo. Pou ijans medikal, DASH disponib 24/7.</span>
+          <span data-lang="fr">Support WhatsApp et telephone disponible pendant ces heures. Pour les urgences medicales, DASH est disponible 24/7.</span>
+          <span data-lang="en">WhatsApp and phone support available during these hours. For medical emergencies, DASH is available 24/7.</span>
+          <span data-lang="es">Soporte de WhatsApp y telefono disponible durante estas horas. Para emergencias medicas, DASH esta disponible 24/7.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-brand">
+    <span data-lang="ht" class="visible"><span>MsouWout</span> pa HaitiBiznis</span>
+    <span data-lang="fr"><span>MsouWout</span> par HaitiBiznis</span>
+    <span data-lang="en"><span>MsouWout</span> by HaitiBiznis</span>
+    <span data-lang="es"><span>MsouWout</span> por HaitiBiznis</span>
+  </div>
+  <p class="footer-sub">
+    <span data-lang="ht" class="visible">Transpote fyab pou tout Ayiti</span>
+    <span data-lang="fr">Transport fiable pour tout Haiti</span>
+    <span data-lang="en">Reliable transportation for all of Haiti</span>
+    <span data-lang="es">Transporte confiable para todo Haiti</span>
+  </p>
+  <div class="footer-links">
+    <a href="https://msouwout.com" class="footer-link">
+      <span data-lang="ht" class="visible">Akèy</span>
+      <span data-lang="fr">Accueil</span>
+      <span data-lang="en">Home</span>
+      <span data-lang="es">Inicio</span>
+    </a>
+    <a href="privacy.html" class="footer-link">
+      <span data-lang="ht" class="visible">Konfidansyalite</span>
+      <span data-lang="fr">Confidentialite</span>
+      <span data-lang="en">Privacy</span>
+      <span data-lang="es">Privacidad</span>
+    </a>
+    <a href="security.html" class="footer-link">
+      <span data-lang="ht" class="visible">Sekirite</span>
+      <span data-lang="fr">Securite</span>
+      <span data-lang="en">Security</span>
+      <span data-lang="es">Seguridad</span>
+    </a>
+    <a href="emergency-dash.html" class="footer-link">
+      <span data-lang="ht" class="visible">Ijans DASH</span>
+      <span data-lang="fr">Urgence DASH</span>
+      <span data-lang="en">DASH Emergency</span>
+      <span data-lang="es">Emergencia DASH</span>
+    </a>
+  </div>
+  <p class="footer-copy">&copy; 2026 HaitiBiznis. Tout dwa rezeve.</p>
+</footer>
+
+<div class="flag-stripe"></div>
+
+<script>
+// Language switcher
+function setLang(lang) {
+  // Update buttons
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
+  });
+  // Hide all, show selected
+  document.querySelectorAll('[data-lang]').forEach(function(el) {
+    el.classList.remove('visible');
+  });
+  document.querySelectorAll('[data-lang="' + lang + '"]').forEach(function(el) {
+    el.classList.add('visible');
+  });
+  // Update html lang attribute
+  document.documentElement.lang = lang === 'ht' ? 'ht' : lang;
+}
+
+// FAQ accordion
+function toggleFaq(btn) {
+  var item = btn.closest('.faq-item');
+  var answer = item.querySelector('.faq-a');
+  var isOpen = item.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.faq-item.open').forEach(function(openItem) {
+    openItem.classList.remove('open');
+    openItem.querySelector('.faq-a').style.maxHeight = '0';
+  });
+
+  // Open clicked (if it was closed)
+  if (!isOpen) {
+    item.classList.add('open');
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+  }
+}
+
+// Auto-detect language from browser (fallback to HT)
+(function() {
+  var browserLang = (navigator.language || navigator.userLanguage || 'ht').toLowerCase().substr(0, 2);
+  var supported = { ht: 'ht', fr: 'fr', en: 'en', es: 'es' };
+  // Default to Creole unless browser lang is supported
+  // Always start with HT as default
+  // setLang(supported[browserLang] || 'ht');
+})();
+</script>
+</body>
+</html>

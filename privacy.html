@@ -1,67 +1,490 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ht">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MsouWout - Privacy Policy</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0">
+<title>MsouWout — Politik Konfidansyalite | Privacy Policy</title>
+<meta name="description" content="Politik konfidansyalite MsouWout. Kijan nou kolekte, itilize, epi pwoteje done pèsonèl ou nan sèvis transpò ak livrezon an Ayiti.">
+<meta property="og:title" content="MsouWout - Politik Konfidansyalite">
+<meta property="og:description" content="Aprann kijan MsouWout pwoteje done pèsonèl ou. Transparans ak konfidansyalite garanti.">
+<meta property="og:image" content="https://msouwout.com/assets/og-msouwout.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://msouwout.com/privacy.html">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://msouwout.com/privacy.html">
+<link rel="icon" type="image/png" href="assets/favicon-32.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0A0E1A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#fff;color:#1a1a2e;line-height:1.7;padding:0}
-header{background:#00209F;color:#fff;padding:20px;text-align:center}
-header h1{font-size:1.5rem;font-weight:700}
-header p{font-size:0.85rem;opacity:0.8;margin-top:4px}
-main{max-width:720px;margin:0 auto;padding:24px 16px 60px}
-h2{color:#00209F;font-size:1.15rem;margin:28px 0 10px;padding-bottom:6px;border-bottom:2px solid #e8e8f0}
-p,li{font-size:0.95rem;margin-bottom:10px}
-ul{padding-left:20px}
-li{margin-bottom:6px}
-a{color:#00209F}
-.updated{text-align:center;color:#888;font-size:0.8rem;margin-top:40px}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#1a1a2e;--bg-light:#16213e;--bg-card:#0f3460;
+  --gold:#f5a623;--gold-light:#ffc857;--gold-dim:rgba(245,166,35,.12);
+  --white:#FFFFFF;--off-white:#e8e8e8;--gray:#94a3b8;
+  --red:#D21034;--blue:#00209F;
+  --font:'Poppins',system-ui,-apple-system,sans-serif;
+  --radius:12px;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--off-white);
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  line-height:1.7;min-height:100vh;
+}
+a{text-decoration:none;color:inherit}
+
+/* FLAG STRIPE */
+.flag{height:4px;background:linear-gradient(90deg,var(--blue) 50%,var(--red) 50%)}
+
+/* TOP BAR */
+.topbar{
+  background:rgba(10,14,26,.95);backdrop-filter:blur(12px);
+  padding:12px 20px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(245,166,35,.12);position:sticky;top:0;z-index:100;
+}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.topbar-left img{height:32px;border-radius:8px}
+.topbar-left span{font-size:1rem;font-weight:800;color:var(--white);letter-spacing:.01em}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.back-link{
+  font-size:.75rem;font-weight:600;color:var(--gold);
+  padding:6px 14px;border:1px solid rgba(245,166,35,.3);border-radius:100px;
+  transition:all .2s;display:flex;align-items:center;gap:6px;
+}
+.back-link:hover{background:rgba(245,166,35,.1);border-color:var(--gold)}
+
+/* LANG SWITCHER */
+.lang-switch{display:flex;gap:2px;background:rgba(255,255,255,.06);border-radius:6px;padding:2px}
+.lang-btn{
+  padding:6px 12px;border:none;border-radius:5px;
+  font-family:var(--font);font-size:.7rem;font-weight:700;
+  letter-spacing:.04em;cursor:pointer;transition:all .2s;
+  background:transparent;color:rgba(255,255,255,.45);
+}
+.lang-btn.active{background:var(--gold);color:#1a1a2e}
+.lang-btn:hover:not(.active){color:var(--white);background:rgba(255,255,255,.1)}
+
+/* HERO */
+.hero{
+  background:linear-gradient(165deg,#0a0e1a 0%,#1a1a2e 40%,#16213e 100%);
+  padding:60px 20px 48px;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 600px 400px at 50% 0%,rgba(245,166,35,.06),transparent);
+}
+.hero>*{position:relative;z-index:1}
+.hero-icon{
+  width:64px;height:64px;margin:0 auto 20px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  border-radius:16px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 32px rgba(245,166,35,.25);font-size:1.8rem;
+}
+.hero-overtitle{
+  font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;
+}
+.hero h1{
+  font-size:clamp(1.5rem,4.5vw,2.4rem);font-weight:800;
+  color:var(--white);line-height:1.15;margin-bottom:14px;
+}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero-sub{
+  font-size:clamp(.85rem,1.6vw,1rem);color:rgba(255,255,255,.6);
+  max-width:540px;margin:0 auto;line-height:1.6;
+}
+
+/* CONTENT */
+.content{max-width:760px;margin:0 auto;padding:40px 20px 80px}
+
+.section-block{margin-bottom:36px}
+.section-block h2{
+  font-size:1.1rem;font-weight:700;color:var(--gold);margin-bottom:12px;
+  padding-bottom:8px;border-bottom:2px solid rgba(245,166,35,.15);
+  display:flex;align-items:center;gap:10px;
+}
+.section-block h2 .ico{font-size:1.2rem}
+.section-block p{font-size:.92rem;color:rgba(255,255,255,.75);margin-bottom:10px}
+.section-block ul{padding-left:20px;margin-bottom:10px}
+.section-block li{font-size:.9rem;color:rgba(255,255,255,.7);margin-bottom:6px}
+.section-block li::marker{color:var(--gold)}
+.section-block strong{color:var(--white);font-weight:600}
+.highlight-box{
+  background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.18);
+  border-radius:var(--radius);padding:16px 20px;margin:12px 0;
+}
+.highlight-box p{color:rgba(255,255,255,.8);margin-bottom:0}
+
+/* CONTACT CARD */
+.contact-card{
+  background:linear-gradient(135deg,rgba(245,166,35,.1),rgba(245,166,35,.04));
+  border:1px solid rgba(245,166,35,.25);border-radius:var(--radius);
+  padding:24px;text-align:center;margin-top:36px;
+}
+.contact-card h3{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:8px}
+.contact-card p{font-size:.88rem;color:rgba(255,255,255,.7);margin-bottom:14px}
+.wa-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--gold);color:#1a1a2e;font-weight:700;font-size:.88rem;
+  padding:12px 28px;border-radius:100px;transition:all .25s;
+}
+.wa-btn:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,166,35,.3)}
+
+/* FOOTER */
+.footer{
+  text-align:center;padding:24px 20px;border-top:1px solid rgba(245,166,35,.1);
+  font-size:.75rem;color:rgba(255,255,255,.35);
+}
+.footer a{color:var(--gold);font-weight:600}
+
+/* RESPONSIVE */
+@media(min-width:768px){
+  .hero{padding:80px 40px 56px}
+  .content{padding:48px 40px 80px}
+  .topbar{padding:12px 32px}
+}
 </style>
 </head>
 <body>
-<header>
-<h1>MsouWout Privacy Policy</h1>
-<p>Haiti's Safe Ride & Delivery Service</p>
+
+<div class="flag"></div>
+
+<!-- TOP BAR -->
+<nav class="topbar">
+  <div class="topbar-left">
+    <img src="assets/msouwout-logo.jpg" alt="MsouWout" onerror="this.style.display='none'">
+    <span>MsouWout</span>
+  </div>
+  <div class="topbar-right">
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="ht">HT</button>
+      <button class="lang-btn" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="es">ES</button>
+    </div>
+    <a href="https://msouwout.com" class="back-link" data-i18n="back_link">&#8592; Retounen</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-icon">&#128274;</div>
+  <div class="hero-overtitle" data-i18n="hero_overtitle">HaitiBiznis / MsouWout</div>
+  <h1 data-i18n="hero_title" data-i18n-html="1">Politik <em>Konfidansyalite</em></h1>
+  <p class="hero-sub" data-i18n="hero_sub">Kijan nou kolekte, itilize, epi pwoteje done pèsonèl ou lè w ap itilize sèvis MsouWout nan Ayiti.</p>
 </header>
-<main>
-<h2>Introduction</h2>
-<p>MsouWout ("we", "our", "us") operates the MsouWout mobile application and website (msouwout.com). This Privacy Policy explains how we collect, use, and protect your information when you use our services.</p>
 
-<h2>Information We Collect</h2>
-<p>Our app is a Trusted Web Activity (TWA) that loads our website. We may collect:</p>
-<ul>
-<li>Information you voluntarily provide when making a booking request (name, phone number, pickup/destination addresses)</li>
-<li>Device information (browser type, operating system) for service improvement</li>
-<li>Location data only when you explicitly use location-based features</li>
-</ul>
+<!-- CONTENT -->
+<main class="content">
 
-<h2>How We Use Your Information</h2>
-<ul>
-<li>To process and fulfill your ride and delivery requests</li>
-<li>To communicate with you about your bookings via WhatsApp</li>
-<li>To improve our services and user experience</li>
-</ul>
+  <!-- 1. INTRODUCTION -->
+  <section class="section-block">
+    <h2><span class="ico">&#128196;</span> <span data-i18n="s1_title">Entwodiksyon</span></h2>
+    <p data-i18n="s1_p1">MsouWout ("nou", "pa nou", "sèvis la") se yon platfòm transpò ak livrezon ki opere pa <strong>HaitiBiznis</strong> nan Repiblik d Ayiti. Politik konfidansyalite sa a eksplike kijan nou jere done pèsonèl ou lè w ap itilize sit wèb msouwout.com ak aplikasyon mobil nou an.</p>
+    <p data-i18n="s1_p2">Lè w ap itilize MsouWout, ou aksepte pratik ki dekri nan dokiman sa a. Tanpri li l byen.</p>
+  </section>
 
-<h2>Third-Party Services</h2>
-<p>Our app may redirect you to WhatsApp for booking confirmations. WhatsApp has its own privacy policy. We do not control how WhatsApp processes your data.</p>
+  <!-- 2. DATA COLLECTION -->
+  <section class="section-block">
+    <h2><span class="ico">&#128203;</span> <span data-i18n="s2_title">Enfòmasyon Nou Kolekte</span></h2>
+    <p data-i18n="s2_intro">Nou kolekte sèlman enfòmasyon ki nesesè pou bay ou yon bon sèvis:</p>
+    <ul>
+      <li data-i18n="s2_li1"><strong>Non konplè</strong> — pou idantifye ou pandan yon kous oswa livrezon</li>
+      <li data-i18n="s2_li2"><strong>Nimewo telefòn</strong> — pou konekte ou ak chofè pa WhatsApp epi pou verifikasyon kont</li>
+      <li data-i18n="s2_li3"><strong>Pozisyon jewografik (GPS)</strong> — pou jwenn pickup ak destinasyon ou, epi pou swiv kous an tan reyèl</li>
+      <li data-i18n="s2_li4"><strong>Adrès pickup ak destinasyon</strong> — pou planifye wout ak kalkile tarif</li>
+      <li data-i18n="s2_li5"><strong>Done aparèy</strong> — tip navigatè ak sistèm operasyon, pou amelyore eksperyans ou</li>
+    </ul>
+    <div class="highlight-box">
+      <p data-i18n="s2_note">&#128274; Nou pa janm mande enfòmasyon finansyè (kat kredi, kont labank) atravè aplikasyon an. Peman fèt an kach oswa pa mwayen ke chofè a aksepte dirèkteman.</p>
+    </div>
+  </section>
 
-<h2>Data Storage</h2>
-<p>Booking preferences may be stored locally on your device using browser storage. We do not sell or share your personal information with third parties for marketing purposes.</p>
+  <!-- 3. HOW WE USE DATA -->
+  <section class="section-block">
+    <h2><span class="ico">&#9881;</span> <span data-i18n="s3_title">Kijan Nou Itilize Done Ou</span></h2>
+    <ul>
+      <li data-i18n="s3_li1"><strong>Konekte kous</strong> — pou matche ou ak yon chofè verifye ki disponib nan zòn ou</li>
+      <li data-i18n="s3_li2"><strong>Sekirite</strong> — pou swiv kous an tan reyèl, verifye idantite, epi garanti sekirite pasajè ak chofè</li>
+      <li data-i18n="s3_li3"><strong>Kominikasyon</strong> — pou voye notifikasyon sou kous ou, konfirmasyon, ak mizajou sèvis</li>
+      <li data-i18n="s3_li4"><strong>Amelyorasyon sèvis</strong> — pou analize done itilizasyon epi amelyore platfòm lan</li>
+      <li data-i18n="s3_li5"><strong>Konfòmite legal</strong> — pou respekte lwa ak règleman an Ayiti</li>
+    </ul>
+  </section>
 
-<h2>Data Security</h2>
-<p>We use industry-standard security measures to protect your information. Our website uses HTTPS encryption for all data transmission.</p>
+  <!-- 4. DATA SHARING -->
+  <section class="section-block">
+    <h2><span class="ico">&#129309;</span> <span data-i18n="s4_title">Pataj Done</span></h2>
+    <p data-i18n="s4_intro">Nou ka pataje enfòmasyon ou ak:</p>
+    <ul>
+      <li data-i18n="s4_li1"><strong>Chofè MsouWout</strong> — non ou ak adrès pickup/destinasyon pou yo ka fè kous la</li>
+      <li data-i18n="s4_li2"><strong>DASH (patnè medikal)</strong> — nan ka ijans oswa aksidan pandan yon kous, nou ka pataje enfòmasyon ak DASH pou bay asistans medikal rapid</li>
+      <li data-i18n="s4_li3"><strong>Otorite legal</strong> — si lalwa egzije sa oswa pou pwoteje dwa legal nou</li>
+    </ul>
+    <div class="highlight-box">
+      <p data-i18n="s4_note">&#128683; Nou pa janm vann done pèsonèl ou bay pyès konpayi twazyèm pati pou reklam oswa maketing.</p>
+    </div>
+  </section>
 
-<h2>Children's Privacy</h2>
-<p>Our services are not directed to children under 13. We do not knowingly collect personal information from children.</p>
+  <!-- 5. DATA RETENTION -->
+  <section class="section-block">
+    <h2><span class="ico">&#128197;</span> <span data-i18n="s5_title">Konsèvasyon Done</span></h2>
+    <p data-i18n="s5_p1">Nou kenbe done kous ou pandan 12 mwa pou rezon sekirite ak rezolisyon litij. Apre peryòd sa a, done yo efase oswa vin anonim.</p>
+    <p data-i18n="s5_p2">Done kont ou (non, telefòn) rete aktif toutotan kont ou egziste. Si ou mande pou efase kont ou, nou pral efase tout done pèsonèl ou nan 30 jou.</p>
+  </section>
 
-<h2>Changes to This Policy</h2>
-<p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated revision date.</p>
+  <!-- 6. DATA SECURITY -->
+  <section class="section-block">
+    <h2><span class="ico">&#128737;</span> <span data-i18n="s6_title">Sekirite Done</span></h2>
+    <p data-i18n="s6_p1">Nou pran sekirite done ou oserye. Men jan nou pwoteje enfòmasyon ou:</p>
+    <ul>
+      <li data-i18n="s6_li1">Chifraj HTTPS pou tout kominikasyon</li>
+      <li data-i18n="s6_li2">Aksè restrenn sèlman pou pèsonèl otorize</li>
+      <li data-i18n="s6_li3">Done lokasyon yo sèlman itilize pandan kous aktif</li>
+      <li data-i18n="s6_li4">Estokaj done sou sèvè ki byen pwoteje</li>
+    </ul>
+  </section>
 
-<h2>Contact Us</h2>
-<p>If you have questions about this Privacy Policy, contact us via WhatsApp at +509 4190 2005 or visit <a href="https://msouwout.com">msouwout.com</a>.</p>
+  <!-- 7. USER RIGHTS -->
+  <section class="section-block">
+    <h2><span class="ico">&#9989;</span> <span data-i18n="s7_title">Dwa Ou</span></h2>
+    <p data-i18n="s7_intro">Kòm itilizatè MsouWout, ou gen dwa pou:</p>
+    <ul>
+      <li data-i18n="s7_li1"><strong>Aksede</strong> done pèsonèl nou kenbe sou ou</li>
+      <li data-i18n="s7_li2"><strong>Korije</strong> enfòmasyon ki pa kòrèk</li>
+      <li data-i18n="s7_li3"><strong>Efase</strong> kont ou ak tout done ki lye ak li</li>
+      <li data-i18n="s7_li4"><strong>Refize</strong> pataj done opsyonèl (sa ka limite kèk fonksyon)</li>
+    </ul>
+    <p data-i18n="s7_how">Pou egzèse dwa sa yo, kontakte nou sou WhatsApp oswa imèl.</p>
+  </section>
 
-<p class="updated">Last updated: May 16, 2026</p>
+  <!-- 8. CHILDREN -->
+  <section class="section-block">
+    <h2><span class="ico">&#128118;</span> <span data-i18n="s8_title">Pwoteksyon Timoun</span></h2>
+    <p data-i18n="s8_p1">Sèvis MsouWout pa fèt pou moun ki gen mwens ke 18 an. Nou pa kolekte done sou timoun volontèman. Si nou dekouvri ke nou te kolekte done sou yon minè, nou pral efase l san reta.</p>
+  </section>
+
+  <!-- 9. CHANGES -->
+  <section class="section-block">
+    <h2><span class="ico">&#128260;</span> <span data-i18n="s9_title">Chanjman nan Politik Sa</span></h2>
+    <p data-i18n="s9_p1">Nou ka mete ajou politik konfidansyalite sa a de tan zan tan. Chanjman yo ap pibliye sou paj sa a ak yon nouvo dat. Nou ankouraje ou verifye paj sa a regilyèman.</p>
+  </section>
+
+  <!-- 10. CONTACT -->
+  <div class="contact-card">
+    <h3 data-i18n="contact_title">&#128222; Kontakte Nou</h3>
+    <p data-i18n="contact_desc">Si ou gen kesyon sou politik konfidansyalite sa a oswa sou done pèsonèl ou, kontakte nou:</p>
+    <p style="color:rgba(255,255,255,.6);font-size:.85rem;margin-bottom:4px"><strong style="color:var(--gold)">HaitiBiznis / MsouWout</strong></p>
+    <p style="color:rgba(255,255,255,.5);font-size:.82rem;margin-bottom:14px">Repiblik d Ayiti</p>
+    <a href="https://wa.me/50946859702" class="wa-btn" target="_blank" rel="noopener">&#128172; WhatsApp: +509 4685 9702</a>
+  </div>
+
+  <p style="text-align:center;color:rgba(255,255,255,.3);font-size:.75rem;margin-top:32px" data-i18n="last_updated">Dènye mizajou: 26 Jen 2026</p>
+
 </main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>&copy; 2026 <a href="https://haitibiznis.com" target="_blank">HaitiBiznis</a> / <a href="https://msouwout.com">MsouWout</a> &mdash; <span data-i18n="footer_text">Tout dwa rezève. Fèt ak kè nan Ayiti.</span></p>
+</footer>
+
+<script>
+const T = {
+  fr: {
+    back_link: "← Retour",
+    hero_overtitle: "HaitiBiznis / MsouWout",
+    hero_title: "Politique de <em>Confidentialité</em>",
+    hero_sub: "Comment nous collectons, utilisons et protégeons vos données personnelles lorsque vous utilisez les services MsouWout en Haïti.",
+    s1_title: "Introduction",
+    s1_p1: "MsouWout (« nous », « notre », « le service ») est une plateforme de transport et de livraison exploitée par <strong>HaitiBiznis</strong> en République d’Haïti. Cette politique de confidentialité explique comment nous gérons vos données personnelles lorsque vous utilisez le site msouwout.com et notre application mobile.",
+    s1_p2: "En utilisant MsouWout, vous acceptez les pratiques décrites dans ce document. Veuillez le lire attentivement.",
+    s2_title: "Informations Collectées",
+    s2_intro: "Nous ne collectons que les informations nécessaires pour vous offrir un bon service :",
+    s2_li1: "<strong>Nom complet</strong> — pour vous identifier lors d’une course ou d’une livraison",
+    s2_li2: "<strong>Numéro de téléphone</strong> — pour vous connecter avec le chauffeur via WhatsApp et pour la vérification du compte",
+    s2_li3: "<strong>Position géographique (GPS)</strong> — pour trouver votre point de prise en charge et votre destination, et pour suivre la course en temps réel",
+    s2_li4: "<strong>Adresses de départ et de destination</strong> — pour planifier l’itinéraire et calculer le tarif",
+    s2_li5: "<strong>Données de l’appareil</strong> — type de navigateur et système d’exploitation, pour améliorer votre expérience",
+    s2_note: "🔒 Nous ne demandons jamais d’informations financières (carte de crédit, compte bancaire) via l’application. Les paiements se font en espèces ou par les moyens acceptés directement par le chauffeur.",
+    s3_title: "Utilisation de vos Données",
+    s3_li1: "<strong>Mise en relation</strong> — pour vous associer à un chauffeur vérifié disponible dans votre zone",
+    s3_li2: "<strong>Sécurité</strong> — pour suivre la course en temps réel, vérifier l’identité et garantir la sécurité des passagers et des chauffeurs",
+    s3_li3: "<strong>Communication</strong> — pour vous envoyer des notifications sur votre course, des confirmations et des mises à jour du service",
+    s3_li4: "<strong>Amélioration du service</strong> — pour analyser les données d’utilisation et améliorer la plateforme",
+    s3_li5: "<strong>Conformité légale</strong> — pour respecter les lois et réglementations en Haïti",
+    s4_title: "Partage des Données",
+    s4_intro: "Nous pouvons partager vos informations avec :",
+    s4_li1: "<strong>Chauffeurs MsouWout</strong> — votre nom et vos adresses de départ/destination pour effectuer la course",
+    s4_li2: "<strong>DASH (partenaire médical)</strong> — en cas d’urgence ou d’accident pendant une course, nous pouvons partager vos informations avec DASH pour une assistance médicale rapide",
+    s4_li3: "<strong>Autorités légales</strong> — si la loi l’exige ou pour protéger nos droits légaux",
+    s4_note: "🚫 Nous ne vendons jamais vos données personnelles à des tiers à des fins publicitaires ou marketing.",
+    s5_title: "Conservation des Données",
+    s5_p1: "Nous conservons vos données de course pendant 12 mois pour des raisons de sécurité et de résolution de litiges. Après cette période, les données sont supprimées ou anonymisées.",
+    s5_p2: "Les données de votre compte (nom, téléphone) restent actives tant que votre compte existe. Si vous demandez la suppression de votre compte, nous effacerons toutes vos données personnelles dans les 30 jours.",
+    s6_title: "Sécurité des Données",
+    s6_p1: "Nous prenons la sécurité de vos données au sérieux. Voici comment nous protégeons vos informations :",
+    s6_li1: "Chiffrement HTTPS pour toutes les communications",
+    s6_li2: "Accès restreint uniquement au personnel autorisé",
+    s6_li3: "Les données de localisation sont utilisées uniquement pendant les courses actives",
+    s6_li4: "Stockage des données sur des serveurs sécurisés",
+    s7_title: "Vos Droits",
+    s7_intro: "En tant qu’utilisateur de MsouWout, vous avez le droit de :",
+    s7_li1: "<strong>Accéder</strong> aux données personnelles que nous détenons sur vous",
+    s7_li2: "<strong>Corriger</strong> les informations incorrectes",
+    s7_li3: "<strong>Supprimer</strong> votre compte et toutes les données associées",
+    s7_li4: "<strong>Refuser</strong> le partage de données optionnelles (cela peut limiter certaines fonctionnalités)",
+    s7_how: "Pour exercer ces droits, contactez-nous via WhatsApp ou par e-mail.",
+    s8_title: "Protection des Enfants",
+    s8_p1: "Les services MsouWout ne sont pas destinés aux personnes de moins de 18 ans. Nous ne collectons pas volontairement les données des mineurs. Si nous découvrons que nous avons collecté des données sur un mineur, nous les supprimerons sans délai.",
+    s9_title: "Modifications de cette Politique",
+    s9_p1: "Nous pouvons mettre à jour cette politique de confidentialité de temps en temps. Les modifications seront publiées sur cette page avec une nouvelle date. Nous vous encourageons à consulter cette page régulièrement.",
+    contact_title: "📞 Contactez-nous",
+    contact_desc: "Si vous avez des questions sur cette politique de confidentialité ou sur vos données personnelles, contactez-nous :",
+    last_updated: "Dernière mise à jour : 26 juin 2026",
+    footer_text: "Tous droits réservés. Fait avec cœur en Haïti."
+  },
+  en: {
+    back_link: "← Back to Site",
+    hero_overtitle: "HaitiBiznis / MsouWout",
+    hero_title: "<em>Privacy</em> Policy",
+    hero_sub: "How we collect, use, and protect your personal data when you use MsouWout services in Haiti.",
+    s1_title: "Introduction",
+    s1_p1: "MsouWout (“we”, “our”, “the service”) is a transportation and delivery platform operated by <strong>HaitiBiznis</strong> in the Republic of Haiti. This Privacy Policy explains how we manage your personal data when you use the msouwout.com website and our mobile application.",
+    s1_p2: "By using MsouWout, you agree to the practices described in this document. Please read it carefully.",
+    s2_title: "Information We Collect",
+    s2_intro: "We only collect information necessary to provide you with good service:",
+    s2_li1: "<strong>Full name</strong> — to identify you during a ride or delivery",
+    s2_li2: "<strong>Phone number</strong> — to connect you with the driver via WhatsApp and for account verification",
+    s2_li3: "<strong>Geographic location (GPS)</strong> — to find your pickup point and destination, and to track the ride in real time",
+    s2_li4: "<strong>Pickup and destination addresses</strong> — to plan the route and calculate the fare",
+    s2_li5: "<strong>Device data</strong> — browser type and operating system, to improve your experience",
+    s2_note: "🔒 We never ask for financial information (credit card, bank account) through the app. Payments are made in cash or by means accepted directly by the driver.",
+    s3_title: "How We Use Your Data",
+    s3_li1: "<strong>Ride matching</strong> — to match you with a verified driver available in your area",
+    s3_li2: "<strong>Safety</strong> — to track rides in real time, verify identity, and ensure the safety of passengers and drivers",
+    s3_li3: "<strong>Communication</strong> — to send you notifications about your ride, confirmations, and service updates",
+    s3_li4: "<strong>Service improvement</strong> — to analyze usage data and improve the platform",
+    s3_li5: "<strong>Legal compliance</strong> — to comply with laws and regulations in Haiti",
+    s4_title: "Data Sharing",
+    s4_intro: "We may share your information with:",
+    s4_li1: "<strong>MsouWout Drivers</strong> — your name and pickup/destination addresses so they can complete the ride",
+    s4_li2: "<strong>DASH (medical partner)</strong> — in case of emergency or accident during a ride, we may share your information with DASH to provide rapid medical assistance",
+    s4_li3: "<strong>Legal authorities</strong> — if required by law or to protect our legal rights",
+    s4_note: "🚫 We never sell your personal data to any third-party company for advertising or marketing purposes.",
+    s5_title: "Data Retention",
+    s5_p1: "We keep your ride data for 12 months for security and dispute resolution purposes. After this period, data is deleted or anonymized.",
+    s5_p2: "Your account data (name, phone) remains active as long as your account exists. If you request account deletion, we will erase all your personal data within 30 days.",
+    s6_title: "Data Security",
+    s6_p1: "We take your data security seriously. Here is how we protect your information:",
+    s6_li1: "HTTPS encryption for all communications",
+    s6_li2: "Restricted access only for authorized personnel",
+    s6_li3: "Location data is only used during active rides",
+    s6_li4: "Data stored on well-protected servers",
+    s7_title: "Your Rights",
+    s7_intro: "As a MsouWout user, you have the right to:",
+    s7_li1: "<strong>Access</strong> the personal data we hold about you",
+    s7_li2: "<strong>Correct</strong> inaccurate information",
+    s7_li3: "<strong>Delete</strong> your account and all associated data",
+    s7_li4: "<strong>Refuse</strong> optional data sharing (this may limit some features)",
+    s7_how: "To exercise these rights, contact us via WhatsApp or email.",
+    s8_title: "Children’s Protection",
+    s8_p1: "MsouWout services are not intended for persons under 18 years of age. We do not knowingly collect data from minors. If we discover that we have collected data about a minor, we will delete it without delay.",
+    s9_title: "Changes to This Policy",
+    s9_p1: "We may update this privacy policy from time to time. Changes will be published on this page with a new date. We encourage you to check this page regularly.",
+    contact_title: "📞 Contact Us",
+    contact_desc: "If you have questions about this privacy policy or about your personal data, contact us:",
+    last_updated: "Last updated: June 26, 2026",
+    footer_text: "All rights reserved. Made with heart in Haiti."
+  },
+  es: {
+    back_link: "← Volver al Sitio",
+    hero_overtitle: "HaitiBiznis / MsouWout",
+    hero_title: "Política de <em>Privacidad</em>",
+    hero_sub: "Cómo recopilamos, utilizamos y protegemos sus datos personales cuando utiliza los servicios de MsouWout en Haití.",
+    s1_title: "Introducción",
+    s1_p1: "MsouWout (“nosotros”, “nuestro”, “el servicio”) es una plataforma de transporte y entrega operada por <strong>HaitiBiznis</strong> en la República de Haití. Esta política de privacidad explica cómo gestionamos sus datos personales cuando utiliza el sitio web msouwout.com y nuestra aplicación móvil.",
+    s1_p2: "Al utilizar MsouWout, usted acepta las prácticas descritas en este documento. Léalo atentamente.",
+    s2_title: "Información que Recopilamos",
+    s2_intro: "Solo recopilamos la información necesaria para brindarle un buen servicio:",
+    s2_li1: "<strong>Nombre completo</strong> — para identificarlo durante un viaje o entrega",
+    s2_li2: "<strong>Número de teléfono</strong> — para conectarlo con el conductor por WhatsApp y para la verificación de la cuenta",
+    s2_li3: "<strong>Ubicación geográfica (GPS)</strong> — para encontrar su punto de recogida y destino, y para rastrear el viaje en tiempo real",
+    s2_li4: "<strong>Direcciones de recogida y destino</strong> — para planificar la ruta y calcular la tarifa",
+    s2_li5: "<strong>Datos del dispositivo</strong> — tipo de navegador y sistema operativo, para mejorar su experiencia",
+    s2_note: "🔒 Nunca solicitamos información financiera (tarjeta de crédito, cuenta bancaria) a través de la aplicación. Los pagos se realizan en efectivo o por los medios aceptados directamente por el conductor.",
+    s3_title: "Cómo Usamos sus Datos",
+    s3_li1: "<strong>Conexión de viaje</strong> — para emparejarlo con un conductor verificado disponible en su zona",
+    s3_li2: "<strong>Seguridad</strong> — para rastrear viajes en tiempo real, verificar identidad y garantizar la seguridad de pasajeros y conductores",
+    s3_li3: "<strong>Comunicación</strong> — para enviarle notificaciones sobre su viaje, confirmaciones y actualizaciones del servicio",
+    s3_li4: "<strong>Mejora del servicio</strong> — para analizar datos de uso y mejorar la plataforma",
+    s3_li5: "<strong>Cumplimiento legal</strong> — para cumplir con las leyes y regulaciones en Haití",
+    s4_title: "Compartir Datos",
+    s4_intro: "Podemos compartir su información con:",
+    s4_li1: "<strong>Conductores MsouWout</strong> — su nombre y direcciones de recogida/destino para completar el viaje",
+    s4_li2: "<strong>DASH (socio médico)</strong> — en caso de emergencia o accidente durante un viaje, podemos compartir su información con DASH para brindar asistencia médica rápida",
+    s4_li3: "<strong>Autoridades legales</strong> — si la ley lo requiere o para proteger nuestros derechos legales",
+    s4_note: "🚫 Nunca vendemos sus datos personales a terceros con fines publicitarios o de marketing.",
+    s5_title: "Conservación de Datos",
+    s5_p1: "Conservamos sus datos de viaje durante 12 meses por razones de seguridad y resolución de disputas. Después de este período, los datos se eliminan o se anonimizan.",
+    s5_p2: "Los datos de su cuenta (nombre, teléfono) permanecen activos mientras su cuenta exista. Si solicita la eliminación de su cuenta, borraremos todos sus datos personales en 30 días.",
+    s6_title: "Seguridad de los Datos",
+    s6_p1: "Tomamos la seguridad de sus datos en serio. Así es como protegemos su información:",
+    s6_li1: "Cifrado HTTPS para todas las comunicaciones",
+    s6_li2: "Acceso restringido solo para personal autorizado",
+    s6_li3: "Los datos de ubicación solo se utilizan durante viajes activos",
+    s6_li4: "Almacenamiento de datos en servidores bien protegidos",
+    s7_title: "Sus Derechos",
+    s7_intro: "Como usuario de MsouWout, usted tiene derecho a:",
+    s7_li1: "<strong>Acceder</strong> a los datos personales que tenemos sobre usted",
+    s7_li2: "<strong>Corregir</strong> información incorrecta",
+    s7_li3: "<strong>Eliminar</strong> su cuenta y todos los datos asociados",
+    s7_li4: "<strong>Rechazar</strong> el uso compartido de datos opcionales (esto puede limitar algunas funciones)",
+    s7_how: "Para ejercer estos derechos, contáctenos por WhatsApp o correo electrónico.",
+    s8_title: "Protección de Menores",
+    s8_p1: "Los servicios de MsouWout no están destinados a personas menores de 18 años. No recopilamos datos de menores de forma voluntaria. Si descubrimos que hemos recopilado datos de un menor, los eliminaremos sin demora.",
+    s9_title: "Cambios en esta Política",
+    s9_p1: "Podemos actualizar esta política de privacidad de vez en cuando. Los cambios se publicarán en esta página con una nueva fecha. Le recomendamos consultar esta página regularmente.",
+    contact_title: "📞 Contáctenos",
+    contact_desc: "Si tiene preguntas sobre esta política de privacidad o sobre sus datos personales, contáctenos:",
+    last_updated: "Última actualización: 26 de junio de 2026",
+    footer_text: "Todos los derechos reservados. Hecho con corazón en Haití."
+  }
+};
+
+/* Cache Creole (default) text from DOM */
+let htCache = {};
+document.querySelectorAll('[data-i18n]').forEach(function(el) {
+  htCache[el.getAttribute('data-i18n')] = el.hasAttribute('data-i18n-html') ? el.innerHTML : el.textContent;
+});
+
+function setLang(lang) {
+  document.documentElement.lang = lang === 'ht' ? 'ht' : lang === 'fr' ? 'fr' : lang === 'es' ? 'es' : 'en';
+  document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    var useHtml = el.hasAttribute('data-i18n-html');
+    if (lang === 'ht') {
+      if (useHtml) el.innerHTML = htCache[key]; else el.textContent = htCache[key];
+    } else {
+      var val = T[lang] && T[lang][key];
+      if (val) { if (useHtml) el.innerHTML = val; else el.textContent = val; }
+    }
+  });
+}
+
+document.querySelectorAll('.lang-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() { setLang(btn.dataset.lang); });
+});
+</script>
+
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
 </body>
 </html>
