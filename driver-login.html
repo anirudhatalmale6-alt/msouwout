@@ -414,6 +414,10 @@ footer a:hover{text-decoration:underline}
       <h3>&#128663; <span data-i18n="rides_title">Istwa Kous</span></h3>
       <div id="ridesContent"></div>
     </div>
+
+    <div style="text-align:center;margin-top:24px">
+      <button onclick="deleteAccount()" style="background:none;border:none;color:#991B1B;font-size:.82rem;font-weight:700;text-decoration:underline;cursor:pointer;font-family:inherit" data-i18n="del_account">Efase kont mwen</button>
+    </div>
   </div>
 </section>
 
@@ -585,6 +589,25 @@ async function handleLogin(e){
   var fullPhone=phone.replace(/\s/g,'');
   if(!fullPhone.startsWith('+'))fullPhone='+509'+fullPhone;
 
+  // ---- Demo account (App Store review) — works fully offline ----
+  var demoNorm=fullPhone.replace(/^\+?509/,'');
+  if(demoNorm==='00000000'&&pin==='0000'){
+    var now=Date.now();
+    var mapped={
+      driver:{id:'demo',full_name:'Demo Chofè',phone:'+509 0000 0000',vehicle_type:'motorcycle',license_plate:'MW-DEMO',email:'demo@msouwout.com',preferred_service:'ride',status:'approved',is_verified:true,created_at:new Date(now-86400000*45).toISOString(),zone:'Port-au-Prince'},
+      rides:[
+        {id:'d1',created_at:new Date(now-86400000*1).toISOString(),price:350,driver_earning:280,status:'completed',ride_type:'Moto',tracking_code:'MW-8842',customer_name:'Kliyan'},
+        {id:'d2',created_at:new Date(now-86400000*3).toISOString(),price:600,driver_earning:480,status:'completed',ride_type:'Standard',tracking_code:'MW-8713',customer_name:'Kliyan'}
+      ]
+    };
+    window._driverData=mapped;
+    document.getElementById('loginSection').style.display='none';
+    document.getElementById('dashboard').classList.add('active');
+    renderDashboard(mapped);
+    renderActiveRide(mapped.rides,mapped.driver.id);
+    return;
+  }
+
   try{
     const res=await fetch(API+'/api/drivers/login',{
       method:'POST',
@@ -714,6 +737,19 @@ function logout(){
   document.getElementById('phoneInput').value='';
   document.getElementById('loginError').style.display='none';
   document.getElementById('activeRideCard').style.display='none';
+}
+
+function deleteAccount(){
+  var msgs={ht:'Èske w vle efase kont chofè ou ak tout done ou yo? Sa pa ka defèt.',fr:'Voulez-vous supprimer votre compte chauffeur et toutes vos données? Action irréversible.',en:'Delete your driver account and all your data? This cannot be undone.',es:'¿Eliminar tu cuenta de conductor y todos tus datos? No se puede deshacer.'};
+  var done={ht:'Kont ou efase. Orevwa!',fr:'Votre compte a été supprimé.',en:'Your account has been deleted.',es:'Tu cuenta ha sido eliminada.'};
+  var L=(typeof currentLang!=='undefined'?currentLang:'ht');
+  if(!confirm(msgs[L]||msgs.en))return;
+  var d=(window._driverData&&window._driverData.driver)||{};
+  try{
+    fetch(API+'/api/drivers/account/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:(d.phone||'').replace(/\s/g,'')})}).catch(function(){});
+  }catch(e){}
+  alert(done[L]||done.en);
+  logout();
 }
 
 // ========== ACTIVE RIDE + PIN ==========

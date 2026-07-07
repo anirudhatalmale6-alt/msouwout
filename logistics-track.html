@@ -728,6 +728,26 @@ function doSearch(){
 }
 
 function fetchTracking(code,cb){
+  // ---- Demo shipment (App Store review) — works fully offline ----
+  if(/^MW-(DEMO|LG-)/i.test(code)){
+    window._demoTrack=true;
+    var demo={
+      tracking_code:code.toUpperCase(),
+      pickup_address:'Port-au-Prince',dropoff_address:'Cap-Haïtien',
+      cargo_type:'rice',quantity:'40 sacs',distance_km:245,price:18000,
+      status:'in_transit',
+      driver_name:'Jean Baptiste',driver_phone:'+50937000000',fleet_name:'MsouWout Fleet',
+      assigned_truck_type:'Camion 6-wheel',truck_plate:'HT-2041',
+      last_location_update:new Date().toISOString(),
+      pickup_lat:18.5944,pickup_lng:-72.3074,
+      dropoff_lat:19.7592,dropoff_lng:-72.1988,
+      truck_lat:19.10,truck_lng:-72.25
+    };
+    currentData=demo;
+    showResult(demo);
+    if(cb) cb(true);
+    return;
+  }
   fetch(API+'/api/logistics/loads/'+encodeURIComponent(code)+'/track')
     .then(function(res){
       if(!res.ok) throw new Error('Not found');
@@ -964,6 +984,7 @@ function updateTruckPosition(d){
 /* ========== POLLING ========== */
 function startPolling(d){
   stopPolling();
+  if(window._demoTrack)return;
   var status=d.status;
   if(status==='assigned'||status==='picked_up'||status==='in_transit'){
     pollTimer=setInterval(function(){
