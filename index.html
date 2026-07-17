@@ -641,7 +641,7 @@ a{text-decoration:none;color:inherit}
           <span id="fareBase" style="font-weight:700"></span>
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:4px;color:var(--blue)">
-          <span data-i18n="fare_protection">Pwoteksyon DASH (5%)</span>
+          <span data-i18n="fare_protection">Pwoteksyon DASH</span>
           <span id="fareMedical" style="font-weight:700"></span>
         </div>
         <div style="display:flex;justify-content:space-between;font-weight:800;font-size:.85rem;padding-top:6px;border-top:1px dashed rgba(0,0,0,.1)">
@@ -872,7 +872,7 @@ var T={
     dash_title:'Pwoteksyon & Asistans Medikal DASH',
     dash_desc:'Pwoteksyon & Asistans Medikal DASH enkli nan kous sa a.',
     fare_ride:'Kous',
-    fare_protection:'Pwoteksyon DASH (5%)',
+    fare_protection:'Pwoteksyon DASH',
     fare_total:'Total'
   },
   fr:{
@@ -970,7 +970,7 @@ var T={
     dash_title:'Protection & Assistance Medicale DASH',
     dash_desc:'La Protection & Assistance Medicale DASH est incluse dans cette course.',
     fare_ride:'Course',
-    fare_protection:'Protection DASH (5%)',
+    fare_protection:'Protection DASH',
     fare_total:'Total'
   },
   en:{
@@ -1068,7 +1068,7 @@ var T={
     dash_title:'DASH Protection & Medical Assistance',
     dash_desc:'DASH Protection & Medical Assistance is included in this ride.',
     fare_ride:'Ride Fare',
-    fare_protection:'DASH Protection (5%)',
+    fare_protection:'DASH Protection',
     fare_total:'Total'
   },
   es:{
@@ -1166,7 +1166,7 @@ var T={
     dash_title:'Proteccion y Asistencia Medica DASH',
     dash_desc:'La Proteccion y Asistencia Medica DASH esta incluida en este viaje.',
     fare_ride:'Viaje',
-    fare_protection:'Proteccion DASH (5%)',
+    fare_protection:'Proteccion DASH',
     fare_total:'Total'
   }
 };
@@ -1265,16 +1265,15 @@ function updateFare(){
   var mult=surgeData&&surgeData.multiplier>1?surgeData.multiplier:1;
   low=Math.round(low*mult);
   high=Math.round(high*mult);
-  var avg=Math.round((low+high)/2);
-  var medFee=Math.round(avg*0.05);
+  var DASH_FEE=12.5; // flat DASH protection fee charged to the rider (HTG)
   document.getElementById('farePrice').textContent='~'+low+'-'+high+' HTG';
   // Show DASH protection breakdown
   var bd=document.getElementById('fareBreakdown');
   if(bd){
     bd.style.display='block';
     document.getElementById('fareBase').textContent='~'+low+'-'+high+' HTG';
-    document.getElementById('fareMedical').textContent='+'+Math.round(low*0.05)+'-'+Math.round(high*0.05)+' HTG';
-    document.getElementById('fareTotal').textContent='~'+Math.round(low*1.05)+'-'+Math.round(high*1.05)+' HTG';
+    document.getElementById('fareMedical').textContent='+'+DASH_FEE.toFixed(2)+' HTG';
+    document.getElementById('fareTotal').textContent='~'+(low+DASH_FEE).toFixed(2)+'-'+(high+DASH_FEE).toFixed(2)+' HTG';
   }
   var fareBox=document.getElementById('fareEst');
   var tagsEl=document.getElementById('surgeTags');
@@ -1525,7 +1524,15 @@ updateLoginUI();
     var saddr=localStorage.getItem('msw_last_addr');
     if(saddr){pickupEl.value=saddr;window._pickupLat=parseFloat(slat);window._pickupLng=parseFloat(slng);checkInputs();}
   }
-  setTimeout(function(){useMyLocation()},500);
+  // Do NOT auto-fire getCurrentPosition on load — that pops the OS location
+  // permission dialog (in the phone's language) with no context and confuses users.
+  // Only re-use a location the user already granted before; otherwise wait for the
+  // deliberate Kreyol "Sevi ak pozisyon mwen" button tap, which primes the prompt.
+  if(navigator.permissions&&navigator.permissions.query){
+    navigator.permissions.query({name:'geolocation'}).then(function(p){
+      if(p.state==='granted'&&!pickupEl.value.trim()){useMyLocation();}
+    }).catch(function(){});
+  }
 })();
 
 /* APPLY SAVED LANGUAGE */
