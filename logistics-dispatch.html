@@ -324,6 +324,13 @@ img{max-width:100%}
   .panel-sos{grid-column:auto}
 }
 </style>
+<style id="capacitor-native-styles">
+body.capacitor-native{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+body.capacitor-native ::-webkit-scrollbar{display:none;}
+body.capacitor-native{scrollbar-width:none;}
+body.capacitor-native .koutye-bar,body.capacitor-native [data-web-only]{display:none!important;}
+body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:text;user-select:text;}
+</style>
 </head>
 <body>
 
@@ -1014,5 +1021,8 @@ document.addEventListener('visibilitychange',function(){
 });
 </script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
+<script id="capacitor-native-loader">
+(function(){if(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform()){document.body.classList.add('capacitor-native');var s=document.createElement('script');s.src='capacitor-bridge.js';document.body.appendChild(s);}})();
+</script>
 </body>
 </html>
