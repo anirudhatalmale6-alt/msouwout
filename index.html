@@ -636,20 +636,43 @@ a{text-decoration:none;color:inherit}
       <div class="fe-price" id="farePrice">~75-150 HTG</div>
       <div class="surge-tags" id="surgeTags"></div>
       <div id="fareBreakdown" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,.08);font-size:.78rem;text-align:left">
+        <div id="fareDistanceRow" style="display:flex;justify-content:space-between;margin-bottom:4px;color:var(--text-light)">
+          <span data-i18n="fare_distance">Distans</span>
+          <span id="fareDistance" style="font-weight:700"></span>
+        </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
           <span data-i18n="fare_ride">Kous</span>
           <span id="fareBase" style="font-weight:700"></span>
+        </div>
+        <div id="fareExtraRow" style="display:none;justify-content:space-between;margin-bottom:4px">
+          <span data-i18n="fare_extra">Pasaje anplis</span>
+          <span id="fareExtra" style="font-weight:700"></span>
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:4px;color:var(--blue)">
           <span data-i18n="fare_protection">Pwoteksyon DASH</span>
           <span id="fareMedical" style="font-weight:700"></span>
         </div>
-        <div style="display:flex;justify-content:space-between;font-weight:800;font-size:.85rem;padding-top:6px;border-top:1px dashed rgba(0,0,0,.1)">
-          <span>Total</span>
-          <span id="fareTotal"></span>
+        <div style="display:flex;justify-content:space-between;font-weight:800;font-size:.9rem;padding-top:6px;border-top:1px dashed rgba(0,0,0,.1)">
+          <span data-i18n="fare_final">Total pou peye</span>
+          <span id="fareTotal" style="color:var(--green)"></span>
+        </div>
+        <div style="margin-top:8px;padding-top:6px;border-top:1px dashed rgba(0,0,0,.08);font-size:.7rem;color:var(--text-light)">
+          <div style="display:flex;justify-content:space-between;margin-bottom:2px">
+            <span data-i18n="fare_driver_earn">Chofè resevwa</span>
+            <span id="fareDriverEarn" style="font-weight:700"></span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span data-i18n="fare_commission">Komisyon MsouWout</span>
+            <span id="fareCommission" style="font-weight:700"></span>
+          </div>
         </div>
       </div>
     </div>
+
+    <label id="extraPassengerToggle" style="display:flex;align-items:center;gap:8px;margin:10px 0 4px;font-size:.8rem;color:var(--text);cursor:pointer">
+      <input type="checkbox" id="extraPassengerChk" onchange="toggleExtraPassenger(this.checked)" style="width:18px;height:18px;accent-color:var(--blue)">
+      <span data-i18n="extra_passenger_label">Pasaje anplis (+50 HTG)</span>
+    </label>
 
     <div id="dashBadge" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(0,32,159,.04);border:1px solid rgba(0,32,159,.12);border-radius:var(--radius);margin-bottom:16px">
       <span style="font-size:1.4rem;flex-shrink:0">&#128657;</span>
@@ -769,6 +792,37 @@ a{text-decoration:none;color:inherit}
 <script>
 var API_URL='https://msouwout-backend.onrender.com';
 function apiFetch(url,opts){var c=new AbortController();setTimeout(function(){c.abort()},5000);opts=opts||{};opts.signal=c.signal;return fetch(url,opts)}
+
+/* ── FARE CONFIG (per client spec 2026-07-17). Editable here / via admin panel. ── */
+var PRICING={
+  base_moto:150, per_km_moto:40,
+  base_car:150, per_km_car:40,   /* provisional: car uses moto rates until client confirms Machin prices */
+  min_fare:200,
+  per_min:5, waiting_free_min:3,      /* waiting fee: 5 HTG/min after first 3 min (charged during ride, not in estimate) */
+  extra_passenger:50,
+  commission_rate:0.15,               /* MsouWout commission — provisional, awaiting client confirmation */
+  dash_rider:12.5, dash_driver:12.5,  /* DASH protection: flat 12.50 each side */
+  road_factor:1.30                    /* straight-line distance -> approx road distance */
+};
+var extraPassengers=0;
+var _rideDistanceKm=null;             /* set after geocoding pickup+dropoff */
+var _geoCache={};
+function geocodeAddr(text){
+  if(!text) return Promise.resolve(null);
+  var key=text.trim().toLowerCase();
+  if(_geoCache[key]) return Promise.resolve(_geoCache[key]);
+  var q=encodeURIComponent(text.indexOf('Haiti')>-1||text.indexOf('Ayiti')>-1?text:text+', Haiti');
+  var c=new AbortController();setTimeout(function(){c.abort()},4500);
+  return fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+q,{signal:c.signal})
+    .then(function(r){return r.json()})
+    .then(function(d){if(d&&d[0]){var p={lat:parseFloat(d[0].lat),lng:parseFloat(d[0].lon)};_geoCache[key]=p;return p}return null})
+    .catch(function(){return null});
+}
+function haversineKm(a,b){
+  var R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180;
+  var s=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R*2*Math.atan2(Math.sqrt(s),Math.sqrt(1-s));
+}
 var vehicleType='moto';
 var timeMode='now';
 var rideData={};
@@ -872,6 +926,7 @@ var T={
     dash_title:'Pwoteksyon & Asistans Medikal DASH',
     dash_desc:'Pwoteksyon & Asistans Medikal DASH enkli nan kous sa a.',
     fare_ride:'Kous',
+    fare_distance:'Distans',fare_extra:'Pasaje anplis',fare_final:'Total pou peye',fare_driver_earn:'Chofè resevwa',fare_commission:'Komisyon MsouWout',extra_passenger_label:'Pasaje anplis (+50 HTG)',
     fare_protection:'Pwoteksyon DASH',
     fare_total:'Total'
   },
@@ -970,6 +1025,7 @@ var T={
     dash_title:'Protection & Assistance Medicale DASH',
     dash_desc:'La Protection & Assistance Medicale DASH est incluse dans cette course.',
     fare_ride:'Course',
+    fare_distance:'Distance',fare_extra:'Passager supplémentaire',fare_final:'Total à payer',fare_driver_earn:'Le chauffeur reçoit',fare_commission:'Commission MsouWout',extra_passenger_label:'Passager supplémentaire (+50 HTG)',
     fare_protection:'Protection DASH',
     fare_total:'Total'
   },
@@ -1068,6 +1124,7 @@ var T={
     dash_title:'DASH Protection & Medical Assistance',
     dash_desc:'DASH Protection & Medical Assistance is included in this ride.',
     fare_ride:'Ride Fare',
+    fare_distance:'Distance',fare_extra:'Extra passenger',fare_final:'Total to pay',fare_driver_earn:'Driver receives',fare_commission:'MsouWout commission',extra_passenger_label:'Extra passenger (+50 HTG)',
     fare_protection:'DASH Protection',
     fare_total:'Total'
   },
@@ -1166,6 +1223,7 @@ var T={
     dash_title:'Proteccion y Asistencia Medica DASH',
     dash_desc:'La Proteccion y Asistencia Medica DASH esta incluida en este viaje.',
     fare_ride:'Viaje',
+    fare_distance:'Distancia',fare_extra:'Pasajero extra',fare_final:'Total a pagar',fare_driver_earn:'El conductor recibe',fare_commission:'Comisión MsouWout',extra_passenger_label:'Pasajero extra (+50 HTG)',
     fare_protection:'Proteccion DASH',
     fare_total:'Total'
   }
@@ -1231,9 +1289,29 @@ function goStep2(){
   if(!pickupEl.value.trim()||!dropEl.value.trim()) return;
   document.getElementById('routePickup').textContent=pickupEl.value.trim();
   document.getElementById('routeDrop').textContent=dropEl.value.trim();
-  updateFare();
   showStep(2);
+  computeDistanceThenFare();
 }
+
+/* Geocode pickup + dropoff, compute road distance, then recompute the fare */
+function computeDistanceThenFare(){
+  _rideDistanceKm=null;
+  document.getElementById('farePrice').textContent='…';
+  var pickupP=(window._pickupLat&&window._pickupLng)
+    ?Promise.resolve({lat:window._pickupLat,lng:window._pickupLng})
+    :geocodeAddr(pickupEl.value);
+  var dropP=geocodeAddr(dropEl.value);
+  Promise.all([pickupP,dropP]).then(function(res){
+    var a=res[0],b=res[1];
+    if(a&&b){
+      var km=haversineKm(a,b)*PRICING.road_factor;
+      if(km>0.3&&km<200) _rideDistanceKm=Math.max(0.5,parseFloat(km.toFixed(1)));
+    }
+    updateFare();
+  });
+}
+
+function toggleExtraPassenger(on){ extraPassengers=on?1:0; updateFare(); }
 
 function goBack(){showStep(1)}
 
@@ -1257,23 +1335,40 @@ function selectTime(mode,el){
 var surgeData=null;
 var surgeIcons={peak_traffic:'&#128663;',night:'&#127769;',rain:'&#127783;&#65039;',demand:'&#128293;'};
 
+/* Fare per client spec: Base + (KM × Rate), × surge, floored at minimum, + extras.
+   Then DASH (+12.50 rider) and commission/driver split. */
 function updateFare(){
-  var base=vehicleType==='car'?150:75;
-  var perKm=vehicleType==='car'?75:40;
-  var low=base;
-  var high=base+perKm*5;
+  var base=vehicleType==='car'?PRICING.base_car:PRICING.base_moto;
+  var perKm=vehicleType==='car'?PRICING.per_km_car:PRICING.per_km_moto;
   var mult=surgeData&&surgeData.multiplier>1?surgeData.multiplier:1;
-  low=Math.round(low*mult);
-  high=Math.round(high*mult);
-  var DASH_FEE=12.5; // flat DASH protection fee charged to the rider (HTG)
-  document.getElementById('farePrice').textContent='~'+low+'-'+high+' HTG';
-  // Show DASH protection breakdown
+  var known=(_rideDistanceKm!=null);
+  var distKm=known?_rideDistanceKm:3;          // fallback ~3km if geocoding failed
+  var approx=known?'':'~';
+  var fare=base+distKm*perKm;
+  fare=fare*mult;
+  if(fare<PRICING.min_fare) fare=PRICING.min_fare;
+  fare=Math.round(fare);
+  var extra=extraPassengers*PRICING.extra_passenger;
+  var rideFare=fare+extra;
+  var finalAmt=rideFare+PRICING.dash_rider;
+  var commission=Math.round(rideFare*PRICING.commission_rate);
+  var driverEarn=Math.round(rideFare-commission-PRICING.dash_driver);
+
+  document.getElementById('farePrice').textContent=approx+Math.round(finalAmt)+' HTG';
   var bd=document.getElementById('fareBreakdown');
   if(bd){
     bd.style.display='block';
-    document.getElementById('fareBase').textContent='~'+low+'-'+high+' HTG';
-    document.getElementById('fareMedical').textContent='+'+DASH_FEE.toFixed(2)+' HTG';
-    document.getElementById('fareTotal').textContent='~'+(low+DASH_FEE).toFixed(2)+'-'+(high+DASH_FEE).toFixed(2)+' HTG';
+    var dRow=document.getElementById('fareDistanceRow');
+    if(known){dRow.style.display='flex';document.getElementById('fareDistance').textContent=distKm.toFixed(1)+' km';}
+    else{dRow.style.display='none';}
+    document.getElementById('fareBase').textContent=approx+fare+' HTG';
+    var eRow=document.getElementById('fareExtraRow');
+    if(extra>0){eRow.style.display='flex';document.getElementById('fareExtra').textContent='+'+extra+' HTG';}
+    else{eRow.style.display='none';}
+    document.getElementById('fareMedical').textContent='+'+PRICING.dash_rider.toFixed(2)+' HTG';
+    document.getElementById('fareTotal').textContent=approx+Math.round(finalAmt)+' HTG';
+    document.getElementById('fareDriverEarn').textContent=driverEarn+' HTG';
+    document.getElementById('fareCommission').textContent=commission+' HTG';
   }
   var fareBox=document.getElementById('fareEst');
   var tagsEl=document.getElementById('surgeTags');
