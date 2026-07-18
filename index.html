@@ -669,10 +669,7 @@ a{text-decoration:none;color:inherit}
       </div>
     </div>
 
-    <label id="extraPassengerToggle" style="display:flex;align-items:center;gap:8px;margin:10px 0 4px;font-size:.8rem;color:var(--text);cursor:pointer">
-      <input type="checkbox" id="extraPassengerChk" onchange="toggleExtraPassenger(this.checked)" style="width:18px;height:18px;accent-color:var(--blue)">
-      <span data-i18n="extra_passenger_label">Pasaje anplis (+50 HTG)</span>
-    </label>
+    <div id="extrasContainer" style="margin:10px 0 4px"></div>
 
     <div id="dashBadge" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(0,32,159,.04);border:1px solid rgba(0,32,159,.12);border-radius:var(--radius);margin-bottom:16px">
       <span style="font-size:1.4rem;flex-shrink:0">&#128657;</span>
@@ -793,18 +790,21 @@ a{text-decoration:none;color:inherit}
 var API_URL='https://msouwout-backend.onrender.com';
 function apiFetch(url,opts){var c=new AbortController();setTimeout(function(){c.abort()},5000);opts=opts||{};opts.signal=c.signal;return fetch(url,opts)}
 
-/* ── FARE CONFIG (per client spec 2026-07-17). Editable here / via admin panel. ── */
+/* ── FARE CONFIG (per client Moto + Car specs 2026-07-17). Editable here / via admin panel.
+   Surge is per-vehicle and only ONE (the highest applicable) is applied, per spec. ── */
 var PRICING={
-  base_moto:150, per_km_moto:40,
-  base_car:150, per_km_car:40,   /* provisional: car uses moto rates until client confirms Machin prices */
-  min_fare:200,
-  per_min:5, waiting_free_min:3,      /* waiting fee: 5 HTG/min after first 3 min (charged during ride, not in estimate) */
-  extra_passenger:50,
+  moto:{ base:150, per_km:40, min:200, per_min:5, waiting_free:3,        /* moto base 150 pending client 150-vs-175 confirmation */
+    surge:{peak_traffic:0.15, night:0.15, demand:0.20, rain:0.20},
+    extras:[{key:'extra_passenger',amt:50,i18n:'x_extra_passenger'}] },
+  car:{ base:200, per_km:60, min:250, per_min:8, waiting_free:3,
+    surge:{peak_traffic:0.20, night:0.15, demand:0.25, rain:0.25},       /* demand/rain 25-50%; 25 = low end, configurable */
+    extras:[{key:'extra_stop',amt:75,i18n:'x_extra_stop'},{key:'luggage',amt:100,i18n:'x_luggage'}],
+    note_i18n:'x_toll_note' },
   commission_rate:0.15,               /* MsouWout commission — provisional, awaiting client confirmation */
   dash_rider:12.5, dash_driver:12.5,  /* DASH protection: flat 12.50 each side */
   road_factor:1.30                    /* straight-line distance -> approx road distance */
 };
-var extraPassengers=0;
+var selectedExtras={};                /* key -> amount, for the current vehicle */
 var _rideDistanceKm=null;             /* set after geocoding pickup+dropoff */
 var _geoCache={};
 function geocodeAddr(text){
@@ -926,7 +926,7 @@ var T={
     dash_title:'Pwoteksyon & Asistans Medikal DASH',
     dash_desc:'Pwoteksyon & Asistans Medikal DASH enkli nan kous sa a.',
     fare_ride:'Kous',
-    fare_distance:'Distans',fare_extra:'Pasaje anplis',fare_final:'Total pou peye',fare_driver_earn:'Chofè resevwa',fare_commission:'Komisyon MsouWout',extra_passenger_label:'Pasaje anplis (+50 HTG)',
+    fare_distance:'Distans',fare_extra:'Chaj anplis',fare_final:'Total pou peye',fare_driver_earn:'Chofè resevwa',fare_commission:'Komisyon MsouWout',x_extra_passenger:'Pasaje anplis',x_extra_stop:'Estòp anplis',x_luggage:'Gwo bagaj',x_toll_note:'Frè peyaj chaje sou pri reyèl la',
     fare_protection:'Pwoteksyon DASH',
     fare_total:'Total'
   },
@@ -1025,7 +1025,7 @@ var T={
     dash_title:'Protection & Assistance Medicale DASH',
     dash_desc:'La Protection & Assistance Medicale DASH est incluse dans cette course.',
     fare_ride:'Course',
-    fare_distance:'Distance',fare_extra:'Passager supplémentaire',fare_final:'Total à payer',fare_driver_earn:'Le chauffeur reçoit',fare_commission:'Commission MsouWout',extra_passenger_label:'Passager supplémentaire (+50 HTG)',
+    fare_distance:'Distance',fare_extra:'Frais supplémentaires',fare_final:'Total à payer',fare_driver_earn:'Le chauffeur reçoit',fare_commission:'Commission MsouWout',x_extra_passenger:'Passager supplémentaire',x_extra_stop:'Arrêt supplémentaire',x_luggage:'Gros bagage',x_toll_note:'Frais de péage facturés au coût réel',
     fare_protection:'Protection DASH',
     fare_total:'Total'
   },
@@ -1124,7 +1124,7 @@ var T={
     dash_title:'DASH Protection & Medical Assistance',
     dash_desc:'DASH Protection & Medical Assistance is included in this ride.',
     fare_ride:'Ride Fare',
-    fare_distance:'Distance',fare_extra:'Extra passenger',fare_final:'Total to pay',fare_driver_earn:'Driver receives',fare_commission:'MsouWout commission',extra_passenger_label:'Extra passenger (+50 HTG)',
+    fare_distance:'Distance',fare_extra:'Extra charges',fare_final:'Total to pay',fare_driver_earn:'Driver receives',fare_commission:'MsouWout commission',x_extra_passenger:'Extra passenger',x_extra_stop:'Additional stop',x_luggage:'Large luggage',x_toll_note:'Toll fees charged at actual cost',
     fare_protection:'DASH Protection',
     fare_total:'Total'
   },
@@ -1223,7 +1223,7 @@ var T={
     dash_title:'Proteccion y Asistencia Medica DASH',
     dash_desc:'La Proteccion y Asistencia Medica DASH esta incluida en este viaje.',
     fare_ride:'Viaje',
-    fare_distance:'Distancia',fare_extra:'Pasajero extra',fare_final:'Total a pagar',fare_driver_earn:'El conductor recibe',fare_commission:'Comisión MsouWout',extra_passenger_label:'Pasajero extra (+50 HTG)',
+    fare_distance:'Distancia',fare_extra:'Cargos extra',fare_final:'Total a pagar',fare_driver_earn:'El conductor recibe',fare_commission:'Comisión MsouWout',x_extra_passenger:'Pasajero extra',x_extra_stop:'Parada adicional',x_luggage:'Equipaje grande',x_toll_note:'Peajes cobrados al costo real',
     fare_protection:'Proteccion DASH',
     fare_total:'Total'
   }
@@ -1290,6 +1290,7 @@ function goStep2(){
   document.getElementById('routePickup').textContent=pickupEl.value.trim();
   document.getElementById('routeDrop').textContent=dropEl.value.trim();
   showStep(2);
+  renderExtras();
   computeDistanceThenFare();
 }
 
@@ -1311,7 +1312,37 @@ function computeDistanceThenFare(){
   });
 }
 
-function toggleExtraPassenger(on){ extraPassengers=on?1:0; updateFare(); }
+/* Build the vehicle-specific extra-charge checkboxes (moto: extra passenger; car: stop, luggage) */
+function renderExtras(){
+  var vp=vehicleType==='car'?PRICING.car:PRICING.moto;
+  selectedExtras={};
+  var c=document.getElementById('extrasContainer');
+  if(!c) return;
+  var html=vp.extras.map(function(e){
+    return '<label style="display:flex;align-items:center;gap:8px;margin:6px 0;font-size:.8rem;color:var(--text);cursor:pointer">'+
+      '<input type="checkbox" data-amt="'+e.amt+'" data-key="'+e.key+'" onchange="onExtraToggle(this)" style="width:18px;height:18px;accent-color:var(--blue)">'+
+      '<span data-i18n="'+e.i18n+'">'+t(e.i18n)+' (+'+e.amt+' HTG)</span></label>';
+  }).join('');
+  if(vp.note_i18n){
+    html+='<div style="font-size:.68rem;color:var(--text-light);margin:4px 0 0" data-i18n="'+vp.note_i18n+'">'+t(vp.note_i18n)+'</div>';
+  }
+  c.innerHTML=html;
+}
+function onExtraToggle(cb){
+  var k=cb.getAttribute('data-key'),amt=parseFloat(cb.getAttribute('data-amt'));
+  if(cb.checked) selectedExtras[k]=amt; else delete selectedExtras[k];
+  updateFare();
+}
+/* Per spec: apply only the single highest applicable surge for this vehicle type */
+function currentSurge(vp){
+  if(!surgeData||!surgeData.factors||!surgeData.factors.length) return {mult:1,type:null,pct:0};
+  var best=0,bestType=null;
+  surgeData.factors.forEach(function(f){
+    var pct=vp.surge[f.type]||0;
+    if(pct>best){best=pct;bestType=f.type;}
+  });
+  return {mult:1+best,type:bestType,pct:Math.round(best*100)};
+}
 
 function goBack(){showStep(1)}
 
@@ -1321,6 +1352,7 @@ function selectVehicle(type,el){
   document.querySelectorAll('.vt-btn').forEach(function(b){b.classList.remove('sel')});
   el.classList.add('sel');
   document.getElementById('acOption').style.display=type==='car'?'block':'none';
+  renderExtras();
   updateFare();
 }
 
@@ -1338,17 +1370,16 @@ var surgeIcons={peak_traffic:'&#128663;',night:'&#127769;',rain:'&#127783;&#6503
 /* Fare per client spec: Base + (KM × Rate), × surge, floored at minimum, + extras.
    Then DASH (+12.50 rider) and commission/driver split. */
 function updateFare(){
-  var base=vehicleType==='car'?PRICING.base_car:PRICING.base_moto;
-  var perKm=vehicleType==='car'?PRICING.per_km_car:PRICING.per_km_moto;
-  var mult=surgeData&&surgeData.multiplier>1?surgeData.multiplier:1;
+  var vp=vehicleType==='car'?PRICING.car:PRICING.moto;
+  var s=currentSurge(vp);
   var known=(_rideDistanceKm!=null);
   var distKm=known?_rideDistanceKm:3;          // fallback ~3km if geocoding failed
   var approx=known?'':'~';
-  var fare=base+distKm*perKm;
-  fare=fare*mult;
-  if(fare<PRICING.min_fare) fare=PRICING.min_fare;
+  var fare=vp.base+distKm*vp.per_km;
+  fare=fare*s.mult;
+  if(fare<vp.min) fare=vp.min;
   fare=Math.round(fare);
-  var extra=extraPassengers*PRICING.extra_passenger;
+  var extra=0; for(var ek in selectedExtras) extra+=selectedExtras[ek];
   var rideFare=fare+extra;
   var finalAmt=rideFare+PRICING.dash_rider;
   var commission=Math.round(rideFare*PRICING.commission_rate);
@@ -1372,16 +1403,11 @@ function updateFare(){
   }
   var fareBox=document.getElementById('fareEst');
   var tagsEl=document.getElementById('surgeTags');
-  if(surgeData&&surgeData.factors&&surgeData.factors.length>0){
+  if(s.type&&s.pct>0){
     fareBox.classList.add('surging');
-    var tags='';
-    surgeData.factors.forEach(function(f){
-      var icon=surgeIcons[f.type]||'&#9889;';
-      var pct=Math.round((f.boost-1)*100);
-      var lbl=t('surge_'+f.type)||f.label;
-      tags+='<span class="surge-tag"><span class="st-icon">'+icon+'</span>'+lbl+' +'+pct+'%</span>';
-    });
-    tagsEl.innerHTML=tags;
+    var icon=surgeIcons[s.type]||'&#9889;';
+    var lbl=t('surge_'+s.type)||s.type;
+    tagsEl.innerHTML='<span class="surge-tag"><span class="st-icon">'+icon+'</span>'+lbl+' +'+s.pct+'%</span>';
   } else {
     fareBox.classList.remove('surging');
     tagsEl.innerHTML='';
