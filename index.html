@@ -187,20 +187,26 @@ a{text-decoration:none;color:inherit}
 .phone-row input:focus{outline:none;border-color:var(--blue)}
 
 .request-btn{
-  width:100%;padding:18px;border-radius:var(--radius);background:var(--red);
-  color:var(--white);font-size:1.05rem;font-weight:800;transition:all .2s;
+  width:100%;padding:18px;border-radius:var(--radius);background:var(--blue);
+  color:var(--white);font-size:1.1rem;font-weight:800;transition:all .2s;
   display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 8px 22px rgba(0,32,159,.30);
 }
-.request-btn:hover{background:var(--red-dark)}
+.request-btn:hover{background:#001A7A}
+.request-btn:active{transform:scale(.98)}
 
 .fare-est{
-  text-align:center;padding:12px;margin-bottom:16px;
+  text-align:center;padding:18px 14px;margin-bottom:16px;
   background:rgba(27,140,61,.06);border-radius:var(--radius);border:1px solid rgba(27,140,61,.15);
 }
 .fare-est.surging{background:rgba(212,160,23,.08);border-color:rgba(212,160,23,.25)}
-.fare-est .fe-price{font-size:1.3rem;font-weight:900;color:var(--green)}
+.fare-est .fe-price{font-size:2.1rem;font-weight:900;color:var(--green);line-height:1.1;letter-spacing:-.02em}
 .fare-est.surging .fe-price{color:#B8860B}
 .fare-est .fe-label{font-size:.72rem;color:var(--text-light)}
+.fare-meta{margin-top:12px}
+.fare-meta .fm-row{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;color:var(--text);padding:8px 4px;border-top:1px solid rgba(0,0,0,.07)}
+.fare-meta .fm-dash{display:inline-flex;align-items:center;gap:7px;justify-content:center;font-size:.85rem;font-weight:800;color:var(--blue);background:rgba(0,32,159,.06);padding:8px 14px;border-radius:100px;margin-top:12px}
+.fare-meta .fm-eta{display:flex;align-items:center;gap:6px;justify-content:center;font-size:.8rem;color:var(--text-light);margin-top:10px;font-weight:600}
 .surge-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:6px}
 .surge-tag{
   display:inline-flex;align-items:center;gap:3px;font-size:.65rem;font-weight:700;
@@ -604,6 +610,12 @@ a{text-decoration:none;color:inherit}
       </div>
     </div>
 
+    <div class="opt-label" data-i18n="triptype_label">TIP KOUS</div>
+    <div class="time-toggle" id="tripToggle" style="margin-bottom:20px">
+      <div class="tt-btn sel" onclick="selectTrip('oneway',this)" data-i18n="trip_oneway">Sèl ale</div>
+      <div class="tt-btn" onclick="selectTrip('round',this)" data-i18n="trip_round">Ale-retou</div>
+    </div>
+
     <div class="ac-option" id="acOption" style="display:none;margin-bottom:20px">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--white);border:2px solid var(--border);border-radius:var(--radius)">
         <div style="display:flex;align-items:center;gap:10px">
@@ -635,56 +647,24 @@ a{text-decoration:none;color:inherit}
       <div class="fe-label" data-i18n="est_label">Estimasyon pri</div>
       <div class="fe-price" id="farePrice">~75-150 HTG</div>
       <div class="surge-tags" id="surgeTags"></div>
-      <div id="fareBreakdown" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,.08);font-size:.78rem;text-align:left">
-        <div id="fareDistanceRow" style="display:flex;justify-content:space-between;margin-bottom:4px;color:var(--text-light)">
+      <div class="fare-meta">
+        <div class="fm-row" id="fareDistanceRow" style="display:none">
           <span data-i18n="fare_distance">Distans</span>
-          <span id="fareDistance" style="font-weight:700"></span>
+          <span id="fareDistance" style="font-weight:800"></span>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-          <span data-i18n="fare_ride">Kous</span>
-          <span id="fareBase" style="font-weight:700"></span>
-        </div>
-        <div id="fareExtraRow" style="display:none;justify-content:space-between;margin-bottom:4px">
-          <span data-i18n="fare_extra">Pasaje anplis</span>
-          <span id="fareExtra" style="font-weight:700"></span>
-        </div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;color:var(--blue)">
-          <span data-i18n="fare_protection">Pwoteksyon DASH</span>
-          <span id="fareMedical" style="font-weight:700"></span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-weight:800;font-size:.9rem;padding-top:6px;border-top:1px dashed rgba(0,0,0,.1)">
-          <span data-i18n="fare_final">Total pou peye</span>
-          <span id="fareTotal" style="color:var(--green)"></span>
-        </div>
-        <div style="margin-top:8px;padding-top:6px;border-top:1px dashed rgba(0,0,0,.08);font-size:.7rem;color:var(--text-light)">
-          <div style="display:flex;justify-content:space-between;margin-bottom:2px">
-            <span data-i18n="fare_driver_earn">Chofè resevwa</span>
-            <span id="fareDriverEarn" style="font-weight:700"></span>
-          </div>
-          <div style="display:flex;justify-content:space-between">
-            <span data-i18n="fare_commission">Komisyon MsouWout</span>
-            <span id="fareCommission" style="font-weight:700"></span>
-          </div>
-        </div>
+        <div class="fm-dash"><span>&#128737;&#65039;</span> <span data-i18n="dash_included">Pwoteksyon DASH enkli</span></div>
+        <div class="fm-eta"><span>&#9201;&#65039;</span> <span data-i18n="eta_label">Estimasyon arive</span>: <span data-i18n="eta_val">3&#8211;5 min</span></div>
       </div>
     </div>
 
-    <div id="extrasContainer" style="margin:10px 0 4px"></div>
-
-    <div id="dashBadge" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(0,32,159,.04);border:1px solid rgba(0,32,159,.12);border-radius:var(--radius);margin-bottom:16px">
-      <span style="font-size:1.4rem;flex-shrink:0">&#128657;</span>
-      <div>
-        <div style="font-size:.82rem;font-weight:700;color:var(--blue)" data-i18n="dash_title">Pwoteksyon & Asistans Medikal DASH</div>
-        <div style="font-size:.72rem;color:var(--text-light);margin-top:2px" data-i18n="dash_desc">Pwoteksyon & Asistans Medikal DASH enkli nan kous sa a.</div>
-      </div>
-    </div>
+    <div id="extrasContainer" style="margin:12px 0 6px"></div>
 
     <div class="opt-label" data-i18n="phone_label">NIMEWO POU KONTAKTE OU</div>
     <div class="phone-row">
       <input type="tel" id="rPhone" placeholder="+509 37 12 3456" data-i18n-placeholder="ph_phone">
     </div>
 
-    <button class="request-btn" onclick="submitRide()" data-i18n="request_btn">&#128308; Mande Kous</button>
+    <button class="request-btn" onclick="submitRide()" data-i18n="request_btn">Mande Chofè</button>
   </div>
 </div>
 
@@ -825,6 +805,8 @@ function haversineKm(a,b){
 }
 var vehicleType='moto';
 var timeMode='now';
+var tripType='oneway';
+var _lastRideFare=0;
 var rideData={};
 var eventData=null;
 var ticketRef='';
@@ -864,12 +846,14 @@ var T={
     car_name:'Machin',
     car_price:'Konfortab, AC',
     when_label:'KI LE',
+    triptype_label:'TIP KOUS',trip_oneway:'Sèl ale',trip_round:'Ale-retou',
+    dash_included:'Pwoteksyon DASH enkli',eta_label:'Estimasyon arive',eta_val:'3–5 min',
     now:'Kounye A',
     later:'Pita',
     est_label:'Estimasyon pri',
     phone_label:'NIMEWO POU KONTAKTE OU',
     ph_phone:'+509 37 12 3456',
-    request_btn:'&#128308; Mande Kous',
+    request_btn:'Mande Chofè',
     match_title:'N ap trete demann ou an...',
     wl_title:'Mèsi!',
     wl_msg:'Mèsi paske ou mande yon kous sou MsouWout! Nou nan faz lansman epi n ap aktive premye chofè verifye yo nan zòn ou an. Ekip nou an ap kontakte ou sou WhatsApp lè nou gen transpò ki disponib nan zòn ou an.',
@@ -963,12 +947,14 @@ var T={
     car_name:'Voiture',
     car_price:'Confortable, AC',
     when_label:'QUAND',
+    triptype_label:'TYPE DE COURSE',trip_oneway:'Aller simple',trip_round:'Aller-retour',
+    dash_included:'Protection DASH incluse',eta_label:'Arrivée estimée',eta_val:'3–5 min',
     now:'Maintenant',
     later:'Plus tard',
     est_label:'Tarif estimé',
     phone_label:'NUMÉRO DE CONTACT',
     ph_phone:'+509 37 12 3456',
-    request_btn:'&#128308; Demander un Trajet',
+    request_btn:'Demander un chauffeur',
     match_title:'Traitement de votre demande...',
     wl_title:'Merci !',
     wl_msg:'Merci d\'avoir demandé un trajet sur MsouWout ! Nous sommes en phase de lancement et activons les premiers chauffeurs vérifiés dans votre zone. Notre équipe vous contactera sur WhatsApp dès qu\'un transport sera disponible dans votre zone.',
@@ -1062,12 +1048,14 @@ var T={
     car_name:'Car',
     car_price:'Comfortable, AC',
     when_label:'WHEN',
+    triptype_label:'TRIP TYPE',trip_oneway:'One-way',trip_round:'Round trip',
+    dash_included:'Dash Protection Included',eta_label:'Estimated arrival',eta_val:'3–5 min',
     now:'Now',
     later:'Later',
     est_label:'Estimated fare',
     phone_label:'CONTACT NUMBER',
     ph_phone:'+509 37 12 3456',
-    request_btn:'&#128308; Request Ride',
+    request_btn:'Request Driver',
     match_title:'Processing your request...',
     wl_title:'Thank you!',
     wl_msg:'Thank you for requesting a ride on MsouWout! We are in our launch phase and activating the first verified drivers in your area. Our team will contact you on WhatsApp when transport is available in your zone.',
@@ -1161,12 +1149,14 @@ var T={
     car_name:'Carro',
     car_price:'Cómodo, AC',
     when_label:'CUÁNDO',
+    triptype_label:'TIPO DE VIAJE',trip_oneway:'Solo ida',trip_round:'Ida y vuelta',
+    dash_included:'Protección DASH incluida',eta_label:'Llegada estimada',eta_val:'3–5 min',
     now:'Ahora',
     later:'Después',
     est_label:'Tarifa estimada',
     phone_label:'NÚMERO DE CONTACTO',
     ph_phone:'+509 37 12 3456',
-    request_btn:'&#128308; Pedir Viaje',
+    request_btn:'Pedir conductor',
     match_title:'Procesando tu solicitud...',
     wl_title:'¡Gracias!',
     wl_msg:'¡Gracias por solicitar un viaje en MsouWout! Estamos en fase de lanzamiento y activando los primeros conductores verificados en tu zona. Nuestro equipo te contactará por WhatsApp cuando haya transporte disponible en tu zona.',
@@ -1358,10 +1348,17 @@ function selectVehicle(type,el){
 
 function selectTime(mode,el){
   timeMode=mode;
-  document.querySelectorAll('.tt-btn').forEach(function(b){b.classList.remove('sel')});
+  el.parentElement.querySelectorAll('.tt-btn').forEach(function(b){b.classList.remove('sel')});
   el.classList.add('sel');
   var sr=document.getElementById('scheduleRow');
   if(mode==='later'){sr.classList.add('show')}else{sr.classList.remove('show')}
+}
+
+function selectTrip(mode,el){
+  tripType=mode;
+  el.parentElement.querySelectorAll('.tt-btn').forEach(function(b){b.classList.remove('sel')});
+  el.classList.add('sel');
+  updateFare();
 }
 
 var surgeData=null;
@@ -1380,26 +1377,17 @@ function updateFare(){
   if(fare<vp.min) fare=vp.min;
   fare=Math.round(fare);
   var extra=0; for(var ek in selectedExtras) extra+=selectedExtras[ek];
-  var rideFare=fare+extra;
-  var finalAmt=rideFare+PRICING.dash_rider;
-  var commission=Math.round(rideFare*PRICING.commission_rate);
-  var driverEarn=Math.round(rideFare-commission-PRICING.dash_driver);
+  var trip=(tripType==='round')?2:1;           // round trip = both legs
+  var rideFare=(fare+extra)*trip;
+  var finalAmt=rideFare+PRICING.dash_rider;     // rider pays fare + their DASH half only
+  _lastRideFare=rideFare;                       // remembered for submit
 
+  // Passenger-facing: total only. Business economics stay hidden.
   document.getElementById('farePrice').textContent=approx+Math.round(finalAmt)+' HTG';
-  var bd=document.getElementById('fareBreakdown');
-  if(bd){
-    bd.style.display='block';
-    var dRow=document.getElementById('fareDistanceRow');
-    if(known){dRow.style.display='flex';document.getElementById('fareDistance').textContent=distKm.toFixed(1)+' km';}
+  var dRow=document.getElementById('fareDistanceRow');
+  if(dRow){
+    if(known){dRow.style.display='flex';document.getElementById('fareDistance').textContent=(distKm*trip).toFixed(1)+' km';}
     else{dRow.style.display='none';}
-    document.getElementById('fareBase').textContent=approx+fare+' HTG';
-    var eRow=document.getElementById('fareExtraRow');
-    if(extra>0){eRow.style.display='flex';document.getElementById('fareExtra').textContent='+'+extra+' HTG';}
-    else{eRow.style.display='none';}
-    document.getElementById('fareMedical').textContent='+'+PRICING.dash_rider.toFixed(2)+' HTG';
-    document.getElementById('fareTotal').textContent=approx+Math.round(finalAmt)+' HTG';
-    document.getElementById('fareDriverEarn').textContent=driverEarn+' HTG';
-    document.getElementById('fareCommission').textContent=commission+' HTG';
   }
   var fareBox=document.getElementById('fareEst');
   var tagsEl=document.getElementById('surgeTags');
@@ -1457,6 +1445,8 @@ function doSubmitRide(name,phone){
     riderName:name||'',
     vehicleType:vehicleType,
     acRequested:wantAC,
+    tripType:tripType,
+    roundTrip:(tripType==='round'),
     medical_protection:true,
     pickupAddress:pickupEl.value.trim(),
     dropoffAddress:dropEl.value.trim(),
