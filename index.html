@@ -773,7 +773,7 @@ function apiFetch(url,opts){var c=new AbortController();setTimeout(function(){c.
 /* ── FARE CONFIG (per client Moto + Car specs 2026-07-17). Editable here / via admin panel.
    Surge is per-vehicle and only ONE (the highest applicable) is applied, per spec. ── */
 var PRICING={
-  moto:{ base:150, per_km:40, min:200, per_min:5, waiting_free:3,        /* moto base 150 pending client 150-vs-175 confirmation */
+  moto:{ base:175, per_km:40, min:200, per_min:5, waiting_free:3,        /* moto base 175 (client confirmed 2026-07-18) */
     surge:{peak_traffic:0.15, night:0.15, demand:0.20, rain:0.20},
     extras:[{key:'extra_passenger',amt:50,i18n:'x_extra_passenger'}] },
   car:{ base:200, per_km:60, min:250, per_min:8, waiting_free:3,
