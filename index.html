@@ -307,12 +307,12 @@ a{text-decoration:none;color:inherit}
 
 /* DRIVER CTA BANNER */
 .driver-banner{
-  margin:0 16px 16px;padding:14px 16px;background:var(--dark);border-radius:var(--radius);
-  display:flex;align-items:center;gap:10px;
+  margin:0 16px 16px;padding:14px 16px;background:linear-gradient(135deg,#0047FF 0%,#00209F 100%);border-radius:var(--radius);
+  display:flex;align-items:center;gap:10px;box-shadow:0 4px 14px rgba(0,54,209,.28);
 }
 .driver-banner .db-text{flex:1;color:var(--white)}
 .driver-banner .db-text strong{font-size:.82rem;display:block}
-.driver-banner .db-text span{font-size:.7rem;color:rgba(255,255,255,.5)}
+.driver-banner .db-text span{font-size:.72rem;color:rgba(255,255,255,.82)}
 .driver-banner a{
   padding:8px 16px;border-radius:8px;background:var(--gold);color:var(--dark);
   font-size:.78rem;font-weight:800;flex-shrink:0;
@@ -487,6 +487,15 @@ a{text-decoration:none;color:inherit}
     <h1 class="main-q" data-i18n="main_q">Jwenn Yon Kous <em>Nan 2 Minit</em></h1>
     <p class="greeting" data-i18n="greeting">Chofe ap reponn rapid via WhatsApp</p>
 
+    <!-- Driver CTA banner — brightened + moved to top per client request 2026-07-17 -->
+    <div class="driver-banner" style="margin:14px 0 4px">
+      <div class="db-text">
+        <strong data-i18n="db_title">&#128663; Ou gen yon machin/moto?</strong>
+        <span data-i18n="db_sub">Touche 500-3,000 HTG/jou</span>
+      </div>
+      <a href="driver-register.html" data-i18n="db_btn">Vin Chofe</a>
+    </div>
+
     <div class="event-badge" id="eventBadge">
       <span class="eb-icon" id="ebIcon">&#127915;</span>
       <div class="eb-text">
@@ -511,15 +520,6 @@ a{text-decoration:none;color:inherit}
     </div>
 
     <button class="find-btn" id="findBtn" onclick="goStep2()" disabled data-i18n="find_btn">&#128308; Mande Kous Kounye A</button>
-
-    <!-- Driver CTA banner (moved above DASH strip per client request) -->
-    <div class="driver-banner" style="margin:20px 0 0">
-      <div class="db-text">
-        <strong data-i18n="db_title">&#128663; Ou gen yon machin/moto?</strong>
-        <span data-i18n="db_sub">Touche 500-3,000 HTG/jou</span>
-      </div>
-      <a href="driver-register.html" data-i18n="db_btn">Vin Chofe</a>
-    </div>
 
     <!-- DASH SAFETY STRIP -->
     <div class="dash-safety-strip" style="margin:20px 0 0;background:linear-gradient(135deg,#0D2818 0%,#0D3B1F 50%,#0A2A15 100%);border-radius:14px;padding:18px 16px;position:relative;overflow:hidden">
