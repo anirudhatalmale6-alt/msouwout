@@ -797,10 +797,10 @@ var PRICING={
     surge:{peak_traffic:0.15, night:0.15, demand:0.20, rain:0.20},
     extras:[{key:'extra_passenger',amt:50,i18n:'x_extra_passenger'}] },
   car:{ base:200, per_km:60, min:250, per_min:8, waiting_free:3,
-    surge:{peak_traffic:0.20, night:0.15, demand:0.25, rain:0.25},       /* demand/rain 25-50%; 25 = low end, configurable */
+    surge:{peak_traffic:0.15, night:0.15, demand:0.25, rain:0.25},       /* rush 15% (client 2026-07-17); demand/rain 25-50%, 25 = low end */
     extras:[{key:'extra_stop',amt:75,i18n:'x_extra_stop'},{key:'luggage',amt:100,i18n:'x_luggage'}],
     note_i18n:'x_toll_note' },
-  commission_rate:0.15,               /* MsouWout commission — provisional, awaiting client confirmation */
+  commission_rate:0.20,               /* MsouWout 20% / driver 80% (client 2026-07-17) */
   dash_rider:12.5, dash_driver:12.5,  /* DASH protection: flat 12.50 each side */
   road_factor:1.30                    /* straight-line distance -> approx road distance */
 };
