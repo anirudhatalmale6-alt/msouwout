@@ -505,6 +505,13 @@ footer{
         </select>
       </div>
 
+      <!-- Vehicle Year -->
+      <div class="form-group">
+        <label class="form-label" data-i18n="f_year_label">Vehicle Year *</label>
+        <input type="number" name="Vehicle Year" id="vehicleYear" inputmode="numeric" min="2000" max="2026" placeholder="2018" data-i18n-placeholder="f_year_ph" required>
+        <div style="font-size:.72rem;color:var(--text-light);margin-top:6px" data-i18n="f_year_hint">Minimòm: Machin 2010, Moto 2015</div>
+      </div>
+
       <!-- A/C Option (shown for Car/Van) -->
       <div class="form-group" id="acFieldGroup" style="display:none">
         <div style="background:rgba(0,32,159,.04);border:1.5px solid rgba(0,32,159,.15);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px">
@@ -730,6 +737,7 @@ const T = {
     f_phone_label:"Numero de Telephone *", f_phone_ph:"+509 XXXX XXXX",
     f_email_label:"Email (optionnel)", f_email_ph:"jean@example.com",
     f_vehicle_label:"Type de Vehicule *", f_vehicle_ph:"-- Selectionnez le Type de Vehicule --",
+    f_year_label:"Année du Véhicule *", f_year_ph:"2018", f_year_hint:"Minimum: Voiture 2010, Moto 2015",
     f_v_moto:"Moto", f_v_car:"Voiture", f_v_van:"Van", f_v_truck:"Camion",
     f_plate_label:"Plaque d'Immatriculation", f_plate_ph:"AB-12345",
     f_license_label:"Numero de Permis de Conduire", f_license_ph:"Permis #",
@@ -782,6 +790,7 @@ const T = {
     f_phone_label:"Phone Number *", f_phone_ph:"+509 XXXX XXXX",
     f_email_label:"Email (optional)", f_email_ph:"jean@example.com",
     f_vehicle_label:"Vehicle Type *", f_vehicle_ph:"-- Select Vehicle Type --",
+    f_year_label:"Vehicle Year *", f_year_ph:"2018", f_year_hint:"Minimum: Car 2010, Motorcycle 2015",
     f_v_moto:"Motorcycle", f_v_car:"Car", f_v_van:"Van", f_v_truck:"Truck",
     f_plate_label:"License Plate", f_plate_ph:"AB-12345",
     f_license_label:"Driver's License Number", f_license_ph:"License #",
@@ -834,6 +843,7 @@ const T = {
     f_phone_label:"Nimewo Telefon *", f_phone_ph:"+509 XXXX XXXX",
     f_email_label:"Imel (opsyonel)", f_email_ph:"jean@example.com",
     f_vehicle_label:"Tip Machin *", f_vehicle_ph:"-- Chwazi Tip Machin --",
+    f_year_label:"Ane Machin nan *", f_year_ph:"2018", f_year_hint:"Minimòm: Machin 2010, Moto 2015",
     f_v_moto:"Moto", f_v_car:"Machin", f_v_van:"Van", f_v_truck:"Kamyon",
     f_plate_label:"Plak Machin", f_plate_ph:"AB-12345",
     f_license_label:"Nimewo Pemi Kondwi", f_license_ph:"Pemi #",
@@ -886,6 +896,7 @@ const T = {
     f_phone_label:"Numero de Telefono *", f_phone_ph:"+509 XXXX XXXX",
     f_email_label:"Email (opcional)", f_email_ph:"jean@example.com",
     f_vehicle_label:"Tipo de Vehiculo *", f_vehicle_ph:"-- Seleccionar Tipo de Vehiculo --",
+    f_year_label:"Año del Vehículo *", f_year_ph:"2018", f_year_hint:"Mínimo: Auto 2010, Moto 2015",
     f_v_moto:"Motocicleta", f_v_car:"Carro", f_v_van:"Van", f_v_truck:"Camion",
     f_plate_label:"Placa del Vehiculo", f_plate_ph:"AB-12345",
     f_license_label:"Numero de Licencia de Conducir", f_license_ph:"Licencia #",
@@ -1008,9 +1019,47 @@ function toggleAllZones(btn){
     document.getElementById('syndicateFinal').value = synFinal;
     jsonData['syndicate'] = synFinal;
 
+    // Minimum vehicle year: cars 2010, motos 2015
+    var vTypeRaw = jsonData['Vehicle Type'] || '';
+    var vYear = parseInt(jsonData['Vehicle Year'], 10);
+    var minYear = (vTypeRaw === 'Motorcycle') ? 2015 : 2010;
+    if(!vYear || vYear < minYear){
+      var ymsgs = {
+        ht:'Machin nan twò ansyen. Minimòm ane pou '+(vTypeRaw==='Motorcycle'?'moto se 2015':'machin se 2010')+'.',
+        en:'Vehicle too old. Minimum year for '+(vTypeRaw==='Motorcycle'?'a moto is 2015':'a car is 2010')+'.',
+        fr:'Véhicule trop ancien. Année minimum pour '+(vTypeRaw==='Motorcycle'?'une moto: 2015':'une voiture: 2010')+'.',
+        es:'Vehículo demasiado antiguo. Año mínimo para '+(vTypeRaw==='Motorcycle'?'una moto: 2015':'un auto: 2010')+'.'
+      };
+      alert(ymsgs[currentLang] || ymsgs.ht);
+      var yEl=document.getElementById('vehicleYear');
+      if(yEl) yEl.scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+
     // Show loading state
     submitBtn.classList.add('btn-loading');
     submitBtn.disabled = true;
+
+    // Build a correctly-keyed payload for the backend API (snake_case).
+    // NOTE: the form field names are human labels ("Full Name" etc.); the API needs snake_case,
+    // otherwise registration 400s and the driver is never saved (login then fails with 404).
+    var vtMap = {Motorcycle:'motorcycle', Car:'car', Van:'van', Truck:'truck'};
+    var svcMap = {Rides:'ride', Delivery:'delivery', Both:'both'};
+    var rawPhone = (jsonData['Phone']||'').replace(/[^0-9]/g,'').replace(/^509/,'');
+    var apiData = {
+      full_name: jsonData['Full Name'] || '',
+      phone: '+509' + rawPhone,
+      email: jsonData['Email'] || '',
+      vehicle_type: vtMap[vTypeRaw] || vTypeRaw.toLowerCase(),
+      license_plate: jsonData['License Plate'] || '',
+      license_number: jsonData['Drivers License'] || '',
+      preferred_service: svcMap[jsonData['Preferred Service']] || 'both',
+      preferred_zones: zones.join(', '),
+      vehicle_year: jsonData['Vehicle Year'] || '',
+      referral_partner: jsonData['referral_partner'] || '',
+      referral_code: jsonData['referral_code'] || '',
+      syndicate: jsonData['syndicate'] || ''
+    };
 
     // Try API first, then fallback to formsubmit.co
     var apiUrl = 'https://msouwout-backend.onrender.com/api/drivers';
@@ -1019,7 +1068,7 @@ function toggleAllZones(btn){
     fetch(apiUrl, {
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-      body: JSON.stringify(jsonData)
+      body: JSON.stringify(apiData)
     })
     .then(function(res){
       if(res.ok) apiSuccess = true;
