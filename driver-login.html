@@ -178,6 +178,20 @@ nav{
 }
 .btn-logout:hover{border-color:var(--red);color:var(--red)}
 
+/* KPI STAT CARDS (money-first, at-a-glance) */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.kpi{border-radius:18px;padding:18px 16px;color:#fff;position:relative;overflow:hidden;
+  box-shadow:0 10px 26px rgba(0,0,0,.10);animation:fadeUp .5s .05s ease both}
+.kpi::after{content:"";position:absolute;right:-20px;top:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.10)}
+.kpi .kv{font-family:var(--display);font-size:1.65rem;font-weight:900;line-height:1;letter-spacing:-.02em;position:relative}
+.kpi .kv small{font-size:.78rem;font-weight:700;opacity:.9}
+.kpi .kl{font-size:.82rem;font-weight:800;margin-top:8px;opacity:.98;position:relative}
+.kpi .kn{font-size:.68rem;margin-top:3px;opacity:.82;position:relative}
+.kpi.k-earn{background:linear-gradient(135deg,#0E8F43,#22C55E)}
+.kpi.k-rides{background:linear-gradient(135deg,#00209F,#2E5BEA)}
+.kpi.k-today{background:linear-gradient(135deg,#D4A017,#EABE2C)}
+.kpi.k-week{background:linear-gradient(135deg,#D21034,#F0264C)}
+
 .status-card{
   border-radius:20px;padding:24px;margin-bottom:16px;
   border:1px solid rgba(0,0,0,.04);
@@ -386,6 +400,8 @@ footer a:hover{text-decoration:underline}
       <button class="btn-logout" onclick="logout()" data-i18n="logout">Dekonekte</button>
     </div>
 
+    <div class="kpi-grid" id="kpiGrid"></div>
+
     <div class="active-ride-card" id="activeRideCard" style="display:none">
       <h3>&#128994; <span data-i18n="active_ride_title">Kous Aktif</span></h3>
       <div id="activeRideInfo"></div>
@@ -453,6 +469,7 @@ const T={
     rides_empty:"Ou poko gen okenn kous.",
     ride_completed:"Fini",ride_in_progress:"An kou",ride_searching:"Ap chache",ride_cancelled:"Anile",ride_accepted:"Aksepte",
     member_since:"Manm depi",
+    kpi_earned:"Kòb Total Ou Fè",kpi_rides:"Kous Konplè",kpi_today:"Jodi A",kpi_week:"Semèn Nan",kpi_rides_done:"kous",kpi_all_time:"depi ou kòmanse",
     active_ride_title:"Kous Aktif",enter_ride_pin:"Mande pasaje a pou kòd PIN nan",
     start_ride_btn:"Kòmanse Kous",complete_ride_btn:"Fini Kous",
     pin_wrong:"PIN pa kòrèk. Eseye ankò.",pin_verified:"PIN verifye! Kous kòmanse!",
@@ -483,6 +500,7 @@ const T={
     rides_empty:"Vous n'avez pas encore de courses.",
     ride_completed:"Termine",ride_in_progress:"En cours",ride_searching:"Recherche",ride_cancelled:"Annule",ride_accepted:"Accepte",
     member_since:"Membre depuis",
+    kpi_earned:"Total Gagné",kpi_rides:"Courses Terminées",kpi_today:"Aujourd'hui",kpi_week:"Cette Semaine",kpi_rides_done:"courses",kpi_all_time:"depuis le début",
     active_ride_title:"Course Active",enter_ride_pin:"Demandez le code PIN au passager",
     start_ride_btn:"Demarrer la Course",complete_ride_btn:"Terminer la Course",
     pin_wrong:"PIN incorrect. Reessayez.",pin_verified:"PIN verifie! Course demarree!",
@@ -513,6 +531,7 @@ const T={
     rides_empty:"You don't have any rides yet.",
     ride_completed:"Completed",ride_in_progress:"In Progress",ride_searching:"Searching",ride_cancelled:"Cancelled",ride_accepted:"Accepted",
     member_since:"Member since",
+    kpi_earned:"Total Earned",kpi_rides:"Completed Rides",kpi_today:"Today",kpi_week:"This Week",kpi_rides_done:"rides",kpi_all_time:"all time",
     active_ride_title:"Active Ride",enter_ride_pin:"Ask the passenger for the PIN code",
     start_ride_btn:"Start Ride",complete_ride_btn:"Complete Ride",
     pin_wrong:"Wrong PIN. Try again.",pin_verified:"PIN verified! Ride started!",
@@ -543,6 +562,7 @@ const T={
     rides_empty:"Aun no tienes viajes.",
     ride_completed:"Completado",ride_in_progress:"En Progreso",ride_searching:"Buscando",ride_cancelled:"Cancelado",ride_accepted:"Aceptado",
     member_since:"Miembro desde",
+    kpi_earned:"Total Ganado",kpi_rides:"Viajes Completados",kpi_today:"Hoy",kpi_week:"Esta Semana",kpi_rides_done:"viajes",kpi_all_time:"desde el inicio",
     active_ride_title:"Viaje Activo",enter_ride_pin:"Pida al pasajero el codigo PIN",
     start_ride_btn:"Iniciar Viaje",complete_ride_btn:"Completar Viaje",
     pin_wrong:"PIN incorrecto. Intenta de nuevo.",pin_verified:"PIN verificado! Viaje iniciado!",
@@ -722,6 +742,23 @@ function renderDashboard(data){
         '<span class="ride-status '+statusClass+'">'+(t('ride_'+r.status)||r.status)+'</span>'+
         '</div>';
     }).join('');
+  }
+
+  // ── KPI stats (money-first, computed from real completed rides) ──
+  var completed=rides.filter(function(r){return r.status==='completed'});
+  function _sum(a){return a.reduce(function(s,r){return s+(Number(r.driver_earning)||0)},0)}
+  var _now=new Date();
+  var _startToday=new Date(_now.getFullYear(),_now.getMonth(),_now.getDate());
+  var _weekAgo=new Date(_now.getTime()-6*86400000);
+  var _todayR=completed.filter(function(r){return new Date(r.created_at)>=_startToday});
+  var _weekR=completed.filter(function(r){return new Date(r.created_at)>=_weekAgo});
+  var _kg=document.getElementById('kpiGrid');
+  if(_kg){
+    _kg.innerHTML=
+      '<div class="kpi k-earn"><div class="kv">'+Math.round(_sum(completed)).toLocaleString()+' <small>HTG</small></div><div class="kl">'+t('kpi_earned')+'</div><div class="kn">'+completed.length+' '+t('kpi_rides_done')+'</div></div>'+
+      '<div class="kpi k-rides"><div class="kv">'+completed.length+'</div><div class="kl">'+t('kpi_rides')+'</div><div class="kn">'+t('kpi_all_time')+'</div></div>'+
+      '<div class="kpi k-today"><div class="kv">'+Math.round(_sum(_todayR)).toLocaleString()+' <small>HTG</small></div><div class="kl">'+t('kpi_today')+'</div><div class="kn">'+_todayR.length+' '+t('kpi_rides_done')+'</div></div>'+
+      '<div class="kpi k-week"><div class="kv">'+Math.round(_sum(_weekR)).toLocaleString()+' <small>HTG</small></div><div class="kl">'+t('kpi_week')+'</div><div class="kn">'+_weekR.length+' '+t('kpi_rides_done')+'</div></div>';
   }
 }
 
