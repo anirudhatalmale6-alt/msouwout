@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#00209F">
 <title>Vin Chofè MsouWout - MyPlopPlop</title>
 <meta property="og:title" content="Vin Chofè MsouWout">
-<meta property="og:description" content="Enskri kòm chofè an 2 etap senp. Kòmanse fè lajan avèk MsouWout jodi a.">
+<meta property="og:description" content="Enskri kòm chofè MsouWout. Kòmanse fè lajan jodi a.">
 <meta property="og:image" content="https://myplopplop.com/assets/og-myplopplop.jpg?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +25,6 @@
     line-height:1.5;padding-bottom:env(safe-area-inset-bottom)}
   img{max-width:100%}
 
-  /* Header */
   .hdr{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line);
     display:flex;align-items:center;justify-content:space-between;
     padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top))}
@@ -38,13 +37,12 @@
     padding:5px 9px;border-radius:999px;cursor:pointer}
   .lang button.on{background:var(--blue);color:#fff}
 
-  /* Progress */
   .prog{background:#fff;padding:16px;border-bottom:1px solid var(--line)}
   .prog-track{height:6px;background:var(--line);border-radius:999px;overflow:hidden}
   .prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));
-    width:50%;border-radius:999px;transition:width .35s ease}
+    width:33%;border-radius:999px;transition:width .35s ease}
   .prog-steps{display:flex;justify-content:space-between;margin-top:10px}
-  .prog-steps span{font:600 12px 'Inter';color:var(--muted)}
+  .prog-steps span{font:600 11.5px 'Inter';color:var(--muted)}
   .prog-steps span.on{color:var(--blue)}
 
   .wrap{max-width:520px;margin:0 auto;padding:20px 16px 40px}
@@ -53,7 +51,7 @@
   .step.on{display:block}
   @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-  .h1{font-family:'Poppins';font-weight:800;font-size:24px;letter-spacing:-.5px}
+  .h1{font-family:'Poppins';font-weight:800;font-size:23px;letter-spacing:-.5px}
   .sub{color:var(--muted);font-size:14px;margin:4px 0 20px}
 
   .field{margin-bottom:16px}
@@ -66,7 +64,6 @@
   .field input:focus, .field select:focus{outline:none;border-color:var(--blue)}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-  /* driver type toggle */
   .dtype{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .dtype label{cursor:pointer}
   .dtype input{position:absolute;opacity:0;pointer-events:none}
@@ -77,7 +74,6 @@
   .dtype input:checked + .box{border-color:var(--blue);background:#eef1ff;
     box-shadow:0 0 0 3px rgba(0,32,159,.12)}
 
-  /* document tiles */
   .docs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .doc{position:relative;border:2px dashed var(--line);border-radius:14px;
     aspect-ratio:1/.82;display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -106,15 +102,16 @@
   .btn-primary{background:var(--blue);color:#fff}
   .btn-primary:disabled{opacity:.55;cursor:not-allowed}
   .btn-ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line);flex:0 0 auto;padding:16px 22px}
-  .btn.load{pointer-events:none;opacity:.75}
+  .btn.load{pointer-events:none;opacity:.85}
   .spin{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;
     border-radius:50%;animation:sp .7s linear infinite;display:none}
   .btn.load .spin{display:inline-block}
   @keyframes sp{to{transform:rotate(360deg)}}
+  .uploading{font-size:13px;color:var(--muted);text-align:center;margin-top:12px;font-weight:600;display:none}
+  .uploading.on{display:block}
 
   .err{color:var(--red);font-size:13px;margin-top:6px;font-weight:600;display:none}
 
-  /* success */
   .done-screen{display:none;text-align:center;padding:30px 8px}
   .done-screen.on{display:block;animation:fade .4s ease}
   .check{width:90px;height:90px;border-radius:50%;background:#e9f7ef;color:var(--green);
@@ -125,8 +122,7 @@
   .done-screen p{color:var(--muted);margin-top:8px;font-size:15px}
   .status-pill{display:inline-flex;align-items:center;gap:8px;background:#fff7e6;color:#b8860b;
     font-weight:700;padding:10px 18px;border-radius:999px;margin:20px 0 6px;font-size:14px}
-  .status-pill .dot{width:9px;height:9px;border-radius:50%;background:#f5a623;
-    animation:pulse 1.4s infinite}
+  .status-pill .dot{width:9px;height:9px;border-radius:50%;background:#f5a623;animation:pulse 1.4s infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
   .eta{color:var(--muted);font-size:13px;margin-bottom:26px}
   .done-actions{display:flex;flex-direction:column;gap:12px;max-width:340px;margin:0 auto}
@@ -153,16 +149,17 @@
   <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
   <div class="prog-steps">
     <span class="on" id="ps1" data-i18n="ps1">1. Enfòmasyon</span>
-    <span id="ps2" data-i18n="ps2">2. Verifikasyon</span>
+    <span id="ps2" data-i18n="ps2">2. Machin</span>
+    <span id="ps3" data-i18n="ps3">3. Dokiman</span>
   </div>
 </div>
 
 <div class="wrap">
 
-  <!-- STEP 1 -->
+  <!-- STEP 1 : INFO -->
   <section class="step on" id="step1">
     <h1 class="h1" data-i18n="s1_title">Vin yon Chofè MsouWout</h1>
-    <p class="sub" data-i18n="s1_sub">Enfòmasyon de baz — sa pran 30 segond.</p>
+    <p class="sub" data-i18n="s1_sub">Enfòmasyon de baz sou ou.</p>
 
     <div class="field">
       <label data-i18n="l_ref">Ki moun ki refere w? <span class="req">*</span></label>
@@ -226,44 +223,102 @@
 
     <p class="err" id="err1"></p>
     <div class="btns" style="margin-top:18px">
-      <button class="btn btn-primary" id="next1">
-        <span data-i18n="continue">Kontinye</span> →
-      </button>
+      <button class="btn btn-primary" id="next1"><span data-i18n="continue">Kontinye</span> →</button>
     </div>
   </section>
 
-  <!-- STEP 2 -->
+  <!-- STEP 2 : VEHICLE + LICENSE -->
   <section class="step" id="step2">
-    <h1 class="h1" data-i18n="s2_title">Verifikasyon</h1>
-    <p class="sub" data-i18n="s2_sub">Pran yon foto pou chak dokiman. Sa rete prive.</p>
+    <h1 class="h1" data-i18n="s2_title">Machin ou</h1>
+    <p class="sub" data-i18n="s2_sub">Detay sou machin ou ak lisans ou.</p>
+
+    <div class="row2">
+      <div class="field">
+        <label data-i18n="l_make">Mak <span class="req">*</span></label>
+        <input id="make" type="text" data-i18n-ph="ph_make" placeholder="Toyota" list="makeList">
+        <datalist id="makeList">
+          <option>Toyota</option><option>Honda</option><option>Nissan</option><option>Hyundai</option>
+          <option>Kia</option><option>Suzuki</option><option>Bajaj</option><option>TVS</option>
+          <option>Haojue</option><option>Yamaha</option><option>Ford</option><option>Mitsubishi</option>
+        </datalist>
+      </div>
+      <div class="field">
+        <label data-i18n="l_model">Modèl <span class="req">*</span></label>
+        <input id="model" type="text" data-i18n-ph="ph_model" placeholder="Corolla">
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label data-i18n="l_year">Ane <span class="req">*</span></label>
+        <input id="year" type="tel" inputmode="numeric" maxlength="4" placeholder="2018">
+      </div>
+      <div class="field">
+        <label data-i18n="l_color">Koulè <span class="req">*</span></label>
+        <input id="color" type="text" data-i18n-ph="ph_color" placeholder="Wouj">
+      </div>
+    </div>
+
+    <div class="field">
+      <label data-i18n="l_plate">Nimewo Plak <span class="req">*</span></label>
+      <input id="plate" type="text" placeholder="AA-12345" data-i18n-ph="ph_plate" style="text-transform:uppercase">
+    </div>
+
+    <div class="field">
+      <label data-i18n="l_licnum">Nimewo Lisans Chofè <span class="req">*</span></label>
+      <input id="licnum" type="text" data-i18n-ph="ph_licnum" placeholder="12345678">
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label data-i18n="l_oavct">Nimewo OAVCT <span class="req">*</span></label>
+        <input id="oavct" type="text" data-i18n-ph="ph_oavct" placeholder="OAVCT #">
+      </div>
+      <div class="field">
+        <label data-i18n="l_oavct_exp">Ekspirasyon OAVCT <span class="opt" data-i18n="opt">(opsyonèl)</span></label>
+        <input id="oavctExp" type="date">
+      </div>
+    </div>
+
+    <p class="err" id="err2"></p>
+    <div class="btns">
+      <button class="btn btn-ghost" id="back2" data-i18n="back">← Retounen</button>
+      <button class="btn btn-primary" id="next2"><span data-i18n="continue">Kontinye</span> →</button>
+    </div>
+  </section>
+
+  <!-- STEP 3 : DOCUMENTS -->
+  <section class="step" id="step3">
+    <h1 class="h1" data-i18n="s3_title">Dokiman</h1>
+    <p class="sub" data-i18n="s3_sub">Pran yon foto pou chak dokiman. Sa rete prive.</p>
 
     <div class="docs">
-      <label class="doc" data-doc="Selfie">
+      <label class="doc" data-doc="selfie">
         <span class="badge">✓</span><img class="prev" alt="">
         <span class="emo">🤳</span><span class="nm" data-i18n="d_selfie">Selfie</span>
         <input type="file" accept="image/*" capture="user" data-doc-input>
       </label>
-      <label class="doc" data-doc="ID">
+      <label class="doc" data-doc="id">
         <span class="badge">✓</span><img class="prev" alt="">
         <span class="emo">🪪</span><span class="nm" data-i18n="d_id">Kat / Paspò</span>
         <input type="file" accept="image/*" capture="environment" data-doc-input>
       </label>
-      <label class="doc" data-doc="License">
+      <label class="doc" data-doc="license">
         <span class="badge">✓</span><img class="prev" alt="">
         <span class="emo">🚘</span><span class="nm" data-i18n="d_lic">Lisans Chofè</span>
         <input type="file" accept="image/*" capture="environment" data-doc-input>
       </label>
-      <label class="doc" data-doc="OAVCT">
+      <label class="doc" data-doc="oavct">
         <span class="badge">✓</span><img class="prev" alt="">
         <span class="emo">📄</span><span class="nm" data-i18n="d_oavct">OAVCT</span>
         <input type="file" accept="image/*" capture="environment" data-doc-input>
       </label>
-      <label class="doc" data-doc="Vehicle">
+      <label class="doc" data-doc="vehicle">
         <span class="badge">✓</span><img class="prev" alt="">
         <span class="emo">🚙</span><span class="nm" data-i18n="d_veh">Foto Machin</span>
         <input type="file" accept="image/*" capture="environment" data-doc-input>
       </label>
-      <label class="doc" data-doc="Insurance">
+      <label class="doc" data-doc="insurance">
         <span class="badge">✓</span><img class="prev" alt="">
         <span class="emo">🛡️</span><span class="nm" data-i18n="d_ins">Asirans</span>
         <span class="hint" data-i18n="d_opt">opsyonèl</span>
@@ -271,24 +326,20 @@
       </label>
     </div>
 
-    <div class="field" style="margin-top:16px">
-      <label data-i18n="l_plate">Nimewo Plak <span class="req">*</span></label>
-      <input id="plate" type="text" placeholder="AA-12345" data-i18n-ph="ph_plate" style="text-transform:uppercase">
-    </div>
-
     <label class="terms">
       <input type="checkbox" id="terms">
       <span data-i18n="terms">Mwen dakò ak Kondisyon yo ak Règleman MsouWout.</span>
     </label>
 
-    <p class="err" id="err2"></p>
+    <p class="err" id="err3"></p>
     <div class="btns">
-      <button class="btn btn-ghost" id="back2" data-i18n="back">← Retounen</button>
+      <button class="btn btn-ghost" id="back3" data-i18n="back">← Retounen</button>
       <button class="btn btn-primary" id="submitBtn">
         <span class="spin"></span>
         <span data-i18n="submit">Voye pou Verifikasyon</span>
       </button>
     </div>
+    <div class="uploading" id="uploading" data-i18n="uploading">N ap voye dokiman ou yo…</div>
   </section>
 
   <!-- SUCCESS -->
@@ -307,87 +358,117 @@
 </div>
 
 <script>
+var API_BASE = 'https://msouwout-backend.onrender.com';
+
 /* ══════════ i18n ══════════ */
 var T = {
   ht:{
-    ps1:'1. Enfòmasyon', ps2:'2. Verifikasyon',
-    s1_title:'Vin yon Chofè MsouWout', s1_sub:'Enfòmasyon de baz — sa pran 30 segond.',
+    ps1:'1. Enfòmasyon', ps2:'2. Machin', ps3:'3. Dokiman',
+    s1_title:'Vin yon Chofè MsouWout', s1_sub:'Enfòmasyon de baz sou ou.',
     l_first:'Non', l_last:'Siyati', ph_first:'Jean', ph_last:'Baptiste',
     l_phone:'Telefòn (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'Imèl', opt:'(opsyonèl)', l_city:'Vil', ph_city:'Pòtoprens',
     l_dtype:'Kalite Chofè', dt_moto:'Moto', dt_car:'Machin', continue:'Kontinye',
     l_ref:'Ki moun ki refere w?', ref_ph:'-- Chwazi --', ref_friend:'Zanmi / Fanmi', ref_other:'Lòt',
-    s2_title:'Verifikasyon', s2_sub:'Pran yon foto pou chak dokiman. Sa rete prive.',
+    s2_title:'Machin ou', s2_sub:'Detay sou machin ou ak lisans ou.',
+    l_make:'Mak', ph_make:'Toyota', l_model:'Modèl', ph_model:'Corolla',
+    l_year:'Ane', l_color:'Koulè', ph_color:'Wouj',
+    l_plate:'Nimewo Plak', ph_plate:'AA-12345',
+    l_licnum:'Nimewo Lisans Chofè', ph_licnum:'12345678',
+    l_oavct:'Nimewo OAVCT', ph_oavct:'OAVCT #', l_oavct_exp:'Ekspirasyon OAVCT',
+    s3_title:'Dokiman', s3_sub:'Pran yon foto pou chak dokiman. Sa rete prive.',
     d_selfie:'Selfie', d_id:'Kat / Paspò', d_lic:'Lisans Chofè', d_oavct:'OAVCT',
     d_veh:'Foto Machin', d_ins:'Asirans', d_opt:'opsyonèl',
-    l_plate:'Nimewo Plak', ph_plate:'AA-12345',
     terms:'Mwen dakò ak Kondisyon yo ak Règleman MsouWout.',
-    back:'← Retounen', submit:'Voye pou Verifikasyon',
+    back:'← Retounen', submit:'Voye pou Verifikasyon', uploading:'N ap voye dokiman ou yo…',
     ok_title:'Mèsi!', ok_sub:'Aplikasyon ou an resevwa.', ok_status:'Anba Revizyon',
     ok_eta:'Verifikasyon prevwa: nan 24 èdtan',
     ok_share:'Pataje MsouWout', ok_paren:'Vin Parenaj Biznis pandan w ap tann',
     e_req:'Tanpri ranpli tout chan obligatwa yo.', e_phone:'Antre yon nimewo telefòn valab.',
-    e_terms:'Tanpri aksepte kondisyon yo.', e_docs:'Tanpri ajoute Selfie, Kat, Lisans, OAVCT ak Foto Machin.'
+    e_year:'Antre yon ane valab.', e_terms:'Tanpri aksepte kondisyon yo.',
+    e_docs:'Tanpri ajoute Selfie, Kat, Lisans, OAVCT ak Foto Machin.',
+    e_dup:'Yon chofè ak nimewo telefòn sa a deja enskri.', e_net:'Erè koneksyon. Tanpri eseye ankò.'
   },
   fr:{
-    ps1:'1. Informations', ps2:'2. Vérification',
-    s1_title:'Devenez chauffeur MsouWout', s1_sub:'Informations de base — 30 secondes.',
+    ps1:'1. Infos', ps2:'2. Véhicule', ps3:'3. Documents',
+    s1_title:'Devenez chauffeur MsouWout', s1_sub:'Informations de base sur vous.',
     l_first:'Prénom', l_last:'Nom', ph_first:'Jean', ph_last:'Baptiste',
     l_phone:'Téléphone (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'E-mail', opt:'(facultatif)', l_city:'Ville', ph_city:'Port-au-Prince',
     l_dtype:'Type de chauffeur', dt_moto:'Moto', dt_car:'Voiture', continue:'Continuer',
     l_ref:'Qui vous a référé ?', ref_ph:'-- Choisir --', ref_friend:'Ami / Famille', ref_other:'Autre',
-    s2_title:'Vérification', s2_sub:'Prenez une photo de chaque document. Cela reste privé.',
+    s2_title:'Votre véhicule', s2_sub:'Détails du véhicule et du permis.',
+    l_make:'Marque', ph_make:'Toyota', l_model:'Modèle', ph_model:'Corolla',
+    l_year:'Année', l_color:'Couleur', ph_color:'Rouge',
+    l_plate:'Numéro de plaque', ph_plate:'AA-12345',
+    l_licnum:'Numéro de permis', ph_licnum:'12345678',
+    l_oavct:'Numéro OAVCT', ph_oavct:'OAVCT #', l_oavct_exp:'Expiration OAVCT',
+    s3_title:'Documents', s3_sub:'Prenez une photo de chaque document. Cela reste privé.',
     d_selfie:'Selfie', d_id:'CIN / Passeport', d_lic:'Permis', d_oavct:'OAVCT',
     d_veh:'Photo véhicule', d_ins:'Assurance', d_opt:'facultatif',
-    l_plate:'Numéro de plaque', ph_plate:'AA-12345',
     terms:'J’accepte les Conditions et le Règlement MsouWout.',
-    back:'← Retour', submit:'Envoyer pour vérification',
+    back:'← Retour', submit:'Envoyer pour vérification', uploading:'Envoi de vos documents…',
     ok_title:'Merci !', ok_sub:'Votre candidature est reçue.', ok_status:'En cours de vérification',
     ok_eta:'Vérification prévue : sous 24 heures',
     ok_share:'Partager MsouWout', ok_paren:'Devenir Parenaj Biznis en attendant',
     e_req:'Veuillez remplir tous les champs obligatoires.', e_phone:'Entrez un numéro de téléphone valide.',
-    e_terms:'Veuillez accepter les conditions.', e_docs:'Ajoutez Selfie, CIN, Permis, OAVCT et Photo véhicule.'
+    e_year:'Entrez une année valide.', e_terms:'Veuillez accepter les conditions.',
+    e_docs:'Ajoutez Selfie, CIN, Permis, OAVCT et Photo véhicule.',
+    e_dup:'Un chauffeur avec ce numéro existe déjà.', e_net:'Erreur de connexion. Réessayez.'
   },
   en:{
-    ps1:'1. Information', ps2:'2. Verification',
-    s1_title:'Become a MsouWout Driver', s1_sub:'Basic info — takes 30 seconds.',
+    ps1:'1. Info', ps2:'2. Vehicle', ps3:'3. Documents',
+    s1_title:'Become a MsouWout Driver', s1_sub:'Basic information about you.',
     l_first:'First Name', l_last:'Last Name', ph_first:'Jean', ph_last:'Baptiste',
     l_phone:'Phone (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'Email', opt:'(optional)', l_city:'City', ph_city:'Port-au-Prince',
     l_dtype:'Driver Type', dt_moto:'Moto', dt_car:'Car', continue:'Continue',
     l_ref:'Who referred you?', ref_ph:'-- Select --', ref_friend:'Friend / Family', ref_other:'Other',
-    s2_title:'Verification', s2_sub:'Take a photo of each document. This stays private.',
+    s2_title:'Your Vehicle', s2_sub:'Your vehicle and license details.',
+    l_make:'Make', ph_make:'Toyota', l_model:'Model', ph_model:'Corolla',
+    l_year:'Year', l_color:'Color', ph_color:'Red',
+    l_plate:'License Plate', ph_plate:'AA-12345',
+    l_licnum:'Driver License #', ph_licnum:'12345678',
+    l_oavct:'OAVCT Number', ph_oavct:'OAVCT #', l_oavct_exp:'OAVCT Expiry',
+    s3_title:'Documents', s3_sub:'Take a photo of each document. This stays private.',
     d_selfie:'Selfie', d_id:'ID / Passport', d_lic:'Driver’s License', d_oavct:'OAVCT',
     d_veh:'Vehicle Photo', d_ins:'Insurance', d_opt:'optional',
-    l_plate:'License Plate', ph_plate:'AA-12345',
     terms:'I agree to the Terms & Conditions and MsouWout policies.',
-    back:'← Back', submit:'Submit for Verification',
+    back:'← Back', submit:'Submit for Verification', uploading:'Uploading your documents…',
     ok_title:'Thank you!', ok_sub:'Your application has been received.', ok_status:'Under Review',
     ok_eta:'Expected verification: within 24 hours',
     ok_share:'Share MsouWout', ok_paren:'Become a Parenaj Biznis while you wait',
     e_req:'Please fill in all required fields.', e_phone:'Enter a valid phone number.',
-    e_terms:'Please accept the terms.', e_docs:'Please add Selfie, ID, License, OAVCT and Vehicle photo.'
+    e_year:'Enter a valid year.', e_terms:'Please accept the terms.',
+    e_docs:'Please add Selfie, ID, License, OAVCT and Vehicle photo.',
+    e_dup:'A driver with this phone number already exists.', e_net:'Connection error. Please try again.'
   },
   es:{
-    ps1:'1. Información', ps2:'2. Verificación',
-    s1_title:'Conviértete en conductor MsouWout', s1_sub:'Datos básicos — toma 30 segundos.',
+    ps1:'1. Info', ps2:'2. Vehículo', ps3:'3. Documentos',
+    s1_title:'Conviértete en conductor MsouWout', s1_sub:'Información básica sobre ti.',
     l_first:'Nombre', l_last:'Apellido', ph_first:'Jean', ph_last:'Baptiste',
     l_phone:'Teléfono (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'Correo', opt:'(opcional)', l_city:'Ciudad', ph_city:'Puerto Príncipe',
     l_dtype:'Tipo de conductor', dt_moto:'Moto', dt_car:'Auto', continue:'Continuar',
     l_ref:'¿Quién te refirió?', ref_ph:'-- Seleccionar --', ref_friend:'Amigo / Familia', ref_other:'Otro',
-    s2_title:'Verificación', s2_sub:'Toma una foto de cada documento. Es privado.',
+    s2_title:'Tu vehículo', s2_sub:'Detalles del vehículo y la licencia.',
+    l_make:'Marca', ph_make:'Toyota', l_model:'Modelo', ph_model:'Corolla',
+    l_year:'Año', l_color:'Color', ph_color:'Rojo',
+    l_plate:'Número de placa', ph_plate:'AA-12345',
+    l_licnum:'N.º de licencia', ph_licnum:'12345678',
+    l_oavct:'Número OAVCT', ph_oavct:'OAVCT #', l_oavct_exp:'Vencimiento OAVCT',
+    s3_title:'Documentos', s3_sub:'Toma una foto de cada documento. Es privado.',
     d_selfie:'Selfie', d_id:'ID / Pasaporte', d_lic:'Licencia', d_oavct:'OAVCT',
     d_veh:'Foto del vehículo', d_ins:'Seguro', d_opt:'opcional',
-    l_plate:'Número de placa', ph_plate:'AA-12345',
     terms:'Acepto los Términos y las políticas de MsouWout.',
-    back:'← Atrás', submit:'Enviar para verificación',
+    back:'← Atrás', submit:'Enviar para verificación', uploading:'Subiendo tus documentos…',
     ok_title:'¡Gracias!', ok_sub:'Tu solicitud fue recibida.', ok_status:'En revisión',
     ok_eta:'Verificación estimada: dentro de 24 horas',
     ok_share:'Compartir MsouWout', ok_paren:'Únete a Parenaj Biznis mientras esperas',
     e_req:'Completa todos los campos obligatorios.', e_phone:'Ingresa un teléfono válido.',
-    e_terms:'Acepta los términos.', e_docs:'Agrega Selfie, ID, Licencia, OAVCT y Foto del vehículo.'
+    e_year:'Ingresa un año válido.', e_terms:'Acepta los términos.',
+    e_docs:'Agrega Selfie, ID, Licencia, OAVCT y Foto del vehículo.',
+    e_dup:'Ya existe un conductor con este número.', e_net:'Error de conexión. Inténtalo de nuevo.'
   }
 };
 var currentLang = localStorage.getItem('mw_lang') || 'ht';
@@ -399,12 +480,10 @@ function setLang(lang){
   document.documentElement.lang = lang;
   var t = T[lang];
   document.querySelectorAll('[data-i18n]').forEach(function(el){
-    var k = el.getAttribute('data-i18n');
-    if(t[k]) el.textContent = t[k];
+    var k = el.getAttribute('data-i18n'); if(t[k]) el.textContent = t[k];
   });
   document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
-    var k = el.getAttribute('data-i18n-ph');
-    if(t[k]) el.setAttribute('placeholder', t[k]);
+    var k = el.getAttribute('data-i18n-ph'); if(t[k]) el.setAttribute('placeholder', t[k]);
   });
   document.querySelectorAll('.lang button').forEach(function(b){
     b.classList.toggle('on', b.getAttribute('data-lang') === lang);
@@ -416,25 +495,34 @@ document.querySelectorAll('.lang button').forEach(function(b){
 
 /* ══════════ navigation ══════════ */
 function gotoStep(n){
-  document.getElementById('step1').classList.toggle('on', n===1);
-  document.getElementById('step2').classList.toggle('on', n===2);
-  document.getElementById('progFill').style.width = (n===1?'50%':'100%');
+  for(var i=1;i<=3;i++){ document.getElementById('step'+i).classList.toggle('on', i===n); }
+  document.getElementById('progFill').style.width = (n*33.34)+'%';
   document.getElementById('ps1').classList.toggle('on', n>=1);
   document.getElementById('ps2').classList.toggle('on', n>=2);
+  document.getElementById('ps3').classList.toggle('on', n>=3);
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
 document.getElementById('next1').addEventListener('click', function(){
   var t = T[currentLang];
-  var first = val('firstName'), last = val('lastName'), phone = val('phone'), city = val('city');
-  var referral = val('referral');
-  var digits = phone.replace(/[^0-9]/g,'').replace(/^509/,'');
+  var first = val('firstName'), last = val('lastName'), city = val('city'), referral = val('referral');
+  var digits = val('phone').replace(/[^0-9]/g,'').replace(/^509/,'');
   if(!referral || !first || !last || !city || !digits){ return showErr('err1', t.e_req); }
   if(digits.length < 8){ return showErr('err1', t.e_phone); }
-  hideErr('err1');
-  gotoStep(2);
+  hideErr('err1'); gotoStep(2);
 });
 document.getElementById('back2').addEventListener('click', function(){ gotoStep(1); });
+
+document.getElementById('next2').addEventListener('click', function(){
+  var t = T[currentLang];
+  var make=val('make'), model=val('model'), year=val('year'), color=val('color'),
+      plate=val('plate'), licnum=val('licnum'), oavct=val('oavct');
+  if(!make||!model||!year||!color||!plate||!licnum||!oavct){ return showErr('err2', t.e_req); }
+  var y = parseInt(year,10);
+  if(!(y>=1980 && y<=2027)){ return showErr('err2', t.e_year); }
+  hideErr('err2'); gotoStep(3);
+});
+document.getElementById('back3').addEventListener('click', function(){ gotoStep(2); });
 
 /* ══════════ document tiles ══════════ */
 var docFiles = {};
@@ -452,67 +540,103 @@ document.querySelectorAll('.doc').forEach(function(doc){
   });
 });
 
-/* ══════════ submit ══════════ */
+/* resize + compress an image file to a JPEG data URL (keeps uploads small & fast) */
+function compress(file){
+  return new Promise(function(resolve){
+    try{
+      var img = new Image();
+      var url = URL.createObjectURL(file);
+      img.onload = function(){
+        var max = 1000, w = img.width, h = img.height;
+        if(w > h && w > max){ h = Math.round(h*max/w); w = max; }
+        else if(h >= w && h > max){ w = Math.round(w*max/h); h = max; }
+        var c = document.createElement('canvas'); c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        try { resolve(c.toDataURL('image/jpeg', 0.72)); }
+        catch(e){ resolve(null); }
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); resolve(null); };
+      img.src = url;
+    } catch(e){ resolve(null); }
+  });
+}
+
+/* ══════════ submit — creates the driver + uploads every document into the system ══════════ */
 document.getElementById('submitBtn').addEventListener('click', function(){
   var t = T[currentLang];
   var btn = this;
-  var required = ['Selfie','ID','License','OAVCT','Vehicle'];
-  var missing = required.filter(function(k){ return !docFiles[k]; });
-  if(missing.length){ return showErr('err2', t.e_docs); }
-  if(!val('plate')){ return showErr('err2', t.e_req); }
-  if(!document.getElementById('terms').checked){ return showErr('err2', t.e_terms); }
-  hideErr('err2');
+  var required = ['selfie','id','license','oavct','vehicle'];
+  if(required.filter(function(k){ return !docFiles[k]; }).length){ return showErr('err3', t.e_docs); }
+  if(!document.getElementById('terms').checked){ return showErr('err3', t.e_terms); }
+  hideErr('err3');
 
   btn.classList.add('load'); btn.disabled = true;
+  document.getElementById('uploading').classList.add('on');
 
-  var first = val('firstName'), last = val('lastName');
-  var fullName = (first + ' ' + last).trim();
   var digits = val('phone').replace(/[^0-9]/g,'').replace(/^509/,'');
-  var vType = (document.querySelector('input[name="dtype"]:checked')||{}).value || 'motorcycle';
-  var plate = val('plate').toUpperCase();
-  var city = val('city');
-  var email = val('email');
-  var referral = val('referral');
-
-  // 1) create the real driver record in the backend (for admin approval)
-  var apiData = {
-    full_name: fullName,
-    phone: '+509' + digits,
-    email: email || '',
-    vehicle_type: vType,
-    license_plate: plate,
-    referral_partner: referral,
-    preferred_service: 'both'
+  var phone = '+509' + digits;
+  var payload = {
+    full_name: (val('firstName') + ' ' + val('lastName')).trim(),
+    phone: phone, whatsapp: phone,
+    email: val('email') || '',
+    city: val('city'),
+    vehicle_type: (document.querySelector('input[name="dtype"]:checked')||{}).value || 'motorcycle',
+    vehicle_make: val('make'), vehicle_model: val('model'),
+    vehicle_year: val('year'), vehicle_color: val('color'),
+    license_plate: val('plate').toUpperCase(),
+    license_number: val('licnum'),
+    oavct_number: val('oavct'), oavct_expiry: val('oavctExp'),
+    referral_partner: val('referral'), preferred_service: 'both'
   };
-  fetch('https://msouwout-backend.onrender.com/api/drivers', {
-    method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body: JSON.stringify(apiData)
-  }).catch(function(){});
 
-  // 2) send full application + document photos to the team (email notification)
-  var fd = new FormData();
-  fd.append('_subject', 'New MsouWout Driver: ' + fullName);
-  fd.append('Referred By', referral);
-  fd.append('Full Name', fullName);
-  fd.append('Phone / WhatsApp', '+509 ' + digits);
-  fd.append('Email', email || '(none)');
-  fd.append('City', city);
-  fd.append('Driver Type', vType);
-  fd.append('License Plate', plate);
-  Object.keys(docFiles).forEach(function(k){ fd.append(k, docFiles[k], k + '-' + digits + '.jpg'); });
+  createDriver(payload).then(function(driverId){
+    if(!driverId) return; // error already shown
+    uploadDocs(driverId).then(function(){ finish(); });
+  });
 
-  fetch('https://formsubmit.co/ajax/business@haitibiznis.com', {
-    method:'POST', body: fd
-  }).then(finish).catch(finish);
+  function createDriver(data){
+    return fetch(API_BASE + '/api/drivers', {
+      method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify(data)
+    }).then(function(r){
+      return r.json().then(function(j){ return {status:r.status, body:j}; });
+    }).then(function(res){
+      if(res.status === 201 && res.body.driver){ return res.body.driver.id; }
+      if(res.status === 409){ fail(t.e_dup); return null; }
+      fail(t.e_net); return null;
+    }).catch(function(){ fail(t.e_net); return null; });
+  }
 
+  function uploadDocs(driverId){
+    var types = Object.keys(docFiles);
+    var chain = Promise.resolve();
+    types.forEach(function(type){
+      chain = chain.then(function(){
+        return compress(docFiles[type]).then(function(dataUrl){
+          if(!dataUrl) return;
+          return fetch(API_BASE + '/api/drivers/' + driverId + '/documents', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ doc_type: type, image_data: dataUrl })
+          }).catch(function(){});
+        });
+      });
+    });
+    return chain;
+  }
+
+  function fail(msg){
+    showErr('err3', msg);
+    btn.classList.remove('load'); btn.disabled = false;
+    document.getElementById('uploading').classList.remove('on');
+  }
   function finish(){
-    document.getElementById('step1').classList.remove('on');
-    document.getElementById('step2').classList.remove('on');
+    document.getElementById('step3').classList.remove('on');
     document.getElementById('progBar').style.display = 'none';
     document.getElementById('doneScreen').classList.add('on');
     window.scrollTo({top:0,behavior:'smooth'});
     btn.classList.remove('load'); btn.disabled = false;
+    document.getElementById('uploading').classList.remove('on');
   }
 });
 
@@ -520,16 +644,13 @@ document.getElementById('submitBtn').addEventListener('click', function(){
 document.getElementById('shareBtn').addEventListener('click', function(){
   var url = 'https://msouwout.com';
   var msg = 'Vin yon chofè MsouWout — enskri isit la: ' + url;
-  if(navigator.share){
-    navigator.share({title:'MsouWout', text:msg, url:url}).catch(function(){});
-  } else {
-    window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
-  }
+  if(navigator.share){ navigator.share({title:'MsouWout', text:msg, url:url}).catch(function(){}); }
+  else { window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank'); }
 });
 
 /* ══════════ helpers ══════════ */
 function val(id){ return (document.getElementById(id).value || '').trim(); }
-function showErr(id, m){ var e=document.getElementById(id); e.textContent=m; e.style.display='block'; }
+function showErr(id, m){ var e=document.getElementById(id); e.textContent=m; e.style.display='block'; window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); }
 function hideErr(id){ document.getElementById(id).style.display='none'; }
 
 setLang(currentLang);
