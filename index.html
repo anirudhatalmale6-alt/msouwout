@@ -632,7 +632,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
           </div>
         </div>
         <label class="ac-switch">
-          <input type="checkbox" id="acToggle">
+          <input type="checkbox" id="acToggle" onchange="updateFare()">
           <span class="ac-slider"></span>
           <span class="ac-knob"></span>
         </label>
@@ -657,6 +657,10 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
         <div class="fm-row" id="fareDistanceRow" style="display:none">
           <span data-i18n="fare_distance">Distans</span>
           <span id="fareDistance" style="font-weight:800"></span>
+        </div>
+        <div class="fm-row" id="fareAcRow" style="display:none">
+          <span>&#10052;&#65039; <span data-i18n="ac_label">A/C (Klimatizasyon)</span></span>
+          <span style="font-weight:800">+5%</span>
         </div>
         <div class="fm-dash"><span>&#128737;&#65039;</span> <span data-i18n="dash_included">Pwoteksyon DASH enkli</span></div>
         <div class="fm-eta"><span>&#9201;&#65039;</span> <span data-i18n="eta_label">Estimasyon arive</span>: <span data-i18n="eta_val">3&#8211;5 min</span></div>
@@ -777,6 +781,7 @@ var PRICING={
     note_i18n:'x_toll_note' },
   commission_rate:0.20,               /* MsouWout 20% / driver 80% (client 2026-07-17) */
   dash_rider:12.5, dash_driver:12.5,  /* DASH protection: flat 12.50 each side */
+  ac_surcharge:0.05,                  /* car with A/C = +5% (client 2026-07-28) */
   road_factor:1.30                    /* straight-line distance -> approx road distance */
 };
 var selectedExtras={};                /* key -> amount, for the current vehicle */
@@ -1370,6 +1375,9 @@ function updateFare(){
   var fare=vp.base+distKm*vp.per_km;
   fare=fare*s.mult;
   if(fare<vp.min) fare=vp.min;
+  var acEl=document.getElementById('acToggle');
+  var acOn=vehicleType==='car'&&acEl&&acEl.checked;
+  if(acOn) fare=fare*(1+PRICING.ac_surcharge);   // car with A/C = +5%
   fare=Math.round(fare);
   var extra=0; for(var ek in selectedExtras) extra+=selectedExtras[ek];
   var trip=(tripType==='round')?2:1;           // round trip = both legs
@@ -1384,6 +1392,8 @@ function updateFare(){
     if(known){dRow.style.display='flex';document.getElementById('fareDistance').textContent=(distKm*trip).toFixed(1)+' km';}
     else{dRow.style.display='none';}
   }
+  var acRow=document.getElementById('fareAcRow');
+  if(acRow) acRow.style.display=acOn?'flex':'none';
   var fareBox=document.getElementById('fareEst');
   var tagsEl=document.getElementById('surgeTags');
   if(s.type&&s.pct>0){
