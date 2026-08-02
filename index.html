@@ -104,6 +104,23 @@ a{text-decoration:none;color:inherit}
 .loc-input:focus{outline:none;border-color:var(--blue);background:var(--white)}
 .loc-input::placeholder{color:var(--text-muted);font-weight:400}
 
+/* Address autocomplete dropdown */
+.loc-row{position:relative}
+.ac-list{
+  position:absolute;left:24px;right:0;top:calc(100% + 6px);z-index:60;
+  background:var(--white);border:1px solid var(--border);border-radius:12px;
+  box-shadow:0 14px 34px rgba(0,0,0,.16);overflow:hidden auto;max-height:264px;display:none;
+}
+.ac-list.show{display:block}
+.ac-item{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--off-white);transition:background .15s}
+.ac-item:last-child{border-bottom:none}
+.ac-item:hover,.ac-item.active{background:rgba(0,32,159,.06)}
+.ac-pin{flex-shrink:0;margin-top:1px}
+.ac-txt{flex:1;min-width:0}
+.ac-main{display:block;font-size:.9rem;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac-sub{display:block;font-size:.72rem;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.ac-note{padding:12px 14px;font-size:.82rem;color:var(--text-light);text-align:center}
+
 .find-btn{
   width:100%;padding:18px;border-radius:var(--radius);background:var(--red);
   color:var(--white);font-size:1.1rem;font-weight:800;transition:all .3s;
@@ -818,6 +835,8 @@ var T={
     greeting:'Chofe ap reponn rapid via WhatsApp',
     ph_pickup:'Ki kote ou ye?',
     ph_drop:'Ki kote ou prale?',
+    ac_searching:'Ap chèche kote…',
+    ac_none:'Pa jwenn okenn kote. Tanpri tape plis detay.',
     gps_btn:'Sevi ak pozisyon mwen',
     find_btn:'&#128308; Mande Kous Kounye A',
     dash_strip_title:'&#128737;&#65039; Sekirite + Pwoteksyon Medikal',
@@ -919,6 +938,8 @@ var T={
     greeting:'Les chauffeurs répondent rapidement via WhatsApp',
     ph_pickup:'Où êtes-vous ?',
     ph_drop:'Où allez-vous ?',
+    ac_searching:'Recherche du lieu…',
+    ac_none:'Aucun lieu trouvé. Ajoutez plus de détails.',
     gps_btn:'Utiliser ma position',
     find_btn:'&#128308; Demander un Trajet Maintenant',
     dash_strip_title:'&#128737;&#65039; Securite + Protection Medicale',
@@ -1020,6 +1041,8 @@ var T={
     greeting:'Drivers respond quickly via WhatsApp',
     ph_pickup:'Where are you?',
     ph_drop:'Where are you going?',
+    ac_searching:'Searching for a place…',
+    ac_none:'No place found. Try adding more detail.',
     gps_btn:'Use my location',
     find_btn:'&#128308; Request a Ride Now',
     dash_strip_title:'&#128737;&#65039; Safety + Medical Protection',
@@ -1121,6 +1144,8 @@ var T={
     greeting:'Los conductores responden rápido por WhatsApp',
     ph_pickup:'¿Dónde estás?',
     ph_drop:'¿A dónde vas?',
+    ac_searching:'Buscando el lugar…',
+    ac_none:'No se encontró ningún lugar. Añade más detalles.',
     gps_btn:'Usar mi ubicación',
     find_btn:'&#128308; Pedir Viaje Ahora',
     dash_strip_title:'&#128737;&#65039; Seguridad + Proteccion Medica',
@@ -1267,6 +1292,75 @@ function checkInputs(){
 }
 pickupEl.addEventListener('input',checkInputs);
 dropEl.addEventListener('input',checkInputs);
+
+/* ─── Live address autocomplete (pickup + dropoff), Haiti-only ─── */
+function acEsc(s){return String(s||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
+function acLabel(item){
+  var a=item.address||{};
+  var main=a.road||a.pedestrian||a.neighbourhood||a.suburb||a.hamlet||a.village||a.town||a.city||a.county||item.name||item.display_name.split(',')[0].trim();
+  var parts=[];
+  [a.suburb,a.city||a.town||a.village,a.county,a.state].forEach(function(p){if(p&&p!==main&&parts.indexOf(p)<0)parts.push(p);});
+  return {main:main,sub:parts.join(', ')||'Ayiti'};
+}
+function acFetch(text,cb){
+  var q=encodeURIComponent(text.indexOf('Haiti')>-1||text.indexOf('Ayiti')>-1?text:text+', Haiti');
+  var c=new AbortController();setTimeout(function(){c.abort();},5000);
+  fetch('https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=6&countrycodes=ht&q='+q,
+        {signal:c.signal,headers:{'Accept-Language':(currentLang==='ht'?'fr':currentLang)}})
+    .then(function(r){return r.json();})
+    .then(function(d){cb(d||[]);})
+    .catch(function(){cb(null);});
+}
+function attachAC(inputEl,isPickup){
+  var box=document.createElement('div');box.className='ac-list';
+  inputEl.parentNode.appendChild(box);
+  var timer=null,items=[],active=-1,lastQ='';
+  function close(){box.classList.remove('show');active=-1;}
+  function hi(){Array.prototype.forEach.call(box.querySelectorAll('.ac-item'),function(el,i){el.classList.toggle('active',i===active);});}
+  function choose(item){
+    var l=acLabel(item);
+    var val=(l.sub&&l.sub!=='Ayiti')?l.main+', '+l.sub:l.main;
+    inputEl.value=val;
+    var lat=parseFloat(item.lat),lng=parseFloat(item.lon);
+    _geoCache[val.trim().toLowerCase()]={lat:lat,lng:lng};
+    if(isPickup){window._pickupLat=lat;window._pickupLng=lng;}
+    close();checkInputs();
+  }
+  function render(){
+    if(!items||!items.length){box.innerHTML='<div class="ac-note">'+t('ac_none')+'</div>';box.classList.add('show');return;}
+    box.innerHTML=items.map(function(it,i){var l=acLabel(it);
+      return '<div class="ac-item" data-i="'+i+'"><span class="ac-pin">&#128205;</span><span class="ac-txt">'+
+             '<span class="ac-main">'+acEsc(l.main)+'</span><span class="ac-sub">'+acEsc(l.sub)+'</span></span></div>';}).join('');
+    box.classList.add('show');
+    Array.prototype.forEach.call(box.querySelectorAll('.ac-item'),function(el){
+      el.addEventListener('mousedown',function(e){e.preventDefault();choose(items[+el.getAttribute('data-i')]);});
+    });
+  }
+  inputEl.addEventListener('input',function(){
+    if(isPickup){window._pickupLat=null;window._pickupLng=null;}
+    var v=inputEl.value.trim();
+    if(v.length<3){close();return;}
+    if(timer)clearTimeout(timer);
+    box.innerHTML='<div class="ac-note">'+t('ac_searching')+'</div>';box.classList.add('show');
+    timer=setTimeout(function(){
+      lastQ=v;
+      acFetch(v,function(res){
+        if(inputEl.value.trim()!==lastQ)return;
+        items=res||[];active=-1;render();
+      });
+    },320);
+  });
+  inputEl.addEventListener('keydown',function(e){
+    if(!box.classList.contains('show'))return;
+    if(e.key==='ArrowDown'){e.preventDefault();active=Math.min(active+1,items.length-1);hi();}
+    else if(e.key==='ArrowUp'){e.preventDefault();active=Math.max(active-1,0);hi();}
+    else if(e.key==='Enter'){if(active>=0&&items[active]){e.preventDefault();choose(items[active]);}}
+    else if(e.key==='Escape'){close();}
+  });
+  inputEl.addEventListener('blur',function(){setTimeout(close,160);});
+}
+attachAC(pickupEl,true);
+attachAC(dropEl,false);
 
 function setDest(el){
   var txt=el.textContent.replace(/^[\S]+\s/,'').trim();
