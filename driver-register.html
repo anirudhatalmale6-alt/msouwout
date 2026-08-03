@@ -203,12 +203,17 @@
 
     <div class="field">
       <label class="lbl" data-i18n="l_city">Vil <span class="req">*</span></label>
-      <input id="city" type="text" data-i18n-ph="ph_city" placeholder="Port-au-Prince" list="cityList">
-      <datalist id="cityList">
-        <option>Port-au-Prince</option><option>Cap-Haïtien</option><option>Les Cayes</option>
-        <option>Gonaïves</option><option>Pétion-Ville</option><option>Delmas</option>
-        <option>Carrefour</option><option>Jacmel</option><option>Saint-Marc</option><option>Jérémie</option>
-      </datalist>
+      <select id="city" onchange="toggleOther('city','cityOther')">
+        <option value="" disabled selected data-i18n="ref_ph">-- Chwazi --</option>
+        <option>Port-au-Prince</option><option>Delmas</option><option>Pétion-Ville</option><option>Carrefour</option>
+        <option>Cité Soleil</option><option>Tabarre</option><option>Croix-des-Bouquets</option><option>Cap-Haïtien</option>
+        <option>Les Cayes</option><option>Gonaïves</option><option>Saint-Marc</option><option>Jacmel</option>
+        <option>Jérémie</option><option>Port-de-Paix</option><option>Hinche</option><option>Mirebalais</option>
+        <option>Léogâne</option><option>Petit-Goâve</option><option>Miragoâne</option><option>Ouanaminthe</option>
+        <option>Fort-Liberté</option><option>Limbé</option><option>Aquin</option><option>Kenscoff</option>
+        <option value="__other__" data-i18n="opt_other">Lòt (ekri)</option>
+      </select>
+      <input id="cityOther" type="text" data-i18n-ph="ph_city" placeholder="Vil ou" style="display:none;margin-top:8px">
     </div>
 
     <div class="field">
@@ -241,12 +246,16 @@
     <div class="row2">
       <div class="field">
         <label class="lbl" data-i18n="l_make">Mak <span class="req">*</span></label>
-        <input id="make" type="text" data-i18n-ph="ph_make" placeholder="Toyota" list="makeList">
-        <datalist id="makeList">
+        <select id="make" onchange="toggleOther('make','makeOther')">
+          <option value="" disabled selected data-i18n="ref_ph">-- Chwazi --</option>
           <option>Toyota</option><option>Honda</option><option>Nissan</option><option>Hyundai</option>
           <option>Kia</option><option>Suzuki</option><option>Bajaj</option><option>TVS</option>
           <option>Haojue</option><option>Yamaha</option><option>Ford</option><option>Mitsubishi</option>
-        </datalist>
+          <option>Isuzu</option><option>Mazda</option><option>Chevrolet</option><option>Jeep</option>
+          <option>Lifan</option><option>Sanya</option><option>Apsonic</option>
+          <option value="__other__" data-i18n="opt_other">Lòt (ekri)</option>
+        </select>
+        <input id="makeOther" type="text" data-i18n-ph="ph_make" placeholder="Mak machin" style="display:none;margin-top:8px">
       </div>
       <div class="field">
         <label class="lbl" data-i18n="l_model">Modèl <span class="req">*</span></label>
@@ -391,7 +400,7 @@ var T = {
     l_phone:'Telefòn (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'Imèl', opt:'(opsyonèl)', l_city:'Vil', ph_city:'Pòtoprens',
     l_dtype:'Kalite Chofè', dt_moto:'Moto', dt_car:'Machin', continue:'Kontinye',
-    l_ref:'Ki moun ki refere w?', ref_ph:'-- Chwazi --', ref_friend:'Zanmi / Fanmi', ref_other:'Lòt',
+    l_ref:'Ki moun ki refere w?', ref_ph:'-- Chwazi --', ref_friend:'Zanmi / Fanmi', ref_other:'Lòt', opt_other:'Lòt (ekri)',
     s2_title:'Machin & Dokiman', s2_sub:'Ranpli chak chan epi ajoute foto dokiman yo.',
     g_vehicle:'Machin ou', g_docs:'Foto Dokiman',
     l_make:'Mak', ph_make:'Toyota', l_model:'Modèl', ph_model:'Corolla',
@@ -419,7 +428,7 @@ var T = {
     l_phone:'Téléphone (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'E-mail', opt:'(facultatif)', l_city:'Ville', ph_city:'Port-au-Prince',
     l_dtype:'Type de chauffeur', dt_moto:'Moto', dt_car:'Voiture', continue:'Continuer',
-    l_ref:'Qui vous a référé ?', ref_ph:'-- Choisir --', ref_friend:'Ami / Famille', ref_other:'Autre',
+    l_ref:'Qui vous a référé ?', ref_ph:'-- Choisir --', ref_friend:'Ami / Famille', ref_other:'Autre', opt_other:'Autre (écrire)',
     s2_title:'Véhicule & Documents', s2_sub:'Remplissez chaque champ et ajoutez les photos des documents.',
     g_vehicle:'Votre véhicule', g_docs:'Photos des documents',
     l_make:'Marque', ph_make:'Toyota', l_model:'Modèle', ph_model:'Corolla',
@@ -447,7 +456,7 @@ var T = {
     l_phone:'Phone (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'Email', opt:'(optional)', l_city:'City', ph_city:'Port-au-Prince',
     l_dtype:'Driver Type', dt_moto:'Moto', dt_car:'Car', continue:'Continue',
-    l_ref:'Who referred you?', ref_ph:'-- Select --', ref_friend:'Friend / Family', ref_other:'Other',
+    l_ref:'Who referred you?', ref_ph:'-- Select --', ref_friend:'Friend / Family', ref_other:'Other', opt_other:'Other (type it)',
     s2_title:'Vehicle & Documents', s2_sub:'Fill in each field and add the document photos.',
     g_vehicle:'Your vehicle', g_docs:'Document photos',
     l_make:'Make', ph_make:'Toyota', l_model:'Model', ph_model:'Corolla',
@@ -475,7 +484,7 @@ var T = {
     l_phone:'Teléfono (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'Correo', opt:'(opcional)', l_city:'Ciudad', ph_city:'Puerto Príncipe',
     l_dtype:'Tipo de conductor', dt_moto:'Moto', dt_car:'Auto', continue:'Continuar',
-    l_ref:'¿Quién te refirió?', ref_ph:'-- Seleccionar --', ref_friend:'Amigo / Familia', ref_other:'Otro',
+    l_ref:'¿Quién te refirió?', ref_ph:'-- Seleccionar --', ref_friend:'Amigo / Familia', ref_other:'Otro', opt_other:'Otro (escribir)',
     s2_title:'Vehículo & Documentos', s2_sub:'Completa cada campo y agrega las fotos de los documentos.',
     g_vehicle:'Tu vehículo', g_docs:'Fotos de documentos',
     l_make:'Marca', ph_make:'Toyota', l_model:'Modelo', ph_model:'Corolla',
@@ -532,7 +541,7 @@ function gotoStep(n){
 
 document.getElementById('next1').addEventListener('click', function(){
   var t = T[currentLang];
-  var first = val('firstName'), last = val('lastName'), city = val('city'), referral = val('referral');
+  var first = val('firstName'), last = val('lastName'), city = pickVal('city','cityOther'), referral = val('referral');
   var digits = val('phone').replace(/[^0-9]/g,'').replace(/^509/,'');
   if(!referral || !first || !last || !city || !digits){ return showErr('err1', t.e_req); }
   if(digits.length < 8){ return showErr('err1', t.e_phone); }
@@ -587,7 +596,7 @@ function compress(file){
 document.getElementById('submitBtn').addEventListener('click', function(){
   var t = T[currentLang];
   var btn = this;
-  var make=val('make'), model=val('model'), year=val('year'), color=val('color'),
+  var make=pickVal('make','makeOther'), model=val('model'), year=val('year'), color=val('color'),
       plate=val('plate'), licnum=val('licnum'), oavct=val('oavct');
   if(!make||!model||!year||!color||!plate||!licnum||!oavct){ return showErr('err2', t.e_req); }
   var y = parseInt(year,10);
@@ -606,7 +615,7 @@ document.getElementById('submitBtn').addEventListener('click', function(){
     full_name: (val('firstName') + ' ' + val('lastName')).trim(),
     phone: phone, whatsapp: phone,
     email: val('email') || '',
-    city: val('city'),
+    city: pickVal('city','cityOther'),
     vehicle_type: (document.querySelector('input[name="dtype"]:checked')||{}).value || 'motorcycle',
     vehicle_make: make, vehicle_model: model,
     vehicle_year: year, vehicle_color: color,
@@ -676,6 +685,11 @@ document.getElementById('shareBtn').addEventListener('click', function(){
 
 /* ══════════ helpers ══════════ */
 function val(id){ return (document.getElementById(id).value || '').trim(); }
+/* dropdowns with an "Other → type it" fallback (city, vehicle make) */
+function toggleOther(selId,otherId){var s=document.getElementById(selId),o=document.getElementById(otherId);if(!s||!o)return;
+  var isOther=s.value==='__other__';o.style.display=isOther?'block':'none';if(isOther){o.focus();}else{o.value='';}}
+function pickVal(selId,otherId){var s=document.getElementById(selId);if(!s)return '';var v=(s.value||'').trim();
+  if(v==='__other__'){var o=document.getElementById(otherId);return o?(o.value||'').trim():'';}return v;}
 function showErr(id, m){ var e=document.getElementById(id); e.textContent=m; e.style.display='block'; window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); }
 function hideErr(id){ document.getElementById(id).style.display='none'; }
 
