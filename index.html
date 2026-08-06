@@ -55,6 +55,10 @@ a{text-decoration:none;color:inherit}
 .header-logo span{color:var(--white);font-size:1rem;font-weight:800}
 .header-links{display:flex;align-items:center;gap:6px}
 .header-link{color:rgba(255,255,255,.5);font-size:.72rem;font-weight:600}
+.msw-back{display:inline-flex;align-items:center;gap:5px;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:5px 12px;font-size:.72rem;font-weight:800;flex-shrink:0}
+.msw-back .ar{font-size:.95rem;line-height:1}
+.msw-back:hover{background:rgba(255,255,255,.24)}
+@media(max-width:430px){.msw-back{padding:5px;width:30px;justify-content:center}.msw-back .lbl{display:none}.header-logo span{display:none}}
 .header-login{
   color:#fff;font-size:.72rem;font-weight:700;padding:5px 14px;
   border-radius:100px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
@@ -513,11 +517,11 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
 <div class="flag-stripe"></div>
 <div class="header">
   <div class="header-logo">
+    <a href="https://haitibiznis.com" class="msw-back" title="HaitiBiznis"><span class="ar">←</span><span class="lbl">HaitiBiznis</span></a>
     <img src="assets/msouwout-logo.jpg" alt="MsouWout" style="border-radius:8px" onerror="this.style.display='none'">
     <span>M Sou Wout</span>
   </div>
   <div class="header-links">
-    <a href="https://haitibiznis.com" class="header-link">HaitiBiznis</a>
     <div style="position:relative">
       <button class="header-login" onclick="toggleLoginMenu()" id="loginBtn" data-i18n="login_btn">Konekte</button>
       <div class="login-dropdown" id="loginDropdown">
