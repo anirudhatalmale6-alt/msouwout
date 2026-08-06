@@ -73,6 +73,25 @@ a{text-decoration:none;color:inherit}
 }
 .login-dropdown a:hover{background:var(--off-white)}
 .login-dropdown a span{font-size:1.1rem}
+.header-signup{
+  color:#fff;font-size:.74rem;font-weight:800;padding:6px 16px;
+  border-radius:100px;background:var(--red);border:1px solid rgba(255,255,255,.28);
+  transition:all .2s;position:relative;cursor:pointer;box-shadow:0 2px 10px rgba(210,16,52,.55);
+  animation:suPulse 2.4s ease-in-out infinite;
+}
+.header-signup:hover{filter:brightness(1.08)}
+@keyframes suPulse{0%,100%{box-shadow:0 2px 10px rgba(210,16,52,.55)}50%{box-shadow:0 0 0 5px rgba(210,16,52,.24)}}
+@media(prefers-reduced-motion:reduce){.header-signup{animation:none}}
+.signup-dropdown{
+  display:none;position:absolute;top:calc(100% + 8px);right:0;
+  background:#fff;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.2);
+  min-width:220px;overflow:hidden;z-index:200;
+}
+.signup-dropdown.show{display:block}
+.signup-dropdown a{display:flex;align-items:center;gap:9px;padding:12px 16px;font-size:.82rem;font-weight:600;color:var(--text);transition:background .15s;border-bottom:1px solid var(--off-white)}
+.signup-dropdown a:last-child{border-bottom:none}
+.signup-dropdown a:hover{background:var(--off-white)}
+.signup-dropdown a span:first-child{font-size:1.15rem}
 
 /* ═══ STEP 1: WHERE ARE YOU GOING ═══ */
 .step{display:none;min-height:calc(100vh - 52px);padding-bottom:80px}
@@ -507,6 +526,14 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
         <a href="#" id="logoutLink" onclick="doLogout();return false;" style="display:none;border-top:1px solid #eee;color:#D21034"><span>🚪</span> <span data-i18n="logout_btn">Dekonekte</span></a>
       </div>
     </div>
+    <div style="position:relative">
+      <button class="header-signup" onclick="toggleSignupMenu()" id="signupBtn" data-i18n="signup_hdr">Enskri</button>
+      <div class="signup-dropdown" id="signupDropdown">
+        <a href="index.html#step1"><span>👤</span> <span data-i18n="su_rider">Pasaje — Mande yon kous</span></a>
+        <a href="driver-register.html"><span>🚗</span> <span data-i18n="su_driver">Chofe — Vin travay</span></a>
+        <a href="business-register.html"><span>🏪</span> <span data-i18n="su_biz">Biznis / Konpayi</span></a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -854,7 +881,7 @@ var T={
     db_title:'&#128663; Ou gen yon machin/moto?',
     db_sub:'Touche 500-3,000 HTG/jou',
     db_btn:'Vin Chofe',
-    login_btn:'Konekte',
+    login_btn:'Konekte',signup_hdr:'Enskri',su_rider:'Pasaje — Mande yon kous',su_driver:'Chofe — Vin travay',su_biz:'Biznis / Konpayi',
     login_rider:'Kliyan / Pasaje',
     login_driver:'Chofe',
     login_logistics:'Logistics',
@@ -957,7 +984,7 @@ var T={
     db_title:'&#128663; Vous avez une voiture/moto ?',
     db_sub:'Gagnez 500-3 000 HTG/jour',
     db_btn:'Devenir Chauffeur',
-    login_btn:'Connexion',
+    login_btn:'Connexion',signup_hdr:'S\'inscrire',su_rider:'Passager — Demander une course',su_driver:'Chauffeur — Travailler',su_biz:'Entreprise / Société',
     login_rider:'Client / Passager',
     login_driver:'Chauffeur',
     login_logistics:'Logistique',
@@ -1060,7 +1087,7 @@ var T={
     db_title:'&#128663; Have a car or motorbike?',
     db_sub:'Earn 500-3,000 HTG/day',
     db_btn:'Become a Driver',
-    login_btn:'Log In',
+    login_btn:'Log In',signup_hdr:'Sign Up',su_rider:'Rider — Request a ride',su_driver:'Driver — Start earning',su_biz:'Business / Company',
     login_rider:'Customer / Passenger',
     login_driver:'Driver',
     login_logistics:'Logistics',
@@ -1163,7 +1190,7 @@ var T={
     db_title:'&#128663; ¿Tienes carro o moto?',
     db_sub:'Gana 500-3,000 HTG/día',
     db_btn:'Ser Conductor',
-    login_btn:'Iniciar Sesión',
+    login_btn:'Iniciar Sesión',signup_hdr:'Registrarse',su_rider:'Pasajero — Pedir un viaje',su_driver:'Conductor — Trabajar',su_biz:'Negocio / Empresa',
     login_rider:'Cliente / Pasajero',
     login_driver:'Conductor',
     login_logistics:'Logistica',
@@ -1693,11 +1720,19 @@ document.getElementById('rPhone').addEventListener('change',function(){
 function toggleLoginMenu(){
   var dd=document.getElementById('loginDropdown');
   dd.classList.toggle('show');
+  document.getElementById('signupDropdown').classList.remove('show');
+}
+function toggleSignupMenu(){
+  var dd=document.getElementById('signupDropdown');
+  dd.classList.toggle('show');
+  document.getElementById('loginDropdown').classList.remove('show');
 }
 document.addEventListener('click',function(e){
-  var dd=document.getElementById('loginDropdown');
   if(!e.target.closest('.header-login')&&!e.target.closest('.login-dropdown')){
-    dd.classList.remove('show');
+    document.getElementById('loginDropdown').classList.remove('show');
+  }
+  if(!e.target.closest('.header-signup')&&!e.target.closest('.signup-dropdown')){
+    document.getElementById('signupDropdown').classList.remove('show');
   }
 });
 function updateLoginUI(){
