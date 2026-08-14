@@ -149,6 +149,12 @@ a{text-decoration:none;color:inherit}
   .content{padding:48px 40px 80px}
   .topbar{padding:12px 32px}
 }
+
+html{overflow-x:hidden;max-width:100%}
+/* language pills + Back link overflowed the top bar on a phone */
+.topbar-right{max-width:100%;min-width:0;overflow-x:auto;scrollbar-width:none}
+.topbar-right::-webkit-scrollbar{display:none}
+.topbar-right>*{flex:0 0 auto}
 </style>
 <style id="capacitor-native-styles">
 body.capacitor-native{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}

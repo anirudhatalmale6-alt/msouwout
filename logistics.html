@@ -487,6 +487,11 @@ img{max-width:100%}
   .bottom-nav{max-width:480px;left:50%;transform:translateX(-50%)}
   .mobile-menu{max-width:480px;left:50%;transform:translateX(-50%)}
 }
+
+html{overflow-x:hidden;max-width:100%}
+/* the type row is a horizontal scroller; without a width cap it pushed the page */
+.transport-scroll{max-width:100%;min-width:0}
+.transport-section{max-width:100vw;box-sizing:border-box}
 </style>
 <style id="capacitor-native-styles">
 body.capacitor-native{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
