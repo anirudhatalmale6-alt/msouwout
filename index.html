@@ -461,6 +461,15 @@ a{text-decoration:none;color:inherit}
 .ac-knob{position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
 #acToggle:checked+.ac-slider{background:var(--blue)}
 #acToggle:checked~.ac-knob{left:25px}
+
+/* passenger entry line — mirrors the driver banner so neither path shouts
+   louder than the other */
+.pax-note{display:flex;align-items:center;gap:11px;margin:12px 0 10px;
+  padding:12px 14px;border-radius:14px;background:#EAF3FF;border:1px solid #CFE0FA}
+.pax-note .pn-ic{font-size:1.5rem;line-height:1;flex:0 0 auto}
+.pax-note .pn-text{display:flex;flex-direction:column;min-width:0}
+.pax-note strong{font-size:.95rem;color:#00209F;line-height:1.25}
+.pax-note span{font-size:.82rem;color:#3A4A6B;line-height:1.4}
 </style>
 <style id="capacitor-native-styles">
 body.capacitor-native{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
@@ -564,6 +573,16 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       </div>
     </div>
 
+
+    <!-- Passenger entry — deliberately says no account is needed, because
+         none exists: a rider orders straight from the two boxes below. -->
+    <div class="pax-note" id="paxNote">
+      <span class="pn-ic">&#128100;</span>
+      <div class="pn-text">
+        <strong data-i18n="pax_title">Ou se pasaje?</strong>
+        <span data-i18n="pax_sub">Ou pa bezwen kont. Ekri kote ou ye ak kote ou prale anba a.</span>
+      </div>
+    </div>
     <div class="loc-inputs">
       <div class="loc-row">
         <div class="loc-dot pickup"></div>
@@ -862,6 +881,7 @@ var ticketRef='';
 /* ═══ TRANSLATIONS ═══ */
 var T={
   ht:{
+    pax_title:'Ou se pasaje?',pax_sub:'Ou pa bezwen kont. Ekri kote ou ye ak kote ou prale anba a.',
     main_q:'Jwenn Yon Kous <em>Nan 2 Minit</em>',
     greeting:'Chofe ap reponn rapid via WhatsApp',
     ph_pickup:'Ki kote ou ye?',
@@ -885,7 +905,7 @@ var T={
     db_title:'&#128663; Ou gen yon machin/moto?',
     db_sub:'Touche 500-3,000 HTG/jou',
     db_btn:'Vin Chofe',
-    login_btn:'Konekte',signup_hdr:'Enskri',su_rider:'Pasaje — Mande yon kous',su_driver:'Chofe — Vin travay',su_biz:'Biznis / Konpayi',
+    login_btn:'Konekte',signup_hdr:'Enskri',su_rider:'Pasaje — Mande yon kous (san kont)',su_driver:'Chofe — Vin travay',su_biz:'Biznis / Konpayi',
     login_rider:'Kliyan / Pasaje',
     login_driver:'Chofe',
     login_logistics:'Logistics',
@@ -965,6 +985,7 @@ var T={
     fare_total:'Total'
   },
   fr:{
+    pax_title:'Vous êtes passager ?',pax_sub:'Pas besoin de compte. Indiquez votre position et votre destination ci-dessous.',
     main_q:'Trouvez un Trajet <em>en 2 Minutes</em>',
     greeting:'Les chauffeurs répondent rapidement via WhatsApp',
     ph_pickup:'Où êtes-vous ?',
@@ -988,7 +1009,7 @@ var T={
     db_title:'&#128663; Vous avez une voiture/moto ?',
     db_sub:'Gagnez 500-3 000 HTG/jour',
     db_btn:'Devenir Chauffeur',
-    login_btn:'Connexion',signup_hdr:'S\'inscrire',su_rider:'Passager — Demander une course',su_driver:'Chauffeur — Travailler',su_biz:'Entreprise / Société',
+    login_btn:'Connexion',signup_hdr:'S\'inscrire',su_rider:'Passager — Demander une course (sans compte)',su_driver:'Chauffeur — Travailler',su_biz:'Entreprise / Société',
     login_rider:'Client / Passager',
     login_driver:'Chauffeur',
     login_logistics:'Logistique',
@@ -1068,6 +1089,7 @@ var T={
     fare_total:'Total'
   },
   en:{
+    pax_title:'Travelling as a passenger?',pax_sub:'No account needed. Just type where you are and where you are going, below.',
     main_q:'Get a Ride <em>in 2 Minutes</em>',
     greeting:'Drivers respond quickly via WhatsApp',
     ph_pickup:'Where are you?',
@@ -1091,7 +1113,7 @@ var T={
     db_title:'&#128663; Have a car or motorbike?',
     db_sub:'Earn 500-3,000 HTG/day',
     db_btn:'Become a Driver',
-    login_btn:'Log In',signup_hdr:'Sign Up',su_rider:'Rider — Request a ride',su_driver:'Driver — Start earning',su_biz:'Business / Company',
+    login_btn:'Log In',signup_hdr:'Sign Up',su_rider:'Passenger — Request a ride (no account)',su_driver:'Driver — Start earning',su_biz:'Business / Company',
     login_rider:'Customer / Passenger',
     login_driver:'Driver',
     login_logistics:'Logistics',
@@ -1171,6 +1193,7 @@ var T={
     fare_total:'Total'
   },
   es:{
+    pax_title:'¿Eres pasajero?',pax_sub:'No necesitas cuenta. Escribe dónde estás y a dónde vas, abajo.',
     main_q:'Consigue un Viaje <em>en 2 Minutos</em>',
     greeting:'Los conductores responden rápido por WhatsApp',
     ph_pickup:'¿Dónde estás?',
@@ -1194,7 +1217,7 @@ var T={
     db_title:'&#128663; ¿Tienes carro o moto?',
     db_sub:'Gana 500-3,000 HTG/día',
     db_btn:'Ser Conductor',
-    login_btn:'Iniciar Sesión',signup_hdr:'Registrarse',su_rider:'Pasajero — Pedir un viaje',su_driver:'Conductor — Trabajar',su_biz:'Negocio / Empresa',
+    login_btn:'Iniciar Sesión',signup_hdr:'Registrarse',su_rider:'Pasajero — Pedir un viaje (sin cuenta)',su_driver:'Conductor — Trabajar',su_biz:'Negocio / Empresa',
     login_rider:'Cliente / Pasajero',
     login_driver:'Conductor',
     login_logistics:'Logistica',
