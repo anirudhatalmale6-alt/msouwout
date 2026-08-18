@@ -1827,16 +1827,18 @@ var isStandalone=window.matchMedia('(display-mode:standalone)').matches||window.
 if(isStandalone&&shareFab) shareFab.style.display='flex';
 
 window.addEventListener('beforeinstallprompt',function(e){
+  /* Keep the native prompt if Chrome offers one - it is the nicest path - but
+     the overlay no longer depends on this ever firing. */
   e.preventDefault();
   deferredPrompt=e;
-  if(!localStorage.getItem('msw_install_dismissed')&&!isStandalone){
+  if(!sessionStorage.getItem('msw_install_dismissed')&&!isStandalone){
     overlay.classList.add('show');
   }
 });
 
 function closeInstall(){
   overlay.classList.remove('show');
-  localStorage.setItem('msw_install_dismissed','1');
+  sessionStorage.setItem('msw_install_dismissed','1');   /* this visit only */
 }
 
 var androidSteps=document.getElementById('androidSteps');
@@ -1863,12 +1865,15 @@ window.addEventListener('appinstalled',function(){
   localStorage.setItem('msw_installed','1');
 });
 
-if(!isStandalone&&!localStorage.getItem('msw_install_dismissed')&&!localStorage.getItem('msw_installed')){
-  if(isIOS){
-    setTimeout(function(){overlay.classList.add('show');},2000);
-  }
-  // On Android, only show if beforeinstallprompt fired (deferredPrompt is set)
-  // Don't show manual steps that confuse users
+/* Android used to be shown NOTHING unless Chrome volunteered its own
+   beforeinstallprompt event. On the phones these users actually have, that
+   event frequently never fires - proven on the client's own Samsung tablet
+   with the HaitiBiznis POS - so most Android users were never offered the
+   app at all. Now both platforms get the offer, and the button falls back to
+   written steps when there is no native prompt to trigger. */
+if(!isStandalone&&!sessionStorage.getItem('msw_install_dismissed')
+   &&!localStorage.getItem('msw_installed')){
+  setTimeout(function(){ if(!isStandalone) overlay.classList.add('show'); }, 2000);
 }
 
 function toggleShareMenu(){
