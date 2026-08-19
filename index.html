@@ -1873,7 +1873,10 @@ window.addEventListener('appinstalled',function(){
    written steps when there is no native prompt to trigger. */
 if(!isStandalone&&!sessionStorage.getItem('msw_install_dismissed')
    &&!localStorage.getItem('msw_installed')){
-  setTimeout(function(){ if(!isStandalone) overlay.classList.add('show'); }, 2000);
+  /* 2 seconds meant the install sheet blacked out the home page before anyone
+     had read a line of it. Everyone still gets the offer - they just get to see
+     what they are installing first. */
+  setTimeout(function(){ if(!isStandalone) overlay.classList.add('show'); }, 12000);
 }
 
 function toggleShareMenu(){

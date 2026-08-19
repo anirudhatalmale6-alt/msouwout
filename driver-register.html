@@ -68,7 +68,7 @@
 
   .dtype{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .dtype label{cursor:pointer}
-  .dtype input{position:absolute;opacity:0;pointer-events:none}
+  .dtype input{position:absolute;opacity:0;pointer-events:none;width:0;height:0;padding:0;margin:0}  /* the .field rule above gives every input width:100%; on an absolutely positioned radio that pushed the page 200px wider than the phone */
   .dtype .box{border:2px solid var(--line);border-radius:14px;padding:14px 12px;text-align:center;
     transition:.15s;background:#fff;display:flex;align-items:center;justify-content:center;gap:8px}
   .dtype .box .emo{font-size:22px}
