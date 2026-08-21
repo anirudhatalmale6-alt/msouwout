@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>JRA business card — print files</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B2A5B; --navy-dark:#111C3E; --red:#C0392B; --green:#1B8C3D;
+  --white:#fff; --off-white:#F4F6FA; --text:#1A2A4A; --text-light:#5A6B8A;
+  --text-muted:#8A95AA; --border:#DFE5EE; --radius:14px;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);color:var(--text);background:var(--off-white);
+  line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;padding:24px 18px 64px}
+
+header{text-align:center;padding:10px 0 24px}
+h1{font-size:1.4rem;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
+.sub{color:var(--text-light);font-size:.95rem}
+
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;margin-bottom:16px}
+.card h2{font-size:1.02rem;font-weight:800;margin-bottom:6px}
+.card p{color:var(--text-light);font-size:.93rem}
+.card img{display:block;width:100%;height:auto;border-radius:10px;
+  border:1px solid var(--border);margin-top:14px}
+
+.btn{display:block;width:100%;text-align:center;text-decoration:none;
+  padding:17px 16px;border-radius:var(--radius);font-weight:800;font-size:1rem;
+  margin-top:14px;letter-spacing:-.01em}
+.btn-main{background:var(--navy);color:var(--white);box-shadow:0 6px 18px rgba(27,42,91,.24)}
+.btn-ghost{background:var(--white);color:var(--navy);border:2px solid var(--navy)}
+.meta{margin-top:12px;font-size:.83rem;color:var(--text-muted);text-align:center}
+
+.tag{display:inline-block;background:rgba(27,140,61,.1);color:var(--green);
+  font-size:.75rem;font-weight:800;padding:4px 10px;border-radius:99px;
+  letter-spacing:.04em;text-transform:uppercase}
+
+ol{margin:12px 0 0;padding:0;list-style:none;counter-reset:s}
+ol li{counter-increment:s;position:relative;padding:0 0 14px 40px;font-size:.93rem;
+  color:var(--text-light)}
+ol li:before{content:counter(s);position:absolute;left:0;top:0;width:26px;height:26px;
+  background:var(--navy);color:#fff;border-radius:50%;font-size:.8rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center}
+ol li b{color:var(--text);font-weight:700}
+
+.warn{background:#FFF6F5;border:1px solid rgba(192,57,43,.28);border-left:4px solid var(--red);
+  border-radius:10px;padding:14px 16px;margin-top:14px}
+.warn b{color:var(--red)}
+.warn p{color:var(--text);font-size:.9rem;margin-top:4px}
+
+.qr{display:block;width:200px;max-width:60%;margin:16px auto 0;border:1px solid var(--border);
+  border-radius:10px}
+footer{text-align:center;color:var(--text-muted);font-size:.82rem;padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>JRA Interpretation &amp; Translation</h1>
+    <p class="sub">Business card &mdash; front &mdash; print files</p>
+  </header>
+
+  <div class="card">
+    <span class="tag">Scan this first</span>
+    <h2 style="margin-top:10px">Check the code works</h2>
+    <p>Point a phone camera at this. It should offer to open
+    jrainterpretation.com. This is the same code that is on the card.</p>
+    <img class="qr" src="JRA-QR-v2-large.png" alt="QR code for jrainterpretation.com">
+    <div class="warn">
+      <b>A card-sized code will not scan off a phone screen.</b>
+      <p>On the card the code is about 10&nbsp;mm across, which is right for a
+      printed card held in the hand. If you open the card picture in a chat and
+      try to scan it from the screen, the squares end up only a few pixels wide
+      and no camera can read them. That is not a fault in the code &mdash; scan
+      the big one above, or scan the card after it is printed.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="tag">Upload this one</span>
+    <h2 style="margin-top:10px">Print file &mdash; with bleed</h2>
+    <p>3.75 &times; 2.25 inches at 300&nbsp;dpi. That is the finished
+    3.5 &times; 2 inch card plus 0.125 inch of bleed on every side. Upload it and
+    let it fill the whole canvas &mdash; do not shrink it and do not drag it
+    around.</p>
+    <a class="btn btn-main" href="JRA-Card-FRONT-v2-print-3.75x2.25-bleed.pdf">Download the print file (PDF)</a>
+    <a class="btn btn-ghost" href="JRA-Card-FRONT-v2-print-3.75x2.25-bleed.jpg">Download it as a JPG instead</a>
+    <p class="meta">Use the PDF if the uploader accepts one.</p>
+  </div>
+
+  <div class="card">
+    <h2>If the uploader refuses a file with bleed</h2>
+    <p>Some tools ask for the finished size instead. Only use this one if it
+    specifically asks for 3.5 &times; 2 inches.</p>
+    <a class="btn btn-ghost" href="JRA-Card-FRONT-v2-3.5x2-no-bleed.jpg">Download the no-bleed version</a>
+  </div>
+
+  <div class="card">
+    <h2>What changed</h2>
+    <ol>
+      <li>The QR code is <b>26% bigger square-for-square</b> and now sits far
+      enough in from the cut line to clear the safe area.</li>
+      <li>It carries stronger error correction, so it still reads when the print
+      is imperfect or the camera is not straight on.</li>
+      <li>Nothing was retyped and nothing else moved.</li>
+    </ol>
+    <div class="warn">
+      <b>Some of the original design still sits close to the cut.</b>
+      <p>The globe in the logo is 0.145 inch from the cut line, the name and the
+      web and email lines are about 0.21 inch, and the icon row along the bottom
+      is 0.22 inch. If the uploader is asking for a quarter inch, it may still
+      flag those. Sorting that out properly means either shrinking the whole
+      design again, which makes the text smaller, or going back to the
+      designer's original file. Send a screenshot of what it says and it can be
+      dealt with.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>To check it, not to print it</h2>
+    <p>The same card with the guides drawn on. Red is where it gets cut, green
+    dashes are the quarter-inch safe area. Never send this one to print.</p>
+    <a class="btn btn-ghost" href="JRA-Card-FRONT-v2-GUIDES-do-not-print.jpg">Open the guides version</a>
+  </div>
+
+  <footer>
+    Front of the card only &mdash; send the back artwork and it can be done the same way.
+  </footer>
+
+</div>
+</body>
+</html>
