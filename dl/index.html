@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>MsouWout 1.1.5 — app files</title>
+<link rel="icon" href="../assets/favicon-32.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#00209F; --red:#D21034; --red-dark:#B00D2C; --gold:#D4A017; --green:#1B8C3D;
+  --white:#fff; --off-white:#F5F7FA; --text:#1A2A4A; --text-light:#5A6B8A;
+  --text-muted:#8A95AA; --border:#E2E8F0; --radius:14px;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);color:var(--text);background:var(--off-white);
+  line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding:24px 18px 64px}
+
+header{text-align:center;padding:14px 0 26px}
+header img{height:56px;width:auto;border-radius:12px}
+h1{font-size:1.45rem;font-weight:800;letter-spacing:-.02em;margin:16px 0 4px}
+.sub{color:var(--text-light);font-size:.95rem}
+
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;margin-bottom:16px}
+.card h2{font-size:1.02rem;font-weight:800;margin-bottom:6px}
+.card p{color:var(--text-light);font-size:.93rem}
+
+.btn{display:block;width:100%;text-align:center;text-decoration:none;
+  padding:18px 16px;border-radius:var(--radius);font-weight:800;font-size:1.02rem;
+  margin-top:14px;letter-spacing:-.01em}
+.btn-main{background:var(--blue);color:var(--white);box-shadow:0 6px 18px rgba(0,32,159,.22)}
+.btn-main:active{transform:translateY(1px)}
+.btn-ghost{background:var(--white);color:var(--blue);border:2px solid var(--blue)}
+.meta{margin-top:12px;font-size:.83rem;color:var(--text-muted);text-align:center}
+
+.tag{display:inline-block;background:rgba(27,140,61,.1);color:var(--green);
+  font-size:.75rem;font-weight:800;padding:4px 10px;border-radius:99px;
+  letter-spacing:.04em;text-transform:uppercase}
+
+ol{margin:12px 0 0 0;padding:0;list-style:none;counter-reset:s}
+ol li{counter-increment:s;position:relative;padding:0 0 14px 40px;font-size:.93rem;
+  color:var(--text-light)}
+ol li:before{content:counter(s);position:absolute;left:0;top:0;width:26px;height:26px;
+  background:var(--blue);color:#fff;border-radius:50%;font-size:.8rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center}
+ol li b{color:var(--text);font-weight:700}
+
+.warn{background:#FFF6F7;border:1px solid rgba(210,16,52,.28);border-left:4px solid var(--red);
+  border-radius:10px;padding:14px 16px;margin-top:14px}
+.warn b{color:var(--red-dark)}
+.warn p{color:var(--text);font-size:.9rem;margin-top:4px}
+
+footer{text-align:center;color:var(--text-muted);font-size:.82rem;padding-top:14px}
+footer a{color:var(--text-light)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <img src="../assets/msouwout-icon.png" alt="MsouWout">
+    <h1>MsouWout 1.1.5</h1>
+    <p class="sub">App files for Google Play</p>
+  </header>
+
+  <div class="card">
+    <span class="tag">Upload this one</span>
+    <h2 style="margin-top:10px">Play Store bundle</h2>
+    <p>This is the file Google Play asks for. Tap to download it to your phone, then upload it in Play Console.</p>
+    <a class="btn btn-main" href="MsouWout-1.1.5-PlayStore-upload.aab">Download the Play Store file</a>
+    <p class="meta">MsouWout-1.1.5-PlayStore-upload.aab &middot; 8.7 MB &middot; version 1.1.5 (code 10)</p>
+  </div>
+
+  <div class="card">
+    <h2>How to upload it</h2>
+    <ol>
+      <li>Open <b>Play Console</b> and choose <b>MsouWout</b>.</li>
+      <li>Go to <b>Production</b>, then <b>Create new release</b>.</li>
+      <li>Tap <b>Upload</b> and pick the file you just downloaded.</li>
+      <li>For "What's new", write: <b>Faster loading and up-to-date prices.</b></li>
+      <li>Tap <b>Next</b>, then <b>Save</b>.</li>
+      <li>Tap <b>Send for review</b>.</li>
+      <li>Google reviews it. Usually a day or two.</li>
+    </ol>
+    <div class="warn">
+      <b>If Google offers to reset or change the signing key &mdash; stop.</b>
+      <p>Do not accept it. Send me a screenshot instead. Everything else you can tap through safely.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Want to try it first?</h2>
+    <p>This version installs straight onto your own phone so you can see it working before you publish. It does not go to Google.</p>
+    <a class="btn btn-ghost" href="MsouWout-1.1.5-test-on-your-phone.apk">Download the test version</a>
+    <p class="meta">Your phone may warn about installing outside the Play Store &mdash; that is normal for a test file.</p>
+  </div>
+
+  <footer>
+    <a href="https://msouwout.com">msouwout.com</a>
+  </footer>
+
+</div>
+</body>
+</html>
