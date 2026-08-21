@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /dl/
 
 Sitemap: https://msouwout.com/sitemap.xml
