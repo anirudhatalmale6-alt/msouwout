@@ -68,14 +68,33 @@ footer{text-align:center;color:var(--text-muted);font-size:.82rem;padding-top:14
 
   <div class="card">
     <span class="tag">Upload this one</span>
-    <h2 style="margin-top:10px">Print file &mdash; version 3</h2>
+    <h2 style="margin-top:10px">Print file &mdash; corrected 25 August</h2>
     <p>3.75 &times; 2.25 inches at 300&nbsp;dpi. That is the finished
     3.5 &times; 2 inch card plus 0.125 inch of bleed on every side. Upload it and
     let it fill the whole canvas &mdash; do not shrink it and do not drag it
     around.</p>
-    <a class="btn btn-main" href="JRA-Card-FRONT-v3-print-3.75x2.25-bleed.pdf">Download the print file (PDF)</a>
-    <a class="btn btn-ghost" href="JRA-Card-FRONT-v3-print-3.75x2.25-bleed.jpg">Download it as a JPG instead</a>
-    <p class="meta">Use the PDF if the uploader accepts one.</p>
+    <a class="btn btn-main" href="JRA-Card-FRONT-PRINT-3.75x2.25.pdf">Download the print file (PDF)</a>
+    <a class="btn btn-ghost" href="JRA-Card-FRONT-PRINT-3.75x2.25-300dpi.jpg">Download it as a JPG instead</a>
+    <p class="meta">Please use the PDF. A PDF states its own print size, so no
+    uploader has to guess it.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">Please read &mdash; this is what was wrong</span>
+    <h2 style="margin-top:10px">The old JPG did not carry its print size</h2>
+    <p>The JPG file sent before was the right shape and the right number of
+    pixels, but it had <b>no resolution tag inside it</b>. A JPEG with no
+    resolution tag has no physical size, so an uploader has to guess one &mdash;
+    and most guess 72&nbsp;dpi, which makes this file look like it is
+    15.6&nbsp;inches wide. The tool then rescales it to fit the card, and once it
+    rescales, the clearance inside the dotted line is gone and the artwork lands
+    back over the line. The same file, uploaded twice, can behave differently
+    for exactly this reason.</p>
+    <p style="margin-top:10px">The file above now states <b>300&nbsp;dpi =
+    3.75 &times; 2.25 inches</b>. The picture itself is byte for byte identical
+    to the one you already have &mdash; nothing was redrawn, only the size label
+    was added. The PDF never had this problem, which is why it is the one to
+    use.</p>
   </div>
 
   <div class="card">
@@ -91,7 +110,7 @@ footer{text-align:center;color:var(--text-muted);font-size:.82rem;padding-top:14
     a clear <b>2.1&nbsp;mm inside the dotted line</b> on all four sides. Nothing
     was retyped and nothing was moved relative to anything else &mdash; it is the
     same card, slightly smaller inside the same paper.</p>
-    <img src="JRA-Card-FRONT-v3-GUIDES-do-not-print.jpg" alt="The card with the cut line in red and the safe area in green dashes">
+    <img src="JRA-Card-FRONT-GUIDES-do-not-print.jpg" alt="The card with the cut line in red and the safe area in green dashes">
     <p class="meta">Red is where it gets cut. Green dashes are the safe area.</p>
   </div>
 
@@ -115,7 +134,7 @@ footer{text-align:center;color:var(--text-muted);font-size:.82rem;padding-top:14
     <h2>If the uploader refuses a file with bleed</h2>
     <p>Some tools ask for the finished size instead. Only use this one if it
     specifically asks for 3.5 &times; 2 inches.</p>
-    <a class="btn btn-ghost" href="JRA-Card-FRONT-v3-3.5x2-no-bleed.jpg">Download the no-bleed version</a>
+    <a class="btn btn-ghost" href="JRA-Card-FRONT-3.5x2-no-bleed-300dpi.jpg">Download the no-bleed version</a>
     <div class="warn">
       <b>Do not put the no-bleed file into a 3.75 &times; 2.25 slot.</b>
       <p>If a 3.5 &times; 2 file is dropped into a template that wants
@@ -128,7 +147,7 @@ footer{text-align:center;color:var(--text-muted);font-size:.82rem;padding-top:14
   <div class="card">
     <h2>To check it, not to print it</h2>
     <p>The same card with the guides drawn on. Never send this one to print.</p>
-    <a class="btn btn-ghost" href="JRA-Card-FRONT-v3-GUIDES-do-not-print.jpg">Open the guides version</a>
+    <a class="btn btn-ghost" href="JRA-Card-FRONT-GUIDES-do-not-print.jpg">Open the guides version</a>
   </div>
 
   <footer>
