@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Love Your Neighbor Now — Strengthening Families in Haiti</title>
+<meta name="description" content="LYNN is a 501(c)(3) nonprofit serving families in Haiti and at home — hot meals for children every week, school fees, trade training and small business loans.">
+<link rel="icon" href="assets/lynn-logo.png">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Love Your Neighbor Now — Strengthening Families in Haiti">
+<meta property="og:description" content="Hot meals for almost 50 children every week. 25 children sent to school. Trade training and small business loans. Give today.">
+<meta property="og:image" content="assets/hero.webp">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ------------------------------------------------------------------ *
+   LYNN — Love Your Neighbor Now
+   Warm editorial palette: cream paper, navy ink, forest green brand,
+   and ONE hot accent (#D4451F) reserved exclusively for giving actions,
+   so the eye always knows where to donate.
+ * ------------------------------------------------------------------ */
+:root{
+  --navy:#1b2050;
+  --navy-2:#2e336a;
+  --green:#227104;
+  --green-2:#2f8f12;
+  --give:#d4451f;
+  --give-dark:#a83615;
+  --cream:#fbf7f0;
+  --cream-2:#f3ece0;
+  --ink:#1a1a24;
+  --muted:#5d5f70;
+  --line:#e2d9c9;
+  --shadow:0 18px 50px -22px rgba(27,32,80,.45);
+  --wrap:1180px;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--cream);color:var(--ink);
+  font-family:'Public Sans',system-ui,sans-serif;
+  font-size:17px;line-height:1.65;overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+a{color:var(--green);text-decoration-thickness:1px;text-underline-offset:3px}
+h1,h2,h3,h4{font-family:'Fraunces',Georgia,serif;line-height:1.1;margin:0;font-weight:600}
+h1{font-size:clamp(2.3rem,6.2vw,4.3rem);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(1.85rem,4vw,2.9rem);letter-spacing:-.015em}
+h3{font-size:clamp(1.2rem,2.2vw,1.5rem)}
+p{margin:0 0 1.05em}
+.wrap{width:min(var(--wrap),100% - 2.5rem);margin-inline:auto}
+.eyebrow{
+  font-family:'Public Sans',sans-serif;font-size:.72rem;font-weight:700;
+  letter-spacing:.19em;text-transform:uppercase;color:var(--green);
+  display:flex;align-items:center;gap:.6rem;margin:0 0 1rem;
+}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--green);flex:none}
+.lede{font-size:clamp(1.05rem,1.6vw,1.22rem);color:var(--muted);max-width:64ch}
+
+/* buttons ---------------------------------------------------------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  font-family:'Public Sans',sans-serif;font-weight:700;font-size:.95rem;
+  padding:.85rem 1.5rem;border-radius:100px;border:2px solid transparent;
+  cursor:pointer;text-decoration:none;transition:transform .18s,box-shadow .18s,background .18s;
+  line-height:1.2;
+}
+.btn-give{background:var(--give);color:#fff;box-shadow:0 10px 24px -10px rgba(212,69,31,.75)}
+.btn-give:hover{background:var(--give-dark);transform:translateY(-2px)}
+.btn-ghost{border-color:currentColor;color:var(--navy);background:transparent}
+.btn-ghost:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn-light{border-color:rgba(255,255,255,.55);color:#fff;background:rgba(255,255,255,.07)}
+.btn-light:hover{background:#fff;color:var(--navy)}
+
+/* header ----------------------------------------------------------- */
+header{
+  position:sticky;top:0;z-index:60;background:rgba(251,247,240,.93);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+}
+.bar{display:flex;align-items:center;gap:1rem;padding:.6rem 0;min-height:66px}
+/* flex:none here pushed the burger off-screen on a 390px phone - the brand must
+   be allowed to shrink, and min-width:0 is what lets it go below its text width */
+.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;min-width:0;flex:0 1 auto}
+.brand img{width:46px;height:46px;object-fit:contain;flex:none}
+.brand > span{min-width:0;overflow:hidden}
+.brand b{
+  font-family:'Fraunces',serif;color:var(--navy);font-size:1.12rem;
+  font-weight:700;line-height:1;display:block;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.brand span{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);font-weight:600}
+nav{margin-left:auto;display:flex;align-items:center;gap:1.6rem}
+nav a.nl{
+  color:var(--navy);text-decoration:none;font-weight:600;font-size:.93rem;
+  padding:.3rem 0;border-bottom:2px solid transparent;
+}
+nav a.nl:hover{border-color:var(--green)}
+.burger{display:none;margin-left:auto;background:none;border:0;padding:.5rem;cursor:pointer}
+.burger span{display:block;width:26px;height:2.5px;background:var(--navy);margin:5px 0;border-radius:2px;transition:.25s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+
+/* hero ------------------------------------------------------------- */
+.hero{position:relative;isolation:isolate;color:#fff;overflow:hidden}
+.hero img.bg{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;
+}
+.hero::after{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(19,23,58,.86) 0%,rgba(19,23,58,.72) 45%,rgba(19,23,58,.93) 100%);
+}
+.hero-in{padding:clamp(4rem,11vw,8.5rem) 0 clamp(3rem,7vw,5rem);max-width:52rem}
+.hero h1{color:#fff;text-wrap:balance}
+.hero h1 em{font-style:normal;color:#8fd66a}
+.hero p{color:rgba(255,255,255,.87);font-size:clamp(1.05rem,1.9vw,1.28rem);max-width:44ch;margin-top:1.4rem}
+.hero-cta{display:flex;flex-wrap:wrap;gap:.85rem;margin-top:2.2rem}
+
+/* trust strip ------------------------------------------------------ */
+.trust{background:var(--navy);color:rgba(255,255,255,.9);padding:1.15rem 0}
+.trust ul{
+  list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;
+  gap:.5rem 2.4rem;justify-content:center;
+  font-size:.82rem;letter-spacing:.03em;font-weight:600;
+}
+.trust li{display:flex;align-items:center;gap:.5rem}
+.trust svg{width:16px;height:16px;flex:none;color:#8fd66a}
+
+/* counters --------------------------------------------------------- */
+.stats{padding:clamp(3.5rem,7vw,5.5rem) 0;background:var(--cream-2)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.1rem}
+.stat{
+  background:var(--cream);border:1px solid var(--line);border-radius:var(--r);
+  padding:1.7rem 1.4rem;text-align:center;min-width:0;
+}
+.stat b{
+  display:block;font-family:'Fraunces',serif;font-size:clamp(2.4rem,5vw,3.2rem);
+  font-weight:700;color:var(--green);line-height:1;letter-spacing:-.02em;
+}
+.stat small{display:block;margin-top:.55rem;font-size:.87rem;color:var(--muted);font-weight:500}
+
+/* generic section -------------------------------------------------- */
+section{scroll-margin-top:80px}
+.pad{padding:clamp(3.5rem,8vw,6.5rem) 0}
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2rem,5vw,4rem);align-items:center}
+.split img{border-radius:var(--r);box-shadow:var(--shadow);width:100%}
+.mission-cards{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:2rem}
+.mcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.5rem;min-width:0}
+.mcard h3{color:var(--navy);margin-bottom:.5rem}
+.mcard p{margin:0;font-size:.95rem;color:var(--muted)}
+
+/* programs --------------------------------------------------------- */
+.programs{background:var(--navy);color:#fff}
+.programs h2,.programs h3{color:#fff}
+.programs .lede{color:rgba(255,255,255,.75)}
+.programs .eyebrow{color:#8fd66a}
+.programs .eyebrow::before{background:#8fd66a}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:1.3rem;margin-top:2.6rem}
+.pcard{
+  background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.14);
+  border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;min-width:0;
+  transition:transform .22s,border-color .22s;
+}
+.pcard:hover{transform:translateY(-4px);border-color:#8fd66a}
+.pcard img{aspect-ratio:4/3;object-fit:cover;width:100%}
+.pcard .body{padding:1.3rem;flex:1;display:flex;flex-direction:column}
+.pcard h3{font-size:1.12rem;margin-bottom:.5rem}
+.pcard p{font-size:.9rem;color:rgba(255,255,255,.78);margin:0}
+
+/* gallery ---------------------------------------------------------- */
+.ggrid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:.7rem;margin-top:2.2rem;
+}
+.ggrid button{
+  padding:0;border:0;background:none;cursor:pointer;border-radius:10px;
+  overflow:hidden;aspect-ratio:1;
+}
+.ggrid img{width:100%;height:100%;object-fit:cover;transition:transform .35s,filter .35s}
+.ggrid button:hover img{transform:scale(1.06);filter:saturate(1.15)}
+.lb{
+  position:fixed;inset:0;z-index:120;background:rgba(12,14,34,.95);
+  display:none;align-items:center;justify-content:center;padding:1.2rem;
+}
+.lb.on{display:flex}
+.lb img{max-width:100%;max-height:86vh;border-radius:8px}
+.lb button{
+  position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;
+  width:48px;height:48px;border-radius:50%;font-size:1.5rem;cursor:pointer;line-height:1;
+}
+.lb .x{top:1.1rem;right:1.1rem}
+.lb .prev{left:1.1rem}
+.lb .next{right:1.1rem}
+
+/* team ------------------------------------------------------------- */
+.team{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-top:2.2rem}
+.person{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);
+  padding:1.25rem 1rem;text-align:center;min-width:0;
+}
+.avatar{
+  width:56px;height:56px;border-radius:50%;margin:0 auto .8rem;
+  background:var(--green);color:#fff;display:grid;place-items:center;
+  font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem;
+}
+.person b{display:block;color:var(--navy);font-size:.98rem;line-height:1.3}
+.person small{display:block;margin-top:.3rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+
+/* credibility ------------------------------------------------------ */
+.cred{
+  background:#fff;border:1px solid var(--line);border-left:5px solid var(--green);
+  border-radius:var(--r);padding:1.8rem;margin-top:2.4rem;display:grid;
+  grid-template-columns:auto 1fr;gap:1.4rem;align-items:center;
+}
+.cred svg{width:44px;height:44px;color:var(--green);flex:none}
+.cred p{margin:0;font-size:.95rem;color:var(--muted)}
+.cred b{color:var(--navy)}
+
+/* give ------------------------------------------------------------- */
+.give{background:var(--cream-2)}
+.give-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(2rem,4vw,3.5rem);align-items:start}
+.ways{display:grid;gap:1rem}
+.way{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);
+  padding:1.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.1rem;min-width:0;
+}
+.way .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--cream-2);color:var(--green);flex:none}
+.way .ic svg{width:22px;height:22px}
+.way h3{color:var(--navy);font-size:1.1rem;margin-bottom:.35rem}
+.way p{margin:0 0 .8rem;font-size:.92rem;color:var(--muted)}
+
+.panel{
+  background:var(--navy);color:#fff;border-radius:18px;padding:1.9rem;
+  box-shadow:var(--shadow);position:sticky;top:88px;
+}
+.panel h3{color:#fff;font-size:1.35rem;margin-bottom:.35rem}
+.panel > p{font-size:.9rem;color:rgba(255,255,255,.72);margin-bottom:1.3rem}
+.toggle{display:flex;background:rgba(255,255,255,.1);border-radius:100px;padding:4px;margin-bottom:1.2rem}
+.toggle button{
+  flex:1;background:none;border:0;color:rgba(255,255,255,.75);font-weight:700;
+  font-size:.85rem;padding:.6rem;border-radius:100px;cursor:pointer;font-family:inherit;
+}
+.toggle button[aria-pressed="true"]{background:#fff;color:var(--navy)}
+.amts{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin-bottom:.9rem}
+.amt{
+  background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.2);color:#fff;
+  border-radius:10px;padding:.85rem;font-weight:700;font-size:1.05rem;cursor:pointer;
+  font-family:'Fraunces',serif;transition:.16s;
+}
+.amt:hover{border-color:rgba(255,255,255,.55)}
+.amt[aria-pressed="true"]{background:#fff;color:var(--navy);border-color:#fff}
+.other{
+  width:100%;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.2);
+  color:#fff;border-radius:10px;padding:.8rem;font-family:inherit;font-size:1rem;margin-bottom:1rem;
+}
+.other::placeholder{color:rgba(255,255,255,.5)}
+.panel .btn{width:100%}
+.impact-line{
+  font-size:.85rem;color:#8fd66a;text-align:center;margin:1rem 0 0;min-height:1.4em;font-weight:600;
+}
+.note{font-size:.78rem;color:rgba(255,255,255,.6);text-align:center;margin:.9rem 0 0}
+
+/* contact ---------------------------------------------------------- */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,3.5rem)}
+form label{display:block;font-weight:700;font-size:.82rem;color:var(--navy);margin:0 0 .35rem}
+form input,form select,form textarea{
+  width:100%;padding:.8rem .9rem;border:1.5px solid var(--line);border-radius:10px;
+  font-family:inherit;font-size:.97rem;background:#fff;color:var(--ink);margin-bottom:1rem;
+}
+form input:focus,form select:focus,form textarea:focus{outline:2px solid var(--green);border-color:var(--green)}
+form textarea{min-height:130px;resize:vertical}
+.cinfo{display:grid;gap:1.1rem;align-content:start}
+.crow{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:start}
+.crow .ic{width:40px;height:40px;border-radius:11px;background:var(--cream-2);color:var(--green);display:grid;place-items:center;flex:none}
+.crow .ic svg{width:19px;height:19px}
+.crow b{display:block;color:var(--navy);font-size:.95rem}
+.crow span{font-size:.92rem;color:var(--muted)}
+
+/* final CTA + footer ----------------------------------------------- */
+.final{background:var(--green);color:#fff;text-align:center}
+.final h2{color:#fff;max-width:20ch;margin-inline:auto}
+.final p{color:rgba(255,255,255,.9);max-width:52ch;margin:1.1rem auto 2rem}
+.final .btn-give{background:#fff;color:var(--give);box-shadow:0 10px 24px -12px rgba(0,0,0,.5)}
+.final .btn-give:hover{background:var(--cream)}
+footer{background:var(--navy);color:rgba(255,255,255,.62);padding:3.2rem 0 6.5rem;font-size:.9rem}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2.2rem;margin-bottom:2.4rem}
+footer img.flogo{width:120px;margin-bottom:1rem}
+footer h4{color:#fff;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;font-family:'Public Sans',sans-serif;font-weight:700;margin-bottom:.9rem}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+footer a{color:rgba(255,255,255,.72);text-decoration:none}
+footer a:hover{color:#8fd66a}
+.fbot{border-top:1px solid rgba(255,255,255,.14);padding-top:1.5rem;font-size:.82rem;display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;justify-content:space-between}
+
+/* sticky mobile give ----------------------------------------------- */
+.mgive{
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:80;
+  padding:.6rem .9rem calc(.6rem + env(safe-area-inset-bottom));
+  background:rgba(251,247,240,.96);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);
+}
+.mgive .btn{width:100%;padding:.95rem}
+
+/* responsive ------------------------------------------------------- */
+@media (max-width:900px){
+  .split,.give-grid,.cgrid,.fgrid{grid-template-columns:1fr}
+  .panel{position:static}
+  .mission-cards{grid-template-columns:1fr}
+  nav{
+    position:fixed;inset:66px 0 auto;background:var(--cream);flex-direction:column;
+    align-items:stretch;gap:0;padding:.5rem 1.25rem 1.25rem;border-bottom:1px solid var(--line);
+    transform:translateY(-130%);transition:transform .3s;box-shadow:var(--shadow);margin:0;
+  }
+  nav.open{transform:translateY(0)}
+  nav a.nl{padding:.85rem 0;border-bottom:1px solid var(--line)}
+  nav .btn{margin-top:.9rem}
+  .burger{display:block}
+  body{padding-bottom:72px}
+  .mgive{display:block}
+  .cred{grid-template-columns:1fr;text-align:left}
+}
+@media (max-width:520px){
+  .brand img{width:38px;height:38px}
+  .brand b{font-size:.98rem}
+  .brand span span{font-size:.55rem}
+  .amts{grid-template-columns:1fr 1fr}
+  .ggrid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+  .trust ul{gap:.45rem 1.3rem;font-size:.75rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#top">
+      <img src="assets/lynn-logo.png" alt="Love Your Neighbor Now logo">
+      <span><b>Love Your Neighbor Now</b><span>501(c)(3) Nonprofit</span></span>
+    </a>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="nav">
+      <a class="nl" href="#about">About</a>
+      <a class="nl" href="#programs">Programs</a>
+      <a class="nl" href="#impact">Impact</a>
+      <a class="nl" href="#involved">Get Involved</a>
+      <a class="nl" href="#contact">Contact</a>
+      <a class="btn btn-give" href="#involved" data-give>Donate Now</a>
+    </nav>
+  </div>
+</header>
+
+<!-- 1. HERO ------------------------------------------------------- -->
+<section class="hero" id="top">
+  <img class="bg" src="assets/hero.webp" alt="Children in LYNN t-shirts at a community event in Haiti">
+  <div class="wrap hero-in">
+    <p class="eyebrow" style="color:#8fd66a">Serving families in Haiti and at home</p>
+    <h1>Strengthening Families.<br>Empowering Communities.<br><em>Changing Lives.</em></h1>
+    <p>Every week LYNN puts hot meals in front of children who would otherwise go without,
+       pays school fees for those who cannot, and teaches a trade to young people who need one.</p>
+    <div class="hero-cta">
+      <a class="btn btn-give" href="#involved" data-give>Donate Now</a>
+      <a class="btn btn-light" href="#programs">See our work</a>
+    </div>
+  </div>
+</section>
+
+<!-- trust strip --------------------------------------------------- -->
+<div class="trust">
+  <div class="wrap">
+    <ul>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Registered 501(c)(3) nonprofit</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Volunteer-led</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Working in Haiti &amp; our local community</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Partnered with local community organizations</li>
+    </ul>
+  </div>
+</div>
+
+<!-- counters ------------------------------------------------------ -->
+<section class="stats" id="impact">
+  <div class="wrap">
+    <div class="stat-grid">
+      <div class="stat"><b data-count="50" data-suffix="+">0</b><small>children fed hot meals every week</small></div>
+      <div class="stat"><b data-count="125" data-suffix="+">0</b><small>children served on Children's International Day</small></div>
+      <div class="stat"><b data-count="25" data-suffix="">0</b><small>children sent to school, K through high school</small></div>
+      <div class="stat"><b data-count="3" data-suffix="">0</b><small>nursing students sponsored in Cap-Haïtien</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. ABOUT ------------------------------------------------------ -->
+<section class="pad" id="about">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <p class="eyebrow">Who we are</p>
+        <h2>Neighbors helping neighbors — here and in Haiti.</h2>
+        <p class="lede">LYNN was incorporated by a group of engaged community members who saw a
+          simple, stubborn problem: families needed help that already existed nearby, and nobody
+          was connecting them to it.</p>
+        <p>Since then we have served hot meals to almost 50 children every week, hosted health
+          fairs, run focus groups with parents to help build stronger family units, and served
+          over 125 children on Children's International Day. We have collaborated with
+          well-respected community organisations including Shalom Village Joly and Église
+          Chrétienne Amour.</p>
+        <p>Our incorporating members are fully dedicated and bring extensive experience serving
+          the community.</p>
+      </div>
+      <img src="assets/story.webp" alt="Families gathered at a LYNN community event">
+    </div>
+
+    <div class="mission-cards">
+      <div class="mcard">
+        <h3>Our Mission</h3>
+        <p>To help connect our neighbors to the community services that already exist around
+           them — and to fill the gap directly with food, schooling and training where those
+           services fall short.</p>
+      </div>
+      <div class="mcard">
+        <h3>Our Vision</h3>
+        <p>Families in Haiti and in our own neighborhood who are fed, schooled, trained and
+           able to build a livelihood without waiting on anyone's permission.</p>
+      </div>
+    </div>
+
+    <div class="cred">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <path d="M12 2l8 4v6c0 5-3.4 9-8 10-4.6-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/>
+      </svg>
+      <p><b>LYNN is a registered 501(c)(3) non-profit organization.</b> Contributions are
+         tax-deductible to the extent allowed by law. Your gift supports the programs on this page.
+         <span data-ein-slot><!-- EIN goes here once Linda sends the determination letter --></span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. PROGRAMS --------------------------------------------------- -->
+<section class="pad programs" id="programs">
+  <div class="wrap">
+    <p class="eyebrow">What we do</p>
+    <h2>Four programs, one purpose.</h2>
+    <p class="lede">Each one exists because somebody in the community told us it was missing.</p>
+
+    <div class="pgrid">
+      <article class="pcard">
+        <img src="assets/prog-food.webp" alt="Children receiving meals from LYNN">
+        <div class="body">
+          <h3>Community Food Project</h3>
+          <p>Nutritional meals three times a week for approximately 40 children in Haiti, plus
+             school fees for an average of 25 children a year. Food justice is community justice.</p>
+        </div>
+      </article>
+      <article class="pcard">
+        <img src="assets/prog-youth.webp" alt="Young people learning a trade in a LYNN workshop">
+        <div class="body">
+          <h3>Youth Professional Development</h3>
+          <p>Trade-school skills classes for local youth, and sponsorship for three nursing
+             students in Cap-Haïtien working toward a profession.</p>
+        </div>
+      </article>
+      <article class="pcard">
+        <img src="assets/prog-biz.webp" alt="Garments being produced by hand at a local workshop">
+        <div class="body">
+          <h3>Community Business Building</h3>
+          <p>Financial assistance so local people can start their own business — the difference
+             between a hand-out and a livelihood that lasts.</p>
+        </div>
+      </article>
+      <article class="pcard">
+        <img src="assets/prog-connect.webp" alt="Medical volunteers at a LYNN health fair">
+        <div class="body">
+          <h3>Community Connections</h3>
+          <p>Health fairs, parent focus groups, and the everyday work of introducing people who
+             need services to the people already providing them.</p>
+        </div>
+      </article>
+    </div>
+
+    <p class="lede" style="margin-top:2.6rem;color:rgba(255,255,255,.8)">
+      This school year, <b style="color:#8fd66a">80 children and 10 adolescents</b> have asked
+      LYNN for help — with school, and with completing a technical trade so they can earn.
+    </p>
+  </div>
+</section>
+
+<!-- gallery ------------------------------------------------------- -->
+<section class="pad">
+  <div class="wrap">
+    <p class="eyebrow">On the ground</p>
+    <h2>What your giving actually looks like.</h2>
+    <div class="ggrid" id="gallery"></div>
+  </div>
+</section>
+
+<!-- team ---------------------------------------------------------- -->
+<section class="pad" style="background:var(--cream-2)">
+  <div class="wrap">
+    <p class="eyebrow">Leadership</p>
+    <h2>The people who show up.</h2>
+    <p class="lede">Our team of regulars and part-time volunteers take their convictions and turn
+       them into action. Think you would be a good fit?
+       <a href="#contact">Get in touch.</a></p>
+    <div class="team" id="team"></div>
+  </div>
+</section>
+
+<!-- 4. GET INVOLVED ----------------------------------------------- -->
+<section class="pad give" id="involved">
+  <div class="wrap">
+    <p class="eyebrow">Get involved</p>
+    <h2>Three ways to make this real.</h2>
+    <div class="give-grid" style="margin-top:2.4rem">
+      <div class="ways">
+        <div class="way">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 10-7.8 7.8l8.8 8.8 8.8-8.8a5.5 5.5 0 000-7.8z"/></svg></div>
+          <div>
+            <h3>Donate</h3>
+            <p>A gift feeds a child this week, not next quarter. Your contribution supports our
+               staff in Haiti and keeps the mission running.</p>
+            <a class="btn btn-give" href="#panel" data-give>Give now</a>
+          </div>
+        </div>
+        <div class="way">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13A4 4 0 0119 7a4 4 0 01-3 3.87"/></svg></div>
+          <div>
+            <h3>Volunteer</h3>
+            <p>Health fairs, back-to-school drives, focus groups and the day-to-day. Tell us what
+               you are good at and we will find the fit.</p>
+            <a class="btn btn-ghost" href="#contact">Volunteer with us</a>
+          </div>
+        </div>
+        <div class="way">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M3 16v5h5"/><path d="M21 16v5h-5"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div>
+            <h3>Partner</h3>
+            <p>Churches, schools, businesses and community groups. We already work alongside Shalom Village
+               Joly and Église Chrétienne Amour — there is room for more.</p>
+            <a class="btn btn-ghost" href="#contact">Start a partnership</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="panel">
+        <h3>Make a gift</h3>
+        <p>Choose an amount. Every dollar is put to work in the programs above.</p>
+        <div class="toggle" role="group" aria-label="Giving frequency">
+          <button type="button" data-freq="once" aria-pressed="true">One-time</button>
+          <button type="button" data-freq="monthly" aria-pressed="false">Monthly</button>
+        </div>
+        <div class="amts" id="amts">
+          <button type="button" class="amt" data-amt="25" aria-pressed="false">$25</button>
+          <button type="button" class="amt" data-amt="50" aria-pressed="true">$50</button>
+          <button type="button" class="amt" data-amt="100" aria-pressed="false">$100</button>
+          <button type="button" class="amt" data-amt="250" aria-pressed="false">$250</button>
+        </div>
+        <input class="other" id="other" type="number" min="1" step="1" placeholder="Other amount ($)" aria-label="Other amount in dollars">
+        <button class="btn btn-give" id="giveBtn" type="button">Donate $50</button>
+        <p class="impact-line" id="impactLine"></p>
+        <p class="note" id="giveNote"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. CONTACT ---------------------------------------------------- -->
+<section class="pad" id="contact">
+  <div class="wrap">
+    <div class="cgrid">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h2>Let's talk.</h2>
+        <p class="lede">A nonprofit is only as strong as the community holding it up. Tell us how
+           you want to help and we will come back to you.</p>
+        <form id="cform" novalidate>
+          <label for="f-name">Name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required>
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required>
+          <label for="f-subject">What is this about?</label>
+          <select id="f-subject" name="subject">
+            <option>I want to donate</option>
+            <option>I want to volunteer</option>
+            <option>Partnership enquiry</option>
+            <option>Sponsor a child's school fees</option>
+            <option>Media / general question</option>
+          </select>
+          <label for="f-msg">Message</label>
+          <textarea id="f-msg" name="message" required></textarea>
+          <button class="btn btn-give" type="submit">Send message</button>
+          <p class="note" id="formNote" style="color:var(--muted);text-align:left"></p>
+        </form>
+      </div>
+      <div class="cinfo" style="padding-top:clamp(0rem,4vw,4.5rem)">
+        <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg></div>
+          <div><b>Email</b><span data-email-slot>Contact address coming soon</span></div>
+        </div>
+        <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><b>Where we work</b><span>Haiti — including Cap-Haïtien — and our local community</span></div>
+        </div>
+        <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <div><b>Response time</b><span>We are volunteer-run — expect a reply within a few days</span></div>
+        </div>
+        <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l8 4v6c0 5-3.4 9-8 10-4.6-1-8-5-8-10V6l8-4z"/></svg></div>
+          <div><b>Registered status</b><span>501(c)(3) non-profit organization</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- final CTA ----------------------------------------------------- -->
+<section class="pad final">
+  <div class="wrap">
+    <h2>A child eats this week because someone decided to help.</h2>
+    <p>Eighty children and ten adolescents have asked us for help this school year. We would like
+       to say yes to all of them.</p>
+    <a class="btn btn-give" href="#involved" data-give>Donate Now</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <img class="flogo" src="assets/lynn-logo-light.png" alt="Love Your Neighbor Now">
+        <p>Love Your Neighbor Now Inc. is a 501(c)(3) non-profit organization serving families in
+           Haiti and in our local community.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#about">About us</a></li>
+          <li><a href="#programs">Our programs</a></li>
+          <li><a href="#impact">Our impact</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Get involved</h4>
+        <ul>
+          <li><a href="#involved" data-give>Donate</a></li>
+          <li><a href="#contact">Volunteer</a></li>
+          <li><a href="#contact">Partner with us</a></li>
+          <li><a href="#contact">Sponsor a student</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot">
+      <span>&copy; <span id="yr"></span> Love Your Neighbor Now Inc. All rights reserved.</span>
+      <span>Registered 501(c)(3) non-profit organization</span>
+    </div>
+  </div>
+</footer>
+
+<div class="mgive"><a class="btn btn-give" href="#involved" data-give>&#10084;&#65039; Donate Now</a></div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button class="x" id="lbx" aria-label="Close">&times;</button>
+  <button class="prev" id="lbp" aria-label="Previous">&#8249;</button>
+  <img id="lbimg" alt="">
+  <button class="next" id="lbn" aria-label="Next">&#8250;</button>
+</div>
+
+<script>
+/* ------------------------------------------------------------------ *
+   CONFIG — the two things LYNN must supply before the site can take
+   money or mail. Both are deliberately EMPTY, not faked: an empty value
+   makes the button explain itself instead of pretending to work.
+ * ------------------------------------------------------------------ */
+var CONFIG = {
+  // Paste the Givebutter / Donorbox / PayPal giving link here.
+  DONATE_URL: "",
+  // Paste the form endpoint (e.g. Formspree) here.
+  CONTACT_ENDPOINT: "",
+  // Real inbox once the domain exists.
+  EMAIL: "",
+  // From the IRS determination letter.
+  EIN: ""
+};
+
+/* nav -------------------------------------------------------------- */
+var burger = document.getElementById('burger'), nav = document.getElementById('nav');
+burger.addEventListener('click', function () {
+  var open = nav.classList.toggle('open');
+  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+nav.addEventListener('click', function (e) {
+  if (e.target.closest('a')) { nav.classList.remove('open'); burger.setAttribute('aria-expanded','false'); }
+});
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* fill the contact + EIN slots only if we actually have the values --- */
+if (CONFIG.EMAIL) {
+  document.querySelectorAll('[data-email-slot]').forEach(function (el) { el.textContent = CONFIG.EMAIL; });
+}
+if (CONFIG.EIN) {
+  document.querySelectorAll('[data-ein-slot]').forEach(function (el) { el.textContent = ' EIN ' + CONFIG.EIN + '.'; });
+}
+
+/* counters --------------------------------------------------------- */
+var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function runCount(el) {
+  var target = +el.dataset.count, suffix = el.dataset.suffix || '';
+  if (reduce) { el.textContent = target + suffix; return; }
+  var start = performance.now(), dur = 1400;
+  function step(now) {
+    var t = Math.min((now - start) / dur, 1);
+    var eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(target * eased) + suffix;
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+var seen = new WeakSet();
+var io = new IntersectionObserver(function (entries) {
+  entries.forEach(function (en) {
+    if (en.isIntersecting && !seen.has(en.target)) { seen.add(en.target); runCount(en.target); }
+  });
+}, { threshold: 0.4 });
+document.querySelectorAll('[data-count]').forEach(function (el) { io.observe(el); });
+
+/* gallery + lightbox ----------------------------------------------- */
+var GALLERY = [
+  ['g1',  'Children in LYNN t-shirts seated at a community gathering'],
+  ['g2',  'A crowd of young people at a LYNN event'],
+  ['g3',  'LYNN volunteer speaking at Children’s International Day'],
+  ['g4',  'Volunteers beside the Children’s International Day banner'],
+  ['g5',  'Children waiting at a LYNN distribution'],
+  ['g6',  'Young people working in the trade skills workshop'],
+  ['g7',  'Peace and Love garments produced in the workshop'],
+  ['g8',  'Trade training session in progress'],
+  ['g9',  'LYNN volunteers registering families'],
+  ['g10', 'A family collecting a school backpack']
+];
+var gal = document.getElementById('gallery');
+GALLERY.forEach(function (g, i) {
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.setAttribute('aria-label', 'View photo: ' + g[1]);
+  b.dataset.i = i;
+  b.innerHTML = '<img src="assets/' + g[0] + '.webp" alt="' + g[1] + '" loading="lazy">';
+  gal.appendChild(b);
+});
+var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'), cur = 0;
+function show(i) {
+  cur = (i + GALLERY.length) % GALLERY.length;
+  lbimg.src = 'assets/' + GALLERY[cur][0] + '.webp';
+  lbimg.alt = GALLERY[cur][1];
+  lb.classList.add('on');
+}
+gal.addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (b) show(+b.dataset.i);
+});
+document.getElementById('lbx').onclick = function () { lb.classList.remove('on'); };
+document.getElementById('lbp').onclick = function () { show(cur - 1); };
+document.getElementById('lbn').onclick = function () { show(cur + 1); };
+lb.addEventListener('click', function (e) { if (e.target === lb) lb.classList.remove('on'); });
+document.addEventListener('keydown', function (e) {
+  if (!lb.classList.contains('on')) return;
+  if (e.key === 'Escape') lb.classList.remove('on');
+  if (e.key === 'ArrowLeft') show(cur - 1);
+  if (e.key === 'ArrowRight') show(cur + 1);
+});
+
+/* team ------------------------------------------------------------- */
+var TEAM = [
+  ['Lynda Joseph Jean', 'Founder / President'],
+  ['Dr Nahomie Mirville', 'Chairwoman'],
+  ['Nancy Adrien', 'Co Chair'],
+  ['Bella Gerton', 'Finance Secretary'],
+  ['Jona', 'Treasurer'],
+  ['Emmanuella', 'Assistant Treasurer'],
+  ['Jacinthe', 'Health Fair Coordinator'],
+  ['Christine', 'Activities Coordinator'],
+  ['Guerline', 'Youth Coordinator'],
+  ['Mr. Wilner Paul', 'Youth Coordinator Assistant'],
+  ['Mr. Johny', 'Social Media'],
+  ['Mr. Bisson', 'Education Coordinator']
+];
+var teamEl = document.getElementById('team');
+TEAM.forEach(function (p) {
+  var initials = p[0].replace(/^(Dr|Mr\.|Mrs\.|Ms\.)\s+/, '')
+                     .split(/\s+/).map(function (w) { return w[0]; }).join('').slice(0, 2);
+  var d = document.createElement('div');
+  d.className = 'person';
+  d.innerHTML = '<div class="avatar">' + initials + '</div><b>' + p[0] + '</b><small>' + p[1] + '</small>';
+  teamEl.appendChild(d);
+});
+
+/* donation panel --------------------------------------------------- */
+var freq = 'once', amount = 50;
+var giveBtn = document.getElementById('giveBtn');
+var other = document.getElementById('other');
+var impactLine = document.getElementById('impactLine');
+var giveNote = document.getElementById('giveNote');
+
+function impactFor(a) {
+  if (!a) return '';
+  if (a < 40)  return 'Feeds a child hot meals for about a month.';
+  if (a < 95)  return 'Feeds a child for two months, three meals a week.';
+  if (a < 240) return 'Helps send a child to school for a term.';
+  return 'Sponsors a nursing student toward their qualification.';
+}
+function refresh() {
+  giveBtn.textContent = amount
+    ? 'Donate $' + amount + (freq === 'monthly' ? ' / month' : '')
+    : 'Choose an amount';
+  impactLine.textContent = impactFor(amount);
+}
+document.querySelectorAll('.toggle button').forEach(function (b) {
+  b.addEventListener('click', function () {
+    freq = b.dataset.freq;
+    document.querySelectorAll('.toggle button').forEach(function (x) {
+      x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+    });
+    refresh();
+  });
+});
+document.querySelectorAll('.amt').forEach(function (b) {
+  b.addEventListener('click', function () {
+    amount = +b.dataset.amt; other.value = '';
+    document.querySelectorAll('.amt').forEach(function (x) {
+      x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+    });
+    refresh();
+  });
+});
+other.addEventListener('input', function () {
+  amount = Math.max(0, Math.floor(+other.value || 0));
+  document.querySelectorAll('.amt').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+  refresh();
+});
+
+giveBtn.addEventListener('click', function () {
+  if (!amount) { other.focus(); return; }
+  if (CONFIG.DONATE_URL) {
+    var u = CONFIG.DONATE_URL
+          + (CONFIG.DONATE_URL.indexOf('?') > -1 ? '&' : '?')
+          + 'amount=' + amount + '&frequency=' + freq;
+    window.open(u, '_blank', 'noopener');
+  } else {
+    // No processor connected yet. Say so plainly rather than looking broken.
+    giveNote.textContent = 'Online giving is being set up right now. Please use the contact form '
+                         + 'below and we will send you how to give today.';
+    document.getElementById('f-subject').value = 'I want to donate';
+    document.getElementById('contact').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+  }
+});
+// A "Donate" link anywhere on the page lands on the panel, not just the section.
+document.querySelectorAll('[data-give]').forEach(function (a) {
+  a.addEventListener('click', function () {
+    setTimeout(function () {
+      document.getElementById('panel').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    }, 120);
+  });
+});
+refresh();
+
+/* contact form ----------------------------------------------------- */
+var cform = document.getElementById('cform'), formNote = document.getElementById('formNote');
+cform.addEventListener('submit', function (e) {
+  e.preventDefault();
+  if (!cform.checkValidity()) { formNote.textContent = 'Please fill in your name, email and message.'; return; }
+  if (!CONFIG.CONTACT_ENDPOINT) {
+    formNote.textContent = 'This form is not connected to an inbox yet — LYNN’s email address '
+                         + 'is still being set up. Nothing was sent.';
+    return;
+  }
+  formNote.textContent = 'Sending…';
+  fetch(CONFIG.CONTACT_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Accept': 'application/json' },
+    body: new FormData(cform)
+  }).then(function (r) {
+    formNote.textContent = r.ok
+      ? 'Thank you — your message is on its way.'
+      : 'Something went wrong. Please try again.';
+    if (r.ok) cform.reset();
+  }).catch(function () {
+    formNote.textContent = 'Something went wrong. Please try again.';
+  });
+});
+</script>
+</body>
+</html>
