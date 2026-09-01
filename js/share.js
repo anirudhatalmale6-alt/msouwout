@@ -191,6 +191,36 @@
     buildSheet().classList.add('open');
   }
 
+  /* Park the floating button clear of everything else already living in that
+     corner - the bottom tab bar, and any chat/assistant bubble the page puts
+     there. Measured at runtime, not guessed: the tab bar is a different
+     height on different pages, and dropping the share button on top of the
+     assistant would just trade one broken control for another. */
+  function placeFab(f) {
+    var vh = window.innerHeight, vw = window.innerWidth;
+    var floor = 14;
+
+    var nav = document.querySelector('.bottom-nav, .botnav, .tabbar');
+    if (nav) {
+      var nb = nav.getBoundingClientRect();
+      if (nb.height) floor = Math.max(floor, Math.round(vh - nb.top) + 14);
+    }
+
+    Array.prototype.forEach.call(document.body.querySelectorAll('*'), function (el) {
+      if (el === f || f.contains(el) || el.contains(f)) return;
+      var st = getComputedStyle(el);
+      if (st.position !== 'fixed' || st.display === 'none' || st.visibility === 'hidden') return;
+      var r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      if (r.width > vw * 0.7 && r.height > vh * 0.7) return;   /* an overlay, not a bubble */
+      /* only things sharing this corner matter */
+      if (r.right < vw - 130 || r.bottom < vh - 190) return;
+      floor = Math.max(floor, Math.round(vh - r.top) + 12);
+    });
+
+    f.style.bottom = Math.min(floor, Math.round(vh * 0.55)) + 'px';
+  }
+
   function mount() {
     if (document.querySelector('.mw-share-top,.mw-share-fab')) return;
     ensureCss();
@@ -215,12 +245,7 @@
     f.innerHTML = ICON + '<span>' + t('btn') + '</span>';
     f.addEventListener('click', doShare);
     document.body.appendChild(f);
-
-    /* park it clear of the bottom tab bar - measured, not guessed,
-       because the bar is a different height on different pages */
-    var nav = document.querySelector('.bottom-nav');
-    var h = nav ? Math.round(nav.getBoundingClientRect().height) : 0;
-    f.style.bottom = (h + 14) + 'px';
+    placeFab(f);
   }
 
   if (document.readyState === 'loading') {
