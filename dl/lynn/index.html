@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Love Your Neighbor Now — Strengthening Families in Haiti</title>
-<meta name="description" content="LYNN is a 501(c)(3) nonprofit serving families in Haiti and at home — hot meals for children every week, school fees, trade training and small business loans.">
+<meta name="description" content="LYNN is a community nonprofit serving families in Haiti and in Miami — hot meals for children every week, school fees, trade training and small business loans.">
 <link rel="icon" href="assets/lynn-logo.png">
 
 <meta property="og:type" content="website">
@@ -153,6 +153,20 @@ section{scroll-margin-top:80px}
 .mcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.5rem;min-width:0}
 .mcard h3{color:var(--navy);margin-bottom:.5rem}
 .mcard p{margin:0;font-size:.95rem;color:var(--muted)}
+/* Six short values read better as a wrapping grid than as a bullet list.
+   auto-fit keeps them 3-up on a laptop and 1-up on a phone with no breakpoint. */
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.vcard{background:var(--cream-2);border-left:3px solid var(--green);border-radius:10px;padding:1.1rem 1.2rem;min-width:0}
+.vcard h4{color:var(--navy);font-size:1.02rem;margin:0 0 .3rem}
+.vcard p{margin:0;font-size:.9rem;color:var(--muted)}
+/* Inside the dark programs band, so the colours are set against navy. */
+.school{margin-top:2.6rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
+  border-radius:var(--r);padding:1.5rem 1.6rem}
+.school h3{color:#fff;margin:.1rem 0 .5rem;font-size:1.25rem}
+.school p{margin:0;color:rgba(255,255,255,.82);font-size:.95rem}
+.chips{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1rem}
+.chips span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;
+  border-radius:999px;padding:.42rem .95rem;font-size:.86rem;font-weight:600}
 
 /* programs --------------------------------------------------------- */
 .programs{background:var(--navy);color:#fff}
@@ -307,6 +321,7 @@ footer a:hover{color:#8fd66a}
 
 /* responsive ------------------------------------------------------- */
 @media (max-width:900px){
+  .vgrid{grid-template-columns:repeat(2,1fr)}
   .split,.give-grid,.cgrid,.fgrid{grid-template-columns:1fr}
   .panel{position:static}
   .mission-cards{grid-template-columns:1fr}
@@ -324,6 +339,7 @@ footer a:hover{color:#8fd66a}
   .cred{grid-template-columns:1fr;text-align:left}
 }
 @media (max-width:520px){
+  .vgrid{grid-template-columns:1fr}
   .brand img{width:38px;height:38px}
   .brand b{font-size:.98rem}
   .brand span span{font-size:.55rem}
@@ -342,7 +358,7 @@ footer a:hover{color:#8fd66a}
   <div class="wrap bar">
     <a class="brand" href="#top">
       <img src="assets/lynn-logo.png" alt="Love Your Neighbor Now logo">
-      <span><b>Love Your Neighbor Now</b><span>501(c)(3) Nonprofit</span></span>
+      <span><b>Love Your Neighbor Now</b><span>Community Nonprofit</span></span>
     </a>
     <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="nav">
       <span></span><span></span><span></span>
@@ -377,7 +393,7 @@ footer a:hover{color:#8fd66a}
 <div class="trust">
   <div class="wrap">
     <ul>
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Registered 501(c)(3) nonprofit</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Members and volunteers in Miami &amp; Haiti</li>
       <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Volunteer-led</li>
       <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Working in Haiti &amp; our local community</li>
       <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Partnered with local community organizations</li>
@@ -404,7 +420,12 @@ footer a:hover{color:#8fd66a}
       <div>
         <p class="eyebrow">Who we are</p>
         <h2>Neighbors helping neighbors — here and in Haiti.</h2>
-        <p class="lede">LYNN was incorporated by a group of engaged community members who saw a
+        <!-- LYNN's own wording, from their Organizational Credentials one-pager. -->
+        <p class="lede">Love Your Neighbor Now (LYNN) is a community-focused organization
+          committed to serving and empowering individuals, families and communities through
+          spiritual, educational, social, entrepreneurial, health and community-development
+          initiatives.</p>
+        <p>LYNN was incorporated by a group of engaged community members who saw a
           simple, stubborn problem: families needed help that already existed nearby, and nobody
           was connecting them to it.</p>
         <p>Since then we have served hot meals to almost 50 children every week, hosted health
@@ -421,24 +442,39 @@ footer a:hover{color:#8fd66a}
     <div class="mission-cards">
       <div class="mcard">
         <h3>Our Mission</h3>
-        <p>To help connect our neighbors to the community services that already exist around
-           them — and to fill the gap directly with food, schooling and training where those
-           services fall short.</p>
+        <p>LYNN is committed to empowering people, families and communities through spiritual
+           development, education, health and wellness, family support, youth development,
+           entrepreneurship, community outreach and humanitarian service.</p>
       </div>
       <div class="mcard">
         <h3>Our Vision</h3>
-        <p>Families in Haiti and in our own neighborhood who are fed, schooled, trained and
-           able to build a livelihood without waiting on anyone's permission.</p>
+        <p>To see people and families equipped to become stronger, healthier, more connected
+           and more self-sustainable, while making a positive impact in their communities.</p>
       </div>
+    </div>
+
+    <!-- The six values, in LYNN's own order and words. -->
+    <p class="eyebrow" style="margin-top:3rem">What guides us</p>
+    <h2 style="margin-bottom:1.6rem">Our core values.</h2>
+    <div class="vgrid">
+      <div class="vcard"><h4>Love</h4><p>Serve with compassion, dignity and respect.</p></div>
+      <div class="vcard"><h4>Faith</h4><p>Put faith into action through prayer and service.</p></div>
+      <div class="vcard"><h4>Service</h4><p>Use our time, talents and resources to meet needs.</p></div>
+      <div class="vcard"><h4>Empowerment</h4><p>Help people recognize their strengths and possibilities.</p></div>
+      <div class="vcard"><h4>Community</h4><p>Build lasting change together.</p></div>
+      <div class="vcard"><h4>Integrity</h4><p>Lead with honesty, responsibility and professionalism.</p></div>
     </div>
 
     <div class="cred">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
         <path d="M12 2l8 4v6c0 5-3.4 9-8 10-4.6-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/>
       </svg>
-      <p><b>LYNN is a registered 501(c)(3) non-profit organization.</b> Contributions are
-         tax-deductible to the extent allowed by law. Your gift supports the programs on this page.
-         <span data-ein-slot><!-- EIN goes here once Linda sends the determination letter --></span></p>
+      <!-- No 501(c)(3) claim and no promise of a tax deduction until LYNN sends the IRS
+           determination letter. Donors act on that sentence; it has to be provable.
+           Fill CONFIG.EIN and both come back automatically. -->
+      <p><b>Every gift goes to the programs on this page.</b> LYNN is run by members and
+         volunteers who live in the communities they serve.
+         <span data-ein-slot><!-- 501(c)(3) line + EIN appear here once the determination letter arrives --></span></p>
     </div>
   </div>
 </section>
@@ -485,10 +521,27 @@ footer a:hover{color:#8fd66a}
       </article>
     </div>
 
+    <!-- Named in LYNN's own materials as their educational initiative. -->
+    <div class="school">
+      <p class="eyebrow" style="color:#8fd66a">Educational initiative</p>
+      <h3>Marie Claire Heureuse School — Milot, Haiti</h3>
+      <p>Part of LYNN's educational work, supported through school leadership, teaching,
+         administration, chaplaincy and educational volunteers.</p>
+    </div>
+
     <p class="lede" style="margin-top:2.6rem;color:rgba(255,255,255,.8)">
       This school year, <b style="color:#8fd66a">80 children and 10 adolescents</b> have asked
       LYNN for help — with school, and with completing a technical trade so they can earn.
     </p>
+
+    <p class="eyebrow" style="margin-top:3rem">Where members serve</p>
+    <div class="chips">
+      <span>Community outreach</span><span>Family support</span>
+      <span>Youth &amp; children's programs</span><span>Education</span>
+      <span>Missions</span><span>Fundraising &amp; events</span>
+      <span>Hospitality</span><span>Prayer &amp; spiritual support</span>
+      <span>Entrepreneurship &amp; financial literacy</span><span>Volunteer coordination</span>
+    </div>
   </div>
 </section>
 
@@ -588,6 +641,7 @@ footer a:hover{color:#8fd66a}
           <label for="f-subject">What is this about?</label>
           <select id="f-subject" name="subject">
             <option>I want to donate</option>
+            <option>I want to become a member</option>
             <option>I want to volunteer</option>
             <option>Partnership enquiry</option>
             <option>Sponsor a child's school fees</option>
@@ -605,8 +659,16 @@ footer a:hover{color:#8fd66a}
           <div><b>Email</b><span data-email-slot>Contact address coming soon</span></div>
         </div>
         <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h1.6l1.4 4-1.7 1.2a13 13 0 006.5 6.5L13 14l4 1.4V17a2 2 0 01-2.2 2A15 15 0 013 6.2 2 2 0 015 4z"/></svg></div>
+          <div><b>Phone</b><span><a href="tel:+17869159536">+1 (786) 915-9536</a></span></div>
+        </div>
+        <div class="crow">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-          <div><b>Where we work</b><span>Haiti — including Cap-Haïtien — and our local community</span></div>
+          <div><b>Address</b><span>921 NE 131 St, Miami, FL 33161</span></div>
+        </div>
+        <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18a15 15 0 010-18z"/></svg></div>
+          <div><b>Where we work</b><span>Miami, and Haiti — including Milot and Cap-Haïtien</span></div>
         </div>
         <div class="crow">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
@@ -614,7 +676,7 @@ footer a:hover{color:#8fd66a}
         </div>
         <div class="crow">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l8 4v6c0 5-3.4 9-8 10-4.6-1-8-5-8-10V6l8-4z"/></svg></div>
-          <div><b>Registered status</b><span>501(c)(3) non-profit organization</span></div>
+          <div><b>Membership</b><span>Members connect, contribute, grow and serve — ask us how to join</span></div>
         </div>
       </div>
     </div>
@@ -636,8 +698,8 @@ footer a:hover{color:#8fd66a}
     <div class="fgrid">
       <div>
         <img class="flogo" src="assets/lynn-logo-light.png" alt="Love Your Neighbor Now">
-        <p>Love Your Neighbor Now Inc. is a 501(c)(3) non-profit organization serving families in
-           Haiti and in our local community.</p>
+        <p>Love Your Neighbor Now Inc. serves families in Haiti and in our local community
+           through spiritual, educational, social and community-development initiatives.</p>
       </div>
       <div>
         <h4>Explore</h4>
@@ -660,7 +722,7 @@ footer a:hover{color:#8fd66a}
     </div>
     <div class="fbot">
       <span>&copy; <span id="yr"></span> Love Your Neighbor Now Inc. All rights reserved.</span>
-      <span>Registered 501(c)(3) non-profit organization</span>
+      <span data-ein-slot></span>
     </div>
   </div>
 </footer>
@@ -685,9 +747,11 @@ var CONFIG = {
   DONATE_URL: "",
   // Paste the form endpoint (e.g. Formspree) here.
   CONTACT_ENDPOINT: "",
-  // Real inbox once the domain exists.
-  EMAIL: "",
-  // From the IRS determination letter.
+  // LYNN's working inbox, from their own Organizational Credentials one-pager.
+  // Verified as reachable (Gmail), unlike info@mylynn.org, whose domain does not exist.
+  EMAIL: "infolynn2020@gmail.com",
+  // From the IRS determination letter. Filling this also restores the 501(c)(3)
+  // line and the tax-deduction sentence, which stay off the page until then.
   EIN: ""
 };
 
@@ -705,10 +769,21 @@ document.getElementById('yr').textContent = new Date().getFullYear();
 
 /* fill the contact + EIN slots only if we actually have the values --- */
 if (CONFIG.EMAIL) {
-  document.querySelectorAll('[data-email-slot]').forEach(function (el) { el.textContent = CONFIG.EMAIL; });
+  document.querySelectorAll('[data-email-slot]').forEach(function (el) {
+    el.textContent = '';
+    var a = document.createElement('a');          // tappable on a phone, not just readable
+    a.href = 'mailto:' + CONFIG.EMAIL;
+    a.textContent = CONFIG.EMAIL;
+    el.appendChild(a);
+  });
 }
 if (CONFIG.EIN) {
-  document.querySelectorAll('[data-ein-slot]').forEach(function (el) { el.textContent = ' EIN ' + CONFIG.EIN + '.'; });
+  /* The determination letter is what makes this sentence true, so it only
+     appears once the EIN is on file. */
+  document.querySelectorAll('[data-ein-slot]').forEach(function (el) {
+    el.textContent = ' LYNN is a registered 501(c)(3) non-profit organization, EIN '
+                   + CONFIG.EIN + '. Contributions are tax-deductible to the extent allowed by law.';
+  });
 }
 
 /* counters --------------------------------------------------------- */
@@ -876,8 +951,22 @@ cform.addEventListener('submit', function (e) {
   e.preventDefault();
   if (!cform.checkValidity()) { formNote.textContent = 'Please fill in your name, email and message.'; return; }
   if (!CONFIG.CONTACT_ENDPOINT) {
-    formNote.textContent = 'This form is not connected to an inbox yet — LYNN’s email address '
-                         + 'is still being set up. Nothing was sent.';
+    /* No form service yet, but LYNN now has a real inbox - so hand the message
+       to the visitor's mail app already filled in, rather than apologising and
+       losing it. Still never claims the message was sent: the visitor sends it. */
+    if (CONFIG.EMAIL) {
+      var subj = document.getElementById('f-subject').value || 'Website enquiry';
+      var body = 'Name: ' + document.getElementById('f-name').value
+               + '\nEmail: ' + document.getElementById('f-email').value
+               + '\n\n' + document.getElementById('f-msg').value;
+      window.location.href = 'mailto:' + CONFIG.EMAIL
+                           + '?subject=' + encodeURIComponent('LYNN website — ' + subj)
+                           + '&body=' + encodeURIComponent(body);
+      formNote.textContent = 'Your email app is opening with this message ready to send to '
+                           + CONFIG.EMAIL + '. Press send there to deliver it.';
+      return;
+    }
+    formNote.textContent = 'This form is not connected to an inbox yet. Nothing was sent.';
     return;
   }
   formNote.textContent = 'Sending…';
