@@ -1,7 +1,8 @@
-const CACHE_NAME = 'msouwout-v6';
+const CACHE_NAME = 'msouwout-v7';
 const ASSETS = [
   '/',
   '/index.html',
+  '/js/share.js',
   '/assets/msouwout-icon.png',
   '/assets/icon-192.png',
   '/assets/icon-512.png'
