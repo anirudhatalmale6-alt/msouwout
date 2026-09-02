@@ -859,7 +859,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v9</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v10</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -2009,8 +2009,19 @@ if(!isStandalone&&!sessionStorage.getItem('msw_install_dismissed')
    &&!localStorage.getItem('msw_installed')){
   /* 2 seconds meant the install sheet blacked out the home page before anyone
      had read a line of it. Everyone still gets the offer - they just get to see
-     what they are installing first. */
-  setTimeout(function(){ if(!isStandalone) overlay.classList.add('show'); }, 12000);
+     what they are installing first.
+
+     And never in the middle of ordering: at 12 seconds the sheet was landing on
+     top of the code the driver asks for, and on the screen that says who is
+     coming. If she is past the first screen, wait and ask again later. */
+  var offerInstall=function(){
+    if(isStandalone||sessionStorage.getItem('msw_install_dismissed'))return;
+    var s1=document.getElementById('step1');
+    var browsing=s1&&getComputedStyle(s1).display!=='none';
+    if(!browsing){ setTimeout(offerInstall,10000); return; }
+    overlay.classList.add('show');
+  };
+  setTimeout(offerInstall, 12000);
 }
 
 function toggleShareMenu(){
