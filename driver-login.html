@@ -611,13 +611,13 @@ function setLang(lang){
    passenger's order could actually reach him. */
 const T_INCOMING={
  ht:{inc_title:"Demann Kous",inc_empty:"Pa gen demann kounye a. Paj sa a ap gade pou kont li.",
-     inc_accept:"Aksepte Kous La",inc_demo:"Sa se kont demo a. Vre demann yo parèt lè ou konekte ak pwòp nimewo ou.",lbl_phone:"Telefòn",lbl_pickup:"Kote pou pran l",lbl_dropoff:"Kote pou depoze l"},
+     inc_accept:"Aksepte Kous La",inc_demo:"Sa se kont demo a. Vre demann yo parèt lè ou konekte ak pwòp nimewo ou.",lbl_phone:"Telefòn",lbl_pickup:"Kote pou pran l",lbl_dropoff:"Kote pou depoze l",inc_skip:"Sote",nav_pickup:"Ale chèche l",nav_drop:"Ale destinasyon an"},
  fr:{inc_title:"Demandes de Course",inc_empty:"Aucune demande pour le moment. Cette page surveille toute seule.",
-     inc_accept:"Accepter la Course",inc_demo:"Ceci est le compte de démonstration. Les vraies demandes apparaissent quand vous vous connectez avec votre propre numéro.",lbl_phone:"Téléphone",lbl_pickup:"Départ",lbl_dropoff:"Destination"},
+     inc_accept:"Accepter la Course",inc_demo:"Ceci est le compte de démonstration. Les vraies demandes apparaissent quand vous vous connectez avec votre propre numéro.",lbl_phone:"Téléphone",lbl_pickup:"Départ",lbl_dropoff:"Destination",inc_skip:"Passer",nav_pickup:"Aller au départ",nav_drop:"Aller à la destination"},
  en:{inc_title:"Ride Requests",inc_empty:"No requests right now. This page keeps watching on its own.",
-     inc_accept:"Accept Ride",inc_demo:"This is the demo account. Real requests appear when you log in with your own number.",lbl_phone:"Phone",lbl_pickup:"Pickup",lbl_dropoff:"Drop-off"},
+     inc_accept:"Accept Ride",inc_demo:"This is the demo account. Real requests appear when you log in with your own number.",lbl_phone:"Phone",lbl_pickup:"Pickup",lbl_dropoff:"Drop-off",inc_skip:"Skip",nav_pickup:"Navigate to pickup",nav_drop:"Navigate to drop-off"},
  es:{inc_title:"Solicitudes de Viaje",inc_empty:"No hay solicitudes ahora. Esta pagina sigue vigilando sola.",
-     inc_accept:"Aceptar Viaje",inc_demo:"Esta es la cuenta de demostracion. Las solicitudes reales aparecen cuando entras con tu propio numero.",lbl_phone:"Telefono",lbl_pickup:"Recogida",lbl_dropoff:"Destino"}
+     inc_accept:"Aceptar Viaje",inc_demo:"Esta es la cuenta de demostracion. Las solicitudes reales aparecen cuando entras con tu propio numero.",lbl_phone:"Telefono",lbl_pickup:"Recogida",lbl_dropoff:"Destino",inc_skip:"Omitir",nav_pickup:"Ir a la recogida",nav_drop:"Ir al destino"}
 };
 Object.keys(T_INCOMING).forEach(function(l){if(T[l])Object.assign(T[l],T_INCOMING[l]);});
 
@@ -849,7 +849,12 @@ function renderActiveRide(rides,driverId){
     (active.dropoff_address?'<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_dropoff')+'</span><span class="ride-info-value">'+esc(active.dropoff_address)+'</span></div>':'')+
     '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_type')+'</span><span class="ride-info-value">'+(vMap[(active.ride_type||'').toLowerCase()]||active.ride_type||'—')+'</span></div>'+
     '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_price')+'</span><span class="ride-info-value">'+(active.price||0)+' HTG</span></div>'+
-    '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_earning')+'</span><span class="ride-info-value">'+(active.driver_earning||0)+' HTG</span></div>';
+    '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_earning')+'</span><span class="ride-info-value">'+(active.driver_earning||0)+' HTG</span></div>'+
+    // Before the PIN he is driving to her; after it, to the destination.
+    '<div style="display:flex;gap:8px;margin-top:12px">'+
+      '<a href="'+navUrl(active.pickup_lat,active.pickup_lng,active.pickup_address)+'" target="_blank" rel="noopener" style="flex:1;text-align:center;padding:11px;border-radius:12px;border:1px solid #C7D2FE;background:#EEF2FF;color:#3730A3;font-weight:800;font-size:13px;text-decoration:none">&#129517; '+t('nav_pickup')+'</a>'+
+      '<a href="'+navUrl(active.dropoff_lat,active.dropoff_lng,active.dropoff_address)+'" target="_blank" rel="noopener" style="flex:1;text-align:center;padding:11px;border-radius:12px;border:1px solid #E2E8F0;background:#F8FAFC;color:#475569;font-weight:800;font-size:13px;text-decoration:none">&#129517; '+t('nav_drop')+'</a>'+
+    '</div>';
 
   const pinSection=document.getElementById('pinEntrySection');
   const progressSection=document.getElementById('inProgressSection');
@@ -913,7 +918,7 @@ async function pollIncoming(){
     const res=await fetch(API+'/api/rides/available?minutes=120');
     if(!res.ok)return;
     const j=await res.json();
-    renderIncoming(j.rides||[]);
+    renderIncoming((j.rides||[]).filter(function(r){return !_skipped[r.id];}));
   }catch(e){/* offline for a moment; the next tick tries again */}
   finally{_incBusy=false;}
 }
@@ -935,13 +940,43 @@ function renderIncoming(rides){
       +'<div style="margin-top:8px;font-size:14px;line-height:1.5">'
         +'<div>&#128994; '+esc(r.pickup_address||'—')+'</div>'
         +'<div>&#128308; '+esc(r.dropoff_address||'—')+'</div></div>'
-      +'<button class="btn-start-ride" style="margin-top:10px" data-accept="'+esc(r.id)+'">'+t('inc_accept')+'</button>'
+      +'<div style="display:flex;gap:8px;margin-top:10px">'
+        +'<button class="btn-start-ride" style="flex:1;margin:0" data-accept="'+esc(r.id)+'">'+t('inc_accept')+'</button>'
+        +'<button style="flex:0 0 auto;margin:0;padding:0 16px;border-radius:12px;border:1px solid #E2E8F0;background:#fff;color:#64748B;font-weight:800;font-size:13px;cursor:pointer" data-skip="'+esc(r.id)+'">'+t('inc_skip')+'</button>'
+      +'</div>'
+      +'<a href="'+navUrl(r.pickup_lat,r.pickup_lng,r.pickup_address)+'" target="_blank" rel="noopener"'
+        +' style="display:block;margin-top:8px;text-align:center;padding:10px;border-radius:12px;border:1px solid #C7D2FE;background:#EEF2FF;color:#3730A3;font-weight:800;font-size:13px;text-decoration:none">'
+        +'&#129517; '+t('nav_pickup')+'</a>'
       +'</div>';
   }).join('');
   list.querySelectorAll('[data-accept]').forEach(function(b){
     b.onclick=function(){acceptRide(b.getAttribute('data-accept'),b);};
   });
+  list.querySelectorAll('[data-skip]').forEach(function(b){
+    b.onclick=function(){skipRide(b.getAttribute('data-skip'));};
+  });
 }
+
+/* Open the phone's own map at the point the passenger actually chose. With no
+   coordinates - and most Haitian addresses have none in the map data - hand the
+   map the words she typed rather than nothing at all. */
+function navUrl(lat,lng,text){
+  var base='https://www.google.com/maps/dir/?api=1&destination=';
+  var la=parseFloat(lat),ln=parseFloat(lng);
+  if(isFinite(la)&&isFinite(ln)&&(la||ln)) return base+la+','+ln;
+  return base+encodeURIComponent((text||'')+', Haiti');
+}
+
+/* "Skip" hides the request on THIS driver's phone only. It stays on the board
+   for every other driver, which is the truth - there is no reassignment queue,
+   and a button that claimed to pass the ride to someone else would be lying. */
+var _skipped={};
+function skipRide(id){
+  _skipped[id]=1;
+  try{sessionStorage.setItem('msw_skipped',JSON.stringify(_skipped));}catch(e){}
+  pollIncoming();
+}
+try{_skipped=JSON.parse(sessionStorage.getItem('msw_skipped')||'{}')||{};}catch(e){_skipped={};}
 
 async function acceptRide(rideId,btn){
   const d=(window._driverData&&window._driverData.driver)||{};

@@ -246,6 +246,31 @@
     f.addEventListener('click', doShare);
     document.body.appendChild(f);
     placeFab(f);
+
+    /* On a phone the on-screen keyboard cuts innerHeight roughly in half, and a
+       button parked a fixed number of pixels off the bottom of the OLD viewport
+       lands in the middle of the NEW one - on top of whatever the person is
+       trying to press. Jeffery's screenshot caught it sitting across "Mande Kous
+       Kounye A" while he typed an address. Nobody needs a share button while
+       they are typing, so get out of the way, and re-measure afterwards. */
+    var typing = function () {
+      var a = document.activeElement;
+      return !!(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable));
+    };
+    var settle = null;
+    var restack = function () {
+      if (settle) clearTimeout(settle);
+      settle = setTimeout(function () {
+        if (typing()) { f.style.display = 'none'; return; }
+        f.style.display = '';
+        placeFab(f);
+      }, 120);
+    };
+    document.addEventListener('focusin', restack, true);
+    document.addEventListener('focusout', restack, true);
+    window.addEventListener('resize', restack);
+    window.addEventListener('orientationchange', restack);
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', restack);
   }
 
   if (document.readyState === 'loading') {

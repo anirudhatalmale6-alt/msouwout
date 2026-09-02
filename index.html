@@ -131,6 +131,13 @@ a{text-decoration:none;color:inherit}
 .loc-input:focus{outline:none;border-color:var(--blue);background:var(--white)}
 .loc-input::placeholder{color:var(--text-muted);font-weight:400}
 
+.loc-note{margin:10px 0 0}
+.loc-note label{display:block;font-size:.72rem;font-weight:700;color:#667;margin:0 0 5px 2px}
+.loc-note input{
+  width:100%;padding:11px 13px;border:1px solid #dfe4f0;border-radius:10px;
+  font-family:var(--body);font-size:.85rem;color:#0b1533;background:#f8fafd;
+}
+.loc-note input:focus{outline:none;border-color:var(--blue);background:#fff}
 /* Address autocomplete dropdown */
 .loc-row{position:relative}
 .ac-list{
@@ -602,6 +609,14 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       </div>
     </div>
 
+    <!-- No street in Haiti carries house numbers in the map data, so the map can
+         never point at a door. This line is what actually gets the driver there:
+         it is typed by the passenger and shown to him word for word. -->
+    <div class="loc-note">
+      <label for="landmark" data-i18n="lm_label">&#128205; Repè pou chofè a (opsyonèl)</label>
+      <input type="text" id="landmark" maxlength="90" placeholder="Egzanp: #2, devan famasi a, kay ble a" data-i18n-placeholder="lm_ph">
+    </div>
+
     <button class="find-btn" id="findBtn" onclick="goStep2()" disabled data-i18n="find_btn">&#128308; Mande Kous Kounye A</button>
 
     <!-- DASH SAFETY STRIP -->
@@ -859,7 +874,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v10</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v11</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1344,28 +1359,36 @@ var T_RIDE_LIVE={
      rl_found:'Chofe jwenn!',
      rl_started:'Kous la komanse',
      rl_call:'Rele chofe a',
-     rl_failed:'Nou pa ka voye demann nan kounye a. Ekri nou sou WhatsApp epi n ap jwenn yon chofe pou ou.'},
+     rl_failed:'Nou pa ka voye demann nan kounye a. Ekri nou sou WhatsApp epi n ap jwenn yon chofe pou ou.',
+     lm_label:'📍 Repe pou chofe a (opsyonel)',
+     lm_ph:'Egzanp: #2, devan famasi a, kay ble a'},
  fr:{rl_searching_sub:'Restez sur cette page. Nous vous prevenons des qu\'un chauffeur accepte.',
      rl_pin_label:'CODE POUR LE CHAUFFEUR',
      rl_pin_hint:'Donnez ce code au chauffeur a son arrivee.',
      rl_found:'Chauffeur trouve!',
      rl_started:'Course commencee',
      rl_call:'Appeler le chauffeur',
-     rl_failed:'Nous ne pouvons pas envoyer la demande maintenant. Ecrivez-nous sur WhatsApp et nous vous trouverons un chauffeur.'},
+     rl_failed:'Nous ne pouvons pas envoyer la demande maintenant. Ecrivez-nous sur WhatsApp et nous vous trouverons un chauffeur.',
+     lm_label:'📍 Repere pour le chauffeur (facultatif)',
+     lm_ph:'Ex: #2, devant la pharmacie, maison bleue'},
  en:{rl_searching_sub:'Stay on this page. We will tell you as soon as a driver accepts.',
      rl_pin_label:'CODE FOR THE DRIVER',
      rl_pin_hint:'Give the driver this code when he arrives.',
      rl_found:'Driver found!',
      rl_started:'Ride started',
      rl_call:'Call the driver',
-     rl_failed:'We cannot send the request right now. Message us on WhatsApp and we will find you a driver.'},
+     rl_failed:'We cannot send the request right now. Message us on WhatsApp and we will find you a driver.',
+     lm_label:'📍 Landmark for the driver (optional)',
+     lm_ph:'e.g. #2, in front of the pharmacy, blue house'},
  es:{rl_searching_sub:'Quedate en esta pagina. Te avisamos en cuanto un conductor acepte.',
      rl_pin_label:'CODIGO PARA EL CONDUCTOR',
      rl_pin_hint:'Dale este codigo al conductor cuando llegue.',
      rl_found:'Conductor encontrado!',
      rl_started:'Viaje iniciado',
      rl_call:'Llamar al conductor',
-     rl_failed:'No podemos enviar la solicitud ahora. Escribenos por WhatsApp y te buscamos un conductor.'}
+     rl_failed:'No podemos enviar la solicitud ahora. Escribenos por WhatsApp y te buscamos un conductor.',
+     lm_label:'📍 Referencia para el conductor (opcional)',
+     lm_ph:'Ej: #2, frente a la farmacia, casa azul'}
 };
 Object.keys(T_RIDE_LIVE).forEach(function(l){ if(T[l]) Object.assign(T[l],T_RIDE_LIVE[l]); });
 
@@ -1418,12 +1441,35 @@ dropEl.addEventListener('input',checkInputs);
 
 /* ─── Live address autocomplete (pickup + dropoff), Haiti-only ─── */
 function acEsc(s){return String(s||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
+/* There are six different "Impasse Alexis" in Haiti and the map holds no house
+   numbers at all, so the headline alone can never identify a door. Put the number
+   in front when the data has one, and make the second line the NARROW area
+   (neighbourhood before commune) - that is the only thing that tells the six
+   apart. */
 function acLabel(item){
   var a=item.address||{};
-  var main=a.road||a.pedestrian||a.neighbourhood||a.suburb||a.hamlet||a.village||a.town||a.city||a.county||item.name||item.display_name.split(',')[0].trim();
+  var road=a.road||a.pedestrian||a.footway||a.residential||null;
+  var poi=(item.name&&item.name!==road)?item.name:null;
+  var main;
+  if(road){
+    main=(a.house_number?a.house_number+', ':'')+road;
+    if(poi) main=poi+', '+main;
+  } else {
+    main=poi||a.neighbourhood||a.suburb||a.hamlet||a.village||a.town||a.city||a.county||item.display_name.split(',')[0].trim();
+  }
   var parts=[];
-  [a.suburb,a.city||a.town||a.village,a.county,a.state].forEach(function(p){if(p&&p!==main&&parts.indexOf(p)<0)parts.push(p);});
-  return {main:main,sub:parts.join(', ')||'Ayiti'};
+  [a.neighbourhood,a.quarter,a.suburb,a.city_district,a.village||a.town||a.city,a.county]
+    .forEach(function(p){if(p&&main.indexOf(p)<0&&parts.indexOf(p)<0)parts.push(p);});
+  return {main:main,sub:parts.slice(0,3).join(', ')||'Ayiti'};
+}
+/* A tapped suggestion must never delete detail the passenger typed herself.
+   She writes "#2 Impasse Alexis"; the map only knows "Impasse Alexis"; keeping
+   her number costs nothing and is the only precise thing on the screen. */
+function keepHouseNo(typed,label){
+  var m=String(typed||'').match(/^\s*(?:#\s*|n[o°]\s*\.?\s*)?(\d+[A-Za-z]?(?:\s*-\s*\d+[A-Za-z]?)?)\s*[,.\-\s]/);
+  if(!m) return label;
+  var hn='#'+m[1].replace(/\s+/g,'');
+  return label.replace(/\s+/g,'').indexOf(hn.replace(/\s+/g,''))>-1?label:hn+', '+label;
 }
 function acFetch(text,cb){
   var q=encodeURIComponent(text.indexOf('Haiti')>-1||text.indexOf('Ayiti')>-1?text:text+', Haiti');
@@ -1443,10 +1489,15 @@ function attachAC(inputEl,isPickup){
   function choose(item){
     var l=acLabel(item);
     var val=(l.sub&&l.sub!=='Ayiti')?l.main+', '+l.sub:l.main;
+    val=keepHouseNo(inputEl.value,val);
     inputEl.value=val;
     var lat=parseFloat(item.lat),lng=parseFloat(item.lon);
     _geoCache[val.trim().toLowerCase()]={lat:lat,lng:lng};
+    /* Both ends now carry their own point. The drop-off used to be re-looked-up
+       from the text at submit time, which could land on a different one of the
+       six streets with that name than the one she actually tapped. */
     if(isPickup){window._pickupLat=lat;window._pickupLng=lng;}
+    else{window._dropLat=lat;window._dropLng=lng;}
     close();checkInputs();
   }
   function render(){
@@ -1461,6 +1512,7 @@ function attachAC(inputEl,isPickup){
   }
   inputEl.addEventListener('input',function(){
     if(isPickup){window._pickupLat=null;window._pickupLng=null;}
+    else{window._dropLat=null;window._dropLng=null;}
     var v=inputEl.value.trim();
     if(v.length<3){close();return;}
     if(timer)clearTimeout(timer);
@@ -1494,7 +1546,8 @@ function setDest(el){
 
 function goStep2(){
   if(!pickupEl.value.trim()||!dropEl.value.trim()) return;
-  document.getElementById('routePickup').textContent=pickupEl.value.trim();
+  document.getElementById('routePickup').textContent=
+    pickupEl.value.trim()+(landmarkText()?' ('+landmarkText()+')':'');
   document.getElementById('routeDrop').textContent=dropEl.value.trim();
   showStep(2);
   renderExtras();
@@ -1508,7 +1561,9 @@ function computeDistanceThenFare(){
   var pickupP=(window._pickupLat&&window._pickupLng)
     ?Promise.resolve({lat:window._pickupLat,lng:window._pickupLng})
     :geocodeAddr(pickupEl.value);
-  var dropP=geocodeAddr(dropEl.value);
+  var dropP=(window._dropLat&&window._dropLng)
+    ?Promise.resolve({lat:window._dropLat,lng:window._dropLng})
+    :geocodeAddr(dropEl.value);
   Promise.all([pickupP,dropP]).then(function(res){
     var a=res[0],b=res[1];
     if(a&&b){
@@ -1657,6 +1712,10 @@ function completeSignup(){
   doSubmitRide(name,phone);
 }
 
+function landmarkText(){
+  var el=document.getElementById('landmark');
+  return el?el.value.trim().replace(/[()]/g,''):'';
+}
 function doSubmitRide(name,phone){
   if(!phone) phone=document.getElementById('rPhone').value.trim();
   if(!phone){showStep(2);document.getElementById('rPhone').focus();return}
@@ -1670,7 +1729,9 @@ function doSubmitRide(name,phone){
     customer_phone:phone,
     customer_name:name||'',
     ride_type:(vehicleType==='car'?'car':'moto'),
-    pickup:pickupEl.value.trim(),
+    /* The landmark rides along with the pickup line, because that is the one
+       field the driver is guaranteed to read on his phone. */
+    pickup:pickupEl.value.trim()+(landmarkText()?' ('+landmarkText()+')':''),
     dropoff:dropEl.value.trim(),
     /* Send the fare she was actually shown, so the driver is offered the same
        number she agreed to. */
@@ -1682,7 +1743,9 @@ function doSubmitRide(name,phone){
     roundTrip:(tripType==='round'),
     medical_protection:true,
     pickupLat:window._pickupLat||null,
-    pickupLng:window._pickupLng||null
+    pickupLng:window._pickupLng||null,
+    dropoffLat:window._dropLat||null,
+    dropoffLng:window._dropLng||null
   };
   if(timeMode==='later'){
     rideData.scheduledDate=document.getElementById('rDate').value;
@@ -1783,6 +1846,8 @@ function newRide(){
   stopRidePolling();
   rideData={};
   pickupEl.value='';dropEl.value='';
+  var lm=document.getElementById('landmark');if(lm)lm.value='';
+  window._pickupLat=null;window._pickupLng=null;window._dropLat=null;window._dropLng=null;
   document.getElementById('rPhone').value='';
   document.getElementById('matchSearching').style.display='';
   document.getElementById('matchFound').classList.remove('show');
@@ -1845,9 +1910,14 @@ function useMyLocation(){
     fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json&addressdetails=1')
       .then(function(r){return r.json()})
       .then(function(data){
-        var addr=data.display_name||(''+lat.toFixed(4)+', '+lng.toFixed(4));
-        var parts=addr.split(',');
-        var short=parts.slice(0,3).join(',').trim();
+        /* Was: the first three comma-separated chunks of display_name, which
+           threw away the house number when there was one and often kept the
+           postcode instead. Build the line from the named fields, and keep
+           anything the passenger had already typed herself. */
+        var l=data&&data.address?acLabel(data):null;
+        var short=l?((l.sub&&l.sub!=='Ayiti')?l.main+', '+l.sub:l.main)
+                  :(data.display_name||(lat.toFixed(5)+', '+lng.toFixed(5)));
+        short=keepHouseNo(document.getElementById('pickup').value,short);
         document.getElementById('pickup').value=short;
         localStorage.setItem('msw_last_addr',short);
         checkInputs();
@@ -1958,7 +2028,10 @@ var shareMenu=document.getElementById('shareMenu');
 var isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
 var isStandalone=window.matchMedia('(display-mode:standalone)').matches||window.navigator.standalone;
 
-if(isStandalone&&shareFab) shareFab.style.display='flex';
+/* Retired: js/share.js already puts a share button on every page. Two of them
+   stacked in the same corner is what pushed the red one up onto the order
+   button in the installed app. */
+if(false&&isStandalone&&shareFab) shareFab.style.display='flex';
 
 window.addEventListener('beforeinstallprompt',function(e){
   /* Keep the native prompt if Chrome offers one - it is the nicest path - but
