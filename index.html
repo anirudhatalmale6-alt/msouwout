@@ -785,6 +785,37 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <div id="matchSearching">
       <div class="match-spinner"></div>
       <div class="match-title" data-i18n="match_title">N ap trete demann ou an...</div>
+      <div class="sub" id="searchSub" style="margin-top:6px;color:#64748B;font-size:13.5px" data-i18n="rl_searching_sub">Rete sou paj sa a. N ap di w lè yon chofè aksepte.</div>
+      <!-- The driver has to be told this number before the ride can start, so the
+           passenger has to be able to read it while she is still waiting. -->
+      <div id="ridePinBox" style="display:none;margin:14px auto 0;max-width:280px;background:#F1F5F9;border-radius:14px;padding:12px">
+        <div style="font-size:11.5px;font-weight:800;color:#64748B;letter-spacing:.04em" data-i18n="rl_pin_label">KOD POU CHOFE A</div>
+        <div id="ridePin" style="font-size:30px;font-weight:900;letter-spacing:8px;color:#0F172A">----</div>
+        <div style="font-size:12px;color:#64748B" data-i18n="rl_pin_hint">Bay chofe a kod sa a le li rive.</div>
+      </div>
+    </div>
+    <!-- A driver actually accepted. Everything here comes from the ride record, so
+         nothing is shown until it is true. -->
+    <div class="match-found" id="matchDriver">
+      <div class="waitlist-check">&#128663;</div>
+      <div class="waitlist-title" id="mdTitle" data-i18n="rl_found">Chofe jwenn!</div>
+      <div class="waitlist-card" style="text-align:left">
+        <div style="font-size:20px;font-weight:900;color:#0F172A" id="mdName"></div>
+        <div style="font-size:14px;color:#475569;margin-top:2px" id="mdVehicle"></div>
+        <div style="margin-top:10px;background:#0F172A;color:#fff;display:inline-block;padding:6px 14px;border-radius:9px;font-weight:900;letter-spacing:2px" id="mdPlate"></div>
+        <div style="margin-top:12px;background:#F1F5F9;border-radius:12px;padding:10px">
+          <div style="font-size:11.5px;font-weight:800;color:#64748B" data-i18n="rl_pin_label">KOD POU CHOFE A</div>
+          <div id="mdPin" style="font-size:26px;font-weight:900;letter-spacing:7px;color:#0F172A">----</div>
+        </div>
+      </div>
+      <div class="waitlist-route">
+        <div class="wr-row"><span class="wr-dot g"></span> <span id="mdPickup"></span></div>
+        <div class="wr-row"><span class="wr-dot r"></span> <span id="mdDrop"></span></div>
+      </div>
+      <a class="wa-connect" id="mdCall" style="background:#16A34A;text-align:center;text-decoration:none;justify-content:center">
+        <span>&#128222;</span> <span data-i18n="rl_call">Rele chofe a</span>
+      </a>
+      <button class="new-ride-btn" onclick="newRide()" data-i18n="new_ride">Mande yon lot kous</button>
     </div>
     <div class="match-found" id="matchFound">
       <div class="waitlist-check">&#9989;</div>
@@ -828,7 +859,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem</div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v9</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1304,6 +1335,40 @@ var T={
 
 /* ═══ I18N ENGINE ═══ */
 var currentLang='ht';
+/* Wording for the part of the ride that only exists now that an order actually
+   reaches a driver: waiting, the PIN the driver must be told, and who is coming. */
+var T_RIDE_LIVE={
+ ht:{rl_searching_sub:'Rete sou paj sa a. N ap di w le yon chofe aksepte.',
+     rl_pin_label:'KOD POU CHOFE A',
+     rl_pin_hint:'Bay chofe a kod sa a le li rive.',
+     rl_found:'Chofe jwenn!',
+     rl_started:'Kous la komanse',
+     rl_call:'Rele chofe a',
+     rl_failed:'Nou pa ka voye demann nan kounye a. Ekri nou sou WhatsApp epi n ap jwenn yon chofe pou ou.'},
+ fr:{rl_searching_sub:'Restez sur cette page. Nous vous prevenons des qu\'un chauffeur accepte.',
+     rl_pin_label:'CODE POUR LE CHAUFFEUR',
+     rl_pin_hint:'Donnez ce code au chauffeur a son arrivee.',
+     rl_found:'Chauffeur trouve!',
+     rl_started:'Course commencee',
+     rl_call:'Appeler le chauffeur',
+     rl_failed:'Nous ne pouvons pas envoyer la demande maintenant. Ecrivez-nous sur WhatsApp et nous vous trouverons un chauffeur.'},
+ en:{rl_searching_sub:'Stay on this page. We will tell you as soon as a driver accepts.',
+     rl_pin_label:'CODE FOR THE DRIVER',
+     rl_pin_hint:'Give the driver this code when he arrives.',
+     rl_found:'Driver found!',
+     rl_started:'Ride started',
+     rl_call:'Call the driver',
+     rl_failed:'We cannot send the request right now. Message us on WhatsApp and we will find you a driver.'},
+ es:{rl_searching_sub:'Quedate en esta pagina. Te avisamos en cuanto un conductor acepte.',
+     rl_pin_label:'CODIGO PARA EL CONDUCTOR',
+     rl_pin_hint:'Dale este codigo al conductor cuando llegue.',
+     rl_found:'Conductor encontrado!',
+     rl_started:'Viaje iniciado',
+     rl_call:'Llamar al conductor',
+     rl_failed:'No podemos enviar la solicitud ahora. Escribenos por WhatsApp y te buscamos un conductor.'}
+};
+Object.keys(T_RIDE_LIVE).forEach(function(l){ if(T[l]) Object.assign(T[l],T_RIDE_LIVE[l]); });
+
 function t(key){ return (T[currentLang]||T.ht)[key]||key; }
 
 function setLang(lang){
@@ -1597,16 +1662,25 @@ function doSubmitRide(name,phone){
   if(!phone){showStep(2);document.getElementById('rPhone').focus();return}
 
   var wantAC=vehicleType==='car'&&document.getElementById('acToggle').checked;
+  var trip=(tripType==='round')?2:1;
   rideData={
-    riderPhone:phone,
-    riderName:name||'',
-    vehicleType:vehicleType,
+    /* The server reads these four. They used to be sent as riderPhone/vehicleType/
+       pickupAddress, which it does not recognise, so every order was rejected and
+       this page pretended otherwise. */
+    customer_phone:phone,
+    customer_name:name||'',
+    ride_type:(vehicleType==='car'?'car':'moto'),
+    pickup:pickupEl.value.trim(),
+    dropoff:dropEl.value.trim(),
+    /* Send the fare she was actually shown, so the driver is offered the same
+       number she agreed to. */
+    price:_lastRideFare||undefined,
+    distance_km:(_rideDistanceKm!=null?_rideDistanceKm*trip:undefined),
+    payment_method:'cash',
     acRequested:wantAC,
     tripType:tripType,
     roundTrip:(tripType==='round'),
     medical_protection:true,
-    pickupAddress:pickupEl.value.trim(),
-    dropoffAddress:dropEl.value.trim(),
     pickupLat:window._pickupLat||null,
     pickupLng:window._pickupLng||null
   };
@@ -1623,18 +1697,70 @@ function doSubmitRide(name,phone){
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify(rideData)
-  }).then(function(r){return r.json()}).then(function(d){
-    rideData.id=d._id||d.id||d.ride_id;
+  }).then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d}})}).then(function(res){
+    if(!res.ok||!(res.d.ride_id||res.d.id)){throw new Error(res.d.error||'rejected');}
+    var d=res.d;
+    rideData.id=d.ride_id||d.id;
     rideData.tracking_code=d.tracking_code||'';
-    setTimeout(showWaitlist,2500);
+    rideData.pin=d.ride_pin||'';
+    if(rideData.pin){
+      document.getElementById('ridePin').textContent=rideData.pin;
+      document.getElementById('ridePinBox').style.display='';
+    }
+    startRidePolling();
   }).catch(function(){
-    setTimeout(showWaitlist,3000);
+    /* The order did not reach the system. Saying "we are looking for a driver"
+       here is a lie that costs her the ride — show the WhatsApp route instead. */
+    setTimeout(function(){showWaitlist(t('rl_failed'));},1200);
   });
 }
 
-function showWaitlist(){
+/* Wait for a driver to accept, then show who is coming. Polling, not magic: the
+   page asks the server every few seconds and stops asking after 10 minutes so a
+   forgotten tab does not hammer it. */
+var _ridePoll=null,_pollUntil=0;
+function startRidePolling(){
+  if(!rideData.id)return;
+  _pollUntil=Date.now()+10*60*1000;
+  clearInterval(_ridePoll);
+  _ridePoll=setInterval(checkRideOnce,4000);
+  checkRideOnce();
+}
+function stopRidePolling(){clearInterval(_ridePoll);_ridePoll=null;}
+function checkRideOnce(){
+  if(Date.now()>_pollUntil){stopRidePolling();showWaitlist();return;}
+  apiFetch(API_URL+'/api/rides/'+rideData.id)
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if(!d||!d.status)return;
+      if(d.status==='accepted'||d.status==='in_progress'){stopRidePolling();showDriverFound(d);}
+      else if(d.status==='cancelled'){stopRidePolling();showWaitlist();}
+    }).catch(function(){});
+}
+
+function showDriverFound(d){
   document.getElementById('matchSearching').style.display='none';
+  document.getElementById('matchFound').classList.remove('show');
+  document.getElementById('mdName').textContent=d.driver_name||'';
+  var vt=(d.vehicle_type==='car'?t('vehicle_car'):t('vehicle_moto'));
+  document.getElementById('mdVehicle').textContent=vt;
+  document.getElementById('mdPlate').textContent=d.license_plate||'';
+  document.getElementById('mdPin').textContent=rideData.pin||d.ride_pin||'----';
+  document.getElementById('mdPickup').textContent=d.pickup_address||pickupEl.value.trim();
+  document.getElementById('mdDrop').textContent=d.dropoff_address||dropEl.value.trim();
+  var call=document.getElementById('mdCall');
+  if(d.driver_phone){call.href='tel:'+d.driver_phone;call.style.display='';}
+  else{call.style.display='none';}
+  document.getElementById('mdTitle').textContent=(d.status==='in_progress')?t('rl_started'):t('rl_found');
+  document.getElementById('matchDriver').classList.add('show');
+}
+
+function showWaitlist(msg){
+  stopRidePolling();
+  document.getElementById('matchSearching').style.display='none';
+  document.getElementById('matchDriver').classList.remove('show');
   document.getElementById('matchFound').classList.add('show');
+  if(msg){var p=document.querySelector('#matchFound .waitlist-msg');if(p){p.textContent=msg;p.removeAttribute('data-i18n');}}
   document.getElementById('wlPickup').textContent=pickupEl.value.trim();
   document.getElementById('wlDrop').textContent=dropEl.value.trim();
   var tl=document.getElementById('trackLink');
@@ -1654,10 +1780,14 @@ function contactWhatsApp(){
 }
 
 function newRide(){
+  stopRidePolling();
+  rideData={};
   pickupEl.value='';dropEl.value='';
   document.getElementById('rPhone').value='';
   document.getElementById('matchSearching').style.display='';
   document.getElementById('matchFound').classList.remove('show');
+  document.getElementById('matchDriver').classList.remove('show');
+  document.getElementById('ridePinBox').style.display='none';
   showStep(1);
   checkInputs();
 }

@@ -413,6 +413,14 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
 
     <div class="kpi-grid" id="kpiGrid"></div>
 
+    <!-- Incoming requests. Until now a driver learned about a ride only at login,
+         which meant a passenger could order and nothing would ever appear here. -->
+    <div class="active-ride-card" id="incomingCard" style="display:none;border-color:#F59E0B">
+      <h3>&#128276; <span data-i18n="inc_title">Demann Kous</span> <span id="incCount" style="font-weight:900"></span></h3>
+      <div id="incomingList"></div>
+      <div id="incomingEmpty" class="sub" style="color:#64748B;font-size:13.5px" data-i18n="inc_empty">Pa gen demann kounye a. Paj sa a ap gade pou kont li.</div>
+    </div>
+
     <div class="active-ride-card" id="activeRideCard" style="display:none">
       <h3>&#128994; <span data-i18n="active_ride_title">Kous Aktif</span></h3>
       <div id="activeRideInfo"></div>
@@ -599,6 +607,20 @@ function setLang(lang){
   });
   if(window._driverData) renderDashboard(window._driverData);
 }
+/* Wording for the requests panel — the screen a driver did not have until a
+   passenger's order could actually reach him. */
+const T_INCOMING={
+ ht:{inc_title:"Demann Kous",inc_empty:"Pa gen demann kounye a. Paj sa a ap gade pou kont li.",
+     inc_accept:"Aksepte Kous La",inc_demo:"Sa se kont demo a. Vre demann yo parèt lè ou konekte ak pwòp nimewo ou.",lbl_phone:"Telefòn",lbl_pickup:"Kote pou pran l",lbl_dropoff:"Kote pou depoze l"},
+ fr:{inc_title:"Demandes de Course",inc_empty:"Aucune demande pour le moment. Cette page surveille toute seule.",
+     inc_accept:"Accepter la Course",inc_demo:"Ceci est le compte de démonstration. Les vraies demandes apparaissent quand vous vous connectez avec votre propre numéro.",lbl_phone:"Téléphone",lbl_pickup:"Départ",lbl_dropoff:"Destination"},
+ en:{inc_title:"Ride Requests",inc_empty:"No requests right now. This page keeps watching on its own.",
+     inc_accept:"Accept Ride",inc_demo:"This is the demo account. Real requests appear when you log in with your own number.",lbl_phone:"Phone",lbl_pickup:"Pickup",lbl_dropoff:"Drop-off"},
+ es:{inc_title:"Solicitudes de Viaje",inc_empty:"No hay solicitudes ahora. Esta pagina sigue vigilando sola.",
+     inc_accept:"Aceptar Viaje",inc_demo:"Esta es la cuenta de demostracion. Las solicitudes reales aparecen cuando entras con tu propio numero.",lbl_phone:"Telefono",lbl_pickup:"Recogida",lbl_dropoff:"Destino"}
+};
+Object.keys(T_INCOMING).forEach(function(l){if(T[l])Object.assign(T[l],T_INCOMING[l]);});
+
 function t(key){return (T[currentLang]||T.ht)[key]||key}
 
 function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open')}
@@ -636,6 +658,7 @@ async function handleLogin(e){
     document.getElementById('dashboard').classList.add('active');
     renderDashboard(mapped);
     renderActiveRide(mapped.rides,mapped.driver.id);
+    startIncoming();
     return;
   }
 
@@ -693,6 +716,7 @@ async function handleLogin(e){
     document.getElementById('dashboard').classList.add('active');
     renderDashboard(mapped);
     renderActiveRide(mapped.rides,mapped.driver.id);
+    startIncoming();
 
   }catch(err){
     errEl.innerHTML=t('err_network');
@@ -778,6 +802,8 @@ function item(label,value){
 }
 
 function logout(){
+  stopIncoming();
+  _activeRide=null;
   window._driverData=null;
   window._activeRide=null;
   document.getElementById('dashboard').classList.remove('active');
@@ -785,6 +811,7 @@ function logout(){
   document.getElementById('phoneInput').value='';
   document.getElementById('loginError').style.display='none';
   document.getElementById('activeRideCard').style.display='none';
+  document.getElementById('incomingCard').style.display='none';
 }
 
 function deleteAccount(){
@@ -812,9 +839,14 @@ function renderActiveRide(rides,driverId){
 
   const info=document.getElementById('activeRideInfo');
   const vMap={motorcycle:t('vehicle_moto'),moto:t('vehicle_moto'),car:t('vehicle_car')};
+  // Where to go and who to call — the two things a driver needs once he has the
+  // ride, and neither was on this card before.
   info.innerHTML=
-    '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_tracking')+'</span><span class="ride-info-value">'+(active.tracking_code||'—')+'</span></div>'+
-    '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_passenger')+'</span><span class="ride-info-value">'+(active.customer_name||'Kliyan')+'</span></div>'+
+    '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_tracking')+'</span><span class="ride-info-value">'+esc(active.tracking_code||'—')+'</span></div>'+
+    '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_passenger')+'</span><span class="ride-info-value">'+esc(active.customer_name||'Kliyan')+'</span></div>'+
+    (active.customer_phone?'<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_phone')+'</span><span class="ride-info-value"><a href="tel:'+esc(active.customer_phone)+'">'+esc(active.customer_phone)+'</a></span></div>':'')+
+    (active.pickup_address?'<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_pickup')+'</span><span class="ride-info-value">'+esc(active.pickup_address)+'</span></div>':'')+
+    (active.dropoff_address?'<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_dropoff')+'</span><span class="ride-info-value">'+esc(active.dropoff_address)+'</span></div>':'')+
     '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_type')+'</span><span class="ride-info-value">'+(vMap[(active.ride_type||'').toLowerCase()]||active.ride_type||'—')+'</span></div>'+
     '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_price')+'</span><span class="ride-info-value">'+(active.price||0)+' HTG</span></div>'+
     '<div class="ride-info-row"><span class="ride-info-label">'+t('lbl_earning')+'</span><span class="ride-info-value">'+(active.driver_earning||0)+' HTG</span></div>';
@@ -833,6 +865,109 @@ function renderActiveRide(rides,driverId){
     card.classList.add('ride-started');
     pinSection.style.display='none';
     progressSection.style.display='block';
+  }
+}
+
+// ========== INCOMING RIDE REQUESTS ==========
+//
+// Everything below is typed by a passenger, so it is escaped before it is put on
+// a driver's screen.
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+
+let _incPoll=null,_incBusy=false;
+
+function startIncoming(){
+  const d=(window._driverData&&window._driverData.driver)||{};
+  if(d.status!=='approved')return;              // a pending driver may not take rides
+  document.getElementById('incomingCard').style.display='block';
+  // The demo login is a preview built in the page itself — it has no account on the
+  // server, so it could show real requests and then fail to accept one. Say so here
+  // instead of letting a driver discover it with a passenger waiting.
+  if(d.id==='demo'){
+    document.getElementById('incomingList').innerHTML='';
+    var de=document.getElementById('incomingEmpty');
+    de.textContent=t('inc_demo');de.removeAttribute('data-i18n');de.style.display='';
+    return;
+  }
+  clearInterval(_incPoll);
+  _incPoll=setInterval(pollIncoming,8000);
+  pollIncoming();
+}
+function stopIncoming(){clearInterval(_incPoll);_incPoll=null;}
+
+async function pollIncoming(){
+  if(_incBusy)return;
+  _incBusy=true;
+  const d=(window._driverData&&window._driverData.driver)||{};
+  try{
+    // A ride accepted on another phone must show up here too, otherwise the driver
+    // sits on a stale screen with no way to enter the PIN.
+    if(!_activeRide&&d.id){
+      const ar=await fetch(API+'/api/rides/driver/'+d.id+'/active');
+      if(ar.ok){
+        const aj=await ar.json();
+        if(aj.ride){renderActiveRide([aj.ride],d.id);}
+      }
+    }
+    const res=await fetch(API+'/api/rides/available?minutes=120');
+    if(!res.ok)return;
+    const j=await res.json();
+    renderIncoming(j.rides||[]);
+  }catch(e){/* offline for a moment; the next tick tries again */}
+  finally{_incBusy=false;}
+}
+
+function renderIncoming(rides){
+  const list=document.getElementById('incomingList');
+  const empty=document.getElementById('incomingEmpty');
+  document.getElementById('incCount').textContent=rides.length?('('+rides.length+')'):'';
+  if(!rides.length){list.innerHTML='';empty.style.display='';return;}
+  empty.style.display='none';
+  const vMap={motorcycle:t('vehicle_moto'),moto:t('vehicle_moto'),car:t('vehicle_car')};
+  list.innerHTML=rides.map(function(r){
+    return '<div style="border:1px solid #E2E8F0;border-radius:14px;padding:12px;margin-bottom:10px;background:#fff">'
+      +'<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">'
+        +'<div style="font-weight:900;font-size:15px">'+esc(r.customer_name||'Kliyan')+'</div>'
+        +'<div style="font-weight:900;color:#16A34A;white-space:nowrap">'+(r.driver_earning||0)+' HTG</div></div>'
+      +'<div style="font-size:12.5px;color:#64748B;margin-top:2px">'+esc(vMap[(r.ride_type||'').toLowerCase()]||r.ride_type||'')
+        +(r.distance_km?(' · '+r.distance_km+' km'):'')+'</div>'
+      +'<div style="margin-top:8px;font-size:14px;line-height:1.5">'
+        +'<div>&#128994; '+esc(r.pickup_address||'—')+'</div>'
+        +'<div>&#128308; '+esc(r.dropoff_address||'—')+'</div></div>'
+      +'<button class="btn-start-ride" style="margin-top:10px" data-accept="'+esc(r.id)+'">'+t('inc_accept')+'</button>'
+      +'</div>';
+  }).join('');
+  list.querySelectorAll('[data-accept]').forEach(function(b){
+    b.onclick=function(){acceptRide(b.getAttribute('data-accept'),b);};
+  });
+}
+
+async function acceptRide(rideId,btn){
+  const d=(window._driverData&&window._driverData.driver)||{};
+  if(!d.id)return;
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> ...';
+  try{
+    const res=await fetch(API+'/api/rides/'+rideId+'/accept',{
+      method:'PATCH',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({driver_id:d.id})
+    });
+    const j=await res.json().catch(function(){return {};});
+    if(!res.ok){
+      // Somebody else got there first, or the ride was cancelled. Say which.
+      alert(j.error||t('err_server'));
+      btn.disabled=false;btn.textContent=t('inc_accept');
+      pollIncoming();
+      return;
+    }
+    const ar=await fetch(API+'/api/rides/driver/'+d.id+'/active');
+    const aj=await ar.json();
+    if(aj.ride)renderActiveRide([aj.ride],d.id);
+    pollIncoming();
+    document.getElementById('activeRideCard').scrollIntoView({behavior:'smooth',block:'center'});
+  }catch(e){
+    alert(t('err_network'));
+    btn.disabled=false;btn.textContent=t('inc_accept');
   }
 }
 
@@ -897,6 +1032,8 @@ async function completeRide(){
       document.getElementById('pinEntrySection').style.display='none';
       fb.style.display='block';
       setTimeout(()=>{document.getElementById('activeRideCard').style.display='none';},3000);
+      _activeRide=null;   // free to take the next request
+      pollIncoming();
     }
   }catch(e){}
   btn.disabled=false;btn.textContent=t('complete_ride_btn');
