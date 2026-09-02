@@ -257,20 +257,52 @@
       var a = document.activeElement;
       return !!(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable));
     };
-    var settle = null;
+    /* And whatever it is parked above, the page still scrolls underneath it. A
+       share button is never worth covering a control the person came here to
+       press, so ask what is actually under it and step aside when the answer is
+       a button. Cheaper than measuring every rect on every scroll frame. */
+    var coversAControl = function () {
+      var r = f.getBoundingClientRect();
+      if (!r.width) return false;
+      f.style.pointerEvents = 'none';
+      var under = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      f.style.pointerEvents = '';
+      while (under && under !== document.body) {
+        if (under === f) return false;
+        var tag = under.tagName;
+        if (tag === 'BUTTON' || tag === 'A' || tag === 'INPUT' || tag === 'SELECT' ||
+            under.getAttribute('role') === 'button' || under.hasAttribute('onclick')) return true;
+        under = under.parentElement;
+      }
+      return false;
+    };
+
+    var settle = null, framed = false;
     var restack = function () {
       if (settle) clearTimeout(settle);
       settle = setTimeout(function () {
         if (typing()) { f.style.display = 'none'; return; }
         f.style.display = '';
         placeFab(f);
+        f.style.visibility = coversAControl(f) ? 'hidden' : '';
       }, 120);
+    };
+    var onScroll = function () {
+      if (framed) return;
+      framed = true;
+      requestAnimationFrame(function () {
+        framed = false;
+        if (f.style.display === 'none') return;
+        f.style.visibility = coversAControl(f) ? 'hidden' : '';
+      });
     };
     document.addEventListener('focusin', restack, true);
     document.addEventListener('focusout', restack, true);
     window.addEventListener('resize', restack);
     window.addEventListener('orientationchange', restack);
+    window.addEventListener('scroll', onScroll, { passive: true });
     if (window.visualViewport) window.visualViewport.addEventListener('resize', restack);
+    setTimeout(onScroll, 400);
   }
 
   if (document.readyState === 'loading') {
