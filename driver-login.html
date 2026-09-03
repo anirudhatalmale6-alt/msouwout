@@ -473,7 +473,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
 
 <!-- FOOTER -->
 <footer>
-  <p>&copy; 2026 MsouWout &mdash; <span data-i18n="footer_part">Yon platfom</span> <a href="https://haitibiznis.com">HaitiBiznis</a> <span style="opacity:.55">v15</span></p>
+  <p>&copy; 2026 MsouWout &mdash; <span data-i18n="footer_part">Yon platfom</span> <a href="https://haitibiznis.com">HaitiBiznis</a> <span style="opacity:.55">v16</span></p>
 </footer>
 
 <script>
@@ -1171,8 +1171,15 @@ async function completeRide(){
       _activeRide=null;   // free to take the next request
       pollIncoming();
       refreshEarnings();
+    }else{
+      /* The server can refuse this - a ride that was never started, a second tap on
+         a ride already finished. It used to refuse in silence: the spinner blinked,
+         the button came back, and the driver stood there with a passenger waiting,
+         with nothing on the screen telling him what happened. */
+      let j={};try{j=await res.json();}catch(e2){}
+      alert(j.error||t('err_server'));
     }
-  }catch(e){}
+  }catch(e){alert(t('err_network'));}
   btn.disabled=false;btn.textContent=t('complete_ride_btn');
 }
 
