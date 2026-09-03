@@ -303,6 +303,14 @@ nav{
 }
 .btn-complete-ride:hover{box-shadow:0 8px 28px rgba(0,32,159,.35);transform:translateY(-1px)}
 .btn-complete-ride:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+/* Deliberately quiet next to Kòmanse / Fini — it must be findable, not tempting. */
+.btn-cancel-ride{
+  width:100%;padding:13px;border-radius:14px;margin-top:10px;
+  background:transparent;border:1.5px solid #FCA5A5;color:#B91C1C;
+  font-size:.86rem;font-weight:800;cursor:pointer;font-family:var(--body);
+}
+.btn-cancel-ride:active{background:#FEF2F2}
+.btn-cancel-ride:disabled{opacity:.5;cursor:not-allowed}
 .pin-feedback{
   border-radius:10px;padding:10px 14px;margin-top:12px;display:none;
   font-size:.82rem;text-align:center;font-weight:600;
@@ -419,6 +427,9 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       <h3>&#128276; <span data-i18n="inc_title">Demann Kous</span> <span id="incCount" style="font-weight:900"></span></h3>
       <div id="incomingList"></div>
       <div id="incomingEmpty" class="sub" style="color:#64748B;font-size:13.5px" data-i18n="inc_empty">Pa gen demann kounye a. Paj sa a ap gade pou kont li.</div>
+      <!-- Say the limit on the screen itself. A driver who thinks he will be called
+           will put the phone in his pocket and miss every ride. -->
+      <div style="margin-top:10px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:10px;font-size:12.5px;color:#92400E;line-height:1.5" data-i18n="inc_sound_note">&#128266; W ap tande yon son lè yon demann rive. Sa mache SÈLMAN si paj sa a rete louvri sou telefòn ou.</div>
     </div>
 
     <div class="active-ride-card" id="activeRideCard" style="display:none">
@@ -433,6 +444,10 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       <div id="inProgressSection" style="display:none">
         <button class="btn-complete-ride" id="btnCompleteRide" onclick="completeRide()" data-i18n="complete_ride_btn">Fini Kous</button>
       </div>
+      <!-- A driver who breaks down or cannot reach the passenger has to be able to
+           give the ride back, otherwise it stays 'accepted' forever and she waits
+           for a car that is never coming. -->
+      <button class="btn-cancel-ride" id="btnCancelRide" onclick="driverCancel()" data-i18n="cancel_ride_btn">Anile kous la</button>
     </div>
 
     <div class="status-card" id="statusCard">
@@ -494,7 +509,9 @@ const T={
     pin_wrong:"PIN pa kòrèk. Eseye ankò.",pin_verified:"PIN verifye! Kous kòmanse!",
     ride_started:"Kous an kou...",ride_completed_msg:"Kous fini! Mèsi.",
     lbl_tracking:"Kòd Swiv",lbl_price:"Pri",lbl_type:"Tip",lbl_passenger:"Pasaje",
-    lbl_earning:"Revni Ou",confirm_complete:"Ou sèten ou vle fini kous sa a?"
+    lbl_earning:"Revni Ou",confirm_complete:"Ou sèten ou vle fini kous sa a?",
+    ride_gone:"Pasaje a anile kous la. Ou lib pou pran yon lòt.",inc_sound_note:"\ud83d\udd0a W ap tande yon son lè yon demann rive. Sa mache SÈLMAN si paj sa a rete louvri sou telefòn ou.",cancel_ride_btn:"Anile kous la",inc_new_title:"Nouvo kous!",
+    confirm_cancel:"Ou vle remèt kous sa a? Pasaje a ap wè li sou telefòn li epi li p ap peye anyen."
   },
   fr:{
     nav_home:"Accueil",nav_messages:"Messages",nav_register:"S'inscrire",nav_apply:"Postuler",
@@ -525,7 +542,9 @@ const T={
     pin_wrong:"PIN incorrect. Reessayez.",pin_verified:"PIN verifie! Course demarree!",
     ride_started:"Course en cours...",ride_completed_msg:"Course terminee! Merci.",
     lbl_tracking:"Code Suivi",lbl_price:"Prix",lbl_type:"Type",lbl_passenger:"Passager",
-    lbl_earning:"Vos Gains",confirm_complete:"Etes-vous sur de vouloir terminer cette course?"
+    lbl_earning:"Vos Gains",confirm_complete:"Etes-vous sur de vouloir terminer cette course?",
+    ride_gone:"Le passager a annule la course. Vous etes libre pour une autre.",inc_sound_note:"\ud83d\udd0a Vous entendrez un son quand une demande arrive. Cela ne marche QUE si cette page reste ouverte sur votre telephone.",cancel_ride_btn:"Annuler la course",inc_new_title:"Nouvelle course!",
+    confirm_cancel:"Rendre cette course? Le passager le verra sur son telephone et ne paiera rien."
   },
   en:{
     nav_home:"Home",nav_messages:"Messages",nav_register:"Register",nav_apply:"Apply Now",
@@ -556,7 +575,9 @@ const T={
     pin_wrong:"Wrong PIN. Try again.",pin_verified:"PIN verified! Ride started!",
     ride_started:"Ride in progress...",ride_completed_msg:"Ride completed! Thank you.",
     lbl_tracking:"Tracking Code",lbl_price:"Price",lbl_type:"Type",lbl_passenger:"Passenger",
-    lbl_earning:"Your Earning",confirm_complete:"Are you sure you want to complete this ride?"
+    lbl_earning:"Your Earning",confirm_complete:"Are you sure you want to complete this ride?",
+    ride_gone:"The passenger cancelled the ride. You are free to take another.",inc_sound_note:"\ud83d\udd0a You will hear a sound when a request arrives. This works ONLY while this page stays open on your phone.",cancel_ride_btn:"Cancel this ride",inc_new_title:"New ride!",
+    confirm_cancel:"Give this ride back? The passenger sees it on her phone and pays nothing."
   },
   es:{
     nav_home:"Inicio",nav_messages:"Mensajes",nav_register:"Registrarse",nav_apply:"Aplicar Ahora",
@@ -587,7 +608,9 @@ const T={
     pin_wrong:"PIN incorrecto. Intenta de nuevo.",pin_verified:"PIN verificado! Viaje iniciado!",
     ride_started:"Viaje en progreso...",ride_completed_msg:"Viaje completado! Gracias.",
     lbl_tracking:"Codigo de Rastreo",lbl_price:"Precio",lbl_type:"Tipo",lbl_passenger:"Pasajero",
-    lbl_earning:"Tu Ganancia",confirm_complete:"Esta seguro de que desea completar este viaje?"
+    lbl_earning:"Tu Ganancia",confirm_complete:"Esta seguro de que desea completar este viaje?",
+    ride_gone:"El pasajero cancelo el viaje. Puedes tomar otro.",inc_sound_note:"\ud83d\udd0a Oiras un sonido cuando llegue una solicitud. Esto funciona SOLO mientras esta pagina siga abierta en tu telefono.",cancel_ride_btn:"Cancelar el viaje",inc_new_title:"Nuevo viaje!",
+    confirm_cancel:"Devolver este viaje? El pasajero lo vera en su telefono y no pagara nada."
   }
 };
 
@@ -638,6 +661,9 @@ async function handleLogin(e){
 
   btn.disabled=true;
   btn.innerHTML='<span class="spinner"></span> '+t('loading');
+  // A phone only lets a page make a sound if a person touched it first. This tap
+  // is that permission - take it here, or the first ride arrives in silence.
+  armSound();
 
   var fullPhone=phone.replace(/\s/g,'');
   if(!fullPhone.startsWith('+'))fullPhone='+509'+fullPhone;
@@ -899,7 +925,7 @@ function startIncoming(){
   _incPoll=setInterval(pollIncoming,8000);
   pollIncoming();
 }
-function stopIncoming(){clearInterval(_incPoll);_incPoll=null;}
+function stopIncoming(){clearInterval(_incPoll);_incPoll=null;_knownInc=null;}
 
 async function pollIncoming(){
   if(_incBusy)return;
@@ -907,12 +933,24 @@ async function pollIncoming(){
   const d=(window._driverData&&window._driverData.driver)||{};
   try{
     // A ride accepted on another phone must show up here too, otherwise the driver
-    // sits on a stale screen with no way to enter the PIN.
-    if(!_activeRide&&d.id){
+    // sits on a stale screen with no way to enter the PIN. And it is asked for on
+    // EVERY tick, not only when the card is empty: when the passenger cancels, the
+    // card used to stay on his screen and he drove to a street corner for nothing.
+    if(d.id&&d.id!=='demo'){
       const ar=await fetch(API+'/api/rides/driver/'+d.id+'/active');
       if(ar.ok){
         const aj=await ar.json();
-        if(aj.ride){renderActiveRide([aj.ride],d.id);}
+        // Re-drawing the card wipes the PIN box, so only redraw when something
+        // actually changed - otherwise it clears itself under his thumb every 8s.
+        if(aj.ride){
+          if(!_activeRide||_activeRide.id!==aj.ride.id||_activeRide.status!==aj.ride.status)
+            renderActiveRide([aj.ride],d.id);
+        }
+        else if(_activeRide){
+          _activeRide=null;
+          document.getElementById('activeRideCard').style.display='none';
+          alert(t('ride_gone'));
+        }
       }
     }
     const res=await fetch(API+'/api/rides/available?minutes=120');
@@ -923,9 +961,57 @@ async function pollIncoming(){
   finally{_incBusy=false;}
 }
 
+/* A ping when a request lands. This is NOT a push notification: it only sounds
+   while this page is open and the phone is awake. Said plainly on the panel too,
+   so nobody leaves the phone in a pocket expecting to be called. */
+var _audioCtx=null,_knownInc=null,_titleFlash=null;
+function armSound(){
+  try{
+    if(!_audioCtx&&(window.AudioContext||window.webkitAudioContext))
+      _audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    if(_audioCtx&&_audioCtx.state==='suspended')_audioCtx.resume();
+  }catch(e){}
+}
+function alertNewRide(n){
+  try{if(navigator.vibrate)navigator.vibrate([200,120,200]);}catch(e){}
+  try{
+    armSound();
+    if(_audioCtx){
+      [0,320,640].forEach(function(off){
+        var o=_audioCtx.createOscillator(),g=_audioCtx.createGain();
+        var s=_audioCtx.currentTime+off/1000;
+        o.type='sine';o.frequency.value=880;
+        g.gain.setValueAtTime(0.0001,s);
+        g.gain.exponentialRampToValueAtTime(0.4,s+0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001,s+0.24);
+        o.connect(g);g.connect(_audioCtx.destination);
+        o.start(s);o.stop(s+0.26);
+      });
+    }
+  }catch(e){}
+  /* He may be on another tab. The title is the one thing visible from there. */
+  try{
+    clearInterval(_titleFlash);
+    var on=true,left=24;
+    _titleFlash=setInterval(function(){
+      document.title=on?('('+n+') '+t('inc_new_title')):'MsouWout';
+      on=!on;
+      if(--left<=0){clearInterval(_titleFlash);document.title='MsouWout';}
+    },900);
+  }catch(e){}
+}
+
 function renderIncoming(rides){
   const list=document.getElementById('incomingList');
   const empty=document.getElementById('incomingEmpty');
+  // Only shout about requests that were not on the board a moment ago. The very
+  // first poll after login is a backlog, not news - he is looking at the screen.
+  var ids=rides.map(function(r){return r.id;});
+  if(_knownInc!==null){
+    var fresh=ids.filter(function(i){return !_knownInc[i];});
+    if(fresh.length)alertNewRide(fresh.length);
+  }
+  _knownInc={};ids.forEach(function(i){_knownInc[i]=1;});
   document.getElementById('incCount').textContent=rides.length?('('+rides.length+')'):'';
   if(!rides.length){list.innerHTML='';empty.style.display='';return;}
   empty.style.display='none';
@@ -1069,9 +1155,53 @@ async function completeRide(){
       setTimeout(()=>{document.getElementById('activeRideCard').style.display='none';},3000);
       _activeRide=null;   // free to take the next request
       pollIncoming();
+      refreshEarnings();
     }
   }catch(e){}
   btn.disabled=false;btn.textContent=t('complete_ride_btn');
+}
+
+/* Cancelling hands the ride back. The rider is charged nothing when the DRIVER is
+   the one who cancels — that split lives on the server, this only says who did it. */
+async function driverCancel(){
+  if(!_activeRide)return;
+  if(!confirm(t('confirm_cancel')))return;
+  const btn=document.getElementById('btnCancelRide');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> ...';
+  try{
+    const res=await fetch(API+'/api/rides/'+_activeRide.id+'/cancel',{
+      method:'PATCH',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({cancelled_by:'driver',reason:'driver cancelled from the app'})
+    });
+    const j=await res.json().catch(()=>({}));
+    if(res.ok&&j.status==='cancelled'){
+      document.getElementById('activeRideCard').style.display='none';
+      _activeRide=null;
+      pollIncoming();
+    }else{
+      alert(j.error||t('err_server'));
+    }
+  }catch(e){alert(t('err_network'));}
+  btn.disabled=false;btn.textContent=t('cancel_ride_btn');
+}
+
+/* The KPI tiles were built once, from the login response, so "today's earnings"
+   still showed the old number after a ride was finished on this very screen. */
+async function refreshEarnings(){
+  const d=(window._driverData&&window._driverData.driver)||{};
+  if(!d.phone)return;
+  try{
+    const res=await fetch(API+'/api/drivers/login',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({phone:d.phone})
+    });
+    if(!res.ok)return;
+    const j=await res.json();
+    // Only the ride list moved. Keep the driver object the dashboard was built
+    // from, which carries fields the raw login row does not.
+    window._driverData.rides=j.rides||[];
+    renderDashboard(window._driverData);
+  }catch(e){/* the numbers refresh at the next login */}
 }
 
 setLang('ht');

@@ -349,6 +349,15 @@ a{text-decoration:none;color:inherit}
   color:var(--blue);font-size:.88rem;font-weight:700;border:2px solid var(--blue);
   margin-top:8px;transition:all .2s;
 }
+/* Cancelling is a real choice, not a mistake — visible, but never the loudest
+   thing on the screen. */
+.cancel-ride-btn{
+  width:100%;padding:13px;border-radius:var(--radius);background:transparent;
+  color:#B91C1C;font-size:.84rem;font-weight:700;border:1.5px solid #FCA5A5;
+  margin-top:14px;transition:all .2s;cursor:pointer;
+}
+.cancel-ride-btn:active{background:#FEF2F2}
+.cancel-ride-btn[disabled]{opacity:.5}
 
 /* EVENT BADGE */
 .event-badge{
@@ -808,6 +817,10 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
         <div id="ridePin" style="font-size:30px;font-weight:900;letter-spacing:8px;color:#0F172A">----</div>
         <div style="font-size:12px;color:#64748B" data-i18n="rl_pin_hint">Bay chofe a kod sa a le li rive.</div>
       </div>
+      <!-- Before a driver takes it, changing your mind is free and has to be
+           possible from the page — otherwise the request sits on every driver's
+           board for two hours and one of them drives to an empty street. -->
+      <button class="cancel-ride-btn" onclick="cancelRide('searching')" data-i18n="rl_cancel">Anile demann nan</button>
     </div>
     <!-- A driver actually accepted. Everything here comes from the ride record, so
          nothing is shown until it is true. -->
@@ -830,6 +843,29 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       <a class="wa-connect" id="mdCall" style="background:#16A34A;text-align:center;text-decoration:none;justify-content:center">
         <span>&#128222;</span> <span data-i18n="rl_call">Rele chofe a</span>
       </a>
+      <button class="cancel-ride-btn" id="mdCancel" onclick="cancelRide('accepted')" data-i18n="rl_cancel_ride">Anile kous la</button>
+    </div>
+
+    <!-- The driver pressed Fini. She should be told, on her own phone, that the
+         trip is closed and what it cost — not left on a card that never moves. -->
+    <div class="match-found" id="matchDone">
+      <div class="waitlist-check">&#127881;</div>
+      <div class="waitlist-title" data-i18n="rl_done_title">Kous la fini!</div>
+      <div class="waitlist-card">
+        <p class="waitlist-msg" data-i18n="rl_done_msg">Mesi paske ou vwayaje ak MsouWout. N espere w ap tounen byento.</p>
+        <div id="doneFare" style="margin-top:10px;font-size:26px;font-weight:900;color:#0F172A"></div>
+        <div id="doneDriver" style="font-size:13.5px;color:#64748B"></div>
+      </div>
+      <button class="new-ride-btn" onclick="newRide()" data-i18n="new_ride">Mande yon lot kous</button>
+    </div>
+
+    <!-- Cancelled, by whichever side. -->
+    <div class="match-found" id="matchCancelled">
+      <div class="waitlist-check">&#128683;</div>
+      <div class="waitlist-title" data-i18n="rl_cancelled_title">Kous la anile</div>
+      <div class="waitlist-card">
+        <p class="waitlist-msg" id="cancelMsg" data-i18n="rl_cancelled_msg">Demann nan anile. Ou ka mande yon lot kous nenpot ki le.</p>
+      </div>
       <button class="new-ride-btn" onclick="newRide()" data-i18n="new_ride">Mande yon lot kous</button>
     </div>
     <div class="match-found" id="matchFound">
@@ -874,7 +910,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v12</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v13</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1361,7 +1397,18 @@ var T_RIDE_LIVE={
      rl_call:'Rele chofe a',
      rl_failed:'Nou pa ka voye demann nan kounye a. Ekri nou sou WhatsApp epi n ap jwenn yon chofe pou ou.',
      lm_label:'📍 Repe pou chofe a (opsyonel)',
-     lm_ph:'Egzanp: #2, devan famasi a, kay ble a'},
+     lm_ph:'Egzanp: #2, devan famasi a, kay ble a',
+     rl_cancel:'Anile demann nan',
+     rl_cancel_ride:'Anile kous la',
+     rl_cancel_confirm:'Ou vle anile demann nan? Li gratis, okenn chofe poko pran l.',
+     rl_cancel_confirm_driver:'Chofe a deja aksepte epi li ka sou wout la. Si 2 minit fin pase depi li aksepte, gen yon frè anilasyon 50 HTG. Ou vle anile kanmenm?',
+     rl_done_title:'Kous la fini!',
+     rl_done_msg:'Mesi paske ou vwayaje ak MsouWout. N espere w ap tounen byento.',
+     rl_cancelled_title:'Kous la anile',
+     rl_cancelled_msg:'Demann nan anile. Ou ka mande yon lot kous nenpot ki le.',
+     rl_cancelled_by_driver:'Chofe a anile kous la. Nou dezole. Ou ka mande yon lot kous kounye a.',
+     rl_cancel_fee:'Gen yon frè anilasyon {fee} HTG.',
+     err_generic:'Yon erè rive. Eseye ankò.'},
  fr:{rl_searching_sub:'Restez sur cette page. Nous vous prevenons des qu\'un chauffeur accepte.',
      rl_pin_label:'CODE POUR LE CHAUFFEUR',
      rl_pin_hint:'Donnez ce code au chauffeur a son arrivee.',
@@ -1370,7 +1417,18 @@ var T_RIDE_LIVE={
      rl_call:'Appeler le chauffeur',
      rl_failed:'Nous ne pouvons pas envoyer la demande maintenant. Ecrivez-nous sur WhatsApp et nous vous trouverons un chauffeur.',
      lm_label:'📍 Repere pour le chauffeur (facultatif)',
-     lm_ph:'Ex: #2, devant la pharmacie, maison bleue'},
+     lm_ph:'Ex: #2, devant la pharmacie, maison bleue',
+     rl_cancel:'Annuler la demande',
+     rl_cancel_ride:'Annuler la course',
+     rl_cancel_confirm:'Annuler la demande? C\'est gratuit, aucun chauffeur ne l\'a encore prise.',
+     rl_cancel_confirm_driver:'Le chauffeur a deja accepte et il est peut-etre en route. Passe un delai de 2 minutes apres son acceptation, des frais d\'annulation de 50 HTG s\'appliquent. Annuler quand meme?',
+     rl_done_title:'Course terminee!',
+     rl_done_msg:'Merci d\'avoir voyage avec MsouWout. A tres bientot.',
+     rl_cancelled_title:'Course annulee',
+     rl_cancelled_msg:'La demande est annulee. Vous pouvez en demander une autre a tout moment.',
+     rl_cancelled_by_driver:'Le chauffeur a annule la course. Nous sommes desoles. Vous pouvez en demander une autre maintenant.',
+     rl_cancel_fee:'Des frais d\'annulation de {fee} HTG s\'appliquent.',
+     err_generic:'Une erreur est survenue. Reessayez.'},
  en:{rl_searching_sub:'Stay on this page. We will tell you as soon as a driver accepts.',
      rl_pin_label:'CODE FOR THE DRIVER',
      rl_pin_hint:'Give the driver this code when he arrives.',
@@ -1379,7 +1437,18 @@ var T_RIDE_LIVE={
      rl_call:'Call the driver',
      rl_failed:'We cannot send the request right now. Message us on WhatsApp and we will find you a driver.',
      lm_label:'📍 Landmark for the driver (optional)',
-     lm_ph:'e.g. #2, in front of the pharmacy, blue house'},
+     lm_ph:'e.g. #2, in front of the pharmacy, blue house',
+     rl_cancel:'Cancel this request',
+     rl_cancel_ride:'Cancel this ride',
+     rl_cancel_confirm:'Cancel the request? It is free, no driver has taken it yet.',
+     rl_cancel_confirm_driver:'The driver has already accepted and may be on his way. More than 2 minutes after he accepted, a 50 HTG cancellation fee applies. Cancel anyway?',
+     rl_done_title:'Ride completed!',
+     rl_done_msg:'Thank you for travelling with MsouWout. See you soon.',
+     rl_cancelled_title:'Ride cancelled',
+     rl_cancelled_msg:'The request is cancelled. You can order another ride at any time.',
+     rl_cancelled_by_driver:'The driver cancelled the ride. We are sorry. You can order another one now.',
+     rl_cancel_fee:'A cancellation fee of {fee} HTG applies.',
+     err_generic:'Something went wrong. Please try again.'},
  es:{rl_searching_sub:'Quedate en esta pagina. Te avisamos en cuanto un conductor acepte.',
      rl_pin_label:'CODIGO PARA EL CONDUCTOR',
      rl_pin_hint:'Dale este codigo al conductor cuando llegue.',
@@ -1388,7 +1457,18 @@ var T_RIDE_LIVE={
      rl_call:'Llamar al conductor',
      rl_failed:'No podemos enviar la solicitud ahora. Escribenos por WhatsApp y te buscamos un conductor.',
      lm_label:'📍 Referencia para el conductor (opcional)',
-     lm_ph:'Ej: #2, frente a la farmacia, casa azul'}
+     lm_ph:'Ej: #2, frente a la farmacia, casa azul',
+     rl_cancel:'Cancelar la solicitud',
+     rl_cancel_ride:'Cancelar el viaje',
+     rl_cancel_confirm:'Cancelar la solicitud? Es gratis, ningun conductor la ha tomado todavia.',
+     rl_cancel_confirm_driver:'El conductor ya acepto y puede estar en camino. Pasados 2 minutos desde que acepto, se aplica una tarifa de cancelacion de 50 HTG. Cancelar de todos modos?',
+     rl_done_title:'Viaje completado!',
+     rl_done_msg:'Gracias por viajar con MsouWout. Hasta pronto.',
+     rl_cancelled_title:'Viaje cancelado',
+     rl_cancelled_msg:'La solicitud fue cancelada. Puedes pedir otro viaje cuando quieras.',
+     rl_cancelled_by_driver:'El conductor cancelo el viaje. Lo sentimos. Puedes pedir otro ahora.',
+     rl_cancel_fee:'Se aplica una tarifa de cancelacion de {fee} HTG.',
+     err_generic:'Ocurrio un error. Intentalo de nuevo.'}
 };
 Object.keys(T_RIDE_LIVE).forEach(function(l){ if(T[l]) Object.assign(T[l],T_RIDE_LIVE[l]); });
 
@@ -1784,21 +1864,83 @@ function doSubmitRide(name,phone){
 var _ridePoll=null,_pollUntil=0;
 function startRidePolling(){
   if(!rideData.id)return;
+  _lastStatus='';
   _pollUntil=Date.now()+10*60*1000;
   clearInterval(_ridePoll);
   _ridePoll=setInterval(checkRideOnce,4000);
   checkRideOnce();
 }
 function stopRidePolling(){clearInterval(_ridePoll);_ridePoll=null;}
+var _lastStatus='';
 function checkRideOnce(){
   if(Date.now()>_pollUntil){stopRidePolling();showWaitlist();return;}
   apiFetch(API_URL+'/api/rides/'+rideData.id)
     .then(function(r){return r.json()})
     .then(function(d){
       if(!d||!d.status)return;
-      if(d.status==='accepted'||d.status==='in_progress'){stopRidePolling();showDriverFound(d);}
-      else if(d.status==='cancelled'){stopRidePolling();showWaitlist();}
+      if(d.status===_lastStatus)return;      /* nothing moved; leave the screen alone */
+      _lastStatus=d.status;
+      if(d.status==='accepted'||d.status==='in_progress'){
+        /* Polling used to STOP the moment a driver accepted, so her screen froze on
+           the driver card: she never saw the trip start and never saw it finish.
+           Keep watching to the end of the ride, just less often. */
+        _pollUntil=Date.now()+3*60*60*1000;
+        clearInterval(_ridePoll);
+        _ridePoll=setInterval(checkRideOnce,10000);
+        showDriverFound(d);
+      }
+      else if(d.status==='completed'){stopRidePolling();showRideDone(d);}
+      else if(d.status==='cancelled'){stopRidePolling();showCancelled(d);}
     }).catch(function(){});
+}
+
+/* Cancel, from her phone. The endpoint decides whether anything is owed — this
+   page never invents a fee, it repeats the one the server returns. */
+function cancelRide(stage){
+  if(!rideData.id)return;
+  var msg=(stage==='accepted')?t('rl_cancel_confirm_driver'):t('rl_cancel_confirm');
+  if(!confirm(msg))return;
+  var btns=document.querySelectorAll('.cancel-ride-btn');
+  for(var i=0;i<btns.length;i++)btns[i].disabled=true;
+  apiFetch(API_URL+'/api/rides/'+rideData.id+'/cancel',{
+    method:'PATCH',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({cancelled_by:'rider',reason:'passenger cancelled from the app'})
+  }).then(function(r){return r.json().catch(function(){return {};})})
+    .then(function(j){
+      if(j&&j.status==='cancelled'){
+        _lastStatus='cancelled';
+        stopRidePolling();
+        showCancelled({cancelled_by:'rider',cancel_fee:j.cancel_fee});
+      }else{
+        alert((j&&j.error)||t('err_generic'));
+        for(var i=0;i<btns.length;i++)btns[i].disabled=false;
+      }
+    }).catch(function(){
+      alert(t('err_generic'));
+      for(var i=0;i<btns.length;i++)btns[i].disabled=false;
+    });
+}
+
+function showRideDone(d){
+  document.getElementById('matchSearching').style.display='none';
+  document.getElementById('matchDriver').classList.remove('show');
+  document.getElementById('matchFound').classList.remove('show');
+  var fare=(d.total_with_protection||d.price||0);
+  document.getElementById('doneFare').textContent=fare?(Math.round(fare)+' HTG'):'';
+  document.getElementById('doneDriver').textContent=d.driver_name||'';
+  document.getElementById('matchDone').classList.add('show');
+}
+
+function showCancelled(d){
+  document.getElementById('matchSearching').style.display='none';
+  document.getElementById('matchDriver').classList.remove('show');
+  document.getElementById('matchFound').classList.remove('show');
+  var p=document.getElementById('cancelMsg');
+  var fee=Number(d&&d.cancel_fee)||0;
+  var key=(d&&d.cancelled_by==='driver')?'rl_cancelled_by_driver':'rl_cancelled_msg';
+  p.textContent=t(key)+(fee?(' '+t('rl_cancel_fee').replace('{fee}',Math.round(fee))):'');
+  p.removeAttribute('data-i18n');
+  document.getElementById('matchCancelled').classList.add('show');
 }
 
 function showDriverFound(d){
@@ -1822,6 +1964,8 @@ function showWaitlist(msg){
   stopRidePolling();
   document.getElementById('matchSearching').style.display='none';
   document.getElementById('matchDriver').classList.remove('show');
+  document.getElementById('matchDone').classList.remove('show');
+  document.getElementById('matchCancelled').classList.remove('show');
   document.getElementById('matchFound').classList.add('show');
   if(msg){var p=document.querySelector('#matchFound .waitlist-msg');if(p){p.textContent=msg;p.removeAttribute('data-i18n');}}
   document.getElementById('wlPickup').textContent=pickupEl.value.trim();
@@ -1845,6 +1989,11 @@ function contactWhatsApp(){
 function newRide(){
   stopRidePolling();
   rideData={};
+  _lastStatus='';
+  document.getElementById('matchDone').classList.remove('show');
+  document.getElementById('matchCancelled').classList.remove('show');
+  var cb=document.querySelectorAll('.cancel-ride-btn');
+  for(var i=0;i<cb.length;i++)cb[i].disabled=false;
   pickupEl.value='';dropEl.value='';
   var lm=document.getElementById('landmark');if(lm)lm.value='';
   window._pickupLat=null;window._pickupLng=null;window._dropLat=null;window._dropLng=null;
