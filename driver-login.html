@@ -473,7 +473,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
 
 <!-- FOOTER -->
 <footer>
-  <p>&copy; 2026 MsouWout &mdash; <span data-i18n="footer_part">Yon platfom</span> <a href="https://haitibiznis.com">HaitiBiznis</a></p>
+  <p>&copy; 2026 MsouWout &mdash; <span data-i18n="footer_part">Yon platfom</span> <a href="https://haitibiznis.com">HaitiBiznis</a> <span style="opacity:.55">v15</span></p>
 </footer>
 
 <script>
@@ -634,13 +634,13 @@ function setLang(lang){
    passenger's order could actually reach him. */
 const T_INCOMING={
  ht:{inc_title:"Demann Kous",inc_empty:"Pa gen demann kounye a. Paj sa a ap gade pou kont li.",
-     inc_accept:"Aksepte Kous La",inc_demo:"Sa se kont demo a. Vre demann yo parèt lè ou konekte ak pwòp nimewo ou.",lbl_phone:"Telefòn",lbl_pickup:"Kote pou pran l",lbl_dropoff:"Kote pou depoze l",inc_skip:"Sote",nav_pickup:"Ale chèche l",nav_drop:"Ale destinasyon an"},
+     inc_busy:"Fini kous ou an anvan",inc_accept:"Aksepte Kous La",inc_demo:"Sa se kont demo a. Vre demann yo parèt lè ou konekte ak pwòp nimewo ou.",lbl_phone:"Telefòn",lbl_pickup:"Kote pou pran l",lbl_dropoff:"Kote pou depoze l",inc_skip:"Sote",nav_pickup:"Ale chèche l",nav_drop:"Ale destinasyon an"},
  fr:{inc_title:"Demandes de Course",inc_empty:"Aucune demande pour le moment. Cette page surveille toute seule.",
-     inc_accept:"Accepter la Course",inc_demo:"Ceci est le compte de démonstration. Les vraies demandes apparaissent quand vous vous connectez avec votre propre numéro.",lbl_phone:"Téléphone",lbl_pickup:"Départ",lbl_dropoff:"Destination",inc_skip:"Passer",nav_pickup:"Aller au départ",nav_drop:"Aller à la destination"},
+     inc_busy:"Terminez votre course",inc_accept:"Accepter la Course",inc_demo:"Ceci est le compte de démonstration. Les vraies demandes apparaissent quand vous vous connectez avec votre propre numéro.",lbl_phone:"Téléphone",lbl_pickup:"Départ",lbl_dropoff:"Destination",inc_skip:"Passer",nav_pickup:"Aller au départ",nav_drop:"Aller à la destination"},
  en:{inc_title:"Ride Requests",inc_empty:"No requests right now. This page keeps watching on its own.",
-     inc_accept:"Accept Ride",inc_demo:"This is the demo account. Real requests appear when you log in with your own number.",lbl_phone:"Phone",lbl_pickup:"Pickup",lbl_dropoff:"Drop-off",inc_skip:"Skip",nav_pickup:"Navigate to pickup",nav_drop:"Navigate to drop-off"},
+     inc_busy:"Finish your ride first",inc_accept:"Accept Ride",inc_demo:"This is the demo account. Real requests appear when you log in with your own number.",lbl_phone:"Phone",lbl_pickup:"Pickup",lbl_dropoff:"Drop-off",inc_skip:"Skip",nav_pickup:"Navigate to pickup",nav_drop:"Navigate to drop-off"},
  es:{inc_title:"Solicitudes de Viaje",inc_empty:"No hay solicitudes ahora. Esta pagina sigue vigilando sola.",
-     inc_accept:"Aceptar Viaje",inc_demo:"Esta es la cuenta de demostracion. Las solicitudes reales aparecen cuando entras con tu propio numero.",lbl_phone:"Telefono",lbl_pickup:"Recogida",lbl_dropoff:"Destino",inc_skip:"Omitir",nav_pickup:"Ir a la recogida",nav_drop:"Ir al destino"}
+     inc_busy:"Termina tu viaje primero",inc_accept:"Aceptar Viaje",inc_demo:"Esta es la cuenta de demostracion. Las solicitudes reales aparecen cuando entras con tu propio numero.",lbl_phone:"Telefono",lbl_pickup:"Recogida",lbl_dropoff:"Destino",inc_skip:"Omitir",nav_pickup:"Ir a la recogida",nav_drop:"Ir al destino"}
 };
 Object.keys(T_INCOMING).forEach(function(l){if(T[l])Object.assign(T[l],T_INCOMING[l]);});
 
@@ -1016,7 +1016,7 @@ function renderIncoming(rides){
   // Only shout about requests that were not on the board a moment ago. The very
   // first poll after login is a backlog, not news - he is looking at the screen.
   var ids=rides.map(function(r){return r.id;});
-  if(_knownInc!==null){
+  if(_knownInc!==null&&!_activeRide){
     var fresh=ids.filter(function(i){return !_knownInc[i];});
     if(fresh.length)alertNewRide(fresh.length);
   }
@@ -1024,6 +1024,10 @@ function renderIncoming(rides){
   document.getElementById('incCount').textContent=rides.length?('('+rides.length+')'):'';
   if(!rides.length){list.innerHTML='';empty.style.display='';return;}
   empty.style.display='none';
+  /* He is already carrying someone. The requests still belong on the board - he
+     can see what is waiting - but the server will refuse a second one, so the
+     button says why instead of failing under his thumb. */
+  var busy=!!_activeRide;
   const vMap={motorcycle:t('vehicle_moto'),moto:t('vehicle_moto'),car:t('vehicle_car')};
   list.innerHTML=rides.map(function(r){
     return '<div style="border:1px solid #E2E8F0;border-radius:14px;padding:12px;margin-bottom:10px;background:#fff">'
@@ -1036,7 +1040,9 @@ function renderIncoming(rides){
         +'<div>&#128994; '+esc(r.pickup_address||'—')+'</div>'
         +'<div>&#128308; '+esc(r.dropoff_address||'—')+'</div></div>'
       +'<div style="display:flex;gap:8px;margin-top:10px">'
-        +'<button class="btn-start-ride" style="flex:1;margin:0" data-accept="'+esc(r.id)+'">'+t('inc_accept')+'</button>'
+        +(busy
+          ?'<button style="flex:1;margin:0;padding:12px;border-radius:12px;border:1px solid #E2E8F0;background:#F1F5F9;color:#94A3B8;font-weight:800;font-size:13px" disabled>'+t('inc_busy')+'</button>'
+          :'<button class="btn-start-ride" style="flex:1;margin:0" data-accept="'+esc(r.id)+'">'+t('inc_accept')+'</button>')
         +'<button style="flex:0 0 auto;margin:0;padding:0 16px;border-radius:12px;border:1px solid #E2E8F0;background:#fff;color:#64748B;font-weight:800;font-size:13px;cursor:pointer" data-skip="'+esc(r.id)+'">'+t('inc_skip')+'</button>'
       +'</div>'
       +'<a href="'+navUrl(r.pickup_lat,r.pickup_lng,r.pickup_address)+'" target="_blank" rel="noopener"'
