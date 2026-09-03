@@ -856,6 +856,14 @@ function deleteAccount(){
 // ========== ACTIVE RIDE + PIN ==========
 let _activeRide=null;
 
+/* Everything the active-ride card puts on screen. If none of it moved there is
+   nothing to redraw, and redrawing would empty the PIN box he is typing into. */
+function cardSig(r){
+  if(!r)return '';
+  return [r.id,r.status,r.pickup_address,r.dropoff_address,r.customer_name,
+          r.customer_phone,r.price,r.driver_earning,r.pickup_lat,r.dropoff_lat].join('|');
+}
+
 function renderActiveRide(rides,driverId){
   const card=document.getElementById('activeRideCard');
   const active=rides.find(r=>r.status==='accepted'||r.status==='in_progress');
@@ -940,11 +948,12 @@ async function pollIncoming(){
       const ar=await fetch(API+'/api/rides/driver/'+d.id+'/active');
       if(ar.ok){
         const aj=await ar.json();
-        // Re-drawing the card wipes the PIN box, so only redraw when something
-        // actually changed - otherwise it clears itself under his thumb every 8s.
+        // Re-drawing the card wipes the PIN box, so only redraw when something the
+        // card SHOWS has changed - otherwise it clears itself under his thumb every
+        // 8s. Comparing the status alone was not enough: the card built at login
+        // carries no addresses, and a status-only test never replaced it.
         if(aj.ride){
-          if(!_activeRide||_activeRide.id!==aj.ride.id||_activeRide.status!==aj.ride.status)
-            renderActiveRide([aj.ride],d.id);
+          if(cardSig(aj.ride)!==cardSig(_activeRide)) renderActiveRide([aj.ride],d.id);
         }
         else if(_activeRide){
           _activeRide=null;
