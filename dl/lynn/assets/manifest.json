@@ -1,0 +1,130 @@
+{
+  "hero": {
+    "from": "lynn-25.jpg",
+    "size": [
+      1040,
+      780
+    ],
+    "kb": 76
+  },
+  "story": {
+    "from": "lynn-02.jpg",
+    "size": [
+      1080,
+      607
+    ],
+    "kb": 65
+  },
+  "prog-food": {
+    "from": "lynn-30.jpg",
+    "size": [
+      1000,
+      750
+    ],
+    "kb": 102
+  },
+  "prog-youth": {
+    "from": "lynn-17.jpg",
+    "size": [
+      600,
+      800
+    ],
+    "kb": 52
+  },
+  "prog-biz": {
+    "from": "lynn-19.jpg",
+    "size": [
+      370,
+      657
+    ],
+    "kb": 19
+  },
+  "prog-connect": {
+    "from": "lynn-36.png",
+    "size": [
+      1000,
+      750
+    ],
+    "kb": 113
+  },
+  "g1": {
+    "from": "lynn-28.jpg",
+    "size": [
+      1080,
+      607
+    ],
+    "kb": 87
+  },
+  "g2": {
+    "from": "lynn-23.jpg",
+    "size": [
+      600,
+      800
+    ],
+    "kb": 109
+  },
+  "g3": {
+    "from": "lynn-32.jpg",
+    "size": [
+      600,
+      800
+    ],
+    "kb": 81
+  },
+  "g4": {
+    "from": "lynn-34.jpg",
+    "size": [
+      600,
+      800
+    ],
+    "kb": 71
+  },
+  "g5": {
+    "from": "lynn-38.jpg",
+    "size": [
+      450,
+      800
+    ],
+    "kb": 63
+  },
+  "g6": {
+    "from": "lynn-40.jpg",
+    "size": [
+      600,
+      800
+    ],
+    "kb": 38
+  },
+  "g7": {
+    "from": "lynn-22.jpg",
+    "size": [
+      450,
+      800
+    ],
+    "kb": 22
+  },
+  "g8": {
+    "from": "lynn-43.jpg",
+    "size": [
+      600,
+      800
+    ],
+    "kb": 54
+  },
+  "g9": {
+    "from": "lynn-05.jpg",
+    "size": [
+      450,
+      800
+    ],
+    "kb": 34
+  },
+  "g10": {
+    "from": "lynn-07.jpg",
+    "size": [
+      450,
+      800
+    ],
+    "kb": 52
+  }
+}

@@ -488,7 +488,7 @@ footer a:hover{color:#8fd66a}
 
     <div class="pgrid">
       <article class="pcard">
-        <img src="assets/prog-food.webp" alt="Children receiving meals from LYNN">
+        <img src="assets/prog-food.webp" alt="Children sharing a hot meal at a LYNN event">
         <div class="body">
           <h3>Community Food Project</h3>
           <p>Nutritional meals three times a week for approximately 40 children in Haiti, plus
@@ -512,7 +512,7 @@ footer a:hover{color:#8fd66a}
         </div>
       </article>
       <article class="pcard">
-        <img src="assets/prog-connect.webp" alt="Medical volunteers at a LYNN health fair">
+        <img src="assets/prog-connect.webp" alt="A LYNN clinic set up in a classroom during the Milot mission">
         <div class="body">
           <h3>Community Connections</h3>
           <p>Health fairs, parent focus groups, and the everyday work of introducing people who
@@ -810,6 +810,28 @@ document.querySelectorAll('[data-count]').forEach(function (el) { io.observe(el)
 
 /* gallery + lightbox ----------------------------------------------- */
 var GALLERY = [
+  /* Photos LYNN sent on 3 September 2026, grouped by the event they came from.
+     They arrived as phone screenshots, so they are roughly 730px wide - the
+     lightbox below refuses to draw any picture larger than its own file. */
+  ['ev-hall-1',      'A hall full of children at a LYNN event in Haiti'],
+  ['ev-children-2',  'Children and volunteers on International Children’s Day'],
+  ['ev-children-1',  'Children in LYNN t-shirts singing on International Children’s Day'],
+  ['ev-mission-5',   'The LYNN volunteer team on the mission in Milot, July 2026'],
+  ['ev-mission-3',   'A clinic set up in a classroom during the Milot mission'],
+  ['ev-mission-4',   'The pharmacy table at the Milot medical mission'],
+  ['ev-mission-2',   'A medical volunteer seeing a mother and her child in Milot', '18% center'],
+  ['ev-mission-1',   'The community gathered for the mission in Milot, Haiti', '10% center'],
+  ['ev-christmas-1', 'Families at the LYNN Christmas gift table'],
+  ['ev-christmas-3', 'School supplies and gifts handed out at Christmas'],
+  ['ev-christmas-4', 'Children sharing a hot meal at a LYNN event'],
+  ['ev-christmas-2', 'A boy at the LYNN Christmas celebration'],
+  ['ev-seniors-1',   'A LYNN volunteer leading a meeting with seniors', '78% center'],
+  ['ev-seniors-2',   'Seniors gathered for a LYNN community meeting'],
+  ['ev-night-1',     'The children’s choir at LYNN’s Hallelujah Night'],
+  ['ev-night-2',     'Hallelujah Night at LYNN'],
+  ['ev-night-3',     'Young people in Hallelujah Night t-shirts'],
+  ['ev-night-4',     'LYNN volunteers at Hallelujah Night'],
+  ['ev-thanks-1',    'LYNN volunteers at the Thanksgiving celebration'],
   ['g1',  'Children in LYNN t-shirts seated at a community gathering'],
   ['g2',  'A crowd of young people at a LYNN event'],
   ['g3',  'LYNN volunteer speaking at Children’s International Day'],
@@ -827,12 +849,16 @@ GALLERY.forEach(function (g, i) {
   b.type = 'button';
   b.setAttribute('aria-label', 'View photo: ' + g[1]);
   b.dataset.i = i;
-  b.innerHTML = '<img src="assets/' + g[0] + '.webp" alt="' + g[1] + '" loading="lazy">';
+  var pos = g[2] ? ' style="object-position:' + g[2] + '"' : '';
+  b.innerHTML = '<img src="assets/' + g[0] + '.webp" alt="' + g[1] + '"' + pos + ' loading="lazy">';
   gal.appendChild(b);
 });
 var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'), cur = 0;
 function show(i) {
   cur = (i + GALLERY.length) % GALLERY.length;
+  /* No cap is needed here: max-width/max-height only ever shrink an <img>, and
+     nothing sets an explicit width, so the lightbox already stops at the file's
+     own size. lynn-test.py asserts that for every picture on the page. */
   lbimg.src = 'assets/' + GALLERY[cur][0] + '.webp';
   lbimg.alt = GALLERY[cur][1];
   lb.classList.add('on');
