@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Making the posters yourself with the AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#00209F; --navy-dark:#001566; --red:#E31B23; --green:#1B8C3D;
+  --white:#fff; --off-white:#F4F6FA; --text:#1A2A4A; --text-light:#5A6B8A;
+  --text-muted:#8A95AA; --border:#DFE5EE; --radius:14px;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);color:var(--text);background:var(--off-white);
+  line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;padding:24px 18px 64px}
+
+header{text-align:center;padding:10px 0 24px}
+h1{font-size:1.4rem;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
+.sub{color:var(--text-light);font-size:.95rem}
+
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;margin-bottom:16px}
+.card h2{font-size:1.02rem;font-weight:800;margin-bottom:6px}
+.card p{color:var(--text-light);font-size:.93rem}
+.card img{display:block;width:100%;height:auto;border-radius:10px;
+  border:1px solid var(--border);margin-top:14px}
+
+.tag{display:inline-block;background:rgba(27,140,61,.1);color:var(--green);
+  font-size:.75rem;font-weight:800;padding:4px 10px;border-radius:99px;
+  letter-spacing:.04em;text-transform:uppercase}
+.tag.blue{background:rgba(0,32,159,.09);color:var(--navy)}
+.tag.red{background:rgba(227,27,35,.1);color:var(--red)}
+
+.step{display:flex;gap:12px;margin-top:14px}
+.step .n{flex:0 0 28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;
+  font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.step p{margin:0;color:var(--text);font-size:.93rem}
+.step p b{font-weight:800}
+
+.warn{background:#FFF6F5;border:1px solid rgba(227,27,35,.28);border-left:4px solid var(--red);
+  border-radius:10px;padding:14px 16px;margin-top:14px}
+.warn b{color:var(--red)}
+.warn p{color:var(--text);font-size:.9rem;margin-top:4px}
+
+.copy{display:block;width:100%;text-align:center;padding:17px 16px;border:0;
+  border-radius:var(--radius);font:inherit;font-weight:800;font-size:1rem;
+  margin-top:14px;background:var(--navy);color:#fff;cursor:pointer;
+  -webkit-appearance:none;box-shadow:0 6px 18px rgba(0,32,159,.24)}
+.copy.done{background:var(--green);box-shadow:none}
+.copy.warn-state{background:var(--red);box-shadow:none}
+
+details{margin-top:12px;border:1px solid var(--border);border-radius:10px;
+  background:#FBFCFE;overflow:hidden}
+summary{padding:12px 14px;font-weight:700;font-size:.9rem;cursor:pointer;
+  color:var(--navy);list-style:none}
+summary::-webkit-details-marker{display:none}
+summary:after{content:' \25BE';float:right}
+details[open] summary:after{content:' \25B4'}
+pre{margin:0;padding:0 14px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;
+  font-size:.78rem;line-height:1.55;white-space:pre-wrap;word-wrap:break-word;
+  color:var(--text);-webkit-user-select:text;user-select:text}
+
+.note{margin-top:12px;font-size:.85rem;color:var(--text-muted)}
+footer{text-align:center;color:var(--text-muted);font-size:.82rem;padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Making the posters yourself with the AI</h1>
+    <p class="sub">What to type, and the one thing never to ask it for</p>
+  </header>
+
+  <div class="card">
+    <span class="tag red">The rule, before anything else</span>
+    <h2 style="margin-top:10px">Never ask the AI for the QR code</h2>
+    <p>It cannot make one. It has never made one for you. It draws something
+    that looks like a code and no phone can read it &mdash; three times now.</p>
+    <p style="margin-top:10px">So ask it to leave <b>an empty white square</b>
+    in the place where the code goes. That one line is at the end of both
+    prompts below. Send me the picture and I drop the real code into the empty
+    square. Minutes, and free.</p>
+    <div class="warn">
+      <b>Get the artwork finished first, then send it to me.</b>
+      <p>The AI redraws the whole poster every time you ask for a change, so if
+      I put the code on and you then ask it for one more change, the code is
+      gone and we start again.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="tag blue">Copy, paste, done</span>
+    <h2 style="margin-top:10px">The MyPlopPlop poster</h2>
+    <p>This is your own flyer, written out as instructions. Tap the button,
+    paste it into the AI, and it makes the same poster &mdash; with the empty
+    square instead of the fake code.</p>
+    <button class="copy" data-copy="p1">Copy the MyPlopPlop prompt</button>
+    <details>
+      <summary>See the whole thing first</summary>
+      <pre id="p1">Create a vertical marketing flyer, portrait, 2:3, at the highest resolution you can produce.
+
+Style: bold, modern, high contrast, print quality. Haitian colours - deep blue, red, dark green. Flat graphic design with real photographs of Haitian people.
+
+Layout, top to bottom:
+
+1. White header band. On the left, a blue and red shield badge with a motorcycle and a car in it. In the centre, large text "MyPlopPlop.com" with "My" in green, "Plop" in red, "Plop" in green and ".com" in blue. Under it in blue: "Achte. Vann. Deplase. An Sekirite." Under that a yellow rounded button with dark text: "2 PLATFOM, 1 SOLISYON !" On the right, leave a clear space for the DASH logo.
+
+2. Two panels side by side, the same size.
+Left panel, deep blue. White strip at the top with "MsouWout" and under it "PLATFOM TRANSPO". Headline in white and yellow: "MANDE CHOFE AN SEKIRITE !" Photograph of a smiling Haitian motorcycle taxi driver in a red and blue jacket and helmet giving a thumbs up, a white car behind him, a city skyline in the background.
+Right panel, dark green. White strip at the top with "MyPlopPlop.com" and under it "PLATFOM BIZNIS". Headline in white and yellow: "LIVRE - VANN - ACHTE TOUT SA W BEZWEN !" Photograph of a smiling Haitian delivery man in a green cap holding a cardboard box, next to a phone showing a shopping app and a basket of fresh food.
+
+3. Under each panel, a row of four round icons, each with a two line caption.
+Under the left panel: "CHOFE VERIFYE", "KOUS AN SEKIRITE", "SIPO 24/7", "ASIRANS & DASH OK".
+Under the right panel: "LIVREZON RAPID", "PRI ABODAB", "PEYE SAN CASH", "SIPO 24/7".
+
+4. A wide green band across both. On the left a shield with a green medical cross and the words "100% KOUVETI MEDIKAL AK DASH", under it in smaller white text "Si ta gen aksidan, DASH pran swen w !", and a clear space for the DASH logo. On the right a photograph of a happy Haitian family of four giving thumbs up.
+
+5. A white band titled "3 MOUN KAP FE PLIS !" with three columns, each with a small icon, a coloured title and one line under it:
+blue - "VIN YON CHOFE" - "Fe lajan chak jou !"
+green - "VIN YON KLIYAN" - "Achte, livre, san soti lakay !"
+red - "VIN YON BIZNIS" - "Vann plis, jwenn plis kliyan !"
+Each column has a small button reading "ENSKRI GRATIS".
+
+6. A dark blue footer band in three parts.
+Left, a red block: "ENSKRI JODI A !", under it in yellow "ESKANE QR CODE LA", under that in white "OSWA KONTAKTE NOU", with a white arrow pointing to the right.
+Centre: a plain white square, completely empty. Do not draw a QR code. Do not draw any pattern, dots, squares or symbols inside it. Leave it blank white.
+Right: three lines, each with a small icon - a WhatsApp icon with the text "WHATSAPP NUMBER", a globe icon with "www.MyPlopPlop.com", a Facebook icon with "MyPlopPlop HAITI". Under them the words "NOU AKSEPTE" with three small payment logos.
+
+7. A thin dark blue strip at the very bottom with five small icons and words: "SEKIRITE", "FYAB", "RAPIDITE", "KONFYANS", "OPOTINITE".
+
+Spell every word exactly as it is written above. Do not translate anything. Do not add any words of your own.</pre>
+    </details>
+    <p class="note">Where it says WHATSAPP NUMBER, type your own number in before
+    you send the prompt &mdash; and check it digit by digit on the picture that
+    comes back. The AI changes numbers.</p>
+    <p class="note">One deliberate difference from your flyer: the prompt asks
+    for PRI ABODAB, not PRIX. See the last card &mdash; change it back if PRIX
+    is what you want.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag blue">Copy, paste, done</span>
+    <h2 style="margin-top:10px">The LajanMaker Academy poster</h2>
+    <button class="copy" data-copy="p2">Copy the Academy prompt</button>
+    <details>
+      <summary>See the whole thing first</summary>
+      <pre id="p2">Create a vertical marketing flyer, portrait, 2:3, at the highest resolution you can produce.
+
+Style: bold, modern, high contrast, print quality. Deep blue, red and dark green on a white background. Flat graphic design with real photographs of Haitian people.
+
+Layout, top to bottom:
+
+1. White header. On the left a logo badge with the letters L and M and a dollar sign. In the centre, large text "LajanMaker" with "Lajan" in blue and "Maker" in red, and under it the word "ACADEMY" in green, and under that in smaller letters "APRANN - VANN - FE LAJAN". On the right a dark blue rounded box with white and yellow text: "YON PLATFOM, MILYON POSIBILITE, YON AVNI PI MEYE POU TOUT MOUN !"
+
+2. Three panels side by side, the same size.
+Panel one, blue heading strip: "MsouWout" and under it "PLATFOM TRANSPO". Below it in blue and red: "ENSKRI CHOFE - FE LAJAN CHAK JOU !" A photograph of a Haitian motorcycle taxi driver in a red and blue jacket next to a white car. Under the photo a list with blue tick marks: "Chofe Verifye", "Plis Pasaje", "Kous An Sekirite", "Sipo 24/7", "Pwoteksyon Medikal". At the bottom of the panel a blue box: "3% KOMISYON sou chak kous".
+Panel two, green heading strip: "MyPlopPlop.com" and under it "PLATFOM BIZNIS". Below it in green: "ENSKRI BIZNIS OU - OGMANTE VANT OU !" An illustration of a market stall on a phone screen with food, a shopping bag and a delivery box. Under it a list with green tick marks: "Plis Vizibilite", "Plis Kliyan", "Plis Vant", "Plis Revni", "Sipo Kliyan 24/7". At the bottom a green box: "3% KOMISYON sou chak vant".
+Panel three, red heading strip: "PWODWI DIJITAL" and under it in yellow "APRANN - KREYE - VANN". Below it in red: "VANN PLIS PASE 30 PWODWI DIJITAL AVEK 30% KOMISYON !" An illustration of a laptop with charts and a play button. Under it two columns of red tick marks: "Logo", "Kat Biznis", "Sit Entenet", "Rezime Egzekitif", "Pitch Deck", "Videyo Explainer", "& Plis anko !". At the bottom a red box: "30% KOMISYON sou chak lavant".
+
+3. A light band across all three titled "SEVIS ADMINISTRATIF" with "10% KOMISYON" under the title, and five small icons in a row with captions: "Renouvelman Lisans", "Kreyasyon Asosyasyon", "Kreyasyon Konpayi", "Tradiksyon", "& Lot Sevis Administratif".
+
+4. A dark blue band with four items in a row, each with a small icon: "PLATFOM FYAB & SEKIRITE", "OPOTINITE POU JEN, FANM AK TOUT MOUN", "PLIS REVNI SAN LIMIT", "SIPO & AKONPAYMAN".
+
+5. A dark blue footer in three parts.
+Left, in yellow and red: "VIN YON AGENT LAJANMAKER - FE LAJAN TOUT JOU !" and under it four green tick lines: "Pa bezwen stock", "Pa bezwen gwo kapital", "Selman yon telefon", "Plis pase 30 sevis ak pwodwi".
+Centre: a red button reading "ENSKRI JODI A !", under it "Eskane QR Code la oswa kontakte nou.", an arrow pointing right, and then a plain white square, completely empty. Do not draw a QR code. Do not draw any pattern, dots, squares or symbols inside it. Leave it blank white.
+Right: three lines, each with a small icon - a WhatsApp icon with the text "WHATSAPP NUMBER", a globe icon with "HaitiBiznis.com/LajanMaker", a Facebook icon with "LajanMaker". Under them "NOU AKSEPTE" with three small payment logos.
+
+6. A thin strip at the very bottom with four small icons and words: "1 PLATFOM", "4 SOLISYON", "MILYON POSIBILITE", "REVNI SAN LIMIT".
+
+Spell every word exactly as it is written above. Do not translate anything. Do not add any words of your own.</pre>
+    </details>
+    <p class="note">The accents are left off on purpose. The AI gets them wrong
+    more often than it gets them right, and a missing accent is easier to live
+    with than a wrong word. If it does put them in, check them.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag blue">Two lines that change everything</span>
+    <h2 style="margin-top:10px">Making it bigger</h2>
+    <p>The files it has been giving you are 1024 by 1536. That is fine for a
+    hand flyer and good up to about 35 by 50 cm on a wall. Past that the photos
+    go soft.</p>
+    <p style="margin-top:10px">Ask for more in the same message and some tools
+    give it. Add these two lines at the end of any prompt:</p>
+    <button class="copy" data-copy="p3">Copy the two lines</button>
+    <details>
+      <summary>See them</summary>
+      <pre id="p3">Produce this at the largest size and highest resolution available to you. Portrait, 2:3.
+
+Do not add any watermark, signature or logo of your own.</pre>
+    </details>
+    <p class="note">If what comes back is still 1024 wide, that is the tool's
+    ceiling and no wording will move it. Tell me and we talk about the poster a
+    different way.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag red">Fixed today</span>
+    <h2 style="margin-top:10px">The AI cannot spell Kreyol. Read every word.</h2>
+    <p>Your MyPlopPlop flyer said <b>VANNN</b>, with three N. It has been on the
+    file since the day the AI made it. I have taken the extra N out &mdash; same
+    poster, nothing else touched.</p>
+    <img src="vann-typo.jpg" alt="Before and after: VANNN corrected to VANN">
+    <p style="margin-top:10px">This is the part no prompt can solve. Whatever
+    comes back, read every line out loud before it goes to the printer. Words,
+    the phone number, the website address. It only has to be wrong once and you
+    have paid for a thousand of them.</p>
+    <p style="margin-top:10px">One I left alone because it may be your choice:
+    the flyer says <b>PRIX ABODAB</b>. PRIX is the French spelling; in Kreyol it
+    is PRI. Tell me which you want and I change it in two minutes.</p>
+  </div>
+
+  <div class="card">
+    <h2>So, start to finish</h2>
+    <div class="step"><div class="n">1</div><p>Copy a prompt above, paste it into the AI, add your number where it says WHATSAPP NUMBER.</p></div>
+    <div class="step"><div class="n">2</div><p>Look at what comes back. Read every word. Ask it again until the writing is right &mdash; that is the only part that matters at this stage.</p></div>
+    <div class="step"><div class="n">3</div><p>Check the code square is <b>empty</b>. If the AI drew a code in it anyway, tell it "leave the white square completely blank" and try again.</p></div>
+    <div class="step"><div class="n">4</div><p>Send me the picture the way you send me everything else. I put the real code in the square and put it back here ready to print.</p></div>
+    <p class="note">Step 4 is free and takes minutes. Do not print anything that
+    has a code on it I have not put there.</p>
+  </div>
+
+  <footer>MyPlopPlop &bull; LajanMaker Academy &bull; A HaitiBiznis platform</footer>
+
+</div>
+<script>
+(function () {
+  'use strict';
+  function fallback(text) {
+    // clipboard API is blocked in some in-app browsers; this route survives them
+    var t = document.createElement('textarea');
+    t.value = text;
+    t.setAttribute('readonly', '');
+    t.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+    document.body.appendChild(t);
+    t.select();
+    t.setSelectionRange(0, text.length);
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(t);
+    return ok;
+  }
+  function flash(btn, cls, label) {
+    var old = btn.textContent;
+    btn.textContent = label;
+    btn.classList.add(cls);
+    setTimeout(function () {
+      btn.textContent = old;
+      btn.classList.remove(cls);
+    }, 2600);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.copy'), function (btn) {
+    btn.addEventListener('click', function () {
+      var el = document.getElementById(btn.getAttribute('data-copy'));
+      if (!el) return;
+      var text = el.textContent;
+      function won() { flash(btn, 'done', 'Copied. Now paste it into the AI.'); }
+      function lost() {
+        // open the block so he can press and hold to select it by hand
+        var d = el.closest('details');
+        if (d) d.open = true;
+        flash(btn, 'warn-state', 'Press and hold the text below instead, then Copy.');
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(won, function () {
+          if (fallback(text)) won(); else lost();
+        });
+      } else {
+        if (fallback(text)) won(); else lost();
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
