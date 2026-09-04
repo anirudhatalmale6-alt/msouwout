@@ -430,6 +430,19 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       <!-- Say the limit on the screen itself. A driver who thinks he will be called
            will put the phone in his pocket and miss every ride. -->
       <div style="margin-top:10px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:10px;font-size:12.5px;color:#92400E;line-height:1.5" data-i18n="inc_sound_note">&#128266; W ap tande yon son lè yon demann rive. Sa mache SÈLMAN si paj sa a rete louvri sou telefòn ou.</div>
+      <!-- A driver who logs in and sees an empty board has no idea what he is
+           supposed to do. These are the five taps, on the screen, in his own
+           language — nobody has to be trained by phone. -->
+      <div style="margin-top:10px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:12px">
+        <div style="font-weight:900;font-size:13px;color:#166534;margin-bottom:8px" data-i18n="guide_title">&#9989; Kijan sa mache</div>
+        <ol style="margin:0;padding-left:18px;font-size:12.5px;color:#14532D;line-height:1.65">
+          <li data-i18n="guide_1">Kite paj sa a louvri sou telefòn ou.</li>
+          <li data-i18n="guide_2">Lè yon demann rive, l ap parèt isit la ak yon son. Peze Aksepte Kous La.</li>
+          <li data-i18n="guide_3">Rele pasaje a, epi peze Ale chèche l pou Google Maps mennen w.</li>
+          <li data-i18n="guide_4">Lè ou rive, mande l kòd 4 chif la, antre l, peze Kòmanse Kous.</li>
+          <li data-i18n="guide_5">Lè kous la fini, peze Fini Kous. Lajan ou monte anwo a menm kote a.</li>
+        </ol>
+      </div>
     </div>
 
     <div class="active-ride-card" id="activeRideCard" style="display:none">
@@ -473,7 +486,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
 
 <!-- FOOTER -->
 <footer>
-  <p>&copy; 2026 MsouWout &mdash; <span data-i18n="footer_part">Yon platfom</span> <a href="https://haitibiznis.com">HaitiBiznis</a> <span style="opacity:.55">v16</span></p>
+  <p>&copy; 2026 MsouWout &mdash; <span data-i18n="footer_part">Yon platfom</span> <a href="https://haitibiznis.com">HaitiBiznis</a> <span style="opacity:.55">v17</span></p>
 </footer>
 
 <script>
@@ -634,12 +647,36 @@ function setLang(lang){
    passenger's order could actually reach him. */
 const T_INCOMING={
  ht:{inc_title:"Demann Kous",inc_empty:"Pa gen demann kounye a. Paj sa a ap gade pou kont li.",
+     guide_title:"✅ Kijan sa mache",
+     guide_1:"Kite paj sa a louvri sou telefòn ou.",
+     guide_2:"Lè yon demann rive, l ap parèt isit la ak yon son. Peze Aksepte Kous La.",
+     guide_3:"Rele pasaje a, epi peze Ale chèche l pou Google Maps mennen w.",
+     guide_4:"Lè ou rive, mande l kòd 4 chif la, antre l, peze Kòmanse Kous.",
+     guide_5:"Lè kous la fini, peze Fini Kous. Lajan ou monte anwo a menm kote a.",
      inc_busy:"Fini kous ou an anvan",inc_accept:"Aksepte Kous La",inc_demo:"Sa se kont demo a. Vre demann yo parèt lè ou konekte ak pwòp nimewo ou.",lbl_phone:"Telefòn",lbl_pickup:"Kote pou pran l",lbl_dropoff:"Kote pou depoze l",inc_skip:"Sote",nav_pickup:"Ale chèche l",nav_drop:"Ale destinasyon an"},
  fr:{inc_title:"Demandes de Course",inc_empty:"Aucune demande pour le moment. Cette page surveille toute seule.",
+     guide_title:"✅ Comment ça marche",
+     guide_1:"Laissez cette page ouverte sur votre téléphone.",
+     guide_2:"Quand une demande arrive, elle apparaît ici avec un son. Appuyez sur Accepter la Course.",
+     guide_3:"Appelez le passager, puis appuyez sur Aller au départ pour que Google Maps vous guide.",
+     guide_4:"À l'arrivée, demandez-lui le code à 4 chiffres, saisissez-le, appuyez sur Demarrer la Course.",
+     guide_5:"À la fin, appuyez sur Terminer la Course. Votre argent monte en haut tout de suite.",
      inc_busy:"Terminez votre course",inc_accept:"Accepter la Course",inc_demo:"Ceci est le compte de démonstration. Les vraies demandes apparaissent quand vous vous connectez avec votre propre numéro.",lbl_phone:"Téléphone",lbl_pickup:"Départ",lbl_dropoff:"Destination",inc_skip:"Passer",nav_pickup:"Aller au départ",nav_drop:"Aller à la destination"},
  en:{inc_title:"Ride Requests",inc_empty:"No requests right now. This page keeps watching on its own.",
+     guide_title:"✅ How this works",
+     guide_1:"Keep this page open on your phone.",
+     guide_2:"When a request comes in it appears here with a sound. Tap Accept Ride.",
+     guide_3:"Call the passenger, then tap Navigate to pickup and Google Maps takes you there.",
+     guide_4:"When you arrive, ask for the 4-digit code, type it in, tap Start Ride.",
+     guide_5:"When the trip is over, tap Complete Ride. Your earnings go up right away.",
      inc_busy:"Finish your ride first",inc_accept:"Accept Ride",inc_demo:"This is the demo account. Real requests appear when you log in with your own number.",lbl_phone:"Phone",lbl_pickup:"Pickup",lbl_dropoff:"Drop-off",inc_skip:"Skip",nav_pickup:"Navigate to pickup",nav_drop:"Navigate to drop-off"},
  es:{inc_title:"Solicitudes de Viaje",inc_empty:"No hay solicitudes ahora. Esta pagina sigue vigilando sola.",
+     guide_title:"✅ Como funciona",
+     guide_1:"Deja esta pagina abierta en tu telefono.",
+     guide_2:"Cuando llega una solicitud aparece aqui con un sonido. Pulsa Aceptar Viaje.",
+     guide_3:"Llama al pasajero y pulsa Ir a la recogida para que Google Maps te lleve.",
+     guide_4:"Al llegar, pidele el codigo de 4 digitos, escribelo y pulsa Iniciar Viaje.",
+     guide_5:"Al terminar, pulsa Completar Viaje. Tus ganancias suben enseguida.",
      inc_busy:"Termina tu viaje primero",inc_accept:"Aceptar Viaje",inc_demo:"Esta es la cuenta de demostracion. Las solicitudes reales aparecen cuando entras con tu propio numero.",lbl_phone:"Telefono",lbl_pickup:"Recogida",lbl_dropoff:"Destino",inc_skip:"Omitir",nav_pickup:"Ir a la recogida",nav_drop:"Ir al destino"}
 };
 Object.keys(T_INCOMING).forEach(function(l){if(T[l])Object.assign(T[l],T_INCOMING[l]);});
