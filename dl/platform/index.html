@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>MyPlopPlop &mdash; where the platform actually stands</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#00209F; --navy-dark:#001566; --red:#E31B23; --green:#1B8C3D; --amber:#B26A00;
+  --white:#fff; --off-white:#F4F6FA; --text:#1A2A4A; --text-light:#5A6B8A;
+  --text-muted:#8A95AA; --border:#DFE5EE; --radius:14px;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);color:var(--text);background:var(--off-white);
+  line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:660px;margin:0 auto;padding:24px 18px 72px}
+
+header{text-align:center;padding:10px 0 22px}
+h1{font-size:1.42rem;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+.sub{color:var(--text-light);font-size:.95rem}
+
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;margin-bottom:16px}
+.card h2{font-size:1.05rem;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
+.card h3{font-size:.95rem;font-weight:800;margin:16px 0 4px}
+.card p{color:var(--text-light);font-size:.93rem}
+.card p + p{margin-top:8px}
+.card p b, .card li b{color:var(--text)}
+
+.tag{display:inline-block;font-size:.72rem;font-weight:800;padding:4px 10px;
+  border-radius:99px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+.tag.green{background:rgba(27,140,61,.1);color:var(--green)}
+.tag.blue{background:rgba(0,32,159,.09);color:var(--navy)}
+.tag.red{background:rgba(227,27,35,.1);color:var(--red)}
+.tag.amber{background:rgba(178,106,0,.1);color:var(--amber)}
+
+.act{background:#FFF8E8;border:1px solid rgba(178,106,0,.3);border-left:4px solid var(--amber);
+  border-radius:10px;padding:15px 16px;margin-top:14px}
+.act b{color:var(--amber)}
+.act p{color:var(--text);font-size:.9rem;margin-top:5px}
+
+.q{border-top:1px solid var(--border);padding-top:15px;margin-top:15px}
+.q:first-of-type{border-top:0;padding-top:0;margin-top:0}
+.q .ask{font-weight:800;font-size:.94rem;color:var(--text);margin-bottom:6px}
+.verdict{display:inline-block;font-size:.74rem;font-weight:800;padding:3px 9px;
+  border-radius:6px;margin-bottom:7px;letter-spacing:.03em}
+.v-yes{background:rgba(27,140,61,.12);color:var(--green)}
+.v-no{background:rgba(227,27,35,.12);color:var(--red)}
+.v-part{background:rgba(178,106,0,.12);color:var(--amber)}
+
+ul{margin:8px 0 0 0;padding:0;list-style:none}
+li{color:var(--text-light);font-size:.92rem;padding:7px 0 7px 26px;position:relative;
+  border-bottom:1px solid var(--border)}
+li:last-child{border-bottom:0}
+li::before{position:absolute;left:0;top:7px;font-size:.95rem}
+li.ok::before{content:'\2705'}
+li.no::before{content:'\26A0\FE0F'}
+li.bug::before{content:'\1F41E'}
+li.plan::before{content:'\1F4CB'}
+
+.step{counter-reset:s;margin-top:10px}
+.step li{padding-left:30px;counter-increment:s}
+.step li::before{content:counter(s);background:var(--navy);color:#fff;width:19px;height:19px;
+  border-radius:99px;display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:800;top:9px}
+
+code{background:var(--off-white);border:1px solid var(--border);border-radius:6px;
+  padding:1px 6px;font-size:.85em;word-break:break-all}
+.free{text-align:center;color:var(--green);font-weight:800;font-size:.88rem;
+  padding:14px;background:rgba(27,140,61,.06);border-radius:10px;margin-bottom:16px}
+footer{text-align:center;color:var(--text-muted);font-size:.82rem;padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Where the platform actually stands</h1>
+    <p class="sub">MyPlopPlop &nbsp;&bull;&nbsp; 5 September 2026 &nbsp;&bull;&nbsp; checked against the running code, not from memory</p>
+  </header>
+
+  <div class="free">Everything on this page was done at no charge.</div>
+
+  <div class="card">
+    <span class="tag amber">One thing only you can do</span>
+    <h2>The website half is live. The API half is not.</h2>
+    <p>The website updates itself when I push. <b>The API does not</b> &mdash; it waits
+    for you to press one button, and most of what is below is in the API.</p>
+    <ol class="step">
+      <li>Open Render</li>
+      <li>Choose <b>myplopplop-api</b></li>
+      <li><b>Manual Deploy</b> &rarr; <b>Deploy latest commit</b></li>
+    </ol>
+    <div class="act">
+      <b>How to know it worked.</b>
+      <p>Open <code>myplopplop-api.onrender.com/api/health</code> on your phone.
+      It now prints which version is running. When it says
+      <code>"commit":"669d081"</code> the API is up to date. If there is no
+      <code>commit</code> word at all, the old code is still running and nothing
+      below is live yet.</p>
+    </div>
+  </div>
+
+  <!-- ================= THE 8 QUESTIONS ================= -->
+  <div class="card">
+    <span class="tag blue">Your eight questions</span>
+    <h2>Straight answers</h2>
+
+    <div class="q">
+      <div class="ask">1. Can a merchant register, log in, create a store, add products, receive an order, confirm it and complete the sale with no manual help?</div>
+      <span class="verdict v-part">YES for pickup &mdash; delivery needs one more thing</span>
+      <p>I walked the whole chain tonight against a real copy of the backend.
+      Register &rarr; log in &rarr; store created &rarr; product added &rarr; customer
+      orders &rarr; merchant confirms, prepares, marks ready &rarr; delivered &rarr;
+      the shop is credited. No one touches it by hand.</p>
+      <p>The one gap: <b>no delivery driver can sign up on MyPlopPlop.</b> The
+      driver form on myplopplop.com sends applications to the MsouWout system
+      instead, so the list the delivery engine looks at is empty and always has
+      been. Tell me how you want that handled and I will wire it.</p>
+    </div>
+
+    <div class="q">
+      <div class="ask">2. Is the LajanMaker referral permanently attached to every merchant, driver and customer, so commissions are never lost?</div>
+      <span class="verdict v-no">NO &mdash; and this is the biggest gap on the platform</span>
+      <p>This is the honest picture, and it is not good:</p>
+      <ul>
+        <li class="no"><b>Merchant</b> &mdash; only since last night, and only as a name carried
+        on the link (<code>?ref=SPAP</code>). It is written once and cannot be changed
+        later, which is right. But it is <b>a name, not a linked LajanMaker account</b>.</li>
+        <li class="no"><b>Driver</b> &mdash; the form does ask "who referred you", but it is a
+        fixed list: FTPH, COTRASMOTHA, SPAP, Eglise Shalom, Facebook, WhatsApp,
+        friend/family, other. <b>An individual LajanMaker agent cannot be chosen at all</b>,
+        and the answer is stored in the MsouWout database, not MyPlopPlop.</li>
+        <li class="no"><b>Customer</b> &mdash; nothing. No referral is recorded when a customer
+        signs up, ever.</li>
+      </ul>
+      <p>There <b>is</b> a full commission system already built in the backend &mdash;
+      agent codes, 10% on MyPlopPlop and MsouWout, tiers, payouts, the lot. It has
+      a working way to record a referral. <b>No sign-up page has ever called it</b>,
+      so not one referral has been recorded through it.</p>
+      <p>And it is not permanent even in the design: a recorded referral
+      <b>expires 365 days</b> after sign-up.</p>
+      <p>I have not changed any of this tonight, because "permanently attached"
+      is a decision about your business, not a bug I can guess at. Two things I
+      need from you: <b>should an agent's credit last for ever or for a year?</b>
+      And <b>should the customer sign-up also carry the agent's code?</b> Once you
+      answer, I will connect all three sign-ups to the commission system.</p>
+    </div>
+
+    <div class="q">
+      <div class="ask">3. Is every payment tied to a valid order before money is accepted? I never want money collected without an order.</div>
+      <span class="verdict v-yes">YES &mdash; it was not, twice, and both are fixed</span>
+      <p>Last night: a shopper with no account could reach Place Order, be sent to
+      MonCash with an order number the page invented, pay, and leave no order
+      anywhere. Fixed &mdash; no account means no order and no payment, and if the
+      order fails to save we refuse to charge.</p>
+      <p>Tonight I found the other half. After paying, the page checked with the
+      gateway <b>in the browser</b> and then just drew the success screen. <b>It
+      never told the server.</b> So every sale you have ever taken is still marked
+      unpaid: the shop was never credited when the order was delivered, and no
+      order was ever eligible for payout. Now the server asks the gateway itself,
+      checks the amount matches the order, and only then marks it paid. The
+      browser is not allowed to say "it is paid".</p>
+    </div>
+
+    <div class="q">
+      <div class="ask">4. Are merchant, customer and driver registration and checkout all writing to the database with no false success messages?</div>
+      <span class="verdict v-part">YES for three of the four</span>
+      <ul>
+        <li class="ok"><b>Merchant registration</b> &mdash; was the "sham" you found. Rebuilt
+        last night, 23 checks including every way it can fail.</li>
+        <li class="ok"><b>Customer registration</b> &mdash; writes correctly, always has.</li>
+        <li class="ok"><b>Checkout</b> &mdash; fixed, see question 3.</li>
+        <li class="no"><b>Driver registration</b> &mdash; writes correctly, but into the
+        <b>MsouWout</b> database. On MyPlopPlop there is no delivery-driver sign-up
+        at all. Nothing lies to anyone; the page simply is not there.</li>
+      </ul>
+    </div>
+
+    <div class="q">
+      <div class="ask">5. How does a completed order get to a delivery driver today? What exactly happens between "Ready" and "Delivered"?</div>
+      <span class="verdict v-part">It works now &mdash; it never did before tonight</span>
+      <p>What happens, with nobody dispatching by hand:</p>
+      <ol class="step">
+        <li>The shop marks the order <b>Ready</b>.</li>
+        <li>A delivery job is created automatically and the customer gets a
+        <b>4-digit handover code</b>.</li>
+        <li>It is offered to the <b>nearest driver</b> who is approved, online and
+        within 15 km.</li>
+        <li>He has <b>30 seconds</b>. If he declines or does not answer, it moves to
+        the next closest driver by itself, and keeps trying.</li>
+        <li>He accepts, collects, and the order shows his name and number.</li>
+        <li>At the door the customer gives him the <b>4-digit code</b>. Without it he
+        cannot finish the delivery.</li>
+        <li>Order closes, the shop is credited, the driver is paid.</li>
+      </ol>
+      <p>Every step of that was walked end to end tonight, including trying the
+      wrong handover code and being refused.</p>
+      <p><b>Why it never worked before:</b> the dispatch crashed on <i>every single
+      order</i> because of one bad line, and the crash was written to a log nobody
+      reads. The order still said "Ready", so nothing looked wrong. On top of
+      that, no shop has GPS &mdash; so a 6&nbsp;km delivery was measured as
+      <b>8,148&nbsp;km</b> and priced at <b>203,808&nbsp;HTG</b>, and the search for a
+      driver "within 15 km of the shop" was looking in the Atlantic Ocean with a
+      rider standing 6 km away. Both fixed.</p>
+      <p>Still needed: at least one approved delivery driver, which is question 1.</p>
+    </div>
+
+    <div class="q">
+      <div class="ask">6. Is there an admin screen where I can approve or reject merchants, drivers and businesses?</div>
+      <span class="verdict v-yes">YES &mdash; and I was wrong last night</span>
+      <p>Last night I told you there was no way to approve a driver. That was
+      wrong: I had only looked at your console. The admin screens exist and they
+      work &mdash; drivers with approve and refuse buttons, merchants, orders, riders,
+      settings, at <code>myplopplop.com/admin/</code>.</p>
+      <p>What was actually missing was a way for <b>you</b> to get in. Those screens
+      need an account marked "admin", and until tonight the only way to get one
+      was a hole that let <b>anyone on the internet</b> have it (see the bugs below).</p>
+      <div class="act">
+        <b>Do this once, after the deploy.</b>
+        <p>Open your ecosystem console &rarr; the security panel &rarr;
+        <b>"Bay yon moun dwa administratè"</b> &rarr; type your own number &rarr; press the
+        green button. Then log in on myplopplop.com with that number and the admin
+        pages open. The panel also lists everyone who holds it.</p>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="ask">7. Does every important action generate a log, so we can audit registrations, orders, payments, deliveries, cancellations and commissions?</div>
+      <span class="verdict v-part">Money and orders: yes. A single audit log: no.</span>
+      <p><b>What is recorded today:</b> every record carries the date it was created
+      and last changed. Every order keeps its own times &mdash; paid, confirmed,
+      prepared, picked up, delivered, cancelled &mdash; plus who cancelled it and why.
+      Every movement of money is its own row: payment, driver earning, commission,
+      referral bonus, each tied to the order number. Driver approvals and refusals
+      now record who did it and when (refusals did not, until tonight).</p>
+      <p><b>What is not:</b> there is no one place you can open and read
+      "what happened on the platform today". Nothing records who changed a price
+      or edited a shop. The only proper audit trail in the system covers the
+      savings groups, nothing else.</p>
+      <p>A real audit log is a build, not a fix, so I have not started it. Say the
+      word and I will send you a plan for it.</p>
+    </div>
+
+    <div class="q">
+      <div class="ask">8. After I deploy the API, can you confirm the website and API are running the same code?</div>
+      <span class="verdict v-yes">YES &mdash; you can check it yourself now</span>
+      <p>You could not check this before, which is exactly why it kept catching
+      us out. The API now prints the version it is running:
+      <code>myplopplop-api.onrender.com/api/health</code>.</p>
+      <p>After your deploy it should say <code>669d081</code>. Send me a screenshot of
+      that page any time you are unsure and I will tell you in one line whether
+      the two halves match.</p>
+    </div>
+  </div>
+
+  <!-- ================= COMPLETE ================= -->
+  <div class="card">
+    <span class="tag green">Complete</span>
+    <h2>&#9989; Working, and checked, not assumed</h2>
+    <ul>
+      <li class="ok">Merchant sign-up: creates the account and the shop, keeps the
+      referral name, handles a merchant who already has an account, asks for a
+      PIN so she can log back in.</li>
+      <li class="ok">Shop: products, photos, opening hours, the public shop page.</li>
+      <li class="ok">Customer: browse, cart, checkout, order, track, order history.</li>
+      <li class="ok">Payment tied to a real order, confirmed by the server with the
+      gateway, amount checked.</li>
+      <li class="ok">Merchant sees the order and moves it: confirmed, preparing,
+      ready.</li>
+      <li class="ok">Automatic dispatch to the nearest driver, 30-second offer,
+      passes on by itself.</li>
+      <li class="ok">4-digit handover code &mdash; the delivery cannot be closed
+      without it.</li>
+      <li class="ok">Order closes when the delivery closes; the shop is credited
+      and queued for payout; the driver is paid, once.</li>
+      <li class="ok">Admin screens: drivers, merchants, orders, riders.</li>
+      <li class="ok">Your console: dashboard, reset a user's PIN, set your own
+      code, and now grant admin.</li>
+      <li class="ok">All 60 pages load with no crashes.</li>
+    </ul>
+  </div>
+
+  <!-- ================= INCOMPLETE ================= -->
+  <div class="card">
+    <span class="tag amber">Incomplete</span>
+    <h2>&#9888;&#65039; Not finished, and I am not pretending otherwise</h2>
+    <ul>
+      <li class="no"><b>No delivery-driver sign-up on MyPlopPlop.</b> The driver form
+      sends applications to MsouWout. Until this is decided, deliveries have
+      nobody to go to. <b>Needs your decision.</b></li>
+      <li class="no"><b>No shop has a location.</b> Nothing has ever asked a merchant
+      where the shop is, so delivery distances and prices cannot be worked out
+      properly. Tonight's fix stops it inventing nonsense &mdash; it now uses the
+      price the customer was quoted &mdash; but the real answer is to ask each shop
+      for its GPS pin.</li>
+      <li class="no"><b>LajanMaker commissions are not being recorded</b> for merchants,
+      drivers or customers. Question 2.</li>
+      <li class="no"><b>No audit log.</b> Question 7.</li>
+      <li class="no"><b>Merchants cannot be approved before going live</b> &mdash; a new shop
+      is live the moment it is created. You have never told me which way you want
+      this, and I have asked twice.</li>
+      <li class="no"><b>Card payments</b> go to a fixed Stripe link that cannot be
+      matched back to an order, so a card sale cannot be confirmed the way MonCash
+      now is.</li>
+      <li class="no"><b>San Cash wallet</b> is switched off for shop orders on purpose &mdash;
+      it completed orders without taking any money.</li>
+    </ul>
+  </div>
+
+  <!-- ================= BUGS ================= -->
+  <div class="card">
+    <span class="tag red">Bugs</span>
+    <h2>&#128030; Found in the sweep &mdash; all fixed, all free</h2>
+    <p>These are real, and every one of them was silent. None of them made
+    anything look broken on screen, which is why they survived so long.</p>
+    <ul>
+      <li class="bug"><b>Anyone on the internet could make themselves an admin.</b>
+      The sign-up form copied whatever role you asked for onto the new account,
+      and "admin" was allowed. That gave a stranger every user's name and phone
+      number, every order, every transaction, and the power to approve drivers.
+      I proved it on a copy, never on your live system. Closed: the sign-up form
+      now only allows customer, merchant and driver, and admin is granted from
+      your console.</li>
+      <li class="bug"><b>Every sale stayed unpaid.</b> The success screen came from the
+      browser; the server was never told. So no shop was ever credited and
+      nothing could ever be paid out. Fixed.</li>
+      <li class="bug"><b>The delivery dispatch crashed on every single order</b> since it
+      was written &mdash; one field the database refused. The error went to a log and
+      the order still said "Ready", so nothing looked wrong. Fixed. The same bug
+      also broke the ride-request endpoint.</li>
+      <li class="bug"><b>Deliveries were measured from the middle of the Atlantic.</b>
+      A 6 km delivery came out as 8,148 km and 203,808 HTG, and no driver was ever
+      found because the search was looking at sea. Fixed.</li>
+      <li class="bug"><b>A finished delivery never closed its order.</b> The goods were in
+      the customer's hands while the order still said "Ready", the tracking page
+      never completed, and the shop was never credited. Fixed &mdash; one shared
+      ending for both the pickup and the delivery case.</li>
+      <li class="bug"><b>Refusing a driver left no trace</b> of who refused him. Approving
+      recorded it; refusing did not. Fixed.</li>
+      <li class="bug"><b>From last night:</b> buying without an account took the money and
+      created no order; the order recorded delivery as free when the customer had
+      paid for it, so the rider's share came out of nothing. Both fixed.</li>
+    </ul>
+    <h3>Known and still open</h3>
+    <ul>
+      <li class="no">Deleting an event on Tik&egrave; Lakay needs no password at all &mdash;
+      anyone who knows the address can delete one.</li>
+      <li class="no">The Tik&egrave; Lakay events page: the category buttons filter
+      nothing and the counts beside them are typed in, not counted.</li>
+      <li class="no">On MsouWout: the driver login still ignores the PIN &mdash; anyone
+      with a driver's number can open his screen.</li>
+    </ul>
+  </div>
+
+  <!-- ================= PLANNED ================= -->
+  <div class="card">
+    <span class="tag blue">Planned</span>
+    <h2>&#128203; After launch &mdash; nothing here is started</h2>
+    <p>Your own order, from when you listed them:</p>
+    <ul>
+      <li class="plan">Driver online / offline switch (MsouWout)</li>
+      <li class="plan">Zone and vehicle filtering &mdash; a driver in Cap-Ha&iuml;tien
+      should never be offered a trip in Delmas</li>
+      <li class="plan">Push notifications</li>
+      <li class="plan">Ratings and reviews</li>
+      <li class="plan">Passenger accounts and trip history</li>
+      <li class="plan">Digital payments for rides</li>
+    </ul>
+    <p style="margin-top:12px">Added by this sweep, for you to slot in where you
+    want them:</p>
+    <ul>
+      <li class="plan">Connect all three sign-ups to the LajanMaker commission
+      system (question 2)</li>
+      <li class="plan">Ask each shop for its GPS pin, and let a merchant set it
+      later</li>
+      <li class="plan">A proper audit log (question 7)</li>
+      <li class="plan">Approve a merchant before the shop goes live &mdash; if that is
+      what you want</li>
+    </ul>
+    <div class="act">
+      <b>Nothing on this list is being built.</b>
+      <p>You said features are frozen and stability comes first. I agree. Tell me
+      which one you want first and I will send you the plan for that one.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>How all of this was checked</h2>
+    <p>Everything above was run against a real copy of your backend on a
+    throwaway database &mdash; never your live one. The payment gateway was replaced
+    with a stand-in on my own machine, so <b>not one gourde of your money moved</b>
+    and not one request reached MonCash.</p>
+    <p>Where I say something works, a test drove the real pages in a real browser
+    and checked the database afterwards. Where a test disagreed with the app, I
+    checked which one was wrong before believing it &mdash; twice it was my test.</p>
+  </div>
+
+  <footer>MyPlopPlop &bull; MsouWout &bull; A HaitiBiznis platform</footer>
+
+</div>
+<script src="../dl.js"></script>
+</body>
+</html>
