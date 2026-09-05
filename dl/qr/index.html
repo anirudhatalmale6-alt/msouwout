@@ -52,6 +52,9 @@ table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.88rem}
 td{padding:9px 6px;border-bottom:1px solid var(--border);color:var(--text-light)}
 td:first-child{color:var(--text);font-weight:700;width:52%}
 tr:last-child td{border-bottom:0}
+/* the Namecheap steps: a number, then all the room for the instruction */
+table.steps td:first-child{width:30px;text-align:center;color:var(--navy)}
+table.steps td:last-child{color:var(--text)}
 
 footer{text-align:center;color:var(--text-muted);font-size:.82rem;padding-top:14px}
 </style>
@@ -110,7 +113,7 @@ footer{text-align:center;color:var(--text-muted);font-size:.82rem;padding-top:14
     on my side. It only needs your domain pointed at it, and only you can do that,
     because it is your Namecheap account and I will never ask you for that
     login.</p>
-    <table>
+    <table class="steps">
       <tr><td>1</td><td>namecheap.com &rarr; sign in &rarr; <b>Domain List</b></td></tr>
       <tr><td>2</td><td>lajanmaker.com &rarr; <b>MANAGE</b> &rarr; <b>Advanced DNS</b></td></tr>
       <tr><td>3</td><td>Delete the rows already there (the bin icon on the right)</td></tr>
