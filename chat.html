@@ -586,6 +586,37 @@ function selectRole(role){
 }
 
 /* ═══ LOGIN ═══ */
+/* '+509' + the 8 digits, which is the only form registration ever writes. */
+function normPhone(p){
+  var s=String(p||'').replace(/[^0-9+]/g,'');
+  if(s.charAt(0)==='+')return s;
+  return '+509'+s.replace(/^509/,'');
+}
+
+/* This page used to keep the login in a plain variable, so reloading it - or
+   coming back to a tab Android had dropped to save memory - threw the driver
+   straight back to the phone box with no warning. That is the "I was connected
+   then suddenly I was not". The session lives here now and is restored on load. */
+function saveSession(){
+  try{
+    sessionStorage.setItem('msw_chat',JSON.stringify({
+      role:userRole,phone:userPhone,driverId:driverId,driver:driverData
+    }));
+  }catch(e){}
+}
+function clearSession(){try{sessionStorage.removeItem('msw_chat');}catch(e){}}
+function restoreSession(){
+  var raw;
+  try{raw=sessionStorage.getItem('msw_chat');}catch(e){return}
+  if(!raw)return;
+  var s;try{s=JSON.parse(raw);}catch(e){return}
+  if(!s||!s.phone)return;
+  if(s.role==='driver'&&!s.driverId)return;
+  userRole=s.role;userPhone=s.phone;driverId=s.driverId;driverData=s.driver;
+  selectRole(userRole);
+  loadConversations();
+}
+
 async function handleLogin(e){
   e.preventDefault();
   const phone=document.getElementById('phoneInput').value.trim().replace(/\s/g,'');
@@ -599,11 +630,23 @@ async function handleLogin(e){
 
   try{
     if(userRole==='driver'){
-      // Driver: first login to get driver ID
-      const res=await fetch(API+'/api/drivers/login',{
+      // Driver: first login to get driver ID.
+      // The box in front of this one already shows the +509 flag, so a driver
+      // types the 8 digits alone - but registration saves the number as
+      // '+509XXXXXXXX' and the lookup matches the STRING, exactly. Sending the 8
+      // digits on their own therefore told a driver who IS registered that his
+      // number is not. Normalise the same way the driver app does, and still try
+      // what he typed, in case an older row was saved in the bare form.
+      let res=await fetch(API+'/api/drivers/login',{
         method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({phone:phone})
+        body:JSON.stringify({phone:normPhone(phone)})
       });
+      if(res.status===404&&normPhone(phone)!==phone){
+        res=await fetch(API+'/api/drivers/login',{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({phone:phone})
+        });
+      }
       if(res.status===404){
         errEl.textContent=t('err_not_found');errEl.style.display='block';
         btn.disabled=false;btn.textContent=t('login_btn');return;
@@ -616,10 +659,12 @@ async function handleLogin(e){
       driverData=data.driver||data;
       driverId=driverData._id||driverData.id;
       userPhone=phone;
+      saveSession();
       await loadConversations();
     }else{
       // Rider: just use phone
       userPhone=phone;
+      saveSession();
       await loadConversations();
     }
   }catch(err){
@@ -631,6 +676,7 @@ async function handleLogin(e){
 function logout(){
   stopPolling();
   stopConvPolling();
+  clearSession();
   userPhone='';driverId=null;driverData=null;
   conversations=[];currentConv=null;messages=[];
   document.getElementById('phoneInput').value='';
@@ -1028,6 +1074,7 @@ function escHtml(s){
 
 /* ═══ INIT ═══ */
 setLang('ht');
+restoreSession();
 </script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
 <script id="capacitor-native-loader">
