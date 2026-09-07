@@ -438,7 +438,8 @@ const API='https://msouwout-backend.onrender.com';
 /* ═══ STATE ═══ */
 let currentLang='ht';
 let userRole='rider'; // 'rider' or 'driver'
-let userPhone='';
+let userPhone='';    // always carries '+509'
+let userPhoneRaw=''; // exactly what was typed, for rows written before this page
 let driverId=null;
 let driverData=null;
 let conversations=[];
@@ -586,11 +587,18 @@ function selectRole(role){
 }
 
 /* ═══ LOGIN ═══ */
-/* '+509' + the 8 digits, which is the only form registration ever writes. */
+/* Nobody here types the country code, so the page puts it on itself: '+509' plus
+   the 8 digits, which is the one form registration ever writes. Paste a number
+   that already carries it and it is left alone. */
 function normPhone(p){
   var s=String(p||'').replace(/[^0-9+]/g,'');
   if(s.charAt(0)==='+')return s;
   return '+509'+s.replace(/^509/,'');
+}
+/* The header prints its own '+509 ' in front, so hand it the bare digits or it
+   reads '+509 +509XXXXXXXX'. */
+function dispPhone(p){
+  return String(p||'').replace(/^\+?509/,'');
 }
 
 /* This page used to keep the login in a plain variable, so reloading it - or
@@ -600,7 +608,8 @@ function normPhone(p){
 function saveSession(){
   try{
     sessionStorage.setItem('msw_chat',JSON.stringify({
-      role:userRole,phone:userPhone,driverId:driverId,driver:driverData
+      role:userRole,phone:userPhone,raw:userPhoneRaw,
+      driverId:driverId,driver:driverData
     }));
   }catch(e){}
 }
@@ -612,7 +621,8 @@ function restoreSession(){
   var s;try{s=JSON.parse(raw);}catch(e){return}
   if(!s||!s.phone)return;
   if(s.role==='driver'&&!s.driverId)return;
-  userRole=s.role;userPhone=s.phone;driverId=s.driverId;driverData=s.driver;
+  userRole=s.role;userPhone=s.phone;userPhoneRaw=s.raw||s.phone;
+  driverId=s.driverId;driverData=s.driver;
   selectRole(userRole);
   loadConversations();
 }
@@ -658,12 +668,19 @@ async function handleLogin(e){
       const data=await res.json();
       driverData=data.driver||data;
       driverId=driverData._id||driverData.id;
-      userPhone=phone;
+      userPhone=normPhone(phone);
+      userPhoneRaw=phone;
       saveSession();
       await loadConversations();
     }else{
-      // Rider: just use phone
-      userPhone=phone;
+      // Passenger. Same trap as the driver, but it fails without a word: the
+      // conversation is filed under the number the ride was ordered with, and
+      // that comparison is exact too. Type the 8 digits when the ride was booked
+      // as '+509...' and the list simply comes back empty, as if nobody had ever
+      // written to you. Ask with the country code on, then fall back to exactly
+      // what was typed for rides booked before this page normalised anything.
+      userPhone=normPhone(phone);
+      userPhoneRaw=phone;
       saveSession();
       await loadConversations();
     }
@@ -677,7 +694,7 @@ function logout(){
   stopPolling();
   stopConvPolling();
   clearSession();
-  userPhone='';driverId=null;driverData=null;
+  userPhone='';userPhoneRaw='';driverId=null;driverData=null;
   conversations=[];currentConv=null;messages=[];
   document.getElementById('phoneInput').value='';
   document.getElementById('loginError').style.display='none';
@@ -687,6 +704,17 @@ function logout(){
 }
 
 /* ═══ CONVERSATIONS ═══ */
+/* The list arrives as a bare array from this route, but has come back wrapped
+   before now, so read it the same way everywhere. */
+function listOf(d){
+  return Array.isArray(d)?d:((d&&(d.conversations||d.data))||[]);
+}
+async function riderConvs(p){
+  const res=await fetch(API+'/api/messages/conversations/rider/'+encodeURIComponent(p));
+  if(!res.ok) throw new Error('Failed');
+  return await res.json();
+}
+
 async function loadConversations(){
   showScreen('screenConvList');
   const list=document.getElementById('convList');
@@ -696,19 +724,25 @@ async function loadConversations(){
   const badge=document.getElementById('convUserBadge');
   badge.textContent=userRole==='driver'?t('badge_driver'):t('badge_rider');
   badge.className='conv-user-badge '+userRole;
-  document.getElementById('convUserPhone').textContent='+509 '+userPhone;
+  document.getElementById('convUserPhone').textContent='+509 '+dispPhone(userPhone);
 
   try{
-    let url;
+    let data;
     if(userRole==='driver'){
-      url=API+'/api/messages/conversations/driver/'+driverId;
+      const res=await fetch(API+'/api/messages/conversations/driver/'+driverId);
+      if(!res.ok) throw new Error('Failed');
+      data=await res.json();
     }else{
-      url=API+'/api/messages/conversations/rider/'+encodeURIComponent(userPhone);
+      data=await riderConvs(userPhone);
+      /* Nothing under the '+509' form. Before telling a passenger he has no
+         messages, ask again with exactly what he typed - a ride booked before
+         this page put the country code on is filed under the bare digits. */
+      if(!listOf(data).length&&userPhoneRaw&&userPhoneRaw!==userPhone){
+        const alt=await riderConvs(userPhoneRaw);
+        if(listOf(alt).length){data=alt;userPhone=userPhoneRaw;saveSession();}
+      }
     }
-    const res=await fetch(url);
-    if(!res.ok) throw new Error('Failed');
-    const data=await res.json();
-    conversations=Array.isArray(data)?data:(data.conversations||data.data||[]);
+    conversations=listOf(data);
     renderConversations();
     startConvPolling();
   }catch(err){

@@ -401,15 +401,32 @@ async function handleLogin(e){
   }
 
   try{
-    const res=await fetch(API+'/api/rides/history',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({phone:phone.replace(/\s/g,'')})
-    });
-    if(!res.ok){
+    /* Nobody here types the country code, so put it on: a ride is filed under
+       whatever number was typed when it was booked, and the lookup compares the
+       text exactly. Ask with '+509' on first, then fall back to exactly what was
+       typed, so rides booked in the bare form are still found. Without this a
+       passenger with a full history is told he has never taken a ride. */
+    const askHistory=function(p){
+      return fetch(API+'/api/rides/history',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({phone:p})
+      });
+    };
+    const typed=phone.replace(/\s/g,'');
+    const full=typed.charAt(0)==='+'?typed:('+509'+typed.replace(/^509/,''));
+    let res=await askHistory(full);
+    let data=res.ok?await res.json():null;
+    if((!data||data.total_rides===0)&&full!==typed){
+      const alt=await askHistory(typed);
+      if(alt.ok){
+        const altData=await alt.json();
+        if(altData.total_rides>0){res=alt;data=altData;}
+      }
+    }
+    if(!res.ok||!data){
       errEl.textContent=t('err_server');errEl.style.display='block';
       btn.disabled=false;btn.textContent=t('login_btn');return;
     }
-    const data=await res.json();
     if(data.total_rides===0){
       errEl.textContent=t('err_empty');errEl.style.display='block';
       btn.disabled=false;btn.textContent=t('login_btn');return;
@@ -468,8 +485,17 @@ function deleteAccount(){
   var L=(typeof currentLang!=='undefined'?currentLang:'ht');
   if(!confirm(msgs[L]||msgs.en))return;
   var phone=(window._userData&&window._userData.phone)||'';
+  /* Ask for both spellings of the same number. Someone who booked one ride
+     typing the country code and another without it has rides filed under two
+     keys, and deleting only the one we happened to log in with would leave the
+     rest behind while telling him everything was gone. */
+  var typed=phone.replace(/\s/g,'');
+  var full=typed.charAt(0)==='+'?typed:('+509'+typed.replace(/^509/,''));
+  var forms=(full===typed)?[typed]:[full,typed];
   try{
-    fetch(API+'/api/rides/account/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:phone.replace(/\s/g,'')})}).catch(function(){});
+    forms.forEach(function(p){
+      fetch(API+'/api/rides/account/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:p})}).catch(function(){});
+    });
   }catch(e){}
   alert(done[L]||done.en);
   logout();

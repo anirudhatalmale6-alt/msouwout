@@ -980,10 +980,15 @@ function submitLoad(e){
   var btn=document.getElementById('submitBtn');
   var origText=btn.innerHTML;
 
+  // Put the country code on the way the other logistics forms already do, so a
+  // load posted here and a load posted on the maritime page are filed the same.
+  var posterPhone=document.getElementById('posted_by_phone').value.trim();
+  if(posterPhone&&posterPhone.indexOf('+509')!==0){posterPhone='+509'+posterPhone.replace(/[^0-9]/g,'').replace(/^509/,'')}
+
   // Build payload
   var payload={
     posted_by_name:document.getElementById('posted_by_name').value.trim(),
-    posted_by_phone:document.getElementById('posted_by_phone').value.trim(),
+    posted_by_phone:posterPhone,
     cargo_type:document.getElementById('cargo_type').value,
     cargo_description:document.getElementById('cargo_description').value.trim(),
     weight_kg:document.getElementById('weight_kg').value?Number(document.getElementById('weight_kg').value):null,

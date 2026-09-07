@@ -1792,6 +1792,17 @@ function completeSignup(){
   doSubmitRide(name,phone);
 }
 
+/* Nobody here types the country code - the flag beside the box already shows it -
+   so the page puts it on before the number goes anywhere. Every lookup on this
+   number compares the text exactly, so a ride filed as 'XXXXXXXX' is invisible to
+   a passenger who later types '+509 XXXXXXXX', and the other way round. One
+   spelling, decided here. A number pasted with '+' is left alone. */
+function mswPhone(p){
+  var s=String(p||'').replace(/[^0-9+]/g,'');
+  if(s.charAt(0)==='+')return s;
+  return '+509'+s.replace(/^509/,'');
+}
+
 function landmarkText(){
   var el=document.getElementById('landmark');
   return el?el.value.trim().replace(/[()]/g,''):'';
@@ -1806,7 +1817,7 @@ function doSubmitRide(name,phone){
     /* The server reads these four. They used to be sent as riderPhone/vehicleType/
        pickupAddress, which it does not recognise, so every order was rejected and
        this page pretended otherwise. */
-    customer_phone:phone,
+    customer_phone:mswPhone(phone),
     customer_name:name||'',
     ride_type:(vehicleType==='car'?'car':'moto'),
     /* The landmark rides along with the pickup line, because that is the one
