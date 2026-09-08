@@ -147,6 +147,11 @@ a{text-decoration:none;color:inherit}
 }
 .ac-list.show{display:block}
 .ac-item{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--off-white);transition:background .15s}
+/* The passenger's own words, always last and always there. Marked apart so it
+   never looks like one more place the map found. */
+.ac-item.ac-own{background:#f7fbf8;border-top:1px solid var(--off-white);border-bottom:0}
+.ac-item.ac-own .ac-main{font-style:normal}
+.ac-item.ac-own .ac-sub{color:#1B8C3D;font-weight:700}
 .ac-item:last-child{border-bottom:none}
 .ac-item:hover,.ac-item.active{background:rgba(0,32,159,.06)}
 .ac-pin{flex-shrink:0;margin-top:1px}
@@ -940,10 +945,28 @@ var PRICING={
 var selectedExtras={};                /* key -> amount, for the current vehicle */
 var _rideDistanceKm=null;             /* set after geocoding pickup+dropoff */
 var _geoCache={};
+
+/* ── One space was losing whole streets ──────────────────────────────────
+   Haitian streets are numbered: Delmas 33, Delmas 40B, Route 9. Written by
+   hand the letter almost always arrives detached - "Delmas 40 B" - and that
+   single space is enough to lose the street completely. Asked for
+   "Delmas 40 B" the map answers with the commune and with two other places
+   called Delmas, one of them in Cayes-Jacmel, four hours from Port-au-Prince.
+   Asked for "Delmas 40B" it answers with the three real Delmas 40B streets.
+
+   Same street, same map, same day. So join the letter back on before asking.
+
+   Only a SINGLE letter is joined: "40 B" becomes "40B", while "40 Boulevard"
+   is left alone, because the letter has to end at a word boundary. */
+function normHtAddr(s){
+  return String(s||'').replace(/\b(\d{1,3})\s+([A-Za-z])\b/g,'$1$2');
+}
+
 function geocodeAddr(text){
   if(!text) return Promise.resolve(null);
   var key=text.trim().toLowerCase();
   if(_geoCache[key]) return Promise.resolve(_geoCache[key]);
+  text=normHtAddr(text);
   var q=encodeURIComponent(text.indexOf('Haiti')>-1||text.indexOf('Ayiti')>-1?text:text+', Haiti');
   var c=new AbortController();setTimeout(function(){c.abort()},4500);
   return fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+q,{signal:c.signal})
@@ -973,6 +996,7 @@ var T={
     ph_pickup:'Ki kote ou ye?',
     ph_drop:'Ki kote ou prale?',
     ac_searching:'Ap chèche kote…',
+    ac_use_typed:'Sèvi ak sa m tape a',
     ac_none:'Pa jwenn okenn kote. Tanpri tape plis detay.',
     gps_btn:'Sevi ak pozisyon mwen',
     find_btn:'&#128308; Mande Kous Kounye A',
@@ -1077,6 +1101,7 @@ var T={
     ph_pickup:'Où êtes-vous ?',
     ph_drop:'Où allez-vous ?',
     ac_searching:'Recherche du lieu…',
+    ac_use_typed:'Utiliser ce que j’ai écrit',
     ac_none:'Aucun lieu trouvé. Ajoutez plus de détails.',
     gps_btn:'Utiliser ma position',
     find_btn:'&#128308; Demander un Trajet Maintenant',
@@ -1181,6 +1206,7 @@ var T={
     ph_pickup:'Where are you?',
     ph_drop:'Where are you going?',
     ac_searching:'Searching for a place…',
+    ac_use_typed:'Use exactly what I typed',
     ac_none:'No place found. Try adding more detail.',
     gps_btn:'Use my location',
     find_btn:'&#128308; Request a Ride Now',
@@ -1285,6 +1311,7 @@ var T={
     ph_pickup:'¿Dónde estás?',
     ph_drop:'¿A dónde vas?',
     ac_searching:'Buscando el lugar…',
+    ac_use_typed:'Usar lo que escribí',
     ac_none:'No se encontró ningún lugar. Añade más detalles.',
     gps_btn:'Usar mi ubicación',
     find_btn:'&#128308; Pedir Viaje Ahora',
@@ -1552,6 +1579,7 @@ function keepHouseNo(typed,label){
   return label.replace(/\s+/g,'').indexOf(hn.replace(/\s+/g,''))>-1?label:hn+', '+label;
 }
 function acFetch(text,cb){
+  text=normHtAddr(text);          /* "Delmas 40 B" finds nothing; "Delmas 40B" finds it */
   var q=encodeURIComponent(text.indexOf('Haiti')>-1||text.indexOf('Ayiti')>-1?text:text+', Haiti');
   var c=new AbortController();setTimeout(function(){c.abort();},5000);
   fetch('https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=6&countrycodes=ht&q='+q,
@@ -1580,14 +1608,41 @@ function attachAC(inputEl,isPickup){
     else{window._dropLat=lat;window._dropLng=lng;}
     close();checkInputs();
   }
+  /* "I wanna put Delmas 40B and i cant and also doesnt give me the option."
+     He was right that there was no option. The list only ever offered places
+     the map knows, and most Haitian addresses are not on any map - a lakou, a
+     shop everybody knows, a street with no sign. There is now always a way to
+     keep exactly what he typed. The driver reads the address and the landmark
+     box; he does not need our coordinates to find a door he already knows. */
+  function useTyped(){
+    var typed=inputEl.value.trim();
+    if(!typed)return;
+    /* No coordinates on purpose: we did not find this place, and pretending we
+       did would put a pin somewhere wrong and price the ride off it. The fare
+       falls back to the standard estimate, exactly as it does today when the
+       map cannot find an address. */
+    if(isPickup){window._pickupLat=null;window._pickupLng=null;}
+    else{window._dropLat=null;window._dropLng=null;}
+    close();checkInputs();
+  }
   function render(){
-    if(!items||!items.length){box.innerHTML='<div class="ac-note">'+t('ac_none')+'</div>';box.classList.add('show');return;}
-    box.innerHTML=items.map(function(it,i){var l=acLabel(it);
-      return '<div class="ac-item" data-i="'+i+'"><span class="ac-pin">&#128205;</span><span class="ac-txt">'+
-             '<span class="ac-main">'+acEsc(l.main)+'</span><span class="ac-sub">'+acEsc(l.sub)+'</span></span></div>';}).join('');
+    var own='<div class="ac-item ac-own" data-own="1"><span class="ac-pin">&#9998;</span>'
+      +'<span class="ac-txt"><span class="ac-main">'+acEsc(inputEl.value.trim())+'</span>'
+      +'<span class="ac-sub">'+acEsc(t('ac_use_typed'))+'</span></span></div>';
+    if(!items||!items.length){
+      box.innerHTML='<div class="ac-note">'+t('ac_none')+'</div>'+own;
+    }else{
+      box.innerHTML=items.map(function(it,i){var l=acLabel(it);
+        return '<div class="ac-item" data-i="'+i+'"><span class="ac-pin">&#128205;</span><span class="ac-txt">'+
+               '<span class="ac-main">'+acEsc(l.main)+'</span><span class="ac-sub">'+acEsc(l.sub)+'</span></span></div>';}).join('')+own;
+    }
     box.classList.add('show');
     Array.prototype.forEach.call(box.querySelectorAll('.ac-item'),function(el){
-      el.addEventListener('mousedown',function(e){e.preventDefault();choose(items[+el.getAttribute('data-i')]);});
+      el.addEventListener('mousedown',function(e){
+        e.preventDefault();
+        if(el.getAttribute('data-own'))return useTyped();
+        choose(items[+el.getAttribute('data-i')]);
+      });
     });
   }
   inputEl.addEventListener('input',function(){
