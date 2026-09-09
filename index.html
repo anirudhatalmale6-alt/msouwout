@@ -1578,6 +1578,46 @@ function keepHouseNo(typed,label){
   var hn='#'+m[1].replace(/\s+/g,'');
   return label.replace(/\s+/g,'').indexOf(hn.replace(/\s+/g,''))>-1?label:hn+', '+label;
 }
+/* ── Put the commune he actually named at the top ────────────────────────
+   "Delmas 40B" comes back as three streets lying 420 m and 740 m apart - the
+   map has one segment tagged in Canapé-Vert (Port-au-Prince) and two in
+   Commune de Delmas, because the street runs along the boundary. He knows
+   Delmas is numbered #2 to 103 and that Canapé-Vert is a different area, so
+   seeing Canapé-Vert first reads as a broken map.
+
+   It is NOT a phantom - it is the same street, four hundred metres away - so
+   it is ranked down, never removed. Removing it would throw away a real piece
+   of the road that somebody may genuinely want.
+
+   The rule: any word he typed that also appears in a result's commune, town or
+   neighbourhood lifts that result. Stable otherwise, so the map's own order
+   survives wherever we have no opinion. */
+function acRank(items,typed){
+  var words=String(typed||'').toLowerCase()
+    .replace(/\d+[a-z]?/g,' ')                 /* the street number tells us nothing */
+    .split(/[^a-zà-ÿ]+/).filter(function(w){return w.length>3;});
+  if(!words.length)return items;
+  return items.map(function(it,i){
+    var a=it.address||{};
+    var where=[a.city,a.town,a.village,a.municipality,a.county,a.suburb,a.city_district,a.neighbourhood]
+      .filter(Boolean).join(' ').toLowerCase();
+    return {it:it,i:i,miss:words.some(function(w){return where.indexOf(w)>-1;})?0:1};
+  }).sort(function(x,y){return x.miss-y.miss||x.i-y.i;})
+    .map(function(o){return o.it;});
+}
+/* The same street can come back several times as separate segments. Two rows
+   reading "Delmas 40B / Cité Saint-Georges, Commune de Delmas" are the same
+   line twice to the person reading them, and a list of identical rows is what
+   makes it look broken. Collapse on what is SHOWN, not on coordinates. */
+function acDedupe(items){
+  var seen={},out=[];
+  (items||[]).forEach(function(it){
+    var l=acLabel(it),k=(l.main+'|'+l.sub).toLowerCase();
+    if(seen[k])return;
+    seen[k]=1;out.push(it);
+  });
+  return out;
+}
 function acFetch(text,cb){
   text=normHtAddr(text);          /* "Delmas 40 B" finds nothing; "Delmas 40B" finds it */
   var q=encodeURIComponent(text.indexOf('Haiti')>-1||text.indexOf('Ayiti')>-1?text:text+', Haiti');
@@ -1656,7 +1696,7 @@ function attachAC(inputEl,isPickup){
       lastQ=v;
       acFetch(v,function(res){
         if(inputEl.value.trim()!==lastQ)return;
-        items=res||[];active=-1;render();
+        items=acDedupe(acRank(res||[],v));active=-1;render();
       });
     },320);
   });
