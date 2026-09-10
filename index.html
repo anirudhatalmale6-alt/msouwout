@@ -1618,15 +1618,54 @@ function acDedupe(items){
   });
   return out;
 }
+/* ── Ask again with less ─────────────────────────────────────────────────
+   A Haitian address is written the way it is spoken: the house number first,
+   then the street, then the name the neighbourhood is really known by.
+
+   A passenger typed "123,Avenue Martin Luther King Lalue" — a real address on
+   a main road in Port-au-Prince — and got "no place found". I asked the map
+   the same thing three ways:
+
+     123,Avenue Martin Luther King Lalue  -> nothing
+     Avenue Martin Luther King Lalue      -> nothing
+     Avenue Martin Luther King            -> three real results
+
+   The house number and the "Lalue" on the end are each enough to lose the
+   street. So when the whole thing finds nothing, ask again with less: first
+   without the house number, then shedding what is on the end.
+
+   ⚠️ Only ever on an EMPTY answer, and three tries at most. This is a free
+   public service and we do not hammer it. */
+function acVariants(text){
+  var out=[],t=normHtAddr(text).trim();
+  if(t)out.push(t);
+  var noNum=t.replace(/^\s*(?:#|n[o°]\s*\.?\s*)?\d+[A-Za-z]?\s*[,.\-]?\s*/,'').trim();
+  if(noNum&&out.indexOf(noNum)<0)out.push(noNum);
+  var base=noNum||t;
+  /* whole trailing pieces first ("…, Lalue"), then trailing words */
+  var parts=base.split(/\s*,\s*/);
+  while(parts.length>1){parts.pop();var j=parts.join(', ').trim();if(j&&out.indexOf(j)<0)out.push(j);}
+  var words=base.split(/\s+/);
+  while(words.length>3){words.pop();var w=words.join(' ').trim();if(w&&out.indexOf(w)<0)out.push(w);}
+  return out.slice(0,3);
+}
 function acFetch(text,cb){
-  text=normHtAddr(text);          /* "Delmas 40 B" finds nothing; "Delmas 40B" finds it */
-  var q=encodeURIComponent(text.indexOf('Haiti')>-1||text.indexOf('Ayiti')>-1?text:text+', Haiti');
-  var c=new AbortController();setTimeout(function(){c.abort();},5000);
-  fetch('https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=6&countrycodes=ht&q='+q,
-        {signal:c.signal,headers:{'Accept-Language':(currentLang==='ht'?'fr':currentLang)}})
-    .then(function(r){return r.json();})
-    .then(function(d){cb(d||[]);})
-    .catch(function(){cb(null);});
+  var tries=acVariants(text),i=0;
+  function ask(){
+    if(i>=tries.length)return cb([]);
+    var t=tries[i++];
+    var q=encodeURIComponent(t.indexOf('Haiti')>-1||t.indexOf('Ayiti')>-1?t:t+', Haiti');
+    var c=new AbortController();setTimeout(function(){c.abort();},5000);
+    fetch('https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=6&countrycodes=ht&q='+q,
+          {signal:c.signal,headers:{'Accept-Language':(currentLang==='ht'?'fr':currentLang)}})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        if(d&&d.length)return cb(d);
+        ask();                      /* nothing found - try the shorter form */
+      })
+      .catch(function(){cb(null);}); /* a real failure is not "not found" */
+  }
+  ask();
 }
 function attachAC(inputEl,isPickup){
   var box=document.createElement('div');box.className='ac-list';
