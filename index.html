@@ -915,7 +915,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v18</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v19</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -969,7 +969,7 @@ function geocodeAddr(text){
   text=normHtAddr(text);
   var q=encodeURIComponent(text.indexOf('Haiti')>-1||text.indexOf('Ayiti')>-1?text:text+', Haiti');
   var c=new AbortController();setTimeout(function(){c.abort()},4500);
-  return fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+q,{signal:c.signal})
+  return fetch('https://nominatim.openstreetmap.org/search?format=json&accept-language=ht&limit=1&q='+q,{signal:c.signal})
     .then(function(r){return r.json()})
     .then(function(d){if(d&&d[0]){var p={lat:parseFloat(d[0].lat),lng:parseFloat(d[0].lon)};_geoCache[key]=p;return p}return null})
     .catch(function(){return null});
@@ -1419,7 +1419,7 @@ var T_RIDE_LIVE={
  ht:{rl_searching_sub:'Rete sou paj sa a. N ap di w le yon chofe aksepte.',
      rl_pin_label:'KOD POU CHOFE A',
      rl_pin_hint:'Bay chofe a kod sa a le li rive.',
-     rl_found:'Chofe jwenn!',
+     rl_found:'Chofe jwenn!',rl_arrived:'Chofe a rive!',rl_arrived_sub:'Li deyo a, ap tann ou',
      rl_started:'Kous la komanse',
      rl_call:'Rele chofe a',
      rl_failed:'Nou pa ka voye demann nan kounye a. Ekri nou sou WhatsApp epi n ap jwenn yon chofe pou ou.',
@@ -1439,7 +1439,7 @@ var T_RIDE_LIVE={
  fr:{rl_searching_sub:'Restez sur cette page. Nous vous prevenons des qu\'un chauffeur accepte.',
      rl_pin_label:'CODE POUR LE CHAUFFEUR',
      rl_pin_hint:'Donnez ce code au chauffeur a son arrivee.',
-     rl_found:'Chauffeur trouve!',
+     rl_found:'Chauffeur trouve!',rl_arrived:'Le chauffeur est la!',rl_arrived_sub:'Il vous attend dehors',
      rl_started:'Course commencee',
      rl_call:'Appeler le chauffeur',
      rl_failed:'Nous ne pouvons pas envoyer la demande maintenant. Ecrivez-nous sur WhatsApp et nous vous trouverons un chauffeur.',
@@ -1459,7 +1459,7 @@ var T_RIDE_LIVE={
  en:{rl_searching_sub:'Stay on this page. We will tell you as soon as a driver accepts.',
      rl_pin_label:'CODE FOR THE DRIVER',
      rl_pin_hint:'Give the driver this code when he arrives.',
-     rl_found:'Driver found!',
+     rl_found:'Driver found!',rl_arrived:'Your driver is here!',rl_arrived_sub:'He is outside waiting for you',
      rl_started:'Ride started',
      rl_call:'Call the driver',
      rl_failed:'We cannot send the request right now. Message us on WhatsApp and we will find you a driver.',
@@ -1479,7 +1479,7 @@ var T_RIDE_LIVE={
  es:{rl_searching_sub:'Quedate en esta pagina. Te avisamos en cuanto un conductor acepte.',
      rl_pin_label:'CODIGO PARA EL CONDUCTOR',
      rl_pin_hint:'Dale este codigo al conductor cuando llegue.',
-     rl_found:'Conductor encontrado!',
+     rl_found:'Conductor encontrado!',rl_arrived:'Tu conductor llego!',rl_arrived_sub:'Te espera afuera',
      rl_started:'Viaje iniciado',
      rl_call:'Llamar al conductor',
      rl_failed:'No podemos enviar la solicitud ahora. Escribenos por WhatsApp y te buscamos un conductor.',
@@ -1656,7 +1656,7 @@ function acFetch(text,cb){
     var t=tries[i++];
     var q=encodeURIComponent(t.indexOf('Haiti')>-1||t.indexOf('Ayiti')>-1?t:t+', Haiti');
     var c=new AbortController();setTimeout(function(){c.abort();},5000);
-    fetch('https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=6&countrycodes=ht&q='+q,
+    fetch('https://nominatim.openstreetmap.org/search?format=json&accept-language=ht&addressdetails=1&limit=6&countrycodes=ht&q='+q,
           {signal:c.signal,headers:{'Accept-Language':(currentLang==='ht'?'fr':currentLang)}})
       .then(function(r){return r.json();})
       .then(function(d){
@@ -2017,14 +2017,21 @@ function startRidePolling(){
 }
 function stopRidePolling(){clearInterval(_ridePoll);_ridePoll=null;}
 var _lastStatus='';
+var _lastArrived=false;
 function checkRideOnce(){
   if(Date.now()>_pollUntil){stopRidePolling();showWaitlist();return;}
   apiFetch(API_URL+'/api/rides/'+rideData.id)
     .then(function(r){return r.json()})
     .then(function(d){
       if(!d||!d.status)return;
-      if(d.status===_lastStatus)return;      /* nothing moved; leave the screen alone */
+      var nowArrived=!!d.arrived_at;
+      /* Arrival is a timestamp, not a status - see the arrived endpoint for why.
+         So "nothing moved" has to mean neither of them moved, or the driver
+         saying he is outside would never once reach this screen. */
+      if(d.status===_lastStatus && nowArrived===_lastArrived)return;
+      var justArrived=nowArrived && !_lastArrived && d.status==='accepted';
       _lastStatus=d.status;
+      _lastArrived=nowArrived;
       if(d.status==='accepted'||d.status==='in_progress'){
         /* Polling used to STOP the moment a driver accepted, so her screen froze on
            the driver card: she never saw the trip start and never saw it finish.
@@ -2033,6 +2040,7 @@ function checkRideOnce(){
         clearInterval(_ridePoll);
         _ridePoll=setInterval(checkRideOnce,10000);
         showDriverFound(d);
+        if(justArrived) announceArrival();
       }
       else if(d.status==='completed'){stopRidePolling();showRideDone(d);}
       else if(d.status==='cancelled'){stopRidePolling();showCancelled(d);}
@@ -2101,8 +2109,43 @@ function showDriverFound(d){
   var call=document.getElementById('mdCall');
   if(d.driver_phone){call.href='tel:'+d.driver_phone;call.style.display='';}
   else{call.style.display='none';}
-  document.getElementById('mdTitle').textContent=(d.status==='in_progress')?t('rl_started'):t('rl_found');
+  var mdT=document.getElementById('mdTitle');
+  if(d.status==='in_progress'){mdT.textContent=t('rl_started');}
+  else if(d.arrived_at){mdT.textContent=t('rl_arrived');}
+  else{mdT.textContent=t('rl_found');}
+  /* A line under the title rather than a new panel - she is already looking at
+     the driver's name and plate, which is what she needs when he is outside. */
+  var sub=document.getElementById('mdArrivedSub');
+  if(!sub){
+    sub=document.createElement('div');
+    sub.id='mdArrivedSub';
+    sub.style.cssText='margin-top:4px;font-weight:700;color:#0F6FBF;font-size:.9rem';
+    mdT.parentNode.insertBefore(sub,mdT.nextSibling);
+  }
+  sub.textContent=(d.arrived_at && d.status==='accepted')?t('rl_arrived_sub'):'';
   document.getElementById('matchDriver').classList.add('show');
+}
+
+function announceArrival(){
+  try{ if(navigator.vibrate) navigator.vibrate([200,90,200]); }catch(e){}
+  try{
+    var C=window.AudioContext||window.webkitAudioContext; if(!C) return;
+    var a=new C(), o=a.createOscillator(), g=a.createGain();
+    o.connect(g); g.connect(a.destination);
+    o.frequency.value=880; g.gain.value=0.0001;
+    g.gain.exponentialRampToValueAtTime(0.25,a.currentTime+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+0.7);
+    o.start(); o.stop(a.currentTime+0.72);
+  }catch(e){}
+  /* If she is on another tab, the title is the only thing she can see. */
+  try{
+    var old=document.title, n=0;
+    var iv=setInterval(function(){
+      document.title=(n++%2)?'\u2022 '+t('rl_arrived'):old;
+      if(n>12){clearInterval(iv);document.title=old;}
+    },700);
+    window.addEventListener('focus',function(){clearInterval(iv);document.title=old;},{once:true});
+  }catch(e){}
 }
 
 function showWaitlist(msg){
@@ -2201,7 +2244,7 @@ function useMyLocation(){
     window._pickupLng=lng;
     localStorage.setItem('msw_last_lat',lat);
     localStorage.setItem('msw_last_lng',lng);
-    fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json&addressdetails=1')
+    fetch('https://nominatim.openstreetmap.org/reverse?accept-language=ht&lat='+lat+'&lon='+lng+'&format=json&addressdetails=1')
       .then(function(r){return r.json()})
       .then(function(data){
         /* Was: the first three comma-separated chunks of display_name, which

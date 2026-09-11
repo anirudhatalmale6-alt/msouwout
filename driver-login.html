@@ -287,6 +287,13 @@ nav{
   font-family:var(--body);color:var(--dark);outline:none;transition:border-color .2s;
 }
 .pin-input-ride:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(34,197,94,.12)}
+.btn-arrived{
+  width:100%;padding:13px;border:none;border-radius:12px;cursor:pointer;
+  font-family:inherit;font-size:.95rem;font-weight:800;margin-bottom:10px;
+  background:#0F6FBF;color:#fff;
+}
+.btn-arrived:disabled{background:#9BB7CC;cursor:default}
+.btn-arrived.done{background:#E8F3EA;color:#1B7F4C;cursor:default}
 .btn-start-ride{
   width:100%;padding:16px;border:none;border-radius:14px;margin-top:16px;
   background:linear-gradient(135deg,var(--green),var(--green-dark));
@@ -422,6 +429,10 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <div class="active-ride-card" id="activeRideCard" style="display:none">
       <h3>&#128994; <span data-i18n="active_ride_title">Kous Aktif</span></h3>
       <div id="activeRideInfo"></div>
+      <!-- Pressed when he pulls up, BEFORE he asks for the PIN. The passenger's
+           page is already polling, so this is all that was missing for her to
+           know he is outside without a phone call. -->
+      <button class="btn-arrived" id="btnArrived" onclick="markArrived()" data-i18n="arrived_btn">M rive - avize pasaje a</button>
       <div class="pin-entry" id="pinEntrySection">
         <div class="pin-entry-label" data-i18n="enter_ride_pin">Mande pasaje a pou PIN nan</div>
         <input type="tel" maxlength="4" class="pin-input-ride" id="ridePinInput" placeholder="- - - -" inputmode="numeric" pattern="[0-9]*">
@@ -520,7 +531,7 @@ const T={
     member_since:"Manm depi",
     kpi_earned:"Kòb Total Ou Fè",kpi_rides:"Kous Konplè",kpi_today:"Jodi A",kpi_week:"Semèn Nan",kpi_rides_done:"kous",kpi_all_time:"depi ou kòmanse",
     active_ride_title:"Kous Aktif",enter_ride_pin:"Mande pasaje a pou kòd PIN nan",
-    start_ride_btn:"Kòmanse Kous",complete_ride_btn:"Fini Kous",
+    arrived_btn:"M rive - avize pasaje a",arrived_done:"Pasaje a avize",start_ride_btn:"Kòmanse Kous",complete_ride_btn:"Fini Kous",
     pin_wrong:"PIN pa kòrèk. Eseye ankò.",pin_verified:"PIN verifye! Kous kòmanse!",
     ride_started:"Kous an kou...",ride_completed_msg:"Kous fini! Mèsi.",
     lbl_tracking:"Kòd Swiv",lbl_price:"Pri",lbl_type:"Tip",lbl_passenger:"Pasaje",
@@ -553,7 +564,7 @@ const T={
     member_since:"Membre depuis",
     kpi_earned:"Total Gagné",kpi_rides:"Courses Terminées",kpi_today:"Aujourd'hui",kpi_week:"Cette Semaine",kpi_rides_done:"courses",kpi_all_time:"depuis le début",
     active_ride_title:"Course Active",enter_ride_pin:"Demandez le code PIN au passager",
-    start_ride_btn:"Demarrer la Course",complete_ride_btn:"Terminer la Course",
+    arrived_btn:"Je suis arrivé - prévenir le passager",arrived_done:"Passager prévenu",start_ride_btn:"Demarrer la Course",complete_ride_btn:"Terminer la Course",
     pin_wrong:"PIN incorrect. Reessayez.",pin_verified:"PIN verifie! Course demarree!",
     ride_started:"Course en cours...",ride_completed_msg:"Course terminee! Merci.",
     lbl_tracking:"Code Suivi",lbl_price:"Prix",lbl_type:"Type",lbl_passenger:"Passager",
@@ -586,7 +597,7 @@ const T={
     member_since:"Member since",
     kpi_earned:"Total Earned",kpi_rides:"Completed Rides",kpi_today:"Today",kpi_week:"This Week",kpi_rides_done:"rides",kpi_all_time:"all time",
     active_ride_title:"Active Ride",enter_ride_pin:"Ask the passenger for the PIN code",
-    start_ride_btn:"Start Ride",complete_ride_btn:"Complete Ride",
+    arrived_btn:"I have arrived - tell the passenger",arrived_done:"Passenger told",start_ride_btn:"Start Ride",complete_ride_btn:"Complete Ride",
     pin_wrong:"Wrong PIN. Try again.",pin_verified:"PIN verified! Ride started!",
     ride_started:"Ride in progress...",ride_completed_msg:"Ride completed! Thank you.",
     lbl_tracking:"Tracking Code",lbl_price:"Price",lbl_type:"Type",lbl_passenger:"Passenger",
@@ -619,7 +630,7 @@ const T={
     member_since:"Miembro desde",
     kpi_earned:"Total Ganado",kpi_rides:"Viajes Completados",kpi_today:"Hoy",kpi_week:"Esta Semana",kpi_rides_done:"viajes",kpi_all_time:"desde el inicio",
     active_ride_title:"Viaje Activo",enter_ride_pin:"Pida al pasajero el codigo PIN",
-    start_ride_btn:"Iniciar Viaje",complete_ride_btn:"Completar Viaje",
+    arrived_btn:"He llegado - avisar al pasajero",arrived_done:"Pasajero avisado",start_ride_btn:"Iniciar Viaje",complete_ride_btn:"Completar Viaje",
     pin_wrong:"PIN incorrecto. Intenta de nuevo.",pin_verified:"PIN verificado! Viaje iniciado!",
     ride_started:"Viaje en progreso...",ride_completed_msg:"Viaje completado! Gracias.",
     lbl_tracking:"Codigo de Rastreo",lbl_price:"Precio",lbl_type:"Tipo",lbl_passenger:"Pasajero",
@@ -1101,7 +1112,7 @@ function renderIncoming(rides){
    coordinates - and most Haitian addresses have none in the map data - hand the
    map the words she typed rather than nothing at all. */
 function navUrl(lat,lng,text){
-  var base='https://www.google.com/maps/dir/?api=1&destination=';
+  var base='https://www.google.com/maps/dir/?api=1&hl=ht&destination=';
   var la=parseFloat(lat),ln=parseFloat(lng);
   if(isFinite(la)&&isFinite(ln)&&(la||ln)) return base+la+','+ln;
   return base+encodeURIComponent((text||'')+', Haiti');
@@ -1143,6 +1154,36 @@ async function acceptRide(rideId,btn){
   }catch(e){
     alert(t('err_network'));
     btn.disabled=false;btn.textContent=t('inc_accept');
+  }
+}
+
+/* Tell the passenger he is outside.
+ *
+ * Fire-and-forget would be wrong here: if this fails she is standing in the
+ * road waiting for a message that never came, so a failure has to be visible
+ * to the driver, who can then just ring her. */
+async function markArrived(){
+  if(!_activeRide) return;
+  const btn=document.getElementById('btnArrived');
+  if(!btn||btn.disabled) return;
+  const was=btn.textContent;
+  btn.disabled=true; btn.textContent='...';
+  try{
+    const res=await fetch(API+'/api/rides/'+_activeRide.id+'/arrived',{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({driver_id:(window._driverData&&window._driverData.driver&&window._driverData.driver.id)||undefined})
+    });
+    const d=await res.json().catch(function(){return {}});
+    if(!res.ok) throw new Error(d.error||'pa mache');
+    _activeRide.arrived_at=d.arrived_at||new Date().toISOString();
+    btn.classList.add('done');
+    btn.textContent=t('arrived_done');
+    if(navigator.vibrate) navigator.vibrate(40);
+  }catch(e){
+    /* Say so rather than look successful - she is waiting on this. */
+    btn.disabled=false; btn.textContent=was;
+    alert((e&&e.message)||'Pa t ka avize pasaje a. Rele l.');
   }
 }
 
