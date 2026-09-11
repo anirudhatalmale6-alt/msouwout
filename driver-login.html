@@ -1012,7 +1012,13 @@ async function pollIncoming(){
         }
       }
     }
-    const res=await fetch(API+'/api/rides/available?minutes=120');
+    /* Ask only for the rides this driver can actually take. The server has
+       supported ride_type since it was written; the app simply never sent it,
+       so a moto driver was shown car rides and could accept one. */
+    var _veh=(window._driverData&&window._driverData.driver&&window._driverData.driver.vehicle_type)||'';
+    var _vq=/^(moto|motorcycle|motocyclette|mototaxi)/i.test(_veh)?'moto'
+           :/^(car|machin|voiture|auto)/i.test(_veh)?'car':'';
+    const res=await fetch(API+'/api/rides/available?minutes=120'+(_vq?'&ride_type='+_vq:''));
     if(!res.ok)return;
     const j=await res.json();
     renderIncoming((j.rides||[]).filter(function(r){return !_skipped[r.id];}));
