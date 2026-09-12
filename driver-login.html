@@ -287,6 +287,20 @@ nav{
   font-family:var(--body);color:var(--dark);outline:none;transition:border-color .2s;
 }
 .pin-input-ride:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(34,197,94,.12)}
+.presence{
+  display:flex;align-items:center;gap:12px;justify-content:space-between;
+  background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:14px;
+  box-shadow:0 2px 10px rgba(10,14,26,.07);border-left:6px solid #9AA6B5;
+}
+.presence.on{border-left-color:#1B8C3D}
+.presence-state{font-weight:800;font-size:1.02rem;color:#0A0E1A}
+.presence-hint{font-size:.78rem;color:#5A6B8A;margin-top:2px;line-height:1.4}
+.presence-btn{
+  flex:none;padding:12px 20px;border:none;border-radius:11px;cursor:pointer;
+  font-family:inherit;font-weight:800;font-size:.9rem;background:#1B8C3D;color:#fff;
+}
+.presence.on .presence-btn{background:#E8EDF3;color:#0A0E1A}
+.presence-btn:disabled{opacity:.55;cursor:default}
 .btn-arrived{
   width:100%;padding:13px;border:none;border-radius:12px;cursor:pointer;
   font-family:inherit;font-size:.95rem;font-weight:800;margin-bottom:10px;
@@ -417,6 +431,17 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
 <!-- DASHBOARD -->
 <section class="dashboard" id="dashboard">
   <div class="dash-inner">
+    <!-- The single most common support call in any ride app is "I am not
+         getting rides" from a driver who is offline and does not know it. So
+         this is the first thing on the screen, it is large, and it says which
+         state he is in rather than only offering the opposite one. -->
+    <div class="presence" id="presenceBar">
+      <div class="presence-txt">
+        <div class="presence-state" id="presenceState">-</div>
+        <div class="presence-hint" id="presenceHint"></div>
+      </div>
+      <button class="presence-btn" id="presenceBtn" onclick="togglePresence()">-</button>
+    </div>
     <div class="welcome-bar">
       <div class="welcome-avatar">&#128100;</div>
       <div class="welcome-info">
@@ -531,7 +556,7 @@ const T={
     member_since:"Manm depi",
     kpi_earned:"Kòb Total Ou Fè",kpi_rides:"Kous Konplè",kpi_today:"Jodi A",kpi_week:"Semèn Nan",kpi_rides_done:"kous",kpi_all_time:"depi ou kòmanse",
     active_ride_title:"Kous Aktif",enter_ride_pin:"Mande pasaje a pou kòd PIN nan",
-    arrived_btn:"M rive - avize pasaje a",arrived_done:"Pasaje a avize",start_ride_btn:"Kòmanse Kous",complete_ride_btn:"Fini Kous",
+    arrived_btn:"M rive - avize pasaje a",arrived_done:"Pasaje a avize",presence_on:"Ou an liy - w ap resevwa kous",presence_off:"Ou deyò - ou p ap resevwa kous",presence_go_on:"Ale an liy",presence_go_off:"Soti",presence_hint_on:"Kite paj la louvri pou w resevwa demann yo.",presence_hint_off:"Peze Ale an liy lè w pare pou travay.",presence_fail:"Nou pa ka chanje sa kounye a. Eseye ankò.",start_ride_btn:"Kòmanse Kous",complete_ride_btn:"Fini Kous",
     pin_wrong:"PIN pa kòrèk. Eseye ankò.",pin_verified:"PIN verifye! Kous kòmanse!",
     ride_started:"Kous an kou...",ride_completed_msg:"Kous fini! Mèsi.",
     lbl_tracking:"Kòd Swiv",lbl_price:"Pri",lbl_type:"Tip",lbl_passenger:"Pasaje",
@@ -564,7 +589,7 @@ const T={
     member_since:"Membre depuis",
     kpi_earned:"Total Gagné",kpi_rides:"Courses Terminées",kpi_today:"Aujourd'hui",kpi_week:"Cette Semaine",kpi_rides_done:"courses",kpi_all_time:"depuis le début",
     active_ride_title:"Course Active",enter_ride_pin:"Demandez le code PIN au passager",
-    arrived_btn:"Je suis arrivé - prévenir le passager",arrived_done:"Passager prévenu",start_ride_btn:"Demarrer la Course",complete_ride_btn:"Terminer la Course",
+    arrived_btn:"Je suis arrivé - prévenir le passager",arrived_done:"Passager prévenu",presence_on:"Vous êtes en ligne - vous recevez des courses",presence_off:"Vous êtes hors ligne - aucune course",presence_go_on:"Se mettre en ligne",presence_go_off:"Se retirer",presence_hint_on:"Gardez la page ouverte pour recevoir les demandes.",presence_hint_off:"Appuyez sur Se mettre en ligne quand vous êtes prêt.",presence_fail:"Impossible de changer cela maintenant. Réessayez.",start_ride_btn:"Demarrer la Course",complete_ride_btn:"Terminer la Course",
     pin_wrong:"PIN incorrect. Reessayez.",pin_verified:"PIN verifie! Course demarree!",
     ride_started:"Course en cours...",ride_completed_msg:"Course terminee! Merci.",
     lbl_tracking:"Code Suivi",lbl_price:"Prix",lbl_type:"Type",lbl_passenger:"Passager",
@@ -597,7 +622,7 @@ const T={
     member_since:"Member since",
     kpi_earned:"Total Earned",kpi_rides:"Completed Rides",kpi_today:"Today",kpi_week:"This Week",kpi_rides_done:"rides",kpi_all_time:"all time",
     active_ride_title:"Active Ride",enter_ride_pin:"Ask the passenger for the PIN code",
-    arrived_btn:"I have arrived - tell the passenger",arrived_done:"Passenger told",start_ride_btn:"Start Ride",complete_ride_btn:"Complete Ride",
+    arrived_btn:"I have arrived - tell the passenger",arrived_done:"Passenger told",presence_on:"You are online - receiving rides",presence_off:"You are offline - no rides",presence_go_on:"Go online",presence_go_off:"Go offline",presence_hint_on:"Keep this page open to receive requests.",presence_hint_off:"Press Go online when you are ready to work.",presence_fail:"We cannot change that right now. Try again.",start_ride_btn:"Start Ride",complete_ride_btn:"Complete Ride",
     pin_wrong:"Wrong PIN. Try again.",pin_verified:"PIN verified! Ride started!",
     ride_started:"Ride in progress...",ride_completed_msg:"Ride completed! Thank you.",
     lbl_tracking:"Tracking Code",lbl_price:"Price",lbl_type:"Type",lbl_passenger:"Passenger",
@@ -630,7 +655,7 @@ const T={
     member_since:"Miembro desde",
     kpi_earned:"Total Ganado",kpi_rides:"Viajes Completados",kpi_today:"Hoy",kpi_week:"Esta Semana",kpi_rides_done:"viajes",kpi_all_time:"desde el inicio",
     active_ride_title:"Viaje Activo",enter_ride_pin:"Pida al pasajero el codigo PIN",
-    arrived_btn:"He llegado - avisar al pasajero",arrived_done:"Pasajero avisado",start_ride_btn:"Iniciar Viaje",complete_ride_btn:"Completar Viaje",
+    arrived_btn:"He llegado - avisar al pasajero",arrived_done:"Pasajero avisado",presence_on:"Estás en línea - recibiendo viajes",presence_off:"Estás fuera de línea - sin viajes",presence_go_on:"Ponerse en línea",presence_go_off:"Salir",presence_hint_on:"Mantén esta página abierta para recibir solicitudes.",presence_hint_off:"Pulsa Ponerse en línea cuando estés listo.",presence_fail:"No podemos cambiar eso ahora. Inténtalo de nuevo.",start_ride_btn:"Iniciar Viaje",complete_ride_btn:"Completar Viaje",
     pin_wrong:"PIN incorrecto. Intenta de nuevo.",pin_verified:"PIN verificado! Viaje iniciado!",
     ride_started:"Viaje en progreso...",ride_completed_msg:"Viaje completado! Gracias.",
     lbl_tracking:"Codigo de Rastreo",lbl_price:"Precio",lbl_type:"Tipo",lbl_passenger:"Pasajero",
@@ -734,7 +759,7 @@ async function handleLogin(e){
     document.getElementById('dashboard').classList.add('active');
     renderDashboard(mapped);
     renderActiveRide(mapped.rides,mapped.driver.id);
-    startIncoming();
+    initPresence();
     return;
   }
 
@@ -792,7 +817,7 @@ async function handleLogin(e){
     document.getElementById('dashboard').classList.add('active');
     renderDashboard(mapped);
     renderActiveRide(mapped.rides,mapped.driver.id);
-    startIncoming();
+    initPresence();
 
   }catch(err){
     errEl.innerHTML=t('err_network');
@@ -965,6 +990,94 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 
 let _incPoll=null,_incBusy=false;
+
+/* ═══ ONLINE / OFFLINE ══════════════════════════════════════════════════════
+ *
+ * Two halves, and both matter:
+ *   - what he CHOSE (the switch)
+ *   - whether his app is still ANSWERING (the heartbeat)
+ *
+ * A driver who switched on this morning and whose battery died at noon is still
+ * "online" by his own choice, and every ride offered to him is a ride nobody
+ * answers. So the app says "still here" every minute while online, and the
+ * server treats a driver as working only if both are true.
+ *
+ * Remembered on the phone: a driver who was working, closed the tab by accident
+ * and reopened it is still working, and should not have to notice.
+ */
+var _online=false, _hbTimer=null;
+
+function presenceDriverId(){
+  return (window._driverData&&window._driverData.driver&&window._driverData.driver.id)||null;
+}
+
+function paintPresence(){
+  var bar=document.getElementById('presenceBar');
+  if(!bar) return;
+  bar.classList.toggle('on',!!_online);
+  document.getElementById('presenceState').textContent=t(_online?'presence_on':'presence_off');
+  document.getElementById('presenceHint').textContent=t(_online?'presence_hint_on':'presence_hint_off');
+  document.getElementById('presenceBtn').textContent=t(_online?'presence_go_off':'presence_go_on');
+}
+
+async function sendPresence(online){
+  var id=presenceDriverId();
+  if(!id||id==='demo') return {ok:false,demo:true};
+  try{
+    var body=(online===null||online===undefined)?{}:{online:!!online};
+    var res=await fetch(API+'/api/drivers/'+id+'/presence',{
+      method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!res.ok) return {ok:false};
+    var d=await res.json().catch(function(){return {}});
+    return {ok:true,online:!!d.is_online};
+  }catch(e){ return {ok:false}; }
+}
+
+async function togglePresence(){
+  var btn=document.getElementById('presenceBtn');
+  var want=!_online;
+  btn.disabled=true;
+  var r=await sendPresence(want);
+  btn.disabled=false;
+  if(!r.ok){
+    if(r.demo){ alert(t('inc_demo')); return; }
+    /* Do not flip the switch on a failed call. A driver who believes he is
+       online because the button changed colour is the exact problem this
+       feature exists to remove. */
+    alert(t('presence_fail'));
+    return;
+  }
+  setOnline(r.online);
+}
+
+function setOnline(on){
+  _online=!!on;
+  try{ localStorage.setItem('msw_online',_online?'1':'0'); }catch(e){}
+  paintPresence();
+  clearInterval(_hbTimer); _hbTimer=null;
+  if(_online){
+    startIncoming();
+    /* Heartbeat. Without it the server cannot tell a working driver from a
+       dead phone. */
+    _hbTimer=setInterval(function(){ sendPresence(null); },60000);
+  }else{
+    stopIncoming();
+    var il=document.getElementById('incomingList'); if(il) il.innerHTML='';
+    var ie=document.getElementById('incomingEmpty');
+    if(ie){ ie.textContent=t('presence_hint_off'); ie.removeAttribute('data-i18n'); ie.style.display=''; }
+  }
+}
+
+/* Called once the dashboard is up. Restores what he chose last time and tells
+   the server, so the two never disagree after a reload. */
+function initPresence(){
+  var saved='0';
+  try{ saved=localStorage.getItem('msw_online')||'0'; }catch(e){}
+  _online=(saved==='1');
+  paintPresence();
+  if(_online){ sendPresence(true); }
+  setOnline(_online);
+}
 
 function startIncoming(){
   const d=(window._driverData&&window._driverData.driver)||{};
