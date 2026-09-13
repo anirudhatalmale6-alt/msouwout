@@ -848,6 +848,16 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       <a class="wa-connect" id="mdCall" style="background:#16A34A;text-align:center;text-decoration:none;justify-content:center">
         <span>&#128222;</span> <span data-i18n="rl_call">Rele chofe a</span>
       </a>
+      <!-- The live map and the share button belonged here all along. They were
+           built only into showWaitlist(), which is the branch that runs when NO
+           driver is found - so the one passenger who had a driver on the way was
+           the one passenger never offered the map. -->
+      <a class="wa-connect" id="mdTrack" style="background:#0F6FBF;text-align:center;text-decoration:none;justify-content:center;display:none">
+        <span>&#128205;</span> <span data-i18n="track_ride">Swiv Kous Ou an Dirèk</span>
+      </a>
+      <button class="wa-connect" id="mdShare" style="background:#128C3E;text-align:center;justify-content:center;display:none;width:100%;border:0;font-family:inherit;cursor:pointer">
+        <span>&#128172;</span> <span data-i18n="rl_share">Voye kat la bay fanmi w</span>
+      </button>
       <button class="cancel-ride-btn" id="mdCancel" onclick="cancelRide('accepted')" data-i18n="rl_cancel_ride">Anile kous la</button>
     </div>
 
@@ -915,7 +925,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v22</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v23</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1422,6 +1432,8 @@ var T_RIDE_LIVE={
      rl_found:'Chofe jwenn!',rl_arrived:'Chofe a rive!',rl_arrived_sub:'Li deyo a, ap tann ou',
      rl_started:'Kous la komanse',
      rl_call:'Rele chofe a',
+     rl_share:'Voye kat la bay fanmi w',
+     rl_share_msg:'M nan yon kous MsouWout kounye a ak {driver} ({plate}). Ou ka swiv mwen an dirèk sou kat la: {url}',
      rl_failed:'Nou pa ka voye demann nan kounye a. Ekri nou sou WhatsApp epi n ap jwenn yon chofe pou ou.',
      lm_label:'📍 Repe pou chofe a (opsyonel)',
      lm_ph:'Egzanp: #2, devan famasi a, kay ble a',
@@ -1442,6 +1454,8 @@ var T_RIDE_LIVE={
      rl_found:'Chauffeur trouve!',rl_arrived:'Le chauffeur est la!',rl_arrived_sub:'Il vous attend dehors',
      rl_started:'Course commencee',
      rl_call:'Appeler le chauffeur',
+     rl_share:'Envoyer la carte à ma famille',
+     rl_share_msg:'Je suis en course MsouWout avec {driver} ({plate}). Suivez-moi en direct sur la carte : {url}',
      rl_failed:'Nous ne pouvons pas envoyer la demande maintenant. Ecrivez-nous sur WhatsApp et nous vous trouverons un chauffeur.',
      lm_label:'📍 Repere pour le chauffeur (facultatif)',
      lm_ph:'Ex: #2, devant la pharmacie, maison bleue',
@@ -1462,6 +1476,8 @@ var T_RIDE_LIVE={
      rl_found:'Driver found!',rl_arrived:'Your driver is here!',rl_arrived_sub:'He is outside waiting for you',
      rl_started:'Ride started',
      rl_call:'Call the driver',
+     rl_share:'Send the map to my family',
+     rl_share_msg:'I am on a MsouWout ride with {driver} ({plate}). Follow me live on the map: {url}',
      rl_failed:'We cannot send the request right now. Message us on WhatsApp and we will find you a driver.',
      lm_label:'📍 Landmark for the driver (optional)',
      lm_ph:'e.g. #2, in front of the pharmacy, blue house',
@@ -1482,6 +1498,8 @@ var T_RIDE_LIVE={
      rl_found:'Conductor encontrado!',rl_arrived:'Tu conductor llego!',rl_arrived_sub:'Te espera afuera',
      rl_started:'Viaje iniciado',
      rl_call:'Llamar al conductor',
+     rl_share:'Enviar el mapa a mi familia',
+     rl_share_msg:'Estoy en un viaje MsouWout con {driver} ({plate}). Sígueme en vivo en el mapa: {url}',
      rl_failed:'No podemos enviar la solicitud ahora. Escribenos por WhatsApp y te buscamos un conductor.',
      lm_label:'📍 Referencia para el conductor (opcional)',
      lm_ph:'Ej: #2, frente a la farmacia, casa azul',
@@ -2109,6 +2127,21 @@ function showDriverFound(d){
   var call=document.getElementById('mdCall');
   if(d.driver_phone){call.href='tel:'+d.driver_phone;call.style.display='';}
   else{call.style.display='none';}
+
+  /* Live map + share. The tracking page reads the driver's real position, which
+     the driver app has been reporting since v22 - so this is a map that moves,
+     not a picture of a street. */
+  var code=d.tracking_code||rideData.tracking_code||'';
+  var tk=document.getElementById('mdTrack');
+  var sh=document.getElementById('mdShare');
+  if(code && d.status!=='completed' && d.status!=='cancelled'){
+    var url=location.origin+location.pathname.replace(/[^/]*$/,'')+'track.html?code='+encodeURIComponent(code);
+    tk.href=url; tk.style.display='';
+    sh.style.display='';
+    sh.onclick=function(){ shareTrack(url, d); };
+  } else {
+    tk.style.display='none'; sh.style.display='none';
+  }
   var mdT=document.getElementById('mdTitle');
   if(d.status==='in_progress'){mdT.textContent=t('rl_started');}
   else if(d.arrived_at){mdT.textContent=t('rl_arrived');}
@@ -2163,6 +2196,23 @@ function showWaitlist(msg){
     tl.href='track.html?code='+encodeURIComponent(rideData.tracking_code);
     tl.style.display='';
   }
+}
+
+/* Send the live map to whoever she wants watching. The phone's own share sheet
+   first - that reaches WhatsApp, SMS, anything she already uses - and WhatsApp
+   directly when the browser has no share sheet. */
+function shareTrack(url, d){
+  var name=(d&&d.driver_name)?d.driver_name:'';
+  var plate=(d&&d.license_plate)?d.license_plate:'';
+  var msg=t('rl_share_msg')
+            .replace('{driver}', name)
+            .replace('{plate}', plate)
+            .replace('{url}', url);
+  if(navigator.share){
+    navigator.share({title:'MsouWout', text:msg}).catch(function(){});
+    return;
+  }
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
 }
 
 function contactWhatsApp(){
