@@ -750,7 +750,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     </div>
 
     <div class="fare-est" id="fareEst">
-      <div class="fe-label" data-i18n="est_label">Estimasyon pri</div>
+      <div class="fe-label" id="fareLabel" data-i18n="est_label">Estimasyon pri</div>
       <div class="fe-price" id="farePrice">~75-150 HTG</div>
       <div class="surge-tags" id="surgeTags"></div>
       <div class="fare-meta">
@@ -763,7 +763,15 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
           <span style="font-weight:800">+5%</span>
         </div>
         <div class="fm-dash"><span>&#128737;&#65039;</span> <span data-i18n="dash_included">Pwoteksyon DASH enkli</span></div>
+        <div class="fm-row" id="fareFixedNote" style="display:none">
+          <span>&#128176;</span> <span data-i18n="fare_fixed_note">Se pri sa a chofè a ap wè</span>
+        </div>
         <div class="fm-eta"><span>&#9201;&#65039;</span> <span data-i18n="eta_label">Estimasyon arive</span>: <span data-i18n="eta_val">3&#8211;5 min</span></div>
+        <!-- Shown ONLY when the address could not be placed. Without it the page
+             printed a confident number built from a 3km guess. -->
+        <div class="fm-row" id="fareUnknownRow" style="display:none;background:#FFF7ED;border:1px solid rgba(217,119,6,.35);border-radius:10px;padding:9px 11px;margin-top:8px">
+          <span style="font-weight:700;color:#9A5B00;font-size:.82rem" id="fareUnknownMsg"></span>
+        </div>
       </div>
     </div>
 
@@ -925,7 +933,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v23</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v24</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -968,21 +976,64 @@ var _geoCache={};
 
    Only a SINGLE letter is joined: "40 B" becomes "40B", while "40 Boulevard"
    is left alone, because the letter has to end at a word boundary. */
+/* "28rue" is a house number with the street glued to it. Two or more letters
+   after the digits means a lost space; ONE letter is a real street suffix
+   (Delmas 40B) and must be left alone. */
+function splitGlued(t){
+  return String(t||'').replace(/^(\s*(?:#|n[o°]\s*\.?\s*)?\d+)([A-Za-z]{2,})/,'$1 $2');
+}
 function normHtAddr(s){
   return String(s||'').replace(/\b(\d{1,3})\s+([A-Za-z])\b/g,'$1$2');
 }
 
+/* Where to look. A bare search for "Martin Luther King" returns a road in
+   Saint-Raphael, 130km north of a passenger standing in Petion-Ville - verified
+   against the live geocoder. Telling it WHERE to look returns Avenue Martin
+   Luther King in Port-au-Prince instead.
+
+   Anchored on whatever we already know about this passenger, and only on
+   metropolitan Port-au-Prince as a last resort - a rider in Cap-Haitien must
+   not be forced into a box round the capital. */
+var PAP_BOX={left:-72.45,top:18.62,right:-72.20,bottom:18.48};
+function geoAnchor(){
+  var la=window._pickupLat||window._dropLat||window._myLat;
+  var ln=window._pickupLng||window._dropLng||window._myLng;
+  if(la&&ln){var d=0.35;return{left:ln-d,top:la+d,right:ln+d,bottom:la-d};}
+  return PAP_BOX;
+}
+function boxParam(){
+  var b=geoAnchor();
+  return '&countrycodes=ht&viewbox='+[b.left,b.top,b.right,b.bottom].join(',')+'&bounded=1';
+}
+
+/* The distance decides the PRICE, so this has to try as hard as the suggestion
+   list does. It used to ask once, with no country and no area, and give up -
+   which is why two ordinary Port-au-Prince addresses produced no distance at
+   all and the fare fell back to a hard-coded 3km guess. */
 function geocodeAddr(text){
   if(!text) return Promise.resolve(null);
   var key=text.trim().toLowerCase();
   if(_geoCache[key]) return Promise.resolve(_geoCache[key]);
-  text=normHtAddr(text);
-  var q=encodeURIComponent(text.indexOf('Haiti')>-1||text.indexOf('Ayiti')>-1?text:text+', Haiti');
-  var c=new AbortController();setTimeout(function(){c.abort()},4500);
-  return fetch('https://nominatim.openstreetmap.org/search?format=json&accept-language=ht&limit=1&q='+q,{signal:c.signal})
-    .then(function(r){return r.json()})
-    .then(function(d){if(d&&d[0]){var p={lat:parseFloat(d[0].lat),lng:parseFloat(d[0].lon)};_geoCache[key]=p;return p}return null})
-    .catch(function(){return null});
+  var tries=acVariants(normHtAddr(splitGlued(text))).slice(0,5);
+  var i=0;
+  function attempt(){
+    if(i>=tries.length) return Promise.resolve(null);
+    var q=encodeURIComponent(tries[i++]);
+    var c=new AbortController();setTimeout(function(){c.abort()},4500);
+    return fetch('https://nominatim.openstreetmap.org/search?format=json&accept-language=ht&limit=1&q='+q+boxParam(),{signal:c.signal})
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(d&&d[0]){
+          var pt={lat:parseFloat(d[0].lat),lng:parseFloat(d[0].lon)};
+          _geoCache[key]=pt;return pt;
+        }
+        /* Only ever retry on an EMPTY answer, never on a network error, and at
+           most three times - Nominatim is a free service at about 1 req/s. */
+        return attempt();
+      })
+      .catch(function(){return null;});
+  }
+  return attempt();
 }
 function haversineKm(a,b){
   var R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180;
@@ -1041,6 +1092,9 @@ var T={
     now:'Kounye A',
     later:'Pita',
     est_label:'Estimasyon pri',
+    fare_fixed:'Pri kous la',
+    fare_fixed_note:'Se egzakteman pri sa a chofè a ap wè',
+    fare_unknown_msg:'Nou pa jwenn adrès sa a sou kat la, kidonk pri sa a se yon apeprè. Chwazi adrès la nan lis la ki parèt anba kaz la pou jwenn pri egzak la.',
     phone_label:'NIMEWO POU KONTAKTE OU',
     ph_phone:'+509 37 12 3456',
     request_btn:'Mande Chofè',
@@ -1146,6 +1200,9 @@ var T={
     now:'Maintenant',
     later:'Plus tard',
     est_label:'Tarif estimé',
+    fare_fixed:'Prix de la course',
+    fare_fixed_note:"C'est exactement ce prix que le chauffeur voit",
+    fare_unknown_msg:"Nous n'avons pas trouvé cette adresse sur la carte, donc ce prix est approximatif. Choisissez l'adresse dans la liste qui apparaît sous le champ pour obtenir le prix exact.",
     phone_label:'NUMÉRO DE CONTACT',
     ph_phone:'+509 37 12 3456',
     request_btn:'Demander un chauffeur',
@@ -1251,6 +1308,9 @@ var T={
     now:'Now',
     later:'Later',
     est_label:'Estimated fare',
+    fare_fixed:'Ride price',
+    fare_fixed_note:'This is exactly the price the driver is shown',
+    fare_unknown_msg:'We could not find this address on the map, so this price is approximate. Pick the address from the list under the box to get the exact price.',
     phone_label:'CONTACT NUMBER',
     ph_phone:'+509 37 12 3456',
     request_btn:'Request Driver',
@@ -1356,6 +1416,9 @@ var T={
     now:'Ahora',
     later:'Después',
     est_label:'Tarifa estimada',
+    fare_fixed:'Precio del viaje',
+    fare_fixed_note:'Es exactamente el precio que ve el conductor',
+    fare_unknown_msg:'No encontramos esta dirección en el mapa, así que este precio es aproximado. Elija la dirección en la lista bajo el campo para obtener el precio exacto.',
     phone_label:'NÚMERO DE CONTACTO',
     ph_phone:'+509 37 12 3456',
     request_btn:'Pedir conductor',
@@ -1655,17 +1718,29 @@ function acDedupe(items){
    ⚠️ Only ever on an EMPTY answer, and three tries at most. This is a free
    public service and we do not hammer it. */
 function acVariants(text){
-  var out=[],t=normHtAddr(text).trim();
+  var out=[],t=normHtAddr(splitGlued(text)).trim();
   if(t)out.push(t);
-  var noNum=t.replace(/^\s*(?:#|n[o°]\s*\.?\s*)?\d+[A-Za-z]?\s*[,.\-]?\s*/,'').trim();
+  /* 🚨 The house number must be followed by a break. "28rue saint preux" used
+     to lose its "r" - \d+[A-Za-z]? ate the first letter of the word glued to
+     the number and searched for "ue saint preux", which finds nothing.
+     A SINGLE trailing letter is part of the number (Delmas 40B); two or more
+     letters is a word that lost its space. */
+  var noNum=t.replace(/^\s*(?:#|n[o°]\s*\.?\s*)?\d+[A-Za-z]?(?![A-Za-z])\s*[,.\-]?\s*/,'').trim();
   if(noNum&&out.indexOf(noNum)<0)out.push(noNum);
   var base=noNum||t;
   /* whole trailing pieces first ("…, Lalue"), then trailing words */
-  var parts=base.split(/\s*,\s*/);
-  while(parts.length>1){parts.pop();var j=parts.join(', ').trim();if(j&&out.indexOf(j)<0)out.push(j);}
-  var words=base.split(/\s+/);
-  while(words.length>3){words.pop();var w=words.join(' ').trim();if(w&&out.indexOf(w)<0)out.push(w);}
-  return out.slice(0,3);
+  var parts=base.split(/\s*,\s*/),shortest=base;
+  while(parts.length>1){parts.pop();var j=parts.join(', ').trim();
+    if(j){if(out.indexOf(j)<0)out.push(j);shortest=j;}}
+  /* Carry on from the SHORTEST comma form, not from the full string - otherwise
+     shedding words re-grows the address and "martin Luther King" never appears
+     before we run out of tries. */
+  var words=shortest.split(/\s+/);
+  /* Down to two words, not three. A Haitian address is a number, a street and
+     the name the area is really known by - "martin Luther King lalu, a cote de
+     natcom" only becomes findable at "martin Luther King". */
+  while(words.length>2){words.pop();var w=words.join(' ').trim();if(w&&out.indexOf(w)<0)out.push(w);}
+  return out.slice(0,6);
 }
 function acFetch(text,cb){
   var tries=acVariants(text),i=0;
@@ -1701,7 +1776,7 @@ function attachAC(inputEl,isPickup){
     /* Both ends now carry their own point. The drop-off used to be re-looked-up
        from the text at submit time, which could land on a different one of the
        six streets with that name than the one she actually tapped. */
-    if(isPickup){window._pickupLat=lat;window._pickupLng=lng;}
+    if(isPickup){window._pickupLat=lat;window._pickupLng=lng;window._myLat=lat;window._myLng=lng;}
     else{window._dropLat=lat;window._dropLng=lng;}
     close();checkInputs();
   }
@@ -1891,6 +1966,23 @@ function updateFare(){
 
   // Passenger-facing: total only. Business economics stay hidden.
   document.getElementById('farePrice').textContent=approx+Math.round(finalAmt)+' HTG';
+
+  /* When the distance is real, so is the price: this exact number is what gets
+     sent with the order and what the driver is offered. Calling it an estimate
+     made a firm price look like a guess. When the distance is NOT real, the
+     number is built from a 3km fallback and must not be dressed up as a fare. */
+  var lblEl=document.getElementById('fareLabel');
+  if(lblEl) lblEl.textContent=t(known?'fare_fixed':'est_label');
+  var unkRow=document.getElementById('fareUnknownRow');
+  if(unkRow){
+    unkRow.style.display=known?'none':'flex';
+    if(!known){
+      var m=document.getElementById('fareUnknownMsg');
+      if(m) m.textContent=t('fare_unknown_msg');
+    }
+  }
+  var fixedNote=document.getElementById('fareFixedNote');
+  if(fixedNote) fixedNote.style.display=known?'flex':'none';
   var dRow=document.getElementById('fareDistanceRow');
   if(dRow){
     if(known){dRow.style.display='flex';document.getElementById('fareDistance').textContent=(distKm*trip).toFixed(1)+' km';}
