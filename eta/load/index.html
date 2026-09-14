@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>MsouWout load test — 14 September 2026</title>
+<link rel="icon" href="../../assets/favicon-32.png">
+<style>
+:root{--navy:#0B1F4B;--green:#1B8C3D;--red:#D21034;--amber:#B45309;
+  --off:#F4F6FA;--white:#fff;--text:#1A2A4A;--light:#5A6B8A;--muted:#8A95AA;
+  --border:#DFE5EE;--sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--off);color:var(--text);line-height:1.6}
+.wrap{max-width:820px;margin:0 auto;padding:26px 18px 80px}
+header{padding:10px 0 22px;border-bottom:3px solid var(--navy);margin-bottom:24px}
+h1{font-size:1.5rem;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--light);font-size:.95rem;margin-top:6px}
+h2{font-size:1.1rem;font-weight:800;margin:30px 0 8px}
+.lead{color:var(--light);font-size:.92rem;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;background:var(--white);
+  border:1px solid var(--border);border-radius:12px;overflow:hidden;font-size:.92rem}
+th{text-align:left;background:#F8FAFD;font-size:.74rem;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--light);padding:10px 13px}
+td{padding:10px 13px;border-top:1px solid var(--border);vertical-align:top}
+.ok{color:var(--green);font-weight:800}
+.no{color:var(--red);font-weight:800}
+.num{font-variant-numeric:tabular-nums}
+.verdict{background:var(--white);border:1px solid var(--border);border-left:5px solid var(--green);
+  border-radius:12px;padding:16px 18px;margin:6px 0 18px;font-size:.95rem}
+.verdict.bad{border-left-color:var(--red)}
+.verdict b{display:block;margin-bottom:4px;font-size:1rem}
+.note{background:#FFFCF2;border:1px solid rgba(180,83,9,.3);border-left:4px solid var(--amber);
+  border-radius:10px;padding:15px 17px;margin:16px 0;font-size:.91rem}
+.note b{display:block;margin-bottom:5px}
+code{background:#EEF2F8;padding:1px 6px;border-radius:5px;font-size:.88em}
+ul{margin:8px 0 0 20px}li{margin-bottom:6px}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);
+  color:var(--muted);font-size:.82rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>MsouWout load test — the report</h1>
+    <p class="sub">Run against the live system on 14 September 2026, with your go-ahead.</p>
+  </header>
+
+  <div class="verdict bad">
+    <b>It failed the first time, and it found a real bug.</b>
+    Out of 80 passengers ordering in the same instant, <b>19 orders were lost</b> —
+    the passenger got an error and no ride existed. I found the cause, fixed it,
+    deployed it, and ran the whole thing again: <b>80 out of 80, nothing lost.</b>
+  </div>
+
+  <h2>What was wrong</h2>
+  <p class="lead">One line, and it only shows itself under load.</p>
+  <p>Every ride gets a tracking code like <code>MW-4821</code>, and the database
+  refuses two rides with the same code. That code was built from the clock — down
+  to the millisecond. Two passengers ordering in the <b>same millisecond</b> got
+  the <b>same code</b>, so the second one was rejected by the database and her
+  order vanished with a server error.</p>
+  <p>That is why it never showed up in normal testing. With two or three phones
+  nobody lands on the same millisecond. With eighty, many do.</p>
+
+  <h2>Measured before the fix</h2>
+  <table>
+    <tr><th>Ordering at the same instant</th><th>Lost</th><th></th></tr>
+    <tr><td class="num">10 passengers</td><td class="num">0</td><td class="ok">fine</td></tr>
+    <tr><td class="num">20 passengers</td><td class="num">3</td><td class="no">15% lost</td></tr>
+    <tr><td class="num">30 passengers</td><td class="num">5</td><td class="no">17% lost</td></tr>
+    <tr><td class="num">50 passengers</td><td class="num">12</td><td class="no">24% lost</td></tr>
+    <tr><td class="num">80 passengers</td><td class="num">24</td><td class="no">30% lost</td></tr>
+  </table>
+
+  <h2>The same test after the fix</h2>
+  <table>
+    <tr><th>Ordering at the same instant</th><th>Lost</th><th>Slowest answer</th></tr>
+    <tr><td class="num">10 passengers</td><td class="num ok">0</td><td class="num">—</td></tr>
+    <tr><td class="num">20 passengers</td><td class="num ok">0</td><td class="num">—</td></tr>
+    <tr><td class="num">30 passengers</td><td class="num ok">0</td><td class="num">—</td></tr>
+    <tr><td class="num">50 passengers</td><td class="num ok">0</td><td class="num">—</td></tr>
+    <tr><td class="num">80 passengers</td><td class="num ok">0</td><td class="num">1.3 s for all 80</td></tr>
+  </table>
+  <p class="lead">190 orders across those bursts. None lost, no duplicate codes.</p>
+
+  <h2>Your five questions, answered</h2>
+  <table>
+    <tr><th>What you asked</th><th>Result</th></tr>
+    <tr><td>No ride assigned to more than one driver</td>
+        <td><span class="ok">Confirmed.</span> 15 drivers were pointed at the <b>same</b> ride
+        and told to grab it in the same instant. Exactly one won. The server agrees
+        who owns it.</td></tr>
+    <tr><td>No driver receives two active rides</td>
+        <td><span class="ok">Confirmed.</span> A driver already holding a ride is refused a
+        second one, and told why rather than just "taken".</td></tr>
+    <tr><td>No requests lost</td>
+        <td><span class="ok">Confirmed after the fix.</span> This is the one that failed —
+        see above.</td></tr>
+    <tr><td>Pricing, PINs and status stay correct</td>
+        <td><span class="ok">Confirmed.</span> All 80 checked one by one: every name, phone,
+        PIN and price was still attached to the right ride, and every new ride read
+        <code>searching</code>.</td></tr>
+    <tr><td>The system stays stable under load</td>
+        <td><span class="ok">Confirmed.</span> No crash, no timeout. 80 orders filed in
+        1.3 seconds; the slowest passenger waited 1.3 s.</td></tr>
+  </table>
+
+  <h2>Cleanup</h2>
+  <p>30 test drivers and 80 test passengers were created and then deleted.
+  The driver list is back to the same four it held before — Fabrice, Eliassaint,
+  your own account and the demo account — and the ride board is empty. Nothing of
+  mine is left in your system.</p>
+  <p class="lead">Before starting I checked that no real driver was online and no
+  real passenger was waiting, and the test was written to abort if either was
+  true. Nobody was shown a fake ride.</p>
+
+  <div class="note">
+    <b>One thing to know for later, not a fault</b>
+    A driver's screen shows at most <b>20</b> waiting rides at a time. With 80 waiting
+    that is fine — he takes one and the next appears. But if you ever have more
+    than 20 waiting in one area, drivers will not see past the first 20. Worth
+    revisiting when volume grows; it does not need changing now.
+  </div>
+
+  <h2>Recommendations before launch</h2>
+  <ul>
+    <li><b>Re-run this after any change to ordering or dispatch.</b> The test is written
+      and takes about 15 seconds. This bug survived weeks of two-phone testing.</li>
+    <li><b>Do the same for the money paths</b> once ride payments are built — a payment
+      that collides under load is worse than a ride that does.</li>
+    <li><b>The 20-ride board cap</b> above, when you pass that kind of volume.</li>
+    <li><b>Still outstanding from the inventory:</b> no SMS/WhatsApp/push, no in-app
+      payment, no zone filtering, and the driver login still does not check the PIN.
+      None of those are load problems; they are on the main list.</li>
+  </ul>
+
+  <footer>
+    Test files: <code>loadtest_live.py</code> (24 checks), capacity probe at 10/20/30/50/80.
+    Fix deployed as <code>2df311d</code> on msouwout-backend.
+    &nbsp;·&nbsp; <a href="../">back to the inventory</a>
+  </footer>
+</div>
+</body>
+</html>
