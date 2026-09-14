@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>MsouWout — what is actually working, 13 September 2026</title>
+<link rel="icon" href="../assets/favicon-32.png">
+<style>
+:root{--navy:#0B1F4B;--green:#1B8C3D;--red:#D21034;--amber:#B45309;
+  --off:#F4F6FA;--white:#fff;--text:#1A2A4A;--light:#5A6B8A;--muted:#8A95AA;
+  --border:#DFE5EE;--sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--off);color:var(--text);line-height:1.6}
+.wrap{max-width:820px;margin:0 auto;padding:26px 18px 80px}
+header{padding:10px 0 22px;border-bottom:3px solid var(--navy);margin-bottom:26px}
+h1{font-size:1.55rem;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--light);font-size:.95rem;margin-top:6px}
+h2{font-size:1.12rem;font-weight:800;margin:30px 0 4px;display:flex;
+  align-items:center;gap:9px}
+h2 .dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+h2 small{font-weight:600;color:var(--muted);font-size:.78rem;letter-spacing:.03em}
+.lead{color:var(--light);font-size:.92rem;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;background:var(--white);
+  border:1px solid var(--border);border-radius:12px;overflow:hidden;font-size:.92rem}
+th{text-align:left;background:#F8FAFD;font-size:.74rem;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--light);padding:10px 13px}
+td{padding:11px 13px;border-top:1px solid var(--border);vertical-align:top}
+td:first-child{font-weight:700;width:38%}
+.ok{color:var(--green);font-weight:800}
+.no{color:var(--red);font-weight:800}
+.half{color:var(--amber);font-weight:800}
+.note{background:#FFFCF2;border:1px solid rgba(180,83,9,.3);border-left:4px solid var(--amber);
+  border-radius:10px;padding:15px 17px;margin:16px 0;font-size:.92rem}
+.note b{display:block;margin-bottom:5px}
+.method{background:var(--white);border:1px solid var(--border);border-radius:12px;
+  padding:16px 18px;font-size:.9rem;color:var(--light)}
+.method b{color:var(--text)}
+ul{margin:8px 0 0 20px}
+li{margin-bottom:5px}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--border);
+  color:var(--muted);font-size:.82rem}
+@media(max-width:560px){td:first-child{width:auto}table{font-size:.86rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>MsouWout — what is actually working</h1>
+    <p class="sub">Checked on 13 September 2026 against the live system, not from memory.</p>
+  </header>
+
+  <div class="method">
+    <b>How each line was checked, and what I did not check.</b>
+    You asked for three things before anything counts as done: the backend works,
+    the app is connected to it, and the whole workflow has been run for real.
+    <ul>
+      <li>The first two I checked myself — every route the server defines,
+          matched against every call the app really makes, plus the browser
+          tests listed at the bottom.</li>
+      <li><b>The third one I cannot do alone.</b> It needs a real passenger and a
+          real driver. Where I have not seen a real run, I say so instead of
+          calling it finished.</li>
+    </ul>
+    One honest note on method: matching a server route to the app that calls it
+    is harder than it sounds, because the app builds its web addresses in
+    pieces. My first automated pass reported the emergency button as
+    disconnected. It is not — it is wired correctly. I checked each line below
+    by hand for that reason.
+  </div>
+
+  <h2><span class="dot" style="background:var(--green)"></span>Working <small>server + app both verified</small></h2>
+  <p class="lead">A passenger can order a ride and a driver can complete it, end to end.</p>
+  <table>
+    <tr><th>What</th><th>Status</th></tr>
+    <tr><td>Passenger orders a ride</td><td><span class="ok">Working</span> — address, vehicle, price, phone</td></tr>
+    <tr><td>Driver sees waiting requests</td><td><span class="ok">Working</span> — refreshes every 8 seconds while the page is open</td></tr>
+    <tr><td>One driver per ride</td><td><span class="ok">Working</span> — ten drivers tapping at the same instant, exactly one wins</td></tr>
+    <tr><td>Ride vanishes from other screens</td><td><span class="ok">Working</span></td></tr>
+    <tr><td>A driver cannot hold two rides</td><td><span class="ok">Working</span> — refused, and told why</td></tr>
+    <tr><td>Online / offline switch</td><td><span class="ok">Working</span> — offline really does stop requests</td></tr>
+    <tr><td>Only rides matching his vehicle</td><td><span class="ok">Working</span> — a moto driver sees no car rides</td></tr>
+    <tr><td>Nearest pickup first</td><td><span class="ok">Working</span> — distance shown on each request</td></tr>
+    <tr><td>Driver phone reports its position</td><td><span class="ok">Working</span> — every 25 s, only while online</td></tr>
+    <tr><td>PIN to start, and completion</td><td><span class="ok">Working</span></td></tr>
+    <tr><td>Cancel, either side</td><td><span class="ok">Working</span></td></tr>
+    <tr><td>&ldquo;I have arrived&rdquo;</td><td><span class="ok">Working</span> <b>on her screen only</b> — see the next section</td></tr>
+    <tr><td>Live map + share with family</td><td><span class="ok">Working</span> — fixed today (v23)</td></tr>
+    <tr><td>Emergency button</td><td><span class="ok">Working</span> — on the tracking page. <b>Until today the passenger was never given the link to that page</b>, so nobody could reach it. Fixing the map in v23 fixed this too.</td></tr>
+    <tr><td>Real fare, not a guess</td><td><span class="ok">Working</span> — fixed today (v24)</td></tr>
+  </table>
+
+  <h2><span class="dot" style="background:var(--red)"></span>Does not exist <small>and must not be claimed</small></h2>
+  <table>
+    <tr><th>What</th><th>Status</th></tr>
+    <tr><td>SMS, WhatsApp or push message</td><td><span class="no">Nothing, anywhere.</span> Every notice only appears while the person has the page open. This is the one you hit with &ldquo;M rive&rdquo;.</td></tr>
+    <tr><td>Paying for a ride in the app</td><td><span class="half">Half.</span> The payment endpoints are live on the server. <b>No screen in either app calls them.</b> Every ride is cash.</td></tr>
+    <tr><td>Zone filtering</td><td><span class="no">Not connected.</span> The zone system exists on the server; no screen uses it. A driver in Cap-Ha&iuml;tien can still be offered a Delmas ride if he is the nearest one online.</td></tr>
+    <tr><td>Passenger account &amp; trip history</td><td><span class="no">Does not exist.</span> There is no passenger account by design — name and phone are taken inside the order.</td></tr>
+    <tr><td>Ratings</td><td><span class="no">Does not exist.</span></td></tr>
+    <tr><td>Driver PIN at login</td><td><span class="no">Not enforced.</span> Anyone with a driver's number can open that driver's dashboard. Recorded in July, still true.</td></tr>
+  </table>
+
+  <div class="note">
+    <b>The pattern behind almost every surprise on this project</b>
+    The server half was built and works; the app half never calls it. That was
+    true of the vehicle filter, the partner dashboard, GPS position, the
+    passenger's map, the emergency button, and payments. When something
+    &ldquo;should already work&rdquo;, this is nearly always why — and it is the first
+    thing I now check.
+  </div>
+
+  <h2><span class="dot" style="background:var(--amber)"></span>Needs your decision</h2>
+  <table>
+    <tr><th>What</th><th>Why it is yours, not mine</th></tr>
+    <tr><td>The map service behind every price</td><td>Prices come from the free public OpenStreetMap lookup. It rate-limits — it blocked my machine for over 20 minutes during testing. When it is blocked it returns nothing, and the fare falls back to a guess. A paid map service, or prices set by zone, removes that. Both cost money, so it is your call.</td></tr>
+    <tr><td>Notifications</td><td>Real SMS or WhatsApp costs money per message and needs an account in your name.</td></tr>
+    <tr><td>Payments in the app</td><td>Finishing this means real money moving in a test. I will not run that without you watching and without agreeing the amount first.</td></tr>
+  </table>
+
+  <h2><span class="dot" style="background:var(--navy)"></span>Not yet verified by a real run</h2>
+  <p class="lead">Honest gaps in my own checking, listed so they are not mistaken for finished.</p>
+  <ul>
+    <li><b>Many drivers and many passengers at once.</b> Tested with a handful of
+        simulated drivers, never with real phones at volume. The load test is
+        still owed, free.</li>
+    <li><b>A full ride start to finish on two real phones since v24.</b> You and
+        Jennifer have done this before; it needs doing again on the new build.</li>
+    <li>The other systems — MyPlopPlop, LajanMaker/POS, Tik&egrave; Lakay — are not in
+        this document. MsouWout first, then the same treatment for each.</li>
+  </ul>
+
+  <footer>
+    Checks behind this page: dispatch race and no-mixing (20 checks), arrival
+    (19), presence and nearest-first (24), map and share (30), fare (27, with a
+    control run against the previous build that fails). Build v24.
+  </footer>
+</div>
+</body>
+</html>
