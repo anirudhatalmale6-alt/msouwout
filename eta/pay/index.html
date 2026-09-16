@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>MsouWout — paying for a ride: the plan and the price</title>
+<link rel="icon" href="../../assets/favicon-32.png">
+<style>
+:root{--navy:#0B1F4B;--green:#1B8C3D;--red:#D21034;--amber:#B45309;
+  --off:#F4F6FA;--white:#fff;--text:#1A2A4A;--light:#5A6B8A;--muted:#8A95AA;
+  --border:#DFE5EE;--sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--off);color:var(--text);line-height:1.6}
+.wrap{max-width:820px;margin:0 auto;padding:26px 18px 80px}
+header{padding:10px 0 22px;border-bottom:3px solid var(--navy);margin-bottom:26px}
+h1{font-size:1.55rem;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--light);font-size:.95rem;margin-top:6px}
+h2{font-size:1.12rem;font-weight:800;margin:32px 0 4px}
+.lead{color:var(--light);font-size:.92rem;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;background:var(--white);
+  border:1px solid var(--border);border-radius:12px;overflow:hidden;font-size:.92rem}
+th{text-align:left;background:#F8FAFD;font-size:.74rem;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--light);padding:10px 13px}
+td{padding:11px 13px;border-top:1px solid var(--border);vertical-align:top}
+td:first-child{font-weight:700;width:38%}
+.ok{color:var(--green);font-weight:800}
+.no{color:var(--red);font-weight:800}
+.half{color:var(--amber);font-weight:800}
+.note{background:#FFFCF2;border:1px solid rgba(180,83,9,.3);border-left:4px solid var(--amber);
+  border-radius:10px;padding:15px 17px;margin:16px 0;font-size:.92rem}
+.note b{display:block;margin-bottom:5px}
+.fix{background:#F2FBF5;border:1px solid rgba(27,140,61,.3);border-left:4px solid var(--green)}
+.method{background:var(--white);border:1px solid var(--border);border-radius:12px;
+  padding:16px 18px;font-size:.9rem;color:var(--light)}
+.method b{color:var(--text)}
+ul{margin:8px 0 0 20px}
+li{margin-bottom:5px}
+.stage{background:var(--white);border:1px solid var(--border);border-radius:12px;
+  padding:0;margin:14px 0;overflow:hidden}
+.stage .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  padding:14px 17px;background:#F8FAFD;border-bottom:1px solid var(--border)}
+.stage .ttl{font-weight:800;font-size:1rem}
+.stage .pr{font-weight:800;color:var(--navy);white-space:nowrap}
+.stage .bd{padding:14px 17px;font-size:.91rem}
+.stage .bd .why{color:var(--light);margin-bottom:8px}
+.tag{display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:.04em;
+  text-transform:uppercase;padding:3px 9px;border-radius:99px;margin-left:6px}
+.t-now{background:rgba(210,16,52,.12);color:var(--red)}
+.t-next{background:rgba(11,31,75,.1);color:var(--navy)}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--border);
+  color:var(--muted);font-size:.82rem}
+@media(max-width:560px){td:first-child{width:auto}table{font-size:.86rem}
+  .stage .top{flex-direction:column;gap:2px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Paying for a ride — the plan and the price</h1>
+    <p class="sub">Written 16 September 2026. Every claim below was checked against the
+      live code today, not taken from my notes.</p>
+  </header>
+
+  <div class="method">
+    <b>The short answer on Monday.</b>
+    The ride itself is finished and works. The only thing standing between you and a
+    launch is that <b>no screen in either app has ever asked anyone for money</b>.
+    Stage&nbsp;1 below is exactly that missing piece, and nothing else in this document
+    is needed to launch. It is buildable before Monday if you decide today or tomorrow.
+  </div>
+
+  <h2>What you already own</h2>
+  <p class="lead">You were right when you told me the payment infrastructure was already
+    in place. I checked, and it is. This is an integration job, not a new payment system,
+    and it is priced that way.</p>
+  <table>
+    <tr><th>Piece</th><th>State</th></tr>
+    <tr><td>SolutionIP gateway</td>
+        <td><span class="ok">Yours, working</span> — the same gateway that takes real
+            money in the POS today. MonCash and NatCash.</td></tr>
+    <tr><td>Payment endpoints on the MsouWout server</td>
+        <td><span class="ok">Built and live</span> — <i>create</i> and <i>verify</i>,
+            switched on and reachable right now.</td></tr>
+    <tr><td>A transaction ledger</td>
+        <td><span class="ok">Exists</span> — in HaitiBiznis, with exactly the states you
+            listed: pending, completed, failed, refunded.</td></tr>
+    <tr><td>Refund decision workflow</td>
+        <td><span class="ok">Exists</span> — request, approve, deny, admin screen,
+            statistics, even a WhatsApp flow. See the correction below.</td></tr>
+  </table>
+
+  <div class="note fix">
+    <b>A correction to something I told you.</b>
+    I previously said nothing anywhere did refunds. That was wrong, and I want it on the
+    record. The whole refund <i>decision</i> workflow is built. What is missing is
+    narrower and I should have said so precisely: approving a refund marks it approved
+    and adjusts the driver's earnings, but <b>it never sends any money back</b>. The
+    status list even has a "processed" step that nothing ever reaches — that is the
+    exact spot where the money was meant to move.
+  </div>
+
+  <h2>What is genuinely missing</h2>
+  <p class="lead">Seven things. The first three are the launch blockers.</p>
+  <table>
+    <tr><th>Gap</th><th>What it means</th></tr>
+    <tr><td>Nothing asks for money</td>
+        <td><span class="no">The blocker.</span> The passenger app never calls the
+            payment endpoints. Every ride today is cash by default.</td></tr>
+    <tr><td>A paid ride would not know it was paid</td>
+        <td><span class="no">Missing.</span> The payment code records nothing against the
+            ride. Even if the app called it, the ride stays marked unpaid and the driver
+            would still ask for cash.</td></tr>
+    <tr><td>Coming back after paying</td>
+        <td><span class="no">Missing.</span> The gateway takes the passenger to its own
+            page to pay. Nothing brings them back or notices they paid.</td></tr>
+    <tr><td>The gateway never calls us back</td>
+        <td><span class="half">Design constraint.</span> There is no automatic
+            notification — the only way to learn a payment succeeded is to ask. So the
+            server has to check on its own, or a passenger who closes the app pays and
+            the ride never updates.</td></tr>
+    <tr><td>MsouWout writes to no ledger</td>
+        <td><span class="no">Missing.</span> Rides live in one database, the ledger in
+            another, and nothing connects them. This is your "one HaitiBiznis ledger".</td></tr>
+    <tr><td>Refunds do not move money</td>
+        <td><span class="no">Missing.</span> Plus the refund admin screen is pointed at a
+            different ride database from the one real rides are stored in — so a real
+            MsouWout ride could not be matched to a refund request today.</td></tr>
+    <tr><td>Driver payouts</td>
+        <td><span class="no">Does not exist.</span> Nothing pays a driver out. Today the
+            driver keeps the cash, which is why this has not bitten yet.</td></tr>
+  </table>
+
+  <div class="note">
+    <b>One thing I cannot answer for you: cards.</b>
+    You asked for cards. The payment code accepts MonCash, NatCash and Kashpaw. I can see
+    no card option in it, and I cannot log in to your SolutionIP account to check what
+    your merchant profile has switched on. <b>Please ask SolutionIP whether your account
+    can take cards, and on which method name.</b> If it can, it is a small addition. If
+    it cannot, cards need a second provider and that is a separate job — I am not going
+    to promise you cards before I know.
+  </div>
+
+  <h2>The stages, and what each costs</h2>
+  <p class="lead">Priced separately, smallest useful piece first. You pay for each one as
+    it lands, and you can stop after any of them. Stage 1 alone is a working, launchable
+    product.</p>
+
+  <div class="stage">
+    <div class="top"><span class="ttl">Stage 1 — A passenger can pay for a ride
+      <span class="tag t-now">Needed for Monday</span></span><span class="pr">$200</span></div>
+    <div class="bd">
+      <p class="why">The only stage you need in order to launch.</p>
+      <ul>
+        <li>The passenger chooses MonCash, NatCash or cash when ordering, in all four
+            languages the app already speaks.</li>
+        <li>The app opens the gateway's payment page and brings them back.</li>
+        <li>The ride records how it was paid, the amount, the reference and the time.</li>
+        <li>The server checks the payment itself on a timer, so a passenger who closes
+            the app or loses signal still ends up with a ride marked paid.</li>
+        <li>The driver's screen says <b>PAID</b> or <b>COLLECT CASH</b> — so he never
+            asks a paying passenger for money again.</li>
+        <li>You get a screen listing payments, with the gateway's reference against each
+            ride.</li>
+        <li>Written tests, and a real end-to-end run with you watching.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="top"><span class="ttl">Stage 2 — One HaitiBiznis ledger
+      <span class="tag t-next">After launch</span></span><span class="pr">$120</span></div>
+    <div class="bd">
+      <p class="why">What you asked for: the money recorded centrally, with a reference
+        back to the ride that produced it.</p>
+      <ul>
+        <li>Every MsouWout payment also writes into the HaitiBiznis ledger.</li>
+        <li>MsouWout keeps its own ride data — only the money is centralised.</li>
+        <li>One place to see takings across rides, orders and tickets together.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="top"><span class="ttl">Stage 3 — Refunds that actually return money
+      </span><span class="pr">$150</span></div>
+    <div class="bd">
+      <p class="why">Separated out, as you asked, because it is the one part that needs
+        something from the provider.</p>
+      <ul>
+        <li>Point the existing refund workflow at the real ride database.</li>
+        <li>Approving a refund sends the money back and reaches "processed".</li>
+        <li>The ledger entry flips to refunded.</li>
+      </ul>
+      <p class="why" style="margin-top:8px"><b>Depends on SolutionIP.</b> I need to know
+        whether their API can reverse a payment. If it cannot, the honest version is a
+        recorded manual transfer — still worth building, but say so now rather than
+        discover it later.</p>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="top"><span class="ttl">Stage 4 — Paying drivers out
+      </span><span class="pr">$160</span></div>
+    <div class="bd">
+      <p class="why">Only becomes urgent once passengers pay in the app, because then
+        the money reaches you first instead of the driver.</p>
+      <ul>
+        <li>What each driver is owed, after your commission.</li>
+        <li>Pay out on a schedule, recorded in the same ledger.</li>
+        <li>A statement the driver can see, so he can check it himself.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="lead" style="margin-top:14px">These are four separate prices, not a total and
+    not a package. If you only ever do Stage 1, you owe $200 and you have a product that
+    takes money.</p>
+
+  <h2>What "fully test" will actually cost you</h2>
+  <div class="note">
+    <b>A real payment test spends your real money.</b>
+    I will not run one without you watching and without agreeing the amount first.
+    The good news is that it is small: the gateway's minimum charge is
+    <b>20 gourdes</b>. So a full end-to-end test — order, pay, driver sees PAID,
+    ride completes, ledger shows it — costs about 20 gourdes per run, not the price of
+    a real ride. Budget a handful of runs.
+  </div>
+
+  <h2>What I need from you to make Monday</h2>
+  <table>
+    <tr><th>Decision</th><th>Why it is yours</th></tr>
+    <tr><td>Go ahead on Stage 1 at $200</td>
+        <td>I do not start building priced work before you agree the price.</td></tr>
+    <tr><td>Cash stays as an option, or not?</td>
+        <td>You said no cash-only launch and I have not raised it since. This is a
+            different question: once paying in the app works, may a passenger still
+            choose cash? Most Haitian riders will expect to. Your call.</td></tr>
+    <tr><td>Ask SolutionIP about cards</td>
+        <td>Only they can tell you what your account has enabled.</td></tr>
+    <tr><td>Who watches the first real payment</td>
+        <td>You and one phone that can pay. Twenty gourdes.</td></tr>
+  </table>
+
+  <footer>
+    Checked 16 September 2026 against the live code and the live server. The ride loop
+    status is in the <a href="../">13 September inventory</a>; the load test is
+    <a href="../load/">here</a>. Nothing in this document has been built yet.
+  </footer>
+</div>
+</body>
+</html>
