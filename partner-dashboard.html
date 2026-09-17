@@ -183,7 +183,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
   <label for="partnerFilter" data-i18n="filter_label">Partner:</label>
   <select class="partner-select" id="partnerFilter" onchange="loadDashboard()">
     <option value="" data-i18n="filter_all">All Partners</option>
-    <option value="FTPH/COTRASMOTHA">FTPH/COTRASMOTHA</option>
+    <option value="FTPH/COTRASMOTHA" data-partner>FTPH/COTRASMOTHA</option>
   </select>
   <div class="partner-links">
     <button class="copy-link-btn" onclick="copyPartnerLink('FTPH/COTRASMOTHA')" id="copyPartner">
@@ -575,6 +575,27 @@ function esc(s){
 </script>
 <script id="capacitor-native-loader">
 (function(){if(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform()){document.body.classList.add('capacitor-native');var s=document.createElement('script');s.src='capacitor-bridge.js';document.body.appendChild(s);}})();
+
+/* Fill the partner filter from the server rather than from hardcoded options,
+   so a partner added in the admin appears here with no code change. The
+   existing option is a fallback and is only cleared once a real list lands. */
+(function loadPartnerFilter() {
+  var sel = document.getElementById('partnerFilter');
+  if (!sel) return;
+  fetch(API + '/drivers/partners')
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      var list = (d && d.partners) || [];
+      if (!list.length) return;
+      sel.querySelectorAll('option[data-partner]').forEach(function (o) { o.remove(); });
+      list.forEach(function (p) {
+        var o = document.createElement('option');
+        o.value = p.code; o.textContent = p.name; o.setAttribute('data-partner', '');
+        sel.appendChild(o);
+      });
+    })
+    .catch(function () { /* keep the fallback */ });
+})();
 </script>
 </body>
 </html>
