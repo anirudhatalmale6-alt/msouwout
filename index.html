@@ -879,6 +879,26 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
         <div id="doneFare" style="margin-top:10px;font-size:26px;font-weight:900;color:#0F172A"></div>
         <div id="doneDriver" style="font-size:13.5px;color:#64748B"></div>
       </div>
+
+      <!-- Paying for the ride. Shown only when the ride is not already paid. -->
+      <div id="payBox" style="display:none;margin-top:14px">
+        <div id="payAsk">
+          <p class="waitlist-msg" id="payTitle" style="font-weight:800;color:#0F172A"></p>
+          <div id="payMethods" style="display:flex;flex-direction:column;gap:9px;margin-top:10px"></div>
+        </div>
+        <div id="payWaiting" style="display:none;text-align:center;padding:6px 0">
+          <div class="spinner" style="margin:0 auto 8px"></div>
+          <p class="waitlist-msg" id="payWaitMsg"></p>
+          <button class="new-ride-btn" id="payCheckNow" style="margin-top:8px"></button>
+        </div>
+        <div id="payDone" style="display:none;text-align:center;padding:8px 0">
+          <div style="font-size:34px">&#9989;</div>
+          <p class="waitlist-msg" id="payDoneMsg" style="font-weight:800;color:#12A150"></p>
+          <p style="font-size:12px;color:#64748B" id="payRefTxt"></p>
+        </div>
+        <p id="payErr" style="display:none;color:#D21034;font-size:13px;margin-top:8px"></p>
+      </div>
+
       <button class="new-ride-btn" onclick="newRide()" data-i18n="new_ride">Mande yon lot kous</button>
     </div>
 
@@ -933,7 +953,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v24</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v25</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1504,6 +1524,17 @@ var T_RIDE_LIVE={
      rl_cancel_ride:'Anile kous la',
      rl_cancel_confirm:'Ou vle anile demann nan? Li gratis, okenn chofe poko pran l.',
      rl_cancel_confirm_driver:'Chofe a deja aksepte epi li ka sou wout la. Si 2 minit fin pase depi li aksepte, gen yon frè anilasyon 50 HTG. Ou vle anile kanmenm?',
+     pay_title:"Peye kous la: {amt} HTG",
+     pay_choose_there:"Chwazi sou paj la",
+     pay_cash:"M ap peye kach",
+     pay_opening:"N ap louvri paj peman an...",
+     pay_waiting:"N ap tann konfimasyon peman an. Ou ka fèmen paj la, n ap kontinye tcheke.",
+     pay_check:"Tcheke kounye a",
+     pay_done:"Peman resevwa ({m})",
+     pay_ref:"Referans:",
+     pay_failed:"Nou pa ka louvri peman an. Eseye ankò oswa peye kach.",
+     pay_not_received:"Nou pa resevwa peman an. Eseye ankò oswa peye kach.",
+     pay_unavailable:"Peman nan aplikasyon an pa disponib kounye a. Peye chofè a kach.",
      rl_done_title:'Kous la fini!',
      rl_done_msg:'Mesi paske ou vwayaje ak MsouWout. N espere w ap tounen byento.',
      rl_cancelled_title:'Kous la anile',
@@ -1526,6 +1557,17 @@ var T_RIDE_LIVE={
      rl_cancel_ride:'Annuler la course',
      rl_cancel_confirm:'Annuler la demande? C\'est gratuit, aucun chauffeur ne l\'a encore prise.',
      rl_cancel_confirm_driver:'Le chauffeur a deja accepte et il est peut-etre en route. Passe un delai de 2 minutes apres son acceptation, des frais d\'annulation de 50 HTG s\'appliquent. Annuler quand meme?',
+     pay_title:"Payer la course : {amt} HTG",
+     pay_choose_there:"Choisir sur la page",
+     pay_cash:"Je paie en espèces",
+     pay_opening:"Ouverture de la page de paiement...",
+     pay_waiting:"En attente de la confirmation. Vous pouvez fermer cette page, nous continuons à vérifier.",
+     pay_check:"Vérifier maintenant",
+     pay_done:"Paiement reçu ({m})",
+     pay_ref:"Référence :",
+     pay_failed:"Impossible d'ouvrir le paiement. Réessayez ou payez en espèces.",
+     pay_not_received:"Paiement non reçu. Réessayez ou payez en espèces.",
+     pay_unavailable:"Le paiement dans l'application n'est pas disponible. Payez le chauffeur en espèces.",
      rl_done_title:'Course terminee!',
      rl_done_msg:'Merci d\'avoir voyage avec MsouWout. A tres bientot.',
      rl_cancelled_title:'Course annulee',
@@ -1548,6 +1590,17 @@ var T_RIDE_LIVE={
      rl_cancel_ride:'Cancel this ride',
      rl_cancel_confirm:'Cancel the request? It is free, no driver has taken it yet.',
      rl_cancel_confirm_driver:'The driver has already accepted and may be on his way. More than 2 minutes after he accepted, a 50 HTG cancellation fee applies. Cancel anyway?',
+     pay_title:"Pay for the ride: {amt} HTG",
+     pay_choose_there:"Choose on the page",
+     pay_cash:"I will pay cash",
+     pay_opening:"Opening the payment page...",
+     pay_waiting:"Waiting for confirmation. You can close this page, we keep checking.",
+     pay_check:"Check now",
+     pay_done:"Payment received ({m})",
+     pay_ref:"Reference:",
+     pay_failed:"Could not open the payment. Try again or pay cash.",
+     pay_not_received:"Payment not received. Try again or pay cash.",
+     pay_unavailable:"Paying in the app is not available right now. Pay the driver in cash.",
      rl_done_title:'Ride completed!',
      rl_done_msg:'Thank you for travelling with MsouWout. See you soon.',
      rl_cancelled_title:'Ride cancelled',
@@ -1570,6 +1623,17 @@ var T_RIDE_LIVE={
      rl_cancel_ride:'Cancelar el viaje',
      rl_cancel_confirm:'Cancelar la solicitud? Es gratis, ningun conductor la ha tomado todavia.',
      rl_cancel_confirm_driver:'El conductor ya acepto y puede estar en camino. Pasados 2 minutos desde que acepto, se aplica una tarifa de cancelacion de 50 HTG. Cancelar de todos modos?',
+     pay_title:"Pagar el viaje: {amt} HTG",
+     pay_choose_there:"Elegir en la página",
+     pay_cash:"Pagaré en efectivo",
+     pay_opening:"Abriendo la página de pago...",
+     pay_waiting:"Esperando la confirmación. Puede cerrar esta página, seguimos verificando.",
+     pay_check:"Verificar ahora",
+     pay_done:"Pago recibido ({m})",
+     pay_ref:"Referencia:",
+     pay_failed:"No se pudo abrir el pago. Intente de nuevo o pague en efectivo.",
+     pay_not_received:"Pago no recibido. Intente de nuevo o pague en efectivo.",
+     pay_unavailable:"El pago en la app no está disponible. Pague al conductor en efectivo.",
      rl_done_title:'Viaje completado!',
      rl_done_msg:'Gracias por viajar con MsouWout. Hasta pronto.',
      rl_cancelled_title:'Viaje cancelado',
@@ -2192,6 +2256,154 @@ function showRideDone(d){
   document.getElementById('doneFare').textContent=fare?(Math.round(fare)+' HTG'):'';
   document.getElementById('doneDriver').textContent=d.driver_name||'';
   document.getElementById('matchDone').classList.add('show');
+  startPayFlow(d, fare);
+}
+
+/* ===================================================================
+   PAYING FOR THE RIDE
+   ------------------------------------------------------------------
+   Everything that decides whether money arrived lives on the server.
+   This screen only asks, sends her to the gateway, and then asks the
+   server what happened - it never decides for itself that a ride is
+   paid. That is the MyPlopPlop card bug, where the browser was trusted
+   and orders could never be confirmed.
+
+   The gateway opens in a NEW TAB on purpose. Replacing this page would
+   lose the ride she is looking at, and coming back into an app shell
+   is where downloads and returns go wrong on these phones.
+   =================================================================== */
+var payState = { ref:null, timer:null, rideId:null, amount:0 };
+var PAY_KEY = 'mw_pending_payment';
+
+function payEl(id){ return document.getElementById(id); }
+function paySet(which){
+  ['payAsk','payWaiting','payDone'].forEach(function(x){
+    payEl(x).style.display = (x===which) ? '' : 'none';
+  });
+  payEl('payBox').style.display='';
+}
+
+function startPayFlow(d, fare){
+  payState.rideId = d.id || d.ride_id || rideData.id;
+  payState.amount = Math.round(fare||0);
+
+  /* Already settled server-side - say so and stop. */
+  if (d.payment_status === 'paid'){ showPaid(d.payment_method); return; }
+
+  /* She may have paid on the gateway and come back to a reloaded page. */
+  var saved=null;
+  try { saved = JSON.parse(localStorage.getItem(PAY_KEY)||'null'); } catch(e){}
+  if (saved && saved.rideId === payState.rideId && saved.ref){
+    payState.ref = saved.ref;
+    paySet('payWaiting');
+    payEl('payWaitMsg').textContent = t('pay_waiting');
+    payEl('payCheckNow').textContent = t('pay_check');
+    pollPayment();
+    return;
+  }
+
+  if (!payState.rideId || !payState.amount){ payEl('payBox').style.display='none'; return; }
+  offerMethods();
+}
+
+function offerMethods(){
+  paySet('payAsk');
+  payEl('payTitle').textContent = t('pay_title').replace('{amt}', payState.amount);
+  var box = payEl('payMethods'); box.innerHTML='';
+  var LABEL = { moncash:'MonCash', natcash:'NatCash', kashpaw:'Kashpaw', all:t('pay_choose_there') };
+
+  apiFetch(API_URL+'/api/payments/methods')
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      var list = (j && j.methods) || [];
+      /* Ask the server which methods are on rather than hardcoding them, so
+         switching one off in the admin takes effect here with no new build. */
+      list.forEach(function(m){
+        var b=document.createElement('button');
+        b.className='new-ride-btn';
+        b.style.cssText='background:#0F172A;color:#fff';
+        b.textContent=LABEL[m.method]||m.method;
+        b.onclick=function(){ beginPayment(m.method); };
+        box.appendChild(b);
+      });
+      var cash=document.createElement('button');
+      cash.className='new-ride-btn';
+      cash.style.cssText='background:#fff;color:#0F172A;border:2px solid #CBD5E1';
+      cash.textContent=t('pay_cash');
+      cash.onclick=function(){ payEl('payBox').style.display='none'; };
+      box.appendChild(cash);
+    })
+    .catch(function(){
+      /* No method list means no reliable way to take money - say so rather
+         than showing buttons that will fail. Cash still works. */
+      payEl('payErr').style.display='';
+      payEl('payErr').textContent=t('pay_unavailable');
+    });
+}
+
+function beginPayment(method){
+  payEl('payErr').style.display='none';
+  paySet('payWaiting');
+  payEl('payWaitMsg').textContent = t('pay_opening');
+  payEl('payCheckNow').textContent = t('pay_check');
+
+  apiFetch(API_URL+'/api/payments/create',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      subject_type:'ride', subject_id:payState.rideId,
+      amount:payState.amount, payment_method:method,
+      payer_phone:(rideData.riderPhone||rideData.customer_phone||''),
+      platform:'msouwout'
+    })
+  }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+    .then(function(res){
+      if(!res.ok || !res.j.payment_url){ throw new Error(res.j.error||'failed'); }
+      payState.ref = res.j.reference_id;
+      try { localStorage.setItem(PAY_KEY, JSON.stringify(
+        { rideId:payState.rideId, ref:payState.ref })); } catch(e){}
+      payEl('payWaitMsg').textContent = t('pay_waiting');
+      window.open(res.j.payment_url,'_blank','noopener');
+      pollPayment();
+    })
+    .catch(function(err){
+      paySet('payAsk');
+      payEl('payErr').style.display='';
+      payEl('payErr').textContent = t('pay_failed');
+    });
+}
+
+function checkPaymentOnce(){
+  if(!payState.ref) return Promise.resolve(null);
+  return apiFetch(API_URL+'/api/payments/'+encodeURIComponent(payState.ref))
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if (j && j.paid){ clearInterval(payState.timer); payState.timer=null;
+        try { localStorage.removeItem(PAY_KEY); } catch(e){}
+        showPaid(j.method, j.reference_id); }
+      else if (j && (j.status==='failed' || j.status==='expired')){
+        clearInterval(payState.timer); payState.timer=null;
+        try { localStorage.removeItem(PAY_KEY); } catch(e){}
+        paySet('payAsk');
+        payEl('payErr').style.display='';
+        payEl('payErr').textContent = t('pay_not_received');
+      }
+      return j;
+    })
+    .catch(function(){ return null; });
+}
+
+function pollPayment(){
+  if(payState.timer) clearInterval(payState.timer);
+  checkPaymentOnce();
+  payState.timer = setInterval(checkPaymentOnce, 5000);
+  payEl('payCheckNow').onclick = function(){ checkPaymentOnce(); };
+}
+
+function showPaid(method, ref){
+  paySet('payDone');
+  payEl('payDoneMsg').textContent = t('pay_done').replace('{m}', method||'');
+  payEl('payRefTxt').textContent = ref ? (t('pay_ref')+' '+ref) : '';
 }
 
 function showCancelled(d){
