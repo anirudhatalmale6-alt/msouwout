@@ -882,36 +882,61 @@ function createIcon(cls) {
   return L.divIcon({ className: cls, iconSize: [14, 14], iconAnchor: [7, 7] });
 }
 
+/* A point is only a point if it has two real numbers on it.
+ *
+ * 18 Sep: Jennifer's drop-off address did not exist in OpenStreetMap, so the
+ * server sent
+ *     "dropoff": { "lat": null, "lng": null, "address": "28,rue Saint-Preux…" }
+ * and every guard here tested the OBJECT, which is truthy. So it called
+ * L.marker([null, null]), Leaflet threw, and the rest of this function never
+ * ran - including the driver marker. The driver WAS reporting his position the
+ * whole time. One missing drop-off blanked the entire map.
+ *
+ * Half a map is useful; no map is not. */
+function hasPoint(p) {
+  /* Number(null) is 0, and 0 is finite - so converting first would accept the
+     exact null island this was written to reject. Reject empty values BEFORE
+     converting. (My own test caught this; the first version was wrong.) */
+  if (!p) return false;
+  if (p.lat === null || p.lat === undefined || p.lat === '') return false;
+  if (p.lng === null || p.lng === undefined || p.lng === '') return false;
+  return Number.isFinite(Number(p.lat)) && Number.isFinite(Number(p.lng));
+}
+function ll(p) { return [Number(p.lat), Number(p.lng)]; }
+
 function updateMap(data) {
-  if (!data.pickup) return;
-  if (!pickupMarker) {
-    pickupMarker = L.marker([data.pickup.lat, data.pickup.lng], { icon: createIcon('pickup-icon') }).addTo(map);
+  const pickup  = hasPoint(data.pickup)  ? data.pickup  : null;
+  const dropoff = hasPoint(data.dropoff) ? data.dropoff : null;
+  const driver  = hasPoint(data.driver)  ? data.driver  : null;
+
+  if (pickup && !pickupMarker) {
+    pickupMarker = L.marker(ll(pickup), { icon: createIcon('pickup-icon') }).addTo(map);
   }
-  if (!dropoffMarker && data.dropoff) {
-    dropoffMarker = L.marker([data.dropoff.lat, data.dropoff.lng], { icon: createIcon('dropoff-icon') }).addTo(map);
+  if (dropoff && !dropoffMarker) {
+    dropoffMarker = L.marker(ll(dropoff), { icon: createIcon('dropoff-icon') }).addTo(map);
   }
-  if (!routeLine && data.pickup && data.dropoff) {
-    routeLine = L.polyline(
-      [[data.pickup.lat, data.pickup.lng], [data.dropoff.lat, data.dropoff.lng]],
-      { color: '#00209F', weight: 3, dashArray: '8,8', opacity: 0.6 }
-    ).addTo(map);
+  if (pickup && dropoff && !routeLine) {
+    routeLine = L.polyline([ll(pickup), ll(dropoff)],
+      { color: '#00209F', weight: 3, dashArray: '8,8', opacity: 0.6 }).addTo(map);
   }
-  if (data.driver && data.driver.lat && data.driver.lng) {
+
+  if (driver) {
     if (!driverMarker) {
-      driverMarker = L.marker([data.driver.lat, data.driver.lng], {
+      driverMarker = L.marker(ll(driver), {
         icon: L.divIcon({ className: 'driver-marker', iconSize: [18, 18], iconAnchor: [9, 9] })
       }).addTo(map);
     } else {
-      driverMarker.setLatLng([data.driver.lat, data.driver.lng]);
+      driverMarker.setLatLng(ll(driver));
     }
-    map.panTo([data.driver.lat, data.driver.lng], { animate: true, duration: 1 });
-  } else {
-    const bounds = [];
-    if (data.pickup) bounds.push([data.pickup.lat, data.pickup.lng]);
-    if (data.dropoff) bounds.push([data.dropoff.lat, data.dropoff.lng]);
-    if (bounds.length >= 2) map.fitBounds(bounds, { padding: [40, 40] });
-    else if (bounds.length === 1) map.setView(bounds[0], 15);
+    map.panTo(ll(driver), { animate: true, duration: 1 });
+    return;
   }
+
+  const bounds = [];
+  if (pickup) bounds.push(ll(pickup));
+  if (dropoff) bounds.push(ll(dropoff));
+  if (bounds.length >= 2) map.fitBounds(bounds, { padding: [40, 40] });
+  else if (bounds.length === 1) map.setView(bounds[0], 15);
 }
 
 // ==================== STATUS ====================

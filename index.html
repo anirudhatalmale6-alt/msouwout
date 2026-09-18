@@ -777,6 +777,14 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
 
     <div id="extrasContainer" style="margin:12px 0 6px"></div>
 
+    <!-- How she intends to pay, asked while she is ordering.
+         She went looking for MonCash here on 18 Sep and there was nothing:
+         the payment step only existed on the finished-ride screen. Choosing it
+         up front is also what tells the driver, from the moment he accepts,
+         whether to expect cash. -->
+    <div class="opt-label" data-i18n="paym_label">KIJAN OU VLE PEYE</div>
+    <div class="time-toggle" id="payMethodRow" style="margin-bottom:20px;flex-wrap:wrap"></div>
+
     <div class="opt-label" data-i18n="phone_label">NIMEWO POU KONTAKTE OU</div>
     <div class="phone-row">
       <input type="tel" id="rPhone" placeholder="+509 37 12 3456" data-i18n-placeholder="ph_phone">
@@ -953,7 +961,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v25</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v26</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1524,6 +1532,11 @@ var T_RIDE_LIVE={
      rl_cancel_ride:'Anile kous la',
      rl_cancel_confirm:'Ou vle anile demann nan? Li gratis, okenn chofe poko pran l.',
      rl_cancel_confirm_driver:'Chofe a deja aksepte epi li ka sou wout la. Si 2 minit fin pase depi li aksepte, gen yon frè anilasyon 50 HTG. Ou vle anile kanmenm?',
+     paym_label:"KIJAN OU VLE PEYE",
+     pay_cash_short:"Kach",
+     pay_wallet:"Bous",
+     pay_cash_chosen:"Ou te chwazi peye kach: {amt} HTG. Bay chofè a lajan an.",
+     pay_switch:"Mwen pito peye ak bous mwen",
      pay_title:"Peye kous la: {amt} HTG",
      pay_choose_there:"Chwazi sou paj la",
      pay_cash:"M ap peye kach",
@@ -1557,6 +1570,11 @@ var T_RIDE_LIVE={
      rl_cancel_ride:'Annuler la course',
      rl_cancel_confirm:'Annuler la demande? C\'est gratuit, aucun chauffeur ne l\'a encore prise.',
      rl_cancel_confirm_driver:'Le chauffeur a deja accepte et il est peut-etre en route. Passe un delai de 2 minutes apres son acceptation, des frais d\'annulation de 50 HTG s\'appliquent. Annuler quand meme?',
+     paym_label:"COMMENT VOULEZ-VOUS PAYER",
+     pay_cash_short:"Espèces",
+     pay_wallet:"Portefeuille",
+     pay_cash_chosen:"Vous avez choisi de payer en espèces : {amt} HTG. Remettez l'argent au chauffeur.",
+     pay_switch:"Je préfère payer avec mon portefeuille",
      pay_title:"Payer la course : {amt} HTG",
      pay_choose_there:"Choisir sur la page",
      pay_cash:"Je paie en espèces",
@@ -1590,6 +1608,11 @@ var T_RIDE_LIVE={
      rl_cancel_ride:'Cancel this ride',
      rl_cancel_confirm:'Cancel the request? It is free, no driver has taken it yet.',
      rl_cancel_confirm_driver:'The driver has already accepted and may be on his way. More than 2 minutes after he accepted, a 50 HTG cancellation fee applies. Cancel anyway?',
+     paym_label:"HOW DO YOU WANT TO PAY",
+     pay_cash_short:"Cash",
+     pay_wallet:"Wallet",
+     pay_cash_chosen:"You chose to pay cash: {amt} HTG. Hand the money to the driver.",
+     pay_switch:"I would rather pay with my wallet",
      pay_title:"Pay for the ride: {amt} HTG",
      pay_choose_there:"Choose on the page",
      pay_cash:"I will pay cash",
@@ -1623,6 +1646,11 @@ var T_RIDE_LIVE={
      rl_cancel_ride:'Cancelar el viaje',
      rl_cancel_confirm:'Cancelar la solicitud? Es gratis, ningun conductor la ha tomado todavia.',
      rl_cancel_confirm_driver:'El conductor ya acepto y puede estar en camino. Pasados 2 minutos desde que acepto, se aplica una tarifa de cancelacion de 50 HTG. Cancelar de todos modos?',
+     paym_label:"CÓMO QUIERE PAGAR",
+     pay_cash_short:"Efectivo",
+     pay_wallet:"Billetera",
+     pay_cash_chosen:"Eligió pagar en efectivo: {amt} HTG. Entregue el dinero al conductor.",
+     pay_switch:"Prefiero pagar con mi billetera",
      pay_title:"Pagar el viaje: {amt} HTG",
      pay_choose_there:"Elegir en la página",
      pay_cash:"Pagaré en efectivo",
@@ -2077,6 +2105,47 @@ fetchSurge();
 setInterval(fetchSurge,300000);
 
 /* STEP 2 — submit ride */
+/* The payment chooser on the order screen.
+ *
+ * Built from the server's list, like the one on the finished-ride card, so a
+ * method switched off in the admin disappears from both. Cash is always first
+ * and selected by default: it is still how most rides are paid, and a default
+ * that quietly commits somebody to a wallet payment would be worse than asking.
+ *
+ * This records an INTENTION. No money moves here - the charge happens when the
+ * ride finishes, which is where the gateway step lives. */
+var chosenPayMethod = 'cash';
+
+function renderPayMethods(){
+  var row = document.getElementById('payMethodRow');
+  if (!row) return;
+  var LABEL = { moncash:'MonCash', natcash:'NatCash', kashpaw:'Kashpaw', all:t('pay_wallet') };
+
+  function draw(methods){
+    row.innerHTML = '';
+    var opts = [{ id:'cash', label:t('pay_cash_short') }].concat(
+      methods.map(function(m){ return { id:m.method, label:LABEL[m.method] || m.method }; }));
+    opts.forEach(function(o){
+      var b = document.createElement('div');
+      b.className = 'tt-btn' + (o.id === chosenPayMethod ? ' sel' : '');
+      b.textContent = o.label;
+      b.onclick = function(){
+        chosenPayMethod = o.id;
+        row.querySelectorAll('.tt-btn').forEach(function(x){ x.classList.remove('sel'); });
+        b.classList.add('sel');
+      };
+      row.appendChild(b);
+    });
+  }
+
+  draw([]);   // cash alone, so the row is never empty while the list loads
+  apiFetch(API_URL + '/api/payments/methods')
+    .then(function(r){ return r.json(); })
+    .then(function(j){ draw((j && j.methods) || []); })
+    .catch(function(){ /* cash-only is a correct fallback, not a failure */ });
+}
+renderPayMethods();
+
 function submitRide(){
   var userSignedUp=localStorage.getItem('msw_user_name');
   if(userSignedUp){
@@ -2136,7 +2205,10 @@ function doSubmitRide(name,phone){
        number she agreed to. */
     price:_lastRideFare||undefined,
     distance_km:(_rideDistanceKm!=null?_rideDistanceKm*trip:undefined),
-    payment_method:'cash',
+    /* Her actual choice, not a hardcoded 'cash'. This was pinned to cash, so
+       the ride always recorded cash however she paid - and the driver's card
+       always said COLLECT. */
+    payment_method:chosenPayMethod||'cash',
     acRequested:wantAC,
     tripType:tripType,
     roundTrip:(tripType==='round'),
@@ -2303,6 +2375,23 @@ function startPayFlow(d, fare){
   }
 
   if (!payState.rideId || !payState.amount){ payEl('payBox').style.display='none'; return; }
+
+  /* She already said how she wanted to pay when she ordered. If that was cash,
+     do not open a wallet screen at her - just remind her what she chose. She
+     can still change her mind with the button. */
+  var chose = (d.payment_method || chosenPayMethod || 'cash').toLowerCase();
+  if (chose === 'cash'){
+    paySet('payAsk');
+    payEl('payTitle').textContent = t('pay_cash_chosen').replace('{amt}', payState.amount);
+    var box = payEl('payMethods'); box.innerHTML='';
+    var b=document.createElement('button');
+    b.className='new-ride-btn';
+    b.style.cssText='background:#fff;color:#0F172A;border:2px solid #CBD5E1';
+    b.textContent=t('pay_switch');
+    b.onclick=function(){ offerMethods(); };
+    box.appendChild(b);
+    return;
+  }
   offerMethods();
 }
 
