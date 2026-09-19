@@ -961,7 +961,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v27</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v28</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1820,19 +1820,40 @@ function acVariants(text){
   var noNum=t.replace(/^\s*(?:#|n[o°]\s*\.?\s*)?\d+[A-Za-z]?(?![A-Za-z])\s*[,.\-]?\s*/,'').trim();
   if(noNum&&out.indexOf(noNum)<0)out.push(noNum);
   var base=noNum||t;
-  /* whole trailing pieces first ("…, Lalue"), then trailing words */
-  var parts=base.split(/\s*,\s*/),shortest=base;
-  while(parts.length>1){parts.pop();var j=parts.join(', ').trim();
-    if(j){if(out.indexOf(j)<0)out.push(j);shortest=j;}}
-  /* Carry on from the SHORTEST comma form, not from the full string - otherwise
-     shedding words re-grows the address and "martin Luther King" never appears
-     before we run out of tries. */
+
+  function add(v){ v=(v||'').trim(); if(v&&out.indexOf(v)<0&&useful(v))out.push(v); }
+  /* A street-type word on its own finds nothing and burns one of our tries.
+     "rue", "impasse", "ave" are not places; "Pétion-Ville" is. */
+  function useful(v){
+    var w=v.toLowerCase().replace(/[^a-zà-ÿ\- ]/g,'').trim();
+    if(w.length<4)return false;
+    return !/^(rue|ave|av|avenue|impasse|imp|route|rt|bd|blvd|boulevard|ruelle|angle|kay|nan)$/.test(w);
+  }
+
+  var parts=base.split(/\s*,\s*/).map(function(x){return x.trim();}).filter(Boolean);
+
+  /* 🚨 THE AREA GOES EARLY, because it is the part Haiti's map data actually
+     has. Shedding from the front keeps the street and throws away the town -
+     and here the street is usually what OpenStreetMap has never heard of while
+     the neighbourhood is what it knows. "28, rue Saint-Preux, Péguy-Ville"
+     used to try "rue Saint-Preux" and never once try "Péguy-Ville". We only
+     get a handful of tries before giving up, so the likeliest one must not sit
+     in last place. */
+  if(parts.length>1){
+    add(parts[parts.length-1].replace(/\s*\([^)]*\)\s*$/,''));
+    if(parts.length>2)add(parts.slice(-2).join(', '));
+  }
+
+  /* Then drop trailing pieces - keeps the most SPECIFIC part. */
+  var lead=parts.slice(),shortest=base;
+  while(lead.length>1){lead.pop();var j=lead.join(', ');add(j);shortest=j;}
+
+  /* 3. Finally shed words, down to ONE - not two. "Pétion-Ville akote oasis"
+     stopped at "Pétion-Ville akote", which is not a place, and never reached
+     "Pétion-Ville", which is a town of 300,000 people. */
   var words=shortest.split(/\s+/);
-  /* Down to two words, not three. A Haitian address is a number, a street and
-     the name the area is really known by - "martin Luther King lalu, a cote de
-     natcom" only becomes findable at "martin Luther King". */
-  while(words.length>2){words.pop();var w=words.join(' ').trim();if(w&&out.indexOf(w)<0)out.push(w);}
-  return out.slice(0,6);
+  while(words.length>1){words.pop();add(words.join(' '));}
+  return out.slice(0,7);
 }
 function acFetch(text,cb){
   var tries=acVariants(text),i=0;
