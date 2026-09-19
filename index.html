@@ -961,7 +961,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v28</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v29</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1839,9 +1839,16 @@ function acVariants(text){
      used to try "rue Saint-Preux" and never once try "Péguy-Ville". We only
      get a handful of tries before giving up, so the likeliest one must not sit
      in last place. */
+  function noParen(v){return String(v||'').replace(/\s*\([^)]*\)\s*$/,'').trim();}
   if(parts.length>1){
-    add(parts[parts.length-1].replace(/\s*\([^)]*\)\s*$/,''));
-    if(parts.length>2)add(parts.slice(-2).join(', '));
+    /* MOST specific area first. Asking for the bare town before the
+       neighbourhood gets a HIT, but it is the town CENTROID - so a pickup in
+       Bellevue Chardonnieres and a dropoff in Petion-Ville both landed on the
+       same dot and the distance came out 0.00km. That is not a fare, and the
+       km>0.3 guard below correctly threw it away - which is why the screen
+       still said "~" even though both lookups had "succeeded". */
+    if(parts.length>2)add(noParen(parts.slice(-2).join(', ')));
+    add(noParen(parts[parts.length-1]));
   }
 
   /* Then drop trailing pieces - keeps the most SPECIFIC part. */
