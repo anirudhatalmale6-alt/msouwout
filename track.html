@@ -712,6 +712,7 @@ const I18N = {
     st_search:'Ap chache', st_accept:'Aksepte', st_enroute:'Nan wout', st_arrive:'Rive', st_done:'Fini',
     distance:'Distans', time:'Tan', price:'Pri (HTG)',
     share:'Pataje', call:'Rele Chofe',
+    map_offline:"Kat la pa ka chaje kounye a. Tout rès enfòmasyon kous la la anba.",
     share_msg:'Mwen nan yon kous MsouWout! Swiv mwen la:',
     sb_text:'Sekirite Fanmi aktif', sb_contacts:'Kontak',
     dev_warn:'Chofe a kite wout nomal la',
@@ -744,6 +745,7 @@ const I18N = {
     st_search:'Recherche', st_accept:'Accepte', st_enroute:'En route', st_arrive:'Arrive', st_done:'Termine',
     distance:'Distance', time:'Temps', price:'Prix (HTG)',
     share:'Partager', call:'Appeler',
+    map_offline:"La carte ne peut pas se charger. Toutes les autres informations sont ci-dessous.",
     share_msg:'Je suis dans une course MsouWout! Suivez-moi ici:',
     sb_text:'Securite Famille active', sb_contacts:'Contacts',
     dev_warn:'Le chauffeur a devie de la route',
@@ -776,6 +778,7 @@ const I18N = {
     st_search:'Searching', st_accept:'Accepted', st_enroute:'En Route', st_arrive:'Arriving', st_done:'Done',
     distance:'Distance', time:'Time', price:'Price (HTG)',
     share:'Share', call:'Call Driver',
+    map_offline:"The map could not load. Everything else about your ride is below.",
     share_msg:'I\'m on a MsouWout ride! Track me here:',
     sb_text:'Family Safety active', sb_contacts:'Contacts',
     dev_warn:'Driver has deviated from route',
@@ -808,6 +811,7 @@ const I18N = {
     st_search:'Buscando', st_accept:'Aceptado', st_enroute:'En camino', st_arrive:'Llegando', st_done:'Listo',
     distance:'Distancia', time:'Tiempo', price:'Precio (HTG)',
     share:'Compartir', call:'Llamar',
+    map_offline:"El mapa no pudo cargarse. Toda la demás información está abajo.",
     share_msg:'Estoy en un viaje MsouWout! Sigueme aqui:',
     sb_text:'Seguridad Familiar activa', sb_contacts:'Contactos',
     dev_warn:'El conductor se desvio de la ruta',
@@ -838,6 +842,7 @@ const I18N = {
 
 let lang = 'ht';
 let map, pickupMarker, dropoffMarker, driverMarker, routeLine;
+let mapAvailable = false;
 let rideData = null;
 let pollTimer = null;
 let rideCode = '';
@@ -871,11 +876,44 @@ function getRiderPhone() {
 
 // ==================== MAP ====================
 
+/* The map is a bonus. The ride is the point.
+ *
+ * Leaflet comes from a CDN. On a weak connection in Port-au-Prince that script
+ * sometimes never arrives, and this function threw "L is not defined" - which
+ * aborted init() BEFORE it fetched the ride. The passenger was left staring at
+ * "Ap chaje..." for ever: no driver name, no plate, no PIN, no emergency
+ * button. A missing map took the entire page with it.
+ *
+ * Now the map is allowed to fail on its own. Everything that does not need it
+ * still works. */
 function initMap() {
-  map = L.map('map', { zoomControl: false, attributionControl: false }).setView([18.54, -72.34], 13);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-  L.control.attribution({ position: 'bottomleft', prefix: false })
-    .addAttribution('&copy; <a href="https://openstreetmap.org">OSM</a>').addTo(map);
+  if (typeof L === 'undefined') {
+    mapAvailable = false;
+    var el = document.getElementById('map');
+    if (el) {
+      el.style.display = 'flex';
+      el.style.alignItems = 'center';
+      el.style.justifyContent = 'center';
+      el.style.background = '#EEF2F7';
+      el.style.color = '#64748B';
+      el.style.font = '600 13px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
+      el.style.textAlign = 'center';
+      el.style.padding = '14px';
+      el.textContent = t('map_offline');
+    }
+    return false;
+  }
+  try {
+    map = L.map('map', { zoomControl: false, attributionControl: false }).setView([18.54, -72.34], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+    L.control.attribution({ position: 'bottomleft', prefix: false })
+      .addAttribution('&copy; <a href="https://openstreetmap.org">OSM</a>').addTo(map);
+    mapAvailable = true;
+    return true;
+  } catch (e) {
+    mapAvailable = false;
+    return false;
+  }
 }
 
 function createIcon(cls) {
@@ -905,6 +943,7 @@ function hasPoint(p) {
 function ll(p) { return [Number(p.lat), Number(p.lng)]; }
 
 function updateMap(data) {
+  if (!mapAvailable || !map) return;   // no map is survivable; a crash is not
   const pickup  = hasPoint(data.pickup)  ? data.pickup  : null;
   const dropoff = hasPoint(data.dropoff) ? data.dropoff : null;
   const driver  = hasPoint(data.driver)  ? data.driver  : null;
@@ -1514,7 +1553,7 @@ async function init() {
     return;
   }
 
-  initMap();
+  try { initMap(); } catch (e) { mapAvailable = false; }
   initConnectivity();
   requestGPSPermission();
   initBattery();
