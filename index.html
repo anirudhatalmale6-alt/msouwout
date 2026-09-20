@@ -961,7 +961,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v29</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v30</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1545,9 +1545,11 @@ var T_RIDE_LIVE={
      pay_check:"Tcheke kounye a",
      pay_done:"Peman resevwa ({m})",
      pay_ref:"Referans:",
-     pay_failed:"Nou pa ka louvri peman an. Eseye ankò oswa peye kach.",
-     pay_not_received:"Nou pa resevwa peman an. Eseye ankò oswa peye kach.",
-     pay_unavailable:"Peman nan aplikasyon an pa disponib kounye a. Peye chofè a kach.",
+     pay_failed:"Nou pa ka louvri peman an. Tanpri eseye ankò.",
+     pay_not_received:"Nou pa resevwa peman an. Tanpri eseye ankò.",
+     pay_unavailable:"Peman pa disponib kounye a. Tanpri eseye ankò nan kèk minit.",
+     pay_none:"Pa gen mwayen peman disponib kounye a. Tanpri eseye ankò nan kèk minit.",
+     pay_loading:"N ap chaje mwayen peman yo...",
      rl_done_title:'Kous la fini!',
      rl_done_msg:'Mesi paske ou vwayaje ak MsouWout. N espere w ap tounen byento.',
      rl_cancelled_title:'Kous la anile',
@@ -1583,9 +1585,11 @@ var T_RIDE_LIVE={
      pay_check:"Vérifier maintenant",
      pay_done:"Paiement reçu ({m})",
      pay_ref:"Référence :",
-     pay_failed:"Impossible d'ouvrir le paiement. Réessayez ou payez en espèces.",
-     pay_not_received:"Paiement non reçu. Réessayez ou payez en espèces.",
-     pay_unavailable:"Le paiement dans l'application n'est pas disponible. Payez le chauffeur en espèces.",
+     pay_failed:"Impossible d'ouvrir le paiement. Veuillez réessayer.",
+     pay_not_received:"Nous n'avons pas reçu le paiement. Veuillez réessayer.",
+     pay_unavailable:"Le paiement n'est pas disponible pour le moment. Réessayez dans quelques minutes.",
+     pay_none:"Aucun moyen de paiement disponible pour le moment. Réessayez dans quelques minutes.",
+     pay_loading:"Chargement des moyens de paiement...",
      rl_done_title:'Course terminee!',
      rl_done_msg:'Merci d\'avoir voyage avec MsouWout. A tres bientot.',
      rl_cancelled_title:'Course annulee',
@@ -1621,9 +1625,11 @@ var T_RIDE_LIVE={
      pay_check:"Check now",
      pay_done:"Payment received ({m})",
      pay_ref:"Reference:",
-     pay_failed:"Could not open the payment. Try again or pay cash.",
-     pay_not_received:"Payment not received. Try again or pay cash.",
-     pay_unavailable:"Paying in the app is not available right now. Pay the driver in cash.",
+     pay_failed:"We could not open the payment. Please try again.",
+     pay_not_received:"We have not received the payment. Please try again.",
+     pay_unavailable:"Payment is not available right now. Please try again in a few minutes.",
+     pay_none:"No payment method is available right now. Please try again in a few minutes.",
+     pay_loading:"Loading payment methods...",
      rl_done_title:'Ride completed!',
      rl_done_msg:'Thank you for travelling with MsouWout. See you soon.',
      rl_cancelled_title:'Ride cancelled',
@@ -1659,9 +1665,11 @@ var T_RIDE_LIVE={
      pay_check:"Verificar ahora",
      pay_done:"Pago recibido ({m})",
      pay_ref:"Referencia:",
-     pay_failed:"No se pudo abrir el pago. Intente de nuevo o pague en efectivo.",
-     pay_not_received:"Pago no recibido. Intente de nuevo o pague en efectivo.",
-     pay_unavailable:"El pago en la app no está disponible. Pague al conductor en efectivo.",
+     pay_failed:"No pudimos abrir el pago. Inténtelo de nuevo.",
+     pay_not_received:"No hemos recibido el pago. Inténtelo de nuevo.",
+     pay_unavailable:"El pago no está disponible en este momento. Inténtelo en unos minutos.",
+     pay_none:"No hay ningún método de pago disponible. Inténtelo en unos minutos.",
+     pay_loading:"Cargando métodos de pago...",
      rl_done_title:'Viaje completado!',
      rl_done_msg:'Gracias por viajar con MsouWout. Hasta pronto.',
      rl_cancelled_title:'Viaje cancelado',
@@ -2142,23 +2150,40 @@ setInterval(fetchSurge,300000);
  *
  * This records an INTENTION. No money moves here - the charge happens when the
  * ride finishes, which is where the gateway step lives. */
-var chosenPayMethod = 'cash';
+/* 20 Sep: MsouWout does NOT accept cash. Cash used to be the default here and
+   the fallback everywhere, so a failed method lookup quietly produced a cash
+   ride - money the business never receives. There is no cash option now, and
+   no silent fallback to one: if no wallet is available the passenger is told
+   so, because an honest dead end beats an order that cannot be paid for. */
+var chosenPayMethod = '';
 
 function renderPayMethods(){
   var row = document.getElementById('payMethodRow');
   if (!row) return;
   var LABEL = { moncash:'MonCash', natcash:'NatCash', kashpaw:'Kashpaw', all:t('pay_wallet') };
 
-  function draw(methods){
+  function note(msg){
     row.innerHTML = '';
-    var opts = [{ id:'cash', label:t('pay_cash_short') }].concat(
-      methods.map(function(m){ return { id:m.method, label:LABEL[m.method] || m.method }; }));
-    opts.forEach(function(o){
+    var n = document.createElement('div');
+    n.style.cssText = 'font-size:.78rem;color:#64748B;padding:4px 0';
+    n.textContent = msg;
+    row.appendChild(n);
+  }
+
+  function draw(methods){
+    if (!methods.length){ chosenPayMethod = ''; note(t('pay_none')); return; }
+    row.innerHTML = '';
+    /* Pre-select the first wallet so an order can never leave here with no
+       payment method attached. */
+    if (!chosenPayMethod || !methods.some(function(m){ return m.method === chosenPayMethod; })) {
+      chosenPayMethod = methods[0].method;
+    }
+    methods.forEach(function(m){
       var b = document.createElement('div');
-      b.className = 'tt-btn' + (o.id === chosenPayMethod ? ' sel' : '');
-      b.textContent = o.label;
+      b.className = 'tt-btn' + (m.method === chosenPayMethod ? ' sel' : '');
+      b.textContent = LABEL[m.method] || m.method;
       b.onclick = function(){
-        chosenPayMethod = o.id;
+        chosenPayMethod = m.method;
         row.querySelectorAll('.tt-btn').forEach(function(x){ x.classList.remove('sel'); });
         b.classList.add('sel');
       };
@@ -2166,11 +2191,11 @@ function renderPayMethods(){
     });
   }
 
-  draw([]);   // cash alone, so the row is never empty while the list loads
+  note(t('pay_loading'));
   apiFetch(API_URL + '/api/payments/methods')
     .then(function(r){ return r.json(); })
     .then(function(j){ draw((j && j.methods) || []); })
-    .catch(function(){ /* cash-only is a correct fallback, not a failure */ });
+    .catch(function(){ chosenPayMethod = ''; note(t('pay_none')); });
 }
 renderPayMethods();
 
@@ -2236,7 +2261,7 @@ function doSubmitRide(name,phone){
     /* Her actual choice, not a hardcoded 'cash'. This was pinned to cash, so
        the ride always recorded cash however she paid - and the driver's card
        always said COLLECT. */
-    payment_method:chosenPayMethod||'cash',
+    payment_method:chosenPayMethod||'',
     acRequested:wantAC,
     tripType:tripType,
     roundTrip:(tripType==='round'),
@@ -2407,7 +2432,9 @@ function startPayFlow(d, fare){
   /* She already said how she wanted to pay when she ordered. If that was cash,
      do not open a wallet screen at her - just remind her what she chose. She
      can still change her mind with the button. */
-  var chose = (d.payment_method || chosenPayMethod || 'cash').toLowerCase();
+  /* Only a ride ALREADY stored as cash shows the cash panel - we no longer
+     create any. Without this, a ride with no method fell into it. */
+  var chose = (d.payment_method || chosenPayMethod || '').toLowerCase();
   if (chose === 'cash'){
     paySet('payAsk');
     payEl('payTitle').textContent = t('pay_cash_chosen').replace('{amt}', payState.amount);
@@ -2443,16 +2470,16 @@ function offerMethods(){
         b.onclick=function(){ beginPayment(m.method); };
         box.appendChild(b);
       });
-      var cash=document.createElement('button');
-      cash.className='new-ride-btn';
-      cash.style.cssText='background:#fff;color:#0F172A;border:2px solid #CBD5E1';
-      cash.textContent=t('pay_cash');
-      cash.onclick=function(){ payEl('payBox').style.display='none'; };
-      box.appendChild(cash);
+      /* No cash button: we do not take cash. An empty list is a real dead end
+         and must say so - it used to be silently absorbed by the cash option. */
+      if (!list.length){
+        payEl('payErr').style.display='';
+        payEl('payErr').textContent=t('pay_none');
+      }
     })
     .catch(function(){
       /* No method list means no reliable way to take money - say so rather
-         than showing buttons that will fail. Cash still works. */
+         than showing buttons that will fail. */
       payEl('payErr').style.display='';
       payEl('payErr').textContent=t('pay_unavailable');
     });
