@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Tès peman MsouWout</title>
+<style>
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+       background:#0F172A;color:#fff;display:flex;align-items:center;
+       justify-content:center;min-height:100vh;padding:20px}
+  .card{background:#fff;color:#0F172A;border-radius:18px;padding:26px 22px;
+        max-width:420px;width:100%;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+  h1{font-size:1.15rem;margin:0 0 6px}
+  .amt{font-size:2.4rem;font-weight:900;color:#D21034;margin:10px 0}
+  p{font-size:.92rem;line-height:1.6;color:#475569;margin:10px 0}
+  button{width:100%;padding:15px;border:0;border-radius:13px;background:#D21034;
+         color:#fff;font-size:1rem;font-weight:800;margin-top:14px}
+  button:disabled{background:#94A3B8}
+  .ref{font-family:ui-monospace,Menlo,monospace;font-size:.82rem;color:#0F6FBF;
+       word-break:break-all;margin-top:12px}
+  .err{color:#D21034;font-weight:700;font-size:.9rem;margin-top:12px}
+  .ok{color:#12A150;font-weight:800;font-size:1rem;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Tès peman MonCash</h1>
+  <div class="amt">20 HTG</div>
+  <p>Peze bouton an. L ap voye w sou paj MonCash la pou peye 20 goud.
+     Se yon tès — se kont machann MsouWout la ki resevwa lajan an.</p>
+  <button id="go">Peye 20 HTG ak MonCash</button>
+  <div class="ref" id="ref"></div>
+  <div class="err" id="err"></div>
+  <div class="ok" id="ok"></div>
+</div>
+<script>
+/* A MonCash redirect token is only valid for TEN MINUTES from the moment it is
+   created. A link pasted into a chat is therefore dead before it is read, which
+   would look exactly like "the payment is broken". So this page creates a FRESH
+   payment every time the button is pressed, and the URL itself never expires. */
+var API = 'https://msouwout-backend.onrender.com';
+var KEY = 'mw_paytest_ref';
+var btn = document.getElementById('go');
+var refEl = document.getElementById('ref');
+var errEl = document.getElementById('err');
+var okEl  = document.getElementById('ok');
+
+function show(el, msg){ el.textContent = msg; }
+
+btn.onclick = function(){
+  btn.disabled = true;
+  show(errEl,''); show(okEl,''); show(refEl,'');
+  btn.textContent = 'N ap prepare peman an...';
+  fetch(API + '/api/payments/create', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      subject_type:'test',
+      subject_id:'moncash-live-check',
+      amount:20, payment_method:'moncash', platform:'msouwout',
+      metadata:{ purpose:'20 HTG MonCash verification' }
+    })
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.success || !d.payment_url){
+      throw new Error((d && d.error) || 'pa reyisi');
+    }
+    try{ localStorage.setItem(KEY, d.reference_id); }catch(e){}
+    show(refEl, 'Referans: ' + d.reference_id);
+    /* Same tab, not a popup: an installed app shell swallows new tabs, which is
+       exactly how a working payment ends up looking like a dead button. */
+    location.href = d.payment_url;
+  }).catch(function(e){
+    btn.disabled = false;
+    btn.textContent = 'Eseye ankò';
+    show(errEl, 'Nou pa ka louvri peman an. ' + (e && e.message ? e.message : ''));
+  });
+};
+
+/* Coming back from MonCash: say plainly whether the money actually arrived.
+   Only the SERVER may decide that - never the fact that she returned here. */
+(function checkPrevious(){
+  var ref; try{ ref = localStorage.getItem(KEY); }catch(e){ return; }
+  if(!ref) return;
+  show(refEl, 'Referans: ' + ref);
+  fetch(API + '/api/payments/' + encodeURIComponent(ref))
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(!d) return;
+      if(d.paid){
+        show(okEl, 'Peman an resevwa — 20 HTG (' + (d.method || '') + ')');
+        try{ localStorage.removeItem(KEY); }catch(e){}
+      } else {
+        show(errEl, 'Peman sa a poko konfime (' + (d.status || 'pending') + ').');
+      }
+    }).catch(function(){});
+})();
+</script>
+</body>
+</html>
