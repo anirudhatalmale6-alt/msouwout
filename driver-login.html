@@ -964,7 +964,11 @@ function payBanner(r){
   } else if (st === 'pending'){
     cfg = { bg:'#FFFBEB', bd:'#FDE68A', fg:'#B45309', ic:'⏳', tx:t('pay_pending') };
   } else {
-    cfg = { bg:'#FEF2F2', bd:'#FECACA', fg:'#D21034', ic:'\U0001F4B5', tx:t('pay_collect') };
+    /* '\U0001F4B5' is a PYTHON escape. JavaScript does not know \U, so this
+       rendered as the literal text "U0001F4B5" on every driver's unpaid ride.
+       The two branches above use real emoji characters; so does this one now.
+       A banknote was also the wrong symbol once cash was removed. */
+    cfg = { bg:'#FEF2F2', bd:'#FECACA', fg:'#D21034', ic:'⚠️', tx:t('pay_collect') };
   }
   return '<div style="margin-top:10px;padding:11px 13px;border-radius:12px;border:1.5px solid '
     + cfg.bd + ';background:' + cfg.bg + ';color:' + cfg.fg

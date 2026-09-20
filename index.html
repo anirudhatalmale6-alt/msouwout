@@ -961,7 +961,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v30</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v31</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1718,11 +1718,18 @@ if(savedName){
 var pickupEl=document.getElementById('pickup');
 var dropEl=document.getElementById('dropoff');
 function checkInputs(){
-  var btn=document.getElementById('findBtn');
-  var ready=pickupEl.value.trim()&&dropEl.value.trim();
-  btn.disabled=!ready;
   pickupEl.classList.toggle('filled',!!pickupEl.value.trim());
   dropEl.classList.toggle('filled',!!dropEl.value.trim());
+  syncFindBtn();
+}
+/* Both addresses filled is not enough - we must also have a real distance,
+   because without one there is no real price and nothing to charge. Kept in one
+   place so the fare path and the typing path can never disagree. */
+function syncFindBtn(){
+  var btn=document.getElementById('findBtn');
+  if(!btn) return;
+  var filled=pickupEl.value.trim()&&dropEl.value.trim();
+  btn.disabled=!(filled&&_rideDistanceKm!=null);
 }
 pickupEl.addEventListener('input',checkInputs);
 dropEl.addEventListener('input',checkInputs);
@@ -1993,6 +2000,7 @@ function goStep2(){
 function computeDistanceThenFare(){
   _rideDistanceKm=null;
   document.getElementById('farePrice').textContent='…';
+  syncFindBtn();          // nothing is orderable while we still have no distance
   var pickupP=(window._pickupLat&&window._pickupLng)
     ?Promise.resolve({lat:window._pickupLat,lng:window._pickupLng})
     :geocodeAddr(pickupEl.value);
@@ -2092,8 +2100,21 @@ function updateFare(){
   var finalAmt=rideFare+PRICING.dash_rider;     // rider pays fare + their DASH half only
   _lastRideFare=rideFare;                       // remembered for submit
 
-  // Passenger-facing: total only. Business economics stay hidden.
-  document.getElementById('farePrice').textContent=approx+Math.round(finalAmt)+' HTG';
+  /* 20 Sep - Jeffery: "when they put the address wrong it gives a price".
+     It did. The tilde was meant to mean "we are guessing", but a guess printed
+     in the same big type as a real fare just reads as the price - he read the
+     "~" as a minus sign. With cash gone there is no way to settle up afterwards
+     either, so a made-up number is worse than no number: we would take an order
+     at a price nobody can honour. When the distance is unknown we now show
+     nothing and let the orange row explain why. */
+  var priceEl=document.getElementById('farePrice');
+  if(known){
+    priceEl.textContent=Math.round(finalAmt)+' HTG';
+  } else {
+    priceEl.textContent='—';
+    _lastRideFare=0;            // nothing may be submitted at a guessed price
+  }
+  syncFindBtn();
 
   /* When the distance is real, so is the price: this exact number is what gets
      sent with the order and what the driver is offered. Calling it an estimate
@@ -2290,6 +2311,7 @@ function doSubmitRide(name,phone){
     rideData.id=d.ride_id||d.id;
     rideData.tracking_code=d.tracking_code||'';
     rideData.pin=d.ride_pin||'';
+    saveActiveRide();
     if(rideData.pin){
       document.getElementById('ridePin').textContent=rideData.pin;
       document.getElementById('ridePinBox').style.display='';
@@ -2304,8 +2326,55 @@ function doSubmitRide(name,phone){
 
 /* Wait for a driver to accept, then show who is coming. Polling, not magic: the
    page asks the server every few seconds and stops asking after 10 minutes so a
-   forgotten tab does not hammer it. */
+   forgotten tab does not hammer it.
+
+   20 Sep - Jeffery, from a real ride: "After i accepted the ride the map didnt
+   come up like it previously did and also when i arrived he didnt get the
+   message". Both were THIS, and neither was the map's fault:
+
+   1. A phone locks. A passenger switches to WhatsApp. Mobile browsers throttle
+      or suspend setInterval in a background tab, so polling silently stops -
+      and nothing ever restarted it. She came back to a frozen screen.
+   2. Even awake, polling gave up after 10 minutes and switched to the waitlist
+      for good. A driver accepting at minute 11 reached a page that had stopped
+      listening: no driver card, no map link, no share button, no arrival alert.
+
+   So the fix is not "show a map", it is KEEP LISTENING: check again the moment
+   the page is visible, and keep the window open while she is actually looking.
+   The forgotten-tab protection still holds, because an invisible tab never
+   extends anything. */
+var RIDE_KEY='mw_active_ride';
 var _ridePoll=null,_pollUntil=0;
+
+function saveActiveRide(){
+  try{
+    if(!rideData.id)return;
+    localStorage.setItem(RIDE_KEY,JSON.stringify({
+      id:rideData.id, tracking_code:rideData.tracking_code||'',
+      pin:rideData.pin||'', ts:Date.now()}));
+  }catch(e){}
+}
+function clearActiveRide(){ try{localStorage.removeItem(RIDE_KEY);}catch(e){} }
+
+/* Closing the app used to lose the ride completely - no driver, no map, no
+   share link, no way back. The ride lives on the server; the phone only needs
+   to remember which one it was. */
+function restoreActiveRide(){
+  var raw;
+  try{ raw=localStorage.getItem(RIDE_KEY); }catch(e){ return false; }
+  if(!raw)return false;
+  var v; try{ v=JSON.parse(raw); }catch(e){ clearActiveRide(); return false; }
+  if(!v||!v.id||!v.ts||(Date.now()-v.ts)>6*60*60*1000){ clearActiveRide(); return false; }
+  rideData.id=v.id; rideData.tracking_code=v.tracking_code||''; rideData.pin=v.pin||'';
+  if(rideData.pin){
+    var pe=document.getElementById('ridePin'), pb=document.getElementById('ridePinBox');
+    if(pe){pe.textContent=rideData.pin;} if(pb){pb.style.display='';}
+  }
+  showStep(3);
+  startRidePolling();
+  return true;
+}
+
 function startRidePolling(){
   if(!rideData.id)return;
   _lastStatus='';
@@ -2315,6 +2384,20 @@ function startRidePolling(){
   checkRideOnce();
 }
 function stopRidePolling(){clearInterval(_ridePoll);_ridePoll=null;}
+
+/* The moment she looks at the screen again, ask the server what happened while
+   she was away - and give her a fresh window, because a passenger who is
+   looking at the page has plainly not forgotten it. */
+function resumeRideWatch(){
+  if(document.hidden||!rideData.id)return;
+  if(_lastStatus==='completed'||_lastStatus==='cancelled')return;
+  _pollUntil=Math.max(_pollUntil,Date.now()+10*60*1000);
+  if(!_ridePoll) _ridePoll=setInterval(checkRideOnce,_lastStatus?10000:4000);
+  checkRideOnce();
+}
+document.addEventListener('visibilitychange',resumeRideWatch);
+window.addEventListener('focus',resumeRideWatch);
+window.addEventListener('pageshow',resumeRideWatch);
 var _lastStatus='';
 var _lastArrived=false;
 function checkRideOnce(){
@@ -2341,8 +2424,17 @@ function checkRideOnce(){
         showDriverFound(d);
         if(justArrived) announceArrival();
       }
-      else if(d.status==='completed'){stopRidePolling();showRideDone(d);}
-      else if(d.status==='cancelled'){stopRidePolling();showCancelled(d);}
+      else if(d.status==='completed'){
+        stopRidePolling();
+        /* Do NOT forget a finished ride that has not been PAID. Payment happens
+           on this screen, and with cash gone there is no way to settle up
+           afterwards - so if she closes the app here, reopening must bring her
+           straight back to the payment step instead of losing the fare. */
+        if(String(d.payment_status||'').toLowerCase()==='paid') clearActiveRide();
+        else saveActiveRide();
+        showRideDone(d);
+      }
+      else if(d.status==='cancelled'){stopRidePolling();clearActiveRide();showCancelled(d);}
     }).catch(function(){});
 }
 
@@ -2946,6 +3038,11 @@ document.addEventListener('click',function(e){
     shareMenu.classList.remove('show');
   }
 });
+
+/* LAST, so every function above exists. A passenger who closed the app mid-ride
+   used to come back to the order form with no way to reach her driver. Runs
+   only if a ride is actually stored, so a normal visit is untouched. */
+try{ restoreActiveRide(); }catch(e){}
 </script>
 <script id="capacitor-native-loader">
 (function(){if(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform()){document.body.classList.add('capacitor-native');var s=document.createElement('script');s.src='capacitor-bridge.js';document.body.appendChild(s);}})();
