@@ -2,6 +2,43 @@
 <html lang="ht">
 <head>
 <meta charset="UTF-8">
+<script>
+/* ── Every MsouWout time a human reads is Haiti time ──────────────────────
+   Storage stays UTC and must: the database, toISOString() and everything the
+   server records are untouched. This only changes DISPLAY.
+
+   Why it is patched here rather than at each call site: there are dozens of
+   them across the apps, and the failure mode of missing one is invisible - the
+   time still renders, just in whatever zone the handset happens to be set to.
+   Jeffery's own phone is on the wrong zone, which is how we found this.
+
+   Inline on purpose. A separate .js that fails to load on a weak Port-au-Prince
+   connection would silently fall back to device time and look fine. Leaflet
+   already taught us that lesson on this project.
+
+   Number.prototype.toLocaleString is a DIFFERENT function and is untouched -
+   it formats every HTG total on these pages. */
+(function(){
+  var TZ = 'America/Port-au-Prince';
+  ['toLocaleString','toLocaleDateString','toLocaleTimeString'].forEach(function(fn){
+    var orig = Date.prototype[fn];
+    if (!orig || orig.__htPatched) return;
+    function patched(locales, options){
+      var o = {};
+      if (options) for (var k in options) {
+        if (Object.prototype.hasOwnProperty.call(options,k)) o[k] = options[k];
+      }
+      if (!o.timeZone) o.timeZone = TZ;   /* an explicit zone always wins */
+      try { return orig.call(this, locales, o); }
+      catch (e) { return orig.call(this, locales, options); }  /* never break a page over a time */
+    }
+    patched.__htPatched = true;
+    Date.prototype[fn] = patched;
+  });
+  window.HAITI_TZ = TZ;
+})();
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>MsouWout — Jwenn Yon Kous Nan 2 Minit | Haiti Ridesharing</title>
 <meta name="description" content="Jwenn yon kous oswa livrezon toupatou nan Ayiti. Chofe verifye, repons rapid, sekirite garanti.">
@@ -961,7 +998,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v32</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v33</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -2784,10 +2821,25 @@ function newRide(){
   checkInputs();
 }
 
+/* Today's date in Haiti, as YYYY-MM-DD. 'en-CA' is the locale that formats
+   that way; the time zone is named explicitly so this is correct even on a
+   handset set to the wrong zone - which is how this was found. */
+function haitiDateISO(d){
+  try{
+    return (d||new Date()).toLocaleDateString('en-CA',{timeZone:'America/Port-au-Prince'});
+  }catch(e){
+    return (d||new Date()).toISOString().split('T')[0];
+  }
+}
+
 /* EVENT PRE-FILL */
 (function(){
   var params=new URLSearchParams(window.location.search);
-  var today=new Date().toISOString().split('T')[0];
+  /* toISOString() is UTC. Haiti is UTC-4, so from 20:00 local onwards this
+     pre-filled TOMORROW's date into the "schedule a ride" field - an evening
+     booking silently defaulted to the wrong day. The date a passenger sees must
+     be the date it is where she is standing. */
+  var today=haitiDateISO();
   document.getElementById('rDate').value=params.get('date')||today;
   if(params.get('time')) document.getElementById('rTime').value=params.get('time');
   ticketRef=params.get('ref')||'';
