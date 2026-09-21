@@ -998,7 +998,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v33</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v34</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1765,8 +1765,27 @@ function checkInputs(){
 function syncFindBtn(){
   var btn=document.getElementById('findBtn');
   if(!btn) return;
-  var filled=pickupEl.value.trim()&&dropEl.value.trim();
-  btn.disabled=!(filled&&_rideDistanceKm!=null);
+  /* 🚨 21 Sep - THIS BUTTON MUST ONLY EVER CHECK THE TWO ADDRESSES.
+     I briefly also required a known distance here and it deadlocked the whole
+     app: findBtn calls goStep2(), and goStep2() is the ONLY caller of
+     computeDistanceThenFare(), which is the only thing that sets
+     _rideDistanceKm. So the button that starts the lookup was waiting for the
+     result of the lookup it starts. Nobody could order a ride at all.
+     ⛔ Never gate step 1 on anything produced by step 2. The price gate lives
+     on the ORDER button instead - see syncOrderBtn(). */
+  btn.disabled=!(pickupEl.value.trim()&&dropEl.value.trim());
+}
+
+/* The real money gate: you may not place an order at a price we invented.
+   This one is safe because the distance lookup has already run by the time
+   this button is on screen. */
+function syncOrderBtn(){
+  var btn=document.querySelector('.request-btn');
+  if(!btn) return;
+  var known=_rideDistanceKm!=null;
+  btn.disabled=!known;
+  btn.style.opacity=known?'':'.55';
+  btn.title=known?'':t('fare_unknown_msg');
 }
 pickupEl.addEventListener('input',checkInputs);
 dropEl.addEventListener('input',checkInputs);
@@ -2037,7 +2056,7 @@ function goStep2(){
 function computeDistanceThenFare(){
   _rideDistanceKm=null;
   document.getElementById('farePrice').textContent='…';
-  syncFindBtn();          // nothing is orderable while we still have no distance
+  syncOrderBtn();         // nothing is orderable while we still have no distance
   var pickupP=(window._pickupLat&&window._pickupLng)
     ?Promise.resolve({lat:window._pickupLat,lng:window._pickupLng})
     :geocodeAddr(pickupEl.value);
@@ -2152,6 +2171,7 @@ function updateFare(){
     _lastRideFare=0;            // nothing may be submitted at a guessed price
   }
   syncFindBtn();
+  syncOrderBtn();
 
   /* When the distance is real, so is the price: this exact number is what gets
      sent with the order and what the driver is offered. Calling it an estimate
@@ -2258,6 +2278,9 @@ function renderPayMethods(){
 renderPayMethods();
 
 function submitRide(){
+  /* Second line of defence. The button is disabled without a distance, but a
+     stale tap or a resumed page must not slip an invented fare through. */
+  if(_rideDistanceKm==null||!_lastRideFare){ syncOrderBtn(); return; }
   var userSignedUp=localStorage.getItem('msw_user_name');
   if(userSignedUp){
     doSubmitRide(userSignedUp,localStorage.getItem('msw_phone')||document.getElementById('rPhone').value.trim());
