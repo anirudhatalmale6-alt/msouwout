@@ -531,7 +531,10 @@ function exportJSON() {
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
   a.href = url;
-  a.download = 'dash-report-' + new Date().toISOString().slice(0,10) + '.json';
+  /* The report is named for the day it was produced IN HAITI, not in UTC -
+     after 20:00 local those are different days. */
+  a.download = 'dash-report-' + new Date().toLocaleDateString('en-CA',
+      {timeZone:'America/Port-au-Prince'}) + '.json';
   a.click();
   URL.revokeObjectURL(url);
 }
