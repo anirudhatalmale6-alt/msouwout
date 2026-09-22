@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SImACT — Investing in Haiti’s Future</title>
+<meta name="description" content="SImACT builds sustainable economic value in Haiti through strategic investment, enterprise development and socially conscious growth. Real estate, agriculture, tourism, commerce and mining.">
+
+<!-- Absolute URL and PNG on purpose: a relative path yields NO preview at all,
+     because the scrapers fetch the image from their own servers with no page to
+     resolve against, and WhatsApp is unreliable with webp. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="SImACT — Investing in Haiti’s Future">
+<meta property="og:description" content="Building sustainable economic value through strategic investment, enterprise development and socially conscious growth.">
+<meta property="og:url" content="https://simact.net/">
+<meta property="og:image" content="https://simact.net/assets/og-simact.png">
+<meta property="og:image:secure_url" content="https://simact.net/assets/og-simact.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SImACT — Société Immobilière d’Agriculture, de Commerce et de Tourisme">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/simact-logo-512.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#0A1F44; --navy-deep:#061530; --red:#CE1126; --sea:#1B7FA8;
+  --sand:#F6F3ED; --sand-2:#EFEAE0; --ink:#16233F; --muted:#5C6B85;
+  --line:rgba(10,31,68,.13);
+  --wrap:1160px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:#fff;color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:16.5px;line-height:1.65;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:700;line-height:1.14;margin:0;letter-spacing:-.012em}
+h1{font-size:clamp(2.1rem,5.6vw,3.9rem)}
+h2{font-size:clamp(1.62rem,3.5vw,2.5rem)}
+h3{font-size:1.16rem;font-family:Inter,sans-serif;font-weight:700;letter-spacing:-.005em}
+p{margin:0 0 1rem}
+a{color:inherit}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 22px}
+.sec{padding:clamp(58px,8vw,104px) 0}
+.eyebrow{
+  display:flex;align-items:center;gap:10px;font-size:.73rem;font-weight:800;
+  letter-spacing:.17em;text-transform:uppercase;color:var(--red);margin-bottom:14px;
+}
+.eyebrow .bar{width:26px;height:2px;background:var(--red);flex:none}
+.lede{font-size:clamp(1.02rem,1.9vw,1.2rem);color:var(--muted);max-width:66ch}
+
+/* ── header ─────────────────────────────────────────────────────────────── */
+header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.94);
+  backdrop-filter:saturate(1.5) blur(10px);border-bottom:1px solid var(--line)}
+.hin{display:flex;align-items:center;gap:16px;height:72px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;min-width:0;flex:0 1 auto}
+.brand img{width:42px;height:42px;border-radius:8px;flex:none;object-fit:cover}
+.brand b{font-family:Fraunces,serif;font-size:1.22rem;letter-spacing:.01em;color:var(--navy);white-space:nowrap}
+nav{margin-left:auto;display:flex;align-items:center;gap:6px}
+nav a{
+  text-decoration:none;font-size:.86rem;font-weight:600;color:var(--ink);
+  padding:8px 11px;border-radius:8px;white-space:nowrap;
+}
+nav a:hover{background:var(--sand);color:var(--navy)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-weight:700;font-size:.9rem;text-decoration:none;cursor:pointer;
+  padding:12px 20px;border-radius:9px;border:1.6px solid transparent;
+}
+.btn-p{background:var(--red);color:#fff}
+.btn-p:hover{background:#b00e20}
+.btn-o{background:transparent;color:var(--navy);border-color:rgba(10,31,68,.28)}
+.btn-o:hover{border-color:var(--navy);background:var(--sand)}
+.btn-l{background:#fff;color:var(--navy)}
+.btn-gh{background:transparent;color:#fff;border-color:rgba(255,255,255,.45)}
+.btn-gh:hover{background:rgba(255,255,255,.1)}
+.burger{display:none;margin-left:auto;background:none;border:0;padding:9px;cursor:pointer}
+.burger span{display:block;width:23px;height:2.4px;background:var(--navy);border-radius:2px}
+.burger span+span{margin-top:5px}
+
+/* ── hero ───────────────────────────────────────────────────────────────── */
+.hero{
+  background:
+    radial-gradient(1100px 460px at 78% -8%,rgba(27,127,168,.42),transparent 62%),
+    radial-gradient(760px 420px at 4% 108%,rgba(206,17,38,.26),transparent 60%),
+    linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);
+  color:#fff;padding:clamp(66px,10vw,128px) 0 0;position:relative;overflow:hidden;
+}
+.hero:after{
+  content:"";position:absolute;inset:auto 0 0 0;height:5px;
+  background:linear-gradient(90deg,var(--navy) 0 33%,#fff 33% 66%,var(--red) 66%);
+  opacity:.85;
+}
+.hero h1{max-width:17ch}
+.hero h1 em{font-style:normal;color:#7FD3F0}
+.hero p{color:rgba(255,255,255,.82);max-width:58ch;font-size:clamp(1rem,1.9vw,1.16rem);margin-top:20px}
+.hero-cta{display:flex;gap:11px;flex-wrap:wrap;margin-top:30px}
+.pillars{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));
+  gap:1px;background:rgba(255,255,255,.17);margin-top:clamp(44px,6vw,76px);
+}
+.pillar{background:var(--navy);padding:22px 18px 26px}
+.pillar b{display:block;font-size:.93rem;font-weight:700;color:#fff;margin-bottom:5px}
+.pillar span{font-size:.79rem;color:rgba(255,255,255,.62);line-height:1.5;display:block}
+
+/* credibility strip */
+.strip{background:var(--sand);border-bottom:1px solid var(--line)}
+.strip-in{display:grid;grid-template-columns:repeat(var(--n,4),1fr);gap:1px;background:var(--line)}
+.stat{background:var(--sand);padding:26px 16px;text-align:center}
+.stat b{display:block;font-family:Fraunces,serif;font-size:clamp(1.55rem,3.4vw,2.2rem);color:var(--navy);line-height:1}
+.stat span{display:block;font-size:.73rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin-top:9px}
+
+/* ── generic blocks ─────────────────────────────────────────────────────── */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,68px);align-items:start}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:18px;margin-top:34px}
+.card{border:1px solid var(--line);border-radius:14px;padding:24px 22px;background:#fff}
+.card h3{color:var(--navy);margin-bottom:8px}
+.card p{font-size:.92rem;color:var(--muted);margin:0}
+.card .num{font-family:Fraunces,serif;font-size:.95rem;color:var(--red);font-weight:700;display:block;margin-bottom:10px}
+
+/* timeline */
+.tl{margin-top:36px;border-left:2px solid var(--line);padding-left:26px;display:grid;gap:26px}
+.tl-i{position:relative}
+.tl-i:before{content:"";position:absolute;left:-33px;top:7px;width:11px;height:11px;border-radius:50%;background:var(--red);border:2.5px solid #fff;box-shadow:0 0 0 2px var(--line)}
+.tl-i b{display:block;font-size:.76rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:4px}
+.tl-i h3{margin-bottom:5px;color:var(--navy)}
+.tl-i p{font-size:.92rem;color:var(--muted);margin:0}
+
+/* leadership */
+.people{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px;margin-top:26px}
+.person{border:1px solid var(--line);border-radius:12px;padding:18px 18px 20px;background:#fff}
+.person b{display:block;color:var(--navy);font-size:1rem}
+.person i{font-style:normal;display:block;font-size:.79rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--red);margin-top:5px}
+.person p{font-size:.88rem;color:var(--muted);margin:10px 0 0}
+
+/* portfolio */
+.pf{display:grid;gap:18px;margin-top:34px}
+.pj{
+  border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;
+  display:grid;grid-template-columns:270px 1fr;
+}
+.pj-side{background:linear-gradient(155deg,var(--navy),var(--navy-deep));color:#fff;padding:26px 24px;display:flex;flex-direction:column;justify-content:space-between}
+.pj-side .tag{font-size:.7rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#7FD3F0}
+.pj-side h3{font-family:Fraunces,serif;font-size:1.5rem;font-weight:700;margin:12px 0 6px;color:#fff}
+.pj-side .loc{font-size:.85rem;color:rgba(255,255,255,.66)}
+.pj-side .status{
+  margin-top:20px;display:inline-flex;align-self:flex-start;font-size:.7rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:99px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.26);
+}
+.pj-body{padding:26px 26px 28px}
+.pj-body p{font-size:.93rem;color:var(--muted)}
+.pj-body ul{margin:4px 0 0;padding-left:19px;color:var(--muted);font-size:.9rem}
+.pj-body li{margin-bottom:5px}
+.pj-body h4{margin:18px 0 7px;font-size:.74rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--navy)}
+
+/* forms */
+.formwrap{background:var(--sand);border:1px solid var(--line);border-radius:16px;padding:clamp(24px,4vw,38px)}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:block;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);margin:14px 0 6px}
+input,select,textarea{
+  width:100%;font:inherit;font-size:.95rem;padding:12px 13px;border-radius:9px;
+  border:1.5px solid var(--line);background:#fff;color:var(--ink);
+}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--sea)}
+textarea{min-height:118px;resize:vertical}
+.f-note{font-size:.85rem;color:var(--muted);margin-top:14px}
+.f-note.bad{color:var(--red);font-weight:600}
+
+/* footer */
+footer{background:var(--navy-deep);color:rgba(255,255,255,.72);padding:54px 0 28px;font-size:.9rem}
+.fgrid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:34px}
+footer h4{font-size:.73rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;margin:0 0 13px}
+footer ul{list-style:none;margin:0;padding:0}
+footer li{margin-bottom:8px}
+footer a{text-decoration:none}
+footer a:hover{color:#fff}
+.flogo{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.flogo img{width:46px;height:46px;border-radius:8px;object-fit:cover}
+.flogo b{font-family:Fraunces,serif;color:#fff;font-size:1.2rem}
+.fbot{border-top:1px solid rgba(255,255,255,.14);margin-top:34px;padding-top:20px;
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;font-size:.82rem}
+
+@media(max-width:900px){
+  .two{grid-template-columns:1fr}
+  .pj{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr}
+  .strip-in{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:760px){
+  .burger{display:block}
+  nav{
+    position:absolute;top:72px;left:0;right:0;background:#fff;flex-direction:column;
+    align-items:stretch;gap:2px;padding:12px 16px 18px;border-bottom:1px solid var(--line);
+    display:none;
+  }
+  nav.on{display:flex}
+  nav a{padding:12px 10px}
+  .f-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hin">
+    <a class="brand" href="#top">
+      <img src="assets/simact-logo.jpg" alt="SImACT">
+      <b>SImACT</b>
+    </a>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="nav">
+      <a href="#about">About</a>
+      <a href="#strategy">Investment Strategy</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#investors">Investors &amp; Contact</a>
+      <a class="btn btn-p" href="#investors" style="margin-left:6px">Invest With Us</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══ 1. HOME ══════════════════════════════════════════════════════════ -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="eyebrow" style="color:#7FD3F0"><span class="bar" style="background:#7FD3F0"></span> Société Immobilière d’Agriculture, de Commerce et de Tourisme</div>
+    <h1>Investing in <em>Haiti’s Future</em></h1>
+    <p>Building sustainable economic value through strategic investment, enterprise
+       development, and socially responsible growth.</p>
+    <div class="hero-cta">
+      <a class="btn btn-l" href="#portfolio">Explore Our Investments</a>
+      <a class="btn btn-gh" href="#investors">Investment Opportunities</a>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar"><b>Real Estate</b><span>Residential, commercial and development opportunities</span></div>
+      <div class="pillar"><b>Agriculture</b><span>Production, processing and food systems</span></div>
+      <div class="pillar"><b>Tourism &amp; Hospitality</b><span>Hotels, destinations and tourism assets</span></div>
+      <div class="pillar"><b>Commerce &amp; Enterprise</b><span>Scalable Haitian businesses</span></div>
+      <div class="pillar"><b>Strategic Investments</b><span>Emerging opportunities and partnerships</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap"><div class="strip-in" id="stats"></div></div>
+</div>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="lede" style="max-width:74ch;font-size:clamp(1.1rem,2.4vw,1.45rem);color:var(--ink)">
+      Contributing to Haiti’s transition toward a more productive, sustainable and
+      self-reliant economy through strategic investment and enterprise development.
+    </p>
+  </div>
+</section>
+
+<!-- ═══ 2. ABOUT ═════════════════════════════════════════════════════════ -->
+<section class="sec" id="about" style="background:var(--sand);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="two">
+      <div>
+        <div class="eyebrow"><span class="bar"></span> About SImACT</div>
+        <h2>Two decades of investing in Haiti, and a platform built for what comes next.</h2>
+      </div>
+      <div>
+        <p>SImACT (Société Immobilière d’Agriculture, de Commerce et de Tourisme) was
+           established in 2004 by a group of Haitian-American professionals and investors
+           united by a shared belief that private investment, diaspora expertise and
+           socially responsible entrepreneurship could contribute meaningfully to Haiti’s
+           economic and social development.</p>
+        <p>Incorporated in both New York and Haiti, SImACT was created to leverage the
+           knowledge, experience, resources and networks of Haitian-American professionals
+           and investors to participate in Haiti’s emerging investment opportunities.</p>
+        <p>From its initial group of investors, SImACT has grown its shareholder base and
+           diversified across hospitality, housing, agriculture and mining. Some initiatives
+           have met limited success — the Company’s journey has been shaped by the complex
+           operating environment in Haiti, including recurring political, economic and
+           social disruptions over the past two decades.</p>
+        <p style="color:var(--ink);font-weight:500">Despite these challenges, SImACT has
+           remained committed to its founding vision. Its experience, shareholder base,
+           sectoral interests and knowledge of the Haitian market position it to pursue a
+           new generation of sustainable investment opportunities.</p>
+      </div>
+    </div>
+
+    <div class="eyebrow" style="margin-top:clamp(44px,6vw,72px)"><span class="bar"></span> Our Timeline</div>
+    <div class="tl">
+      <div class="tl-i"><b>2004</b><h3>Founded</h3><p>The Company is founded by seven Haitian-American professionals with an initial focus on real estate development opportunities in Haiti.</p></div>
+      <div class="tl-i"><b>2004</b><h3>Dual incorporation</h3><p>Corporate presence established in both New York and Haiti, creating a platform for investment and business activities in Haiti.</p></div>
+      <div class="tl-i"><b>2000s</b><h3>Expansion beyond real estate</h3><p>The Company begins exploring opportunities beyond its original real estate focus, expanding into tourism, mining and financial services.</p></div>
+      <div class="tl-i"><b>2010s</b><h3>Sector diversification</h3><p>Initiatives and investment opportunities pursued across multiple sectors, broadening the portfolio and expanding business relationships in Haiti.</p></div>
+      <div class="tl-i"><b>2010s–2020s</b><h3>Navigating a challenging environment</h3><p>The Company operates through a period marked by recurring political, economic and social disruption. Several initiatives encounter challenges and achieve limited success as a result.</p></div>
+      <div class="tl-i"><b>2020s</b><h3>Growth of the shareholder base</h3><p>The Company grows from its original seven investors to more than 31 shareholders, expanding the collective resources, expertise and networks available to support its objectives.</p></div>
+      <div class="tl-i"><b>Today</b><h3>A new investment platform</h3><p>Building on more than two decades of experience, the Company is positioned to pursue sustainable investment opportunities across real estate, business enterprises, tourism, mining, financial services and other strategic sectors.</p></div>
+      <div class="tl-i"><b>Looking ahead</b><h3>Building a self-reliant economy</h3><p>SImACT remains committed to identifying and developing opportunities that generate sustainable economic value, strengthen local enterprise, create opportunities for investment and contribute to Haiti’s long-term economic self-reliance.</p></div>
+    </div>
+
+    <div class="two" style="margin-top:clamp(44px,6vw,72px)">
+      <div>
+        <div class="eyebrow"><span class="bar"></span> Our Mission</div>
+        <p>SImACT’s mission is to create sustainable economic value in Haiti through socially
+           conscious investment, enterprise development and strategic partnerships that
+           generate both financial returns and meaningful social impact.</p>
+        <p>We invest across real estate, agriculture, commerce, tourism and related sectors
+           with the objective of stimulating economic growth, creating productive employment,
+           expanding access to property ownership, strengthening local enterprises and
+           contributing to the revitalization of communities.</p>
+      </div>
+      <div>
+        <div class="eyebrow"><span class="bar"></span> Our Vision</div>
+        <p>To be a leading Haitian investment platform recognized for combining financial
+           performance with sustainable economic and social impact.</p>
+        <p>We envision a Haiti where strategic investment helps unlock the potential of its
+           people, communities, businesses and natural resources — creating productive
+           opportunities, strengthening local economies, and contributing to a more
+           prosperous and self-reliant nation.</p>
+      </div>
+    </div>
+
+    <div class="eyebrow" style="margin-top:clamp(44px,6vw,72px)"><span class="bar"></span> Our Leadership</div>
+    <h2 style="max-width:22ch">A board built for stewardship.</h2>
+    <p class="lede" style="margin-top:16px">SImACT’s Board of Directors is comprised of a
+       distinguished group of professionals whose collective experience, expertise and
+       leadership provide the vision and stewardship that guide the Company forward — and a
+       shared commitment to responsible investment, sound governance and sustainable
+       development.</p>
+
+    <h3 style="margin-top:30px;color:var(--navy)">Executive Committee</h3>
+    <div class="people">
+      <div class="person"><b>Lesly Kernisant, MD</b><i>Chairman</i><p>Provides strategic leadership and overall direction to the Board and to SImACT, helping ensure its activities remain aligned with its long-term vision and objectives.</p></div>
+      <div class="person"><b>Daniel Faustin, MD</b><i>Vice President</i><p>Supports SImACT’s leadership, strategic development and institutional objectives, contributing to the effective implementation of the Company’s priorities.</p></div>
+      <div class="person"><b>Roosevelt Clerisme, MD</b><i>Secretary</i><p>Oversees Board governance, corporate records and organizational continuity, supporting effective administration and compliance with SImACT’s governance framework.</p></div>
+    </div>
+
+    <h3 style="margin-top:34px;color:var(--navy)">Board Members at Large</h3>
+    <p style="font-size:.95rem;color:var(--muted);max-width:66ch">Bringing a range of professional
+       expertise and leadership experience, including healthcare, finance and other professional
+       fields.</p>
+    <div class="people">
+      <div class="person"><b>Elsie Alvarez, MD</b><i>Board Member at Large</i></div>
+      <div class="person"><b>Elsie Raphael Kernisant, NP</b><i>Board Member at Large</i></div>
+      <div class="person"><b>Jean Marie Wolff</b><i>Finance Expert · Board Member at Large</i></div>
+      <div class="person"><b>Marie Ignace Morel, MD</b><i>Board Member at Large</i></div>
+      <div class="person"><b>Narcisse Versailles, MD</b><i>Board Member at Large</i></div>
+      <div class="person"><b>Serge Pinard, CFA</b><i>Board Member at Large</i></div>
+    </div>
+    <p style="font-size:.93rem;color:var(--muted);margin-top:20px;max-width:72ch">
+      SImACT always welcomes qualified professionals from diverse backgrounds, industries and
+      areas of expertise to its Board — broadening its collective knowledge while strengthening
+      its capacity to pursue strategic opportunities and maintain its commitment to integrity,
+      accountability, responsible investment, sound governance and social responsibility.</p>
+  </div>
+</section>
+
+<!-- ═══ 3. INVESTMENT STRATEGY ═══════════════════════════════════════════ -->
+<section class="sec" id="strategy">
+  <div class="wrap">
+    <div class="eyebrow"><span class="bar"></span> Investment Strategy</div>
+    <h2>Capital With Purpose</h2>
+    <p class="lede" style="margin-top:16px">We focus on opportunities where investment can
+       generate sustainable financial returns and measurable economic and social value.</p>
+
+    <div class="cards">
+      <div class="card"><span class="num">01</span><h3>Real Estate</h3><p>Developing and investing in residential, commercial, hospitality and other real estate opportunities that respond to market demand and support community development.</p></div>
+      <div class="card"><span class="num">02</span><h3>Agriculture &amp; Agro-Industry</h3><p>Supporting productive agricultural activities and agro-industrial opportunities that contribute to local employment, food systems and economic growth.</p></div>
+      <div class="card"><span class="num">03</span><h3>Tourism &amp; Hospitality</h3><p>Developing tourism and hospitality assets that leverage Haiti’s cultural, historical and natural resources while creating jobs and supporting local economies.</p></div>
+      <div class="card"><span class="num">04</span><h3>Commerce &amp; Enterprise</h3><p>Investing in businesses and enterprises with the potential to expand economic activity, create employment and deliver sustainable value.</p></div>
+      <div class="card"><span class="num">05</span><h3>Strategic Investments</h3><p>Exploring opportunities in sectors and assets where capital, expertise and partnerships can produce sustainable financial and economic outcomes.</p></div>
+    </div>
+
+    <div class="two" style="margin-top:clamp(40px,6vw,66px)">
+      <div>
+        <div class="eyebrow"><span class="bar"></span> Our Investment Philosophy</div>
+        <h2 style="font-size:clamp(1.35rem,2.7vw,1.9rem);max-width:20ch">Investment performance and economic development can be mutually reinforcing.</h2>
+      </div>
+      <div>
+        <p>Our investors seek more than financial returns. They seek opportunities where
+           capital can generate measurable economic and social value. Our philosophy therefore
+           considers both the commercial viability of an opportunity and its potential
+           contribution to communities and the broader Haitian economy.</p>
+        <p style="font-weight:600;color:var(--navy);margin-top:18px">We focus on opportunities that:</p>
+        <ul style="color:var(--muted);font-size:.94rem;padding-left:19px;margin:0">
+          <li>Generate sustainable financial returns</li>
+          <li>Create productive employment and entrepreneurial opportunities</li>
+          <li>Support the development of local businesses and industries</li>
+          <li>Expand access to quality real estate and hospitality services</li>
+          <li>Strengthen agriculture and productive economic activity</li>
+          <li>Encourage tourism and destination development</li>
+          <li>Revitalize underserved communities</li>
+          <li>Contribute to Haiti’s long-term economic resilience and self-reliance</li>
+        </ul>
+        <a class="btn btn-o" href="#investors" style="margin-top:24px">Partner With SImACT</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 4. PORTFOLIO ═════════════════════════════════════════════════════ -->
+<section class="sec" id="portfolio" style="background:var(--sand);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="eyebrow"><span class="bar"></span> Portfolio</div>
+    <h2>Real assets, in both the North and the South-East.</h2>
+    <p class="lede" style="margin-top:16px">Our current activities reflect SImACT’s commitment to
+       investment across real assets, hospitality, tourism and agro-industry. Through our operating
+       entities and development initiatives, we maintain a presence in both Northeastern and
+       Southeastern Haiti.</p>
+
+    <div class="pf">
+
+      <article class="pj">
+        <div class="pj-side">
+          <div>
+            <div class="tag">Hospitality &amp; Tourism</div>
+            <h3>Cap Lamandou Hotel</h3>
+            <div class="loc">Jacmel, Haiti</div>
+          </div>
+          <span class="status">Operating asset</span>
+        </div>
+        <div class="pj-body">
+          <p>Cap Lamandou is one of SImACT’s signature projects in Haiti’s hospitality sector.
+             Located along Jacmel’s scenic Caribbean coastline, the 32-room property represents
+             a longstanding investment in tourism and regional economic development, and
+             reflects our commitment to assets that generate both financial value and economic
+             activity within local communities.</p>
+          <p>Under the leadership of Dr. Daniel Faustin, the tourism division has worked closely
+             with the hotel’s management to strengthen operations and maintain business
+             continuity despite the significant political, economic and security challenges
+             affecting Haiti’s hospitality industry in recent years.</p>
+          <h4>Market opportunity</h4>
+          <p>Jacmel’s growing appeal as a domestic tourism destination creates demand for
+             comfortable, upscale accommodation. The property’s location, established operations
+             and existing base provide a platform for future growth — including a long-term
+             objective to develop additional private seafront suites, subject to market
+             conditions, feasibility and the availability of appropriate financing.</p>
+          <h4>Investment position</h4>
+          <p>Cap Lamandou forms part of the Company’s broader real estate and tourism portfolio.
+             Continued ownership provides exposure to the long-term potential of Jacmel’s tourism
+             market while preserving the underlying value of the real estate asset.<span data-valuation></span></p>
+        </div>
+      </article>
+
+      <article class="pj">
+        <div class="pj-side">
+          <div>
+            <div class="tag">Real Estate + Hospitality</div>
+            <h3>Belle Rive Residences, Hotel &amp; Club</h3>
+            <div class="loc">Jacmel, Haiti</div>
+          </div>
+          <span class="status">Development opportunity</span>
+        </div>
+        <div class="pj-body">
+          <p>A planned luxury mixed-use residential and hospitality development on approximately
+             24 acres fronting the Caribbean Sea, designed to combine upscale accommodation,
+             residential living, leisure and tourism within a distinctive coastal setting.</p>
+          <h4>The development</h4>
+          <ul>
+            <li>94 luxury townhouse and tower residences</li>
+            <li>A 120-room, four-star hotel</li>
+            <li>A private residential and social club</li>
+            <li>Boutique retail and service offerings</li>
+            <li>Resort amenities and recreational facilities</li>
+            <li>Access to a private beach minutes from the development</li>
+          </ul>
+          <h4>Development vision</h4>
+          <p>Belle Rive is conceived as more than a residential and hotel development. It is
+             intended to create a destination bringing together real estate, tourism, hospitality
+             and local culture — combining contemporary international standards with the cultural
+             identity of Jacmel, with Haitian art, craftsmanship and cuisine incorporated
+             throughout the guest and residential experience.</p>
+          <h4>Economic development potential</h4>
+          <p>The project has the potential to generate employment, stimulate supporting
+             businesses, attract visitors and investment, and expand the availability of
+             high-quality residential and hospitality accommodation in the Jacmel market.</p>
+        </div>
+      </article>
+
+      <article class="pj">
+        <div class="pj-side">
+          <div>
+            <div class="tag">Housing &amp; Community Development</div>
+            <h3>Village Laferrière</h3>
+            <div class="loc">Milot, Haiti</div>
+          </div>
+          <span class="status">Planned · ~500 homes</span>
+        </div>
+        <div class="pj-body">
+          <p>A proposed affordable housing and community development initiative designed to
+             address the growing need for quality, attainable housing in northern Haiti while
+             creating a model for sustainable community development.</p>
+          <p>SImACT acquired 191 acres in Milot for a planned private, gated community of
+             approximately 500 homes — designed as an integrated neighbourhood where residents
+             can live, work, socialize and access essential services within a thoughtfully
+             planned environment.</p>
+          <h4>Planned amenities</h4>
+          <ul>
+            <li>Recreational and sports facilities</li>
+            <li>Community gardens and green spaces</li>
+            <li>Grocery and convenience retail</li>
+            <li>Farmers’ market</li>
+            <li>Community gathering spaces</li>
+          </ul>
+          <h4>Making homeownership accessible</h4>
+          <p>SImACT is exploring financing structures that could include subsidized financing and
+             mortgage products designed to make homeownership more attainable for qualified
+             buyers — with the objective of competitive, fixed rates and terms of up to ten
+             years, subject to market conditions, regulatory requirements and agreements with
+             participating financial institutions.</p>
+          <h4>Location &amp; economic opportunity</h4>
+          <p>Milot sits within a region seeing significant infrastructure, institutional, tourism
+             and economic activity — close to Cap-Haïtien International Airport, Milot’s
+             healthcare facilities, the Caracol Industrial Park, educational institutions and
+             major attractions including the Citadelle Laferrière.</p>
+        </div>
+      </article>
+
+      <article class="pj">
+        <div class="pj-side">
+          <div>
+            <div class="tag">Agriculture &amp; Agro-Industry</div>
+            <h3>Agricultural Production &amp; Processing</h3>
+            <div class="loc">Haiti</div>
+          </div>
+          <span class="status">Area of interest</span>
+        </div>
+        <div class="pj-body">
+          <p>Haiti possesses significant agricultural potential, supported by its agroecological
+             conditions, longstanding farming traditions and experience in food production.
+             SImACT recognizes agriculture as a sector able to generate employment, strengthen
+             local production, improve food security and create opportunities for sustainable
+             economic growth.</p>
+          <p>Our interest extends beyond primary production to the broader agro-industrial value
+             chain — food processing, value-added production, storage, distribution and related
+             activities — connecting agricultural production with processing and markets.</p>
+        </div>
+      </article>
+
+      <article class="pj">
+        <div class="pj-side">
+          <div>
+            <div class="tag">Mining &amp; Natural Resources</div>
+            <h3>SOMINE</h3>
+            <div class="loc">Société Minière du Nord-Est S.A.</div>
+          </div>
+          <span class="status">Majority shareholding</span>
+        </div>
+        <div class="pj-body">
+          <p>Haiti possesses substantial, largely underdeveloped mineral resources, including
+             known deposits of gold, copper and other minerals, offering opportunities for
+             responsible exploration and development. SImACT has established a significant
+             presence in the sector through its majority shareholding in Société Minière du
+             Nord-Est S.A. (SOMINE).</p>
+          <p>SImACT views mining as an opportunity to support economic diversification, job
+             creation, infrastructure development and increased investment in Haiti, while
+             promoting responsible environmental and community practices.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 5. INVESTORS & CONTACT ═══════════════════════════════════════════ -->
+<section class="sec" id="investors">
+  <div class="wrap">
+    <div class="eyebrow"><span class="bar"></span> Investors</div>
+    <h2>Invest With SImACT</h2>
+    <p class="lede" style="margin-top:16px">Learn about the Company, register your investment
+       interest, and a member of our team will follow up with you directly.</p>
+
+    <div class="two" style="margin-top:34px">
+      <div>
+        <div class="cards" style="grid-template-columns:1fr;margin-top:0">
+          <div class="card"><h3>Investment opportunities</h3><p>Current and prospective opportunities across real estate, agriculture, tourism, commerce and strategic sectors.</p></div>
+          <div class="card"><h3>Request investor information</h3><p>Register your interest and our team will contact you with the appropriate information.</p></div>
+          <div class="card"><h3>Strategic partnerships</h3><p>We work with financial institutions, developers, operators and other stakeholders to advance projects toward implementation.</p></div>
+        </div>
+      </div>
+
+      <div class="formwrap">
+        <h3 style="color:var(--navy);font-size:1.16rem">Register your interest</h3>
+        <form id="form" novalidate>
+          <div class="f-row">
+            <div><label for="f-name">Full name</label><input id="f-name" name="name" autocomplete="name"></div>
+            <div><label for="f-org">Organization <span style="text-transform:none;font-weight:500;color:var(--muted)">(optional)</span></label><input id="f-org" name="organization" autocomplete="organization"></div>
+          </div>
+          <div class="f-row">
+            <div><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email"></div>
+            <div><label for="f-phone">Phone <span style="text-transform:none;font-weight:500;color:var(--muted)">(optional)</span></label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
+          </div>
+          <label for="f-subject">I am enquiring about</label>
+          <select id="f-subject" name="subject">
+            <option>Investment inquiry</option>
+            <option>Partnership inquiry</option>
+            <option>Request investor information</option>
+            <option>General inquiry</option>
+          </select>
+          <label for="f-interest">Sector of interest</label>
+          <select id="f-interest" name="interest">
+            <option>No particular sector</option>
+            <option>Real estate</option>
+            <option>Agriculture &amp; agro-industry</option>
+            <option>Tourism &amp; hospitality</option>
+            <option>Commerce &amp; enterprise</option>
+            <option>Mining &amp; natural resources</option>
+          </select>
+          <label for="f-msg">Message</label>
+          <textarea id="f-msg" name="message"></textarea>
+          <button class="btn btn-p" type="submit" id="f-send" style="width:100%;margin-top:18px">Send enquiry</button>
+        </form>
+        <p class="f-note" id="f-note"></p>
+      </div>
+    </div>
+
+    <div class="eyebrow" style="margin-top:clamp(48px,7vw,80px)"><span class="bar"></span> Connect With SImACT</div>
+    <h2 style="font-size:clamp(1.35rem,2.7vw,1.9rem)">Contact</h2>
+    <div class="cards" id="contactCards"></div>
+    <p class="f-note" id="contactNote" style="margin-top:18px"></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <div class="flogo"><img src="assets/simact-logo.jpg" alt="SImACT"><b>SImACT</b></div>
+        <p style="margin:0;max-width:44ch">Société Immobilière d’Agriculture, de Commerce et de
+           Tourisme. Incorporated in New York and in Haiti.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#about">About SImACT</a></li>
+          <li><a href="#strategy">Investment Strategy</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#investors">Investors &amp; Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Portfolio</h4>
+        <ul>
+          <li><a href="#portfolio">Cap Lamandou Hotel</a></li>
+          <li><a href="#portfolio">Belle Rive Residences</a></li>
+          <li><a href="#portfolio">Village Laferrière</a></li>
+          <li><a href="#portfolio">SOMINE</a></li>
+        </ul>
+        <ul id="socialList" style="margin-top:12px"></ul>
+      </div>
+    </div>
+    <div class="fbot">
+      <span>&copy; <span id="yr"></span> SImACT. All rights reserved.</span>
+      <span>Socially conscious investors.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site-config.js"></script>
+<script>
+/* Nothing on this page contains a figure, an address or an e-mail. They are all
+   read from SITE_CONFIG, and an empty value is left OUT rather than printed as
+   a blank row. */
+var CFG = window.SITE_CONFIG || {};
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? '' : s)
+  .replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* ── menu ──────────────────────────────────────────────────────────────── */
+var burger = $('burger'), nav = $('nav');
+burger.onclick = function(){
+  var on = nav.classList.toggle('on');
+  burger.setAttribute('aria-expanded', on ? 'true' : 'false');
+};
+nav.addEventListener('click', function(e){
+  if (e.target.tagName === 'A'){ nav.classList.remove('on'); burger.setAttribute('aria-expanded','false'); }
+});
+
+/* ── the credibility strip ─────────────────────────────────────────────── */
+var stats = (CFG.STATS || []).filter(function(s){ return s && String(s.value || '').trim(); });
+var strip = $('stats');
+if (stats.length){
+  strip.style.setProperty('--n', Math.min(stats.length, 4));
+  strip.innerHTML = stats.slice(0,4).map(function(s){
+    return '<div class="stat"><b>' + esc(s.value) + '</b><span>' + esc(s.label) + '</span></div>';
+  }).join('');
+} else {
+  strip.closest('.strip').style.display = 'none';
+}
+
+/* ── the Cap Lamandou valuation ────────────────────────────────────────────
+   Printed ONLY when both the figures AND the caveat are present. Their source
+   document breaks off mid-word right where the caveat should be, and an
+   unqualified valuation in front of investors is not a typo, it is a claim. */
+(function valuation(){
+  var slot = document.querySelector('[data-valuation]');
+  if (!slot) return;
+  var rep = String(CFG.CAP_LAMANDOU_REPLACEMENT_VALUE || '').trim();
+  var biz = String(CFG.CAP_LAMANDOU_BUSINESS_VALUE || '').trim();
+  var cav = String(CFG.CAP_LAMANDOU_VALUATION_CAVEAT || '').trim();
+  if (!rep || !biz || !cav) return;          // silence is the correct default
+  slot.textContent = ' Based on the Company’s historical assessment, the property’s '
+    + 'replacement value was estimated at ' + rep + ', while the business value of the hotel '
+    + 'was estimated at ' + biz + '. ' + cav;
+})();
+
+/* ── contact details ───────────────────────────────────────────────────── */
+(function contact(){
+  var rows = [
+    ['Email', CFG.CONTACT_EMAIL, 'mailto:' + CFG.CONTACT_EMAIL],
+    ['Telephone (United States)', CFG.CONTACT_PHONE_US, 'tel:' + String(CFG.CONTACT_PHONE_US||'').replace(/[^0-9+]/g,'')],
+    ['Telephone (Haiti)', CFG.CONTACT_PHONE_HT, 'tel:' + String(CFG.CONTACT_PHONE_HT||'').replace(/[^0-9+]/g,'')],
+    ['Office (United States)', CFG.CONTACT_ADDRESS_US, ''],
+    ['Office (Haiti)', CFG.CONTACT_ADDRESS_HT, ''],
+    ['Request an appointment', CFG.APPOINTMENT_URL ? 'Book a time with our team' : '', CFG.APPOINTMENT_URL]
+  ].filter(function(r){ return String(r[1] || '').trim(); });
+
+  var box = $('contactCards');
+  if (!rows.length){
+    box.style.display = 'none';
+    $('contactNote').textContent = 'Contact details are being finalised. Until then, please use '
+      + 'the enquiry form above and a member of our team will respond.';
+    return;
+  }
+  box.innerHTML = rows.map(function(r){
+    var val = r[2] ? '<a href="' + esc(r[2]) + '"' + (/^https?:/.test(r[2]) ? ' target="_blank" rel="noopener noreferrer"' : '') + '>' + esc(r[1]) + '</a>' : esc(r[1]);
+    return '<div class="card"><h3>' + esc(r[0]) + '</h3><p>' + val + '</p></div>';
+  }).join('');
+})();
+
+(function social(){
+  var s = CFG.SOCIAL || {};
+  var items = Object.keys(s).filter(function(k){ return String(s[k] || '').trim(); });
+  if (!items.length) return;
+  $('socialList').innerHTML = '<h4 style="margin-top:6px">Follow</h4>' + items.map(function(k){
+    return '<li><a href="' + esc(s[k]) + '" target="_blank" rel="noopener noreferrer">'
+      + k.charAt(0).toUpperCase() + k.slice(1) + '</a></li>';
+  }).join('');
+})();
+
+/* ── the enquiry form ───────────────────────────────────────────────────── */
+(function form(){
+  var f = $('form'), note = $('f-note'), btn = $('f-send');
+  function say(msg, bad){ note.textContent = msg; note.className = 'f-note' + (bad ? ' bad' : ''); }
+
+  if (!CFG.FORM_ENDPOINT){
+    say(CFG.CONTACT_EMAIL
+      ? 'This form is not connected yet. Please email ' + CFG.CONTACT_EMAIL + ' and we will respond.'
+      : 'This form is not connected yet — enquiries sent here would not reach anyone. '
+        + 'It will be switched on as soon as SImACT’s enquiry address is confirmed.');
+  }
+
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = $('f-name').value.trim(), email = $('f-email').value.trim();
+    if (!name || !email){ return say('Please give us your name and email so we can reply.', true); }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ return say('That email address does not look right.', true); }
+
+    /* ⛔ Never print a thank-you we cannot stand behind. With no endpoint the
+       message has gone nowhere, and saying otherwise loses a real investor. */
+    if (!CFG.FORM_ENDPOINT){
+      return say(CFG.CONTACT_EMAIL
+        ? 'This form is not connected yet, so nothing was sent. Please email ' + CFG.CONTACT_EMAIL + '.'
+        : 'This form is not connected yet, so nothing was sent. Please try again once SImACT’s enquiry address is published.', true);
+    }
+
+    btn.disabled = true; say('Sending…');
+    fetch(CFG.FORM_ENDPOINT, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name, email: email,
+        organization: $('f-org').value.trim(), phone: $('f-phone').value.trim(),
+        subject: $('f-subject').value, interest: $('f-interest').value,
+        message: $('f-msg').value.trim(), source: 'simact.net'
+      })
+    }).then(function(r){
+      if (!r.ok) throw new Error('rejected');
+      f.reset();
+      say('Thank you — your enquiry has been received. A member of our team will be in touch.');
+    }).catch(function(){
+      say('We could not send that just now. Please try again in a moment.', true);
+    }).then(function(){ btn.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>
