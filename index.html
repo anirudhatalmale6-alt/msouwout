@@ -532,6 +532,11 @@ a{text-decoration:none;color:inherit}
 .pax-note .pn-text{display:flex;flex-direction:column;min-width:0}
 .pax-note strong{font-size:.95rem;color:#00209F;line-height:1.25}
 .pax-note span{font-size:.82rem;color:#3A4A6B;line-height:1.4}
+.need-hint{
+  margin:8px 2px 0;font-size:.82rem;font-weight:700;color:#B45309;
+  text-align:center;min-height:1px;
+}
+.need-hint:empty{display:none}
 </style>
 <style id="capacitor-native-styles">
 body.capacitor-native{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
@@ -669,6 +674,11 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     </div>
 
     <button class="find-btn" id="findBtn" onclick="goStep2()" disabled data-i18n="find_btn">&#128308; Mande Kous Kounye A</button>
+    <!-- 🚨 A greyed-out button with no explanation reads as "the app is broken".
+         Jeffery reported "the button isn't working" twice: the first was a real
+         deadlock I caused, the second was simply an empty destination with
+         nothing on screen saying so. Silence is not a error message. -->
+    <p class="need-hint" id="findHint" role="status"></p>
 
     <!-- DASH SAFETY STRIP -->
     <div class="dash-safety-strip" style="margin:20px 0 0;background:linear-gradient(135deg,#0D2818 0%,#0D3B1F 50%,#0A2A15 100%);border-radius:14px;padding:18px 16px;position:relative;overflow:hidden">
@@ -998,7 +1008,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v34</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v35</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1126,6 +1136,9 @@ var T={
     ac_none:'Pa jwenn okenn kote. Tanpri tape plis detay.',
     gps_btn:'Sevi ak pozisyon mwen',
     find_btn:'&#128308; Mande Kous Kounye A',
+    need_both:'Antre kote ou ye ak kote ou prale.',
+    need_pickup:'Antre kote ou ye a.',
+    need_drop:'Antre kote ou prale a.',
     dash_strip_title:'&#128737;&#65039; Sekirite + Pwoteksyon Medikal',
     dash_s1:'Chofe Verifye pa DCPR',dash_s2:'Pwoteksyon Medikal DASH',dash_s3:'Swivi GPS an tan reyel',dash_s4:'Bouton Ijans',
     dash_s_link:'Aprann plis sou pwoteksyon DASH &#8594;',
@@ -1234,6 +1247,9 @@ var T={
     ac_none:'Aucun lieu trouvé. Ajoutez plus de détails.',
     gps_btn:'Utiliser ma position',
     find_btn:'&#128308; Demander un Trajet Maintenant',
+    need_both:'Indiquez votre position et votre destination.',
+    need_pickup:'Indiquez votre position.',
+    need_drop:'Indiquez votre destination.',
     dash_strip_title:'&#128737;&#65039; Securite + Protection Medicale',
     dash_s1:'Chauffeurs Verifies DCPR',dash_s2:'Protection Medicale DASH',dash_s3:'Suivi GPS en temps reel',dash_s4:'Bouton d\'Urgence',
     dash_s_link:'En savoir plus sur la protection DASH &#8594;',
@@ -1342,6 +1358,9 @@ var T={
     ac_none:'No place found. Try adding more detail.',
     gps_btn:'Use my location',
     find_btn:'&#128308; Request a Ride Now',
+    need_both:'Enter where you are and where you are going.',
+    need_pickup:'Enter where you are.',
+    need_drop:'Enter where you are going.',
     dash_strip_title:'&#128737;&#65039; Safety + Medical Protection',
     dash_s1:'DCPR Verified Drivers',dash_s2:'DASH Medical Protection',dash_s3:'Real-time GPS Tracking',dash_s4:'Emergency Button',
     dash_s_link:'Learn more about DASH protection &#8594;',
@@ -1450,6 +1469,9 @@ var T={
     ac_none:'No se encontró ningún lugar. Añade más detalles.',
     gps_btn:'Usar mi ubicación',
     find_btn:'&#128308; Pedir Viaje Ahora',
+    need_both:'Indique dónde está y a dónde va.',
+    need_pickup:'Indique dónde está.',
+    need_drop:'Indique a dónde va.',
     dash_strip_title:'&#128737;&#65039; Seguridad + Proteccion Medica',
     dash_s1:'Conductores Verificados DCPR',dash_s2:'Proteccion Medica DASH',dash_s3:'Seguimiento GPS en tiempo real',dash_s4:'Boton de Emergencia',
     dash_s_link:'Mas sobre la proteccion DASH &#8594;',
@@ -1773,7 +1795,13 @@ function syncFindBtn(){
      result of the lookup it starts. Nobody could order a ride at all.
      ⛔ Never gate step 1 on anything produced by step 2. The price gate lives
      on the ORDER button instead - see syncOrderBtn(). */
-  btn.disabled=!(pickupEl.value.trim()&&dropEl.value.trim());
+  var hasPick=!!pickupEl.value.trim(), hasDrop=!!dropEl.value.trim();
+  btn.disabled=!(hasPick&&hasDrop);
+  var hint=document.getElementById('findHint');
+  if(hint){
+    hint.textContent = (hasPick&&hasDrop) ? ''
+      : t(!hasPick&&!hasDrop ? 'need_both' : (hasPick ? 'need_drop' : 'need_pickup'));
+  }
 }
 
 /* The real money gate: you may not place an order at a price we invented.
