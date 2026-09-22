@@ -1008,7 +1008,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a href="https://haitibiznis.com/prolakay.html" style="color:rgba(255,255,255,.4);font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08)">Pwofesyonèl Lakay</a>
     <a href="https://haitibiznis.com/ecosystem-admin.html" style="color:rgba(255,255,255,.15);font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.05)">Admin</a>
   </div>
-  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v35</span></div>
+  <div style="font-size:.64rem;color:rgba(255,255,255,.2)">&copy; 2026 HaitiBiznis Ecosystem <!-- So a "it is not working" report can be answered with "which build are you on" instead of a guess. --><span id="buildVer">v36</span></div>
 </footer>
 
 <!-- KOUTYE STICKY BAR -->
@@ -1982,6 +1982,28 @@ function acFetch(text,cb){
 function attachAC(inputEl,isPickup){
   var box=document.createElement('div');box.className='ac-list';
   inputEl.parentNode.appendChild(box);
+
+  /* 🚨 22 Sep, LAUNCH DAY. The suggestion list is position:absolute with
+     max-height 264px. The destination input sits ~90px below the pickup input,
+     so the PICKUP list lay right on top of the DESTINATION field. Tapping the
+     destination hit a suggestion instead - the field could not be reached at
+     all. Reported as "He cant put any destination address", with a driver and a
+     passenger waiting.
+     ⛔ I cannot tell "wants this suggestion" from "wants the field underneath":
+     they are the same pixel. So the list must never reach the next field.
+     It is capped to the space actually available each time it opens. */
+  function capHeight(){
+    var next = isPickup ? document.getElementById('dropoff')
+                        : document.getElementById('findBtn');
+    if(!next) return;
+    var top = box.getBoundingClientRect().top;
+    var room = next.getBoundingClientRect().top - top - 8;
+    /* Use the room that actually exists. A floor of 64px overshot a 60px gap
+       and still clipped the top of the field by 13px - close is not good
+       enough when the whole point is that the field must be tappable. A short
+       scrolling list beats a tall one that swallows the next input. */
+    box.style.maxHeight = Math.max(40, Math.min(264, room)) + 'px';
+  }
   var timer=null,items=[],active=-1,lastQ='';
   function close(){box.classList.remove('show');active=-1;}
   function hi(){Array.prototype.forEach.call(box.querySelectorAll('.ac-item'),function(el,i){el.classList.toggle('active',i===active);});}
@@ -2027,7 +2049,7 @@ function attachAC(inputEl,isPickup){
         return '<div class="ac-item" data-i="'+i+'"><span class="ac-pin">&#128205;</span><span class="ac-txt">'+
                '<span class="ac-main">'+acEsc(l.main)+'</span><span class="ac-sub">'+acEsc(l.sub)+'</span></span></div>';}).join('')+own;
     }
-    box.classList.add('show');
+    box.classList.add('show'); capHeight();
     Array.prototype.forEach.call(box.querySelectorAll('.ac-item'),function(el){
       el.addEventListener('mousedown',function(e){
         e.preventDefault();
@@ -2042,7 +2064,8 @@ function attachAC(inputEl,isPickup){
     var v=inputEl.value.trim();
     if(v.length<3){close();return;}
     if(timer)clearTimeout(timer);
-    box.innerHTML='<div class="ac-note">'+t('ac_searching')+'</div>';box.classList.add('show');
+    box.innerHTML='<div class="ac-note">'+t('ac_searching')+'</div>';
+    box.classList.add('show'); capHeight();
     timer=setTimeout(function(){
       lastQ=v;
       acFetch(v,function(res){
@@ -3121,7 +3144,18 @@ if(!isStandalone&&!sessionStorage.getItem('msw_install_dismissed')
     if(isStandalone||sessionStorage.getItem('msw_install_dismissed'))return;
     var s1=document.getElementById('step1');
     var browsing=s1&&getComputedStyle(s1).display!=='none';
-    if(!browsing){ setTimeout(offerInstall,10000); return; }
+
+    /* 🚨 22 Sep, LAUNCH DAY. This sheet is position:fixed with z-index 10000 and
+       covers the WHOLE page. The old rule deferred it on steps 2 and 3 and then
+       showed it on step 1 - which is the ADDRESS FORM. Twelve seconds in, right
+       when someone is still typing a Haitian address on a phone keyboard, a
+       modal dropped over the inputs and ate every tap. From the outside it looks
+       exactly like "he cant put any destination address", and that is precisely
+       how it was reported, with a driver and a passenger waiting.
+       ⛔ Never offer an install while the person is filling something in. */
+    var typing = document.activeElement===pickupEl || document.activeElement===dropEl
+              || (pickupEl && pickupEl.value.trim()) || (dropEl && dropEl.value.trim());
+    if(!browsing || typing){ setTimeout(offerInstall,15000); return; }
     overlay.classList.add('show');
   };
   setTimeout(offerInstall, 12000);
