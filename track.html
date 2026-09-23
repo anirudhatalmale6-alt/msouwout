@@ -303,6 +303,30 @@ body.stealth .lang-sw button.active{color:#333;background:#eee}
   font-size:.7rem;font-weight:600;text-decoration:underline;
 }
 
+/* PAY FOR THE RIDE — hidden until there is a driver and something to pay */
+.pay-card{
+  display:none;margin:12px 16px;padding:16px;border-radius:var(--radius);
+  background:#fff;border:1.5px solid rgba(0,32,159,.18);
+  box-shadow:0 6px 20px rgba(15,23,42,.07);
+}
+.pay-card.show{display:block}
+.pay-card.paid{border-color:rgba(18,161,80,.35);background:rgba(18,161,80,.06)}
+.pay-title{font-size:1rem;font-weight:900;color:#0F172A;margin-bottom:4px}
+.pay-sub{font-size:.76rem;color:#64748B;line-height:1.5}
+.pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.pay-methods:empty{display:none}
+.pay-btn{
+  padding:13px 10px;border:0;border-radius:12px;background:#00209F;color:#fff;
+  font-size:.86rem;font-weight:800;width:100%;
+}
+.pay-btn:disabled{background:#94A3B8}
+.pay-err{color:#D21034;font-size:.78rem;font-weight:700;margin-top:10px;display:none}
+.pay-err.show{display:block}
+.pay-check{
+  margin-top:10px;width:100%;padding:11px;border:1.5px solid #CBD5E1;
+  border-radius:11px;background:#fff;color:#0F172A;font-size:.8rem;font-weight:800;
+}
+
 /* SOS LEVEL 2 — SILENT ALERT ACTIVE */
 .sos-l2{
   position:fixed;inset:0;z-index:600;
@@ -686,6 +710,22 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       <div class="ride-stat"><div class="ride-stat-value" id="statPrice">--</div><div class="ride-stat-label" data-i18n="price">Pri (HTG)</div></div>
     </div>
 
+    <!-- PAY FOR THE RIDE
+         🚨 23 Sep: this whole card did not exist. The passenger is sent to
+         track.html, and track.html had no payment code in it at all - not one
+         line. The machinery was all on index.html behind showRideDone(), so it
+         only ever appeared to somebody who ordered on that device AND stayed on
+         that page AND waited for the ride to finish. Jennifer was sent a
+         tracking link and had no way to pay from it.
+         It opens as soon as a driver is on the ride, not at the end. -->
+    <div class="pay-card" id="payCard">
+      <div class="pay-title" id="payTitle">---</div>
+      <div class="pay-sub" id="paySub"></div>
+      <div class="pay-methods" id="payMethods"></div>
+      <div class="pay-err" id="payErr"></div>
+      <button class="pay-check" id="payCheck" onclick="checkPaymentNow()" style="display:none"></button>
+    </div>
+
     <div class="actions" id="actionBtns">
       <button class="act-btn act-share" onclick="shareRide()">
         <span>&#128279;</span> <span data-i18n="share">Pataje</span>
@@ -698,7 +738,8 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <!-- SOS FAMILY SAFETY -->
     <div class="safety-actions" id="safetyBtns">
       <button class="sos-family-btn" id="sosBtn"
-        onpointerdown="sosDown(event)" onpointerup="sosUp()" onpointerleave="sosUp()">
+        onpointerdown="sosDown(event)" onpointerup="sosUp()" onpointerleave="sosUp()"
+        onpointercancel="sosUp()" onlostpointercapture="sosUp()">
         <span>&#128737;</span>
         <span data-i18n="sos_btn">Sekirite Fanmi</span>
         <span class="sos-sub-text" data-i18n="sos_hold">Kenbe 3s</span>
@@ -753,6 +794,12 @@ const I18N = {
     share_msg:'Mwen nan yon kous MsouWout! Swiv mwen la:',
     sb_text:'Sekirite Fanmi aktif', sb_contacts:'Kontak',
     dev_warn:'Chofe a kite wout nomal la',
+    pay_title:'Peye kous la — {amt} HTG', pay_sub:'Chwazi bous ou. Ou ka peye kounye a oswa lè kous la fini.',
+    pay_opening:'N ap louvri paj peman an...', pay_waiting:'N ap tann konfimasyon peman an.',
+    pay_wallet:'Bous', pay_check:'Verifye peman an', pay_paid:'Peman resevwa', pay_paid_sub:'Mèsi. Kous sa a peye.',
+    pay_none:'Pa gen mwayen peman disponib kounye a. Tanpri eseye ankò nan kèk minit.',
+    pay_failed:'Nou pa ka louvri peman an. Tanpri eseye ankò.',
+    pay_not_yet:'Peman an poko konfime.',
     sos_btn:'Sekirite Fanmi', sos_hold:'Kenbe 3s', safe_btn:'Mwen Anfom',
     l1_title:'Eske ou bezwen ed?', l1_sub:'Si ou pa anile nan 10 segonn, yon alet silansye ap voye bay kontak konfyans ou yo ak ekip sekirite a.',
     l1_cancel:'Non, Mwen Anfom', l1_silent:'Voye alet silansye kounye a',
@@ -786,6 +833,12 @@ const I18N = {
     share_msg:'Je suis dans une course MsouWout! Suivez-moi ici:',
     sb_text:'Securite Famille active', sb_contacts:'Contacts',
     dev_warn:'Le chauffeur a devie de la route',
+    pay_title:'Payer la course — {amt} HTG', pay_sub:'Choisissez votre portefeuille. Vous pouvez payer maintenant ou a la fin.',
+    pay_opening:'Ouverture de la page de paiement...', pay_waiting:'En attente de la confirmation du paiement.',
+    pay_wallet:'Portefeuille', pay_check:'Verifier le paiement', pay_paid:'Paiement recu', pay_paid_sub:'Merci. Cette course est payee.',
+    pay_none:'Aucun moyen de paiement disponible pour le moment. Reessayez dans quelques minutes.',
+    pay_failed:'Impossible d\'ouvrir le paiement. Veuillez reessayer.',
+    pay_not_yet:'Le paiement n\'est pas encore confirme.',
     sos_btn:'Securite Famille', sos_hold:'Maintenir 3s', safe_btn:'Je Suis OK',
     l1_title:'Avez-vous besoin d\'aide?', l1_sub:'Si vous n\'annulez pas dans 10 secondes, une alerte silencieuse sera envoyee a vos contacts de confiance.',
     l1_cancel:'Non, Je Suis OK', l1_silent:'Envoyer alerte silencieuse maintenant',
@@ -819,6 +872,12 @@ const I18N = {
     share_msg:'I\'m on a MsouWout ride! Track me here:',
     sb_text:'Family Safety active', sb_contacts:'Contacts',
     dev_warn:'Driver has deviated from route',
+    pay_title:'Pay for the ride — {amt} HTG', pay_sub:'Choose your wallet. You can pay now or when the ride ends.',
+    pay_opening:'Opening the payment page...', pay_waiting:'Waiting for the payment to be confirmed.',
+    pay_wallet:'Wallet', pay_check:'Check the payment', pay_paid:'Payment received', pay_paid_sub:'Thank you. This ride is paid.',
+    pay_none:'No payment method is available right now. Please try again in a few minutes.',
+    pay_failed:'We could not open the payment. Please try again.',
+    pay_not_yet:'The payment is not confirmed yet.',
     sos_btn:'Family Safety', sos_hold:'Hold 3s', safe_btn:'I\'m Safe',
     l1_title:'Do you need help?', l1_sub:'If you don\'t cancel in 10 seconds, a silent alert will be sent to your trusted contacts and security team.',
     l1_cancel:'No, I\'m Fine', l1_silent:'Send silent alert now',
@@ -852,6 +911,12 @@ const I18N = {
     share_msg:'Estoy en un viaje MsouWout! Sigueme aqui:',
     sb_text:'Seguridad Familiar activa', sb_contacts:'Contactos',
     dev_warn:'El conductor se desvio de la ruta',
+    pay_title:'Pagar el viaje — {amt} HTG', pay_sub:'Elija su billetera. Puede pagar ahora o al terminar el viaje.',
+    pay_opening:'Abriendo la pagina de pago...', pay_waiting:'Esperando la confirmacion del pago.',
+    pay_wallet:'Billetera', pay_check:'Verificar el pago', pay_paid:'Pago recibido', pay_paid_sub:'Gracias. Este viaje esta pagado.',
+    pay_none:'No hay ningun metodo de pago disponible. Intentelo en unos minutos.',
+    pay_failed:'No pudimos abrir el pago. Intentelo de nuevo.',
+    pay_not_yet:'El pago aun no esta confirmado.',
     sos_btn:'Seguridad Familiar', sos_hold:'Mantener 3s', safe_btn:'Estoy Bien',
     l1_title:'Necesitas ayuda?', l1_sub:'Si no cancelas en 10 segundos, se enviara una alerta silenciosa a tus contactos de confianza.',
     l1_cancel:'No, Estoy Bien', l1_silent:'Enviar alerta silenciosa ahora',
@@ -900,6 +965,13 @@ function setLang(l) {
     const k = el.dataset.i18n;
     if (I18N[l] && I18N[l][k]) el.textContent = I18N[l][k];
   });
+  /* The pay card is written by script, not from data-i18n attributes, so this
+     loop cannot reach it - switching to French left it in Kreyol. Redraw it. */
+  try {
+    const box = document.getElementById('payMethods');
+    if (box) box.dataset.filled = '';
+    if (typeof updatePayCard === 'function' && rideData) updatePayCard(rideData);
+  } catch (e) {}
 }
 
 function getParam() {
@@ -1102,10 +1174,14 @@ function updateUI(data) {
     }
   }
 
+  try { updatePayCard(data); } catch (e) {}
+
   updateMap(data);
 }
 
 function hideActiveElements() {
+  const pc = document.getElementById('payCard');
+  if (pc) pc.classList.remove('show');
   document.getElementById('rideDetails').style.display = 'none';
   document.getElementById('actionBtns').style.display = 'none';
   document.getElementById('safetyBtns').style.display = 'none';
@@ -1142,6 +1218,190 @@ function stopPolling() {
   if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
 }
 
+// ==================== PAYING FOR THE RIDE ====================
+/* Everything that decides whether money arrived lives on the SERVER. Coming
+   back from the wallet page proves nothing - only GET /api/payments/:ref does.
+   The amount is never taken from this page either: /api/payments/create reads
+   the ride and charges what the ride costs, so a tampered page cannot change
+   the price. */
+
+const PAY_KEY = 'msw_track_pay';
+let payRef = null;
+let payTimer = null;
+let payAmount = 0;
+let payBusy = false;
+
+function payIsOwner() {
+  /* A shared tracking link is for somebody watching the journey. They must see
+     the ride; they must never be asked to pay for it. */
+  return !location.search.includes('shared=1');
+}
+
+function payAmountOf(d) {
+  const withProt = Number(d.total_with_protection || 0);
+  const base = Number(d.price || 0);
+  return Math.round(withProt > 0 ? withProt : base);
+}
+
+function payShow(on) {
+  const c = document.getElementById('payCard');
+  if (c) c.classList.toggle('show', !!on);
+}
+
+function payErr(msg) {
+  const e = document.getElementById('payErr');
+  if (!e) return;
+  e.textContent = msg || '';
+  e.classList.toggle('show', !!msg);
+}
+
+function payShowPaid(method) {
+  const c = document.getElementById('payCard');
+  if (c) c.classList.add('paid');
+  document.getElementById('payTitle').textContent = t('pay_paid');
+  document.getElementById('paySub').textContent =
+    t('pay_paid_sub') + (method ? ' (' + method + ')' : '');
+  document.getElementById('payMethods').innerHTML = '';
+  document.getElementById('payCheck').style.display = 'none';
+  payErr('');
+  payShow(true);
+  payStopPolling();
+  try { localStorage.removeItem(PAY_KEY); } catch (e) {}
+}
+
+function updatePayCard(d) {
+  if (!payIsOwner()) { payShow(false); return; }
+
+  const status = d.status || '';
+  const hasDriver = ['accepted', 'in_progress', 'monitoring', 'emergency', 'completed']
+    .includes(status);
+  payAmount = payAmountOf(d);
+
+  if ((d.payment_status || '') === 'paid') { payShowPaid(d.payment_method); return; }
+  if (!hasDriver || !payAmount) { payShow(false); return; }
+
+  /* She may have paid on the wallet page and come back to a reloaded page. */
+  if (!payRef) {
+    try {
+      const saved = JSON.parse(localStorage.getItem(PAY_KEY) || 'null');
+      if (saved && saved.code === (d.tracking_code || rideCode) && saved.ref) {
+        payRef = saved.ref;
+      }
+    } catch (e) {}
+  }
+
+  payShow(true);
+  if (payRef) { payWaiting(); return; }
+  payOfferMethods();
+}
+
+function payWaiting() {
+  document.getElementById('payTitle').textContent = t('pay_title').replace('{amt}', payAmount);
+  document.getElementById('paySub').textContent = t('pay_waiting');
+  document.getElementById('payMethods').innerHTML = '';
+  const c = document.getElementById('payCheck');
+  c.textContent = t('pay_check');
+  c.style.display = '';
+  payStartPolling();
+}
+
+function payOfferMethods() {
+  const title = document.getElementById('payTitle');
+  const sub = document.getElementById('paySub');
+  const box = document.getElementById('payMethods');
+  title.textContent = t('pay_title').replace('{amt}', payAmount);
+  sub.textContent = t('pay_sub');
+  document.getElementById('payCheck').style.display = 'none';
+
+  if (box.dataset.filled === '1') return;   /* do not redraw under her finger every 5s */
+  const LABEL = { moncash: 'MonCash', natcash: 'NatCash', kashpaw: 'Kashpaw', all: t('pay_wallet') };
+
+  fetch(API + '/payments/methods')
+    .then(r => r.json())
+    .then(j => {
+      const list = (j && j.methods) || [];
+      box.innerHTML = '';
+      if (!list.length) { payErr(t('pay_none')); return; }
+      box.dataset.filled = '1';
+      payErr('');
+      list.forEach(m => {
+        const b = document.createElement('button');
+        b.className = 'pay-btn';
+        b.textContent = LABEL[m.method] || m.method;
+        b.onclick = () => beginPayment(m.method);
+        box.appendChild(b);
+      });
+    })
+    .catch(() => { box.innerHTML = ''; payErr(t('pay_none')); });
+}
+
+function beginPayment(method) {
+  if (payBusy) return;
+  payBusy = true;
+  payErr('');
+  document.getElementById('paySub').textContent = t('pay_opening');
+  document.querySelectorAll('#payMethods .pay-btn').forEach(b => { b.disabled = true; });
+
+  fetch(API + '/payments/create', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      subject_type: 'ride',
+      subject_id: (rideData && rideData.ride_id) || null,
+      amount: payAmount,
+      payment_method: method,
+      payer_phone: (rideData && rideData.rider && rideData.rider.phone) || '',
+      platform: 'msouwout'
+    })
+  })
+    .then(r => r.json())
+    .then(j => {
+      if (!j || !j.success || !j.payment_url) throw new Error((j && j.error) || 'failed');
+      payRef = j.reference_id;
+      try {
+        localStorage.setItem(PAY_KEY, JSON.stringify({
+          code: (rideData && rideData.tracking_code) || rideCode, ref: payRef
+        }));
+      } catch (e) {}
+      /* Same tab. An installed app shell swallows a new tab, and a swallowed
+         tab looks exactly like a dead button. */
+      location.href = j.payment_url;
+    })
+    .catch(() => {
+      payBusy = false;
+      document.querySelectorAll('#payMethods .pay-btn').forEach(b => { b.disabled = false; });
+      document.getElementById('paySub').textContent = t('pay_sub');
+      payErr(t('pay_failed'));
+    });
+}
+
+function checkPaymentOnce() {
+  if (!payRef) return Promise.resolve(null);
+  return fetch(API + '/payments/' + encodeURIComponent(payRef))
+    .then(r => r.json())
+    .then(j => {
+      if (j && j.paid) { payShowPaid(j.method); return j; }
+      return j;
+    })
+    .catch(() => null);
+}
+
+function checkPaymentNow() {
+  payErr('');
+  checkPaymentOnce().then(j => {
+    if (j && !j.paid) payErr(t('pay_not_yet'));
+  });
+}
+
+function payStartPolling() {
+  if (payTimer) return;
+  payTimer = setInterval(checkPaymentOnce, 6000);
+}
+
+function payStopPolling() {
+  if (payTimer) { clearInterval(payTimer); payTimer = null; }
+}
+
 // ==================== SHARE / CALL ====================
 
 function shareRide() {
@@ -1159,11 +1419,46 @@ function callDriver() {
 
 // ==================== SOS 3-LEVEL SYSTEM ====================
 
+/* 🚨 23 Sep, reported live: "the alert went off without asking for it, and when
+   I click I am OK it kept jumping back to the previous message."
+
+   Two faults, both about timers nobody was cancelling.
+
+   1. The hold only listened for pointerup and pointerleave. When a scroll starts
+      on this button the browser fires POINTERCANCEL and no pointerup at all, so
+      the 3-second timer ran to completion and opened the alert. Scrolling the
+      page could raise a real emergency.
+
+   2. Every call to triggerL1() created a NEW countdown interval and overwrote
+      the handle to the old one. The old one kept counting and fired
+      triggerSilent() on its own - which is why dismissing the alert bounced
+      her back to it, and why the escalated screen appeared on top of the silent
+      one in her screenshot instead of replacing it. Each stray countdown also
+      POSTs a fresh alert to the contacts and the security team.
+
+   Every one of these now clears before it sets, and every screen change hides
+   the other two rather than assuming which one is up. */
+
+function sosClearTimers() {
+  if (sosHoldTimer) { clearTimeout(sosHoldTimer); sosHoldTimer = null; }
+  if (sosCountdown) { clearInterval(sosCountdown); sosCountdown = null; }
+}
+
+function sosOnly(id) {
+  ['sosL1', 'sosL2', 'sosL3'].forEach(function (x) {
+    const el = document.getElementById(x);
+    if (el) el.classList.toggle('show', x === id);
+  });
+}
+
 function sosDown(e) {
   e.preventDefault();
+  if (sosLevel > 0) return;              /* already alerting - not a new hold */
   const btn = document.getElementById('sosBtn');
+  if (sosHoldTimer) clearTimeout(sosHoldTimer);
   btn.classList.add('holding');
   sosHoldTimer = setTimeout(() => {
+    sosHoldTimer = null;
     btn.classList.remove('holding');
     triggerL1();
   }, 3000);
@@ -1171,13 +1466,15 @@ function sosDown(e) {
 
 function sosUp() {
   const btn = document.getElementById('sosBtn');
-  btn.classList.remove('holding');
+  if (btn) btn.classList.remove('holding');
   if (sosHoldTimer) { clearTimeout(sosHoldTimer); sosHoldTimer = null; }
 }
 
 function triggerL1() {
+  if (sosLevel > 0) return;              /* never stack a second countdown */
+  sosClearTimers();
   sosLevel = 1;
-  document.getElementById('sosL1').classList.add('show');
+  sosOnly('sosL1');
   let count = 10;
   document.getElementById('l1Count').textContent = count;
   sosCountdown = setInterval(() => {
@@ -1192,20 +1489,23 @@ function triggerL1() {
 }
 
 function cancelSOS() {
-  if (sosCountdown) { clearInterval(sosCountdown); sosCountdown = null; }
+  sosClearTimers();
   sosLevel = 0;
-  document.getElementById('sosL1').classList.remove('show');
+  sosOnly(null);
 }
 
 function triggerSilentNow() {
-  if (sosCountdown) { clearInterval(sosCountdown); sosCountdown = null; }
+  sosClearTimers();
   triggerSilent();
 }
 
 async function triggerSilent() {
+  /* A stray countdown must not raise a second alert on a ride that is already
+     escalated, and must not drag the screen back down to level 2. */
+  if (sosLevel >= 2) return;
+  sosClearTimers();
   sosLevel = 2;
-  document.getElementById('sosL1').classList.remove('show');
-  document.getElementById('sosL2').classList.add('show');
+  sosOnly('sosL2');
   document.getElementById('safeBtn').classList.add('show');
 
   const coords = await getGPS();
@@ -1233,9 +1533,10 @@ async function triggerSilent() {
 }
 
 async function escalateToL3() {
+  if (sosLevel >= 3) return;
+  sosClearTimers();
   sosLevel = 3;
-  document.getElementById('sosL2').classList.remove('show');
-  document.getElementById('sosL3').classList.add('show');
+  sosOnly('sosL3');
 
   const coords = await getGPS();
   const phone = getRiderPhone();
@@ -1269,11 +1570,12 @@ async function confirmSafe() {
   } catch (e) {}
 
   stopAudioRecording();
+  /* Clear the timers BEFORE dropping the level. A countdown still ticking here
+     is exactly what bounced her back to the alert she had just dismissed. */
+  sosClearTimers();
   sosLevel = 0;
   currentAlertId = null;
-  document.getElementById('sosL1').classList.remove('show');
-  document.getElementById('sosL2').classList.remove('show');
-  document.getElementById('sosL3').classList.remove('show');
+  sosOnly(null);
   document.getElementById('safeBtn').classList.remove('show');
   document.body.classList.remove('stealth');
 }
@@ -1622,6 +1924,11 @@ confirmSafe = async function() {
   stopEscalationTimer();
   stopSafetyChecks();
   await _origConfirmSafe();
+  /* 🚨 A guard that stops guarding. stopSafetyChecks() killed the periodic
+     "are you OK?" for the rest of the journey, so saying "I'm fine" once turned
+     the safety checks off permanently - on the ride where she had just needed
+     them. Restart them if the ride is still running. */
+  if (rideData && rideData.status === 'in_progress') startSafetyChecks();
 };
 
 init();
