@@ -796,6 +796,7 @@ const I18N = {
     dev_warn:'Chofe a kite wout nomal la',
     pay_title:'Peye kous la — {amt} HTG', pay_sub:'Chwazi bous ou. Ou ka peye kounye a oswa lè kous la fini.',
     pay_opening:'N ap louvri paj peman an...', pay_waiting:'N ap tann konfimasyon peman an.',
+    refund_title:'Nou dwe ou {amt} HTG', refund_sub:'Ou te peye {paid} HTG. Frè anilasyon an se {fee} HTG. Ekip MsouWout ap voye rès la sou kont MonCash ou.',
     pay_wallet:'Bous', pay_check:'Verifye peman an', pay_paid:'Peman resevwa', pay_paid_sub:'Mèsi. Kous sa a peye.',
     pay_none:'Pa gen mwayen peman disponib kounye a. Tanpri eseye ankò nan kèk minit.',
     pay_failed:'Nou pa ka louvri peman an. Tanpri eseye ankò.',
@@ -835,6 +836,7 @@ const I18N = {
     dev_warn:'Le chauffeur a devie de la route',
     pay_title:'Payer la course — {amt} HTG', pay_sub:'Choisissez votre portefeuille. Vous pouvez payer maintenant ou a la fin.',
     pay_opening:'Ouverture de la page de paiement...', pay_waiting:'En attente de la confirmation du paiement.',
+    refund_title:'Nous vous devons {amt} HTG', refund_sub:'Vous avez paye {paid} HTG. Les frais d'+String.fromCharCode(39)+'annulation sont de {fee} HTG. L'+String.fromCharCode(39)+'equipe MsouWout renvoie le reste sur votre compte MonCash.',
     pay_wallet:'Portefeuille', pay_check:'Verifier le paiement', pay_paid:'Paiement recu', pay_paid_sub:'Merci. Cette course est payee.',
     pay_none:'Aucun moyen de paiement disponible pour le moment. Reessayez dans quelques minutes.',
     pay_failed:'Impossible d\'ouvrir le paiement. Veuillez reessayer.',
@@ -874,6 +876,7 @@ const I18N = {
     dev_warn:'Driver has deviated from route',
     pay_title:'Pay for the ride — {amt} HTG', pay_sub:'Choose your wallet. You can pay now or when the ride ends.',
     pay_opening:'Opening the payment page...', pay_waiting:'Waiting for the payment to be confirmed.',
+    refund_title:'We owe you {amt} HTG', refund_sub:'You paid {paid} HTG. The cancellation fee is {fee} HTG. The MsouWout team is sending the rest back to your MonCash account.',
     pay_wallet:'Wallet', pay_check:'Check the payment', pay_paid:'Payment received', pay_paid_sub:'Thank you. This ride is paid.',
     pay_none:'No payment method is available right now. Please try again in a few minutes.',
     pay_failed:'We could not open the payment. Please try again.',
@@ -913,6 +916,7 @@ const I18N = {
     dev_warn:'El conductor se desvio de la ruta',
     pay_title:'Pagar el viaje — {amt} HTG', pay_sub:'Elija su billetera. Puede pagar ahora o al terminar el viaje.',
     pay_opening:'Abriendo la pagina de pago...', pay_waiting:'Esperando la confirmacion del pago.',
+    refund_title:'Le debemos {amt} HTG', refund_sub:'Usted pago {paid} HTG. El cargo por cancelacion es de {fee} HTG. El equipo de MsouWout le devuelve el resto a su cuenta MonCash.',
     pay_wallet:'Billetera', pay_check:'Verificar el pago', pay_paid:'Pago recibido', pay_paid_sub:'Gracias. Este viaje esta pagado.',
     pay_none:'No hay ningun metodo de pago disponible. Intentelo en unos minutos.',
     pay_failed:'No pudimos abrir el pago. Intentelo de nuevo.',
@@ -1271,6 +1275,26 @@ function payShowPaid(method) {
 
 function updatePayCard(d) {
   if (!payIsOwner()) { payShow(false); return; }
+
+  /* 🛑 She paid, then the ride was cancelled. MW-4RQDSL0: 368 HTG taken, 50
+     kept as the cancellation fee, 318 owed back - and on the day it happened
+     nothing on this page said so, so the only person who knew she was owed
+     money was her. Tell her the number. */
+  if (Number(d.refund_due) > 0) {
+    const c = document.getElementById('payCard');
+    if (c) c.classList.remove('paid');
+    document.getElementById('payTitle').textContent =
+      t('refund_title').replace('{amt}', Math.round(Number(d.refund_due)));
+    document.getElementById('paySub').textContent =
+      t('refund_sub').replace('{paid}', Math.round(Number(d.total_with_protection || d.price || 0)))
+                    .replace('{fee}', Math.round(Number(d.cancel_fee || 0)));
+    document.getElementById('payMethods').innerHTML = '';
+    document.getElementById('payCheck').style.display = 'none';
+    payErr('');
+    payShow(true);
+    payStopPolling();
+    return;
+  }
 
   const status = d.status || '';
   const hasDriver = ['accepted', 'in_progress', 'monitoring', 'emergency', 'completed']
