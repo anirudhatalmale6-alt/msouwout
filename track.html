@@ -303,6 +303,21 @@ body.stealth .lang-sw button.active{color:#333;background:#eee}
   font-size:.7rem;font-weight:600;text-decoration:underline;
 }
 
+/* DRIVER DROPPED OUT — amber, because it is news, not an error */
+.reassign-card{
+  display:none;margin:12px 16px;padding:16px;border-radius:var(--radius);
+  background:#FFF8E6;border:1.5px solid rgba(212,160,23,.45);
+}
+.reassign-card.show{display:block}
+.reassign-title{font-size:1rem;font-weight:900;color:#0F172A;margin-bottom:4px}
+.reassign-sub{font-size:.8rem;color:#6B5B2A;line-height:1.5}
+.reassign-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.reassign-wait{padding:12px 8px;border:0;border-radius:11px;background:#00209F;color:#fff;
+  font-size:.84rem;font-weight:800}
+.reassign-refund{padding:12px 8px;border:1.5px solid #CBD5E1;border-radius:11px;
+  background:#fff;color:#0F172A;font-size:.84rem;font-weight:800}
+.reassign-wait:disabled,.reassign-refund:disabled{opacity:.55}
+
 /* PAY FOR THE RIDE — hidden until there is a driver and something to pay */
 .pay-card{
   display:none;margin:12px 16px;padding:16px;border-radius:var(--radius);
@@ -710,6 +725,21 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       <div class="ride-stat"><div class="ride-stat-value" id="statPrice">--</div><div class="ride-stat-label" data-i18n="price">Pri (HTG)</div></div>
     </div>
 
+    <!-- DRIVER DROPPED OUT — she must be told, and given a choice.
+         Jeffery, 25 Sep: "make sure passengers are notified when their driver
+         cancels and can choose whether to wait for another driver or request a
+         full manual refund. Nobody should be left waiting indefinitely."
+         Without this the ride just slides back to a searching screen that looks
+         exactly like a ride that was never accepted. -->
+    <div class="reassign-card" id="reassignCard">
+      <div class="reassign-title" id="reassignTitle"></div>
+      <div class="reassign-sub" id="reassignSub"></div>
+      <div class="reassign-btns">
+        <button class="reassign-wait" id="reassignWait" onclick="keepWaiting()"></button>
+        <button class="reassign-refund" id="reassignRefund" onclick="askRefund()"></button>
+      </div>
+    </div>
+
     <!-- PAY FOR THE RIDE
          🚨 23 Sep: this whole card did not exist. The passenger is sent to
          track.html, and track.html had no payment code in it at all - not one
@@ -796,6 +826,13 @@ const I18N = {
     dev_warn:'Chofe a kite wout nomal la',
     pay_title:'Peye kous la — {amt} HTG', pay_sub:'Chwazi bous ou. Ou ka peye kounye a oswa lè kous la fini.',
     pay_opening:'N ap louvri paj peman an...', pay_waiting:'N ap tann konfimasyon peman an.',
+    ra_title:'Chofè a pa ka fè kous la',
+    ra_sub:'N ap chèche yon lòt chofè pou ou kounye a.',
+    ra_sub_paid:'N ap chèche yon lòt chofè pou ou. Ou pa bezwen peye ankò — lajan ou rete sou kous la.',
+    ra_wait:'Tann yon lòt chofè',
+    ra_refund:'Mande lajan m',
+    ra_confirm:'Ou vle nou anile kous la epi remèt ou lajan ou?',
+    ra_failed:'Nou pa ka fè sa kounye a. Tanpri eseye ankò.',
     refund_title:'Nou dwe ou {amt} HTG', refund_sub:'Ou te peye {paid} HTG. Frè anilasyon an se {fee} HTG. Ekip MsouWout ap voye rès la sou kont MonCash ou.',
     pay_wallet:'Bous', pay_check:'Verifye peman an', pay_paid:'Peman resevwa', pay_paid_sub:'Mèsi. Kous sa a peye.',
     pay_none:'Pa gen mwayen peman disponib kounye a. Tanpri eseye ankò nan kèk minit.',
@@ -836,6 +873,13 @@ const I18N = {
     dev_warn:'Le chauffeur a devie de la route',
     pay_title:'Payer la course — {amt} HTG', pay_sub:'Choisissez votre portefeuille. Vous pouvez payer maintenant ou a la fin.',
     pay_opening:'Ouverture de la page de paiement...', pay_waiting:'En attente de la confirmation du paiement.',
+    ra_title:'Le chauffeur ne peut pas faire la course',
+    ra_sub:'Nous cherchons un autre chauffeur pour vous.',
+    ra_sub_paid:'Nous cherchons un autre chauffeur. Vous ne payez pas deux fois — votre paiement reste sur la course.',
+    ra_wait:'Attendre un autre chauffeur',
+    ra_refund:'Demander un remboursement',
+    ra_confirm:'Voulez-vous annuler la course et être remboursé?',
+    ra_failed:'Impossible pour le moment. Veuillez reessayer.',
     refund_title:'Nous vous devons {amt} HTG', refund_sub:'Vous avez paye {paid} HTG. Les frais d'+String.fromCharCode(39)+'annulation sont de {fee} HTG. L'+String.fromCharCode(39)+'equipe MsouWout renvoie le reste sur votre compte MonCash.',
     pay_wallet:'Portefeuille', pay_check:'Verifier le paiement', pay_paid:'Paiement recu', pay_paid_sub:'Merci. Cette course est payee.',
     pay_none:'Aucun moyen de paiement disponible pour le moment. Reessayez dans quelques minutes.',
@@ -876,6 +920,13 @@ const I18N = {
     dev_warn:'Driver has deviated from route',
     pay_title:'Pay for the ride — {amt} HTG', pay_sub:'Choose your wallet. You can pay now or when the ride ends.',
     pay_opening:'Opening the payment page...', pay_waiting:'Waiting for the payment to be confirmed.',
+    ra_title:'Your driver cannot make the trip',
+    ra_sub:'We are looking for another driver for you.',
+    ra_sub_paid:'We are looking for another driver. You are not charged twice — your payment stays with the ride.',
+    ra_wait:'Wait for another driver',
+    ra_refund:'Ask for my money back',
+    ra_confirm:'Cancel the ride and get your money back?',
+    ra_failed:'We could not do that right now. Please try again.',
     refund_title:'We owe you {amt} HTG', refund_sub:'You paid {paid} HTG. The cancellation fee is {fee} HTG. The MsouWout team is sending the rest back to your MonCash account.',
     pay_wallet:'Wallet', pay_check:'Check the payment', pay_paid:'Payment received', pay_paid_sub:'Thank you. This ride is paid.',
     pay_none:'No payment method is available right now. Please try again in a few minutes.',
@@ -916,6 +967,13 @@ const I18N = {
     dev_warn:'El conductor se desvio de la ruta',
     pay_title:'Pagar el viaje — {amt} HTG', pay_sub:'Elija su billetera. Puede pagar ahora o al terminar el viaje.',
     pay_opening:'Abriendo la pagina de pago...', pay_waiting:'Esperando la confirmacion del pago.',
+    ra_title:'El conductor no puede hacer el viaje',
+    ra_sub:'Estamos buscando otro conductor para usted.',
+    ra_sub_paid:'Estamos buscando otro conductor. No paga dos veces — su pago sigue en el viaje.',
+    ra_wait:'Esperar otro conductor',
+    ra_refund:'Pedir mi dinero',
+    ra_confirm:'Cancelar el viaje y recibir su dinero?',
+    ra_failed:'No pudimos hacerlo ahora. Intentelo de nuevo.',
     refund_title:'Le debemos {amt} HTG', refund_sub:'Usted pago {paid} HTG. El cargo por cancelacion es de {fee} HTG. El equipo de MsouWout le devuelve el resto a su cuenta MonCash.',
     pay_wallet:'Billetera', pay_check:'Verificar el pago', pay_paid:'Pago recibido', pay_paid_sub:'Gracias. Este viaje esta pagado.',
     pay_none:'No hay ningun metodo de pago disponible. Intentelo en unos minutos.',
@@ -1195,6 +1253,7 @@ function updateUI(data) {
     }
   }
 
+  try { updateReassign(data); } catch (e) {}
   try { updatePayCard(data); } catch (e) {}
 
   updateMap(data);
@@ -1203,6 +1262,8 @@ function updateUI(data) {
 function hideActiveElements() {
   const pc = document.getElementById('payCard');
   if (pc) pc.classList.remove('show');
+  const rc = document.getElementById('reassignCard');
+  if (rc) rc.classList.remove('show');
   document.getElementById('rideDetails').style.display = 'none';
   document.getElementById('actionBtns').style.display = 'none';
   document.getElementById('safetyBtns').style.display = 'none';
@@ -1237,6 +1298,66 @@ function startPolling() {
 
 function stopPolling() {
   if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+}
+
+// ============ THE DRIVER DROPPED OUT — TELL HER, AND LET HER CHOOSE ========
+/* Only the person who booked sees this. A family member watching the journey
+   must not be offered somebody else's refund. */
+let reassignDismissed = false;
+
+function updateReassign(d) {
+  const card = document.getElementById('reassignCard');
+  if (!card) return;
+  const dropped = (d.status === 'searching') && Number(d.reassigned_count) > 0;
+  if (!dropped || !payIsOwner() || reassignDismissed) {
+    card.classList.remove('show');
+    return;
+  }
+  document.getElementById('reassignTitle').textContent = t('ra_title');
+  document.getElementById('reassignSub').textContent =
+    (String(d.payment_status || '').toLowerCase() === 'paid')
+      ? t('ra_sub_paid')
+      : t('ra_sub');
+  document.getElementById('reassignWait').textContent = t('ra_wait');
+  const rb = document.getElementById('reassignRefund');
+  rb.textContent = t('ra_refund');
+  /* Nothing was paid, so there is nothing to give back. Offering a refund
+     button that can only disappoint is worse than not offering it. */
+  rb.style.display = (String(d.payment_status || '').toLowerCase() === 'paid') ? '' : 'none';
+  card.classList.add('show');
+}
+
+function keepWaiting() {
+  reassignDismissed = true;
+  const card = document.getElementById('reassignCard');
+  if (card) card.classList.remove('show');
+}
+
+function askRefund() {
+  if (!confirm(t('ra_confirm'))) return;
+  const w = document.getElementById('reassignWait');
+  const r = document.getElementById('reassignRefund');
+  w.disabled = true; r.disabled = true;
+  r.textContent = '...';
+  /* Reuses the ordinary cancel. The server decides what is owed and records
+     it; this page never invents an amount. The fee is zero for the launch, so
+     she is owed the whole fare. */
+  fetch(API + '/rides/' + encodeURIComponent(rideData.ride_id) + '/cancel', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ cancelled_by: 'rider', reason: 'no replacement driver wanted' })
+  })
+    .then(res => res.json())
+    .then(j => {
+      if (!j || j.error) throw new Error(j && j.error);
+      keepWaiting();
+      fetchRide();
+    })
+    .catch(() => {
+      w.disabled = false; r.disabled = false;
+      r.textContent = t('ra_refund');
+      alert(t('ra_failed'));
+    });
 }
 
 // ==================== PAYING FOR THE RIDE ====================
