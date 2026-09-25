@@ -1134,6 +1134,7 @@ var T={
     ac_searching:'Ap chèche kote…',
     ac_use_typed:'Sèvi ak sa m tape a',
     ac_none:'Pa jwenn okenn kote. Tanpri tape plis detay.',
+    gps_my_position:'Pozisyon mwen (GPS)',
     gps_btn:'Sevi ak pozisyon mwen',
     find_btn:'&#128308; Mande Kous Kounye A',
     need_both:'Antre kote ou ye ak kote ou prale.',
@@ -1245,6 +1246,7 @@ var T={
     ac_searching:'Recherche du lieu…',
     ac_use_typed:'Utiliser ce que j’ai écrit',
     ac_none:'Aucun lieu trouvé. Ajoutez plus de détails.',
+    gps_my_position:'Ma position (GPS)',
     gps_btn:'Utiliser ma position',
     find_btn:'&#128308; Demander un Trajet Maintenant',
     need_both:'Indiquez votre position et votre destination.',
@@ -1356,6 +1358,7 @@ var T={
     ac_searching:'Searching for a place…',
     ac_use_typed:'Use exactly what I typed',
     ac_none:'No place found. Try adding more detail.',
+    gps_my_position:'My position (GPS)',
     gps_btn:'Use my location',
     find_btn:'&#128308; Request a Ride Now',
     need_both:'Enter where you are and where you are going.',
@@ -1467,6 +1470,7 @@ var T={
     ac_searching:'Buscando el lugar…',
     ac_use_typed:'Usar lo que escribí',
     ac_none:'No se encontró ningún lugar. Añade más detalles.',
+    gps_my_position:'Mi ubicación (GPS)',
     gps_btn:'Usar mi ubicación',
     find_btn:'&#128308; Pedir Viaje Ahora',
     need_both:'Indique dónde está y a dónde va.',
@@ -2943,6 +2947,48 @@ function haitiDateISO(d){
   }
 })();
 
+/* A fetch that gives up. On a weak Port-au-Prince connection a request that
+   never settles leaves the button spinning for ever, which reads as "broken"
+   just as loudly as an error does. */
+function withTimeout(p, ms){
+  return Promise.race([
+    p,
+    new Promise(function(_, rej){ setTimeout(function(){ rej(new Error('timeout')); }, ms); })
+  ]);
+}
+
+/* Second reverse geocoder, used only when the first one will not answer.
+   Free, no key, OpenStreetMap data, CORS open - and for the coordinates
+   Jennifer sent it returns a street name where Nominatim returns none.
+   Shaped into the same {address:{...}, display_name} that acLabel() expects so
+   there is one label builder, not two. */
+function reverseViaPhoton(lat, lng){
+  return withTimeout(fetch('https://photon.komoot.io/reverse?lat='+lat+'&lon='+lng+'&limit=1'), 7000)
+    .then(function(r){ if(!r.ok) throw new Error('photon '+r.status); return r.json(); })
+    .then(function(j){
+      var f=(j&&j.features&&j.features[0])||null;
+      if(!f) return null;
+      var p=f.properties||{};
+      var addr={
+        house_number:p.housenumber||undefined,
+        road:p.street||undefined,
+        neighbourhood:p.district||undefined,
+        suburb:p.district||undefined,
+        city:p.city||undefined,
+        county:p.county||undefined,
+        state:p.state||undefined,
+        country:p.country||undefined
+      };
+      /* Photon puts a street in `name` when there is no housenumber, which is
+         exactly the case that left Nominatim blank here. */
+      if(!addr.road && p.name && p.name!==p.city) addr.road=p.name;
+      var display=[p.name,p.street,p.district,p.city,p.state,p.country]
+        .filter(function(x){return x;}).join(', ');
+      return { address:addr, display_name:display, name:'' };
+    })
+    .catch(function(){ return null; });
+}
+
 /* GPS LOCATION */
 function useMyLocation(){
   var btn=document.getElementById('gpsBtn');
@@ -2960,9 +3006,34 @@ function useMyLocation(){
     window._pickupLng=lng;
     localStorage.setItem('msw_last_lat',lat);
     localStorage.setItem('msw_last_lng',lng);
-    fetch('https://nominatim.openstreetmap.org/reverse?accept-language=ht&lat='+lat+'&lon='+lng+'&format=json&addressdetails=1')
-      .then(function(r){return r.json()})
+    /* 🚨 25 Sep. Jennifer: "chak m use pozisyon GPS lan li pa banm adress
+       kotem ye an men yn paket numewo" - every time she uses GPS it gives her
+       a pile of numbers instead of where she is.
+
+       Two faults, and the second is the one that actually stopped her.
+
+       1. This asked ONE free public service. It answers me perfectly from
+          here - "Morne Hercule, Petyonvil" for her exact coordinates - and
+          failed every time from her phone. Nominatim rate-limits by IP, and a
+          whole carrier can sit behind one address. I flagged this service as a
+          weak foundation on 13 September and left it as the only one. There is
+          now a second, Photon, which is also free, also OpenStreetMap, and for
+          her coordinates actually returns a street name where Nominatim
+          returns none.
+
+       2. When the lookup failed it wrote the raw latitude and longitude INTO
+          the address box. That is what she was looking at. And it is what
+          blocked the order: seeing numbers she did not recognise, she edited
+          the field - and editing the field throws away the GPS coordinates the
+          fare is measured from. So the fix that matters is never to show her
+          coordinates at all. If both services are silent she gets a plain
+          "my position (GPS)" and the ride still works, because the distance is
+          measured from the coordinates we already hold, not from this text. */
+    withTimeout(fetch('https://nominatim.openstreetmap.org/reverse?accept-language=ht&lat='+lat+'&lon='+lng+'&format=json&addressdetails=1'), 7000)
+      .then(function(r){ if(!r.ok) throw new Error('nominatim '+r.status); return r.json(); })
+      .catch(function(){ return reverseViaPhoton(lat,lng); })
       .then(function(data){
+        if(!data) throw new Error('no reverse geocoder answered');
         /* Was: the first three comma-separated chunks of display_name, which
            threw away the house number when there was one and often kept the
            postcode instead. Build the line from the named fields, and keep
@@ -2978,10 +3049,17 @@ function useMyLocation(){
         btn.style.opacity='1';
         setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span data-i18n="gps_btn">'+t('gps_btn')+'</span>'},2000);
       }).catch(function(){
-        document.getElementById('pickup').value=lat.toFixed(4)+', '+lng.toFixed(4);
+        /* ⛔ NEVER raw coordinates. She cannot read them, she does not trust
+           them, and the moment she edits them the fare loses its starting
+           point. A plain label keeps the GPS fix attached and the order
+           working. */
+        var label=t('gps_my_position');
+        document.getElementById('pickup').value=label;
+        localStorage.setItem('msw_last_addr',label);
         checkInputs();
         btn.innerHTML='<span>&#9989;</span> <span>'+t('gps_found_short')+'</span>';
         btn.style.opacity='1';
+        setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span data-i18n="gps_btn">'+t('gps_btn')+'</span>'},2000);
       });
   },function(err){
     btn.style.opacity='1';
