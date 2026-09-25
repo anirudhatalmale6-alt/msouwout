@@ -1112,9 +1112,26 @@ function updateUI(data) {
   if (data.duration_min != null) document.getElementById('statTime').textContent = data.duration_min + ' min';
   if (data.price != null) document.getElementById('statPrice').textContent = data.price + ' HTG';
 
+  /* 🚨🚨 24 Sep. The PIN no longer comes from the server on this page, and it
+     must not: this page is reached with a tracking code, and that code lives in
+     a link the passenger is told to forward to her family. Anybody holding the
+     link was being shown the code she uses to prove she is getting into the
+     right car.
+     It now comes from THIS DEVICE - the ordering page saved it when she booked.
+     So the phone that ordered still shows the PIN, and a forwarded link on any
+     other phone shows nothing. That is the line between the passenger and the
+     people she shares with, and a query string was never it. */
   var pinCard = document.getElementById('pinCard');
-  if (data.ride_pin && !['completed','cancelled'].includes(data.status)) {
-    document.getElementById('pinCode').textContent = data.ride_pin;
+  var myPin = '';
+  try {
+    var saved = JSON.parse(localStorage.getItem('mw_active_ride') || 'null');
+    if (saved && saved.pin &&
+        (saved.tracking_code === data.tracking_code || saved.id === data.ride_id)) {
+      myPin = saved.pin;
+    }
+  } catch (e) {}
+  if (myPin && !['completed','cancelled'].includes(data.status)) {
+    document.getElementById('pinCode').textContent = myPin;
     pinCard.classList.add('show');
   } else {
     pinCard.classList.remove('show');
