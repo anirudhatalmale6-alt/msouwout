@@ -1181,13 +1181,21 @@ function updateUI(data) {
      people she shares with, and a query string was never it. */
   var pinCard = document.getElementById('pinCard');
   var myPin = '';
-  try {
-    var saved = JSON.parse(localStorage.getItem('mw_active_ride') || 'null');
-    if (saved && saved.pin &&
-        (saved.tracking_code === data.tracking_code || saved.id === data.ride_id)) {
-      myPin = saved.pin;
-    }
-  } catch (e) {}
+  /* The server sends the PIN only when the token matched. That is now the
+     primary source: localStorage loses it the moment she clears her browser
+     or opens her link on another phone, and then she cannot start the ride
+     she has already paid for. The saved copy stays as a fallback. */
+  if (data.ride_pin) {
+    myPin = data.ride_pin;
+  } else {
+    try {
+      var saved = JSON.parse(localStorage.getItem('mw_active_ride') || 'null');
+      if (saved && saved.pin &&
+          (saved.tracking_code === data.tracking_code || saved.id === data.ride_id)) {
+        myPin = saved.pin;
+      }
+    } catch (e) {}
+  }
   if (myPin && !['completed','cancelled'].includes(data.status)) {
     document.getElementById('pinCode').textContent = myPin;
     pinCard.classList.add('show');
@@ -1275,11 +1283,29 @@ function hideActiveElements() {
 
 // ==================== POLLING ====================
 
+/* ── WHO IS HOLDING THIS LINK ──────────────────────────────────────────────
+   One source of truth, and it is a SECRET, not a query string. ?t= is in the
+   passenger's own link; a link she forwards does not have it. The old test
+   asked whether the URL said `shared=1`, which the viewer could simply delete.
+
+   The token is also recovered from this phone's saved ride, so her own link
+   keeps working if she re-opens it from history without the parameter. */
+function ownerToken() {
+  try {
+    const q = new URLSearchParams(location.search).get('t');
+    if (q) return q;
+    const saved = JSON.parse(localStorage.getItem('mw_active_ride') || 'null');
+    if (saved && saved.owner_token &&
+        (saved.tracking_code === rideCode || saved.id === rideCode)) return saved.owner_token;
+  } catch (e) {}
+  return '';
+}
+
 async function fetchRide() {
   try {
-    const isOwner = !location.search.includes('shared=1');
-    const pinParam = isOwner ? '?pin=1' : '';
-    const resp = await fetch(API + '/rides/' + encodeURIComponent(rideCode) + '/track' + pinParam);
+    const tok = ownerToken();
+    const resp = await fetch(API + '/rides/' + encodeURIComponent(rideCode) + '/track' +
+                             (tok ? '?t=' + encodeURIComponent(tok) : ''));
     if (!resp.ok) throw new Error('not found');
     const data = await resp.json();
     document.getElementById('loadingScreen').classList.add('hide');
@@ -1375,8 +1401,11 @@ let payBusy = false;
 
 function payIsOwner() {
   /* A shared tracking link is for somebody watching the journey. They must see
-     the ride; they must never be asked to pay for it. */
-  return !location.search.includes('shared=1');
+     the ride; they must never be asked to pay for it.
+     ⚠️ This now trusts the SERVER's is_owner, which was decided by comparing
+     the token. Deciding it here from the URL meant the page could be talked
+     into showing a pay button to anyone. */
+  return !!(rideData && rideData.is_owner);
 }
 
 function payAmountOf(d) {
@@ -1568,7 +1597,10 @@ function payStopPolling() {
 
 function shareRide() {
   const code = rideData ? rideData.tracking_code : rideCode;
-  const url = SITE + '/track.html?code=' + encodeURIComponent(code) + '&shared=1';
+  /* ⛔ NO TOKEN. This is the whole point of the separation: what she sends to
+     her family is a link that cannot become her booking page. It shows the
+     driver, the car and the journey - not her name, her number or her PIN. */
+  const url = SITE + '/track.html?code=' + encodeURIComponent(code);
   const msg = t('share_msg') + ' ' + url;
   window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
 }

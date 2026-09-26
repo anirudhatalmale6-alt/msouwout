@@ -2461,12 +2461,36 @@ function doSubmitRide(name,phone){
 var RIDE_KEY='mw_active_ride';
 var _ridePoll=null,_pollUntil=0;
 
+/* Her own booking link. The token is what tells the tracking page she is the
+   passenger and not somebody she forwarded it to - without it she lands on the
+   family view with no PIN and no pay button, on her own ride. */
+function myTrackUrl(code, absolute){
+  var base = absolute
+    ? location.origin + location.pathname.replace(/[^/]*$/, '') + 'track.html'
+    : 'track.html';
+  var url = base + '?code=' + encodeURIComponent(code);
+  var tok = (rideData && rideData.owner_token) || '';
+  if (!tok) {
+    try {
+      var saved = JSON.parse(localStorage.getItem(RIDE_KEY) || 'null');
+      if (saved && saved.owner_token &&
+          (saved.tracking_code === code || saved.id === code)) tok = saved.owner_token;
+    } catch (e) {}
+  }
+  return tok ? url + '&t=' + encodeURIComponent(tok) : url;
+}
+
 function saveActiveRide(){
   try{
     if(!rideData.id)return;
     localStorage.setItem(RIDE_KEY,JSON.stringify({
       id:rideData.id, tracking_code:rideData.tracking_code||'',
-      pin:rideData.pin||'', ts:Date.now()}));
+      pin:rideData.pin||'',
+      /* 🔑 Her private key to this booking. The server sends it once, at
+         creation, and never again - so if this is not kept here it is gone,
+         and her own link degrades to the family view. */
+      owner_token:rideData.owner_token||'',
+      ts:Date.now()}));
   }catch(e){}
 }
 function clearActiveRide(){ try{localStorage.removeItem(RIDE_KEY);}catch(e){} }
@@ -2790,10 +2814,18 @@ function showDriverFound(d){
   var tk=document.getElementById('mdTrack');
   var sh=document.getElementById('mdShare');
   if(code && d.status!=='completed' && d.status!=='cancelled'){
-    var url=location.origin+location.pathname.replace(/[^/]*$/,'')+'track.html?code='+encodeURIComponent(code);
+    /* ⚠️ TWO DIFFERENT LINKS, and they must never be crossed.
+       `url` is HERS and carries the token. `familyUrl` is what the green
+       "send the card to your family" button sends, and carries nothing but
+       the tracking code - sharing the token would hand her family her PIN,
+       her pay button and her phone number, which is the whole thing this
+       separation exists to prevent. */
+    var url=myTrackUrl(code, true);
+    var familyUrl=location.origin+location.pathname.replace(/[^/]*$/,'')+
+                  'track.html?code='+encodeURIComponent(code);
     tk.href=url; tk.style.display='';
     sh.style.display='';
-    sh.onclick=function(){ shareTrack(url, d); };
+    sh.onclick=function(){ shareTrack(familyUrl, d); };
   } else {
     tk.style.display='none'; sh.style.display='none';
   }
@@ -2848,7 +2880,7 @@ function showWaitlist(msg){
   document.getElementById('wlDrop').textContent=dropEl.value.trim();
   var tl=document.getElementById('trackLink');
   if(rideData.tracking_code){
-    tl.href='track.html?code='+encodeURIComponent(rideData.tracking_code);
+    tl.href=myTrackUrl(rideData.tracking_code, false);
     tl.style.display='';
   }
 }
