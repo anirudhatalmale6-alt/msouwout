@@ -254,6 +254,30 @@ nav{
 .status-msg{font-size:.9rem;margin-top:12px;line-height:1.6;color:var(--text)}
 .status-msg strong{font-weight:800}
 
+.payout-card{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:16px;margin-bottom:16px}
+.payout-card h3{margin:0 0 12px;font-size:15px;font-weight:900;color:#0F172A}
+.payout-sums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.payout-sums .s{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:10px 8px;text-align:center}
+.payout-sums .sv{font-size:16px;font-weight:900;color:#0F172A}
+.payout-sums .sv small{font-size:10px;font-weight:700;color:#64748B}
+.payout-sums .sl{font-size:10.5px;font-weight:700;color:#64748B;margin-top:2px;line-height:1.3}
+.payout-methods{display:grid;gap:8px;margin-bottom:10px}
+/* Big taps. Most drivers are on a small phone with one thumb free. */
+.pm{display:flex;align-items:center;gap:10px;padding:13px 14px;border:2px solid #E2E8F0;border-radius:13px;background:#fff;cursor:pointer;font-family:inherit;font-size:14px;font-weight:800;color:#0F172A;text-align:left;width:100%}
+.pm .tick{margin-left:auto;font-size:17px;color:#00209F;visibility:hidden}
+.pm.on{border-color:#00209F;background:#F5F8FF}
+.pm.on .tick{visibility:visible}
+.pm:disabled{opacity:.55;cursor:not-allowed}
+.pm .sub2{display:block;font-size:11.5px;font-weight:600;color:#64748B;margin-top:2px}
+.payout-wallet{display:flex;gap:8px;margin-bottom:10px}
+.payout-wallet input{flex:1;font-family:inherit;font-size:14px;padding:11px 12px;border:1px solid #CBD5E1;border-radius:11px;min-width:0}
+.payout-wallet button{font-family:inherit;font-size:13px;font-weight:800;padding:11px 16px;border-radius:11px;border:none;background:#00209F;color:#fff;cursor:pointer}
+.payout-note{font-size:12px;line-height:1.5;color:#64748B;background:#F8FAFC;border-radius:10px;padding:10px}
+.payout-note.bad{color:#991B1B;background:#FEF2F2}
+.payout-note.good{color:#166534;background:#F0FDF4}
+.payout-runs{margin-top:12px;display:grid;gap:8px}
+.payout-runs .r{border:1px solid #E2E8F0;border-radius:11px;padding:10px 12px;font-size:12.5px}
+.payout-runs .r b{font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
 .profile-card{
   background:var(--white);border-radius:20px;padding:24px;margin-bottom:16px;
   border:1px solid rgba(0,0,0,.04);box-shadow:0 8px 32px rgba(0,0,0,.04);
@@ -538,6 +562,19 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
 
     <div class="kpi-grid" id="kpiGrid"></div>
 
+    <!-- 26 Sep: how he wants his money. He may choose the METHOD and his wallet
+         number himself; the bank ACCOUNT NUMBER is entered by an administrator,
+         because /api/drivers/login authenticates on a phone number alone and an
+         account number behind that door belongs to whoever opened the app. -->
+    <div class="payout-card" id="payoutCard" style="display:none">
+      <h3>&#128176; <span data-i18n="pay_title">Kijan ou vle peye</span></h3>
+      <div class="payout-sums" id="payoutSums"></div>
+      <div class="payout-methods" id="payoutMethods"></div>
+      <div id="payoutWallet"></div>
+      <div class="payout-note" id="payoutNote"></div>
+      <div class="payout-runs" id="payoutRuns"></div>
+    </div>
+
     <div class="status-card" id="statusCard">
       <span class="status-badge" id="statusBadge"></span>
       <div class="status-msg" id="statusMsg"></div>
@@ -592,6 +629,7 @@ const T={
     ride_completed:"Fini",ride_in_progress:"An kou",ride_searching:"Ap chache",ride_cancelled:"Anile",ride_accepted:"Aksepte",
     member_since:"Manm depi",
     kpi_earned:"Kòb Total Ou Fè",kpi_rides:"Kous Konplè",kpi_today:"Jodi A",kpi_week:"Semèn Nan",kpi_rides_done:"kous",kpi_all_time:"depi ou kòmanse",
+    pay_title:"Kijan ou vle peye",pay_owed:"Yo dwe w",pay_inpay:"Nan pwosesis",pay_settled:"Yo peye w",pay_moncash:"MonCash",pay_natcash:"NatCash",pay_bank:"Kont labank",pay_bank_sub:"Yon administratè antre nimewo kont lan",pay_wallet_ph:"Nimewo w pou resevwa lajan",pay_save:"Anrejistre",pay_locked:"Yo ap trete yon peman kounye a, kidonk ou pa ka chanje anyen jiskaske li fini. Sa pwoteje lajan ki deja sou wout la.",pay_bank_none:"Ou chwazi labank. Yon administratè dwe antre enfòmasyon kont ou anvan yo ka fè yon vire.",pay_hint:"Lajan yo dwe w anrejistre men yo poko voye l. Se lè li make peye ak yon referans ou gen li nan men w.",pay_run_paid:"peye",pay_run_wait:"ap tann apwobasyon",pay_run_ok:"apwouve",
     active_ride_title:"Kous Aktif",enter_ride_pin:"Mande pasaje a pou kòd PIN nan",
     arrived_btn:"M rive - avize pasaje a",arrived_done:"Pasaje a avize",presence_on:"Ou an liy - w ap resevwa kous",presence_off:"Ou make kòm deyò - men w ap toujou resevwa demann",presence_go_on:"Ale an liy",presence_go_off:"Soti",presence_hint_on:"Kite paj la louvri pou w resevwa demann yo.",presence_hint_off:"Peze Ale an liy lè w pare pou travay.",presence_fail:"Nou pa ka chanje sa kounye a. Eseye ankò.",geo_denied:"Ou an liy. GPS fèmen - ou ka toujou resevwa kous.",geo_unavailable:"Ou an liy. Nou pa ka jwenn pozisyon w kounye a.",start_ride_btn:"Kòmanse Kous",complete_ride_btn:"Fini Kous",
     pin_wrong:"PIN pa kòrèk. Eseye ankò.",pin_verified:"PIN verifye! Kous kòmanse!",
@@ -628,6 +666,7 @@ const T={
     ride_completed:"Termine",ride_in_progress:"En cours",ride_searching:"Recherche",ride_cancelled:"Annule",ride_accepted:"Accepte",
     member_since:"Membre depuis",
     kpi_earned:"Total Gagné",kpi_rides:"Courses Terminées",kpi_today:"Aujourd'hui",kpi_week:"Cette Semaine",kpi_rides_done:"courses",kpi_all_time:"depuis le début",
+    pay_title:"Comment vous êtes payé",pay_owed:"Dû",pay_inpay:"En cours",pay_settled:"Payé",pay_moncash:"MonCash",pay_natcash:"NatCash",pay_bank:"Compte bancaire",pay_bank_sub:"Un administrateur saisit le numéro de compte",pay_wallet_ph:"Votre numéro pour recevoir l'argent",pay_save:"Enregistrer",pay_locked:"Un paiement est en cours de traitement, vous ne pouvez rien changer jusqu'à ce qu'il soit réglé. Cela protège l'argent déjà en route.",pay_bank_none:"Banque choisie. Un administrateur doit encore saisir vos coordonnées avant qu'un virement soit possible.",pay_hint:"Les montants dus sont enregistrés mais pas encore envoyés. L'argent est à vous une fois marqué payé avec une référence.",pay_run_paid:"payé",pay_run_wait:"en attente d'approbation",pay_run_ok:"approuvé",
     active_ride_title:"Course Active",enter_ride_pin:"Demandez le code PIN au passager",
     arrived_btn:"Je suis arrivé - prévenir le passager",arrived_done:"Passager prévenu",presence_on:"Vous êtes en ligne - vous recevez des courses",presence_off:"Marqué hors ligne - vous recevez toujours les demandes",presence_go_on:"Se mettre en ligne",presence_go_off:"Se retirer",presence_hint_on:"Gardez la page ouverte pour recevoir les demandes.",presence_hint_off:"Appuyez sur Se mettre en ligne quand vous êtes prêt.",presence_fail:"Impossible de changer cela maintenant. Réessayez.",geo_denied:"En ligne. GPS refusé - vous recevez quand même des courses.",geo_unavailable:"En ligne. Position indisponible pour le moment.",start_ride_btn:"Demarrer la Course",complete_ride_btn:"Terminer la Course",
     pin_wrong:"PIN incorrect. Reessayez.",pin_verified:"PIN verifie! Course demarree!",
@@ -664,6 +703,7 @@ const T={
     ride_completed:"Completed",ride_in_progress:"In Progress",ride_searching:"Searching",ride_cancelled:"Cancelled",ride_accepted:"Accepted",
     member_since:"Member since",
     kpi_earned:"Total Earned",kpi_rides:"Completed Rides",kpi_today:"Today",kpi_week:"This Week",kpi_rides_done:"rides",kpi_all_time:"all time",
+    pay_title:"How you get paid",pay_owed:"Owed to you",pay_inpay:"Being paid",pay_settled:"Paid",pay_moncash:"MonCash",pay_natcash:"NatCash",pay_bank:"Bank account",pay_bank_sub:"An administrator enters the account number",pay_wallet_ph:"Your number for receiving money",pay_save:"Save",pay_locked:"A payment is being processed right now, so nothing can change until it settles. This protects the money already on its way to you.",pay_bank_none:"Bank chosen. An administrator still has to enter your account details before a transfer can be made.",pay_hint:"Amounts owed are recorded but not sent. It is money in your hands once it shows paid with a reference.",pay_run_paid:"paid",pay_run_wait:"waiting for approval",pay_run_ok:"approved",
     active_ride_title:"Active Ride",enter_ride_pin:"Ask the passenger for the PIN code",
     arrived_btn:"I have arrived - tell the passenger",arrived_done:"Passenger told",presence_on:"You are online - receiving rides",presence_off:"Marked offline - you still receive requests",presence_go_on:"Go online",presence_go_off:"Go offline",presence_hint_on:"Keep this page open to receive requests.",presence_hint_off:"Press Go online so we can see where you are. Requests still appear either way.",presence_fail:"We cannot change that right now. Try again.",geo_denied:"Online. GPS is off - you still receive rides.",geo_unavailable:"Online. We cannot find your position right now.",start_ride_btn:"Start Ride",complete_ride_btn:"Complete Ride",
     pin_wrong:"Wrong PIN. Try again.",pin_verified:"PIN verified! Ride started!",
@@ -700,6 +740,7 @@ const T={
     ride_completed:"Completado",ride_in_progress:"En Progreso",ride_searching:"Buscando",ride_cancelled:"Cancelado",ride_accepted:"Aceptado",
     member_since:"Miembro desde",
     kpi_earned:"Total Ganado",kpi_rides:"Viajes Completados",kpi_today:"Hoy",kpi_week:"Esta Semana",kpi_rides_done:"viajes",kpi_all_time:"desde el inicio",
+    pay_title:"Cómo le pagamos",pay_owed:"Se le debe",pay_inpay:"En proceso",pay_settled:"Pagado",pay_moncash:"MonCash",pay_natcash:"NatCash",pay_bank:"Cuenta bancaria",pay_bank_sub:"Un administrador ingresa el número de cuenta",pay_wallet_ph:"Su número para recibir el dinero",pay_save:"Guardar",pay_locked:"Se está procesando un pago ahora mismo, así que nada puede cambiar hasta que se liquide. Esto protege el dinero que ya va en camino.",pay_bank_none:"Banco elegido. Un administrador aún debe ingresar los datos de su cuenta antes de poder transferir.",pay_hint:"Los montos adeudados están registrados pero no enviados. Es dinero suyo cuando aparece pagado con una referencia.",pay_run_paid:"pagado",pay_run_wait:"esperando aprobación",pay_run_ok:"aprobado",
     active_ride_title:"Viaje Activo",enter_ride_pin:"Pida al pasajero el codigo PIN",
     arrived_btn:"He llegado - avisar al pasajero",arrived_done:"Pasajero avisado",presence_on:"Estás en línea - recibiendo viajes",presence_off:"Marcado sin conexión - sigues recibiendo solicitudes",presence_go_on:"Ponerse en línea",presence_go_off:"Salir",presence_hint_on:"Mantén esta página abierta para recibir solicitudes.",presence_hint_off:"Pulsa Ponerse en línea cuando estés listo.",presence_fail:"No podemos cambiar eso ahora. Inténtalo de nuevo.",geo_denied:"En línea. GPS desactivado - aún recibes viajes.",geo_unavailable:"En línea. No podemos ubicarte ahora mismo.",start_ride_btn:"Iniciar Viaje",complete_ride_btn:"Completar Viaje",
     pin_wrong:"PIN incorrecto. Intenta de nuevo.",pin_verified:"PIN verificado! Viaje iniciado!",
@@ -804,6 +845,7 @@ async function handleLogin(e){
       ]
     };
     window._driverData=mapped;
+    loadPayout();
     document.getElementById('loginSection').style.display='none';
     document.getElementById('dashboard').classList.add('active');
     renderDashboard(mapped);
@@ -862,6 +904,7 @@ async function handleLogin(e){
       rides:data.rides||[]
     };
     window._driverData=mapped;
+    loadPayout();
     document.getElementById('loginSection').style.display='none';
     document.getElementById('dashboard').classList.add('active');
     renderDashboard(mapped);
@@ -969,6 +1012,101 @@ function renderDashboard(data){
 function item(label,value){
   return '<div class="profile-item"><div class="label">'+label+'</div><div class="value">'+value+'</div></div>';
 }
+
+/* ── HOW HE GETS PAID ──────────────────────────────────────────────────────
+   Reads /api/payouts/driver/:id — his own earnings and the state of his
+   payouts. That endpoint never returns a bank account number, which is the
+   point: this page is reached by typing a phone number, and the server does
+   not check anything else, so nothing behind it may be worth stealing.
+
+   The whole card is skipped in silence if the endpoint is not there yet. A
+   driver whose backend has not been deployed must still see his rides. */
+var _payoutBusy = false;
+function loadPayout(){
+  var id = (window._driverData && window._driverData.driver && window._driverData.driver.id) || null;
+  var card = document.getElementById('payoutCard');
+  if(!id || !card) return;
+  fetch(API + '/api/payouts/driver/' + id)
+    .then(function(r){ if(!r.ok) throw new Error('unavailable'); return r.json(); })
+    .then(function(d){ card.style.display='block'; renderPayout(d); })
+    .catch(function(){ card.style.display='none'; });
+}
+
+function _esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+function renderPayout(d){
+  window._payout = d;
+  var n = function(v){ return Math.round(v||0).toLocaleString(); };
+  document.getElementById('payoutSums').innerHTML =
+    '<div class="s"><div class="sv">'+n(d.owed)+' <small>HTG</small></div><div class="sl">'+t('pay_owed')+'</div></div>'+
+    '<div class="s"><div class="sv">'+n(d.in_payout)+' <small>HTG</small></div><div class="sl">'+t('pay_inpay')+'</div></div>'+
+    '<div class="s"><div class="sv">'+n(d.paid)+' <small>HTG</small></div><div class="sl">'+t('pay_settled')+'</div></div>';
+
+  /* ⚠️ can_edit comes from the SERVER, not from anything this page works out.
+     The server refuses the change anyway; disabling the buttons only saves him
+     pressing something that was never going to work. */
+  var locked = d.can_edit === false;
+  var cur = d.payout_method || 'moncash';
+  var methods = [
+    ['moncash', t('pay_moncash'), ''],
+    ['natcash', t('pay_natcash'), ''],
+    ['bank',    t('pay_bank'),    d.bank_on_file
+        ? _esc([d.bank_name, d.bank_account_masked].filter(Boolean).join(' '))
+        : t('pay_bank_sub')]
+  ];
+  document.getElementById('payoutMethods').innerHTML = methods.map(function(m){
+    return '<button class="pm'+(cur===m[0]?' on':'')+'"'+(locked?' disabled':'')+
+      ' onclick="chooseMethod(\''+m[0]+'\')">'+
+      '<span>'+_esc(m[1])+(m[2]?'<span class="sub2">'+m[2]+'</span>':'')+'</span>'+
+      '<span class="tick">&#10004;</span></button>';
+  }).join('');
+
+  /* The wallet number only matters for the two wallet methods. Showing it next
+     to "bank account" would invite him to type an account number into a box
+     that sends it to a phone field. */
+  var wal = document.getElementById('payoutWallet');
+  if(cur === 'bank'){
+    wal.innerHTML = '';
+  } else {
+    var phone = (d.destination||'').replace(/^(MonCash|NatCash)\s*/,'');
+    wal.innerHTML = '<div class="payout-wallet">'+
+      '<input id="payPhone" type="tel" inputmode="tel" placeholder="'+_esc(t('pay_wallet_ph'))+'" value="'+_esc(/^[0-9+]/.test(phone)?phone:'')+'"'+(locked?' disabled':'')+'>'+
+      '<button onclick="saveWallet()"'+(locked?' disabled':'')+'>'+_esc(t('pay_save'))+'</button></div>';
+  }
+
+  var note = document.getElementById('payoutNote');
+  if(locked){ note.className='payout-note bad'; note.textContent=t('pay_locked'); }
+  else if(cur==='bank' && !d.bank_on_file){ note.className='payout-note bad'; note.textContent=t('pay_bank_none'); }
+  else { note.className='payout-note'; note.textContent=t('pay_hint'); }
+
+  var runs = (d.payouts||[]).slice(0,5);
+  document.getElementById('payoutRuns').innerHTML = runs.map(function(p){
+    var state = p.status==='paid' ? t('pay_run_paid')
+              : p.status==='approved' ? t('pay_run_ok') : t('pay_run_wait');
+    return '<div class="r"><b>'+_esc(p.reference)+'</b> · '+n(p.amount)+' HTG · '+_esc(state)+
+      (p.bank_reference?' · '+_esc(p.bank_reference):'')+'</div>';
+  }).join('');
+}
+
+function chooseMethod(m){
+  if(_payoutBusy) return;
+  _payoutBusy = true;
+  var id = window._driverData.driver.id;
+  var body = { payout_method: m };
+  var el = document.getElementById('payPhone');
+  if(el && m !== 'bank') body.payout_phone = el.value;
+  fetch(API+'/api/payouts/driver/'+id+'/method',{
+    method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)
+  }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok, j:j}; }); })
+    .then(function(res){
+      _payoutBusy = false;
+      var note = document.getElementById('payoutNote');
+      if(!res.ok){ note.className='payout-note bad'; note.textContent=res.j.error||''; loadPayout(); return; }
+      loadPayout();
+    }).catch(function(){ _payoutBusy=false; });
+}
+function saveWallet(){ chooseMethod((window._payout && window._payout.payout_method) || 'moncash'); }
 
 function logout(){
   stopIncoming();
