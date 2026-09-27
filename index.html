@@ -1018,7 +1018,13 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
 
 <script>
 var API_URL='https://msouwout-backend.onrender.com';
-function apiFetch(url,opts){var c=new AbortController();setTimeout(function(){c.abort()},5000);opts=opts||{};opts.signal=c.signal;return fetch(url,opts)}
+/* ⚠️ 5 seconds was hardcoded here. On a Haitian mobile connection the ride
+   POST can take longer than that - the server creates the ride, this aborts,
+   and the passenger is told the order failed for a ride that exists. Callers
+   that write something may ask for more time. */
+function apiFetch(url,opts){opts=opts||{};var ms=opts.timeoutMs||5000;delete opts.timeoutMs;
+  var c=new AbortController();setTimeout(function(){c.abort()},ms);opts.signal=c.signal;
+return fetch(url,opts)}
 
 /* ── FARE CONFIG (per client Moto + Car specs 2026-07-17). Editable here / via admin panel.
    Surge is per-vehicle and only ONE (the highest applicable) is applied, per spec. ── */
@@ -2513,6 +2519,8 @@ function doSubmitRide(name,phone){
   apiFetch(API_URL+'/api/rides/request',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
+    /* Ordering is the one request that must not be given up on early. */
+    timeoutMs:25000,
     body:JSON.stringify(rideData)
   }).then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d}})}).then(function(res){
     if(!res.ok||!(res.d.ride_id||res.d.id)){throw new Error(res.d.error||'rejected');}
@@ -2520,6 +2528,12 @@ function doSubmitRide(name,phone){
     rideData.id=d.ride_id||d.id;
     rideData.tracking_code=d.tracking_code||'';
     rideData.pin=d.ride_pin||'';
+    /* 🚨 27 Sep: THIS LINE WAS MISSING, and it is the whole private link.
+       The server sends owner_token exactly once, here. It was never read, so
+       saveActiveRide() stored an empty one, myTrackUrl() never appended &t=,
+       and the passenger opened her own booking as if she were a stranger - no
+       PIN, and (until this morning) no pay button. */
+    rideData.owner_token=d.owner_token||'';
     saveActiveRide();
     if(rideData.pin){
       document.getElementById('ridePin').textContent=rideData.pin;
@@ -2527,9 +2541,39 @@ function doSubmitRide(name,phone){
     }
     startRidePolling();
   }).catch(function(){
-    /* The order did not reach the system. Saying "we are looking for a driver"
-       here is a lie that costs her the ride — show the WhatsApp route instead. */
-    setTimeout(function(){showWaitlist(t('rl_failed'));},1200);
+    /* 🚨 27 Sep. Jennifer's tablet showed "Nou pa ka voye demann nan kounye a"
+       while MW-8DJUJ9T sat in the database with her name on it. The request
+       had reached the server; the answer had not reached her. She was sent to
+       WhatsApp for a ride she had already booked, so she never saw a tracking
+       page and never paid.
+
+       ⛔ A failed RESPONSE is not a failed ORDER. Ask the server whether the
+       ride exists before telling her it does not. */
+    var phone=(rideData.riderPhone||rideData.customer_phone||'').trim();
+    if(!phone){ setTimeout(function(){showWaitlist(t('rl_failed'));},1200); return; }
+    apiFetch(API_URL+'/api/rides/history',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      timeoutMs:12000,body:JSON.stringify({phone:phone})
+    }).then(function(r){return r.json();}).then(function(j){
+      var list=(j&&(j.rides||j))||[];
+      var fresh=null, now=Date.now();
+      (list.length?list:[]).forEach(function(r){
+        var age=now-new Date(r.created_at||0).getTime();
+        if(age>=0&&age<180000&&['searching','accepted','arrived','in_progress'].indexOf(r.status)>=0){
+          if(!fresh||new Date(r.created_at)>new Date(fresh.created_at)) fresh=r;
+        }
+      });
+      if(!fresh) throw new Error('really not there');
+      /* It landed. Carry on as though the answer had arrived.
+         ⚠️ The PIN and the private key came only in the response we lost, so
+         she will be asked for the PIN by the driver and will not have it. She
+         can still pay and still track. Better than a dead end. */
+      rideData.id=fresh.id; rideData.tracking_code=fresh.tracking_code||'';
+      saveActiveRide();
+      startRidePolling();
+    }).catch(function(){
+      setTimeout(function(){showWaitlist(t('rl_failed'));},1200);
+    });
   });
 }
 
