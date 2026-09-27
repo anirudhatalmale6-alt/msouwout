@@ -1113,6 +1113,7 @@ function hasPoint(p) {
 }
 function ll(p) { return [Number(p.lat), Number(p.lng)]; }
 
+var mapFitted = false;   /* has the view been framed even once? */
 function updateMap(data) {
   if (!mapAvailable || !map) return;   // no map is survivable; a crash is not
   const pickup  = hasPoint(data.pickup)  ? data.pickup  : null;
@@ -1130,6 +1131,23 @@ function updateMap(data) {
       { color: '#00209F', weight: 3, dashArray: '8,8', opacity: 0.6 }).addTo(map);
   }
 
+  /* 🚨 27 Sep, LIVE TEST: "I get this when i open the map why ? this is
+     confusing". The map showed Cité Soleil and Route Nationale #1 for a ride
+     from Turgeau to Pacot - 0.9 km apart, with the driver 120 metres from the
+     pickup.
+
+     It was not showing the wrong PLACE. It was showing the right place at the
+     wrong SCALE: when a driver existed this panned to him and returned, never
+     once fitting the view, so the map kept the city-wide zoom 13 it was created
+     with. Everything that mattered was a few pixels in the middle and the only
+     readable labels were suburbs miles away.
+
+     So: fit everything that matters the FIRST time, then follow the car
+     without yanking the zoom around underneath her. */
+  const bounds = [];
+  if (pickup) bounds.push(ll(pickup));
+  if (dropoff) bounds.push(ll(dropoff));
+
   if (driver) {
     if (!driverMarker) {
       driverMarker = L.marker(ll(driver), {
@@ -1138,15 +1156,21 @@ function updateMap(data) {
     } else {
       driverMarker.setLatLng(ll(driver));
     }
-    map.panTo(ll(driver), { animate: true, duration: 1 });
+    bounds.push(ll(driver));
+    if (!mapFitted) {
+      mapFitted = true;
+      /* maxZoom, or a driver sitting on top of the pickup zooms to the roof
+         tiles and she cannot tell where anything is. */
+      if (bounds.length >= 2) map.fitBounds(bounds, { padding: [50, 50], maxZoom: 16 });
+      else map.setView(ll(driver), 15);
+    } else {
+      map.panTo(ll(driver), { animate: true, duration: 1 });
+    }
     return;
   }
 
-  const bounds = [];
-  if (pickup) bounds.push(ll(pickup));
-  if (dropoff) bounds.push(ll(dropoff));
-  if (bounds.length >= 2) map.fitBounds(bounds, { padding: [40, 40] });
-  else if (bounds.length === 1) map.setView(bounds[0], 15);
+  if (bounds.length >= 2) { mapFitted = true; map.fitBounds(bounds, { padding: [40, 40], maxZoom: 16 }); }
+  else if (bounds.length === 1) { mapFitted = true; map.setView(bounds[0], 15); }
 }
 
 // ==================== STATUS ====================

@@ -2199,6 +2199,21 @@ function computeDistanceThenFare(){
     :geocodeAddr(dropEl.value);
   Promise.all([pickupP,dropP]).then(function(res){
     var a=res[0],b=res[1];
+    /* 🚨 27 Sep, LIVE TEST: "I get this when i open the map why ? this is
+       confusing" - the tracking map showed Cité Soleil for a ride from Turgeau
+       to Pacot, 0.9 km apart.
+
+       The ride was stored with NO dropoff coordinates. She typed her
+       destination instead of tapping a suggestion, so _dropLat stayed null -
+       and the order sends `window._dropLat || null`. The point found HERE, the
+       one the fare was calculated from, was used for the distance and then
+       thrown away. So we charged her off a location we refused to remember.
+
+       🔑 If it is good enough to price the ride, it is good enough to draw it.
+       The address text is still what the driver reads; this only stops the map
+       having nothing to show. */
+    if(a&&!(window._pickupLat&&window._pickupLng)){ window._pickupLat=a.lat; window._pickupLng=a.lng; }
+    if(b&&!(window._dropLat&&window._dropLng)){ window._dropLat=b.lat; window._dropLng=b.lng; }
     if(a&&b){
       var km=haversineKm(a,b)*PRICING.road_factor;
       if(km>0.3&&km<200) _rideDistanceKm=Math.max(0.5,parseFloat(km.toFixed(1)));
