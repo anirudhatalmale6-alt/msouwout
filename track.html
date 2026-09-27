@@ -1400,12 +1400,26 @@ let payAmount = 0;
 let payBusy = false;
 
 function payIsOwner() {
-  /* A shared tracking link is for somebody watching the journey. They must see
-     the ride; they must never be asked to pay for it.
-     ⚠️ This now trusts the SERVER's is_owner, which was decided by comparing
-     the token. Deciding it here from the URL meant the page could be talked
-     into showing a pay button to anyone. */
-  return !!(rideData && rideData.is_owner);
+  /* 🚨 27 Sep, LIVE TEST: "no option to pay bay moncash".
+
+     Yesterday this required the server's is_owner - the private-link token.
+     That made the pay button default to HIDDEN, and Jennifer reached the
+     tracking page without the token (a booking page cached from before the
+     token existed still sends her to a plain link). Ride accepted, fare owed,
+     and no way on earth to pay it.
+
+     ⚖️ I had the trade backwards. Weigh the two mistakes:
+       - showing the pay button to somebody holding the family link: they can
+         pay a fare that is genuinely owed. That is not an attack, it is a
+         favour, and the money goes to the same ride either way.
+       - hiding it from the passenger: the ride cannot be paid for AT ALL, so
+         it cannot start. Total failure.
+     The privacy this separation exists for is her NAME, her NUMBER and her
+     PIN - and those are still gated on the token, server-side, where they
+     belong. The pay button was never the secret.
+
+     So: anyone looking at a real, unpaid, accepted ride may pay it. */
+  return true;
 }
 
 function payAmountOf(d) {
