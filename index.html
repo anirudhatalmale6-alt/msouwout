@@ -1085,6 +1085,59 @@ function boxParam(){
    list does. It used to ask once, with no country and no area, and give up -
    which is why two ordinary Port-au-Prince addresses produced no distance at
    all and the fare fell back to a hard-coded 3km guess. */
+/* 🚨🚨 27 Sep, LIVE TEST MORNING. "The GPS is not working at all."
+   Nominatim rate-limits by IP and a whole Haitian carrier sits behind one
+   address, so from his phone it answers NOTHING. Every typed address goes
+   through it, in two places - the suggestion list and the fare - and when it
+   is silent there is no distance, so there is no price, so the order button
+   never enables. The app is not slow, it is completely stuck, and the message
+   on screen tells him to choose from a list that cannot load.
+
+   ⛔ I DIAGNOSED THIS EXACT FAULT ON 25 SEPTEMBER and fixed only the reverse
+   lookup behind the GPS button, because that was the one Jennifer reported.
+   The same service, one screen away, doing the more important job, was left
+   as a single point of failure. Fix the CLASS, not the instance.
+
+   Photon is also free, also OpenStreetMap, no key, CORS open - and its answers
+   are mapped into Nominatim's shape here so acLabel(), choose() and the whole
+   caller side stay untouched. Same mapping as reverseViaPhoton. */
+function photonSearch(text, limit){
+  var url='https://photon.komoot.io/api/?limit='+(limit||6)+
+          '&lat=18.54&lon=-72.34'+          /* bias to Port-au-Prince */
+          '&q='+encodeURIComponent(text);
+  var c=new AbortController();setTimeout(function(){c.abort();},6000);
+  return fetch(url,{signal:c.signal})
+    .then(function(r){ if(!r.ok) throw new Error('photon '+r.status); return r.json(); })
+    .then(function(j){
+      var feats=(j&&j.features)||[];
+      return feats.filter(function(f){
+        /* Photon's bias is a nudge, not a filter - without this a mistyped
+           street can come back from another country and price a ride off it. */
+        var cc=(f.properties&&f.properties.countrycode)||'';
+        return !cc || cc==='HT';
+      }).map(function(f){
+        var p=f.properties||{}, g=f.geometry||{}, co=g.coordinates||[];
+        var addr={
+          house_number:p.housenumber||undefined,
+          road:p.street||undefined,
+          neighbourhood:p.district||undefined,
+          suburb:p.district||undefined,
+          city:p.city||undefined,
+          county:p.county||undefined,
+          state:p.state||undefined,
+          country:p.country||undefined
+        };
+        if(!addr.road && p.name && p.name!==p.city) addr.road=p.name;
+        var display=[p.name,p.street,p.district,p.city,p.state,p.country]
+          .filter(function(x){return x;}).join(', ');
+        return { address:addr, display_name:display||String(text),
+                 name:(p.name&&p.name!==addr.road)?p.name:'',
+                 lat:String(co[1]), lon:String(co[0]) };
+      });
+    })
+    .catch(function(){ return null; });
+}
+
 function geocodeAddr(text){
   if(!text) return Promise.resolve(null);
   var key=text.trim().toLowerCase();
@@ -1108,7 +1161,22 @@ function geocodeAddr(text){
       })
       .catch(function(){return null;});
   }
-  return attempt();
+  /* ⚠️ ONE fallback, and it has to be HERE rather than inside the loop.
+     When the service is BLOCKED the fetch rejects, the catch above returns
+     null, and the "ran out of variants" branch is never reached at all - which
+     is exactly the case this exists for. Catching both endings in one place is
+     the difference between a fallback that runs and one that only looks like
+     it does. */
+  return attempt().then(function(pt){
+    if(pt) return pt;
+    return photonSearch(text,1).then(function(list){
+      if(list&&list.length){
+        var q={lat:parseFloat(list[0].lat),lng:parseFloat(list[0].lon)};
+        if(isFinite(q.lat)&&isFinite(q.lng)){ _geoCache[key]=q; return q; }
+      }
+      return null;
+    });
+  });
 }
 function haversineKm(a,b){
   var R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180;
@@ -1979,8 +2047,19 @@ function acFetch(text,cb){
         if(d&&d.length)return cb(d);
         ask();                      /* nothing found - try the shorter form */
       })
-      .catch(function(){cb(null);}); /* a real failure is not "not found" */
+      .catch(function(){ askPhoton(); });
   }
+  /* Only after every Nominatim variant has been tried, or the service could
+     not be reached. An empty list is what makes the on-screen instruction
+     ("choose from the list below") a lie, so this runs before giving up. */
+  function askPhoton(){
+    photonSearch(text,6).then(function(list){
+      if(list&&list.length) return cb(list);
+      cb(null);
+    });
+  }
+  var _ask=ask;
+  ask=function(){ if(i>=tries.length) return askPhoton(); _ask(); };
   ask();
 }
 function attachAC(inputEl,isPickup){
