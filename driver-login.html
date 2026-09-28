@@ -617,7 +617,7 @@ const T={
     footer_part:"Yon platfòm",
     err_not_found:"Nimewo sa a pa enskri. <a href='driver-register.html'>Enskri kounye a</a>",
     err_wrong_pin:"PIN pa kòrèk. Eseye ankò.",
-    err_server:"Erè sèvè. Eseye ankò.",err_network:"Pa gen koneksyon. Verifye entènèt ou.",
+    err_server:"Erè sèvè. Eseye ankò.",err_pin_needed:"Antre PIN ou.",err_pin_wrong:"PIN pa kòrèk. Ou gen {n} esè ki rete.",err_locked:"Twòp esè. Tann {min} minit epi eseye ankò.",pin_choose:"Chwazi yon PIN 4 chif pou pwoteje kont ou. Pa itilize 0000 oswa 1234.",pin_saved:"PIN ou anrejistre. Sonje l — w ap bezwen l chak fwa ou konekte.",pin_bad:"PIN nan dwe gen 4 chif.",pin_too_simple:"PIN sa a twò fasil pou devine. Chwazi yon lòt.",err_network:"Pa gen koneksyon. Verifye entènèt ou.",
     loading:"Ap chache...",
     status_pending:"An Atant",status_approved:"Apwouve",status_rejected:"Rejte",status_suspended:"Sispann",
     msg_pending:"Aplikasyon ou ap revize. Nou ap kontakte ou byento via WhatsApp.",
@@ -655,7 +655,7 @@ const T={
     footer_part:"Une plateforme",
     err_not_found:"Ce numero n'est pas enregistre. <a href='driver-register.html'>S'inscrire maintenant</a>",
     err_wrong_pin:"PIN incorrect. Reessayez.",
-    err_server:"Erreur serveur. Reessayez.",err_network:"Pas de connexion. Verifiez votre internet.",
+    err_server:"Erreur serveur. Reessayez.",err_pin_needed:"Entrez votre PIN.",err_pin_wrong:"PIN incorrect. Il vous reste {n} essais.",err_locked:"Trop d'essais. Attendez {min} minutes.",pin_choose:"Choisissez un PIN a 4 chiffres pour proteger votre compte. Pas 0000 ni 1234.",pin_saved:"PIN enregistre. Retenez-le — il vous faudra a chaque connexion.",pin_bad:"Le PIN doit avoir 4 chiffres.",pin_too_simple:"Ce PIN est trop facile a deviner. Choisissez-en un autre.",err_network:"Pas de connexion. Verifiez votre internet.",
     loading:"Recherche...",
     status_pending:"En Attente",status_approved:"Approuve",status_rejected:"Rejete",status_suspended:"Suspendu",
     msg_pending:"Votre candidature est en cours de revision. Nous vous contacterons bientot via WhatsApp.",
@@ -693,7 +693,7 @@ const T={
     footer_part:"A platform by",
     err_not_found:"This number is not registered. <a href='driver-register.html'>Register now</a>",
     err_wrong_pin:"Wrong PIN. Try again.",
-    err_server:"Server error. Please try again.",err_network:"No connection. Check your internet.",
+    err_server:"Server error. Please try again.",err_pin_needed:"Enter your PIN.",err_pin_wrong:"Wrong PIN. You have {n} tries left.",err_locked:"Too many attempts. Wait {min} minutes and try again.",pin_choose:"Choose a 4-digit PIN to protect your account. Not 0000 or 1234.",pin_saved:"PIN saved. Remember it — you will need it every time you sign in.",pin_bad:"The PIN must be 4 digits.",pin_too_simple:"That PIN is too easy to guess. Please choose another.",err_network:"No connection. Check your internet.",
     loading:"Searching...",
     status_pending:"Pending",status_approved:"Approved",status_rejected:"Rejected",status_suspended:"Suspended",
     msg_pending:"Your application is under review. We will contact you soon via WhatsApp.",
@@ -731,7 +731,7 @@ const T={
     footer_part:"Una plataforma de",
     err_not_found:"Este numero no esta registrado. <a href='driver-register.html'>Registrate ahora</a>",
     err_wrong_pin:"PIN incorrecto. Intenta de nuevo.",
-    err_server:"Error del servidor. Intenta de nuevo.",err_network:"Sin conexion. Verifica tu internet.",
+    err_server:"Error del servidor. Intenta de nuevo.",err_pin_needed:"Ingrese su PIN.",err_pin_wrong:"PIN incorrecto. Le quedan {n} intentos.",err_locked:"Demasiados intentos. Espere {min} minutos.",pin_choose:"Elija un PIN de 4 digitos para proteger su cuenta. No use 0000 ni 1234.",pin_saved:"PIN guardado. Recuerdelo — lo necesitara cada vez que entre.",pin_bad:"El PIN debe tener 4 digitos.",pin_too_simple:"Ese PIN es demasiado facil de adivinar. Elija otro.",err_network:"Sin conexion. Verifica tu internet.",
     loading:"Buscando...",
     status_pending:"Pendiente",status_approved:"Aprobado",status_rejected:"Rechazado",status_suspended:"Suspendido",
     msg_pending:"Tu solicitud esta en revision. Te contactaremos pronto via WhatsApp.",
@@ -894,11 +894,34 @@ async function handleLogin(e){
       return;
     }
 
-    if(res.status===401){
-      errEl.innerHTML=t('err_wrong_pin');
+    /* ⚠️ A 401 handler already lived HERE, above the new one, and Express takes
+       the first match exactly like the browser takes the first branch: it
+       swallowed every PIN answer and printed "PIN pa kòrèk. Eseye ankò." with
+       no count, so a driver could never tell he was two tries from a lockout.
+       Caught by driving the real page, not by reading it. The specific handler
+       below is the only one now. */
+
+    /* 🚨🚨 28 Sep. The server now VERIFIES the PIN. Until today it took a phone
+       number and nothing else, so anyone who knew a driver's number could read
+       the name, telephone and address of every passenger he had carried.
+       These branches are what stop the new lock becoming a locked-out fleet:
+       every answer tells him exactly what to do next. */
+    if(res.status===429){
+      var lj=await res.json().catch(function(){return {};});
+      errEl.innerHTML=t('err_locked').replace('{min}', lj.minutes||15);
       errEl.style.display='block';
-      btn.disabled=false;
-      btn.textContent=t('login_btn');
+      btn.disabled=false; btn.textContent=t('login_btn');
+      return;
+    }
+    if(res.status===401){
+      var pj=await res.json().catch(function(){return {};});
+      errEl.innerHTML = pj.code==='pin_wrong'
+        ? t('err_pin_wrong').replace('{n}', pj.remaining!=null?pj.remaining:'')
+        : t('err_pin_needed');
+      errEl.style.display='block';
+      var pf=document.getElementById('pinInput');
+      if(pf){ pf.value=''; pf.focus(); }
+      btn.disabled=false; btn.textContent=t('login_btn');
       return;
     }
 
@@ -937,6 +960,10 @@ async function handleLogin(e){
     renderActiveRide(mapped.rides,mapped.driver.id);
     startActiveWatch();
     initPresence();
+    /* He has no PIN yet. He is INSIDE - nothing is taken away from him - and
+       he chooses one now, on the phone already in his hand. That is the whole
+       migration: the fleet enrolls itself one man at a time. */
+    if(data.enrollment_required) askForPin(mapped.driver.id);
 
   }catch(err){
     errEl.innerHTML=t('err_network');
@@ -944,6 +971,36 @@ async function handleLogin(e){
     btn.disabled=false;
     btn.textContent=t('login_btn');
   }
+}
+
+/* Choosing a first PIN. Deliberately a plain prompt rather than a new screen:
+   it has to work on the cheapest Android in Haiti, and it must not be possible
+   to wander off and leave the account open with no PIN. */
+function askForPin(driverId){
+  var tries=0;
+  (function ask(){
+    var pin=window.prompt(t('pin_choose'), '');
+    if(pin===null){
+      /* He can refuse. The account still works - the server lets a driver with
+         no PIN in - so refusing costs him nothing today and he is asked again
+         next time. ⛔ Never pick one for him: a PIN somebody else chose is a
+         PIN somebody else knows. */
+      return;
+    }
+    pin=String(pin).trim();
+    fetch(API+'/api/drivers/'+driverId+'/pin',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({pin:pin})
+    }).then(function(r){ return r.json().then(function(j){ return {s:r.status,j:j}; }); })
+      .then(function(o){
+        if(o.s===200){ alert(t('pin_saved')); return; }
+        tries++;
+        if(tries>3) return;
+        alert(o.j && o.j.error==='pin_too_simple' ? t('pin_too_simple') : t('pin_bad'));
+        ask();
+      })
+      .catch(function(){ alert(t('err_network')); });
+  })();
 }
 
 function renderDashboard(data){
@@ -1559,7 +1616,10 @@ async function pollIncoming(){
     /* Sorted from where he actually is, when we know. Without a fix the server
        falls back to newest first, which is what it always did. */
     var _pos=_myPos?('&lat='+_myPos.lat+'&lng='+_myPos.lng):'';
-    const res=await fetch(API+'/api/rides/available?minutes=120'+(_vq?'&ride_type='+_vq:'')+_pos);
+    /* Say WHO is asking, so the server can keep real passengers off a demo
+       account's board. Harmless for everyone else. */
+    const _who=d.id&&d.id!=='demo'?('&driver_id='+encodeURIComponent(d.id)):'';
+    const res=await fetch(API+'/api/rides/available?minutes=120'+(_vq?'&ride_type='+_vq:'')+_pos+_who);
     if(!res.ok)return;
     const j=await res.json();
     renderIncoming((j.rides||[]).filter(function(r){return !_skipped[r.id];}));
