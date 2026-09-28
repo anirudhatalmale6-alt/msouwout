@@ -857,6 +857,7 @@ async function handleLogin(e){
     document.getElementById('dashboard').classList.add('active');
     renderDashboard(mapped);
     renderActiveRide(mapped.rides,mapped.driver.id);
+    startActiveWatch();
     initPresence();
     return;
   }
@@ -917,6 +918,7 @@ async function handleLogin(e){
     document.getElementById('dashboard').classList.add('active');
     renderDashboard(mapped);
     renderActiveRide(mapped.rides,mapped.driver.id);
+    startActiveWatch();
     initPresence();
 
   }catch(err){
@@ -1179,6 +1181,7 @@ function saveWallet(){ chooseMethod((window._payout && window._payout.payout_met
 
 function logout(){
   stopIncoming();
+  stopActiveWatch();
   _activeRide=null;
   window._driverData=null;
   window._activeRide=null;
@@ -1488,33 +1491,48 @@ function startIncoming(){
 }
 function stopIncoming(){clearInterval(_incPoll);_incPoll=null;_knownInc=null;}
 
+/* 🚨 THE RIDE HE ALREADY HOLDS IS NOT AN OFFER.
+   This used to live inside pollIncoming, which only runs while he is ONLINE -
+   so a driver who flipped the toggle off kept a card for a ride that had been
+   cancelled, finished on another phone, or taken back off him, and could drive
+   to a passenger who was no longer his. "Online" means "send me new requests".
+   It must never decide whether his own ride is shown correctly.
+   Slower than the offer poll: nothing here is time-critical, it only has to
+   stop being WRONG. */
+var _activePoll=null;
+function startActiveWatch(){
+  const d=(window._driverData&&window._driverData.driver)||{};
+  if(!d.id||d.id==='demo')return;
+  clearInterval(_activePoll);
+  _activePoll=setInterval(pollActiveRide,20000);
+}
+function stopActiveWatch(){clearInterval(_activePoll);_activePoll=null;}
+
+async function pollActiveRide(){
+  const d=(window._driverData&&window._driverData.driver)||{};
+  if(!d.id||d.id==='demo')return;
+  try{
+    const ar=await fetch(API+'/api/rides/driver/'+d.id+'/active');
+    if(!ar.ok)return;
+    const aj=await ar.json();
+    if(aj.ride){
+      if(cardSig(aj.ride)!==cardSig(_activeRide)) renderActiveRide([aj.ride],d.id);
+    }else if(_activeRide){
+      _activeRide=null;
+      document.getElementById('activeRideCard').style.display='none';
+      alert(t('ride_gone'));
+    }
+  }catch(e){/* a moment offline; the next tick tries again */}
+}
+
 async function pollIncoming(){
   if(_incBusy)return;
   _incBusy=true;
   const d=(window._driverData&&window._driverData.driver)||{};
   try{
-    // A ride accepted on another phone must show up here too, otherwise the driver
-    // sits on a stale screen with no way to enter the PIN. And it is asked for on
-    // EVERY tick, not only when the card is empty: when the passenger cancels, the
-    // card used to stay on his screen and he drove to a street corner for nothing.
-    if(d.id&&d.id!=='demo'){
-      const ar=await fetch(API+'/api/rides/driver/'+d.id+'/active');
-      if(ar.ok){
-        const aj=await ar.json();
-        // Re-drawing the card wipes the PIN box, so only redraw when something the
-        // card SHOWS has changed - otherwise it clears itself under his thumb every
-        // 8s. Comparing the status alone was not enough: the card built at login
-        // carries no addresses, and a status-only test never replaced it.
-        if(aj.ride){
-          if(cardSig(aj.ride)!==cardSig(_activeRide)) renderActiveRide([aj.ride],d.id);
-        }
-        else if(_activeRide){
-          _activeRide=null;
-          document.getElementById('activeRideCard').style.display='none';
-          alert(t('ride_gone'));
-        }
-      }
-    }
+    /* The active ride moved OUT of here into pollActiveRide, which runs whether
+       he is online or not. Doing it in both places meant two "ride gone"
+       alerts for one event. */
     /* Ask only for the rides this driver can actually take. The server has
        supported ride_type since it was written; the app simply never sent it,
        so a moto driver was shown car rides and could accept one. */
