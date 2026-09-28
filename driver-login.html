@@ -1269,11 +1269,11 @@ function payBanner(r){
 
 function renderActiveRide(rides,driverId){
   const card=document.getElementById('activeRideCard');
-  /* 'monitoring'/'emergency' are set by the safety system on an active ride.
-     Leaving them out here made a started ride vanish from the driver's own
-     screen - see MW-KRPWCO9, stranded since 20 Sep. The server half is fixed
-     too; fixing only one side would have left him just as blind. */
-  const ACTIVE_ST=['accepted','in_progress','monitoring','emergency'];
+  /* A safety alert used to OVERWRITE the ride's status with 'monitoring' or
+     'emergency', which is why those had to be listed here at all - and why a
+     paid ride could never be finished afterwards (MW-8EF6GP6, 28 Sep). Safety
+     has its own field now, so these two are the only real in-flight states. */
+  const ACTIVE_ST=['accepted','in_progress'];
   const active=rides.find(r=>ACTIVE_ST.indexOf(r.status)>=0);
   if(!active){card.style.display='none';_activeRide=null;return;}
   _activeRide=active;
