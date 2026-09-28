@@ -538,6 +538,8 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
          which meant a passenger could order and nothing would ever appear here. -->
     <div class="active-ride-card" id="incomingCard" style="display:none;border-color:#F59E0B">
       <h3>&#128276; <span data-i18n="inc_title">Demann Kous</span> <span id="incCount" style="font-weight:900"></span></h3>
+      <button id="alertBtn" onclick="enableAlerts()" style="width:100%;margin:0 0 10px;padding:13px;border:0;border-radius:12px;background:#166534;color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer" data-i18n="alert_on">🔔 Limen alèt pou nouvo kous</button>
+      <div id="alertMsg" style="font-size:12.5px;line-height:1.45;margin:-4px 0 10px;color:#166534"></div>
       <div id="incomingList"></div>
       <div id="incomingEmpty" class="sub" style="color:#64748B;font-size:13.5px" data-i18n="inc_empty">Pa gen demann kounye a. Paj sa a ap gade pou kont li.</div>
       <!-- Say the limit on the screen itself. A driver who thinks he will be called
@@ -629,6 +631,7 @@ const T={
     ride_completed:"Fini",ride_in_progress:"An kou",ride_searching:"Ap chache",ride_cancelled:"Anile",ride_accepted:"Aksepte",
     member_since:"Manm depi",
     kpi_earned:"Kòb Total Ou Fè",kpi_rides:"Kous Konplè",kpi_today:"Jodi A",kpi_week:"Semèn Nan",kpi_rides_done:"kous",kpi_all_time:"depi ou kòmanse",
+    alert_on:"🔔 Limen alèt pou nouvo kous",alert_ok:"✅ Alèt limen — w ap konnen menm si paj la fèmen",alert_no:"Telefòn ou pa sipòte alèt yo",alert_denied:"Ou refize alèt yo. Louvri paramèt navigatè a pou pèmèt yo.",alert_wait:"Y ap limen…",
     pay_title:"Kijan ou vle peye",pay_owed:"Yo dwe w",pay_inpay:"Nan pwosesis",pay_settled:"Yo peye w",pay_moncash:"MonCash",pay_natcash:"NatCash",pay_bank:"Kont labank",pay_bank_sub:"Yon administratè antre nimewo kont lan",pay_wallet_ph:"Nimewo w pou resevwa lajan",pay_save:"Anrejistre",pay_locked:"Yo ap trete yon peman kounye a, kidonk ou pa ka chanje anyen jiskaske li fini. Sa pwoteje lajan ki deja sou wout la.",pay_bank_none:"Ou chwazi labank. Yon administratè dwe antre enfòmasyon kont ou anvan yo ka fè yon vire.",pay_hint:"Lajan yo dwe w anrejistre men yo poko voye l. Se lè li make peye ak yon referans ou gen li nan men w.",pay_run_paid:"peye",pay_run_wait:"ap tann apwobasyon",pay_run_ok:"apwouve",
     active_ride_title:"Kous Aktif",enter_ride_pin:"Mande pasaje a pou kòd PIN nan",
     arrived_btn:"M rive - avize pasaje a",arrived_done:"Pasaje a avize",presence_on:"Ou an liy - w ap resevwa kous",presence_off:"Ou make kòm deyò - men w ap toujou resevwa demann",presence_go_on:"Ale an liy",presence_go_off:"Soti",presence_hint_on:"Kite paj la louvri pou w resevwa demann yo.",presence_hint_off:"Peze Ale an liy lè w pare pou travay.",presence_fail:"Nou pa ka chanje sa kounye a. Eseye ankò.",geo_denied:"Ou an liy. GPS fèmen - ou ka toujou resevwa kous.",geo_unavailable:"Ou an liy. Nou pa ka jwenn pozisyon w kounye a.",start_ride_btn:"Kòmanse Kous",complete_ride_btn:"Fini Kous",
@@ -666,6 +669,7 @@ const T={
     ride_completed:"Termine",ride_in_progress:"En cours",ride_searching:"Recherche",ride_cancelled:"Annule",ride_accepted:"Accepte",
     member_since:"Membre depuis",
     kpi_earned:"Total Gagné",kpi_rides:"Courses Terminées",kpi_today:"Aujourd'hui",kpi_week:"Cette Semaine",kpi_rides_done:"courses",kpi_all_time:"depuis le début",
+    alert_on:"🔔 Activer les alertes de course",alert_ok:"✅ Alertes activées — même page fermée",alert_no:"Votre téléphone ne supporte pas les alertes",alert_denied:"Vous avez refusé les alertes. Autorisez-les dans les réglages du navigateur.",alert_wait:"Activation…",
     pay_title:"Comment vous êtes payé",pay_owed:"Dû",pay_inpay:"En cours",pay_settled:"Payé",pay_moncash:"MonCash",pay_natcash:"NatCash",pay_bank:"Compte bancaire",pay_bank_sub:"Un administrateur saisit le numéro de compte",pay_wallet_ph:"Votre numéro pour recevoir l'argent",pay_save:"Enregistrer",pay_locked:"Un paiement est en cours de traitement, vous ne pouvez rien changer jusqu'à ce qu'il soit réglé. Cela protège l'argent déjà en route.",pay_bank_none:"Banque choisie. Un administrateur doit encore saisir vos coordonnées avant qu'un virement soit possible.",pay_hint:"Les montants dus sont enregistrés mais pas encore envoyés. L'argent est à vous une fois marqué payé avec une référence.",pay_run_paid:"payé",pay_run_wait:"en attente d'approbation",pay_run_ok:"approuvé",
     active_ride_title:"Course Active",enter_ride_pin:"Demandez le code PIN au passager",
     arrived_btn:"Je suis arrivé - prévenir le passager",arrived_done:"Passager prévenu",presence_on:"Vous êtes en ligne - vous recevez des courses",presence_off:"Marqué hors ligne - vous recevez toujours les demandes",presence_go_on:"Se mettre en ligne",presence_go_off:"Se retirer",presence_hint_on:"Gardez la page ouverte pour recevoir les demandes.",presence_hint_off:"Appuyez sur Se mettre en ligne quand vous êtes prêt.",presence_fail:"Impossible de changer cela maintenant. Réessayez.",geo_denied:"En ligne. GPS refusé - vous recevez quand même des courses.",geo_unavailable:"En ligne. Position indisponible pour le moment.",start_ride_btn:"Demarrer la Course",complete_ride_btn:"Terminer la Course",
@@ -703,6 +707,7 @@ const T={
     ride_completed:"Completed",ride_in_progress:"In Progress",ride_searching:"Searching",ride_cancelled:"Cancelled",ride_accepted:"Accepted",
     member_since:"Member since",
     kpi_earned:"Total Earned",kpi_rides:"Completed Rides",kpi_today:"Today",kpi_week:"This Week",kpi_rides_done:"rides",kpi_all_time:"all time",
+    alert_on:"🔔 Turn on new-ride alerts",alert_ok:"✅ Alerts on — you will know even if this page is closed",alert_no:"This phone does not support alerts",alert_denied:"You blocked alerts. Allow them in your browser settings.",alert_wait:"Turning on…",
     pay_title:"How you get paid",pay_owed:"Owed to you",pay_inpay:"Being paid",pay_settled:"Paid",pay_moncash:"MonCash",pay_natcash:"NatCash",pay_bank:"Bank account",pay_bank_sub:"An administrator enters the account number",pay_wallet_ph:"Your number for receiving money",pay_save:"Save",pay_locked:"A payment is being processed right now, so nothing can change until it settles. This protects the money already on its way to you.",pay_bank_none:"Bank chosen. An administrator still has to enter your account details before a transfer can be made.",pay_hint:"Amounts owed are recorded but not sent. It is money in your hands once it shows paid with a reference.",pay_run_paid:"paid",pay_run_wait:"waiting for approval",pay_run_ok:"approved",
     active_ride_title:"Active Ride",enter_ride_pin:"Ask the passenger for the PIN code",
     arrived_btn:"I have arrived - tell the passenger",arrived_done:"Passenger told",presence_on:"You are online - receiving rides",presence_off:"Marked offline - you still receive requests",presence_go_on:"Go online",presence_go_off:"Go offline",presence_hint_on:"Keep this page open to receive requests.",presence_hint_off:"Press Go online so we can see where you are. Requests still appear either way.",presence_fail:"We cannot change that right now. Try again.",geo_denied:"Online. GPS is off - you still receive rides.",geo_unavailable:"Online. We cannot find your position right now.",start_ride_btn:"Start Ride",complete_ride_btn:"Complete Ride",
@@ -740,6 +745,7 @@ const T={
     ride_completed:"Completado",ride_in_progress:"En Progreso",ride_searching:"Buscando",ride_cancelled:"Cancelado",ride_accepted:"Aceptado",
     member_since:"Miembro desde",
     kpi_earned:"Total Ganado",kpi_rides:"Viajes Completados",kpi_today:"Hoy",kpi_week:"Esta Semana",kpi_rides_done:"viajes",kpi_all_time:"desde el inicio",
+    alert_on:"🔔 Activar alertas de viajes",alert_ok:"✅ Alertas activadas — aunque la página esté cerrada",alert_no:"Este teléfono no soporta alertas",alert_denied:"Bloqueaste las alertas. Actívalas en los ajustes del navegador.",alert_wait:"Activando…",
     pay_title:"Cómo le pagamos",pay_owed:"Se le debe",pay_inpay:"En proceso",pay_settled:"Pagado",pay_moncash:"MonCash",pay_natcash:"NatCash",pay_bank:"Cuenta bancaria",pay_bank_sub:"Un administrador ingresa el número de cuenta",pay_wallet_ph:"Su número para recibir el dinero",pay_save:"Guardar",pay_locked:"Se está procesando un pago ahora mismo, así que nada puede cambiar hasta que se liquide. Esto protege el dinero que ya va en camino.",pay_bank_none:"Banco elegido. Un administrador aún debe ingresar los datos de su cuenta antes de poder transferir.",pay_hint:"Los montos adeudados están registrados pero no enviados. Es dinero suyo cuando aparece pagado con una referencia.",pay_run_paid:"pagado",pay_run_wait:"esperando aprobación",pay_run_ok:"aprobado",
     active_ride_title:"Viaje Activo",enter_ride_pin:"Pida al pasajero el codigo PIN",
     arrived_btn:"He llegado - avisar al pasajero",arrived_done:"Pasajero avisado",presence_on:"Estás en línea - recibiendo viajes",presence_off:"Marcado sin conexión - sigues recibiendo solicitudes",presence_go_on:"Ponerse en línea",presence_go_off:"Salir",presence_hint_on:"Mantén esta página abierta para recibir solicitudes.",presence_hint_off:"Pulsa Ponerse en línea cuando estés listo.",presence_fail:"No podemos cambiar eso ahora. Inténtalo de nuevo.",geo_denied:"En línea. GPS desactivado - aún recibes viajes.",geo_unavailable:"En línea. No podemos ubicarte ahora mismo.",start_ride_btn:"Iniciar Viaje",complete_ride_btn:"Completar Viaje",
@@ -846,6 +852,7 @@ async function handleLogin(e){
     };
     window._driverData=mapped;
     loadPayout();
+    syncAlertButton();
     document.getElementById('loginSection').style.display='none';
     document.getElementById('dashboard').classList.add('active');
     renderDashboard(mapped);
@@ -905,6 +912,7 @@ async function handleLogin(e){
     };
     window._driverData=mapped;
     loadPayout();
+    syncAlertButton();
     document.getElementById('loginSection').style.display='none';
     document.getElementById('dashboard').classList.add('active');
     renderDashboard(mapped);
@@ -1007,6 +1015,67 @@ function renderDashboard(data){
       '<div class="kpi k-today"><div class="kv">'+Math.round(_sum(_todayR)).toLocaleString()+' <small>HTG</small></div><div class="kl">'+t('kpi_today')+'</div><div class="kn">'+_todayR.length+' '+t('kpi_rides_done')+'</div></div>'+
       '<div class="kpi k-week"><div class="kv">'+Math.round(_sum(_weekR)).toLocaleString()+' <small>HTG</small></div><div class="kl">'+t('kpi_week')+'</div><div class="kn">'+_weekR.length+' '+t('kpi_rides_done')+'</div></div>';
   }
+}
+
+/* ── NEW-RIDE ALERTS ───────────────────────────────────────────────────────
+   28 Sep: "MsouWout cannot depend on drivers having the webpage open at
+   exactly the moment somebody requests a ride." This asks the phone once, and
+   from then on the server can wake it with the browser closed. */
+function b64ToU8(b64){
+  const pad='='.repeat((4-b64.length%4)%4);
+  const raw=atob((b64+pad).replace(/-/g,'+').replace(/_/g,'/'));
+  return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));
+}
+function alertSay(t,bad){
+  var el=document.getElementById('alertMsg');
+  if(el){ el.textContent=t; el.style.color=bad?'#B91C1C':'#166534'; }
+}
+async function enableAlerts(){
+  var btn=document.getElementById('alertBtn');
+  var id=(window._driverData&&window._driverData.driver&&window._driverData.driver.id)||null;
+  if(!id) return;
+  if(!('serviceWorker' in navigator)||!('PushManager' in window)){
+    alertSay(t('alert_no'),true); return;
+  }
+  btn.disabled=true; alertSay(t('alert_wait'));
+  try{
+    var perm=await Notification.requestPermission();
+    if(perm!=='granted'){ alertSay(t('alert_denied'),true); btn.disabled=false; return; }
+    var reg=await navigator.serviceWorker.ready;
+    var kr=await fetch(API+'/api/drivers/push/key').then(r=>r.json());
+    var sub=await reg.pushManager.getSubscription();
+    if(!sub){
+      sub=await reg.pushManager.subscribe({
+        userVisibleOnly:true,
+        applicationServerKey:b64ToU8(kr.key)
+      });
+    }
+    var r=await fetch(API+'/api/drivers/push/subscribe',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({driver_id:id,subscription:sub.toJSON?sub.toJSON():sub})
+    });
+    if(!r.ok) throw new Error('save failed');
+    /* Remembered so the button can show its real state next time he logs in,
+       rather than inviting him to switch on something already on. */
+    try{ localStorage.setItem('mw_alerts_on','1'); }catch(e){}
+    btn.style.display='none';
+    alertSay(t('alert_ok'));
+  }catch(e){
+    btn.disabled=false;
+    alertSay(t('alert_denied'),true);
+  }
+}
+/* Reflect the real state of the browser subscription, not what we remember -
+   he may have cleared the site, or switched phones. */
+async function syncAlertButton(){
+  var btn=document.getElementById('alertBtn'); if(!btn) return;
+  try{
+    if(!('serviceWorker' in navigator)||!('PushManager' in window)){ btn.style.display='none'; return; }
+    var reg=await navigator.serviceWorker.ready;
+    var sub=await reg.pushManager.getSubscription();
+    if(sub && Notification.permission==='granted'){ btn.style.display='none'; alertSay(t('alert_ok')); }
+    else { btn.style.display=''; }
+  }catch(e){}
 }
 
 function item(label,value){
