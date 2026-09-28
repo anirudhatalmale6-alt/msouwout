@@ -863,11 +863,28 @@ async function handleLogin(e){
   }
 
   try{
-    const res=await fetch(API+'/api/drivers/login',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({phone:fullPhone,pin:pin})
-    });
+    /* 🚨 28 Sep. Jeffery photographed this button stuck on "Ap chache..." and
+       said "I am not even able to disconnect". There was NO timeout: fetch()
+       waits for ever, so any request that never answers - the server
+       restarting, a tunnel that dies mid-request, Haiti's mobile data dropping
+       between two towers - left the spinner turning with no error, no way back
+       and nothing to press. Silence looked exactly like work in progress.
+       25s, then say so and give him the button back. A driver who is told the
+       network failed can try again; a driver watching a spinner can only give
+       up. */
+    const _ac=new AbortController();
+    const _to=setTimeout(function(){_ac.abort();},25000);
+    let res;
+    try{
+      res=await fetch(API+'/api/drivers/login',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({phone:fullPhone,pin:pin}),
+        signal:_ac.signal
+      });
+    } finally {
+      clearTimeout(_to);
+    }
 
     if(res.status===404){
       errEl.innerHTML=t('err_not_found');
