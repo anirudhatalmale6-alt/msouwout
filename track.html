@@ -170,6 +170,21 @@ body.stealth .lang-sw button.active{color:#333;background:#eee}
   font-variant-numeric:tabular-nums;
 }
 .pin-hint{font-size:.62rem;color:rgba(255,255,255,.4);margin-top:6px}
+.pin-recover{text-align:center;margin:-6px 0 14px}
+.pin-lost-link{background:none;border:0;font-family:inherit;font-size:13px;font-weight:700;
+  color:#64748B;text-decoration:underline;cursor:pointer;padding:6px 10px}
+.pin-rec-box{background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:14px;margin-top:8px;text-align:left}
+.pin-rec-t{font-weight:800;font-size:15px;color:#0F172A}
+.pin-rec-sub{font-size:12.5px;color:#64748B;margin:4px 0 10px;line-height:1.45}
+.pin-rec-box input{width:100%;box-sizing:border-box;font-family:inherit;font-size:16px;
+  padding:12px;border:1px solid #CBD5E1;border-radius:11px}
+.pin-rec-msg{font-size:12.5px;line-height:1.45;margin:8px 0 0;min-height:16px}
+.pin-rec-msg.bad{color:#B91C1C}
+.pin-rec-go{width:100%;margin-top:10px;padding:13px;border:0;border-radius:11px;
+  background:#00209F;color:#fff;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer}
+.pin-rec-x{width:100%;margin-top:8px;padding:11px;border:1px solid #E2E8F0;border-radius:11px;
+  background:#fff;color:#475569;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}
+
 
 /* DRIVER CARD */
 .driver-card{margin:0 16px 12px;padding:12px;background:var(--off-white);border-radius:12px;display:flex;align-items:center;gap:12px}
@@ -710,6 +725,24 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       <div class="pin-hint" data-i18n="pin_hint">Bay chofè a kòd sa a avan kous la kòmanse</div>
     </div>
 
+    <!-- 🚨 27 Sep: "We cannot have passengers contacting you to retrieve their
+         PIN manually." The PIN arrives once, in the answer to the booking. If
+         that answer is lost, or she clears her browser, or opens her link on
+         another phone, she had no way back except me. -->
+    <div class="pin-recover" id="pinRecover">
+      <button class="pin-lost-link" id="pinLostBtn" onclick="pinRecoverOpen()"
+              data-i18n="pin_lost">M pa gen kòd la</button>
+      <div class="pin-rec-box" id="pinRecBox" style="display:none">
+        <div class="pin-rec-t" data-i18n="pin_rec_t">Jwenn kòd sekirite ou</div>
+        <div class="pin-rec-sub" data-i18n="pin_rec_sub">Mete nimewo telefòn ou te itilize pou kòmande kous la.</div>
+        <input id="pinRecPhone" type="tel" inputmode="tel" autocomplete="tel"
+               placeholder="Nimewo telefòn ou" data-i18n-placeholder="pin_rec_ph">
+        <div class="pin-rec-msg" id="pinRecMsg"></div>
+        <button class="pin-rec-go" id="pinRecGo" onclick="pinRecoverGo()" data-i18n="pin_rec_go">Jwenn kòd la</button>
+        <button class="pin-rec-x" onclick="pinRecoverClose()" data-i18n="pin_rec_cancel">Fèmen</button>
+      </div>
+    </div>
+
     <div class="driver-card hidden" id="driverCard">
       <div class="driver-avatar" id="driverAvatar">?</div>
       <div class="driver-info">
@@ -821,7 +854,7 @@ const I18N = {
     distance:'Distans', time:'Tan', price:'Pri (HTG)',
     share:'Pataje', call:'Rele Chofe',
     map_offline:"Kat la pa ka chaje kounye a. Tout rès enfòmasyon kous la la anba.",
-    share_msg:'Mwen nan yon kous MsouWout! Swiv mwen la:',
+    pin_lost:"M pa gen kòd la",pin_rec_t:"Jwenn kòd sekirite ou",pin_rec_sub:"Mete nimewo telefòn ou te itilize pou kòmande kous la.",pin_rec_ph:"Nimewo telefòn ou",pin_rec_go:"Jwenn kòd la",pin_rec_bad:"Nou pa jwenn yon kous ki gen nimewo sa a.",pin_rec_wait:"N ap gade…",pin_rec_cancel:"Fèmen",share_msg:'Mwen nan yon kous MsouWout! Swiv mwen la:',
     sb_text:'Sekirite Fanmi aktif', sb_contacts:'Kontak',
     dev_warn:'Chofe a kite wout nomal la',
     pay_title:'Peye kous la — {amt} HTG', pay_sub:'Chwazi bous ou. Ou ka peye kounye a oswa lè kous la fini.',
@@ -868,7 +901,7 @@ const I18N = {
     distance:'Distance', time:'Temps', price:'Prix (HTG)',
     share:'Partager', call:'Appeler',
     map_offline:"La carte ne peut pas se charger. Toutes les autres informations sont ci-dessous.",
-    share_msg:'Je suis dans une course MsouWout! Suivez-moi ici:',
+    pin_lost:"Je n'ai pas le code",pin_rec_t:"Retrouver votre code",pin_rec_sub:"Entrez le numéro de téléphone utilisé pour commander la course.",pin_rec_ph:"Votre numéro",pin_rec_go:"Retrouver le code",pin_rec_bad:"Aucune course trouvée avec ce numéro.",pin_rec_wait:"Recherche…",pin_rec_cancel:"Fermer",share_msg:'Je suis dans une course MsouWout! Suivez-moi ici:',
     sb_text:'Securite Famille active', sb_contacts:'Contacts',
     dev_warn:'Le chauffeur a devie de la route',
     pay_title:'Payer la course — {amt} HTG', pay_sub:'Choisissez votre portefeuille. Vous pouvez payer maintenant ou a la fin.',
@@ -915,7 +948,7 @@ const I18N = {
     distance:'Distance', time:'Time', price:'Price (HTG)',
     share:'Share', call:'Call Driver',
     map_offline:"The map could not load. Everything else about your ride is below.",
-    share_msg:'I\'m on a MsouWout ride! Track me here:',
+    pin_lost:"I don't have the code",pin_rec_t:"Recover your security code",pin_rec_sub:"Enter the phone number you used to book the ride.",pin_rec_ph:"Your phone number",pin_rec_go:"Get the code",pin_rec_bad:"No ride found with that number.",pin_rec_wait:"Checking…",pin_rec_cancel:"Close",share_msg:'I\'m on a MsouWout ride! Track me here:',
     sb_text:'Family Safety active', sb_contacts:'Contacts',
     dev_warn:'Driver has deviated from route',
     pay_title:'Pay for the ride — {amt} HTG', pay_sub:'Choose your wallet. You can pay now or when the ride ends.',
@@ -962,7 +995,7 @@ const I18N = {
     distance:'Distancia', time:'Tiempo', price:'Precio (HTG)',
     share:'Compartir', call:'Llamar',
     map_offline:"El mapa no pudo cargarse. Toda la demás información está abajo.",
-    share_msg:'Estoy en un viaje MsouWout! Sigueme aqui:',
+    pin_lost:"No tengo el código",pin_rec_t:"Recuperar su código",pin_rec_sub:"Ingrese el número de teléfono con el que pidió el viaje.",pin_rec_ph:"Su número",pin_rec_go:"Obtener el código",pin_rec_bad:"No encontramos un viaje con ese número.",pin_rec_wait:"Buscando…",pin_rec_cancel:"Cerrar",share_msg:'Estoy en un viaje MsouWout! Sigueme aqui:',
     sb_text:'Seguridad Familiar activa', sb_contacts:'Contactos',
     dev_warn:'El conductor se desvio de la ruta',
     pay_title:'Pagar el viaje — {amt} HTG', pay_sub:'Elija su billetera. Puede pagar ahora o al terminar el viaje.',
@@ -1220,7 +1253,12 @@ function updateUI(data) {
       }
     } catch (e) {}
   }
-  if (myPin && !['completed','cancelled'].includes(data.status)) {
+  var live = !['completed','cancelled'].includes(data.status);
+  var rec = document.getElementById('pinRecover');
+  /* Offered only when it is needed: she has no PIN and the ride is still on.
+     Showing it beside a PIN she can already read is just noise. */
+  if (rec) rec.style.display = (!myPin && live) ? 'block' : 'none';
+  if (myPin && live) {
     document.getElementById('pinCode').textContent = myPin;
     pinCard.classList.add('show');
   } else {
@@ -1422,6 +1460,60 @@ let payRef = null;
 let payTimer = null;
 let payAmount = 0;
 let payBusy = false;
+
+/* ── PIN RECOVERY ─────────────────────────────────────────────────────────
+   She proves it is her ride with the phone number she booked with, and gets
+   BOTH the PIN and the private key back - recovering the PIN alone would leave
+   her still treated as a stranger on her own booking. */
+function pinRecoverOpen(){
+  document.getElementById('pinRecBox').style.display = 'block';
+  document.getElementById('pinLostBtn').style.display = 'none';
+  var f = document.getElementById('pinRecPhone');
+  if (f) { f.value = ''; f.focus(); }
+}
+function pinRecoverClose(){
+  document.getElementById('pinRecBox').style.display = 'none';
+  document.getElementById('pinLostBtn').style.display = '';
+  document.getElementById('pinRecMsg').textContent = '';
+}
+var pinRecBusy = false;
+function pinRecoverGo(){
+  if (pinRecBusy) return;
+  var msg = document.getElementById('pinRecMsg');
+  var phone = (document.getElementById('pinRecPhone').value || '').trim();
+  if (phone.replace(/[^0-9]/g,'').length < 6) {
+    msg.className = 'pin-rec-msg bad'; msg.textContent = t('pin_rec_bad'); return;
+  }
+  pinRecBusy = true;
+  msg.className = 'pin-rec-msg'; msg.textContent = t('pin_rec_wait');
+  fetch(API + '/rides/' + encodeURIComponent(rideCode) + '/recover', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone: phone })
+  }).then(function(r){ return r.json().then(function(j){ return { ok: r.ok, j: j }; }); })
+    .then(function(res){
+      pinRecBusy = false;
+      if (!res.ok || !res.j.ride_pin) {
+        msg.className = 'pin-rec-msg bad';
+        msg.textContent = res.j.error || t('pin_rec_bad');
+        return;
+      }
+      /* Keep the key on THIS phone so her whole booking works from now on -
+         PIN, and anything else the private link carries. */
+      try {
+        localStorage.setItem('mw_active_ride', JSON.stringify({
+          id: res.j.ride_id, tracking_code: res.j.tracking_code,
+          pin: res.j.ride_pin, owner_token: res.j.owner_token || '', ts: Date.now()
+        }));
+      } catch (e) {}
+      pinRecoverClose();
+      document.getElementById('pinCode').textContent = res.j.ride_pin;
+      document.getElementById('pinCard').classList.add('show');
+      fetchRide();
+    }).catch(function(){
+      pinRecBusy = false;
+      msg.className = 'pin-rec-msg bad'; msg.textContent = t('pin_rec_bad');
+    });
+}
 
 function payIsOwner() {
   /* 🚨 27 Sep, LIVE TEST: "no option to pay bay moncash".

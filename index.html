@@ -2505,7 +2505,12 @@ function doSubmitRide(name,phone){
     pickupLat:window._pickupLat||null,
     pickupLng:window._pickupLng||null,
     dropoffLat:window._dropLat||null,
-    dropoffLng:window._dropLng||null
+    dropoffLng:window._dropLng||null,
+    /* ⛔ ONE id per booking ATTEMPT, reused by every retry of that attempt.
+       This is what stops a lost answer, a double tap or the recovery path
+       turning into two rides and two drivers. It is regenerated only when she
+       starts a genuinely new booking (see newBookingKey). */
+    client_request_id:bookingKey()
   };
   if(timeMode==='later'){
     rideData.scheduledDate=document.getElementById('rDate').value;
@@ -2617,6 +2622,19 @@ function myTrackUrl(code, absolute){
   }
   return tok ? url + '&t=' + encodeURIComponent(tok) : url;
 }
+
+/* The idempotency key for the booking currently being attempted. Held on the
+   page, not in storage: it must survive a retry, and must NOT survive into the
+   next booking she makes. */
+var _bookingKey = null;
+function bookingKey(){
+  if(!_bookingKey){
+    _bookingKey = 'b-' + Date.now().toString(36) + '-' +
+      Math.random().toString(36).slice(2,10);
+  }
+  return _bookingKey;
+}
+function newBookingKey(){ _bookingKey = null; }
 
 function saveActiveRide(){
   try{
@@ -3050,6 +3068,9 @@ function contactWhatsApp(){
 }
 
 function newRide(){
+  /* ⚠️ A genuinely NEW booking must get a NEW key, or it would be replayed
+     as the previous ride and she would be handed the old car back. */
+  newBookingKey();
   stopRidePolling();
   rideData={};
   _lastStatus='';
