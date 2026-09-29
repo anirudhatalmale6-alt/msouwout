@@ -1144,6 +1144,12 @@ function photonSearch(text, limit){
     .catch(function(){ return null; });
 }
 
+/* One second between lookups. The free map service asks for no more than one
+   request a second and enforces it; firing five at once is how a perfectly
+   good address ends up reported as "not found". */
+var GEO_PACE_MS=1100;
+function geoPace(){ return new Promise(function(r){ setTimeout(r,GEO_PACE_MS); }); }
+
 function geocodeAddr(text){
   if(!text) return Promise.resolve(null);
   var key=text.trim().toLowerCase();
@@ -1153,19 +1159,42 @@ function geocodeAddr(text){
   function attempt(){
     if(i>=tries.length) return Promise.resolve(null);
     var q=encodeURIComponent(tries[i++]);
-    var c=new AbortController();setTimeout(function(){c.abort()},4500);
-    return fetch('https://nominatim.openstreetmap.org/search?format=json&accept-language=ht&limit=1&q='+q+boxParam(),{signal:c.signal})
-      .then(function(r){return r.json()})
-      .then(function(d){
-        if(d&&d[0]){
-          var pt={lat:parseFloat(d[0].lat),lng:parseFloat(d[0].lon)};
-          _geoCache[key]=pt;return pt;
-        }
-        /* Only ever retry on an EMPTY answer, never on a network error, and at
-           most three times - Nominatim is a free service at about 1 req/s. */
-        return attempt();
-      })
-      .catch(function(){return null;});
+    var firstTry=(i===1);
+    /* 🚨🚨 29 Sep, THE LIVE TEST THAT NEVER STARTED. Jennifer typed
+       "28rue saint preux Péguy ville 11" and got "we cannot find this address".
+
+       The shortening logic was FINE - I replayed her exact text through it and
+       it produces "rue saint preux Péguy ville", which the map service answers
+       instantly with her real street. It was attempt 3 of 5. It should have
+       worked.
+
+       Two mistakes stopped it:
+       1. All five attempts were fired INSTANTLY, back to back, at a free
+          service that allows about ONE request per second. Attempts 2-5 were
+          refused for going too fast - including the one that would have won.
+       2. A refusal landed in the catch below, which returned null and
+          ABANDONED every remaining attempt. One "slow down" killed the search.
+
+       And r.json() was called without checking r.ok, so a refusal page (which
+       is not JSON) threw before anything could look at the status.
+
+       So: pace the attempts, and treat a refusal like a miss - move to the
+       NEXT variant instead of giving up on all of them. */
+    return (firstTry?Promise.resolve():geoPace()).then(function(){
+      var c=new AbortController();setTimeout(function(){c.abort()},4500);
+      return fetch('https://nominatim.openstreetmap.org/search?format=json&accept-language=ht&limit=1&q='+q+boxParam(),{signal:c.signal})
+        .then(function(r){ if(!r.ok) throw new Error('nominatim '+r.status); return r.json(); })
+        .then(function(d){
+          if(d&&d[0]){
+            var pt={lat:parseFloat(d[0].lat),lng:parseFloat(d[0].lon)};
+            _geoCache[key]=pt;return pt;
+          }
+          return attempt();
+        })
+        /* ⛔ NOT "return null". i has already advanced, so this walks on to the
+           next variant and the guard at the top ends it. */
+        .catch(function(){ return attempt(); });
+    });
   }
   /* ⚠️ ONE fallback, and it has to be HERE rather than inside the loop.
      When the service is BLOCKED the fetch rejects, the catch above returns
@@ -2044,16 +2073,27 @@ function acFetch(text,cb){
   function ask(){
     if(i>=tries.length)return cb([]);
     var t=tries[i++];
+    var firstTry=(i===1);
     var q=encodeURIComponent(t.indexOf('Haiti')>-1||t.indexOf('Ayiti')>-1?t:t+', Haiti');
-    var c=new AbortController();setTimeout(function(){c.abort();},5000);
-    fetch('https://nominatim.openstreetmap.org/search?format=json&accept-language=ht&addressdetails=1&limit=6&countrycodes=ht&q='+q,
-          {signal:c.signal,headers:{'Accept-Language':(currentLang==='ht'?'fr':currentLang)}})
-      .then(function(r){return r.json();})
-      .then(function(d){
-        if(d&&d.length)return cb(d);
-        ask();                      /* nothing found - try the shorter form */
-      })
-      .catch(function(){ askPhoton(); });
+    /* 🚨 29 Sep, same fault as geocodeAddr - see the long note there. The
+       RETRIES were fired instantly at a service that allows about one request
+       a second, so the shorter forms were refused for going too fast. The
+       FIRST attempt is still immediate; only the retries wait, which is what
+       keeps a type-ahead feeling like a type-ahead.
+       ⛔ And a refusal no longer skips straight past the remaining variants -
+       it tries the next one, THEN falls back to Photon. This list is what the
+       on-screen instruction "choose from the list below" depends on. */
+    (firstTry?Promise.resolve():geoPace()).then(function(){
+      var c=new AbortController();setTimeout(function(){c.abort();},5000);
+      return fetch('https://nominatim.openstreetmap.org/search?format=json&accept-language=ht&addressdetails=1&limit=6&countrycodes=ht&q='+q,
+            {signal:c.signal,headers:{'Accept-Language':(currentLang==='ht'?'fr':currentLang)}})
+        .then(function(r){ if(!r.ok) throw new Error('nominatim '+r.status); return r.json(); })
+        .then(function(d){
+          if(d&&d.length)return cb(d);
+          ask();                    /* nothing found - try the shorter form */
+        })
+        .catch(function(){ ask(); });
+    });
   }
   /* Only after every Nominatim variant has been tried, or the service could
      not be reached. An empty list is what makes the on-screen instruction
