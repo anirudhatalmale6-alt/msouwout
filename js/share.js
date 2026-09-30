@@ -305,9 +305,20 @@
     setTimeout(onScroll, 400);
   }
 
+  /* 🔑 A page may ASK to hold the button back until sharing is worth offering.
+     Jeffery, 30 Sep: "Do NOT show the big floating Pataje button while the
+     passenger is still building the ride. Once the ride is requested/accepted,
+     then show it." Nobody wants to share a half-typed address.
+     ⛔ Opt-in only: every other page that loads this file behaves exactly as
+     before, because the flag is absent there. */
+  function boot() {
+    if (window.MW_SHARE_DEFER) return;
+    mount();
+  }
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', mount);
-  } else { mount(); }
+    document.addEventListener('DOMContentLoaded', boot);
+  } else { boot(); }
 
   window.mwShare = doShare;   /* so a page can put "Pataje" on its own button too */
+  window.mwShareShow = function () { window.MW_SHARE_DEFER = false; mount(); };
 })();
