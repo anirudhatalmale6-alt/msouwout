@@ -1,4 +1,4 @@
-const CACHE_NAME = 'msouwout-v47';
+const CACHE_NAME = 'msouwout-v48';
 const ASSETS = [
   '/',
   '/index.html',
