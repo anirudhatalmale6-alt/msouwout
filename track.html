@@ -714,7 +714,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
          argument in one message: if it does not say the current build, the
          phone is on an old copy, and if it does, the fault is mine. -->
     <span id="buildStamp" title="build"
-          style="font-size:9px;opacity:.45;letter-spacing:.06em;margin-right:6px">v47</span>
+          style="font-size:9px;opacity:.45;letter-spacing:.06em;margin-right:6px">v48</span>
     <div class="topbar-code" id="topCode">---</div>
     <div class="lang-sw">
       <button onclick="setLang('ht')" class="active" data-lang="ht">HT</button>
@@ -1681,6 +1681,10 @@ function receiptPairs(d) {
   if (fare > 0) add(t('rc_fare'), fare + ' HTG');
   if (prot > 0) add(t('rc_prot'), prot + ' HTG');
   if (d.payment_method) add(t('rc_method'), String(d.payment_method).toUpperCase());
+  /* ⚠️ Same trap as on the booking page: this line used to go on regardless, so
+     a ride we know nothing about produced a "receipt" reading only
+     "Estati: Poko peye". Found by a test, not by looking. */
+  if (!out.length) return { pairs: [], total: 0 };
   add(t('rc_status'), d.payment_status === 'paid' ? t('rc_paid') : t('rc_unpaid'));
   return { pairs: out, total: total };
 }
