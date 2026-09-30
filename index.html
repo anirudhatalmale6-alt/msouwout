@@ -552,6 +552,36 @@ a{text-decoration:none;color:inherit}
 .dn-receipt .tot span{font-weight:900;font-size:15px}
 .dn-receipt .ref{margin-top:10px;font-size:11.5px;color:#93A0B8;text-align:center;
   letter-spacing:.04em}
+
+/* The two questions that replaced the explanation box. Short, loud, and they
+   tell her exactly what to type next. */
+.ask-where{
+  font-size:.82rem;font-weight:900;letter-spacing:.06em;color:#0F172A;
+  margin:2px 0 8px 2px;text-transform:uppercase
+}
+.ask-where.second{margin-top:12px}
+
+/* The security strip, collapsed until she asks for it. */
+.dash-safety-strip{
+  margin:20px 0 0;background:linear-gradient(135deg,#0D2818 0%,#0D3B1F 50%,#0A2A15 100%);
+  border-radius:14px;overflow:hidden
+}
+.dash-peek{
+  width:100%;display:flex;align-items:center;gap:10px;padding:13px 14px;background:none;
+  border:0;cursor:pointer;font-family:inherit;text-align:left
+}
+.dash-peek img{width:30px;height:30px;border-radius:50%;object-fit:cover;background:#fff;padding:2px;flex:none}
+.dash-peek .dp-txt{flex:1;min-width:0}
+.dash-peek .dp-txt b{display:block;font-size:.78rem;font-weight:800;color:#fff}
+.dash-peek .dp-txt i{
+  display:block;font-style:normal;font-size:.66rem;color:rgba(255,255,255,.55);
+  font-weight:600;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
+}
+.dash-peek .dp-more{
+  flex:none;font-size:.68rem;font-weight:800;color:#5EE6A1;
+  border:1px solid rgba(94,230,161,.35);border-radius:100px;padding:5px 10px
+}
+.dash-full{padding:0 16px 16px;position:relative}
 </style>
 <style id="capacitor-native-styles">
 body.capacitor-native{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
@@ -656,15 +686,11 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     </div>
 
 
-    <!-- Passenger entry — deliberately says no account is needed, because
-         none exists: a rider orders straight from the two boxes below. -->
-    <div class="pax-note" id="paxNote">
-      <span class="pn-ic">&#128100;</span>
-      <div class="pn-text">
-        <strong data-i18n="pax_title">Ou se pasaje?</strong>
-        <span data-i18n="pax_sub">Ou pa bezwen kont. Ekri kote ou ye ak kote ou prale anba a.</span>
-      </div>
-    </div>
+    <!-- ⛔ The "Ou se pasajè? Ou pa bezwen kont..." box used to sit here.
+         Jeffery, 30 Sep: "Remove the large 'Ou se pasajè?' explanation box. It
+         takes too much space and the form is already obvious."
+         The two questions below say the same thing in four words each. -->
+    <div class="ask-where" data-i18n="ask_pickup">&#128205; KOTE OU YE?</div>
     <div class="loc-inputs">
       <div class="loc-row">
         <div class="loc-dot pickup"></div>
@@ -674,6 +700,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
         <span>&#128205;</span> <span data-i18n="gps_btn">Sevi ak pozisyon mwen</span>
       </button>
       <div class="loc-line"></div>
+      <div class="ask-where second" data-i18n="ask_drop">&#127937; KOTE OU PRALE?</div>
       <div class="loc-row">
         <div class="loc-dot drop"></div>
         <input type="text" class="loc-input" id="dropoff" placeholder="Ki kote ou prale?" data-i18n-placeholder="ph_drop">
@@ -695,17 +722,23 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
          nothing on screen saying so. Silence is not a error message. -->
     <p class="need-hint" id="findHint" role="status"></p>
 
-    <!-- DASH SAFETY STRIP -->
-    <div class="dash-safety-strip" style="margin:20px 0 0;background:linear-gradient(135deg,#0D2818 0%,#0D3B1F 50%,#0A2A15 100%);border-radius:14px;padding:18px 16px;position:relative;overflow:hidden">
-      <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(13,155,92,.2) 0%,transparent 70%);border-radius:50%"></div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;position:relative">
-        <img src="assets/dash-logo.jpg" alt="DASH" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#fff;padding:2px">
-        <div>
-          <div style="font-size:.82rem;font-weight:800;color:#fff;letter-spacing:-.01em" data-i18n="dash_strip_title">&#128737;&#65039; Sekirite + Pwoteksyon Medikal</div>
-          <div style="font-size:.65rem;color:rgba(255,255,255,.45);font-weight:600">DASH x MsouWout</div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;position:relative">
+    <!-- DASH SAFETY — COLLAPSED.
+         Jeffery, 30 Sep: "Security is one of MsouWout's biggest advantages, so
+         do NOT remove it. But we don't need the huge security card before
+         ordering... Tap 'Wè plis' for full explanation."
+         ⛔ Nothing is deleted. Every claim is still here, one tap away, and the
+         strip still says what it is before she opens it. -->
+    <div class="dash-safety-strip" id="dashStrip">
+      <button type="button" class="dash-peek" onclick="toggleDash()" aria-expanded="false">
+        <img src="assets/dash-logo.jpg" alt="DASH">
+        <span class="dp-txt">
+          <b data-i18n="dash_strip_title">&#128737;&#65039; Sekirite + Pwoteksyon Medikal</b>
+          <i data-i18n="dash_peek_sub">Chofe verifye &middot; GPS &middot; Pwoteksyon DASH &middot; Bouton ijans</i>
+        </span>
+        <span class="dp-more" id="dashMore" data-i18n="dash_more">W&egrave; plis</span>
+      </button>
+      <div class="dash-full" id="dashFull" style="display:none">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;position:relative">
         <div style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:rgba(255,255,255,.85);font-weight:600">
           <span style="width:22px;height:22px;border-radius:6px;background:rgba(13,155,92,.25);display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0">&#9989;</span>
           <span data-i18n="dash_s1">Chofe Verifye pa DCPR</span>
@@ -724,6 +757,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
         </div>
       </div>
       <a href="dash-partnership.html" style="display:block;text-align:center;margin-top:14px;font-size:.68rem;color:rgba(255,255,255,.35);font-weight:600;text-decoration:none" data-i18n="dash_s_link">Aprann plis sou pwoteksyon DASH &#8594;</a>
+          </div>
     </div>
 
     <div class="quick-opts" style="margin-top:20px">
@@ -825,9 +859,10 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
           <span style="font-weight:800">+5%</span>
         </div>
         <div class="fm-dash"><span>&#128737;&#65039;</span> <span data-i18n="dash_included">Pwoteksyon DASH enkli</span></div>
-        <div class="fm-row" id="fareFixedNote" style="display:none">
-          <span>&#128176;</span> <span data-i18n="fare_fixed_note">Se pri sa a chofè a ap wè</span>
-        </div>
+        <!-- ⛔ "Se egzakteman pri sa a chofè a ap wè" removed. Jeffery, 30 Sep:
+               "We don't need to explain our internal pricing relationship to
+               the passenger." The number is the answer; the explanation was
+               about us, not about her. -->
         <div class="fm-eta"><span>&#9201;&#65039;</span> <span data-i18n="eta_label">Estimasyon arive</span>: <span data-i18n="eta_val">3&#8211;5 min</span></div>
         <!-- Shown ONLY when the address could not be placed. Without it the page
              printed a confident number built from a 3km guess. -->
@@ -1744,6 +1779,7 @@ var T_RIDE_LIVE={
      pay_loading:"N ap chaje mwayen peman yo...",
      rl_done_title:'Kous la fini!',
      rl_done_msg:'Mesi paske ou vwayaje ak MsouWout. N espere w ap tounen byento.',
+     ask_pickup:"📍 KOTE OU YE?",ask_drop:"🏁 KOTE OU PRALE?",dash_peek_sub:"Chofe verifye · GPS · Pwoteksyon DASH · Bouton ijans",dash_more:"Wè plis",dash_less:"Fèmen",
      rc_title:"Resi Kous La",rc_date:"Dat",rc_from:"Kote yo pran w",rc_to:"Kote yo depoze w",rc_driver:"Chofè",rc_dist:"Distans",rc_fare:"Pri kous la",rc_prot:"Pwoteksyon DASH",rc_method:"Mwayen peman",rc_status:"Estati",rc_paid:"Peye",rc_unpaid:"Poko peye",rc_total:"TOTAL",rc_ref:"Kòd",rc_share:"📤 Voye resi a",
      rl_cancelled_title:'Kous la anile',
      rl_cancelled_msg:'Demann nan anile. Ou ka mande yon lot kous nenpot ki le.',
@@ -1785,6 +1821,7 @@ var T_RIDE_LIVE={
      pay_loading:"Chargement des moyens de paiement...",
      rl_done_title:'Course terminee!',
      rl_done_msg:'Merci d\'avoir voyage avec MsouWout. A tres bientot.',
+     ask_pickup:"📍 OÙ ÊTES-VOUS ?",ask_drop:"🏁 OÙ ALLEZ-VOUS ?",dash_peek_sub:"Chauffeurs vérifiés · GPS · Protection DASH · Bouton urgence",dash_more:"Voir plus",dash_less:"Fermer",
      rc_title:"Recu de la course",rc_date:"Date",rc_from:"Depart",rc_to:"Destination",rc_driver:"Chauffeur",rc_dist:"Distance",rc_fare:"Prix de la course",rc_prot:"Protection DASH",rc_method:"Moyen de paiement",rc_status:"Statut",rc_paid:"Paye",rc_unpaid:"Non paye",rc_total:"TOTAL",rc_ref:"Code",rc_share:"📤 Envoyer le recu",
      rl_cancelled_title:'Course annulee',
      rl_cancelled_msg:'La demande est annulee. Vous pouvez en demander une autre a tout moment.',
@@ -1826,6 +1863,7 @@ var T_RIDE_LIVE={
      pay_loading:"Loading payment methods...",
      rl_done_title:'Ride completed!',
      rl_done_msg:'Thank you for travelling with MsouWout. See you soon.',
+     ask_pickup:"📍 WHERE ARE YOU?",ask_drop:"🏁 WHERE ARE YOU GOING?",dash_peek_sub:"Verified drivers · GPS · DASH protection · Emergency button",dash_more:"See more",dash_less:"Close",
      rc_title:"Ride Receipt",rc_date:"Date",rc_from:"Pickup",rc_to:"Destination",rc_driver:"Driver",rc_dist:"Distance",rc_fare:"Fare",rc_prot:"DASH protection",rc_method:"Payment method",rc_status:"Status",rc_paid:"Paid",rc_unpaid:"Not paid",rc_total:"TOTAL",rc_ref:"Code",rc_share:"📤 Send receipt",
      rl_cancelled_title:'Ride cancelled',
      rl_cancelled_msg:'The request is cancelled. You can order another ride at any time.',
@@ -1867,6 +1905,7 @@ var T_RIDE_LIVE={
      pay_loading:"Cargando métodos de pago...",
      rl_done_title:'Viaje completado!',
      rl_done_msg:'Gracias por viajar con MsouWout. Hasta pronto.',
+     ask_pickup:"📍 ¿DÓNDE ESTÁ?",ask_drop:"🏁 ¿A DÓNDE VA?",dash_peek_sub:"Conductores verificados · GPS · Protección DASH · Botón de emergencia",dash_more:"Ver más",dash_less:"Cerrar",
      rc_title:"Recibo del viaje",rc_date:"Fecha",rc_from:"Recogida",rc_to:"Destino",rc_driver:"Conductor",rc_dist:"Distancia",rc_fare:"Tarifa",rc_prot:"Proteccion DASH",rc_method:"Metodo de pago",rc_status:"Estado",rc_paid:"Pagado",rc_unpaid:"No pagado",rc_total:"TOTAL",rc_ref:"Codigo",rc_share:"📤 Enviar recibo",
      rl_cancelled_title:'Viaje cancelado',
      rl_cancelled_msg:'La solicitud fue cancelada. Puedes pedir otro viaje cuando quieras.',
@@ -1904,7 +1943,25 @@ document.querySelectorAll('.lang-bar a').forEach(function(a){
 });
 
 /* STEP NAVIGATION */
+
+/* One tap opens the full security card. ⛔ Nothing about the protection itself
+   changes - this only decides when she reads about it. */
+function toggleDash(){
+  var full=document.getElementById('dashFull');
+  var btn=document.querySelector('.dash-peek');
+  var more=document.getElementById('dashMore');
+  if(!full) return;
+  var open = full.style.display==='none';
+  full.style.display = open ? 'block' : 'none';
+  if(btn) btn.setAttribute('aria-expanded', open?'true':'false');
+  if(more && typeof t==='function') more.textContent = t(open?'dash_less':'dash_more');
+}
+
 function showStep(n){
+  /* 🔑 Sharing only becomes useful once there is a ride to share. Step 3 is the
+     moment she has actually requested one. ⛔ Before that the button is not
+     hidden, it was never created - it cannot land on top of MANDE CHOFÈ. */
+  if(n>=3){ try{ if(window.mwShareShow) window.mwShareShow(); }catch(e){} }
   document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active')});
   document.getElementById('step'+n).classList.add('active');
   window.scrollTo(0,0);
@@ -3639,6 +3696,7 @@ try{ restoreActiveRide(); }catch(e){}
 <script id="capacitor-native-loader">
 (function(){if(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform()){document.body.classList.add('capacitor-native');var s=document.createElement('script');s.src='capacitor-bridge.js';document.body.appendChild(s);}})();
 </script>
-  <script src="js/share.js" defer></script>
+  <script>window.MW_SHARE_DEFER = true;</script>
+<script src="js/share.js" defer></script>
 </body>
 </html>
