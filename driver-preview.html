@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MsouWout Chofè — Apèsi</title>
+<link rel="icon" href="favicon.ico">
+<!--
+  ════════════════════════════════════════════════════════════════════
+  APÈSI / PREVIEW ONLY — for Jeffery to approve the LAYOUT.
+
+  Jeffery, 29 Sep: "THIS IS UI ONLY. Do NOT change the ride logic, payment
+  logic, dispatch logic, PIN security, notifications, ledger, database, or
+  APIs we just stabilized... Before deploying it live, show me the new driver
+  UI so I can approve the layout first."
+
+  ⛔ So this page talks to NOTHING. No API, no login, no real driver, no real
+  money. Every number on it is an example from his own spec. Tapping through
+  it changes only what is on the screen. The real driver portal
+  (driver-login.html) is untouched until he says yes.
+
+  30 Sep: "Also Mrive button should be at the same location ! I sent you the
+  layout design" — so the main action button is pinned to one fixed place at
+  the bottom and NEVER moves between steps. ALE CHÈCHE, MWEN RIVE, KÒMANSE
+  KOUS and FINI KOUS all land under the driver's thumb in the same spot.
+  ════════════════════════════════════════════════════════════════════
+-->
+<style>
+  :root{
+    --red:#D21034; --blue:#00209F; --ink:#0F172A; --muted:#64748B;
+    --line:#E6EAF2; --bg:#F4F6FB; --green:#12A150; --amber:#B45309;
+    --nav-h:64px; --act-h:96px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;
+    background:var(--bg); color:var(--ink);
+    padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));
+  }
+
+  /* ── the preview banner. It must be impossible to mistake this for live. ── */
+  .demo-bar{
+    background:#FEF3C7;color:#78350F;font-size:12px;font-weight:700;
+    padding:7px 14px;text-align:center;border-bottom:1px solid #FDE68A;
+    position:sticky;top:0;z-index:60;line-height:1.35
+  }
+
+  /* ── HEADER: small, per the spec. No big profile card. ── */
+  header{
+    background:var(--ink);color:#fff;padding:11px 14px;
+    display:flex;align-items:center;gap:12px
+  }
+  .burger{
+    background:none;border:0;color:#fff;font-size:22px;line-height:1;
+    padding:4px 6px;cursor:pointer;border-radius:8px
+  }
+  .brand{font-size:15px;font-weight:800;letter-spacing:.01em}
+  .hello{font-size:12.5px;color:#C3CBDA;margin-top:1px}
+  .plate{
+    margin-left:auto;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700;white-space:nowrap
+  }
+
+  main{padding:14px 14px 18px;max-width:560px;margin:0 auto}
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:16px;
+    padding:16px;margin-bottom:13px
+  }
+  .card.flat{padding:14px 16px}
+
+  /* ── 1. ONLINE / OFFLINE — the first and most obvious control ── */
+  .status-line{display:flex;align-items:center;gap:9px;font-size:18px;font-weight:900}
+  .dot{width:13px;height:13px;border-radius:50%;flex:none}
+  .dot.on{background:var(--green);box-shadow:0 0 0 4px rgba(18,161,80,.16)}
+  .dot.off{background:#CBD5E1}
+  .status-sub{color:var(--muted);font-size:13.5px;margin:7px 0 13px;line-height:1.45}
+
+  .btn{
+    display:block;width:100%;border:0;border-radius:14px;
+    font-family:inherit;font-size:16.5px;font-weight:800;padding:16px 14px;
+    cursor:pointer;text-align:center;line-height:1.25
+  }
+  .btn-lg{font-size:18px;padding:19px 14px}
+  .btn-green{background:var(--green);color:#fff}
+  .btn-red{background:var(--red);color:#fff}
+  .btn-blue{background:var(--blue);color:#fff}
+  .btn-dark{background:var(--ink);color:#fff}
+  .btn-ghost{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+  .btn-soft{background:#EEF2F9;color:var(--ink)}
+  .btn:active{filter:brightness(.94)}
+
+  /* ── 2. RIDE AREA ── */
+  .waiting{text-align:center;padding:26px 12px}
+  .waiting .big{font-size:17px;font-weight:900;letter-spacing:.01em}
+  .waiting .sub{color:var(--muted);font-size:13.5px;margin-top:7px}
+  .bell{font-size:34px;display:block;margin-bottom:8px}
+
+  .newride{border:2px solid var(--blue);box-shadow:0 8px 28px rgba(0,32,159,.13)}
+  .newride h3{margin:0 0 12px;font-size:16px;font-weight:900;color:var(--blue)}
+  .rowline{
+    display:flex;gap:10px;align-items:flex-start;
+    padding:8px 0;border-bottom:1px dashed #EDF1F7;font-size:15px
+  }
+  .rowline:last-of-type{border-bottom:0}
+  .rowline .ic{width:22px;flex:none;text-align:center}
+  .rowline .lb{color:var(--muted);font-size:12.5px;display:block}
+  .earn{
+    background:#ECFDF3;border:1px solid #BBF7D0;border-radius:13px;
+    padding:13px;text-align:center;margin:12px 0 6px
+  }
+  .earn .lb{font-size:12px;font-weight:800;color:#166534;letter-spacing:.06em}
+  .earn .amt{font-size:30px;font-weight:900;color:#166534;line-height:1.15}
+
+  /* ── ONE SCREEN = ONE MAIN ACTION ── */
+  .step-who{font-size:20px;font-weight:900}
+  .step-where{color:var(--muted);font-size:15px;margin-top:6px;line-height:1.45}
+  .step-tag{
+    display:inline-block;background:#EEF2F9;border-radius:999px;
+    padding:5px 12px;font-size:12px;font-weight:800;color:var(--blue);
+    letter-spacing:.05em;margin-bottom:10px
+  }
+
+  .pinrow{display:flex;gap:9px;justify-content:center;margin:14px 0 4px}
+  .pinbox{
+    width:52px;height:62px;border:2px solid var(--line);border-radius:12px;
+    font-size:26px;font-weight:900;text-align:center;line-height:58px;background:#fff
+  }
+  .pinbox.filled{border-color:var(--blue);color:var(--blue)}
+
+  .locked{
+    background:#FEF2F2;border:1px solid #FECACA;border-radius:13px;
+    padding:13px;color:#991B1B;font-size:14px;line-height:1.45
+  }
+  .okpay{
+    background:#ECFDF3;border:1px solid #BBF7D0;border-radius:13px;
+    padding:13px;color:#166534;font-size:14.5px;font-weight:800
+  }
+
+  /* ── 3. MONEY — one clean section ── */
+  .money-total{font-size:32px;font-weight:900;line-height:1.1}
+  .money-lb{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .money-grid{display:flex;gap:10px;margin:13px 0}
+  .money-grid div{flex:1;background:#F7F9FC;border-radius:11px;padding:9px 10px}
+  .money-grid .k{font-size:11.5px;color:var(--muted)}
+  .money-grid .v{font-size:14.5px;font-weight:800;margin-top:2px;white-space:nowrap}
+  .owed{color:var(--amber)}
+
+  h2.sec{font-size:13px;font-weight:900;letter-spacing:.07em;color:var(--muted);
+    margin:4px 0 10px;text-transform:uppercase}
+
+  /* ── THE ACTION SLOT: pinned, so the main button never moves ──────────
+     "Mrive button should be at the same location" - every step's main
+     action renders into this one fixed slot above the nav bar. ───────── */
+  .action-slot{
+    position:fixed;left:0;right:0;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,rgba(244,246,251,0),#F4F6FB 34%);
+    padding:14px 14px 12px;z-index:50
+  }
+  .action-slot .inner{max-width:560px;margin:0 auto}
+  .action-slot .pair{display:flex;gap:10px}
+  .action-slot .pair .btn{flex:1}
+  .action-slot .pair .btn.dom{flex:1.9}   /* AKSEPTE is visually dominant */
+  body.has-action main{padding-bottom:var(--act-h)}
+
+  /* ── BOTTOM NAV: exactly four ── */
+  nav{
+    position:fixed;left:0;right:0;bottom:0;z-index:55;background:#fff;
+    border-top:1px solid var(--line);display:flex;
+    padding-bottom:env(safe-area-inset-bottom)
+  }
+  nav button{
+    flex:1;background:none;border:0;padding:9px 4px 8px;font-family:inherit;
+    color:var(--muted);font-size:11.5px;font-weight:700;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:3px
+  }
+  nav button .ni{font-size:21px;line-height:1}
+  nav button.active{color:var(--blue)}
+  nav button.active .ni{transform:translateY(-1px)}
+
+  /* ── ☰ menu (Kont lives here too) ── */
+  .scrim{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:70;display:none}
+  .scrim.show{display:block}
+  .drawer{
+    position:fixed;top:0;bottom:0;left:0;width:82%;max-width:320px;background:#fff;
+    z-index:71;transform:translateX(-100%);transition:transform .22s ease;
+    display:flex;flex-direction:column
+  }
+  .drawer.show{transform:translateX(0)}
+  .drawer .dh{background:var(--ink);color:#fff;padding:18px 16px}
+  .drawer .dh .n{font-size:17px;font-weight:800}
+  .drawer .dh .p{font-size:12.5px;color:#C3CBDA;margin-top:3px}
+  .drawer a{
+    display:flex;gap:11px;align-items:center;padding:15px 16px;
+    border-bottom:1px solid var(--line);color:var(--ink);
+    text-decoration:none;font-size:15px;font-weight:600
+  }
+  .drawer a .mi{width:24px;text-align:center;font-size:18px}
+  .drawer a.out{color:var(--red);font-weight:800;border-bottom:0}
+
+  .hint{
+    font-size:12px;color:var(--muted);text-align:center;margin:2px 0 10px;line-height:1.5
+  }
+  .pager{
+    display:flex;gap:8px;justify-content:center;margin:16px 0 4px;flex-wrap:wrap
+  }
+  .pager button{
+    background:#fff;border:1px solid var(--line);border-radius:999px;
+    padding:7px 13px;font-family:inherit;font-size:12px;font-weight:700;
+    color:var(--muted);cursor:pointer
+  }
+  .pager button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .hide{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="demo-bar">
+  APÈSI — se sèlman yon egzanp pou w gade layout la. Chif yo se egzanp.
+  Anyen pa reyèl, anyen pa konekte.
+</div>
+
+<header>
+  <button class="burger" onclick="openMenu()" aria-label="Meni">&#9776;</button>
+  <div>
+    <div class="brand">MsouWout Chof&egrave;</div>
+    <div class="hello">Bonjou, Jeffery &#128075;</div>
+  </div>
+  <div class="plate">&#128663; AA71182</div>
+</header>
+
+<main>
+
+  <!-- ══════════════ AK&Egrave;Y ══════════════ -->
+  <section id="tab-home">
+
+    <!-- 1. ONLINE / OFFLINE -->
+    <div class="card flat" id="onlineCard">
+      <div class="status-line">
+        <span class="dot off" id="stDot"></span>
+        <span id="stText">OU PA AN LIY</span>
+      </div>
+      <div class="status-sub" id="stSub">Peze bouton an l&egrave; ou pare pou travay.</div>
+      <button class="btn btn-green" id="stBtn" onclick="toggleOnline()">K&Ograve;MANSE TRAVAY</button>
+    </div>
+
+    <!-- 2. RIDE AREA -->
+    <!-- waiting -->
+    <div class="card waiting" id="boxWaiting">
+      <span class="bell">&#128276;</span>
+      <div class="big">AP TANN YON KOUS...</div>
+      <div class="sub">N ap av&egrave;ti w l&egrave; yon nouvo demann rive.</div>
+    </div>
+
+    <!-- offline: nothing will come -->
+    <div class="card waiting hide" id="boxOffline">
+      <span class="bell">&#128164;</span>
+      <div class="big">OU PA AP RESEVWA KOUS</div>
+      <div class="sub">K&ograve;manse travay pou w ka resevwa demann.</div>
+    </div>
+
+    <!-- a new request -->
+    <div class="card newride hide" id="boxNew">
+      <h3>&#128276; NOUVO KOUS</h3>
+      <div class="rowline"><span class="ic">&#128100;</span><span><span class="lb">Pasaj&egrave;</span><b>Jennifer</b></span></div>
+      <div class="rowline"><span class="ic">&#128205;</span><span><span class="lb">Pran</span><b>P&eacute;tion-Ville</b></span></div>
+      <div class="rowline"><span class="ic">&#127937;</span><span><span class="lb">Depoze</span><b>Delmas 60</b></span></div>
+      <div class="rowline"><span class="ic">&#128207;</span><span><span class="lb">Distans</span><b>5.4 km</b></span></div>
+      <div class="earn">
+        <div class="lb">OU PRAL TOUCHE</div>
+        <div class="amt">325 HTG</div>
+      </div>
+    </div>
+
+    <!-- STEP 1: go and get her -->
+    <div class="card hide" id="boxGo">
+      <span class="step-tag">KOUS LA SE POU OU</span>
+      <div class="step-who">&#128100; Jennifer</div>
+      <div class="step-where">&#128205; P&eacute;tion-Ville</div>
+    </div>
+
+    <!-- STEP 2: her 4 digits -->
+    <div class="card hide" id="boxPin">
+      <span class="step-tag">OU RIVE</span>
+      <div class="step-who">Mande pasaj&egrave; a k&ograve;d 4 chif li.</div>
+      <div class="pinrow">
+        <div class="pinbox filled">7</div><div class="pinbox filled">2</div>
+        <div class="pinbox filled">4</div><div class="pinbox">&nbsp;</div>
+      </div>
+      <div class="locked" id="payLocked" style="margin-top:14px">
+        &#128274; <b>Peman poko konfime</b><br>
+        Ou pa ka k&ograve;manse kous la pou kounye a.
+      </div>
+      <div class="okpay hide" id="payOk" style="margin-top:14px">
+        &#9989; PEMAN KONFIME
+      </div>
+      <button class="btn btn-soft" style="margin-top:12px;font-size:14px"
+              onclick="fakePayment()" id="simPayBtn">
+        (apèsi) fè konsa peman an konfime
+      </button>
+    </div>
+
+    <!-- STEP 3: driving -->
+    <div class="card hide" id="boxRiding">
+      <span class="step-tag">&#128663; KOUS AN KOU</span>
+      <div class="step-who">&#128100; Jennifer</div>
+      <div class="step-where">&#128205; Destinasyon: Delmas 60</div>
+      <button class="btn btn-ghost" style="margin-top:14px" onclick="noop()">
+        &#128506;&#65039; OUVRI WOUT LA
+      </button>
+    </div>
+
+    <!-- STEP 4: done -->
+    <div class="card hide" id="boxDone" style="text-align:center">
+      <div style="font-size:40px">&#127881;</div>
+      <div class="step-who" style="margin-top:6px">KOUS FINI</div>
+      <div class="earn" style="margin-top:14px">
+        <div class="lb">OU TOUCHE</div>
+        <div class="amt">325 HTG</div>
+      </div>
+    </div>
+
+    <!-- 3. MONEY - one section, details live on Revni -->
+    <div class="card" id="moneyCard">
+      <h2 class="sec">&#128176; Revni mwen</h2>
+      <div class="money-total">1,593 HTG</div>
+      <div class="money-lb">Total ou f&egrave;</div>
+      <div class="money-grid">
+        <div><div class="k">Jodi a</div><div class="v">0 HTG</div></div>
+        <div><div class="k">Sem&egrave;n sa</div><div class="v">303 HTG</div></div>
+        <div><div class="k">Yo dwe w</div><div class="v owed">191 HTG</div></div>
+      </div>
+      <button class="btn btn-soft" onclick="go('earn')">W&Egrave; DETAY REVNI</button>
+    </div>
+  </section>
+
+  <!-- ══════════════ KOUS ══════════════ -->
+  <section id="tab-rides" class="hide">
+    <h2 class="sec">Kous kounye a</h2>
+    <div class="card" id="ridesNow">
+      <div class="waiting" style="padding:14px 6px">
+        <div class="big" style="font-size:15px">Pa gen kous kounye a</div>
+      </div>
+    </div>
+    <h2 class="sec">Kous ki fini</h2>
+    <div class="card flat">
+      <div class="rowline"><span class="ic">&#9989;</span>
+        <span><b>Jennifer &mdash; Delmas 60</b><span class="lb">30 sept. &middot; 5.4 km</span></span>
+        <b style="margin-left:auto">325 HTG</b></div>
+      <div class="rowline"><span class="ic">&#9989;</span>
+        <span><b>Marie &mdash; Bois Patate</b><span class="lb">29 sept. &middot; 0.6 km</span></span>
+        <b style="margin-left:auto">188 HTG</b></div>
+      <div class="rowline"><span class="ic">&#9989;</span>
+        <span><b>Wilkendy &mdash; Delmas 33</b><span class="lb">27 sept. &middot; 3.1 km</span></span>
+        <b style="margin-left:auto">230 HTG</b></div>
+    </div>
+  </section>
+
+  <!-- ══════════════ REVNI ══════════════ -->
+  <section id="tab-earn" class="hide">
+    <div class="card">
+      <h2 class="sec">&#128176; Revni mwen</h2>
+      <div class="money-total">1,593 HTG</div>
+      <div class="money-lb">Total ou f&egrave; depi ou k&ograve;manse</div>
+      <div class="money-grid">
+        <div><div class="k">Jodi a</div><div class="v">0 HTG</div></div>
+        <div><div class="k">Sem&egrave;n sa</div><div class="v">303 HTG</div></div>
+        <div><div class="k">Yo dwe w</div><div class="v owed">191 HTG</div></div>
+      </div>
+    </div>
+
+    <!-- 4. PAYOUT: method shown, forms only behind CHANJE METÒD -->
+    <div class="card">
+      <h2 class="sec">&#128179; Peman mwen</h2>
+      <div class="rowline"><span class="ic">&#128176;</span>
+        <span><span class="lb">Yo dwe w</span><b class="owed">191 HTG</b></span></div>
+      <div class="rowline"><span class="ic">&#128241;</span>
+        <span><span class="lb">Met&ograve;d</span><b>MonCash &middot; +509 &bull;&bull;&bull;&bull; 9702</b></span></div>
+      <button class="btn btn-soft" style="margin-top:12px" onclick="togglePayout()">
+        CHANJE MET&Ograve;D
+      </button>
+      <div id="payoutForms" class="hide" style="margin-top:12px">
+        <button class="btn btn-ghost" style="margin-bottom:9px" onclick="noop()">MonCash</button>
+        <button class="btn btn-ghost" style="margin-bottom:9px" onclick="noop()">NatCash</button>
+        <button class="btn btn-ghost" onclick="noop()">Kont labank</button>
+        <div class="hint" style="margin-top:10px">
+          Menm sist&egrave;m peman an ki te la deja &mdash; anyen pa chanje nan fason yo peye w.
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sec">Istwa peman</h2>
+    <div class="card flat">
+      <div class="rowline"><span class="ic">&#128184;</span>
+        <span><b>MonCash</b><span class="lb">24 sept.</span></span>
+        <b style="margin-left:auto">1,402 HTG</b></div>
+    </div>
+  </section>
+
+  <!-- ══════════════ KONT ══════════════ -->
+  <section id="tab-acct" class="hide">
+    <div class="card">
+      <h2 class="sec">Pwofil</h2>
+      <div class="rowline"><span class="ic">&#128100;</span>
+        <span><span class="lb">Non</span><b>Jeffery Boyard</b></span></div>
+      <div class="rowline"><span class="ic">&#128222;</span>
+        <span><span class="lb">Telef&ograve;n</span><b>+509 &bull;&bull;&bull;&bull; 9702</b></span></div>
+      <div class="rowline"><span class="ic">&#128663;</span>
+        <span><span class="lb">Machin</span><b>AA71182</b></span></div>
+    </div>
+    <div class="card flat">
+      <div class="rowline"><span class="ic">&#128196;</span><span><b>Dokiman mwen</b></span></div>
+      <div class="rowline"><span class="ic">&#127760;</span><span><b>Lang</b></span></div>
+      <div class="rowline"><span class="ic">&#128274;</span><span><b>Chanje k&ograve;d sekirite (PIN)</b></span></div>
+      <div class="rowline"><span class="ic">&#10067;</span><span><b>&Egrave;d / Kijan sa mache</b></span></div>
+    </div>
+    <button class="btn btn-soft" style="color:var(--red)" onclick="noop()">SOTI</button>
+  </section>
+
+  <!-- the little walk-through control, preview only -->
+  <div class="pager" id="pager"></div>
+  <div class="hint">
+    Apèsi sa a pa konekte ak anyen. Peze bouton yo pou w wè chak etap.
+  </div>
+</main>
+
+<!-- THE ONE FIXED ACTION SLOT -->
+<div class="action-slot hide" id="actionSlot"><div class="inner" id="actionInner"></div></div>
+
+<nav>
+  <button class="active" data-tab="home"  onclick="go('home')"><span class="ni">&#127968;</span>Ak&egrave;y</button>
+  <button data-tab="rides" onclick="go('rides')"><span class="ni">&#128663;</span>Kous</button>
+  <button data-tab="earn"  onclick="go('earn')"><span class="ni">&#128176;</span>Revni</button>
+  <button data-tab="acct"  onclick="go('acct')"><span class="ni">&#128100;</span>Kont</button>
+</nav>
+
+<div class="scrim" id="scrim" onclick="closeMenu()"></div>
+<aside class="drawer" id="drawer">
+  <div class="dh">
+    <div class="n">Jeffery Boyard</div>
+    <div class="p">&#128663; AA71182 &middot; +509 &bull;&bull;&bull;&bull; 9702</div>
+  </div>
+  <a href="#" onclick="closeMenu();go('acct');return false"><span class="mi">&#128100;</span>Pwofil mwen</a>
+  <a href="#" onclick="closeMenu();return false"><span class="mi">&#128196;</span>Dokiman</a>
+  <a href="#" onclick="closeMenu();return false"><span class="mi">&#127760;</span>Lang</a>
+  <a href="#" onclick="closeMenu();return false"><span class="mi">&#10067;</span>&Egrave;d / Kijan sa mache</a>
+  <a href="#" onclick="closeMenu();return false"><span class="mi">&#128274;</span>Chanje k&ograve;d sekirite</a>
+  <a href="#" class="out" onclick="closeMenu();return false"><span class="mi">&#128682;</span>Soti</a>
+</aside>
+
+<script>
+/* ⛔ PREVIEW ONLY. Nothing here calls the server, and nothing here is the real
+   driver portal. It exists so Jeffery can approve the LAYOUT before I touch
+   driver-login.html. Every value is an example from his own written spec. */
+
+var online = false;
+var step = 'idle';      /* idle | new | go | arrived | riding | done */
+var paid = false;
+
+/* The main action for each step. They all render into ONE fixed slot, so the
+   button never moves - "Mrive button should be at the same location". */
+var ACTIONS = {
+  idle:    null,
+  new:     {pair: [
+              {label:'❌ REFIZE', cls:'btn-soft', fn:'setStep(\'idle\')'},
+              {label:'✅ AKSEPTE', cls:'btn-green dom', fn:'setStep(\'go\')'}
+            ]},
+  /* ⚠️ His spec puts these in a strict order, and my first build broke it: the
+     PIN screen appeared while the button still said MWEN RIVE. Per the spec,
+     STEP 1 is the passenger (ALE CHÈCHE, then MWEN RIVE) and STEP 2 - the 4
+     digits and the payment lock - only comes AFTER he says he has arrived. */
+  go:      {one: {label:'🗺️ ALE CHÈCHE PASAJE A', cls:'btn-blue',
+                  fn:'setStep(\'going\')', note:'Lè ou rive, peze MWEN RIVE'}},
+  going:   {one: {label:'📍 MWEN RIVE', cls:'btn-blue', fn:'setStep(\'arrived\')'}},
+  /* not paid yet: the button is there but it will not start the ride, and it is
+     NOT a payment button - he is never asked to collect money. */
+  arrived: {one: {label:'🔒 KÒMANSE KOUS', cls:'btn-soft', fn:'noop()'}},
+  ready:   {one: {label:'🚗 KÒMANSE KOUS', cls:'btn-green', fn:'setStep(\'riding\')'}},
+  riding:  {one: {label:'✅ FINI KOUS', cls:'btn-red', fn:'setStep(\'done\')'}},
+  done:    {one: {label:'RETOUNEN SOU AKÈY', cls:'btn-dark', fn:'setStep(\'idle\')'}}
+};
+
+function el(id){ return document.getElementById(id); }
+function show(id, yes){ el(id).classList.toggle('hide', !yes); }
+function noop(){ /* preview: this button does nothing on purpose */ }
+
+function toggleOnline(){
+  online = !online;
+  if(!online) setStep('idle');
+  paint();
+}
+
+function setStep(s){
+  step = s;
+  if(s === 'idle' || s === 'new') paid = false;
+  if(s === 'go' || s === 'going') online = true;
+  paint();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* He arrives; whether he can start depends on the SERVER confirming payment.
+   ⛔ Per his spec: the driver never gets a payment button. */
+function fakePayment(){ paid = true; paint(); }
+
+function togglePayout(){ el('payoutForms').classList.toggle('hide'); }
+
+function paint(){
+  /* online card */
+  el('stDot').className = 'dot ' + (online ? 'on' : 'off');
+  el('stText').textContent = online ? 'OU AN LIY' : 'OU PA AN LIY';
+  el('stSub').textContent = online
+    ? 'W ap resevwa demann kous.'
+    : 'Peze bouton an lè ou pare pou travay.';
+  el('stBtn').textContent = online ? 'SOTI AN LIY' : 'KÒMANSE TRAVAY';
+  el('stBtn').className = 'btn ' + (online ? 'btn-soft' : 'btn-green');
+  /* while he is on a ride the online switch is out of the way */
+  show('onlineCard', step === 'idle');
+
+  var busy = (step !== 'idle');
+  show('boxWaiting', step === 'idle' && online);
+  show('boxOffline', step === 'idle' && !online);
+  show('boxNew',     step === 'new');
+  show('boxGo',      step === 'go' || step === 'going');
+  show('boxPin',     step === 'arrived');
+  show('boxRiding',  step === 'riding');
+  show('boxDone',    step === 'done');
+  /* the current ride must come BEFORE money; money hides while driving */
+  show('moneyCard',  !busy);
+
+  /* payment state inside the PIN step */
+  show('payLocked', !paid);
+  show('payOk',      paid);
+  show('simPayBtn', !paid);
+
+  /* Kous tab mirrors the same ride */
+  el('ridesNow').innerHTML = busy
+    ? '<div class="rowline"><span class="ic">🚗</span><span><b>Jennifer &mdash; Delmas 60</b>'
+      + '<span class="lb">' + stepLabel() + '</span></span><b style="margin-left:auto">325 HTG</b></div>'
+    : '<div class="waiting" style="padding:14px 6px"><div class="big" style="font-size:15px">'
+      + 'Pa gen kous kounye a</div></div>';
+
+  paintAction();
+  paintPager();
+}
+
+function stepLabel(){
+  return {go:'Ou pral chèche l', going:'Ou sou wout la', arrived:'Ou rive, ap tann kòd la',
+          riding:'Kous la an kou', done:'Fini', new:'Nouvo demann'}[step] || '';
+}
+
+/* ONE fixed slot. The button for the current step is drawn here and nowhere
+   else, so its position on the screen never changes. */
+function paintAction(){
+  var key = step;
+  if(step === 'arrived' && paid) key = 'ready';
+  var a = ACTIONS[key];
+  var slot = el('actionSlot'), inner = el('actionInner');
+  if(!a){
+    slot.classList.add('hide');
+    document.body.classList.remove('has-action');
+    inner.innerHTML = '';
+    return;
+  }
+  var html = '';
+  if(a.pair){
+    html = '<div class="pair">' + a.pair.map(function(b){
+      return '<button class="btn btn-lg ' + b.cls + '" onclick="' + b.fn + '">' + b.label + '</button>';
+    }).join('') + '</div>';
+  } else {
+    /* ⚠️ The note goes ABOVE the button, never below it. The slot is anchored to
+       the bottom of the screen, so anything underneath the button pushes the
+       button UP - and a measurement showed exactly that: 730px at the ALE
+       CHÈCHE step against 756px everywhere else. 26 pixels is small on a desk
+       and it is the whole of his complaint: "Mrive button should be at the same
+       location". Above the button, the button cannot move. */
+    html = '';
+    if(a.one.note) html += '<div class="hint" style="margin:0 0 8px">' + a.one.note + '</div>';
+    html += '<button class="btn btn-lg ' + a.one.cls + '" onclick="' + a.one.fn + '">'
+         + a.one.label + '</button>';
+  }
+  inner.innerHTML = html;
+  slot.classList.remove('hide');
+  document.body.classList.add('has-action');
+}
+
+/* preview-only walk-through buttons */
+var STEPS = [['idle','Ap tann'],['new','Nouvo kous'],['go','Ale chèche'],
+             ['going','Sou wout la'],['arrived','Ou rive'],['riding','Kous an kou'],
+             ['done','Fini']];
+function paintPager(){
+  el('pager').innerHTML = STEPS.map(function(s){
+    return '<button class="' + (s[0] === step ? 'on' : '') + '" onclick="setStep(\''
+         + s[0] + '\')">' + s[1] + '</button>';
+  }).join('');
+}
+
+var current = 'home';
+function go(tab){
+  current = tab;
+  ['home','rides','earn','acct'].forEach(function(t){
+    el('tab-' + t).classList.toggle('hide', t !== tab);
+  });
+  document.querySelectorAll('nav button').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-tab') === tab);
+  });
+  /* the action slot belongs to the ride, which lives on Akèy and Kous */
+  el('actionSlot').classList.toggle('hide',
+    !(ACTIONS[step === 'arrived' && paid ? 'ready' : step]) || (tab !== 'home' && tab !== 'rides'));
+  el('pager').classList.toggle('hide', tab !== 'home');
+  window.scrollTo({top:0});
+}
+
+function openMenu(){ el('scrim').classList.add('show'); el('drawer').classList.add('show'); }
+function closeMenu(){ el('scrim').classList.remove('show'); el('drawer').classList.remove('show'); }
+
+paint();
+</script>
+</body>
+</html>
