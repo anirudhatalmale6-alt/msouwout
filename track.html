@@ -230,6 +230,19 @@ body.stealth .lang-sw button.active{color:#333;background:#eee}
 .act-call:active{background:#001A80}
 .act-call.disabled{background:var(--text-muted);pointer-events:none}
 
+.receipt{margin-top:14px;text-align:left;border:1px solid #E2E8F0;border-radius:14px;
+  padding:14px 16px;background:#fff;font-size:13.5px;color:#152341}
+.receipt h4{margin:0 0 10px;font-size:14px;font-weight:900;letter-spacing:.02em}
+.receipt .r{display:flex;justify-content:space-between;gap:12px;padding:5px 0;
+  border-bottom:1px dashed #EDF1F7}
+.receipt .r:last-child{border-bottom:0}
+.receipt .r span:first-child{color:#5A6B8A}
+.receipt .r span:last-child{font-weight:700;text-align:right}
+.receipt .tot{margin-top:8px;padding-top:9px;border-top:2px solid #0B2E6F}
+.receipt .tot span{font-weight:900;font-size:15px}
+.receipt .ref{margin-top:10px;font-size:11.5px;color:#93A0B8;text-align:center;
+  letter-spacing:.04em}
+
 /* SOS FAMILY SAFETY BUTTON */
 .safety-actions{padding:0 16px 16px;display:flex;gap:8px}
 .sos-family-btn{
@@ -851,6 +864,13 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       <div class="end-title" data-i18n="ride_done">Kous Fini!</div>
       <div class="end-price" id="endPrice">-- HTG</div>
       <div class="end-sub" data-i18n="ride_done_sub">Mesi pou konfyans ou nan MsouWout.</div>
+      <!-- 🚨 29 Sep, twice: "She didnt get a receipt as well". There was no
+           receipt at all - the ride simply ended. Built entirely from what the
+           tracking response already carries, so ⛔ nothing on the server had to
+           change while the ride workflow is frozen. -->
+      <div id="receipt" class="receipt" style="display:none"></div>
+      <button type="button" id="receiptShare" class="btn-ghost"
+              style="display:none;margin-top:10px" onclick="shareReceipt()"></button>
     </div>
     <div class="end-state" id="endCancelled">
       <div class="end-icon">&#10060;</div>
@@ -877,7 +897,7 @@ const I18N = {
     distance:'Distans', time:'Tan', price:'Pri (HTG)',
     share:'Pataje', call:'Rele Chofe',
     map_offline:"Kat la pa ka chaje kounye a. Tout rès enfòmasyon kous la la anba.",
-    pin_lost:"M pa gen kòd la",pin_rec_t:"Jwenn kòd sekirite ou",pin_rec_sub:"Mete nimewo telefòn ou te itilize pou kòmande kous la.",pin_rec_ph:"Nimewo telefòn ou",pin_rec_go:"Jwenn kòd la",pin_rec_bad:"Nou pa jwenn yon kous ki gen nimewo sa a.",pin_rec_wait:"N ap gade…",pin_rec_cancel:"Fèmen",wait_t:"Nou poko jwenn yon chofè",wait_b:"Sa gen {min} minit n ap chèche. Ou vle kontinye tann, oswa ekri nou sou WhatsApp?",wait_keep:"Kontinye tann",wait_wa:"Ekri nou sou WhatsApp",wait_kept:"Dakò — n ap kontinye chèche pou ou.",exp_t:"Nou pa t jwenn yon chofè",exp_b:"Nou regrèt. Pèsonn pa t ka pran kous la. Ekri nou sou WhatsApp epi n ap ede w.",nodrv_t:"Pa gen chofè toupre",recenter:"Chofè a",drop_t:"Chofè a pa t vini",drop_b:"Nou regrèt. Chofè ki te pran kous la pa t rive, kidonk nou retire l nan men l epi n ap chèche yon lòt chofè pou ou kounye a.",share_msg:'Mwen nan yon kous MsouWout! Swiv mwen la:',
+    pin_lost:"M pa gen kòd la",pin_rec_t:"Jwenn kòd sekirite ou",pin_rec_sub:"Mete nimewo telefòn ou te itilize pou kòmande kous la.",pin_rec_ph:"Nimewo telefòn ou",pin_rec_go:"Jwenn kòd la",pin_rec_bad:"Nou pa jwenn yon kous ki gen nimewo sa a.",pin_rec_wait:"N ap gade…",pin_rec_cancel:"Fèmen",wait_t:"Nou poko jwenn yon chofè",wait_b:"Sa gen {min} minit n ap chèche. Ou vle kontinye tann, oswa ekri nou sou WhatsApp?",wait_keep:"Kontinye tann",wait_wa:"Ekri nou sou WhatsApp",wait_kept:"Dakò — n ap kontinye chèche pou ou.",exp_t:"Nou pa t jwenn yon chofè",exp_b:"Nou regrèt. Pèsonn pa t ka pran kous la. Ekri nou sou WhatsApp epi n ap ede w.",nodrv_t:"Pa gen chofè toupre",recenter:"Chofè a",follow_on:"M ap swiv ou",follow_off:"Swiv chofè a",rc_title:"Resi Kous La",rc_date:"Dat",rc_from:"Kote yo pran w",rc_to:"Kote yo depoze w",rc_driver:"Chofè",rc_dist:"Distans",rc_fare:"Pri kous la",rc_prot:"Pwoteksyon DASH",rc_method:"Mwayen peman",rc_status:"Estati",rc_paid:"Peye",rc_unpaid:"Poko peye",rc_total:"TOTAL",rc_ref:"Kòd",rc_share:"📤 Voye resi a",pay_checking_t:"N ap tcheke peman an…",pay_checking_b:"Nou wè ou kòmanse peye. Sa ka pran yon minit pou MonCash konfime. ⛔ Pa peye yon dezyèm fwa.",drop_t:"Chofè a pa t vini",drop_b:"Nou regrèt. Chofè ki te pran kous la pa t rive, kidonk nou retire l nan men l epi n ap chèche yon lòt chofè pou ou kounye a.",share_msg:'Mwen nan yon kous MsouWout! Swiv mwen la:',
     sb_text:'Sekirite Fanmi aktif', sb_contacts:'Kontak',
     dev_warn:'Chofe a kite wout nomal la',
     pay_title:'Peye kous la — {amt} HTG', pay_break:'Kous la {fare} HTG + pwoteksyon DASH {prot} HTG',pay_sub:'Chwazi bous ou. Ou ka peye kounye a oswa lè kous la fini.',
@@ -924,7 +944,7 @@ const I18N = {
     distance:'Distance', time:'Temps', price:'Prix (HTG)',
     share:'Partager', call:'Appeler',
     map_offline:"La carte ne peut pas se charger. Toutes les autres informations sont ci-dessous.",
-    pin_lost:"Je n'ai pas le code",pin_rec_t:"Retrouver votre code",pin_rec_sub:"Entrez le numéro de téléphone utilisé pour commander la course.",pin_rec_ph:"Votre numéro",pin_rec_go:"Retrouver le code",pin_rec_bad:"Aucune course trouvée avec ce numéro.",pin_rec_wait:"Recherche…",pin_rec_cancel:"Fermer",wait_t:"Nous n'avons pas encore trouvé de chauffeur",wait_b:"Cela fait {min} minutes. Voulez-vous continuer à attendre, ou nous écrire sur WhatsApp ?",wait_keep:"Continuer à attendre",wait_wa:"Nous écrire sur WhatsApp",wait_kept:"D'accord — nous continuons à chercher.",exp_t:"Nous n'avons pas trouvé de chauffeur",exp_b:"Désolé. Personne n'a pu prendre la course. Écrivez-nous sur WhatsApp et nous vous aiderons.",nodrv_t:"Aucun chauffeur à proximité",recenter:"Le chauffeur",drop_t:"Le chauffeur n'est pas venu",drop_b:"Désolé. Le chauffeur qui avait accepté n'est pas arrivé, nous lui avons retiré la course et nous cherchons un autre chauffeur pour vous.",share_msg:'Je suis dans une course MsouWout! Suivez-moi ici:',
+    pin_lost:"Je n'ai pas le code",pin_rec_t:"Retrouver votre code",pin_rec_sub:"Entrez le numéro de téléphone utilisé pour commander la course.",pin_rec_ph:"Votre numéro",pin_rec_go:"Retrouver le code",pin_rec_bad:"Aucune course trouvée avec ce numéro.",pin_rec_wait:"Recherche…",pin_rec_cancel:"Fermer",wait_t:"Nous n'avons pas encore trouvé de chauffeur",wait_b:"Cela fait {min} minutes. Voulez-vous continuer à attendre, ou nous écrire sur WhatsApp ?",wait_keep:"Continuer à attendre",wait_wa:"Nous écrire sur WhatsApp",wait_kept:"D'accord — nous continuons à chercher.",exp_t:"Nous n'avons pas trouvé de chauffeur",exp_b:"Désolé. Personne n'a pu prendre la course. Écrivez-nous sur WhatsApp et nous vous aiderons.",nodrv_t:"Aucun chauffeur à proximité",recenter:"Le chauffeur",follow_on:"Suivi actif",follow_off:"Suivre le chauffeur",rc_title:"Recu de la course",rc_date:"Date",rc_from:"Depart",rc_to:"Destination",rc_driver:"Chauffeur",rc_dist:"Distance",rc_fare:"Prix de la course",rc_prot:"Protection DASH",rc_method:"Moyen de paiement",rc_status:"Statut",rc_paid:"Paye",rc_unpaid:"Non paye",rc_total:"TOTAL",rc_ref:"Code",rc_share:"📤 Envoyer le recu",pay_checking_t:"Verification du paiement…",pay_checking_b:"Nous voyons votre paiement. MonCash peut prendre une minute a confirmer. ⛔ Ne payez pas une seconde fois.",drop_t:"Le chauffeur n'est pas venu",drop_b:"Désolé. Le chauffeur qui avait accepté n'est pas arrivé, nous lui avons retiré la course et nous cherchons un autre chauffeur pour vous.",share_msg:'Je suis dans une course MsouWout! Suivez-moi ici:',
     sb_text:'Securite Famille active', sb_contacts:'Contacts',
     dev_warn:'Le chauffeur a devie de la route',
     pay_title:'Payer la course — {amt} HTG', pay_break:'Course {fare} HTG + protection DASH {prot} HTG',pay_sub:'Choisissez votre portefeuille. Vous pouvez payer maintenant ou a la fin.',
@@ -971,7 +991,7 @@ const I18N = {
     distance:'Distance', time:'Time', price:'Price (HTG)',
     share:'Share', call:'Call Driver',
     map_offline:"The map could not load. Everything else about your ride is below.",
-    pin_lost:"I don't have the code",pin_rec_t:"Recover your security code",pin_rec_sub:"Enter the phone number you used to book the ride.",pin_rec_ph:"Your phone number",pin_rec_go:"Get the code",pin_rec_bad:"No ride found with that number.",pin_rec_wait:"Checking…",pin_rec_cancel:"Close",wait_t:"We have not found a driver yet",wait_b:"It has been {min} minutes. Would you like to keep waiting, or message us on WhatsApp?",wait_keep:"Keep waiting",wait_wa:"Message us on WhatsApp",wait_kept:"All right — we will keep looking for you.",exp_t:"We could not find a driver",exp_b:"We are sorry. Nobody was able to take this ride. Message us on WhatsApp and we will help.",nodrv_t:"No driver nearby",recenter:"Driver",drop_t:"Your driver did not come",drop_b:"We are sorry. The driver who accepted did not arrive, so we took the ride back and we are looking for another driver for you now.",share_msg:'I\'m on a MsouWout ride! Track me here:',
+    pin_lost:"I don't have the code",pin_rec_t:"Recover your security code",pin_rec_sub:"Enter the phone number you used to book the ride.",pin_rec_ph:"Your phone number",pin_rec_go:"Get the code",pin_rec_bad:"No ride found with that number.",pin_rec_wait:"Checking…",pin_rec_cancel:"Close",wait_t:"We have not found a driver yet",wait_b:"It has been {min} minutes. Would you like to keep waiting, or message us on WhatsApp?",wait_keep:"Keep waiting",wait_wa:"Message us on WhatsApp",wait_kept:"All right — we will keep looking for you.",exp_t:"We could not find a driver",exp_b:"We are sorry. Nobody was able to take this ride. Message us on WhatsApp and we will help.",nodrv_t:"No driver nearby",recenter:"Driver",follow_on:"Following",follow_off:"Follow driver",rc_title:"Ride Receipt",rc_date:"Date",rc_from:"Pickup",rc_to:"Destination",rc_driver:"Driver",rc_dist:"Distance",rc_fare:"Fare",rc_prot:"DASH protection",rc_method:"Payment method",rc_status:"Status",rc_paid:"Paid",rc_unpaid:"Not paid",rc_total:"TOTAL",rc_ref:"Code",rc_share:"📤 Send receipt",pay_checking_t:"Checking your payment…",pay_checking_b:"We can see your payment started. MonCash can take a minute to confirm. ⛔ Please do not pay a second time.",drop_t:"Your driver did not come",drop_b:"We are sorry. The driver who accepted did not arrive, so we took the ride back and we are looking for another driver for you now.",share_msg:'I\'m on a MsouWout ride! Track me here:',
     sb_text:'Family Safety active', sb_contacts:'Contacts',
     dev_warn:'Driver has deviated from route',
     pay_title:'Pay for the ride — {amt} HTG', pay_break:'Fare {fare} HTG + DASH protection {prot} HTG',pay_sub:'Choose your wallet. You can pay now or when the ride ends.',
@@ -1018,7 +1038,7 @@ const I18N = {
     distance:'Distancia', time:'Tiempo', price:'Precio (HTG)',
     share:'Compartir', call:'Llamar',
     map_offline:"El mapa no pudo cargarse. Toda la demás información está abajo.",
-    pin_lost:"No tengo el código",pin_rec_t:"Recuperar su código",pin_rec_sub:"Ingrese el número de teléfono con el que pidió el viaje.",pin_rec_ph:"Su número",pin_rec_go:"Obtener el código",pin_rec_bad:"No encontramos un viaje con ese número.",pin_rec_wait:"Buscando…",pin_rec_cancel:"Cerrar",wait_t:"Todavía no encontramos un conductor",wait_b:"Han pasado {min} minutos. ¿Quiere seguir esperando o escribirnos por WhatsApp?",wait_keep:"Seguir esperando",wait_wa:"Escríbenos por WhatsApp",wait_kept:"De acuerdo — seguimos buscando.",exp_t:"No encontramos un conductor",exp_b:"Lo sentimos. Nadie pudo tomar el viaje. Escríbanos por WhatsApp y le ayudamos.",nodrv_t:"No hay conductores cerca",recenter:"Conductor",drop_t:"El conductor no llegó",drop_b:"Lo sentimos. El conductor que aceptó no llegó, le retiramos el viaje y estamos buscando otro conductor para usted.",share_msg:'Estoy en un viaje MsouWout! Sigueme aqui:',
+    pin_lost:"No tengo el código",pin_rec_t:"Recuperar su código",pin_rec_sub:"Ingrese el número de teléfono con el que pidió el viaje.",pin_rec_ph:"Su número",pin_rec_go:"Obtener el código",pin_rec_bad:"No encontramos un viaje con ese número.",pin_rec_wait:"Buscando…",pin_rec_cancel:"Cerrar",wait_t:"Todavía no encontramos un conductor",wait_b:"Han pasado {min} minutos. ¿Quiere seguir esperando o escribirnos por WhatsApp?",wait_keep:"Seguir esperando",wait_wa:"Escríbenos por WhatsApp",wait_kept:"De acuerdo — seguimos buscando.",exp_t:"No encontramos un conductor",exp_b:"Lo sentimos. Nadie pudo tomar el viaje. Escríbanos por WhatsApp y le ayudamos.",nodrv_t:"No hay conductores cerca",recenter:"Conductor",follow_on:"Siguiendo",follow_off:"Seguir conductor",rc_title:"Recibo del viaje",rc_date:"Fecha",rc_from:"Recogida",rc_to:"Destino",rc_driver:"Conductor",rc_dist:"Distancia",rc_fare:"Tarifa",rc_prot:"Proteccion DASH",rc_method:"Metodo de pago",rc_status:"Estado",rc_paid:"Pagado",rc_unpaid:"No pagado",rc_total:"TOTAL",rc_ref:"Codigo",rc_share:"📤 Enviar recibo",pay_checking_t:"Verificando su pago…",pay_checking_b:"Vemos que inicio el pago. MonCash puede tardar un minuto. ⛔ No pague una segunda vez.",drop_t:"El conductor no llegó",drop_b:"Lo sentimos. El conductor que aceptó no llegó, le retiramos el viaje y estamos buscando otro conductor para usted.",share_msg:'Estoy en un viaje MsouWout! Sigueme aqui:',
     sb_text:'Seguridad Familiar activa', sb_contacts:'Contactos',
     dev_warn:'El conductor se desvio de la ruta',
     pay_title:'Pagar el viaje — {amt} HTG', pay_break:'Viaje {fare} HTG + proteccion DASH {prot} HTG',pay_sub:'Elija su billetera. Puede pagar ahora o al terminar el viaje.',
@@ -1173,6 +1193,7 @@ var mapFitted = false;   /* has the view been framed even once? */
 /* A button, not an ambush. Appears only when the car is actually off-screen,
    so it is never clutter on a map that is already showing everything. */
 var recenterBtn = null;
+var mapFollow = false;   /* the driver turns this on; the passenger leaves it off */
 function updateRecenter(latlng) {
   if (!map) return;
   if (!recenterBtn) {
@@ -1190,8 +1211,31 @@ function updateRecenter(latlng) {
       host.appendChild(recenterBtn);
     }
   }
-  recenterBtn.onclick = function () { map.setView(latlng, Math.max(map.getZoom(), 15)); };
-  recenterBtn.style.display = map.getBounds().contains(latlng) ? 'none' : '';
+  /* 🚨 29 Sep. Jennifer wanted the map to STOP moving. Jeffery, driving the
+     same ride, said "I cant see where to go... i couldnt follow where to drop
+     her off". They need opposite things from one screen, so it is a CHOICE
+     rather than a default: one tap follows, a second tap stops. Off by
+     default, because the passenger is the one who complained about being
+     dragged around. */
+  recenterBtn.onclick = function () {
+    mapFollow = !mapFollow;
+    if (mapFollow) map.setView(latlng, Math.max(map.getZoom(), 16));
+    paintRecenter(latlng);
+  };
+  if (mapFollow) map.setView(latlng, Math.max(map.getZoom(), 16));
+  paintRecenter(latlng);
+}
+
+/* Visible when it is DOING something (following) or when it is NEEDED (the car
+   has gone off the screen). Never just sitting there. */
+function paintRecenter(latlng) {
+  if (!recenterBtn || !map) return;
+  var off = !map.getBounds().contains(latlng);
+  recenterBtn.textContent = (mapFollow ? '\uD83D\uDCCD ' : '\uD83E\uDDED ') +
+    (typeof t === 'function' ? t(mapFollow ? 'follow_on' : 'follow_off') : 'Chofè a');
+  recenterBtn.style.background = mapFollow ? '#0F6FBF' : '#fff';
+  recenterBtn.style.color = mapFollow ? '#fff' : '#0F6FBF';
+  recenterBtn.style.display = (mapFollow || off) ? '' : 'none';
 }
 
 function updateMap(data) {
@@ -1358,9 +1402,16 @@ function updateUI(data) {
   if (status === 'completed') {
     hideActiveElements();
     document.getElementById('endCompleted').classList.add('show');
-    var priceText = (data.price || '--') + ' HTG';
-    if (data.medical_fee) priceText += ' (+ ' + data.medical_fee + ' DASH)';
-    document.getElementById('endPrice').textContent = priceText;
+    /* 🚨 This said "302 HTG (+ 25 DASH)" while the receipt underneath said 13.
+       25 is the WHOLE DASH pot - the driver pays half of it out of his side.
+       SHE pays 13. Two different numbers for the same ride on the same screen
+       is precisely what she asked about this morning, so the headline is now
+       the one figure that matters: what left her wallet. */
+    var total = Number(data.total_with_protection || 0);
+    var fare = Number(data.price || 0);
+    document.getElementById('endPrice').textContent =
+      (total > 0 ? total : fare || '--') + ' HTG';
+    renderReceipt(data);
     stopPolling();
   } else if (status === 'cancelled') {
     hideActiveElements();
@@ -1399,6 +1450,110 @@ function updateUI(data) {
   try { updatePayCard(data); } catch (e) {}
 
   updateMap(data);
+}
+
+/* THE RECEIPT. Jeffery, 29 Sep, twice: "She didnt get a receipt as well".
+   There was none - the ride ended and nothing was issued.
+   ⛔ Built ONLY from fields the tracking response already returns, because the
+   ride workflow is frozen and a receipt is not a reason to touch the server.
+   Every line is shown only when the value actually exists: a receipt that
+   prints "0 HTG" or "undefined" is worse than no receipt at all. */
+/* ⚠️ track.html has NO esc() helper - that one lives in driver-login.html and I
+   assumed it was here. So the receipt is built as DOM nodes with textContent
+   instead: nothing to escape, nothing to get wrong, and a street name with a
+   quote in it cannot break the page.
+   ⛔ Built ONLY from fields the tracking response already returns - the ride
+   workflow is frozen and a receipt is not a reason to touch the server. */
+function receiptPairs(d) {
+  var fare = Number(d.price || 0);
+  var total = Number(d.total_with_protection || 0);
+  var prot = total > 0 && fare > 0 ? Math.max(0, total - fare) : 0;
+  /* ⚠️ completed_at and updated_at are NOT in the tracking response - I wrote
+     a fixture that had them and the date row silently never appeared. created_at
+     is the field that is really there, and the day of the ride is what a receipt
+     needs anyway. Checked against the live response, not assumed. */
+  var when = d.completed_at || d.created_at || null;
+  var out = [];
+  var add = function (label, value) {
+    if (value === null || value === undefined || value === '') return;
+    out.push([label, String(value)]);
+  };
+  add(t('rc_date'), when ? fmtLocal(when) : null);
+  add(t('rc_from'), (d.pickup && d.pickup.address) || null);
+  add(t('rc_to'), (d.dropoff && d.dropoff.address) || null);
+  add(t('rc_driver'), (d.driver && d.driver.name) || null);
+  if (d.distance_km) add(t('rc_dist'), d.distance_km + ' km');
+  if (fare > 0) add(t('rc_fare'), fare + ' HTG');
+  if (prot > 0) add(t('rc_prot'), prot + ' HTG');
+  if (d.payment_method) add(t('rc_method'), String(d.payment_method).toUpperCase());
+  add(t('rc_status'), d.payment_status === 'paid' ? t('rc_paid') : t('rc_unpaid'));
+  return { pairs: out, total: total };
+}
+
+/* The page works in UTC everywhere else; a receipt is the one thing she may
+   show to somebody else, so it carries a readable local time. */
+function fmtLocal(iso) {
+  try {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return null;
+    var lang = (typeof currentLang === 'string' && currentLang) ? currentLang : 'fr';
+    return d.toLocaleString(lang === 'ht' ? 'fr-FR' : lang,
+      { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  } catch (e) { return null; }
+}
+
+var _receiptText = '';
+function renderReceipt(d) {
+  var box = document.getElementById('receipt');
+  var btn = document.getElementById('receiptShare');
+  if (!box) return;
+  var built = receiptPairs(d);
+  if (!built.pairs.length) {
+    box.style.display = 'none';
+    if (btn) btn.style.display = 'none';
+    return;
+  }
+
+  box.textContent = '';
+  var h = document.createElement('h4');
+  h.textContent = t('rc_title');
+  box.appendChild(h);
+
+  var row = function (label, value, cls) {
+    var r = document.createElement('div');
+    r.className = cls || 'r';
+    var a = document.createElement('span'); a.textContent = label;
+    var b = document.createElement('span'); b.textContent = value;
+    r.appendChild(a); r.appendChild(b);
+    box.appendChild(r);
+  };
+  built.pairs.forEach(function (pv) { row(pv[0], pv[1]); });
+  if (built.total > 0) row(t('rc_total'), built.total + ' HTG', 'r tot');
+
+  var ref = document.createElement('div');
+  ref.className = 'ref';
+  ref.textContent = d.tracking_code || rideCode || '';
+  box.appendChild(ref);
+  box.style.display = '';
+
+  /* Plain text so she can keep it, forward it on WhatsApp, or show it to
+     somebody who is not holding this page. */
+  var lines = [t('rc_title'), ''];
+  built.pairs.forEach(function (pv) { lines.push(pv[0] + ': ' + pv[1]); });
+  if (built.total > 0) lines.push(t('rc_total') + ': ' + built.total + ' HTG');
+  lines.push('', t('rc_ref') + ': ' + (d.tracking_code || rideCode || ''), 'MsouWout');
+  _receiptText = lines.join('\n');
+  if (btn) { btn.textContent = t('rc_share'); btn.style.display = ''; }
+}
+
+function shareReceipt() {
+  if (!_receiptText) return;
+  if (navigator.share) {
+    navigator.share({ title: t('rc_title'), text: _receiptText }).catch(function () {});
+    return;
+  }
+  /* No share sheet - WhatsApp is what everybody here actually uses. */
+  window.open('https://wa.me/?text=' + encodeURIComponent(_receiptText), '_blank');
 }
 
 function hideActiveElements() {
@@ -1748,6 +1903,28 @@ function updatePayCard(d) {
   payAmount = payAmountOf(d);
 
   if ((d.payment_status || '') === 'paid') { payShowPaid(d.payment_method); return; }
+
+  /* 🚨 29 Sep, the 19:00 test: "She paid but it still said that no payments has
+     been made". Her money left at 19:09:31 and the server confirmed it at
+     19:10:33 - SIXTY-TWO SECONDS in which this page said "not paid".
+     MonCash tells us nothing during that gap; we have to keep asking. But
+     "not paid" during a wait we KNOW about reads as a failure, and it is the
+     moment a passenger pays a second time - which is exactly what happened on
+     the ticket side the same evening.
+     So while the server is holding a pending attempt, say we are checking. */
+  if ((d.payment_status || '') === 'pending') {
+    const c = document.getElementById('payCard');
+    if (c) c.classList.remove('paid');
+    document.getElementById('payTitle').textContent = t('pay_checking_t');
+    document.getElementById('paySub').textContent = t('pay_checking_b');
+    document.getElementById('payMethods').innerHTML = '';
+    document.getElementById('payCheck').style.display = 'none';
+    payErr('');
+    payShow(true);
+    payStartPolling();
+    return;
+  }
+
   if (!hasDriver || !payAmount) { payShow(false); return; }
 
   /* She may have paid on the wallet page and come back to a reloaded page. */
