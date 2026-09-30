@@ -125,6 +125,14 @@ body.stealth .lang-sw button.active{color:#333;background:#eee}
 }
 .sheet::-webkit-scrollbar{width:0}
 .sheet-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:10px auto 6px}
+/* The handle already LOOKED like a grabber but did nothing. Tapping it now
+   drops the sheet out of the way, which is the quickest answer to "i cant see
+   where to go with the map too small" - 32% of the screen becomes ~88%.
+   ⛔ The default look does not change: it starts open, exactly as before. */
+.sheet-grab{padding:2px 0 6px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sheet.collapsed{max-height:46px;overflow:hidden}
+.sheet-peek{display:none;text-align:center;font-size:12px;color:var(--muted,#6b7280);padding:0 0 10px}
+.sheet.collapsed .sheet-peek{display:block}
 
 /* STATUS STEPS */
 .status-bar{padding:0 16px 12px;overflow-x:auto}
@@ -700,6 +708,13 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
   <div class="topbar">
     <img src="assets/msouwout-logo.jpg" alt="MsouWout" class="topbar-logo">
     <div class="topbar-title" data-i18n="track_title">Swiv Kous Ou</div>
+    <!-- 🚨 30 Sep. Twice I have told Jeffery "your phone is showing a cached
+         page" without being able to prove it, and twice that was a guess
+         dressed up as a diagnosis. A build stamp he can read out loud ends the
+         argument in one message: if it does not say the current build, the
+         phone is on an old copy, and if it does, the fault is mine. -->
+    <span id="buildStamp" title="build"
+          style="font-size:9px;opacity:.45;letter-spacing:.06em;margin-right:6px">v47</span>
     <div class="topbar-code" id="topCode">---</div>
     <div class="lang-sw">
       <button onclick="setLang('ht')" class="active" data-lang="ht">HT</button>
@@ -712,7 +727,10 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
   <div id="map"></div>
 
   <div class="sheet" id="sheet">
-    <div class="sheet-handle"></div>
+    <div class="sheet-grab" id="sheetGrab" onclick="toggleSheet()" role="button" tabindex="0">
+      <div class="sheet-handle"></div>
+      <div class="sheet-peek" id="sheetPeek" data-i18n="sheet_open">Tape pou wè detay yo</div>
+    </div>
 
     <div class="status-bar">
       <div class="status-steps" id="statusSteps">
@@ -897,7 +915,7 @@ const I18N = {
     distance:'Distans', time:'Tan', price:'Pri (HTG)',
     share:'Pataje', call:'Rele Chofe',
     map_offline:"Kat la pa ka chaje kounye a. Tout rès enfòmasyon kous la la anba.",
-    pin_lost:"M pa gen kòd la",pin_rec_t:"Jwenn kòd sekirite ou",pin_rec_sub:"Mete nimewo telefòn ou te itilize pou kòmande kous la.",pin_rec_ph:"Nimewo telefòn ou",pin_rec_go:"Jwenn kòd la",pin_rec_bad:"Nou pa jwenn yon kous ki gen nimewo sa a.",pin_rec_wait:"N ap gade…",pin_rec_cancel:"Fèmen",wait_t:"Nou poko jwenn yon chofè",wait_b:"Sa gen {min} minit n ap chèche. Ou vle kontinye tann, oswa ekri nou sou WhatsApp?",wait_keep:"Kontinye tann",wait_wa:"Ekri nou sou WhatsApp",wait_kept:"Dakò — n ap kontinye chèche pou ou.",exp_t:"Nou pa t jwenn yon chofè",exp_b:"Nou regrèt. Pèsonn pa t ka pran kous la. Ekri nou sou WhatsApp epi n ap ede w.",nodrv_t:"Pa gen chofè toupre",recenter:"Chofè a",follow_on:"M ap swiv ou",follow_off:"Swiv chofè a",rc_title:"Resi Kous La",rc_date:"Dat",rc_from:"Kote yo pran w",rc_to:"Kote yo depoze w",rc_driver:"Chofè",rc_dist:"Distans",rc_fare:"Pri kous la",rc_prot:"Pwoteksyon DASH",rc_method:"Mwayen peman",rc_status:"Estati",rc_paid:"Peye",rc_unpaid:"Poko peye",rc_total:"TOTAL",rc_ref:"Kòd",rc_share:"📤 Voye resi a",pay_checking_t:"N ap tcheke peman an…",pay_checking_b:"Nou wè ou kòmanse peye. Sa ka pran yon minit pou MonCash konfime. ⛔ Pa peye yon dezyèm fwa.",drop_t:"Chofè a pa t vini",drop_b:"Nou regrèt. Chofè ki te pran kous la pa t rive, kidonk nou retire l nan men l epi n ap chèche yon lòt chofè pou ou kounye a.",share_msg:'Mwen nan yon kous MsouWout! Swiv mwen la:',
+    pin_lost:"M pa gen kòd la",pin_rec_t:"Jwenn kòd sekirite ou",pin_rec_sub:"Mete nimewo telefòn ou te itilize pou kòmande kous la.",pin_rec_ph:"Nimewo telefòn ou",pin_rec_go:"Jwenn kòd la",pin_rec_bad:"Nou pa jwenn yon kous ki gen nimewo sa a.",pin_rec_wait:"N ap gade…",pin_rec_cancel:"Fèmen",wait_t:"Nou poko jwenn yon chofè",wait_b:"Sa gen {min} minit n ap chèche. Ou vle kontinye tann, oswa ekri nou sou WhatsApp?",wait_keep:"Kontinye tann",wait_wa:"Ekri nou sou WhatsApp",wait_kept:"Dakò — n ap kontinye chèche pou ou.",exp_t:"Nou pa t jwenn yon chofè",exp_b:"Nou regrèt. Pèsonn pa t ka pran kous la. Ekri nou sou WhatsApp epi n ap ede w.",nodrv_t:"Pa gen chofè toupre",recenter:"Chofè a",sheet_open:"Tape pou wè detay yo",sheet_close:"Tape pou pi gwo kat",follow_on:"M ap swiv ou",follow_off:"Swiv chofè a",rc_title:"Resi Kous La",rc_date:"Dat",rc_from:"Kote yo pran w",rc_to:"Kote yo depoze w",rc_driver:"Chofè",rc_dist:"Distans",rc_fare:"Pri kous la",rc_prot:"Pwoteksyon DASH",rc_method:"Mwayen peman",rc_status:"Estati",rc_paid:"Peye",rc_unpaid:"Poko peye",rc_total:"TOTAL",rc_ref:"Kòd",rc_share:"📤 Voye resi a",pay_checking_t:"N ap tcheke peman an…",pay_checking_b:"Nou wè ou kòmanse peye. Sa ka pran yon minit pou MonCash konfime. ⛔ Pa peye yon dezyèm fwa.",drop_t:"Chofè a pa t vini",drop_b:"Nou regrèt. Chofè ki te pran kous la pa t rive, kidonk nou retire l nan men l epi n ap chèche yon lòt chofè pou ou kounye a.",share_msg:'Mwen nan yon kous MsouWout! Swiv mwen la:',
     sb_text:'Sekirite Fanmi aktif', sb_contacts:'Kontak',
     dev_warn:'Chofe a kite wout nomal la',
     pay_title:'Peye kous la — {amt} HTG', pay_break:'Kous la {fare} HTG + pwoteksyon DASH {prot} HTG',pay_sub:'Chwazi bous ou. Ou ka peye kounye a oswa lè kous la fini.',
@@ -944,7 +962,7 @@ const I18N = {
     distance:'Distance', time:'Temps', price:'Prix (HTG)',
     share:'Partager', call:'Appeler',
     map_offline:"La carte ne peut pas se charger. Toutes les autres informations sont ci-dessous.",
-    pin_lost:"Je n'ai pas le code",pin_rec_t:"Retrouver votre code",pin_rec_sub:"Entrez le numéro de téléphone utilisé pour commander la course.",pin_rec_ph:"Votre numéro",pin_rec_go:"Retrouver le code",pin_rec_bad:"Aucune course trouvée avec ce numéro.",pin_rec_wait:"Recherche…",pin_rec_cancel:"Fermer",wait_t:"Nous n'avons pas encore trouvé de chauffeur",wait_b:"Cela fait {min} minutes. Voulez-vous continuer à attendre, ou nous écrire sur WhatsApp ?",wait_keep:"Continuer à attendre",wait_wa:"Nous écrire sur WhatsApp",wait_kept:"D'accord — nous continuons à chercher.",exp_t:"Nous n'avons pas trouvé de chauffeur",exp_b:"Désolé. Personne n'a pu prendre la course. Écrivez-nous sur WhatsApp et nous vous aiderons.",nodrv_t:"Aucun chauffeur à proximité",recenter:"Le chauffeur",follow_on:"Suivi actif",follow_off:"Suivre le chauffeur",rc_title:"Recu de la course",rc_date:"Date",rc_from:"Depart",rc_to:"Destination",rc_driver:"Chauffeur",rc_dist:"Distance",rc_fare:"Prix de la course",rc_prot:"Protection DASH",rc_method:"Moyen de paiement",rc_status:"Statut",rc_paid:"Paye",rc_unpaid:"Non paye",rc_total:"TOTAL",rc_ref:"Code",rc_share:"📤 Envoyer le recu",pay_checking_t:"Verification du paiement…",pay_checking_b:"Nous voyons votre paiement. MonCash peut prendre une minute a confirmer. ⛔ Ne payez pas une seconde fois.",drop_t:"Le chauffeur n'est pas venu",drop_b:"Désolé. Le chauffeur qui avait accepté n'est pas arrivé, nous lui avons retiré la course et nous cherchons un autre chauffeur pour vous.",share_msg:'Je suis dans une course MsouWout! Suivez-moi ici:',
+    pin_lost:"Je n'ai pas le code",pin_rec_t:"Retrouver votre code",pin_rec_sub:"Entrez le numéro de téléphone utilisé pour commander la course.",pin_rec_ph:"Votre numéro",pin_rec_go:"Retrouver le code",pin_rec_bad:"Aucune course trouvée avec ce numéro.",pin_rec_wait:"Recherche…",pin_rec_cancel:"Fermer",wait_t:"Nous n'avons pas encore trouvé de chauffeur",wait_b:"Cela fait {min} minutes. Voulez-vous continuer à attendre, ou nous écrire sur WhatsApp ?",wait_keep:"Continuer à attendre",wait_wa:"Nous écrire sur WhatsApp",wait_kept:"D'accord — nous continuons à chercher.",exp_t:"Nous n'avons pas trouvé de chauffeur",exp_b:"Désolé. Personne n'a pu prendre la course. Écrivez-nous sur WhatsApp et nous vous aiderons.",nodrv_t:"Aucun chauffeur à proximité",recenter:"Le chauffeur",sheet_open:"Appuyez pour voir les détails",sheet_close:"Appuyez pour agrandir la carte",follow_on:"Suivi actif",follow_off:"Suivre le chauffeur",rc_title:"Recu de la course",rc_date:"Date",rc_from:"Depart",rc_to:"Destination",rc_driver:"Chauffeur",rc_dist:"Distance",rc_fare:"Prix de la course",rc_prot:"Protection DASH",rc_method:"Moyen de paiement",rc_status:"Statut",rc_paid:"Paye",rc_unpaid:"Non paye",rc_total:"TOTAL",rc_ref:"Code",rc_share:"📤 Envoyer le recu",pay_checking_t:"Verification du paiement…",pay_checking_b:"Nous voyons votre paiement. MonCash peut prendre une minute a confirmer. ⛔ Ne payez pas une seconde fois.",drop_t:"Le chauffeur n'est pas venu",drop_b:"Désolé. Le chauffeur qui avait accepté n'est pas arrivé, nous lui avons retiré la course et nous cherchons un autre chauffeur pour vous.",share_msg:'Je suis dans une course MsouWout! Suivez-moi ici:',
     sb_text:'Securite Famille active', sb_contacts:'Contacts',
     dev_warn:'Le chauffeur a devie de la route',
     pay_title:'Payer la course — {amt} HTG', pay_break:'Course {fare} HTG + protection DASH {prot} HTG',pay_sub:'Choisissez votre portefeuille. Vous pouvez payer maintenant ou a la fin.',
@@ -991,7 +1009,7 @@ const I18N = {
     distance:'Distance', time:'Time', price:'Price (HTG)',
     share:'Share', call:'Call Driver',
     map_offline:"The map could not load. Everything else about your ride is below.",
-    pin_lost:"I don't have the code",pin_rec_t:"Recover your security code",pin_rec_sub:"Enter the phone number you used to book the ride.",pin_rec_ph:"Your phone number",pin_rec_go:"Get the code",pin_rec_bad:"No ride found with that number.",pin_rec_wait:"Checking…",pin_rec_cancel:"Close",wait_t:"We have not found a driver yet",wait_b:"It has been {min} minutes. Would you like to keep waiting, or message us on WhatsApp?",wait_keep:"Keep waiting",wait_wa:"Message us on WhatsApp",wait_kept:"All right — we will keep looking for you.",exp_t:"We could not find a driver",exp_b:"We are sorry. Nobody was able to take this ride. Message us on WhatsApp and we will help.",nodrv_t:"No driver nearby",recenter:"Driver",follow_on:"Following",follow_off:"Follow driver",rc_title:"Ride Receipt",rc_date:"Date",rc_from:"Pickup",rc_to:"Destination",rc_driver:"Driver",rc_dist:"Distance",rc_fare:"Fare",rc_prot:"DASH protection",rc_method:"Payment method",rc_status:"Status",rc_paid:"Paid",rc_unpaid:"Not paid",rc_total:"TOTAL",rc_ref:"Code",rc_share:"📤 Send receipt",pay_checking_t:"Checking your payment…",pay_checking_b:"We can see your payment started. MonCash can take a minute to confirm. ⛔ Please do not pay a second time.",drop_t:"Your driver did not come",drop_b:"We are sorry. The driver who accepted did not arrive, so we took the ride back and we are looking for another driver for you now.",share_msg:'I\'m on a MsouWout ride! Track me here:',
+    pin_lost:"I don't have the code",pin_rec_t:"Recover your security code",pin_rec_sub:"Enter the phone number you used to book the ride.",pin_rec_ph:"Your phone number",pin_rec_go:"Get the code",pin_rec_bad:"No ride found with that number.",pin_rec_wait:"Checking…",pin_rec_cancel:"Close",wait_t:"We have not found a driver yet",wait_b:"It has been {min} minutes. Would you like to keep waiting, or message us on WhatsApp?",wait_keep:"Keep waiting",wait_wa:"Message us on WhatsApp",wait_kept:"All right — we will keep looking for you.",exp_t:"We could not find a driver",exp_b:"We are sorry. Nobody was able to take this ride. Message us on WhatsApp and we will help.",nodrv_t:"No driver nearby",recenter:"Driver",sheet_open:"Tap to see details",sheet_close:"Tap for a bigger map",follow_on:"Following",follow_off:"Follow driver",rc_title:"Ride Receipt",rc_date:"Date",rc_from:"Pickup",rc_to:"Destination",rc_driver:"Driver",rc_dist:"Distance",rc_fare:"Fare",rc_prot:"DASH protection",rc_method:"Payment method",rc_status:"Status",rc_paid:"Paid",rc_unpaid:"Not paid",rc_total:"TOTAL",rc_ref:"Code",rc_share:"📤 Send receipt",pay_checking_t:"Checking your payment…",pay_checking_b:"We can see your payment started. MonCash can take a minute to confirm. ⛔ Please do not pay a second time.",drop_t:"Your driver did not come",drop_b:"We are sorry. The driver who accepted did not arrive, so we took the ride back and we are looking for another driver for you now.",share_msg:'I\'m on a MsouWout ride! Track me here:',
     sb_text:'Family Safety active', sb_contacts:'Contacts',
     dev_warn:'Driver has deviated from route',
     pay_title:'Pay for the ride — {amt} HTG', pay_break:'Fare {fare} HTG + DASH protection {prot} HTG',pay_sub:'Choose your wallet. You can pay now or when the ride ends.',
@@ -1038,7 +1056,7 @@ const I18N = {
     distance:'Distancia', time:'Tiempo', price:'Precio (HTG)',
     share:'Compartir', call:'Llamar',
     map_offline:"El mapa no pudo cargarse. Toda la demás información está abajo.",
-    pin_lost:"No tengo el código",pin_rec_t:"Recuperar su código",pin_rec_sub:"Ingrese el número de teléfono con el que pidió el viaje.",pin_rec_ph:"Su número",pin_rec_go:"Obtener el código",pin_rec_bad:"No encontramos un viaje con ese número.",pin_rec_wait:"Buscando…",pin_rec_cancel:"Cerrar",wait_t:"Todavía no encontramos un conductor",wait_b:"Han pasado {min} minutos. ¿Quiere seguir esperando o escribirnos por WhatsApp?",wait_keep:"Seguir esperando",wait_wa:"Escríbenos por WhatsApp",wait_kept:"De acuerdo — seguimos buscando.",exp_t:"No encontramos un conductor",exp_b:"Lo sentimos. Nadie pudo tomar el viaje. Escríbanos por WhatsApp y le ayudamos.",nodrv_t:"No hay conductores cerca",recenter:"Conductor",follow_on:"Siguiendo",follow_off:"Seguir conductor",rc_title:"Recibo del viaje",rc_date:"Fecha",rc_from:"Recogida",rc_to:"Destino",rc_driver:"Conductor",rc_dist:"Distancia",rc_fare:"Tarifa",rc_prot:"Proteccion DASH",rc_method:"Metodo de pago",rc_status:"Estado",rc_paid:"Pagado",rc_unpaid:"No pagado",rc_total:"TOTAL",rc_ref:"Codigo",rc_share:"📤 Enviar recibo",pay_checking_t:"Verificando su pago…",pay_checking_b:"Vemos que inicio el pago. MonCash puede tardar un minuto. ⛔ No pague una segunda vez.",drop_t:"El conductor no llegó",drop_b:"Lo sentimos. El conductor que aceptó no llegó, le retiramos el viaje y estamos buscando otro conductor para usted.",share_msg:'Estoy en un viaje MsouWout! Sigueme aqui:',
+    pin_lost:"No tengo el código",pin_rec_t:"Recuperar su código",pin_rec_sub:"Ingrese el número de teléfono con el que pidió el viaje.",pin_rec_ph:"Su número",pin_rec_go:"Obtener el código",pin_rec_bad:"No encontramos un viaje con ese número.",pin_rec_wait:"Buscando…",pin_rec_cancel:"Cerrar",wait_t:"Todavía no encontramos un conductor",wait_b:"Han pasado {min} minutos. ¿Quiere seguir esperando o escribirnos por WhatsApp?",wait_keep:"Seguir esperando",wait_wa:"Escríbenos por WhatsApp",wait_kept:"De acuerdo — seguimos buscando.",exp_t:"No encontramos un conductor",exp_b:"Lo sentimos. Nadie pudo tomar el viaje. Escríbanos por WhatsApp y le ayudamos.",nodrv_t:"No hay conductores cerca",recenter:"Conductor",sheet_open:"Toque para ver detalles",sheet_close:"Toque para agrandar el mapa",follow_on:"Siguiendo",follow_off:"Seguir conductor",rc_title:"Recibo del viaje",rc_date:"Fecha",rc_from:"Recogida",rc_to:"Destino",rc_driver:"Conductor",rc_dist:"Distancia",rc_fare:"Tarifa",rc_prot:"Proteccion DASH",rc_method:"Metodo de pago",rc_status:"Estado",rc_paid:"Pagado",rc_unpaid:"No pagado",rc_total:"TOTAL",rc_ref:"Codigo",rc_share:"📤 Enviar recibo",pay_checking_t:"Verificando su pago…",pay_checking_b:"Vemos que inicio el pago. MonCash puede tardar un minuto. ⛔ No pague una segunda vez.",drop_t:"El conductor no llegó",drop_b:"Lo sentimos. El conductor que aceptó no llegó, le retiramos el viaje y estamos buscando otro conductor para usted.",share_msg:'Estoy en un viaje MsouWout! Sigueme aqui:',
     sb_text:'Seguridad Familiar activa', sb_contacts:'Contactos',
     dev_warn:'El conductor se desvio de la ruta',
     pay_title:'Pagar el viaje — {amt} HTG', pay_break:'Viaje {fare} HTG + proteccion DASH {prot} HTG',pay_sub:'Elija su billetera. Puede pagar ahora o al terminar el viaje.',
@@ -1156,6 +1174,7 @@ function initMap() {
     L.control.attribution({ position: 'bottomleft', prefix: false })
       .addAttribution('&copy; <a href="https://openstreetmap.org">OSM</a>').addTo(map);
     mapAvailable = true;
+    watchMapSize();
     return true;
   } catch (e) {
     mapAvailable = false;
@@ -1219,10 +1238,10 @@ function updateRecenter(latlng) {
      dragged around. */
   recenterBtn.onclick = function () {
     mapFollow = !mapFollow;
-    if (mapFollow) map.setView(latlng, Math.max(map.getZoom(), 16));
+    if (mapFollow) centerVisible(latlng, Math.max(map.getZoom(), 16));
     paintRecenter(latlng);
   };
-  if (mapFollow) map.setView(latlng, Math.max(map.getZoom(), 16));
+  if (mapFollow) centerVisible(latlng, Math.max(map.getZoom(), 16));
   paintRecenter(latlng);
 }
 
@@ -1230,7 +1249,9 @@ function updateRecenter(latlng) {
    has gone off the screen). Never just sitting there. */
 function paintRecenter(latlng) {
   if (!recenterBtn || !map) return;
-  var off = !map.getBounds().contains(latlng);
+  /* "off screen" must mean off the part he can SEE, not merely outside
+     getBounds() - a car sitting behind the sheet is invisible to him. */
+  var off = !visiblePoint(latlng);
   recenterBtn.textContent = (mapFollow ? '\uD83D\uDCCD ' : '\uD83E\uDDED ') +
     (typeof t === 'function' ? t(mapFollow ? 'follow_on' : 'follow_off') : 'Chofè a');
   recenterBtn.style.background = mapFollow ? '#0F6FBF' : '#fff';
@@ -1281,13 +1302,7 @@ function updateMap(data) {
       driverMarker.setLatLng(ll(driver));
     }
     bounds.push(ll(driver));
-    if (!mapFitted) {
-      mapFitted = true;
-      /* maxZoom, or a driver sitting on top of the pickup zooms to the roof
-         tiles and she cannot tell where anything is. */
-      if (bounds.length >= 2) map.fitBounds(bounds, { padding: [50, 50], maxZoom: 16 });
-      else map.setView(ll(driver), 15);
-    }
+    if (!mapFitted) fitRide(bounds, ll(driver));
     /* 🚨🚨 28 Sep, Jennifer, in her own words:
          "GPS lan pa ret en place lap pede ale, se lem klike dwèt mwen yo parèt,
           e a chak fwa vue GPS lan diferan, li pa banm menm premye vue lem t
@@ -1310,9 +1325,189 @@ function updateMap(data) {
     return;
   }
 
-  if (bounds.length >= 2) { mapFitted = true; map.fitBounds(bounds, { padding: [40, 40], maxZoom: 16 }); }
-  else if (bounds.length === 1) { mapFitted = true; map.setView(bounds[0], 15); }
+  if (bounds.length) fitRide(bounds, bounds[0]);
 }
+
+/* 🚨🚨 30 Sep. Twice now Jeffery has photographed a map showing somewhere 4-8 km
+   from his ride, with no pins on it - and BOTH times the same ride framed
+   perfectly on my side, same page, same screen size. I had been explaining it
+   away as a cached page. That is a guess, and guessing twice about the same
+   complaint is not diagnosis.
+
+   So the map stops trusting its own fit and CHECKS it.
+
+   The mechanism it is defending against: Leaflet measures its container once.
+   If the map is built while that container is the wrong size - a bottom sheet
+   still sliding up, fonts still loading, the browser chrome still settling on a
+   phone - every later fitBounds is computed against the wrong size and lands
+   somewhere else entirely. mapFitted then latches that one bad result for ever,
+   which is exactly what the screenshots look like.
+
+   invalidateSize() re-measures first. Then we verify the ride is genuinely on
+   screen, and if it is not we try again, a few times, briefly. ⛔ A bounded
+   number of attempts, not a permanent timer: a map that keeps re-framing itself
+   is the complaint Jennifer made on the 28th. */
+var _fitTries = 0;
+var _lastBounds = null;   /* the points we last framed, so we can re-check them */
+
+/* 🔑 THE ACTUAL FAULT, measured on a 412x892 phone with a real ride:
+
+     map element .................... 835px tall
+     details sheet covers ........... 553px of it   (.sheet is position:fixed;bottom:0)
+     map he can actually SEE ........ 282px         (32% of the screen)
+     pickup / dropoff / driver ...... y = 498 / 477 / 338   ALL THREE BEHIND THE SHEET
+
+   Leaflet frames the ride into the map's FULL height, so on a small phone every
+   marker lands in the two thirds the sheet is sitting on top of. He sees streets
+   and no pins - "the map is not good", "i cant see where to go".
+
+   ⛔ And note how wrong my earlier answer was: getBounds() really did contain all
+   three points, so "the map frames correctly" was TRUE and useless. Containing a
+   point is not showing it. Everything below measures the VISIBLE strip instead. */
+function coveredPx() {
+  var m = document.getElementById('map');
+  var sh = document.querySelector('.sheet');
+  if (!m || !sh) return 0;
+  try {
+    if (getComputedStyle(sh).display === 'none') return 0;
+    var mr = m.getBoundingClientRect(), sr = sh.getBoundingClientRect();
+    var cov = mr.bottom - sr.top;
+    if (!(cov > 0)) return 0;
+    /* never squeeze the ride into a sliver - leave at least 150px to look at */
+    return Math.min(cov, Math.max(0, mr.height - 150));
+  } catch (e) { return 0; }
+}
+
+/* Can he see this point right now - in the strip the sheet is NOT covering? */
+function visiblePoint(latlng) {
+  if (!map) return true;
+  try {
+    var size = map.getSize(), cov = coveredPx(), M = 8;
+    var p = map.latLngToContainerPoint(latlng);
+    return p.x > M && p.x < size.x - M && p.y > M && p.y < size.y - cov - M;
+  } catch (e) { return true; }
+}
+
+/* Is the whole ride genuinely visible? */
+function rideOnScreen() {
+  if (!map || !_lastBounds || !_lastBounds.length) return true;   /* nothing to judge */
+  return _lastBounds.every(visiblePoint);
+}
+
+/* "I cant see where to go with the map too small" - the sheet takes 62% of a
+   phone screen, leaving 282px of map. One tap on the grabber drops it out of the
+   way and gives the map ~88%; a second tap brings the details back.
+   ⛔ It starts OPEN, so nothing looks different until he chooses. */
+function toggleSheet() {
+  var sh = document.getElementById('sheet');
+  if (!sh) return;
+  var closing = !sh.classList.contains('collapsed');
+  sh.classList.toggle('collapsed', closing);
+  var peek = document.getElementById('sheetPeek');
+  if (peek && typeof t === 'function') peek.textContent = t('sheet_open');
+  /* The sheet just changed how much map he can see, so re-frame the ride into
+     the space he now has. The ResizeObserver would catch this too, but only
+     when the ride has gone off screen - here we want the bigger view used. */
+  setTimeout(function () {
+    if (!map) return;
+    try { map.invalidateSize(false); } catch (e) {}
+    if (mapFollow || !rideData) return;
+    mapFitted = false; _fitTries = 0;
+    try { updateMap(rideData); } catch (e) {}
+  }, 340);   /* after the 0.3s CSS transition */
+}
+
+/* Centre something in the VISIBLE strip rather than in the middle of the
+   element, where the sheet would be sitting on top of it. */
+function centerVisible(latlng, zoom) {
+  if (!map) return;
+  map.setView(latlng, zoom == null ? map.getZoom() : zoom, { animate: false });
+  var cov = coveredPx();
+  if (cov > 0) map.panBy([0, cov / 2], { animate: false });
+}
+
+function fitRide(bounds, fallback) {
+  if (!map || !bounds || !bounds.length) return;
+  _lastBounds = bounds;
+
+  function attempt() {
+    try { map.invalidateSize(false); } catch (e) {}
+    var cov = coveredPx();
+    if (bounds.length >= 2) {
+      /* pad the bottom by whatever the sheet is covering, so the ride is framed
+         in the strip he can see rather than in the middle of the element */
+      map.fitBounds(bounds, {
+        paddingTopLeft: [40, 40],
+        paddingBottomRight: [40, cov + 40],
+        maxZoom: 16
+      });
+    } else {
+      centerVisible(fallback || bounds[0], 15);
+    }
+
+    /* Did it actually work? The only honest test is whether the ride is now in
+       the part of the map that is not hidden behind the sheet. */
+    var good = rideOnScreen();
+
+    if (good) { mapFitted = true; _fitTries = 0; return; }
+    if (_fitTries++ < 4) { setTimeout(attempt, 350); return; }
+    mapFitted = true;              /* give up quietly; the marker is still right */
+  }
+  attempt();
+}
+
+/* ⚠️ The retry loop above is NOT enough on its own, and a test is the only
+   reason I know that. If the container is still the wrong size while those four
+   attempts run, they all fail, mapFitted latches true, and when the container
+   LATER grows nothing re-fits: a container changing size fires no window
+   `resize` event, and updateMap only calls fitRide `if (!mapFitted)`.
+   That is the map Jeffery photographed.
+
+   So watch the container itself. Whenever it changes size, re-measure and frame
+   the ride again on the points we last drew. ⛔ Never while she is following the
+   driver - that would yank the view out from under her. */
+function watchMapSize() {
+  var el = document.getElementById('map');
+  if (!el || typeof ResizeObserver === 'undefined') return;   /* old browser: the resize hook below still helps */
+  /* ⚠️ Watch the SHEET as well. It is position:fixed, so when it grows it hides
+     more of the map without changing the map's own size - the markers can go
+     behind it while every size stays exactly the same. */
+  var sheetEl = document.querySelector('.sheet');
+  var lastW = 0, lastH = 0, lastCov = -1;
+  var ro = new ResizeObserver(function () {
+    var w = el.clientWidth, h = el.clientHeight, cov = coveredPx();
+    if (!w || !h) return;                       /* hidden; wait until it is real */
+    if (w === lastW && h === lastH && Math.abs(cov - lastCov) < 24) return;
+    lastW = w; lastH = h; lastCov = cov;
+    clearTimeout(window._sizeT);
+    window._sizeT = setTimeout(function () {
+      if (!map) return;
+      try { map.invalidateSize(false); } catch (e) {}
+      if (mapFollow || !rideData) return;
+      /* ⛔ Do NOT re-frame every time the panel grows a line - a map that keeps
+         jumping is the complaint Jennifer made on the 28th, and it would also
+         undo a pan she made on purpose. Re-frame only when the ride is actually
+         off screen, which is the fault we are here to fix. */
+      if (rideOnScreen()) return;
+      mapFitted = false; _fitTries = 0;
+      try { updateMap(rideData); } catch (e) {}
+    }, 250);
+  });
+  try { ro.observe(el); if (sheetEl) ro.observe(sheetEl); } catch (e) {}
+}
+
+/* Turning the phone, or the keyboard closing, changes the window - and a view
+   fitted at the old size is wrong at the new one. ⛔ Never while she is
+   following the driver. */
+window.addEventListener('resize', function () {
+  if (!map || mapFollow) return;
+  clearTimeout(window._refitT);
+  window._refitT = setTimeout(function () {
+    if (!rideData) return;
+    mapFitted = false; _fitTries = 0;
+    try { updateMap(rideData); } catch (e) {}
+  }, 400);
+});
 
 // ==================== STATUS ====================
 
