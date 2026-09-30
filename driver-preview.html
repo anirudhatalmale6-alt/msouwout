@@ -137,6 +137,37 @@
     padding:13px;color:#166534;font-size:14.5px;font-weight:800
   }
 
+  /* ── the map, inside the DRIVER's own portal ── */
+  .mapstrip{
+    position:relative;margin-top:13px;border-radius:13px;overflow:hidden;
+    border:1px solid var(--line);height:120px;background:#E8EDF4
+  }
+  .mapstrip svg{display:block;width:100%;height:120px}
+  .mapnote{
+    position:absolute;right:8px;bottom:8px;background:rgba(15,23,42,.72);color:#fff;
+    font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:999px
+  }
+
+  /* ── the payment → code sequence, drawn as three numbered steps ── */
+  .seq{margin:4px 0 12px}
+  .seqrow{
+    display:flex;align-items:flex-start;gap:11px;padding:11px 12px;
+    border:1px solid var(--line);border-radius:13px;margin-bottom:8px;background:#F8FAFC
+  }
+  .seqrow .num{
+    width:28px;height:28px;flex:none;border-radius:50%;background:#E2E8F0;color:#64748B;
+    font-weight:900;font-size:14px;text-align:center;line-height:28px
+  }
+  .seqrow .txt{flex:1;font-size:14.5px;line-height:1.35}
+  .seqrow .txt b{display:block;font-weight:800}
+  .seqrow .txt i{display:block;font-style:normal;font-size:12.5px;color:var(--muted);margin-top:2px}
+  .seqrow .tick{font-size:17px;flex:none;line-height:1.5}
+  .seqrow.done{background:#ECFDF3;border-color:#BBF7D0}
+  .seqrow.done .num{background:var(--green);color:#fff}
+  .seqrow.now{background:#EEF4FF;border-color:#BFDBFE;box-shadow:0 0 0 3px rgba(0,32,159,.07)}
+  .seqrow.now .num{background:var(--blue);color:#fff}
+  .seqrow.wait{opacity:.5}
+
   /* ── 3. MONEY — one clean section ── */
   .money-total{font-size:32px;font-weight:900;line-height:1.1}
   .money-lb{font-size:12.5px;color:var(--muted);margin-top:2px}
@@ -252,12 +283,11 @@
       <div class="sub">N ap av&egrave;ti w l&egrave; yon nouvo demann rive.</div>
     </div>
 
-    <!-- offline: nothing will come -->
-    <div class="card waiting hide" id="boxOffline">
-      <span class="bell">&#128164;</span>
-      <div class="big">OU PA AP RESEVWA KOUS</div>
-      <div class="sub">K&ograve;manse travay pou w ka resevwa demann.</div>
-    </div>
+    <!-- ⛔ There used to be a second big box here saying OU PA AP RESEVWA KOUS.
+         Jeffery, 30 Sep: "I don't think we need both... They communicate almost
+         the same thing. Simplify this so the screen feels less long."
+         He is right - the online card already says OU PA AN LIY. One statement,
+         not two. The offline screen is now just the switch and the money. -->
 
     <!-- a new request -->
     <div class="card newride hide" id="boxNew">
@@ -272,27 +302,69 @@
       </div>
     </div>
 
-    <!-- STEP 1: go and get her -->
+    <!-- STEP 1: go and get her.
+         🔑 The map lives HERE, in the driver's own portal. Until now the driver
+         portal's map button sent him to track.html - the PASSENGER tracking page
+         - which is why he was looking at "Rele Chofè" (call himself), "Sekirite
+         Fanmi", "M pa gen kòd la" and a 5-step passenger progress bar and asking
+         why the driver portal was so busy. It was not the driver portal. -->
     <div class="card hide" id="boxGo">
       <span class="step-tag">KOUS LA SE POU OU</span>
       <div class="step-who">&#128100; Jennifer</div>
       <div class="step-where">&#128205; P&eacute;tion-Ville</div>
+      <div class="mapstrip" id="mapGo">
+        <svg viewBox="0 0 320 120" preserveAspectRatio="none" aria-hidden="true">
+          <rect width="320" height="120" fill="#E8EDF4"/>
+          <path d="M0 86 H320" stroke="#fff" stroke-width="9"/>
+          <path d="M96 0 V120" stroke="#fff" stroke-width="7"/>
+          <path d="M232 0 V120" stroke="#fff" stroke-width="5"/>
+          <path d="M0 34 H320" stroke="#fff" stroke-width="5"/>
+          <path d="M40 104 C 96 104, 96 52, 176 52" stroke="#00209F"
+                stroke-width="4" fill="none" stroke-dasharray="9 7"/>
+          <circle cx="40" cy="104" r="8" fill="#12A150" stroke="#fff" stroke-width="3"/>
+          <circle cx="176" cy="52" r="8" fill="#D21034" stroke="#fff" stroke-width="3"/>
+        </svg>
+        <span class="mapnote">kat la ap parèt isit</span>
+      </div>
     </div>
 
-    <!-- STEP 2: her 4 digits -->
+    <!-- STEP 2: payment, THEN the 4 digits.
+         Jeffery, 30 Sep: "make the payment status and 4-digit code step extremely
+         obvious. Driver must immediately understand: passenger pays first →
+         server confirms → code → start ride."
+         So it is drawn as three numbered steps that light up in order. -->
     <div class="card hide" id="boxPin">
       <span class="step-tag">OU RIVE</span>
-      <div class="step-who">Mande pasaj&egrave; a k&ograve;d 4 chif li.</div>
-      <div class="pinrow">
+
+      <div class="seq">
+        <div class="seqrow" id="seq1">
+          <span class="num">1</span>
+          <span class="txt"><b>Tann kliyan an peye</b><i>Se pasaj&egrave; a ki peye, pa ou.</i></span>
+          <span class="tick" id="tick1">&#9203;</span>
+        </div>
+        <div class="seqrow" id="seq2">
+          <span class="num">2</span>
+          <span class="txt"><b>Peman konfime</b><i>Se s&egrave;v&egrave; a ki di l&egrave; li bon.</i></span>
+          <span class="tick" id="tick2">&#9203;</span>
+        </div>
+        <div class="seqrow" id="seq3">
+          <span class="num">3</span>
+          <span class="txt"><b>Antre k&ograve;d 4 chif kliyan an</b><i>Mande l k&ograve;d la.</i></span>
+          <span class="tick" id="tick3">&#9203;</span>
+        </div>
+      </div>
+
+      <div class="pinrow" id="pinRow">
         <div class="pinbox filled">7</div><div class="pinbox filled">2</div>
         <div class="pinbox filled">4</div><div class="pinbox">&nbsp;</div>
       </div>
-      <div class="locked" id="payLocked" style="margin-top:14px">
+
+      <div class="locked" id="payLocked">
         &#128274; <b>Peman poko konfime</b><br>
         Ou pa ka k&ograve;manse kous la pou kounye a.
       </div>
-      <div class="okpay hide" id="payOk" style="margin-top:14px">
-        &#9989; PEMAN KONFIME
+      <div class="okpay hide" id="payOk">
+        &#9989; PEMAN KONFIME &mdash; ou ka mande k&ograve;d la kounye a
       </div>
       <button class="btn btn-soft" style="margin-top:12px;font-size:14px"
               onclick="fakePayment()" id="simPayBtn">
@@ -305,7 +377,21 @@
       <span class="step-tag">&#128663; KOUS AN KOU</span>
       <div class="step-who">&#128100; Jennifer</div>
       <div class="step-where">&#128205; Destinasyon: Delmas 60</div>
-      <button class="btn btn-ghost" style="margin-top:14px" onclick="noop()">
+      <div class="mapstrip">
+        <svg viewBox="0 0 320 120" preserveAspectRatio="none" aria-hidden="true">
+          <rect width="320" height="120" fill="#E8EDF4"/>
+          <path d="M0 62 H320" stroke="#fff" stroke-width="9"/>
+          <path d="M132 0 V120" stroke="#fff" stroke-width="7"/>
+          <path d="M60 0 V120" stroke="#fff" stroke-width="5"/>
+          <path d="M0 100 H320" stroke="#fff" stroke-width="5"/>
+          <path d="M44 84 C 132 84, 132 30, 268 30" stroke="#00209F"
+                stroke-width="4" fill="none" stroke-dasharray="9 7"/>
+          <circle cx="44" cy="84" r="8" fill="#0F172A" stroke="#fff" stroke-width="3"/>
+          <circle cx="268" cy="30" r="8" fill="#D21034" stroke="#fff" stroke-width="3"/>
+        </svg>
+        <span class="mapnote">kat la ap parèt isit</span>
+      </div>
+      <button class="btn btn-ghost" style="margin-top:12px" onclick="noop()">
         &#128506;&#65039; OUVRI WOUT LA
       </button>
     </div>
@@ -320,15 +406,19 @@
       </div>
     </div>
 
-    <!-- 3. MONEY - one section, details live on Revni -->
+    <!-- 3. MONEY.
+         Jeffery, 30 Sep: "the most important number for a driver is probably
+         'Yo dwe w', not lifetime total, so make that very easy to see."
+         So YO DWE W is now the big number, and the lifetime total drops down
+         into the small row with Jodi a and Semèn sa. -->
     <div class="card" id="moneyCard">
       <h2 class="sec">&#128176; Revni mwen</h2>
-      <div class="money-total">1,593 HTG</div>
-      <div class="money-lb">Total ou f&egrave;</div>
+      <div class="money-total owed">191 HTG</div>
+      <div class="money-lb">Yo dwe w</div>
       <div class="money-grid">
         <div><div class="k">Jodi a</div><div class="v">0 HTG</div></div>
         <div><div class="k">Sem&egrave;n sa</div><div class="v">303 HTG</div></div>
-        <div><div class="k">Yo dwe w</div><div class="v owed">191 HTG</div></div>
+        <div><div class="k">Total</div><div class="v">1,593 HTG</div></div>
       </div>
       <button class="btn btn-soft" onclick="go('earn')">W&Egrave; DETAY REVNI</button>
     </div>
@@ -360,12 +450,12 @@
   <section id="tab-earn" class="hide">
     <div class="card">
       <h2 class="sec">&#128176; Revni mwen</h2>
-      <div class="money-total">1,593 HTG</div>
-      <div class="money-lb">Total ou f&egrave; depi ou k&ograve;manse</div>
+      <div class="money-total owed">191 HTG</div>
+      <div class="money-lb">Yo dwe w</div>
       <div class="money-grid">
         <div><div class="k">Jodi a</div><div class="v">0 HTG</div></div>
         <div><div class="k">Sem&egrave;n sa</div><div class="v">303 HTG</div></div>
-        <div><div class="k">Yo dwe w</div><div class="v owed">191 HTG</div></div>
+        <div><div class="k">Total</div><div class="v">1,593 HTG</div></div>
       </div>
     </div>
 
@@ -517,8 +607,8 @@ function paint(){
   show('onlineCard', step === 'idle');
 
   var busy = (step !== 'idle');
+  /* ⛔ Offline shows ONE statement, not two - the second box is gone entirely. */
   show('boxWaiting', step === 'idle' && online);
-  show('boxOffline', step === 'idle' && !online);
   show('boxNew',     step === 'new');
   show('boxGo',      step === 'go' || step === 'going');
   show('boxPin',     step === 'arrived');
@@ -531,6 +621,23 @@ function paint(){
   show('payLocked', !paid);
   show('payOk',      paid);
   show('simPayBtn', !paid);
+
+  /* 🔑 The three numbered steps, so the order is unmistakable:
+     the passenger pays → the SERVER confirms → then the code → then start.
+     ⛔ The code boxes stay dimmed until payment is confirmed, because asking
+     for the code first is exactly the confusion he wants removed. */
+  seqRow('seq1', 'tick1', paid ? 'done' : 'now');
+  seqRow('seq2', 'tick2', paid ? 'done' : 'wait');
+  seqRow('seq3', 'tick3', paid ? 'now'  : 'wait');
+  var pr = el('pinRow');
+  if(pr){ pr.style.opacity = paid ? '1' : '.4'; }
+
+  function seqRow(rowId, tickId, state){
+    var r = el(rowId), tk = el(tickId);
+    if(!r) return;
+    r.className = 'seqrow ' + state;
+    if(tk) tk.textContent = state === 'done' ? '✅' : (state === 'now' ? '➡️' : '⏳');
+  }
 
   /* Kous tab mirrors the same ride */
   el('ridesNow').innerHTML = busy
