@@ -418,6 +418,142 @@ footer a:hover{text-decoration:underline}
   .ride-row{grid-template-columns:1fr;gap:6px}
   .ride-price{font-size:.85rem}
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THE REBUILT DRIVER PORTAL — layout only. ⛔ No behaviour lives in here.
+   Jeffery, 30 Sep: "ONE SCREEN = ONE JOB = ONE BIG BUTTON... a 12-year-old
+   should be able to use this without anybody explaining it."
+   ══════════════════════════════════════════════════════════════════════════ */
+:root{ --dp-nav:64px; --dp-blue:#00209F; --dp-red:#D21034; --dp-ink:#0F172A;
+       --dp-muted:#64748B; --dp-line:#E6EAF2; --dp-green:#12A150; --dp-amber:#B45309; }
+
+/* the dashboard becomes the whole app surface once he is logged in */
+body.dp-on{background:#F4F6FB}
+body.dp-on .koutye-bar,body.dp-on > nav,body.dp-on nav:not(.dp-nav),body.dp-on footer,
+body.dp-on .hero,body.dp-on .lang-bar{display:none !important}
+body.dp-on .dashboard{padding:0;margin:0;max-width:none}
+body.dp-on .dash-inner{padding:0;max-width:none}
+
+.dp-head{
+  background:var(--dp-ink);color:#fff;padding:11px 14px;display:flex;
+  align-items:center;gap:12px;position:sticky;top:0;z-index:40
+}
+.dp-burger{background:none;border:0;color:#fff;font-size:22px;line-height:1;padding:4px 6px;cursor:pointer}
+.dp-brand{font-size:15px;font-weight:800}
+.dp-hello{font-size:12.5px;color:#C3CBDA;margin-top:1px}
+.dp-plate{
+  margin-left:auto;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700;white-space:nowrap
+}
+.dp-main{
+  padding:14px 14px 18px;max-width:560px;margin:0 auto;
+  padding-bottom:calc(var(--dp-nav) + 26px + env(safe-area-inset-bottom))
+}
+body.dp-has-action .dp-main{padding-bottom:calc(var(--dp-nav) + 108px + env(safe-area-inset-bottom))}
+
+.dp-card{background:#fff;border:1px solid var(--dp-line);border-radius:16px;padding:16px;margin-bottom:13px}
+.dp-sec{font-size:13px;font-weight:900;letter-spacing:.06em;color:var(--dp-muted);
+  margin:0 0 10px;text-transform:uppercase}
+
+/* MONEY: "the most important number for a driver is probably Yo dwe w" */
+.dp-owed{font-size:32px;font-weight:900;line-height:1.1;color:var(--dp-amber)}
+.dp-owed-lb{font-size:12.5px;color:var(--dp-muted);margin-top:2px}
+.dp-money-grid{display:flex;gap:10px;margin:13px 0}
+.dp-money-grid div{flex:1;background:#F7F9FC;border-radius:11px;padding:9px 10px}
+.dp-money-grid .k{font-size:11.5px;color:var(--dp-muted)}
+.dp-money-grid .v{font-size:14.5px;font-weight:800;margin-top:2px;white-space:nowrap}
+.dp-btn-soft{
+  display:block;width:100%;border:0;border-radius:14px;background:#EEF2F9;color:var(--dp-ink);
+  font-family:inherit;font-size:15px;font-weight:800;padding:14px;cursor:pointer
+}
+
+.dp-waiting{text-align:center;padding:26px 12px;background:#fff;border:1px solid var(--dp-line);
+  border-radius:16px;margin-bottom:13px}
+.dp-waiting .bell{font-size:34px;display:block;margin-bottom:8px}
+.dp-waiting .big{font-size:17px;font-weight:900}
+.dp-waiting .sub{color:var(--dp-muted);font-size:13.5px;margin-top:7px}
+
+/* the driver's OWN map */
+.dp-map-wrap{margin-top:12px;border-radius:13px;overflow:hidden;border:1px solid var(--dp-line)}
+#dpMap{height:170px;width:100%;background:#E8EDF4}
+
+/* payment → code, as three numbered steps */
+.dp-seq{margin:12px 0 4px}
+.dp-seqrow{display:flex;align-items:flex-start;gap:11px;padding:11px 12px;border:1px solid var(--dp-line);
+  border-radius:13px;margin-bottom:8px;background:#F8FAFC}
+.dp-seqrow .num{width:28px;height:28px;flex:none;border-radius:50%;background:#E2E8F0;color:#64748B;
+  font-weight:900;font-size:14px;text-align:center;line-height:28px}
+.dp-seqrow .txt{flex:1;font-size:14.5px;line-height:1.35}
+.dp-seqrow .txt b{display:block;font-weight:800}
+.dp-seqrow .txt i{display:block;font-style:normal;font-size:12.5px;color:var(--dp-muted);margin-top:2px}
+.dp-seqrow .tick{font-size:17px;flex:none}
+.dp-seqrow.done{background:#ECFDF3;border-color:#BBF7D0}
+.dp-seqrow.done .num{background:var(--dp-green);color:#fff}
+.dp-seqrow.now{background:#EEF4FF;border-color:#BFDBFE;box-shadow:0 0 0 3px rgba(0,32,159,.07)}
+.dp-seqrow.now .num{background:var(--dp-blue);color:#fff}
+.dp-seqrow.wait{opacity:.5}
+#pinEntryBody.dp-dim{opacity:.4}
+
+.dp-alert-btn{width:100%;margin:0 0 10px;padding:13px;border:0;border-radius:12px;background:#166534;
+  color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer}
+.dp-since{font-size:12.5px;color:var(--dp-muted);margin:0 0 10px}
+.dp-guide{display:grid;gap:9px;font-size:13px;color:#14532D;line-height:1.45}
+.dp-guide div{display:flex;gap:9px;align-items:center}
+.dp-guide div span:first-child{font-size:20px;line-height:1;flex:none}
+.dp-sound-note{margin-top:12px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;
+  padding:10px;font-size:12.5px;color:#92400E;line-height:1.5}
+
+/* ── THE ONE FIXED ACTION SLOT ──
+   "Keep the main action button in the exact same physical position." */
+.dp-slot{
+  position:fixed;left:0;right:0;bottom:calc(var(--dp-nav) + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,rgba(244,246,251,0),#F4F6FB 34%);
+  padding:14px 14px 12px;z-index:45
+}
+.dp-slot-inner{max-width:560px;margin:0 auto}
+/* every main action is the same size in the same place */
+.dp-slot .btn-arrived,.dp-slot .btn-start-ride,.dp-slot .btn-complete-ride{
+  display:block;width:100%;margin:0;border:0;border-radius:14px;font-family:inherit;
+  font-size:18px;font-weight:800;padding:19px 14px;cursor:pointer;line-height:1.25;text-align:center
+}
+.dp-slot .pin-entry{margin:0;padding:0;border:0;background:none}
+.dp-nav-link{
+  display:block;margin:0 0 9px;text-align:center;padding:11px;border-radius:12px;
+  border:1px solid #C7D2FE;background:#EEF2FF;color:#3730A3;font-weight:800;font-size:13.5px;
+  text-decoration:none
+}
+
+/* ── FOUR NAVIGATION BUTTONS ── */
+.dp-nav{
+  /* ⚠️ The page already styles a bare `nav` (the marketing bar) with a `top`.
+     Mine set only `bottom`, so BOTH applied, the box was over-constrained and
+     `top` won - the four buttons rendered under the header instead of at the
+     foot of the screen. `top:auto` is the whole fix. Found by measuring the
+     element, not by reading the CSS. */
+  position:fixed;left:0;right:0;bottom:0;top:auto;z-index:48;background:#fff;
+  border-top:1px solid var(--dp-line);border-bottom:0;display:flex;height:auto;
+  padding:0 0 env(safe-area-inset-bottom);justify-content:stretch;align-items:stretch
+}
+.dp-nav button{
+  flex:1;background:none;border:0;padding:9px 4px 8px;font-family:inherit;color:var(--dp-muted);
+  font-size:11.5px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;gap:3px
+}
+.dp-nav button .ni{font-size:21px;line-height:1}
+.dp-nav button.active{color:var(--dp-blue)}
+
+.dp-scrim{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:70;display:none}
+.dp-scrim.show{display:block}
+.dp-drawer{position:fixed;top:0;bottom:0;left:0;width:82%;max-width:320px;background:#fff;
+  z-index:71;transform:translateX(-100%);transition:transform .22s ease;display:flex;flex-direction:column}
+.dp-drawer.show{transform:translateX(0)}
+.dp-drawer .dh{background:var(--dp-ink);color:#fff;padding:18px 16px}
+.dp-drawer .dh .n{font-size:17px;font-weight:800}
+.dp-drawer .dh .p{font-size:12.5px;color:#C3CBDA;margin-top:3px}
+.dp-drawer a{display:flex;gap:11px;align-items:center;padding:15px 16px;border-bottom:1px solid var(--dp-line);
+  color:var(--dp-ink);text-decoration:none;font-size:15px;font-weight:600}
+.dp-drawer a .mi{width:24px;text-align:center;font-size:18px}
+.dp-drawer a.out{color:var(--dp-red);font-weight:800;border-bottom:0}
 </style>
 <style id="capacitor-native-styles">
 body.capacitor-native{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
@@ -426,6 +562,8 @@ body.capacitor-native{scrollbar-width:none;}
 body.capacitor-native .koutye-bar,body.capacitor-native [data-web-only]{display:none!important;}
 body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:text;user-select:text;}
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
@@ -491,112 +629,226 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
 
 <!-- DASHBOARD -->
 <section class="dashboard" id="dashboard">
-  <div class="dash-inner">
-    <!-- The single most common support call in any ride app is "I am not
-         getting rides" from a driver who is offline and does not know it. So
-         this is the first thing on the screen, it is large, and it says which
-         state he is in rather than only offering the opposite one. -->
-    <div class="presence" id="presenceBar">
-      <div class="presence-txt">
-        <div class="presence-state" id="presenceState">-</div>
-        <div class="presence-hint" id="presenceHint"></div>
-      </div>
-      <button class="presence-btn" id="presenceBtn" onclick="togglePresence()">-</button>
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       THE DRIVER PORTAL, REBUILT TO THE LAYOUT JEFFERY APPROVED (30 Sep).
+
+       ⛔ UI ONLY. Every id below is the SAME id the existing code already
+       reaches for, and no ride, payment, PIN, dispatch, cancellation,
+       security or ledger function has been touched. This file is still the
+       ONE source of truth - the logic was not forked into a second page.
+
+       His rules, in his words:
+         "ONE SCREEN = ONE JOB = ONE BIG BUTTON"
+         "a 12-year-old should be able to use this without anybody explaining"
+         "Keep the main action button in the exact same physical position"
+         "Remove anything that belongs to the passenger experience"
+       ════════════════════════════════════════════════════════════════════ -->
+
+  <!-- small header: no large profile card, per the spec -->
+  <div class="dp-head">
+    <button class="dp-burger" onclick="dpMenu(true)" aria-label="Meni">&#9776;</button>
+    <div class="dp-id">
+      <div class="dp-brand">MsouWout Chof&egrave;</div>
+      <div class="dp-hello"><span data-i18n="dp_hello">Bonjou</span>, <span id="driverName"></span> &#128075;</div>
     </div>
-    <div class="welcome-bar">
-      <div class="welcome-avatar">&#128100;</div>
-      <div class="welcome-info">
-        <h2 id="driverName"></h2>
-        <p id="driverSince"></p>
+    <div class="dp-plate" id="dpPlate"></div>
+  </div>
+
+  <main class="dp-main">
+
+    <!-- ══════════════ AKÈY ══════════════ -->
+    <div id="dpTabHome">
+
+      <!-- 1. ONLINE / OFFLINE — first and most obvious.
+           ⛔ The second box that also said "you are not receiving rides" is
+           gone: he said it communicated the same thing twice. -->
+      <div class="presence" id="presenceBar">
+        <div class="presence-txt">
+          <div class="presence-state" id="presenceState">-</div>
+          <div class="presence-hint" id="presenceHint"></div>
+        </div>
+        <button class="presence-btn" id="presenceBtn" onclick="togglePresence()">-</button>
       </div>
-      <button class="btn-logout" onclick="logout()" data-i18n="logout">Dekonekte</button>
+
+      <!-- 2. THE RIDE. Everything about the job he is doing right now. -->
+      <div class="active-ride-card" id="activeRideCard" style="display:none">
+        <h3>&#128994; <span data-i18n="active_ride_title">Kous Aktif</span></h3>
+        <div id="activeRideInfo"></div>
+
+        <!-- 🔑 THE DRIVER'S OWN MAP.
+             Until now the map button in this portal opened track.html - the
+             PASSENGER tracking page - so the driver ended up looking at
+             "Rele Chofè" (call himself), "Sekirite Fanmi", "M pa gen kòd la"
+             and a 5-step passenger progress bar, and asked me why his portal
+             was so busy. It was not his portal. This map is his. -->
+        <div class="dp-map-wrap" id="dpMapWrap" style="display:none">
+          <div id="dpMap"></div>
+        </div>
+
+        <!-- 🔑 THE PAYMENT ORDER, SPELLED OUT.
+             "Driver must immediately understand: passenger pays first →
+             server confirms → code → start ride." -->
+        <div class="dp-seq" id="dpSeq" style="display:none">
+          <div class="dp-seqrow" id="dpSeq1">
+            <span class="num">1</span>
+            <span class="txt"><b data-i18n="dp_s1">Tann kliyan an peye</b><i data-i18n="dp_s1b">Se pasaj&egrave; a ki peye, pa ou.</i></span>
+            <span class="tick" id="dpTick1">&#9203;</span>
+          </div>
+          <div class="dp-seqrow" id="dpSeq2">
+            <span class="num">2</span>
+            <span class="txt"><b data-i18n="dp_s2">Peman konfime</b><i data-i18n="dp_s2b">Se s&egrave;v&egrave; a ki di l&egrave; li bon.</i></span>
+            <span class="tick" id="dpTick2">&#9203;</span>
+          </div>
+          <div class="dp-seqrow" id="dpSeq3">
+            <span class="num">3</span>
+            <span class="txt"><b data-i18n="dp_s3">Antre k&ograve;d 4 chif kliyan an</b><i data-i18n="dp_s3b">Mande l k&ograve;d la.</i></span>
+            <span class="tick" id="dpTick3">&#9203;</span>
+          </div>
+        </div>
+
+        <!-- the code he types. ⚠️ The BUTTON that uses it lives in the fixed
+             action slot at the bottom, so it never moves; this half stays in
+             the card and is shown/hidden together with it by dpShowPin(). -->
+        <div class="pin-entry" id="pinEntryBody" style="display:none">
+          <div class="pin-entry-label" data-i18n="enter_ride_pin">Mande pasaje a pou PIN nan</div>
+          <input type="tel" maxlength="4" class="pin-input-ride" id="ridePinInput" placeholder="- - - -" inputmode="numeric" pattern="[0-9]*">
+          <div class="pin-feedback" id="pinFeedback"></div>
+        </div>
+
+        <!-- Giving the ride back is a real need, but it is NOT the main action,
+             so it is small and it stays out of the big button's slot. -->
+        <button class="btn-cancel-ride" id="btnCancelRide" onclick="driverCancel()" data-i18n="cancel_ride_btn">Anile kous la</button>
+      </div>
+
+      <!-- 3. INCOMING REQUESTS -->
+      <div class="active-ride-card" id="incomingCard" style="display:none;border-color:#F59E0B">
+        <h3>&#128276; <span data-i18n="inc_title">Demann Kous</span> <span id="incCount" style="font-weight:900"></span></h3>
+        <button id="alertBtn" onclick="enableAlerts()" class="dp-alert-btn" data-i18n="alert_on">&#128276; Limen al&egrave;t pou nouvo kous</button>
+        <div id="alertMsg" style="font-size:12.5px;line-height:1.45;margin:-2px 0 10px;color:#166534"></div>
+        <div id="incomingList"></div>
+        <div id="incomingEmpty" class="sub" style="color:#64748B;font-size:13.5px" data-i18n="inc_empty">Pa gen demann kounye a. Paj sa a ap gade pou kont li.</div>
+      </div>
+
+      <!-- waiting, when he is online and has nothing to do -->
+      <div class="dp-waiting" id="dpWaiting" style="display:none">
+        <span class="bell">&#128276;</span>
+        <div class="big" data-i18n="dp_waiting">AP TANN YON KOUS...</div>
+        <div class="sub" data-i18n="dp_waiting_b">N ap av&egrave;ti w l&egrave; yon nouvo demann rive.</div>
+      </div>
+
+      <!-- 4. MONEY — ONE section. "Yo dwe w" is the number he cares about. -->
+      <div class="dp-card" id="dpMoneyHome">
+        <h2 class="dp-sec">&#128176; <span data-i18n="dp_revni">Revni mwen</span></h2>
+        <div class="dp-owed" id="dpOwed">—</div>
+        <div class="dp-owed-lb" data-i18n="pay_owed">Yo dwe w</div>
+        <div class="dp-money-grid" id="dpMoneyGrid"></div>
+        <button class="dp-btn-soft" onclick="dpGo('earn')" data-i18n="dp_see_revni">W&Egrave; DETAY REVNI</button>
+      </div>
     </div>
 
-    <div class="active-ride-card" id="activeRideCard" style="display:none">
-      <h3>&#128994; <span data-i18n="active_ride_title">Kous Aktif</span></h3>
-      <div id="activeRideInfo"></div>
-      <!-- Pressed when he pulls up, BEFORE he asks for the PIN. The passenger's
-           page is already polling, so this is all that was missing for her to
-           know he is outside without a phone call. -->
+    <!-- ══════════════ KOUS ══════════════ -->
+    <div id="dpTabRides" style="display:none">
+      <div class="rides-card">
+        <h3>&#128663; <span data-i18n="rides_title">Istwa Kous</span></h3>
+        <div id="ridesContent"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════ REVNI ══════════════ -->
+    <div id="dpTabEarn" style="display:none">
+      <div class="kpi-grid" id="kpiGrid"></div>
+      <div class="payout-card" id="payoutCard" style="display:none">
+        <h3>&#128176; <span data-i18n="pay_title">Kijan ou vle peye</span></h3>
+        <div class="payout-sums" id="payoutSums"></div>
+        <div class="payout-methods" id="payoutMethods"></div>
+        <div id="payoutWallet"></div>
+        <div class="payout-note" id="payoutNote"></div>
+        <div class="payout-runs" id="payoutRuns"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════ KONT ══════════════ -->
+    <div id="dpTabAcct" style="display:none">
+      <div class="status-card" id="statusCard">
+        <span class="status-badge" id="statusBadge"></span>
+        <div class="status-msg" id="statusMsg"></div>
+      </div>
+      <div class="profile-card">
+        <h3>&#128203; <span data-i18n="profile_title">Pwofil Ou</span></h3>
+        <p id="driverSince" class="dp-since"></p>
+        <div class="profile-grid" id="profileGrid"></div>
+      </div>
+
+      <!-- "Kijan sa mache" moved OFF the home screen, exactly as he asked:
+           "Do NOT delete those functions. Move them to the appropriate
+           secondary page." -->
+      <div class="dp-card">
+        <h2 class="dp-sec">&#9989; <span data-i18n="guide_title">Kijan sa mache</span></h2>
+        <div class="dp-guide">
+          <div><span>&#128241;</span><span data-i18n="guide_1">Kite paj sa a louvri.</span></div>
+          <div><span>&#128276;</span><span data-i18n="guide_2">Demann rive ak yon son. Peze Aksepte Kous La.</span></div>
+          <div><span>&#128663;</span><span data-i18n="guide_3">Rele pasaje a. Peze Ale ch&egrave;che l.</span></div>
+          <div><span>&#128290;</span><span data-i18n="guide_4">Mande k&ograve;d 4 chif la. Peze K&ograve;manse Kous.</span></div>
+          <div><span>&#9989;</span><span data-i18n="guide_5">Peze Fini Kous. Lajan ou monte.</span></div>
+        </div>
+        <div class="dp-sound-note" data-i18n="inc_sound_note">&#128266; W ap tande yon son l&egrave; yon demann rive. Sa mache S&Egrave;LMAN si paj sa a rete louvri sou telef&ograve;n ou.</div>
+      </div>
+
+      <button class="dp-btn-soft" onclick="logout()" data-i18n="logout">Dekonekte</button>
+      <!-- So "is my phone showing the new page?" is answered in one second
+           instead of both of us guessing. The old footer carried this and the
+           footer is hidden once the portal takes over. -->
+      <div style="text-align:center;margin-top:14px;font-size:11px;color:#94A3B8;letter-spacing:.06em">
+        MsouWout Chof&egrave; &middot; <span id="dpBuild">v26</span>
+      </div>
+      <div style="text-align:center;margin-top:18px">
+        <button onclick="deleteAccount()" style="background:none;border:none;color:#991B1B;font-size:.82rem;font-weight:700;text-decoration:underline;cursor:pointer;font-family:inherit" data-i18n="del_account">Efase kont mwen</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ══════════════ THE ONE FIXED ACTION SLOT ══════════════
+       "Keep the main action button in the exact same physical position
+       through AKSEPTE → ALE CHÈCHE → MWEN RIVE → KÒMANSE KOUS → FINI KOUS.
+       That is very important."
+       So every main action is rendered HERE and nowhere else. The two
+       wrappers below keep the ids the existing code already toggles. -->
+  <div class="dp-slot" id="dpSlot" style="display:none">
+    <div class="dp-slot-inner">
+      <a class="dp-nav-link" id="dpNavLink" href="#" target="_blank" rel="noopener" style="display:none"></a>
       <button class="btn-arrived" id="btnArrived" onclick="markArrived()" data-i18n="arrived_btn">M rive - avize pasaje a</button>
-      <div class="pin-entry" id="pinEntrySection">
-        <div class="pin-entry-label" data-i18n="enter_ride_pin">Mande pasaje a pou PIN nan</div>
-        <input type="tel" maxlength="4" class="pin-input-ride" id="ridePinInput" placeholder="- - - -" inputmode="numeric" pattern="[0-9]*">
-        <div class="pin-feedback" id="pinFeedback"></div>
-        <button class="btn-start-ride" id="btnStartRide" onclick="startRide()" data-i18n="start_ride_btn">Kòmanse Kous</button>
+      <div class="pin-entry" id="pinEntrySection" style="display:none">
+        <button class="btn-start-ride" id="btnStartRide" onclick="startRide()" data-i18n="start_ride_btn">K&ograve;manse Kous</button>
       </div>
       <div id="inProgressSection" style="display:none">
         <button class="btn-complete-ride" id="btnCompleteRide" onclick="completeRide()" data-i18n="complete_ride_btn">Fini Kous</button>
       </div>
-      <!-- A driver who breaks down or cannot reach the passenger has to be able to
-           give the ride back, otherwise it stays 'accepted' forever and she waits
-           for a car that is never coming. -->
-      <button class="btn-cancel-ride" id="btnCancelRide" onclick="driverCancel()" data-i18n="cancel_ride_btn">Anile kous la</button>
-    </div>
-
-    <!-- Incoming requests. Until now a driver learned about a ride only at login,
-         which meant a passenger could order and nothing would ever appear here. -->
-    <div class="active-ride-card" id="incomingCard" style="display:none;border-color:#F59E0B">
-      <h3>&#128276; <span data-i18n="inc_title">Demann Kous</span> <span id="incCount" style="font-weight:900"></span></h3>
-      <button id="alertBtn" onclick="enableAlerts()" style="width:100%;margin:0 0 10px;padding:13px;border:0;border-radius:12px;background:#166534;color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer" data-i18n="alert_on">🔔 Limen alèt pou nouvo kous</button>
-      <div id="alertMsg" style="font-size:12.5px;line-height:1.45;margin:-4px 0 10px;color:#166534"></div>
-      <div id="incomingList"></div>
-      <div id="incomingEmpty" class="sub" style="color:#64748B;font-size:13.5px" data-i18n="inc_empty">Pa gen demann kounye a. Paj sa a ap gade pou kont li.</div>
-      <!-- Say the limit on the screen itself. A driver who thinks he will be called
-           will put the phone in his pocket and miss every ride. -->
-      <div style="margin-top:10px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:10px;font-size:12.5px;color:#92400E;line-height:1.5" data-i18n="inc_sound_note">&#128266; W ap tande yon son lè yon demann rive. Sa mache SÈLMAN si paj sa a rete louvri sou telefòn ou.</div>
-      <!-- A driver who logs in and sees an empty board has no idea what he is
-           supposed to do. These are the five taps, on the screen, in his own
-           language — nobody has to be trained by phone. -->
-      <div style="margin-top:10px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:12px">
-        <div style="font-weight:900;font-size:13px;color:#166534;margin-bottom:8px" data-i18n="guide_title">&#9989; Kijan sa mache</div>
-        <!-- A picture is read faster than a sentence by someone who has never
-             used an app before, so each step leads with its own icon. -->
-        <div style="display:grid;gap:9px;font-size:12.5px;color:#14532D;line-height:1.45">
-          <div style="display:flex;gap:9px;align-items:center"><span style="font-size:20px;line-height:1;flex:none">&#128241;</span><span data-i18n="guide_1">Kite paj sa a louvri.</span></div>
-          <div style="display:flex;gap:9px;align-items:center"><span style="font-size:20px;line-height:1;flex:none">&#128276;</span><span data-i18n="guide_2">Demann rive ak yon son. Peze Aksepte Kous La.</span></div>
-          <div style="display:flex;gap:9px;align-items:center"><span style="font-size:20px;line-height:1;flex:none">&#128663;</span><span data-i18n="guide_3">Rele pasaje a. Peze Ale chèche l.</span></div>
-          <div style="display:flex;gap:9px;align-items:center"><span style="font-size:20px;line-height:1;flex:none">&#128290;</span><span data-i18n="guide_4">Mande kòd 4 chif la. Peze Kòmanse Kous.</span></div>
-          <div style="display:flex;gap:9px;align-items:center"><span style="font-size:20px;line-height:1;flex:none">&#9989;</span><span data-i18n="guide_5">Peze Fini Kous. Lajan ou monte.</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="kpi-grid" id="kpiGrid"></div>
-
-    <!-- 26 Sep: how he wants his money. He may choose the METHOD and his wallet
-         number himself; the bank ACCOUNT NUMBER is entered by an administrator,
-         because /api/drivers/login authenticates on a phone number alone and an
-         account number behind that door belongs to whoever opened the app. -->
-    <div class="payout-card" id="payoutCard" style="display:none">
-      <h3>&#128176; <span data-i18n="pay_title">Kijan ou vle peye</span></h3>
-      <div class="payout-sums" id="payoutSums"></div>
-      <div class="payout-methods" id="payoutMethods"></div>
-      <div id="payoutWallet"></div>
-      <div class="payout-note" id="payoutNote"></div>
-      <div class="payout-runs" id="payoutRuns"></div>
-    </div>
-
-    <div class="status-card" id="statusCard">
-      <span class="status-badge" id="statusBadge"></span>
-      <div class="status-msg" id="statusMsg"></div>
-    </div>
-
-    <div class="profile-card">
-      <h3>&#128203; <span data-i18n="profile_title">Pwofil Ou</span></h3>
-      <div class="profile-grid" id="profileGrid"></div>
-    </div>
-
-    <div class="rides-card">
-      <h3>&#128663; <span data-i18n="rides_title">Istwa Kous</span></h3>
-      <div id="ridesContent"></div>
-    </div>
-
-    <div style="text-align:center;margin-top:24px">
-      <button onclick="deleteAccount()" style="background:none;border:none;color:#991B1B;font-size:.82rem;font-weight:700;text-decoration:underline;cursor:pointer;font-family:inherit" data-i18n="del_account">Efase kont mwen</button>
     </div>
   </div>
+
+  <!-- ══════════════ FOUR NAVIGATION BUTTONS, FIXED ══════════════ -->
+  <nav class="dp-nav" id="dpNav" style="display:none">
+    <button class="active" data-dptab="home"  onclick="dpGo('home')"><span class="ni">&#127968;</span><span data-i18n="dp_home">Ak&egrave;y</span></button>
+    <button data-dptab="rides" onclick="dpGo('rides')"><span class="ni">&#128663;</span><span data-i18n="dp_rides">Kous</span></button>
+    <button data-dptab="earn"  onclick="dpGo('earn')"><span class="ni">&#128176;</span><span data-i18n="dp_earn">Revni</span></button>
+    <button data-dptab="acct"  onclick="dpGo('acct')"><span class="ni">&#128100;</span><span data-i18n="dp_acct">Kont</span></button>
+  </nav>
+
+  <div class="dp-scrim" id="dpScrim" onclick="dpMenu(false)"></div>
+  <aside class="dp-drawer" id="dpDrawer">
+    <div class="dh">
+      <div class="n" id="dpDrawerName"></div>
+      <div class="p" id="dpDrawerSub"></div>
+    </div>
+    <a href="#" onclick="dpMenu(false);dpGo('acct');return false"><span class="mi">&#128100;</span><span data-i18n="dp_acct">Kont</span></a>
+    <a href="#" onclick="dpMenu(false);dpGo('earn');return false"><span class="mi">&#128176;</span><span data-i18n="dp_earn">Revni</span></a>
+    <a href="#" onclick="dpMenu(false);dpGo('rides');return false"><span class="mi">&#128663;</span><span data-i18n="dp_rides">Kous</span></a>
+    <a href="#" class="out" onclick="dpMenu(false);logout();return false"><span class="mi">&#128682;</span><span data-i18n="logout">Dekonekte</span></a>
+  </aside>
 </section>
+
 
 <!-- FOOTER -->
 <footer>
@@ -634,7 +886,7 @@ const T={
     alert_on:"🔔 Limen alèt pou nouvo kous",alert_ok:"✅ Alèt limen — w ap konnen menm si paj la fèmen",alert_no:"Telefòn ou pa sipòte alèt yo",alert_denied:"Ou refize alèt yo. Louvri paramèt navigatè a pou pèmèt yo.",alert_wait:"Y ap limen…",
     pay_title:"Kijan ou vle peye",pay_owed:"Yo dwe w",pay_inpay:"Nan pwosesis",pay_settled:"Yo peye w",pay_moncash:"MonCash",pay_natcash:"NatCash",pay_bank:"Kont labank",pay_bank_sub:"Yon administratè antre nimewo kont lan",pay_wallet_ph:"Nimewo w pou resevwa lajan",pay_save:"Anrejistre",pay_locked:"Yo ap trete yon peman kounye a, kidonk ou pa ka chanje anyen jiskaske li fini. Sa pwoteje lajan ki deja sou wout la.",pay_bank_none:"Ou chwazi labank. Yon administratè dwe antre enfòmasyon kont ou anvan yo ka fè yon vire.",pay_hint:"Lajan yo dwe w anrejistre men yo poko voye l. Se lè li make peye ak yon referans ou gen li nan men w.",pay_run_paid:"peye",pay_run_wait:"ap tann apwobasyon",pay_run_ok:"apwouve",
     active_ride_title:"Kous Aktif",enter_ride_pin:"Mande pasaje a pou kòd PIN nan",
-    arrived_btn:"M rive - avize pasaje a",arrived_done:"Pasaje a avize",presence_on:"Ou an liy - w ap resevwa kous",presence_off:"Ou make kòm deyò - men w ap toujou resevwa demann",presence_go_on:"Ale an liy",presence_go_off:"Soti",presence_hint_on:"Kite paj la louvri pou w resevwa demann yo.",presence_hint_off:"Peze Ale an liy lè w pare pou travay.",presence_fail:"Nou pa ka chanje sa kounye a. Eseye ankò.",geo_denied:"Ou an liy. GPS fèmen - ou ka toujou resevwa kous.",geo_unavailable:"Ou an liy. Nou pa ka jwenn pozisyon w kounye a.",start_ride_btn:"Kòmanse Kous",complete_ride_btn:"Fini Kous",
+    dp_hello:"Bonjou",dp_home:"Akèy",dp_rides:"Kous",dp_earn:"Revni",dp_acct:"Kont",dp_revni:"Revni mwen",dp_see_revni:"WÈ DETAY REVNI",dp_waiting:"AP TANN YON KOUS...",dp_waiting_b:"N ap avèti w lè yon nouvo demann rive.",dp_s1:"Tann kliyan an peye",dp_s1b:"Se pasajè a ki peye, pa ou.",dp_s2:"Peman konfime",dp_s2b:"Se sèvè a ki di lè li bon.",dp_s3:"Antre kòd 4 chif kliyan an",dp_s3b:"Mande l kòd la.",arrived_btn:"M rive - avize pasaje a",arrived_done:"Pasaje a avize",presence_on:"Ou an liy - w ap resevwa kous",presence_off:"Ou make kòm deyò - men w ap toujou resevwa demann",presence_go_on:"Ale an liy",presence_go_off:"Soti",presence_hint_on:"Kite paj la louvri pou w resevwa demann yo.",presence_hint_off:"Peze Ale an liy lè w pare pou travay.",presence_fail:"Nou pa ka chanje sa kounye a. Eseye ankò.",geo_denied:"Ou an liy. GPS fèmen - ou ka toujou resevwa kous.",geo_unavailable:"Ou an liy. Nou pa ka jwenn pozisyon w kounye a.",start_ride_btn:"Kòmanse Kous",complete_ride_btn:"Fini Kous",
     pin_wrong:"PIN pa kòrèk. Eseye ankò.",pin_verified:"PIN verifye! Kous kòmanse!",
     ride_started:"Kous an kou...",ride_completed_msg:"Kous fini! Mèsi.",
     lbl_tracking:"Kòd Swiv",lbl_price:"Pri",lbl_type:"Tip",lbl_passenger:"Pasaje",
@@ -672,7 +924,7 @@ const T={
     alert_on:"🔔 Activer les alertes de course",alert_ok:"✅ Alertes activées — même page fermée",alert_no:"Votre téléphone ne supporte pas les alertes",alert_denied:"Vous avez refusé les alertes. Autorisez-les dans les réglages du navigateur.",alert_wait:"Activation…",
     pay_title:"Comment vous êtes payé",pay_owed:"Dû",pay_inpay:"En cours",pay_settled:"Payé",pay_moncash:"MonCash",pay_natcash:"NatCash",pay_bank:"Compte bancaire",pay_bank_sub:"Un administrateur saisit le numéro de compte",pay_wallet_ph:"Votre numéro pour recevoir l'argent",pay_save:"Enregistrer",pay_locked:"Un paiement est en cours de traitement, vous ne pouvez rien changer jusqu'à ce qu'il soit réglé. Cela protège l'argent déjà en route.",pay_bank_none:"Banque choisie. Un administrateur doit encore saisir vos coordonnées avant qu'un virement soit possible.",pay_hint:"Les montants dus sont enregistrés mais pas encore envoyés. L'argent est à vous une fois marqué payé avec une référence.",pay_run_paid:"payé",pay_run_wait:"en attente d'approbation",pay_run_ok:"approuvé",
     active_ride_title:"Course Active",enter_ride_pin:"Demandez le code PIN au passager",
-    arrived_btn:"Je suis arrivé - prévenir le passager",arrived_done:"Passager prévenu",presence_on:"Vous êtes en ligne - vous recevez des courses",presence_off:"Marqué hors ligne - vous recevez toujours les demandes",presence_go_on:"Se mettre en ligne",presence_go_off:"Se retirer",presence_hint_on:"Gardez la page ouverte pour recevoir les demandes.",presence_hint_off:"Appuyez sur Se mettre en ligne quand vous êtes prêt.",presence_fail:"Impossible de changer cela maintenant. Réessayez.",geo_denied:"En ligne. GPS refusé - vous recevez quand même des courses.",geo_unavailable:"En ligne. Position indisponible pour le moment.",start_ride_btn:"Demarrer la Course",complete_ride_btn:"Terminer la Course",
+    dp_hello:"Bonjour",dp_home:"Accueil",dp_rides:"Courses",dp_earn:"Revenus",dp_acct:"Compte",dp_revni:"Mes revenus",dp_see_revni:"VOIR LE DÉTAIL",dp_waiting:"EN ATTENTE D'UNE COURSE...",dp_waiting_b:"Nous vous prévenons dès qu'une demande arrive.",dp_s1:"Attendre le paiement du client",dp_s1b:"C'est le passager qui paie, pas vous.",dp_s2:"Paiement confirmé",dp_s2b:"C'est le serveur qui le confirme.",dp_s3:"Saisir le code à 4 chiffres du client",dp_s3b:"Demandez-lui le code.",arrived_btn:"Je suis arrivé - prévenir le passager",arrived_done:"Passager prévenu",presence_on:"Vous êtes en ligne - vous recevez des courses",presence_off:"Marqué hors ligne - vous recevez toujours les demandes",presence_go_on:"Se mettre en ligne",presence_go_off:"Se retirer",presence_hint_on:"Gardez la page ouverte pour recevoir les demandes.",presence_hint_off:"Appuyez sur Se mettre en ligne quand vous êtes prêt.",presence_fail:"Impossible de changer cela maintenant. Réessayez.",geo_denied:"En ligne. GPS refusé - vous recevez quand même des courses.",geo_unavailable:"En ligne. Position indisponible pour le moment.",start_ride_btn:"Demarrer la Course",complete_ride_btn:"Terminer la Course",
     pin_wrong:"PIN incorrect. Reessayez.",pin_verified:"PIN verifie! Course demarree!",
     ride_started:"Course en cours...",ride_completed_msg:"Course terminee! Merci.",
     lbl_tracking:"Code Suivi",lbl_price:"Prix",lbl_type:"Type",lbl_passenger:"Passager",
@@ -710,7 +962,7 @@ const T={
     alert_on:"🔔 Turn on new-ride alerts",alert_ok:"✅ Alerts on — you will know even if this page is closed",alert_no:"This phone does not support alerts",alert_denied:"You blocked alerts. Allow them in your browser settings.",alert_wait:"Turning on…",
     pay_title:"How you get paid",pay_owed:"Owed to you",pay_inpay:"Being paid",pay_settled:"Paid",pay_moncash:"MonCash",pay_natcash:"NatCash",pay_bank:"Bank account",pay_bank_sub:"An administrator enters the account number",pay_wallet_ph:"Your number for receiving money",pay_save:"Save",pay_locked:"A payment is being processed right now, so nothing can change until it settles. This protects the money already on its way to you.",pay_bank_none:"Bank chosen. An administrator still has to enter your account details before a transfer can be made.",pay_hint:"Amounts owed are recorded but not sent. It is money in your hands once it shows paid with a reference.",pay_run_paid:"paid",pay_run_wait:"waiting for approval",pay_run_ok:"approved",
     active_ride_title:"Active Ride",enter_ride_pin:"Ask the passenger for the PIN code",
-    arrived_btn:"I have arrived - tell the passenger",arrived_done:"Passenger told",presence_on:"You are online - receiving rides",presence_off:"Marked offline - you still receive requests",presence_go_on:"Go online",presence_go_off:"Go offline",presence_hint_on:"Keep this page open to receive requests.",presence_hint_off:"Press Go online so we can see where you are. Requests still appear either way.",presence_fail:"We cannot change that right now. Try again.",geo_denied:"Online. GPS is off - you still receive rides.",geo_unavailable:"Online. We cannot find your position right now.",start_ride_btn:"Start Ride",complete_ride_btn:"Complete Ride",
+    dp_hello:"Hello",dp_home:"Home",dp_rides:"Rides",dp_earn:"Earnings",dp_acct:"Account",dp_revni:"My earnings",dp_see_revni:"SEE EARNINGS DETAIL",dp_waiting:"WAITING FOR A RIDE...",dp_waiting_b:"We will alert you when a new request arrives.",dp_s1:"Wait for the customer to pay",dp_s1b:"The passenger pays, not you.",dp_s2:"Payment confirmed",dp_s2b:"The server is what confirms it.",dp_s3:"Enter the customer's 4-digit code",dp_s3b:"Ask them for the code.",arrived_btn:"I have arrived - tell the passenger",arrived_done:"Passenger told",presence_on:"You are online - receiving rides",presence_off:"Marked offline - you still receive requests",presence_go_on:"Go online",presence_go_off:"Go offline",presence_hint_on:"Keep this page open to receive requests.",presence_hint_off:"Press Go online so we can see where you are. Requests still appear either way.",presence_fail:"We cannot change that right now. Try again.",geo_denied:"Online. GPS is off - you still receive rides.",geo_unavailable:"Online. We cannot find your position right now.",start_ride_btn:"Start Ride",complete_ride_btn:"Complete Ride",
     pin_wrong:"Wrong PIN. Try again.",pin_verified:"PIN verified! Ride started!",
     ride_started:"Ride in progress...",ride_completed_msg:"Ride completed! Thank you.",
     lbl_tracking:"Tracking Code",lbl_price:"Price",lbl_type:"Type",lbl_passenger:"Passenger",
@@ -748,7 +1000,7 @@ const T={
     alert_on:"🔔 Activar alertas de viajes",alert_ok:"✅ Alertas activadas — aunque la página esté cerrada",alert_no:"Este teléfono no soporta alertas",alert_denied:"Bloqueaste las alertas. Actívalas en los ajustes del navegador.",alert_wait:"Activando…",
     pay_title:"Cómo le pagamos",pay_owed:"Se le debe",pay_inpay:"En proceso",pay_settled:"Pagado",pay_moncash:"MonCash",pay_natcash:"NatCash",pay_bank:"Cuenta bancaria",pay_bank_sub:"Un administrador ingresa el número de cuenta",pay_wallet_ph:"Su número para recibir el dinero",pay_save:"Guardar",pay_locked:"Se está procesando un pago ahora mismo, así que nada puede cambiar hasta que se liquide. Esto protege el dinero que ya va en camino.",pay_bank_none:"Banco elegido. Un administrador aún debe ingresar los datos de su cuenta antes de poder transferir.",pay_hint:"Los montos adeudados están registrados pero no enviados. Es dinero suyo cuando aparece pagado con una referencia.",pay_run_paid:"pagado",pay_run_wait:"esperando aprobación",pay_run_ok:"aprobado",
     active_ride_title:"Viaje Activo",enter_ride_pin:"Pida al pasajero el codigo PIN",
-    arrived_btn:"He llegado - avisar al pasajero",arrived_done:"Pasajero avisado",presence_on:"Estás en línea - recibiendo viajes",presence_off:"Marcado sin conexión - sigues recibiendo solicitudes",presence_go_on:"Ponerse en línea",presence_go_off:"Salir",presence_hint_on:"Mantén esta página abierta para recibir solicitudes.",presence_hint_off:"Pulsa Ponerse en línea cuando estés listo.",presence_fail:"No podemos cambiar eso ahora. Inténtalo de nuevo.",geo_denied:"En línea. GPS desactivado - aún recibes viajes.",geo_unavailable:"En línea. No podemos ubicarte ahora mismo.",start_ride_btn:"Iniciar Viaje",complete_ride_btn:"Completar Viaje",
+    dp_hello:"Hola",dp_home:"Inicio",dp_rides:"Viajes",dp_earn:"Ingresos",dp_acct:"Cuenta",dp_revni:"Mis ingresos",dp_see_revni:"VER DETALLE",dp_waiting:"ESPERANDO UN VIAJE...",dp_waiting_b:"Le avisamos cuando llegue una solicitud.",dp_s1:"Espere que el cliente pague",dp_s1b:"Paga el pasajero, no usted.",dp_s2:"Pago confirmado",dp_s2b:"El servidor es quien lo confirma.",dp_s3:"Ingrese el código de 4 dígitos",dp_s3b:"Pídale el código.",arrived_btn:"He llegado - avisar al pasajero",arrived_done:"Pasajero avisado",presence_on:"Estás en línea - recibiendo viajes",presence_off:"Marcado sin conexión - sigues recibiendo solicitudes",presence_go_on:"Ponerse en línea",presence_go_off:"Salir",presence_hint_on:"Mantén esta página abierta para recibir solicitudes.",presence_hint_off:"Pulsa Ponerse en línea cuando estés listo.",presence_fail:"No podemos cambiar eso ahora. Inténtalo de nuevo.",geo_denied:"En línea. GPS desactivado - aún recibes viajes.",geo_unavailable:"En línea. No podemos ubicarte ahora mismo.",start_ride_btn:"Iniciar Viaje",complete_ride_btn:"Completar Viaje",
     pin_wrong:"PIN incorrecto. Intenta de nuevo.",pin_verified:"PIN verificado! Viaje iniciado!",
     ride_started:"Viaje en progreso...",ride_completed_msg:"Viaje completado! Gracias.",
     lbl_tracking:"Codigo de Rastreo",lbl_price:"Precio",lbl_type:"Tipo",lbl_passenger:"Pasajero",
@@ -855,6 +1107,7 @@ async function handleLogin(e){
     syncAlertButton();
     document.getElementById('loginSection').style.display='none';
     document.getElementById('dashboard').classList.add('active');
+    dpOn();
     renderDashboard(mapped);
     renderActiveRide(mapped.rides,mapped.driver.id);
     startActiveWatch();
@@ -956,6 +1209,7 @@ async function handleLogin(e){
     syncAlertButton();
     document.getElementById('loginSection').style.display='none';
     document.getElementById('dashboard').classList.add('active');
+    dpOn();
     renderDashboard(mapped);
     renderActiveRide(mapped.rides,mapped.driver.id);
     startActiveWatch();
@@ -1091,6 +1345,14 @@ function renderDashboard(data){
       '<div class="kpi k-today"><div class="kv">'+Math.round(_sum(_todayR)).toLocaleString()+' <small>HTG</small></div><div class="kl">'+t('kpi_today')+'</div><div class="kn">'+_todayR.length+' '+t('kpi_rides_done')+'</div></div>'+
       '<div class="kpi k-week"><div class="kv">'+Math.round(_sum(_weekR)).toLocaleString()+' <small>HTG</small></div><div class="kl">'+t('kpi_week')+'</div><div class="kn">'+_weekR.length+' '+t('kpi_rides_done')+'</div></div>';
   }
+  /* the same figures, summarised for the home screen. ⛔ No new arithmetic -
+     these are the values the KPI grid was already showing. */
+  window._dpTotals = {
+    today: Math.round(_sum(_todayR)).toLocaleString()+' HTG',
+    week:  Math.round(_sum(_weekR)).toLocaleString()+' HTG',
+    total: Math.round(_sum(paidRides)).toLocaleString()+' HTG'
+  };
+  dpMoney();
 }
 
 /* ── NEW-RIDE ALERTS ───────────────────────────────────────────────────────
@@ -1183,6 +1445,10 @@ function _esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){
 function renderPayout(d){
   window._payout = d;
   var n = function(v){ return Math.round(v||0).toLocaleString(); };
+  /* the one number the home screen leads with */
+  window._dpOwed = n(d.owed)+' HTG';
+  dpMoney();
+
   document.getElementById('payoutSums').innerHTML =
     '<div class="s"><div class="sv">'+n(d.owed)+' <small>HTG</small></div><div class="sl">'+t('pay_owed')+'</div></div>'+
     '<div class="s"><div class="sv">'+n(d.in_payout)+' <small>HTG</small></div><div class="sl">'+t('pay_inpay')+'</div></div>'+
@@ -1260,11 +1526,13 @@ function logout(){
   window._driverData=null;
   window._activeRide=null;
   document.getElementById('dashboard').classList.remove('active');
+  document.body.classList.remove('dp-on','dp-has-action');
   document.getElementById('loginSection').style.display='';
   document.getElementById('phoneInput').value='';
   document.getElementById('loginError').style.display='none';
   document.getElementById('activeRideCard').style.display='none';
   document.getElementById('incomingCard').style.display='none';
+  try{ dpPaintSlot(); }catch(e){}
 }
 
 function deleteAccount(){
@@ -1287,8 +1555,16 @@ let _activeRide=null;
    nothing to redraw, and redrawing would empty the PIN box he is typing into. */
 function cardSig(r){
   if(!r)return '';
-  return [r.id,r.status,r.pickup_address,r.dropoff_address,r.customer_name,
-          r.customer_phone,r.price,r.driver_earning,r.pickup_lat,r.dropoff_lat].join('|');
+  /* 🚨 payment_status and arrived_at were NOT in this signature, so when the
+     passenger finally paid, pollActiveRide decided "nothing moved" and never
+     redrew the card. The driver's screen went on saying the ride was unpaid
+     until something else about the ride happened to change. That is Jeffery's
+     "The payment came but late" - the money was on time, the screen was not.
+     ⛔ This changes only WHEN the card is redrawn. Nothing about how a payment
+     is taken, confirmed or recorded is touched. */
+  return [r.id,r.status,r.payment_status,r.arrived_at,r.pickup_address,r.dropoff_address,
+          r.customer_name,r.customer_phone,r.price,r.driver_earning,
+          r.pickup_lat,r.dropoff_lat].join('|');
 }
 
 /* PAID / COLLECT CASH, in the driver's own language.
@@ -1340,35 +1616,51 @@ function renderActiveRide(rides,driverId){
   const vMap={motorcycle:t('vehicle_moto'),moto:t('vehicle_moto'),car:t('vehicle_car')};
   // Where to go and who to call — the two things a driver needs once he has the
   // ride, and neither was on this card before.
+  /* 🔑 ONE SCREEN = ONE JOB. "a 12-year-old should be able to use this without
+     anybody explaining it." So each step shows only what that step needs:
+
+       driving to her   name · where to collect her · what he earns
+       arrived          name · the payment sequence and her code
+       carrying her     name · where he is taking her
+
+     ⛔ Nothing is deleted - the tracking code, her phone, the vehicle type and
+     the fare are all still on the ride, and still on the Kous page. They are
+     simply not competing with the one button he has to press. */
+  var _goingTo = (active.status === 'in_progress');
+  var _row = function(icon, label, value){
+    if(value === null || value === undefined || value === '') return '';
+    return '<div class="ride-info-row"><span class="ride-info-label">'+icon+' '+label
+         + '</span><span class="ride-info-value">'+value+'</span></div>';
+  };
   info.innerHTML=
-    '<div class="ride-info-row"><span class="ride-info-label">&#127915; '+t('lbl_tracking')+'</span><span class="ride-info-value">'+esc(active.tracking_code||'—')+'</span></div>'+
-    '<div class="ride-info-row"><span class="ride-info-label">&#128100; '+t('lbl_passenger')+'</span><span class="ride-info-value">'+esc(active.customer_name||'Kliyan')+'</span></div>'+
-    (active.customer_phone?'<div class="ride-info-row"><span class="ride-info-label">&#128222; '+t('lbl_phone')+'</span><span class="ride-info-value"><a href="tel:'+esc(active.customer_phone)+'">'+esc(active.customer_phone)+'</a></span></div>':'')+
-    (active.pickup_address?'<div class="ride-info-row"><span class="ride-info-label">&#128205; '+t('lbl_pickup')+'</span><span class="ride-info-value">'+esc(active.pickup_address)+'</span></div>':'')+
-    (active.dropoff_address?'<div class="ride-info-row"><span class="ride-info-label">&#127937; '+t('lbl_dropoff')+'</span><span class="ride-info-value">'+esc(active.dropoff_address)+'</span></div>':'')+
-    '<div class="ride-info-row"><span class="ride-info-label">&#128664; '+t('lbl_type')+'</span><span class="ride-info-value">'+(vMap[(active.ride_type||'').toLowerCase()]||active.ride_type||'—')+'</span></div>'+
-    '<div class="ride-info-row"><span class="ride-info-label">&#128181; '+t('lbl_price')+'</span><span class="ride-info-value">'+(active.price||0)+' HTG</span></div>'+
-    '<div class="ride-info-row"><span class="ride-info-label">&#128176; '+t('lbl_earning')+'</span><span class="ride-info-value">'+(active.driver_earning||0)+' HTG</span></div>'+
+    _row('&#128100;', t('lbl_passenger'), esc(active.customer_name||'Kliyan'))+
+    (active.customer_phone
+      ? _row('&#128222;', t('lbl_phone'),
+             '<a href="tel:'+esc(active.customer_phone)+'">'+esc(active.customer_phone)+'</a>')
+      : '')+
+    (_goingTo
+      ? _row('&#127937;', t('lbl_dropoff'), esc(active.dropoff_address||''))
+      : _row('&#128205;', t('lbl_pickup'),  esc(active.pickup_address||'')))+
+    (_goingTo ? '' : _row('&#128176;', t('lbl_earning'), (active.driver_earning||0)+' HTG'))+
     /* Whether to ask for money at the end. Without this the driver has no way
        of knowing she already paid in the app, so he asks anyway and she pays
        twice - which is worse than not taking app payments at all. The value
        comes from the ride record, which only the gateway can set to paid. */
     payBanner(active)+
-    // Before the PIN he is driving to her; after it, to the destination.
-    '<div style="display:flex;gap:8px;margin-top:12px">'+
-      '<a href="'+navUrl(active.pickup_lat,active.pickup_lng,active.pickup_address)+'" target="_blank" rel="noopener" style="flex:1;text-align:center;padding:11px;border-radius:12px;border:1px solid #C7D2FE;background:#EEF2FF;color:#3730A3;font-weight:800;font-size:13px;text-decoration:none">&#129517; '+t('nav_pickup')+'</a>'+
-      '<a href="'+navUrl(active.dropoff_lat,active.dropoff_lng,active.dropoff_address)+'" target="_blank" rel="noopener" style="flex:1;text-align:center;padding:11px;border-radius:12px;border:1px solid #E2E8F0;background:#F8FAFC;color:#475569;font-weight:800;font-size:13px;text-decoration:none">&#129517; '+t('nav_drop')+'</a>'+
-    '</div>'+
-    /* A map that opens INSIDE the app. The two buttons above hand off to Google
-       Maps in a new tab, and a new tab is exactly what an installed app shell
-       tends to swallow - which is why "the map didn't come up" after accepting.
-       This one is a same-tab link to our own tracking page, so it always opens. */
-    (active.tracking_code
-      ? '<a href="track.html?code='+encodeURIComponent(active.tracking_code)+'"'
-        +' style="display:block;margin-top:8px;text-align:center;padding:11px;border-radius:12px;'
-        +'border:1px solid #BFDBFE;background:#EFF6FF;color:#0F6FBF;font-weight:800;'
-        +'font-size:13px;text-decoration:none">&#128205; '+t('nav_map')+'</a>'
-      : '');
+    /* ⛔ The two navigation buttons used to sit here as well. There is now ONE,
+       in the fixed slot beside the action it belongs to, and it already points
+       at the pickup before the code and the destination after it. Two buttons
+       saying "Ale chèche l" on one screen is the clutter he asked me to remove. */
+    '';
+
+  /* ⛔ THE LINK TO track.html IS GONE.
+     It opened the PASSENGER tracking page from inside the driver's portal,
+     which is why Jeffery was looking at "Rele Chofè" - an offer to telephone
+     himself - plus Sekirite Fanmi, "M pa gen kòd la", Pataje and a five-step
+     passenger progress bar, and asked me why his own portal was so cluttered.
+     It was not his portal. He now gets his own map, below, and nothing from
+     the passenger experience is reachable from here. */
+  dpDrawMap(active);
 
   const pinSection=document.getElementById('pinEntrySection');
   const progressSection=document.getElementById('inProgressSection');
@@ -1377,14 +1669,28 @@ function renderActiveRide(rides,driverId){
 
   if(active.status==='accepted'){
     card.classList.remove('ride-started');
-    pinSection.style.display='block';
+    /* ⚠️ The code BOXES stayed in the card and the START button moved into the
+       fixed slot, so the two halves are shown together by one helper. Nothing
+       about how a PIN is checked changed - startRide() still reads
+       #ridePinInput exactly as before. */
+    /* 🔑 ONE SCREEN = ONE BUTTON. Before he says he is there, the only action is
+       MWEN RIVE; the code and its button appear only afterwards. Both used to be
+       on screen together, which is two choices where he asked for one. */
+    dpShowPin(!!active.arrived_at);
     progressSection.style.display='none';
-    document.getElementById('ridePinInput').value='';
+    /* ⚠️ This used to wipe the box on every redraw. Now that a redraw also
+       happens the moment payment confirms, that would erase a code the driver
+       was halfway through typing, with the passenger reading it out to him.
+       Clear it only when this is a DIFFERENT ride. */
+    var _pin=document.getElementById('ridePinInput');
+    if(_pin && window._dpPinRide !== active.id){ _pin.value=''; }
+    window._dpPinRide = active.id;
   }else if(active.status==='in_progress'){
     card.classList.add('ride-started');
-    pinSection.style.display='none';
+    dpShowPin(false);
     progressSection.style.display='block';
   }
+  dpPaintSlot(active);
 }
 
 // ========== INCOMING RIDE REQUESTS ==========
@@ -1417,6 +1723,10 @@ function presenceDriverId(){
 }
 
 function paintPresence(){
+  /* the home screen needs to know, to decide whether "AP TANN YON KOUS" makes
+     any sense to show. ⛔ Reading the existing flag, not owning it. */
+  try{ window._dpOnline = !!_online; }catch(e){}
+  setTimeout(dpPaintSlot, 0);
   var bar=document.getElementById('presenceBar');
   if(!bar) return;
   bar.classList.toggle('on',!!_online);
@@ -1550,6 +1860,7 @@ function startIncoming(){
   const d=(window._driverData&&window._driverData.driver)||{};
   if(d.status!=='approved')return;              // a pending driver may not take rides
   document.getElementById('incomingCard').style.display='block';
+  try{ dpPaintSlot(); }catch(e){}
   // The demo login is a preview built in the page itself — it has no account on the
   // server, so it could show real requests and then fail to accept one. Say so here
   // instead of letting a driver discover it with a passenger waiting.
@@ -1579,6 +1890,11 @@ function startActiveWatch(){
   if(!d.id||d.id==='demo')return;
   clearInterval(_activePoll);
   _activePoll=setInterval(pollActiveRide,20000);
+  /* ⚠️ This only set the timer, so the first check was 20 seconds away. A
+     driver who reloads mid-ride - which is exactly what happens when a new
+     version of this page ships - stared at a screen with no ride on it for
+     twenty seconds before it appeared. Ask once, now. */
+  pollActiveRide();
 }
 function stopActiveWatch(){clearInterval(_activePoll);_activePoll=null;}
 
@@ -1795,6 +2111,8 @@ async function markArrived(){
     btn.classList.add('done');
     btn.textContent=t('arrived_done');
     if(navigator.vibrate) navigator.vibrate(40);
+    /* presentation only: hand the slot over to the next single action */
+    try{ dpShowPin(true); dpPaintSlot(_activeRide); }catch(_e){}
   }catch(e){
     /* Say so rather than look successful - she is waiting on this. */
     btn.disabled=false; btn.textContent=was;
@@ -1834,7 +2152,7 @@ async function startRide(){
     fb.textContent=t('pin_verified');fb.className='pin-feedback success';
     _activeRide.status='in_progress';
     setTimeout(()=>{
-      document.getElementById('pinEntrySection').style.display='none';
+      dpShowPin(false);
       document.getElementById('inProgressSection').style.display='block';
       document.getElementById('activeRideCard').classList.add('ride-started');
       fb.style.display='none';
@@ -1860,7 +2178,7 @@ async function completeRide(){
       const fb=document.getElementById('pinFeedback');
       fb.textContent=t('ride_completed_msg');fb.className='pin-feedback success';
       document.getElementById('inProgressSection').style.display='none';
-      document.getElementById('pinEntrySection').style.display='none';
+      dpShowPin(false);
       fb.style.display='block';
       setTimeout(()=>{document.getElementById('activeRideCard').style.display='none';},3000);
       _activeRide=null;   // free to take the next request
@@ -1922,6 +2240,208 @@ async function refreshEarnings(){
 }
 
 setLang('ht');
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THE REBUILT PORTAL — presentation only.
+
+   ⛔ Nothing in this block decides anything about a ride, a payment, a PIN, a
+   dispatch, a cancellation or the ledger. It decides what is on the screen.
+   Every function the portal already had is untouched and still the only place
+   those decisions are made.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+var _dpTab = 'home';
+
+function dpGo(tab){
+  _dpTab = tab;
+  var map = {home:'dpTabHome', rides:'dpTabRides', earn:'dpTabEarn', acct:'dpTabAcct'};
+  Object.keys(map).forEach(function(k){
+    var el = document.getElementById(map[k]);
+    if(el) el.style.display = (k === tab ? '' : 'none');
+  });
+  document.querySelectorAll('.dp-nav button').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-dptab') === tab);
+  });
+  dpPaintSlot();
+  window.scrollTo({top:0});
+  /* Leaflet measures its container once. Coming back to a tab that was hidden
+     leaves it measured at zero, which is the fault that made the passenger's
+     map show the wrong part of town. Re-measure. */
+  if(tab === 'home' && window._dpMap){
+    setTimeout(function(){ try{ _dpMap.invalidateSize(false); }catch(e){} }, 60);
+  }
+}
+
+function dpMenu(open){
+  var sc = document.getElementById('dpScrim'), dr = document.getElementById('dpDrawer');
+  if(!sc || !dr) return;
+  sc.classList.toggle('show', !!open);
+  dr.classList.toggle('show', !!open);
+}
+
+/* The code boxes live in the card, the START button lives in the fixed slot.
+   They are one step, so they are shown and hidden together. */
+function dpShowPin(on){
+  var slotPart = document.getElementById('pinEntrySection');
+  var bodyPart = document.getElementById('pinEntryBody');
+  if(slotPart) slotPart.style.display = on ? 'block' : 'none';
+  if(bodyPart) bodyPart.style.display = on ? 'block' : 'none';
+  var seq = document.getElementById('dpSeq');
+  if(seq) seq.style.display = on ? 'block' : 'none';
+}
+
+/* 🔑 THE ONE FIXED SLOT.
+   "Keep the main action button in the exact same physical position through
+   AKSEPTE -> ALE CHÈCHE -> MWEN RIVE -> KÒMANSE KOUS -> FINI KOUS."
+   Only one of these is ever visible, and they are all the same size in the
+   same place, so nothing moves under his thumb. */
+function dpPaintSlot(active){
+  if(active !== undefined) window._dpActive = active;
+  var a = window._dpActive || null;
+  var slot = document.getElementById('dpSlot');
+  var nav  = document.getElementById('dpNav');
+  if(nav) nav.style.display = '';
+  if(!slot) return;
+
+  var card = document.getElementById('activeRideCard');
+  var onRide = !!a && card && card.style.display !== 'none';
+  /* the ride owns the screen on Akèy and Kous; the money tabs are for reading */
+  var show = onRide && (_dpTab === 'home' || _dpTab === 'rides');
+  slot.style.display = show ? '' : 'none';
+  document.body.classList.toggle('dp-has-action', !!show);
+
+  /* ⛔ Exactly one main action is ever visible. */
+  var arrivedBtn = document.getElementById('btnArrived');
+  if(arrivedBtn){
+    var showArrived = !!a && a.status === 'accepted' && !a.arrived_at;
+    arrivedBtn.style.display = showArrived ? '' : 'none';
+  }
+
+  /* the navigation hand-off, in the slot with the action rather than buried */
+  var link = document.getElementById('dpNavLink');
+  if(link && a){
+    var toPickup = (a.status === 'accepted');
+    var lat = toPickup ? a.pickup_lat  : a.dropoff_lat;
+    var lng = toPickup ? a.pickup_lng  : a.dropoff_lng;
+    var adr = toPickup ? a.pickup_address : a.dropoff_address;
+    if(lat != null && lng != null){
+      link.href = navUrl(lat, lng, adr);
+      link.textContent = '🧭 ' + t(toPickup ? 'nav_pickup' : 'nav_drop');
+      link.style.display = '';
+    } else { link.style.display = 'none'; }
+  } else if(link){ link.style.display = 'none'; }
+
+  /* waiting, only when he is online with nothing to do */
+  var w = document.getElementById('dpWaiting');
+  if(w){
+    var inc = document.getElementById('incomingCard');
+    var incOpen = inc && inc.style.display !== 'none';
+    w.style.display = (!onRide && !incOpen && window._dpOnline) ? '' : 'none';
+  }
+  dpPaintSeq();
+}
+
+/* The three numbered steps: pay -> confirm -> code. The driver never gets a
+   payment button; he is told to wait, and the server is what releases him. */
+function dpPaintSeq(){
+  var a = window._dpActive || null;
+  if(!a) return;
+  var paid = String(a.payment_status || '').toLowerCase() === 'paid';
+  var rows = [['dpSeq1','dpTick1', paid ? 'done' : 'now'],
+              ['dpSeq2','dpTick2', paid ? 'done' : 'wait'],
+              ['dpSeq3','dpTick3', paid ? 'now'  : 'wait']];
+  rows.forEach(function(r){
+    var el = document.getElementById(r[0]), tk = document.getElementById(r[1]);
+    if(el) el.className = 'dp-seqrow ' + r[2];
+    if(tk) tk.textContent = r[2] === 'done' ? '✅' : (r[2] === 'now' ? '➡️' : '⏳');
+  });
+  var body = document.getElementById('pinEntryBody');
+  if(body) body.classList.toggle('dp-dim', !paid);
+  var btn = document.getElementById('btnStartRide');
+  if(btn && !btn.disabled){
+    /* ⛔ Presentation only - startRide() and the server still decide whether a
+       ride may start. This just stops him typing a code before she has paid. */
+    btn.style.opacity = paid ? '' : '.55';
+  }
+}
+
+/* The driver's own map. Guarded: if Leaflet is missing the portal still works,
+   it simply has no map - it must never take the ride screen down with it. */
+function dpDrawMap(a){
+  var wrap = document.getElementById('dpMapWrap');
+  if(!wrap) return;
+  if(typeof L === 'undefined' || !a || a.pickup_lat == null){
+    wrap.style.display = 'none';
+    return;
+  }
+  wrap.style.display = '';
+  try{
+    if(!window._dpMap){
+      window._dpMap = L.map('dpMap', {zoomControl:false, attributionControl:false})
+                       .setView([a.pickup_lat, a.pickup_lng], 14);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19})
+       .addTo(window._dpMap);
+      window._dpPins = [];
+    }
+    (window._dpPins || []).forEach(function(m){ try{ _dpMap.removeLayer(m); }catch(e){} });
+    window._dpPins = [];
+    var pts = [];
+    function pin(lat,lng,color,label){
+      if(lat == null || lng == null) return;
+      var m = L.circleMarker([lat,lng], {radius:9, color:'#fff', weight:3,
+              fillColor:color, fillOpacity:1}).addTo(_dpMap);
+      if(label) m.bindTooltip(label, {permanent:false});
+      _dpPins.push(m); pts.push([lat,lng]);
+    }
+    pin(a.pickup_lat,  a.pickup_lng,  '#12A150', t('nav_pickup'));
+    pin(a.dropoff_lat, a.dropoff_lng, '#D21034', t('nav_drop'));
+    if(pts.length >= 2){
+      var line = L.polyline(pts, {color:'#00209F', weight:4, dashArray:'9 7'}).addTo(_dpMap);
+      _dpPins.push(line);
+    }
+    setTimeout(function(){
+      try{
+        _dpMap.invalidateSize(false);
+        if(pts.length >= 2) _dpMap.fitBounds(pts, {padding:[28,28], maxZoom:16});
+        else if(pts.length) _dpMap.setView(pts[0], 15);
+      }catch(e){}
+    }, 80);
+  }catch(e){ wrap.style.display = 'none'; }
+}
+
+/* Home money. "the most important number for a driver is probably Yo dwe w" */
+function dpMoney(){
+  var owed = document.getElementById('dpOwed');
+  var grid = document.getElementById('dpMoneyGrid');
+  if(owed && window._dpOwed != null) owed.textContent = window._dpOwed;
+  if(grid && window._dpTotals){
+    var x = window._dpTotals;
+    grid.innerHTML =
+      '<div><div class="k">' + t('kpi_today') + '</div><div class="v">' + x.today + '</div></div>' +
+      '<div><div class="k">' + t('kpi_week')  + '</div><div class="v">' + x.week  + '</div></div>' +
+      '<div><div class="k">' + t('kpi_earned')+ '</div><div class="v">' + x.total + '</div></div>';
+  }
+}
+
+/* Once he is logged in the portal owns the screen: the public marketing page,
+   its navbar and its footer are not part of a working tool. */
+function dpOn(){
+  document.body.classList.add('dp-on');
+  var nav = document.getElementById('dpNav');
+  if(nav) nav.style.display = '';
+  var d = (window._driverData && window._driverData.driver) || {};
+  var nm = document.getElementById('driverName');
+  var dn = document.getElementById('dpDrawerName');
+  if(nm && dn) dn.textContent = nm.textContent || (d.full_name || '');
+  /* the plate pill in the header, and the same line in the menu */
+  var plate = document.getElementById('dpPlate');
+  if(plate) plate.textContent = d.license_plate ? ('🚗 ' + d.license_plate) : '';
+  var sub = document.getElementById('dpDrawerSub');
+  if(sub) sub.textContent = [d.license_plate ? '🚗 ' + d.license_plate : '', d.phone || '']
+                            .filter(Boolean).join(' · ');
+  dpGo(_dpTab);
+}
+
 </script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
 <script id="capacitor-native-loader">
