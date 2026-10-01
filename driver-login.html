@@ -809,7 +809,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
            instead of both of us guessing. The old footer carried this and the
            footer is hidden once the portal takes over. -->
       <div style="text-align:center;margin-top:14px;font-size:11px;color:#94A3B8;letter-spacing:.06em">
-        MsouWout Chof&egrave; &middot; <span id="dpBuild">v27</span>
+        MsouWout Chof&egrave; &middot; <span id="dpBuild">v28</span>
       </div>
       <div style="text-align:center;margin-top:18px">
         <button onclick="deleteAccount()" style="background:none;border:none;color:#991B1B;font-size:.82rem;font-weight:700;text-decoration:underline;cursor:pointer;font-family:inherit" data-i18n="del_account">Efase kont mwen</button>
@@ -826,7 +826,12 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
        wrappers below keep the ids the existing code already toggles. -->
   <div class="dp-slot" id="dpSlot" style="display:none">
     <div class="dp-slot-inner">
-      <a class="dp-nav-link" id="dpNavLink" href="#" target="_blank" rel="noopener" style="display:none"></a>
+      <!-- 🔑 NO target="_blank". Jeffery, 1 Oct: "had a problem to be redirected
+           to the MsouWout after". A new tab is exactly that problem: Android
+           hands off to the Google Maps app, and when he comes back to Chrome
+           he lands on the EXTRA TAB, not on his ride. Same tab means Back
+           brings him straight back to the ride he was working. -->
+      <a class="dp-nav-link" id="dpNavLink" href="#" rel="noopener" style="display:none"></a>
       <button class="btn-arrived" id="btnArrived" onclick="markArrived()" data-i18n="arrived_btn">M rive - avize pasaje a</button>
       <div class="pin-entry" id="pinEntrySection" style="display:none">
         <button class="btn-start-ride" id="btnStartRide" onclick="startRide()" data-i18n="start_ride_btn">K&ograve;manse Kous</button>
@@ -1894,6 +1899,22 @@ function stopIncoming(){clearInterval(_incPoll);_incPoll=null;_knownInc=null;}
    Slower than the offer poll: nothing here is time-critical, it only has to
    stop being WRONG. */
 var _activePoll=null;
+/* 🔑 THE MOMENT HE COMES BACK.
+   He leaves for Google Maps, or locks the phone, or answers WhatsApp. Without
+   this the page sits on whatever it last drew until the 20-second poll comes
+   round - so he returns, looks at a stale screen, and presses nothing.
+   ⛔ This touches no navigation and no ride logic: it asks the server what the
+   state is, which is the same thing the timer already does. */
+function dpRefreshOnReturn(){
+  if(document.visibilityState !== 'visible') return;
+  try{ if(typeof pollActiveRide === 'function') pollActiveRide(); }catch(e){}
+  try{ if(typeof pollIncoming === 'function' && _online) pollIncoming(); }catch(e){}
+}
+document.addEventListener('visibilitychange', dpRefreshOnReturn);
+/* Android restores a backgrounded tab from the back/forward cache, and that
+   fires pageshow rather than visibilitychange. */
+window.addEventListener('pageshow', dpRefreshOnReturn);
+
 function startActiveWatch(){
   const d=(window._driverData&&window._driverData.driver)||{};
   if(!d.id||d.id==='demo')return;
