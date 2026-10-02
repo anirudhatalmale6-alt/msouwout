@@ -812,7 +812,15 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       </div>
     </div>
 
-    <div class="opt-label" data-i18n="triptype_label">TIP KOUS</div>
+    <!-- 🛑 ALE-RETOU IS HIDDEN FOR LAUNCH, not deleted.
+         The page doubled the distance and the price correctly, but the server
+         has no column for a return trip and threw the flag away - so the
+         passenger paid for two legs, the ride was stored as a one-way, and the
+         driver was never told to bring her back. Jeffery, 1 Oct: "we absolutely
+         cannot have someone paying double and then receiving only a one-way
+         ride." Every line of it is still here; flip MW_HIDE_UNBUILT to show it
+         again once the server side exists. -->
+    <div class="opt-label" id="tripLabel" data-i18n="triptype_label">TIP KOUS</div>
     <div class="time-toggle" id="tripToggle" style="margin-bottom:20px">
       <div class="tt-btn sel" onclick="selectTrip('oneway',this)" data-i18n="trip_oneway">Sèl ale</div>
       <div class="tt-btn" onclick="selectTrip('round',this)" data-i18n="trip_round">Ale-retou</div>
@@ -835,8 +843,11 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       </div>
     </div>
 
-    <div class="opt-label" data-i18n="when_label">KI LE</div>
-    <div class="time-toggle">
+    <!-- 🛑 PITA IS HIDDEN FOR LAUNCH, not deleted. A "for later" ride was
+         created with status 'searching', so it went out to drivers immediately
+         - it was never actually scheduled. -->
+    <div class="opt-label" id="whenLabel" data-i18n="when_label">KI LE</div>
+    <div class="time-toggle" id="whenToggle">
       <div class="tt-btn sel" onclick="selectTime('now',this)" data-i18n="now">Kounye A</div>
       <div class="tt-btn" onclick="selectTime('later',this)" data-i18n="later">Pita</div>
     </div>
@@ -2404,7 +2415,38 @@ function selectVehicle(type,el){
   updateFare();
 }
 
+
+/* ═══ TWO OPTIONS HELD BACK FOR LAUNCH ═══════════════════════════════════
+   Ale-retou and Pita both work on this page and are both discarded by the
+   server. Rather than delete working UI, they are hidden behind one flag.
+
+   ⛔ Belt AND braces: hiding the buttons is not enough on its own, because a
+   phone running a cached copy of this page could still hold the old markup.
+   So selectTrip/selectTime also REFUSE the two unbuilt choices, which means
+   nothing can send roundTrip or a schedule to the server even by accident.
+
+   To bring them back: set MW_HIDE_UNBUILT = false, once the server stores a
+   return trip and holds a scheduled ride back from the driver board. */
+var MW_HIDE_UNBUILT = true;
+
+(function hideUnbuilt(){
+  if(!MW_HIDE_UNBUILT) return;
+  function go(){
+    ['tripLabel','tripToggle','whenLabel','whenToggle','scheduleRow']
+      .forEach(function(id){
+        var el=document.getElementById(id);
+        if(el) el.style.display='none';
+      });
+    /* force the only states the server actually honours */
+    try{ tripType='oneway'; timeMode='now'; }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go);
+  else go();
+})();
+
 function selectTime(mode,el){
+  /* ⛔ 'later' is not built on the server - never let it be chosen. */
+  if(MW_HIDE_UNBUILT && mode==='later') return;
   timeMode=mode;
   el.parentElement.querySelectorAll('.tt-btn').forEach(function(b){b.classList.remove('sel')});
   el.classList.add('sel');
@@ -2413,6 +2455,8 @@ function selectTime(mode,el){
 }
 
 function selectTrip(mode,el){
+  /* ⛔ 'round' doubles the price for a ride the server stores as one-way. */
+  if(MW_HIDE_UNBUILT && mode==='round') return;
   tripType=mode;
   el.parentElement.querySelectorAll('.tt-btn').forEach(function(b){b.classList.remove('sel')});
   el.classList.add('sel');
