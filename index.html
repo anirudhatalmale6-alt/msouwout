@@ -1222,6 +1222,25 @@ function photonSearch(text, limit){
 var GEO_PACE_MS=1100;
 function geoPace(){ return new Promise(function(r){ setTimeout(r,GEO_PACE_MS); }); }
 
+/* The DISTANCE decides the fare, so the landmark index has to be consulted
+   here too - not only in the suggestion list. A passenger who types "Eagle
+   Supermarket" and presses the button without tapping a suggestion must still
+   get a real distance, or the fare falls back to a guess.
+   ⛔ Only a CONFIDENT match is allowed to set a price. A weak fuzzy hit is
+   fine for a list she can look at and reject; it is not fine for money. */
+function localGeocode(text){
+  try{
+    if(!window.MW_PLACES||typeof MW_PLACES.search!=='function') return Promise.resolve(null);
+    var at=whereIsShe();
+    return MW_PLACES.search(text,{limit:1,lat:at.lat,lng:at.lng}).then(function(list){
+      if(!list||!list.length) return null;
+      if(!(list[0]._mw_score>=0.9)) return null;
+      var p={lat:parseFloat(list[0].lat),lng:parseFloat(list[0].lon)};
+      return (isFinite(p.lat)&&isFinite(p.lng))?p:null;
+    }).catch(function(){return null;});
+  }catch(e){ return Promise.resolve(null); }
+}
+
 function geocodeAddr(text){
   if(!text) return Promise.resolve(null);
   var key=text.trim().toLowerCase();
@@ -1274,7 +1293,11 @@ function geocodeAddr(text){
      is exactly the case this exists for. Catching both endings in one place is
      the difference between a fallback that runs and one that only looks like
      it does. */
-  return attempt().then(function(pt){
+  /* Our own list is asked FIRST here as well - it is instant, it cannot be
+     rate-limited, and it knows the Haitian businesses OSM has never heard of. */
+  return localGeocode(text).then(function(mine){
+    if(mine){ _geoCache[key]=mine; return mine; }
+    return attempt().then(function(pt){
     if(pt) return pt;
     return photonSearch(text,1).then(function(list){
       if(list&&list.length){
@@ -1282,6 +1305,7 @@ function geocodeAddr(text){
         if(isFinite(q.lat)&&isFinite(q.lng)){ _geoCache[key]=q; return q; }
       }
       return null;
+    });
     });
   });
 }
@@ -2175,7 +2199,51 @@ function acVariants(text){
   while(words.length>1){words.pop();add(words.join(' '));}
   return out.slice(0,7);
 }
+/* ═══ OUR HAITI LIST FIRST, OPENSTREETMAP SECOND ═══════════════════════════
+   Jeffery, 3 Oct: "Our own Haiti database should be searched first, then
+   OpenStreetMap can remain the fallback."
+
+   Why it has to be first and not merged: OSM genuinely does not know most
+   Haitian businesses. "Hotel Osis" returned nothing at all, and that is what
+   put Jennifer on WhatsApp instead of in a car.
+
+   ⛔ EVERY PATH ENDS IN A CALLBACK. If the index is missing, slow, empty or
+   throws, this hands straight over to acFetchOSM - the exact function that
+   ran before this existed. A search aid must never be able to stop somebody
+   ordering a car. */
+function whereIsShe(){
+  var la=window._pickupLat||window._myLat||window._dropLat;
+  var ln=window._pickupLng||window._myLng||window._dropLng;
+  return (la&&ln)?{lat:la,lng:ln}:{};
+}
 function acFetch(text,cb){
+  var answered=false;
+  function finish(list){ if(answered)return; answered=true; cb(list); }
+  try{
+    if(window.MW_PLACES&&typeof MW_PLACES.search==='function'){
+      var at=whereIsShe();
+      MW_PLACES.search(text,{limit:6,lat:at.lat,lng:at.lng}).then(function(local){
+        local=local||[];
+        /* A confident local answer is the whole point - do not make her wait
+           on a service that is rate-limited behind her whole carrier. */
+        if(local.length>=3) return finish(local);
+        /* Thin result: keep ours at the top and let OSM fill the rest. */
+        acFetchOSM(text,function(remote){
+          var seen={},merged=[];
+          local.concat(remote||[]).forEach(function(r){
+            if(!r)return;
+            var k=(r.lat||'')+','+(r.lon||'');
+            if(seen[k])return; seen[k]=1; merged.push(r);
+          });
+          finish(merged.length?merged.slice(0,8):(remote||null));
+        });
+      }).catch(function(){ acFetchOSM(text,finish); });
+      return;
+    }
+  }catch(e){}
+  acFetchOSM(text,finish);
+}
+function acFetchOSM(text,cb){
   var tries=acVariants(text),i=0;
   function ask(){
     if(i>=tries.length)return cb([]);
@@ -3776,5 +3844,9 @@ try{ restoreActiveRide(); }catch(e){}
      heard of. I have been caught by exactly this before (long-cached assets
      against fresh markup). Changing the URL is what actually ships the change. -->
 <script src="js/share.js?v=2" defer></script>
+<!-- The Haiti landmark index. Loaded LAST and without blocking: if it never
+     arrives, acFetch falls straight through to the OpenStreetMap lookups that
+     were always there, and nobody is stopped from ordering a car. -->
+<script src="js/haiti-places.js?v=1" defer></script>
 </body>
 </html>
