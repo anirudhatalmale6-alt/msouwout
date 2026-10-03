@@ -1017,6 +1017,14 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
           <a id="payOpenLink" class="new-ride-btn" target="_blank" rel="noopener"
              style="display:none;background:#0F172A;color:#fff;text-decoration:none"></a>
           <button class="new-ride-btn" id="payCheckNow" style="margin-top:8px"></button>
+          <!-- 🚨 3 Oct. The wallet page kept answering "Error". A wallet
+               transaction is spent the moment it is attempted, but our reuse
+               window handed the SAME dead transaction back for ten minutes -
+               so retrying could not possibly work. This asks for a genuinely
+               new one. The server verifies the old attempt was not actually
+               paid before letting go of it. -->
+          <button class="new-ride-btn" id="payRetryNew" onclick="retryPaymentFresh()"
+                  style="margin-top:8px;background:#fff;color:#0F172A;border:2px solid #CBD5E1;display:none"></button>
         </div>
         <div id="payDone" style="display:none;text-align:center;padding:8px 0">
           <div style="font-size:34px">&#9989;</div>
@@ -1817,6 +1825,7 @@ var T_RIDE_LIVE={
      pay_opening:"N ap louvri paj peman an...",
      pay_waiting:"N ap tann konfimasyon peman an. Ou ka fèmen paj la, n ap kontinye tcheke.",
      pay_open_page:"Louvri paj peman an",
+     pay_retry_new:"Peman an bay erè? Jwenn yon nouvo paj peman",
      pay_tap_open:"Telefòn ou bloke paj la. Touche bouton an anba a pou w antre nimewo w.",
      pay_check:"Tcheke kounye a",
      pay_done:"Peman resevwa ({m})",
@@ -1862,6 +1871,7 @@ var T_RIDE_LIVE={
      pay_opening:"Ouverture de la page de paiement...",
      pay_waiting:"En attente de la confirmation. Vous pouvez fermer cette page, nous continuons à vérifier.",
      pay_open_page:"Ouvrir la page de paiement",
+     pay_retry_new:"Erreur sur la page de paiement ? Obtenir une nouvelle page",
      pay_tap_open:"Votre téléphone a bloqué la page. Touchez le bouton ci-dessous pour saisir votre numéro.",
      pay_check:"Vérifier maintenant",
      pay_done:"Paiement reçu ({m})",
@@ -1907,6 +1917,7 @@ var T_RIDE_LIVE={
      pay_opening:"Opening the payment page...",
      pay_waiting:"Waiting for confirmation. You can close this page, we keep checking.",
      pay_open_page:"Open the payment page",
+     pay_retry_new:"Payment page showing an error? Get a new payment page",
      pay_tap_open:"Your phone blocked the page. Tap the button below to enter your number.",
      pay_check:"Check now",
      pay_done:"Payment received ({m})",
@@ -1952,6 +1963,7 @@ var T_RIDE_LIVE={
      pay_opening:"Abriendo la página de pago...",
      pay_waiting:"Esperando la confirmación. Puede cerrar esta página, seguimos verificando.",
      pay_open_page:"Abrir la página de pago",
+     pay_retry_new:"¿La página de pago da error? Obtener una página nueva",
      pay_tap_open:"Su teléfono bloqueó la página. Toque el botón de abajo para ingresar su número.",
      pay_check:"Verificar ahora",
      pay_done:"Pago recibido ({m})",
@@ -3267,8 +3279,20 @@ function offerMethods(){
     });
 }
 
-function beginPayment(method){
+/* She is looking at a wallet page that said "Error". Ask for a brand new
+   transaction rather than the dead one she already tried.
+   ⛔ The method is remembered so she is not sent back to choose again - she
+   has already told us how she wants to pay. */
+var _lastPayMethod = null;
+function retryPaymentFresh(){
+  if (!_lastPayMethod) { offerMethods(); return; }
+  beginPayment(_lastPayMethod, true);
+}
+
+function beginPayment(method, fresh){
+  _lastPayMethod = method;
   payEl('payErr').style.display='none';
+  payEl('payRetryNew').style.display='none';
   paySet('payWaiting');
   payEl('payWaitMsg').textContent = t('pay_opening');
   payEl('payCheckNow').textContent = t('pay_check');
@@ -3297,7 +3321,8 @@ function beginPayment(method){
       subject_type:'ride', subject_id:payState.rideId,
       amount:payState.amount, payment_method:method,
       payer_phone:(rideData.riderPhone||rideData.customer_phone||''),
-      platform:'msouwout'
+      platform:'msouwout',
+      fresh:!!fresh
     })
   }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
     .then(function(res){
@@ -3314,6 +3339,13 @@ function beginPayment(method){
       lk.href = res.j.payment_url;
       lk.textContent = t('pay_open_page');
       lk.style.display = '';
+
+      /* Offered straight away, not only after she complains. If the wallet
+         page says "Error" there is nothing on THAT page to help her, and
+         nothing here was telling her she could ask for a new one. */
+      var rt = payEl('payRetryNew');
+      rt.textContent = t('pay_retry_new');
+      rt.style.display = '';
 
       if (held && !held.closed) {
         try { held.location.replace(res.j.payment_url); }
