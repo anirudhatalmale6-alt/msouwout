@@ -1005,6 +1005,17 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
         <div id="payWaiting" style="display:none;text-align:center;padding:6px 0">
           <div class="spinner" style="margin:0 auto 8px"></div>
           <p class="waitlist-msg" id="payWaitMsg"></p>
+          <!-- 🚨🚨 3 Oct, Jennifer, mid-ride: "not able to enter her natcom
+               phone number to get the code", repeatedly. The wallet page was
+               opened with window.open AFTER the server answered - which is an
+               asynchronous call, so the phone treats it as a pop-up and blocks
+               it silently. She was left on this spinner with no page to type
+               her number into, and no way to reach one.
+               ⛔ THIS LINK IS THE GUARANTEE. Whatever the browser does with
+               the automatic opening, she can always tap this herself - and a
+               tap is a real gesture, which is never blocked. -->
+          <a id="payOpenLink" class="new-ride-btn" target="_blank" rel="noopener"
+             style="display:none;background:#0F172A;color:#fff;text-decoration:none"></a>
           <button class="new-ride-btn" id="payCheckNow" style="margin-top:8px"></button>
         </div>
         <div id="payDone" style="display:none;text-align:center;padding:8px 0">
@@ -1805,6 +1816,8 @@ var T_RIDE_LIVE={
      pay_cash:"M ap peye kach",
      pay_opening:"N ap louvri paj peman an...",
      pay_waiting:"N ap tann konfimasyon peman an. Ou ka fèmen paj la, n ap kontinye tcheke.",
+     pay_open_page:"Louvri paj peman an",
+     pay_tap_open:"Telefòn ou bloke paj la. Touche bouton an anba a pou w antre nimewo w.",
      pay_check:"Tcheke kounye a",
      pay_done:"Peman resevwa ({m})",
      pay_ref:"Referans:",
@@ -1848,6 +1861,8 @@ var T_RIDE_LIVE={
      pay_cash:"Je paie en espèces",
      pay_opening:"Ouverture de la page de paiement...",
      pay_waiting:"En attente de la confirmation. Vous pouvez fermer cette page, nous continuons à vérifier.",
+     pay_open_page:"Ouvrir la page de paiement",
+     pay_tap_open:"Votre téléphone a bloqué la page. Touchez le bouton ci-dessous pour saisir votre numéro.",
      pay_check:"Vérifier maintenant",
      pay_done:"Paiement reçu ({m})",
      pay_ref:"Référence :",
@@ -1891,6 +1906,8 @@ var T_RIDE_LIVE={
      pay_cash:"I will pay cash",
      pay_opening:"Opening the payment page...",
      pay_waiting:"Waiting for confirmation. You can close this page, we keep checking.",
+     pay_open_page:"Open the payment page",
+     pay_tap_open:"Your phone blocked the page. Tap the button below to enter your number.",
      pay_check:"Check now",
      pay_done:"Payment received ({m})",
      pay_ref:"Reference:",
@@ -1934,6 +1951,8 @@ var T_RIDE_LIVE={
      pay_cash:"Pagaré en efectivo",
      pay_opening:"Abriendo la página de pago...",
      pay_waiting:"Esperando la confirmación. Puede cerrar esta página, seguimos verificando.",
+     pay_open_page:"Abrir la página de pago",
+     pay_tap_open:"Su teléfono bloqueó la página. Toque el botón de abajo para ingresar su número.",
      pay_check:"Verificar ahora",
      pay_done:"Pago recibido ({m})",
      pay_ref:"Referencia:",
@@ -3253,6 +3272,23 @@ function beginPayment(method){
   paySet('payWaiting');
   payEl('payWaitMsg').textContent = t('pay_opening');
   payEl('payCheckNow').textContent = t('pay_check');
+  var link = payEl('payOpenLink');
+  link.style.display='none'; link.removeAttribute('href');
+
+  /* 🔑 OPEN THE TAB NOW, WHILE HER TAP IS STILL THE REASON WE ARE RUNNING.
+     A phone only allows a new window while it believes a person asked for
+     one, and that belief does not survive a network round trip - which on a
+     sleeping server can be twenty seconds. So the empty tab is claimed on the
+     tap, and the address is put into it once the server answers.
+     If the browser refuses even this, held is null and we carry on: the
+     visible link below is what she uses instead. */
+  var held = null;
+  try { held = window.open('', '_blank'); } catch(e){ held = null; }
+  if (held) { try { held.document.write(
+    '<!doctype html><meta name=viewport content="width=device-width">' +
+    '<body style="font-family:system-ui;padding:28px;text-align:center;color:#0F172A">' +
+    '<p style="font-size:17px;font-weight:700">MsouWout</p><p>' +
+    t('pay_opening') + '</p></body>'); } catch(e){} }
 
   apiFetch(API_URL+'/api/payments/create',{
     method:'POST',
@@ -3270,10 +3306,29 @@ function beginPayment(method){
       try { localStorage.setItem(PAY_KEY, JSON.stringify(
         { rideId:payState.rideId, ref:payState.ref })); } catch(e){}
       payEl('payWaitMsg').textContent = t('pay_waiting');
-      window.open(res.j.payment_url,'_blank','noopener');
+
+      /* The link is shown FIRST and always, before anything is opened
+         automatically. If every automatic route fails she still has a button
+         under her thumb - that is the whole point of it. */
+      var lk = payEl('payOpenLink');
+      lk.href = res.j.payment_url;
+      lk.textContent = t('pay_open_page');
+      lk.style.display = '';
+
+      if (held && !held.closed) {
+        try { held.location.replace(res.j.payment_url); }
+        catch(e){ try { held.location.href = res.j.payment_url; } catch(e2){} }
+      } else {
+        /* The pop-up was refused. One more try - some browsers allow it this
+           close to the tap - and if that is refused too, she has the link. */
+        var w = null;
+        try { w = window.open(res.j.payment_url,'_blank','noopener'); } catch(e){}
+        if (!w) payEl('payWaitMsg').textContent = t('pay_tap_open');
+      }
       pollPayment();
     })
     .catch(function(err){
+      if (held && !held.closed) { try { held.close(); } catch(e){} }
       paySet('payAsk');
       payEl('payErr').style.display='';
       payEl('payErr').textContent = t('pay_failed');
