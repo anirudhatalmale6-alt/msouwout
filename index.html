@@ -1764,6 +1764,7 @@ var T_RIDE_LIVE={
      rl_share:'Voye kat la bay fanmi w',
      rl_share_msg:'M nan yon kous MsouWout kounye a ak {driver} ({plate}). Ou ka swiv mwen an dirèk sou kat la: {url}',
      rl_failed:'Nou pa ka voye demann nan kounye a. Ekri nou sou WhatsApp epi n ap jwenn yon chofe pou ou.',
+     rl_expired:'Pa gen chofe ki pran kous la. Nou fenmen demann nan — ou mèt mande yon lòt kous kounye a, oswa ekri nou sou WhatsApp.',
      lm_label:'📍 Repe pou chofe a (opsyonel)',
      lm_ph:'Egzanp: #2, devan famasi a, kay ble a',
      rl_cancel:'Anile demann nan',
@@ -1806,6 +1807,7 @@ var T_RIDE_LIVE={
      rl_share:'Envoyer la carte à ma famille',
      rl_share_msg:'Je suis en course MsouWout avec {driver} ({plate}). Suivez-moi en direct sur la carte : {url}',
      rl_failed:'Nous ne pouvons pas envoyer la demande maintenant. Ecrivez-nous sur WhatsApp et nous vous trouverons un chauffeur.',
+     rl_expired:"Aucun chauffeur n'a pris la course. Nous avons ferme la demande — vous pouvez en commander une autre maintenant, ou nous ecrire sur WhatsApp.",
      lm_label:'📍 Repere pour le chauffeur (facultatif)',
      lm_ph:'Ex: #2, devant la pharmacie, maison bleue',
      rl_cancel:'Annuler la demande',
@@ -1848,6 +1850,7 @@ var T_RIDE_LIVE={
      rl_share:'Send the map to my family',
      rl_share_msg:'I am on a MsouWout ride with {driver} ({plate}). Follow me live on the map: {url}',
      rl_failed:'We cannot send the request right now. Message us on WhatsApp and we will find you a driver.',
+     rl_expired:'No driver took the ride. We closed the request — you can order another one now, or message us on WhatsApp.',
      lm_label:'📍 Landmark for the driver (optional)',
      lm_ph:'e.g. #2, in front of the pharmacy, blue house',
      rl_cancel:'Cancel this request',
@@ -1890,6 +1893,7 @@ var T_RIDE_LIVE={
      rl_share:'Enviar el mapa a mi familia',
      rl_share_msg:'Estoy en un viaje MsouWout con {driver} ({plate}). Sígueme en vivo en el mapa: {url}',
      rl_failed:'No podemos enviar la solicitud ahora. Escribenos por WhatsApp y te buscamos un conductor.',
+     rl_expired:'Ningun conductor tomo el viaje. Cerramos la solicitud — puedes pedir otro ahora, o escribirnos por WhatsApp.',
      lm_label:'📍 Referencia para el conductor (opcional)',
      lm_ph:'Ej: #2, frente a la farmacia, casa azul',
      rl_cancel:'Cancelar la solicitud',
@@ -2883,8 +2887,18 @@ function checkRideOnce(){
          saying he is outside would never once reach this screen. */
       if(d.status===_lastStatus && nowArrived===_lastArrived)return;
       var justArrived=nowArrived && !_lastArrived && d.status==='accepted';
-      _lastStatus=d.status;
-      _lastArrived=nowArrived;
+      /* 🚨🚨 2 Oct, Jennifer, TWICE: "it keeps on loading for her, not able to
+         enter anything." THIS PAIR OF LINES IS THE TRAP.
+
+         _lastStatus used to be stamped HERE, before the screen was drawn. So
+         the moment the server reported a status this function has no branch
+         for - or the moment drawing one threw - the next poll hit the
+         "nothing moved" test above and returned. For ever. The spinner then
+         runs until she kills the tab, and nothing is written to the screen or
+         the console to say why.
+
+         ⛔ The marker now moves only AFTER a branch has actually run, so an
+         unknown status can never silence the poller. */
       if(d.status==='accepted'||d.status==='in_progress'){
         /* Polling used to STOP the moment a driver accepted, so her screen froze on
            the driver card: she never saw the trip start and never saw it finish.
@@ -2906,6 +2920,21 @@ function checkRideOnce(){
         showRideDone(d);
       }
       else if(d.status==='cancelled'){stopRidePolling();clearActiveRide();showCancelled(d);}
+      /* 🚨 THE STATUS NOBODY TOLD HER ABOUT.
+         services/dispatch.js closes a request nobody accepted with
+         status='expired' (expire_reason 'no_driver_accepted'). This page knew
+         four statuses and the server can set five, so an expired ride left the
+         passenger watching a spinner for a car that was never coming. */
+      else if(d.status==='expired'){
+        stopRidePolling(); clearActiveRide();
+        showWaitlist(t('rl_expired'));
+      }
+      /* Anything else is a status this page has never heard of. Do NOT stamp
+         it as "seen" - drop out and let the next poll try again, so a new
+         server status can never freeze her screen the way 'expired' did. */
+      else return;
+      _lastStatus=d.status;
+      _lastArrived=nowArrived;
     }).catch(function(){});
 }
 
