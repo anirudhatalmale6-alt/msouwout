@@ -567,12 +567,18 @@ document.addEventListener('DOMContentLoaded', function(){
   function el(i){return document.getElementById(i);}
   function num(n){return (Number(n)||0).toLocaleString('fr-FR');}
   function note(msg,bad){
-    var h=document.querySelector('.stats')||document.body;
+    /* ⚠️ The first version did h.parentNode.insertBefore(d,h) with h falling
+       back to document.body - which inserts the notice OUTSIDE <body>, where
+       nobody can see it. A warning that cannot be read is the same as no
+       warning, and the whole point here is that silence looks like zero. */
     var d=document.createElement('div');
-    d.style.cssText='margin:14px 0;padding:12px 14px;border-radius:12px;font-size:.92rem;'+
+    d.style.cssText='margin:14px;padding:12px 14px;border-radius:12px;font-size:.92rem;'+
       (bad?'background:#FEF2F2;color:#991B1B;border:1px solid #FCA5A5':
            'background:#ECFDF5;color:#065F46;border:1px solid #6EE7B7');
-    d.textContent=msg; h.parentNode.insertBefore(d,h);
+    d.textContent=msg;
+    var host=document.querySelector('.stats');
+    if(host && host.parentNode) host.parentNode.insertBefore(d,host);
+    else document.body.insertBefore(d, document.body.firstChild);
   }
   if(!KEY){ note('Portail en lecture seule — ouvrez ce lien avec votre cle DASH pour voir les chiffres reels.',true); return; }
   fetch(API+'/api/rides/dash/summary?k='+encodeURIComponent(KEY))
