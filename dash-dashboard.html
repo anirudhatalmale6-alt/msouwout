@@ -278,22 +278,22 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
   <div class="stats-row">
     <div class="stat-card blue anim d2">
       <span class="stat-icon">&#128663;</span>
-      <div class="stat-value">0</div>
+      <div class="stat-value" id="dsRides">0</div>
       <div class="stat-label" data-i18n="stat_rides">Courses Couvertes</div>
     </div>
     <div class="stat-card green anim d3">
       <span class="stat-icon">&#128176;</span>
-      <div class="stat-value">0 <small style="font-size:.5em;font-style:normal;font-family:var(--body)">HTG</small></div>
+      <div class="stat-value"><span id="dsCollected">0</span> <small style="font-size:.5em;font-style:normal;font-family:var(--body)">HTG</small></div>
       <div class="stat-label" data-i18n="stat_collected">Frais Collectes (25 HTG/course)</div>
     </div>
     <div class="stat-card gold anim d4">
       <span class="stat-icon">&#127974;</span>
-      <div class="stat-value">0 <small style="font-size:.5em;font-style:normal;font-family:var(--body)">HTG</small></div>
+      <div class="stat-value"><span id="dsOwed">0</span> <small style="font-size:.5em;font-style:normal;font-family:var(--body)">HTG</small></div>
       <div class="stat-label" data-i18n="stat_owed">Du a DASH (virement 48h)</div>
     </div>
     <div class="stat-card red anim d5">
       <span class="stat-icon">&#128680;</span>
-      <div class="stat-value">0</div>
+      <div class="stat-value" id="dsIncidents">0</div>
       <div class="stat-label" data-i18n="stat_incidents">Incidents Declares</div>
     </div>
   </div>
@@ -548,6 +548,54 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 <script id="capacitor-native-loader">
 (function(){if(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform()){document.body.classList.add('capacitor-native');var s=document.createElement('script');s.src='capacitor-bridge.js';document.body.appendChild(s);}})();
+</script>
+
+<script>
+/* ═══ REAL FIGURES, NOT ZEROS ════════════════════════════════════════════
+   6 Oct 2026. This page was a static mock-up: four tiles hard-coded to 0 and
+   not one request to the server. Jeffery was about to show it to DASH, the
+   partner it belongs to, after two real rides had already collected the fee.
+
+   The portal is opened with its key in the address:
+       msouwout.com/dash-dashboard.html?k=YOUR-KEY
+   Without a key nothing is requested and the page says so, rather than showing
+   zeros that look like "no business yet".                                     */
+(function(){
+  var API='https://msouwout-backend.onrender.com';
+  function qs(n){try{return new URLSearchParams(location.search).get(n)||'';}catch(e){return '';}}
+  var KEY=qs('k');
+  function el(i){return document.getElementById(i);}
+  function num(n){return (Number(n)||0).toLocaleString('fr-FR');}
+  function note(msg,bad){
+    var h=document.querySelector('.stats')||document.body;
+    var d=document.createElement('div');
+    d.style.cssText='margin:14px 0;padding:12px 14px;border-radius:12px;font-size:.92rem;'+
+      (bad?'background:#FEF2F2;color:#991B1B;border:1px solid #FCA5A5':
+           'background:#ECFDF5;color:#065F46;border:1px solid #6EE7B7');
+    d.textContent=msg; h.parentNode.insertBefore(d,h);
+  }
+  if(!KEY){ note('Portail en lecture seule — ouvrez ce lien avec votre cle DASH pour voir les chiffres reels.',true); return; }
+  fetch(API+'/api/rides/dash/summary?k='+encodeURIComponent(KEY))
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(d){
+      if(el('dsRides'))     el('dsRides').textContent=num(d.rides);
+      if(el('dsCollected')) el('dsCollected').textContent=num(d.collected);
+      if(el('dsOwed'))      el('dsOwed').textContent=num(d.owed);
+      if(el('dsIncidents')) el('dsIncidents').textContent=num(d.incidents);
+      var tb=el('financialBody');
+      if(tb && d.monthly && d.monthly.length){
+        tb.innerHTML=d.monthly.map(function(m){
+          return '<tr><td>'+m.period+'</td><td>'+num(m.rides)+'</td><td>'+num(m.collected)+
+                 ' HTG</td><td>'+num(m.collected)+' HTG</td><td>En attente</td></tr>';
+        }).join('');
+      }
+    })
+    .catch(function(e){
+      /* ⛔ Never leave the zeros standing silently - a figure that failed to
+         load must not be mistaken for a figure that is genuinely zero. */
+      note('Impossible de charger les chiffres pour le moment ('+e.message+'). Les totaux ci-dessous ne sont pas a jour.',true);
+    });
+})();
 </script>
 </body>
 </html>
