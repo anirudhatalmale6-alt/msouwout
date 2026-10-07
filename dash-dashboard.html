@@ -284,12 +284,16 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <div class="stat-card green anim d3">
       <span class="stat-icon">&#128176;</span>
       <div class="stat-value"><span id="dsCollected">0</span> <small style="font-size:.5em;font-style:normal;font-family:var(--body)">HTG</small></div>
-      <div class="stat-label" data-i18n="stat_collected">Frais Collectes (25 HTG/course)</div>
+      <!-- 🚨 This tile used to read "Frais Collectes (25 HTG/course)" while
+           showing DASH's 80% share. For 6 rides it said 120, and 6 x 25 is
+           150 - the first multiplication any partner does in a meeting. It
+           now shows the POT, which is the number those words describe. -->
+      <div class="stat-label" data-i18n="stat_collected">Pot de protection (25 HTG/course)</div>
     </div>
     <div class="stat-card gold anim d4">
       <span class="stat-icon">&#127974;</span>
       <div class="stat-value"><span id="dsOwed">0</span> <small style="font-size:.5em;font-style:normal;font-family:var(--body)">HTG</small></div>
-      <div class="stat-label" data-i18n="stat_owed">Du a DASH (virement 48h)</div>
+      <div class="stat-label" data-i18n="stat_owed">Du a DASH — 80% du pot (virement 48h)</div>
     </div>
     <div class="stat-card red anim d5">
       <span class="stat-icon">&#128680;</span>
@@ -298,6 +302,14 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     </div>
   </div>
 
+
+  <!-- Every gourde of the pot, in one line. The partner asked where the
+       passenger's 13th gourde goes; this answers it on the page rather than
+       in an email. Filled by JS - no data-i18n on #dsRecon, which would wipe
+       whatever was written into it. -->
+  <div id="dsRecon" style="margin:-6px 0 22px;padding:13px 16px;border-radius:12px;
+       background:#F1F5F9;border:1px solid #E2E8F0;color:#334155;font-size:.88rem;
+       line-height:1.6"></div>
   <!-- QUICK ACTIONS -->
   <div class="section-label anim d3" data-i18n="section_actions">Actions Rapides</div>
   <div class="actions-row anim d4">
@@ -324,8 +336,8 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
         <tr>
           <th data-i18n="th_period">Periode</th>
           <th data-i18n="th_rides">Courses</th>
-          <th data-i18n="th_collected">Frais Collectes</th>
-          <th data-i18n="th_dash_share">Part DASH</th>
+          <th data-i18n="th_collected">Pot (25/course)</th>
+          <th data-i18n="th_dash_share">Part DASH (20)</th>
           <th data-i18n="th_status">Statut</th>
         </tr>
       </thead>
@@ -444,12 +456,12 @@ var translations = {
     hero_sub:'Protection Medicale & Assistance d\'Urgence',
     hero_status:'Partenariat actif depuis Juin 2026',
     section_overview:'Vue d\'ensemble',
-    stat_rides:'Courses Couvertes',stat_collected:'Frais Collectes',stat_owed:'Du a DASH',stat_incidents:'Incidents Declares',
+    stat_rides:'Courses Couvertes',stat_collected:'Pot de protection (25 HTG/course)',stat_owed:'Du a DASH (80%)',stat_incidents:'Incidents Declares',
     section_actions:'Actions Rapides',
     btn_export:'Exporter Rapport (JSON)',btn_contact:'Contacter MsouWout',btn_partnership:'Voir Partenariat',
     section_financial:'Resume Financier',
     fin_title:'Releve Mensuel',fin_badge:'Mensuel',
-    th_period:'Periode',th_rides:'Courses',th_collected:'Frais Collectes',th_dash_share:'Part DASH',th_status:'Statut',
+    th_period:'Periode',th_rides:'Courses',th_collected:'Pot (25/course)',th_dash_share:'Part DASH (20)',th_status:'Statut',
     status_pending:'En attente',
     section_incidents:'Rapports d\'Incidents',
     inc_title:'Incidents & Assistance',inc_empty:'Aucun incident declare',inc_empty_desc:'Les incidents signales lors des courses MsouWout apparaitront ici avec tous les details.',
@@ -465,12 +477,12 @@ var translations = {
     hero_sub:'Medical Protection & Emergency Assistance',
     hero_status:'Partnership active since June 2026',
     section_overview:'Overview',
-    stat_rides:'Covered Rides',stat_collected:'Fees Collected',stat_owed:'Owed to DASH',stat_incidents:'Reported Incidents',
+    stat_rides:'Covered Rides',stat_collected:'Protection pot (25 HTG/ride)',stat_owed:'Owed to DASH (80%)',stat_incidents:'Reported Incidents',
     section_actions:'Quick Actions',
     btn_export:'Export Report (JSON)',btn_contact:'Contact MsouWout',btn_partnership:'View Partnership',
     section_financial:'Financial Summary',
     fin_title:'Monthly Statement',fin_badge:'Monthly',
-    th_period:'Period',th_rides:'Rides',th_collected:'Fees Collected',th_dash_share:'DASH Share',th_status:'Status',
+    th_period:'Period',th_rides:'Rides',th_collected:'Pot (25/ride)',th_dash_share:'DASH Share (20)',th_status:'Status',
     status_pending:'Pending',
     section_incidents:'Incident Reports',
     inc_title:'Incidents & Assistance',inc_empty:'No incidents reported',inc_empty_desc:'Incidents reported during MsouWout rides will appear here with full details.',
@@ -486,12 +498,12 @@ var translations = {
     hero_sub:'Pwoteksyon Medikal & Asistans Dijans',
     hero_status:'Patenarya aktif depi Jen 2026',
     section_overview:'Apesi Jeneral',
-    stat_rides:'Kous Kouvri',stat_collected:'Frè Kolekte',stat_owed:'Dwe DASH',stat_incidents:'Ensidan Deklare',
+    stat_rides:'Kous Kouvri',stat_collected:'Pot pwoteksyon (25 HTG/kous)',stat_owed:'Dwe DASH (80%)',stat_incidents:'Ensidan Deklare',
     section_actions:'Aksyon Rapid',
     btn_export:'Ekspote Rapò (JSON)',btn_contact:'Kontakte MsouWout',btn_partnership:'Wè Patenarya',
     section_financial:'Rezime Finansye',
     fin_title:'Relve Mansyèl',fin_badge:'Mansyèl',
-    th_period:'Peryòd',th_rides:'Kous',th_collected:'Frè Kolekte',th_dash_share:'Pa DASH',th_status:'Estati',
+    th_period:'Peryòd',th_rides:'Kous',th_collected:'Pot (25/kous)',th_dash_share:'Pa DASH (20)',th_status:'Estati',
     status_pending:'An atant',
     section_incidents:'Rapò Ensidan',
     inc_title:'Ensidan & Asistans',inc_empty:'Okenn ensidan deklare',inc_empty_desc:'Ensidan ki rive pandan kous MsouWout ap parèt isit la ak tout detay.',
@@ -507,6 +519,12 @@ var currentLang = 'fr';
 
 function setLang(lang) {
   currentLang = lang;
+  /* After the labels are swapped below, the reconciliation line has to be
+     rebuilt too - it is written by JS and carries no data-i18n.
+     ⚠️ drawRecon is defined inside the fetch closure, so it is reached through
+     window. The first version called it directly and a try/catch swallowed the
+     ReferenceError, which is exactly why the line stayed in French. */
+  setTimeout(function(){ if (window.drawRecon) window.drawRecon(); }, 0);
   document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.remove('active')});
   document.getElementById('lang-' + lang).classList.add('active');
   var t = translations[lang] || translations.fr;
@@ -580,18 +598,71 @@ document.addEventListener('DOMContentLoaded', function(){
     if(host && host.parentNode) host.parentNode.insertBefore(d,host);
     else document.body.insertBefore(d, document.body.firstChild);
   }
+
+  /* Drawn from the stored summary so a language switch redraws it. */
+  window.drawRecon = function drawRecon(){
+    var d=window._dash, pot=window._dashPot, rc=el('dsRecon');
+    if(!d||!rc) return;
+      /* The reconciliation line. Built from what the server sent, so if the
+         two halves ever stop adding up to the pot it says so here instead of
+         being discovered by the partner. */
+  
+      if(rc){
+        var pr=(d.per_ride)||{pot:25,rider:13,driver:12,dash:20,msouwout:5};
+        var ri=(d.rider_share_collected!=null)?d.rider_share_collected:null;
+        var dr=(d.driver_share_collected!=null)?d.driver_share_collected:null;
+        var L=(currentLang==='en')?{
+          per:'Per ride: <b>'+pr.pot+' HTG</b> = '+pr.rider+' from the passenger + '+pr.driver+
+              ' from the driver &rarr; <b>'+pr.dash+' to DASH</b> + '+pr.msouwout+' to MsouWout.',
+          tot:'Over '+num(d.rides)+' paid rides: passengers <b>'+num(ri)+'</b> + drivers <b>'+
+              num(dr)+'</b> = <b>'+num(pot)+' HTG</b> collected, of which <b>'+num(d.owed)+
+              ' HTG is owed to DASH</b>.',
+          bad:'&#9888; These figures do not add up. Do not settle from this page until it is fixed.'
+        }:{
+          per:'Par course : <b>'+pr.pot+' HTG</b> = '+pr.rider+' du passager + '+pr.driver+
+              ' du chauffeur &rarr; <b>'+pr.dash+' pour DASH</b> + '+pr.msouwout+' pour MsouWout.',
+          tot:'Sur '+num(d.rides)+' courses payees : passagers <b>'+num(ri)+'</b> + chauffeurs <b>'+
+              num(dr)+'</b> = <b>'+num(pot)+' HTG</b> collectes, dont <b>'+num(d.owed)+
+              ' HTG dus a DASH</b>.',
+          bad:'&#9888; Ces chiffres ne s\'additionnent pas. Ne reglez rien depuis cette page.'
+        };
+        var html=L.per;
+        if(ri!=null&&dr!=null) html+='<br>'+L.tot;
+        if(d.reconciles===false){
+          html+='<br><b style="color:#991B1B">'+L.bad+'</b>';
+          rc.style.background='#FEF2F2'; rc.style.borderColor='#FCA5A5';
+        }
+        rc.innerHTML=html;
+      }
+  }
+  
   if(!KEY){ note('Portail en lecture seule — ouvrez ce lien avec votre cle DASH pour voir les chiffres reels.',true); return; }
   fetch(API+'/api/rides/dash/summary?k='+encodeURIComponent(KEY))
     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(d){
       if(el('dsRides'))     el('dsRides').textContent=num(d.rides);
-      if(el('dsCollected')) el('dsCollected').textContent=num(d.collected);
+      /* The POT, not DASH's share - see the comment on the tile. Falls back
+         to rides x 25 for an older server that does not send `pot` yet, so
+         the tile can never silently show the wrong kind of number. */
+      var pot = (d.pot!=null) ? d.pot : (num(d.rides)*25);
+      if(el('dsCollected')) el('dsCollected').textContent=num(pot);
       if(el('dsOwed'))      el('dsOwed').textContent=num(d.owed);
       if(el('dsIncidents')) el('dsIncidents').textContent=num(d.incidents);
+
+      /* The reconciliation line. Built from what the server sent, so if the
+         two halves ever stop adding up to the pot it says so here instead of
+         being discovered by the partner. Kept on window so switching language
+         redraws it - it has no data-i18n, which would wipe it. */
+      window._dash = d; window._dashPot = pot;
+      drawRecon();
       var tb=el('financialBody');
       if(tb && d.monthly && d.monthly.length){
         tb.innerHTML=d.monthly.map(function(m){
-          return '<tr><td>'+m.period+'</td><td>'+num(m.rides)+'</td><td>'+num(m.collected)+
+          /* ⚠️ Both columns used to print m.collected, so "Frais Collectes"
+             and "Part DASH" showed the same figure - DASH's 20 a ride under a
+             heading that promised 25. */
+          var mp=(m.pot!=null)?m.pot:(m.rides*25);
+          return '<tr><td>'+m.period+'</td><td>'+num(m.rides)+'</td><td>'+num(mp)+
                  ' HTG</td><td>'+num(m.collected)+' HTG</td><td>En attente</td></tr>';
         }).join('');
       }
