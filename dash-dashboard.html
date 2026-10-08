@@ -402,17 +402,41 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
   <div class="table-card anim d6" style="overflow:visible">
     <div class="table-card-header">
       <h3 data-i18n="clinic_title">Localisation des Cliniques</h3>
-      <span class="badge badge-green" data-i18n="clinic_badge">12 Centres</span>
+      <span class="badge badge-green" data-i18n="clinic_badge">14 Structures</span>
     </div>
     <div style="padding:20px 22px">
       <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:16px" data-i18n="clinic_desc">En cas d'accident, le systeme dirige automatiquement vers la clinique partenaire la plus proche selon la position GPS.</p>
+      <!-- ═══ DASH's OWN STRUCTURES ═══════════════════════════════════════
+           Jeffery, 8 Oct: "With this link you can see all the locations
+           where Dash operates.. The list in the app is fictif"
+           https://dashhaiti.org/nos-structures/
+
+           He is right, and it was worse than cosmetic. This page listed
+           six hospitals that are NOT DASH structures at all - HUEH,
+           Bernard Mevs, St Luc and three others - on the dashboard DASH
+           themselves read. An injured passenger sent to a hospital that
+           has no agreement with them is turned away at the door.
+
+           Taken verbatim from their own page, including the six marked
+           temporarily unavailable for security reasons. ⛔ Those are
+           shown greyed and labelled rather than hidden: a closed site
+           that silently disappears looks exactly like one that never
+           existed, and somebody needs to know not to drive there. -->
       <div id="clinicList" style="display:grid;gap:10px">
-        <div class="clinic-item"><span class="ci-dot blue"></span><div><strong>Hopital Universite d'Etat d'Haiti (HUEH)</strong><br><span class="ci-addr">Rue Oswald Durand, Port-au-Prince</span></div></div>
-        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Hopital Bernard Mevs</strong><br><span class="ci-addr">Bicentenaire, Port-au-Prince</span></div></div>
-        <div class="clinic-item"><span class="ci-dot blue"></span><div><strong>Clinique Lambert Sante</strong><br><span class="ci-addr">Delmas 33, Port-au-Prince</span></div></div>
-        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Hopital de la Communaute Haitienne</strong><br><span class="ci-addr">Petionville, Port-au-Prince</span></div></div>
-        <div class="clinic-item"><span class="ci-dot blue"></span><div><strong>Medika Mamba / Zanmi Lasante</strong><br><span class="ci-addr">Tabarre, Port-au-Prince</span></div></div>
-        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Hopital St. Luc</strong><br><span class="ci-addr">Tabarre, Port-au-Prince</span></div></div>
+        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Hôpital OMNI Per Mariam</strong><br><span class="ci-addr">Rue Clerveaux, Pétion-Ville &middot; &#128222; 3316-0200 / 3325-4365</span></div></div>
+        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>La Croix Dieu</strong><br><span class="ci-addr">325, Delmas 67 &middot; &#128222; 4394-5577</span></div></div>
+        <div class="clinic-item closed"><span class="ci-dot grey"></span><div><strong>Hôpital Jude-Anne</strong><br><span class="ci-addr">Delmas 18 &middot; &#128222; 4062-0642 / 4061-2152</span><br><span class="ci-closed">Temporairement indisponible pour raisons de s&eacute;curit&eacute;</span></div></div>
+        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Hôpital St Landry</strong><br><span class="ci-addr">#25, Rue Aubran, Pétion-Ville &middot; &#128222; 3222-1019 / 4393-0969</span></div></div>
+        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Hôpital Mont-Carmel</strong><br><span class="ci-addr">Rue Metelus &middot; &#128222; 4061-6134 / 3214-1227</span></div></div>
+        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Hôpital Ste Claire</strong><br><span class="ci-addr">Laboule 11 C &middot; &#128222; 4893-9486</span></div></div>
+        <div class="clinic-item closed"><span class="ci-dot grey"></span><div><strong>Hôpital St James</strong><br><span class="ci-addr">Martissant 4 &middot; &#128222; 4437-1254</span><br><span class="ci-closed">Temporairement indisponible pour raisons de s&eacute;curit&eacute;</span></div></div>
+        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Hôpital Christ du Nord</strong><br><span class="ci-addr">Rue 17K, Cap-Haïtien &middot; &#128222; 3219-4051</span></div></div>
+        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Hôpital Ste-Cène</strong><br><span class="ci-addr">Rte de Frères, Niveau Jacquet Toto &middot; &#128222; 4061-7155</span></div></div>
+        <div class="clinic-item closed"><span class="ci-dot grey"></span><div><strong>DASH / Tabarre</strong><br><span class="ci-addr">BLVD 15 Octobre, à côté de la Camep &middot; &#128222; 4706-9431</span><br><span class="ci-closed">Temporairement indisponible pour raisons de s&eacute;curit&eacute;</span></div></div>
+        <div class="clinic-item closed"><span class="ci-dot grey"></span><div><strong>Clinique médico-chirurgicale Oswald Durand</strong><br><span class="ci-addr">&#128222; 4061-0086</span><br><span class="ci-closed">Temporairement indisponible pour raisons de s&eacute;curit&eacute;</span></div></div>
+        <div class="clinic-item"><span class="ci-dot green"></span><div><strong>Sonapi</strong><br><span class="ci-addr">Parc industriel, Sonapi &middot; &#128222; 3316-1060</span></div></div>
+        <div class="clinic-item closed"><span class="ci-dot grey"></span><div><strong>DASH Carries</strong><br><span class="ci-addr">En face Warf de la Gonâve &middot; &#128222; 4891-7562</span><br><span class="ci-closed">Temporairement indisponible pour raisons de s&eacute;curit&eacute;</span></div></div>
+        <div class="clinic-item closed"><span class="ci-dot grey"></span><div><strong>DASH Montrouis</strong><br><span class="ci-addr">Tout près Royal Decameron &middot; &#128222; 4891-7562</span><br><span class="ci-closed">Temporairement indisponible pour raisons de s&eacute;curit&eacute;</span></div></div>
       </div>
       <a href="emergency-dash.html" class="action-btn primary" style="margin-top:16px;display:inline-flex;font-size:.8rem;padding:10px 20px" data-i18n="clinic_btn">Ouvrir Localisateur d'Urgence</a>
     </div>
@@ -423,6 +447,9 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     .ci-addr{font-size:.72rem;color:var(--text-light)}
     .ci-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
     .ci-dot.blue{background:var(--navy)}.ci-dot.green{background:var(--green)}
+    .ci-dot.grey{background:#94A3B8}
+    .clinic-item.closed{opacity:.72}
+    .ci-closed{font-size:.68rem;font-weight:700;color:#B45309}
   </style>
 
   <!-- SETTLEMENT HISTORY -->
@@ -474,7 +501,7 @@ var translations = {
     section_settlements:'Historique des Reglements',
     set_title:'Reglements',set_badge:'Historique',set_empty:'Aucun reglement effectue',set_empty_desc:'Les transferts et paiements vers DASH seront enregistres ici avec references bancaires.',
     section_bank:'Informations Bancaires',bank_title:'Virement Bancaire DASH',bank_sub:'Coordonnees Bancaires',bank_name:'Banque',bank_account:'No de compte',bank_holder:'Nom du compte',bank_delay:'Les virements sont effectues dans un delai de 48 heures apres la periode de reglement.',
-    section_clinics:'Cliniques Partenaires',clinic_title:'Localisation des Cliniques',clinic_badge:'12 Centres',clinic_desc:'En cas d\'accident, le systeme dirige automatiquement vers la clinique partenaire la plus proche selon la position GPS.',clinic_btn:'Ouvrir Localisateur d\'Urgence',
+    section_clinics:'Cliniques Partenaires',clinic_title:'Localisation des Cliniques',clinic_badge:'14 Structures',clinic_desc:'En cas d\'accident, le systeme dirige automatiquement vers la clinique partenaire la plus proche selon la position GPS.',clinic_btn:'Ouvrir Localisateur d\'Urgence',
     footer_desc:'Partenariat Protection Medicale'
   },
   en: {
@@ -495,7 +522,7 @@ var translations = {
     section_settlements:'Settlement History',
     set_title:'Settlements',set_badge:'History',set_empty:'No settlements yet',set_empty_desc:'Transfers and payments to DASH will be recorded here with bank references.',
     section_bank:'Banking Information',bank_title:'DASH Wire Transfer',bank_sub:'Bank Details',bank_name:'Bank',bank_account:'Account No',bank_holder:'Account Name',bank_delay:'Wire transfers are processed within 48 hours after the settlement period.',
-    section_clinics:'Partner Clinics',clinic_title:'Clinic Locator',clinic_badge:'12 Centers',clinic_desc:'In case of accident, the system automatically directs to the nearest partner clinic based on GPS.',clinic_btn:'Open Emergency Locator',
+    section_clinics:'Partner Clinics',clinic_title:'Clinic Locator',clinic_badge:'14 Structures',clinic_desc:'In case of accident, the system automatically directs to the nearest partner clinic based on GPS.',clinic_btn:'Open Emergency Locator',
     footer_desc:'Medical Protection Partnership'
   },
   ht: {
@@ -516,7 +543,7 @@ var translations = {
     section_settlements:'Istwa Règleman',
     set_title:'Règleman yo',set_badge:'Istwa',set_empty:'Okenn règleman ankò',set_empty_desc:'Transfè ak peman bay DASH ap anrejistre isit la ak referans bank.',
     section_bank:'Enfomasyon Bank',bank_title:'Viman Bank DASH',bank_sub:'Detay Bank',bank_name:'Bank',bank_account:'No kont',bank_holder:'Non kont',bank_delay:'Viman yo fèt nan 48 èdtan apre peryòd règleman an.',
-    section_clinics:'Klinik Patnè',clinic_title:'Lokalizasyon Klinik',clinic_badge:'12 Sant',clinic_desc:'An ka aksidan, sistèm nan dirije otomatikman nan klinik patnè ki pi pre selon pozisyon GPS.',clinic_btn:'Ouvri Lokalizatè Ijans',
+    section_clinics:'Klinik Patnè',clinic_title:'Lokalizasyon Klinik',clinic_badge:'14 Estrikti',clinic_desc:'An ka aksidan, sistèm nan dirije otomatikman nan klinik patnè ki pi pre selon pozisyon GPS.',clinic_btn:'Ouvri Lokalizatè Ijans',
     footer_desc:'Patenarya Pwoteksyon Medikal'
   }
 };
