@@ -635,6 +635,8 @@ document.addEventListener('DOMContentLoaded', function(){
       : {em:'URGENCE', mo:'Verification', pass:'Passager', drv:'Chauffeur',
          ord:'Commande par', route:'Trajet', cov:'Protection', paid:'payee',
          unpaid:'non payee', note:'Les noms ne sont affiches que pour les courses avec une alerte.'};
+    L.extra = (currentLang==='en') ? 'Shared-ride passenger' : 'Passager partage';
+    L.extraNone = (currentLang==='en') ? 'none' : 'aucun';
 
     var html='';
     rows.forEach(function(r){
@@ -657,6 +659,15 @@ document.addEventListener('DOMContentLoaded', function(){
           ((r.pickup||r.dropoff)?'<br><b>'+L.route+':</b> '+esc(r.pickup||'—')+' → '+
              esc(r.dropoff||'—'):'')+
           '<br><b>'+L.cov+':</b> '+(r.protection_paid?L.paid:L.unpaid)+
+          /* ⛔ A SEPARATE line, never merged into `passenger`: "The DASH
+             dashboard must distinguish between the original passenger and
+             additional shared-ride passengers." Only covered ones are sent by
+             the server, so anybody listed here really is DASH's to treat. */
+          (((r.extra_passengers||[]).length)
+            ? '<br><b>'+L.extra+':</b> '+r.extra_passengers.map(function(x){
+                return esc(x.name||'—')+' · '+esc(x.phone||'—');
+              }).join('<br>&nbsp;&nbsp;&nbsp;&nbsp;')
+            : '')+
         '</div></div>';
     });
     html+='<div style="padding:12px 16px;font-size:.76rem;color:#8A95AA">'+L.note+'</div>';
@@ -700,6 +711,23 @@ document.addEventListener('DOMContentLoaded', function(){
         };
         var html=L.per;
         if(ri!=null&&dr!=null) html+='<br>'+L.tot;
+        /* Jeffery, 8 Oct: "Display the 13 HTG DASH allocation separately in
+           our accounting and DASH reports." Its own sentence, never folded
+           into the 25-pot figures above it. */
+        if(d.extra_passengers){
+          var xr=(d.extra_passenger_rate)||{fee:50,dash:13,driver:27,msouwout:10};
+          html+='<br>'+((currentLang==='en')
+            ? 'Shared rides: <b>'+num(d.extra_passengers)+'</b> covered extra passenger(s) &times; '+
+              xr.dash+' HTG = <b>'+num(d.extra_passenger_dash)+' HTG</b> (from the existing '+
+              xr.fee+' HTG shared-ride fee &mdash; '+xr.driver+' driver, '+xr.msouwout+' MsouWout).'
+            : 'Courses partagees : <b>'+num(d.extra_passengers)+'</b> passager(s) supplementaire(s) couvert(s) &times; '+
+              xr.dash+' HTG = <b>'+num(d.extra_passenger_dash)+' HTG</b> (sur les '+xr.fee+
+              ' HTG deja percus &mdash; '+xr.driver+' chauffeur, '+xr.msouwout+' MsouWout).');
+        }
+        if(d.owed_total!=null){
+          html+='<br><b>'+((currentLang==='en')?'Total owed to DASH: ':'Total du a DASH : ')+
+                num(d.owed_total)+' HTG</b>';
+        }
         if(d.reconciles===false){
           html+='<br><b style="color:#991B1B">'+L.bad+'</b>';
           rc.style.background='#FEF2F2'; rc.style.borderColor='#FCA5A5';
