@@ -1122,10 +1122,16 @@ return fetch(url,opts)}
 var PRICING={
   moto:{ base:175, per_km:40, min:200, per_min:5, waiting_free:3,        /* moto base 175 (client confirmed 2026-07-18) */
     surge:{peak_traffic:0.15, night:0.15, demand:0.20, rain:0.20},
-    extras:[{key:'extra_passenger',amt:50,i18n:'x_extra_passenger'}] },
+    /* "MOTO CAPACITY is 2 passengers" - the rider and one more. */
+    extras:[{key:'extra_passenger',amt:50,i18n:'x_extra_passenger',max:1}] },
   car:{ base:200, per_km:60, min:250, per_min:8, waiting_free:3,
     surge:{peak_traffic:0.15, night:0.15, demand:0.25, rain:0.25},       /* rush 15% (client 2026-07-17); demand/rain 25-50%, 25 = low end */
-    extras:[{key:'extra_stop',amt:75,i18n:'x_extra_stop'},{key:'luggage',amt:100,i18n:'x_luggage'}],
+    /* 🔑 Approved 9 Oct: 75 per additional passenger (DASH 13, MsouWout 15,
+       driver 47). FIRST in the list on purpose - "Do not confuse the existing
+       car options for additional stops or luggage with additional
+       passengers." A stop and a suitcase are not people. */
+    extras:[{key:'extra_passenger',amt:75,i18n:'x_extra_passenger',max:3},
+            {key:'extra_stop',amt:75,i18n:'x_extra_stop'},{key:'luggage',amt:100,i18n:'x_luggage'}],
     note_i18n:'x_toll_note' },
   commission_rate:0.20,               /* MsouWout 20% / driver 80% (client 2026-07-17) */
   dash_rider:12.5, dash_driver:12.5,  /* DASH protection: flat 12.50 each side */
@@ -1451,7 +1457,7 @@ var T={
     dash_title:'Pwoteksyon & Asistans Medikal DASH',
     dash_desc:'Pwoteksyon & Asistans Medikal DASH enkli nan kous sa a.',
     fare_ride:'Kous',
-    fare_distance:'Distans',fare_extra:'Chaj anplis',fare_final:'Total pou peye',fare_driver_earn:'Chofè resevwa',fare_commission:'Komisyon MsouWout',x_extra_passenger:'Pasaje anplis',xp_head:'Kouvèti Aksidan DASH pou 2yèm pasaje a',xp_name:'Non konplè 2yèm pasaje a',xp_phone:'Telefòn li',xp_why:'Nou bezwen non ak telefòn li pou DASH ka idantifye l si gen yon aksidan. Pa gen anyen anplis pou peye — 13 HTG nan 50 HTG a ale nan kouvèti li.',xp_need:'Mete non ak telefòn 2yèm pasaje a, otreman li pap kouvri.',x_extra_stop:'Estòp anplis',x_luggage:'Gwo bagaj',x_toll_note:'Frè peyaj chaje sou pri reyèl la',
+    fare_distance:'Distans',fare_extra:'Chaj anplis',fare_final:'Total pou peye',fare_driver_earn:'Chofè resevwa',fare_commission:'Komisyon MsouWout',x_extra_passenger:'Pasaje anplis',xp_head:'Kouvèti Aksidan DASH pou 2yèm pasaje a',xp_name:'Non konplè 2yèm pasaje a',xp_phone:'Telefòn li',xp_why:'Nou bezwen non ak telefòn li pou DASH ka idantifye l si gen yon aksidan. Pa gen anyen anplis pou peye — 13 HTG nan 50 HTG a ale nan kouvèti li.',xp_need:'Mete non ak telefòn chak pasaje anplis, otreman yo pap kouvri.',xp_add:'+ Ajoute yon lòt pasaje',xp_remove:'Retire',xp_nth:'Pasaje anplis {n}',x_extra_stop:'Estòp anplis',x_luggage:'Gwo bagaj',x_toll_note:'Frè peyaj chaje sou pri reyèl la',
     fare_protection:'Pwoteksyon DASH',
     fare_total:'Total'
   },
@@ -1563,7 +1569,7 @@ var T={
     dash_title:'Protection & Assistance Medicale DASH',
     dash_desc:'La Protection & Assistance Medicale DASH est incluse dans cette course.',
     fare_ride:'Course',
-    fare_distance:'Distance',fare_extra:'Frais supplémentaires',fare_final:'Total à payer',fare_driver_earn:'Le chauffeur reçoit',fare_commission:'Commission MsouWout',x_extra_passenger:'Passager supplémentaire',xp_head:'Couverture Accident DASH pour le 2e passager',xp_name:'Nom complet du 2e passager',xp_phone:'Son téléphone',xp_why:'Son nom et son téléphone permettent à DASH de l’identifier en cas d’accident. Rien de plus à payer — 13 HTG sur les 50 HTG vont à sa couverture.',xp_need:'Indiquez le nom et le téléphone du 2e passager, sinon il ne sera pas couvert.',x_extra_stop:'Arrêt supplémentaire',x_luggage:'Gros bagage',x_toll_note:'Frais de péage facturés au coût réel',
+    fare_distance:'Distance',fare_extra:'Frais supplémentaires',fare_final:'Total à payer',fare_driver_earn:'Le chauffeur reçoit',fare_commission:'Commission MsouWout',x_extra_passenger:'Passager supplémentaire',xp_head:'Couverture Accident DASH pour le 2e passager',xp_name:'Nom complet du 2e passager',xp_phone:'Son téléphone',xp_why:'Son nom et son téléphone permettent à DASH de l’identifier en cas d’accident. Rien de plus à payer — 13 HTG sur les 50 HTG vont à sa couverture.',xp_need:'Indiquez le nom et le téléphone de chaque passager supplémentaire, sinon ils ne seront pas couverts.',xp_add:'+ Ajouter un autre passager',xp_remove:'Retirer',xp_nth:'Passager supplémentaire {n}',x_extra_stop:'Arrêt supplémentaire',x_luggage:'Gros bagage',x_toll_note:'Frais de péage facturés au coût réel',
     fare_protection:'Protection DASH',
     fare_total:'Total'
   },
@@ -1675,7 +1681,7 @@ var T={
     dash_title:'DASH Protection & Medical Assistance',
     dash_desc:'DASH Protection & Medical Assistance is included in this ride.',
     fare_ride:'Ride Fare',
-    fare_distance:'Distance',fare_extra:'Extra charges',fare_final:'Total to pay',fare_driver_earn:'Driver receives',fare_commission:'MsouWout commission',x_extra_passenger:'Extra passenger',xp_head:'DASH Accident Cover for the 2nd passenger',xp_name:'2nd passenger full name',xp_phone:'Their phone',xp_why:'DASH needs their name and phone to identify them if there is an accident. Nothing extra to pay — 13 HTG of the 50 HTG goes to their cover.',xp_need:'Enter the 2nd passenger’s name and phone, or they will not be covered.',x_extra_stop:'Additional stop',x_luggage:'Large luggage',x_toll_note:'Toll fees charged at actual cost',
+    fare_distance:'Distance',fare_extra:'Extra charges',fare_final:'Total to pay',fare_driver_earn:'Driver receives',fare_commission:'MsouWout commission',x_extra_passenger:'Extra passenger',xp_head:'DASH Accident Cover for the 2nd passenger',xp_name:'2nd passenger full name',xp_phone:'Their phone',xp_why:'DASH needs their name and phone to identify them if there is an accident. Nothing extra to pay — 13 HTG of the 50 HTG goes to their cover.',xp_need:'Enter each extra passenger’s name and phone, or they will not be covered.',xp_add:'+ Add another passenger',xp_remove:'Remove',xp_nth:'Extra passenger {n}',x_extra_stop:'Additional stop',x_luggage:'Large luggage',x_toll_note:'Toll fees charged at actual cost',
     fare_protection:'DASH Protection',
     fare_total:'Total'
   },
@@ -1787,7 +1793,7 @@ var T={
     dash_title:'Proteccion y Asistencia Medica DASH',
     dash_desc:'La Proteccion y Asistencia Medica DASH esta incluida en este viaje.',
     fare_ride:'Viaje',
-    fare_distance:'Distancia',fare_extra:'Cargos extra',fare_final:'Total a pagar',fare_driver_earn:'El conductor recibe',fare_commission:'Comisión MsouWout',x_extra_passenger:'Pasajero extra',xp_head:'Cobertura de Accidente DASH para el 2º pasajero',xp_name:'Nombre completo del 2º pasajero',xp_phone:'Su teléfono',xp_why:'DASH necesita su nombre y teléfono para identificarlo si hay un accidente. Nada extra que pagar — 13 HTG de los 50 HTG van a su cobertura.',xp_need:'Escribe el nombre y teléfono del 2º pasajero, o no estará cubierto.',x_extra_stop:'Parada adicional',x_luggage:'Equipaje grande',x_toll_note:'Peajes cobrados al costo real',
+    fare_distance:'Distancia',fare_extra:'Cargos extra',fare_final:'Total a pagar',fare_driver_earn:'El conductor recibe',fare_commission:'Comisión MsouWout',x_extra_passenger:'Pasajero extra',xp_head:'Cobertura de Accidente DASH para el 2º pasajero',xp_name:'Nombre completo del 2º pasajero',xp_phone:'Su teléfono',xp_why:'DASH necesita su nombre y teléfono para identificarlo si hay un accidente. Nada extra que pagar — 13 HTG de los 50 HTG van a su cobertura.',xp_need:'Escribe el nombre y teléfono de cada pasajero extra, o no estarán cubiertos.',xp_add:'+ Añadir otro pasajero',xp_remove:'Quitar',xp_nth:'Pasajero extra {n}',x_extra_stop:'Parada adicional',x_luggage:'Equipaje grande',x_toll_note:'Peajes cobrados al costo real',
     fare_protection:'Proteccion DASH',
     fare_total:'Total'
   }
@@ -2496,8 +2502,11 @@ function renderExtras(){
       row+='<div id="extraPaxBox" style="display:none;margin:2px 0 10px 26px;padding:10px 12px;'+
         'background:#F1F5F9;border:1px solid #E2E8F0;border-radius:10px">'+
         '<div style="font-size:.72rem;font-weight:700;color:var(--blue);margin-bottom:6px" data-i18n="xp_head">'+t('xp_head')+'</div>'+
-        '<input id="xpName" type="text" placeholder="'+t('xp_name')+'" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:8px;font-family:var(--body);font-size:.85rem;margin-bottom:6px">'+
-        '<input id="xpPhone" type="tel" inputmode="tel" placeholder="'+t('xp_phone')+'" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:8px;font-family:var(--body);font-size:.85rem">'+
+        '<div id="xpRows"></div>'+
+        '<button type="button" id="xpAdd" onclick="addPaxRow()" style="display:none;width:100%;'+
+          'margin-top:6px;padding:8px;border:1px dashed var(--blue);border-radius:8px;'+
+          'background:#fff;color:var(--blue);font-size:.78rem;font-weight:700;font-family:var(--body)">'+
+          t('xp_add')+'</button>'+
         '<div style="font-size:.66rem;color:var(--text-light);margin-top:6px;line-height:1.45" data-i18n="xp_why">'+t('xp_why')+'</div>'+
         '<div id="xpErr" style="font-size:.7rem;color:#D21034;margin-top:6px;display:none"></div>'+
       '</div>';
@@ -2512,21 +2521,80 @@ function renderExtras(){
 function onExtraToggle(cb){
   var k=cb.getAttribute('data-key'),amt=parseFloat(cb.getAttribute('data-amt'));
   if(cb.checked) selectedExtras[k]=amt; else delete selectedExtras[k];
-  var box=document.getElementById('extraPaxBox');
-  if(k==='extra_passenger'&&box) box.style.display=cb.checked?'block':'none';
+  if(k==='extra_passenger'){
+    var box=document.getElementById('extraPaxBox');
+    if(box) box.style.display=cb.checked?'block':'none';
+    var rows=document.getElementById('xpRows');
+    if(rows){
+      if(cb.checked && !rows.children.length) addPaxRow();
+      if(!cb.checked) rows.innerHTML='';
+    }
+    syncPaxFare();
+  }
   updateFare();
+}
+
+/* How many extra passengers this vehicle may carry. One on a moto - "MOTO
+   CAPACITY is 2 passengers" - and three in a car. */
+function paxMax(){
+  var vp=vehicleType==='car'?PRICING.car:PRICING.moto;
+  var e=(vp.extras||[]).filter(function(x){return x.key==='extra_passenger'})[0];
+  return (e&&e.max)||1;
+}
+function paxFee(){
+  var vp=vehicleType==='car'?PRICING.car:PRICING.moto;
+  var e=(vp.extras||[]).filter(function(x){return x.key==='extra_passenger'})[0];
+  return (e&&e.amt)||0;
+}
+
+/* The fare must follow the NUMBER of people, not just the fact that the box
+   is ticked. Three passengers in a car is 3 x 75, and the server will record
+   three rows and owe DASH 3 x 13. If this did not multiply, the passenger
+   would be charged for one and three would be covered. */
+function syncPaxFare(){
+  var rows=document.getElementById('xpRows');
+  var n=rows?rows.children.length:0;
+  if(n>0) selectedExtras.extra_passenger=paxFee()*n;
+  else delete selectedExtras.extra_passenger;
+  var add=document.getElementById('xpAdd');
+  if(add) add.style.display=(n>0&&n<paxMax())?'block':'none';
+  updateFare();
+}
+
+function addPaxRow(){
+  var rows=document.getElementById('xpRows');
+  if(!rows||rows.children.length>=paxMax()) return;
+  var i=rows.children.length;
+  var d=document.createElement('div');
+  d.className='xp-row';
+  d.style.cssText='margin-bottom:8px;padding-bottom:8px'+(i?';border-top:1px solid #E2E8F0;padding-top:8px':'');
+  d.innerHTML=
+    (paxMax()>1?'<div style="font-size:.66rem;color:var(--text-light);margin-bottom:4px">'+
+      t('xp_nth').replace('{n}',i+1)+'</div>':'')+
+    '<input class="xp-name" type="text" placeholder="'+t('xp_name')+'" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:8px;font-family:var(--body);font-size:.85rem;margin-bottom:6px">'+
+    '<input class="xp-phone" type="tel" inputmode="tel" placeholder="'+t('xp_phone')+'" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:8px;font-family:var(--body);font-size:.85rem">'+
+    (i>0?'<button type="button" onclick="this.closest(\'.xp-row\').remove();syncPaxFare()" style="margin-top:6px;background:none;border:none;color:#D21034;font-size:.72rem;font-weight:700;font-family:var(--body);cursor:pointer">'+t('xp_remove')+'</button>':'');
+  rows.appendChild(d);
+  syncPaxFare();
 }
 
 /* The extra passenger as the server wants them, or null.
    ⛔ Returns null unless BOTH a name and a usable phone are there. The server
    drops a nameless one on the floor, which would leave somebody charged 50
    and uncovered - the exact failure this whole change exists to end. */
-function extraPassengerEntered(){
-  if(!selectedExtras.extra_passenger) return null;
-  var n=document.getElementById('xpName'), p=document.getElementById('xpPhone');
-  var name=n?n.value.trim():'', phone=p?p.value.trim():'';
-  if(!name||phone.replace(/\D/g,'').length<8) return null;
-  return {name:name, phone:mswPhone(phone)};
+function extraPassengersEntered(){
+  if(!selectedExtras.extra_passenger) return [];
+  var rows=document.querySelectorAll('#xpRows .xp-row');
+  var out=[];
+  for(var i=0;i<rows.length;i++){
+    var n=rows[i].querySelector('.xp-name'), p=rows[i].querySelector('.xp-phone');
+    var name=n?n.value.trim():'', phone=p?p.value.trim():'';
+    /* ⛔ One incomplete row makes the WHOLE thing invalid. Sending two of
+       three would charge for three and cover two. */
+    if(!name||phone.replace(/\D/g,'').length<8) return null;
+    out.push({name:name, phone:mswPhone(phone)});
+  }
+  return out.length?out:null;
 }
 /* Per spec: apply only the single highest applicable surge for this vehicle type */
 function currentSurge(vp){
@@ -2839,16 +2907,16 @@ function doSubmitRide(name,phone){
 
   /* ⛔ The 50 is already in the fare at this point. Sending the booking
      without the name would charge for a cover nobody can claim. */
-  var xp=extraPassengerEntered();
-  if(selectedExtras.extra_passenger&&!xp){
+  var xp=extraPassengersEntered();
+  if(selectedExtras.extra_passenger&&(!xp||!xp.length)){
     var box=document.getElementById('extraPaxBox'), err=document.getElementById('xpErr');
     if(box) box.style.display='block';
     if(err){err.textContent=t('xp_need');err.style.display='';}
     showStep(2);
-    var nameEl=document.getElementById('xpName'); if(nameEl) nameEl.focus();
+    var nameEl=document.querySelector('#xpRows .xp-name'); if(nameEl) nameEl.focus();
     return;
   }
-  if(xp) rideData.extra_passengers=[xp];
+  if(xp&&xp.length) rideData.extra_passengers=xp;
 
   showStep(3);
 
