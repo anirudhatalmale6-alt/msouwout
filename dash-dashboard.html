@@ -358,14 +358,20 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
   <div class="table-card anim d6">
     <div class="table-card-header">
       <h3 data-i18n="inc_title">Incidents &amp; Assistance</h3>
-      <span class="badge badge-red">0</span>
+      <span class="badge badge-red" id="incBadge">0</span>
     </div>
-    <div class="empty-state">
-      <div class="empty-icon">
-        <svg width="28" height="28" viewBox="0 0 40 40" fill="none"><rect x="16" y="8" width="8" height="24" rx="2" fill="#D8DDE8"/><rect x="8" y="16" width="24" height="8" rx="2" fill="#D8DDE8"/></svg>
+    <!-- 🚨 This card promised "tous les details" and showed an empty state for
+         ever, while the tile above it counted 1. A partner read both at once.
+         Filled by JS now - and deliberately no data-i18n on #incBody, which
+         would wipe whatever was written into it. -->
+    <div id="incBody">
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg width="28" height="28" viewBox="0 0 40 40" fill="none"><rect x="16" y="8" width="8" height="24" rx="2" fill="#D8DDE8"/><rect x="8" y="16" width="24" height="8" rx="2" fill="#D8DDE8"/></svg>
+        </div>
+        <div class="empty-title" data-i18n="inc_empty">Aucun incident declare</div>
+        <div class="empty-desc" data-i18n="inc_empty_desc">Les incidents signales lors des courses MsouWout apparaitront ici avec tous les details.</div>
       </div>
-      <div class="empty-title" data-i18n="inc_empty">Aucun incident declare</div>
-      <div class="empty-desc" data-i18n="inc_empty_desc">Les incidents signales lors des courses MsouWout apparaitront ici avec tous les details.</div>
     </div>
   </div>
 
@@ -524,7 +530,10 @@ function setLang(lang) {
      ⚠️ drawRecon is defined inside the fetch closure, so it is reached through
      window. The first version called it directly and a try/catch swallowed the
      ReferenceError, which is exactly why the line stayed in French. */
-  setTimeout(function(){ if (window.drawRecon) window.drawRecon(); }, 0);
+  setTimeout(function(){
+    if (window.drawRecon) window.drawRecon();
+    if (window.drawIncidents) window.drawIncidents();
+  }, 0);
   document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.remove('active')});
   document.getElementById('lang-' + lang).classList.add('active');
   var t = translations[lang] || translations.fr;
@@ -600,6 +609,69 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   /* Drawn from the stored summary so a language switch redraws it. */
+  /* Who was on the ride when something happened.
+     ⛔ Only rides with an alert carry names - see the comment on the endpoint.
+     The partner needs the people on the claim, not the customer book. */
+  window.drawIncidents = function drawIncidents(){
+    var d=window._dash, host=el('incBody'), badge=el('incBadge');
+    if(!d||!host) return;
+    var rows=d.incident_list;
+    if(badge) badge.textContent = (d.incidents!=null) ? d.incidents : 0;
+    /* An older server sends only a count. Saying so is better than drawing an
+       empty state under a badge that reads 1. */
+    if(!rows){
+      if(d.incidents) host.innerHTML='<div style="padding:18px;font-size:.9rem;color:#92400E;'+
+        'background:#FFFBEB;border-radius:10px;margin:10px">'+
+        (currentLang==='en'?'Details are not available from this server yet.'
+                           :'Les details ne sont pas encore disponibles.')+'</div>';
+      return;
+    }
+    if(!rows.length) return;      /* keep the empty state the page ships with */
+
+    var L=(currentLang==='en')
+      ? {em:'EMERGENCY', mo:'Check-in', pass:'Passenger', drv:'Driver',
+         ord:'Ordered by', route:'Route', cov:'Protection', paid:'paid',
+         unpaid:'not paid', note:'Names are shown only for rides where an alert was raised.'}
+      : {em:'URGENCE', mo:'Verification', pass:'Passager', drv:'Chauffeur',
+         ord:'Commande par', route:'Trajet', cov:'Protection', paid:'payee',
+         unpaid:'non payee', note:'Les noms ne sont affiches que pour les courses avec une alerte.'};
+
+    var html='';
+    rows.forEach(function(r){
+      var urgent = r.level==='emergency';
+      html+='<div style="padding:14px 16px;border-bottom:1px solid #EEF1F6">'+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">'+
+          '<div style="font-family:monospace;font-weight:700;color:#0A0E1A">'+esc(r.tracking_code)+'</div>'+
+          '<span style="font-size:.68rem;font-weight:800;padding:4px 10px;border-radius:99px;'+
+            (urgent?'background:#FEE2E2;color:#991B1B':'background:#FEF3C7;color:#92400E')+'">'+
+            (urgent?L.em:L.mo)+'</span>'+
+        '</div>'+
+        '<div style="font-size:.78rem;color:#64748B;margin-top:3px">'+esc(fmtDate(r.at))+'</div>'+
+        '<div style="margin-top:9px;font-size:.88rem;line-height:1.65;color:#1A2A4A">'+
+          '<b>'+L.pass+':</b> '+esc(r.passenger.name||'—')+' · '+esc(r.passenger.phone||'—')+'<br>'+
+          '<b>'+L.drv+':</b> '+esc(r.driver.name||'—')+' · '+esc(r.driver.phone||'—')+
+            (r.driver.plate?' · '+esc(r.driver.plate):'')+
+            (r.driver.vehicle?' ('+esc(r.driver.vehicle)+')':'')+
+          (r.ordered_by?'<br><b>'+L.ord+':</b> '+esc(r.ordered_by.name||'—')+' · '+
+             esc(r.ordered_by.phone||'—'):'')+
+          ((r.pickup||r.dropoff)?'<br><b>'+L.route+':</b> '+esc(r.pickup||'—')+' → '+
+             esc(r.dropoff||'—'):'')+
+          '<br><b>'+L.cov+':</b> '+(r.protection_paid?L.paid:L.unpaid)+
+        '</div></div>';
+    });
+    html+='<div style="padding:12px 16px;font-size:.76rem;color:#8A95AA">'+L.note+'</div>';
+    host.innerHTML=html;
+  };
+
+  function fmtDate(x){
+    if(!x) return '';
+    try { return new Date(x).toLocaleString(); } catch(e){ return String(x); }
+  }
+  function esc(v){
+    return String(v==null?'':v).replace(/[&<>"]/g,function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});
+  }
+
   window.drawRecon = function drawRecon(){
     var d=window._dash, pot=window._dashPot, rc=el('dsRecon');
     if(!d||!rc) return;
@@ -655,6 +727,7 @@ document.addEventListener('DOMContentLoaded', function(){
          redraws it - it has no data-i18n, which would wipe it. */
       window._dash = d; window._dashPot = pot;
       drawRecon();
+      drawIncidents();
       var tb=el('financialBody');
       if(tb && d.monthly && d.monthly.length){
         tb.innerHTML=d.monthly.map(function(m){
