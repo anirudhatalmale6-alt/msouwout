@@ -741,15 +741,26 @@ document.addEventListener('DOMContentLoaded', function(){
         /* Jeffery, 8 Oct: "Display the 13 HTG DASH allocation separately in
            our accounting and DASH reports." Its own sentence, never folded
            into the 25-pot figures above it. */
+        var xr=(d.extra_passenger_rate)||{};
         if(d.extra_passengers){
-          var xr=(d.extra_passenger_rate)||{fee:50,dash:13,driver:27,msouwout:10};
           html+='<br>'+((currentLang==='en')
             ? 'Shared rides: <b>'+num(d.extra_passengers)+'</b> covered extra passenger(s) &times; '+
-              xr.dash+' HTG = <b>'+num(d.extra_passenger_dash)+' HTG</b> (from the existing '+
-              xr.fee+' HTG shared-ride fee &mdash; '+xr.driver+' driver, '+xr.msouwout+' MsouWout).'
+              (xr.dash||13)+' HTG = <b>'+num(d.extra_passenger_dash)+' HTG</b>.'
             : 'Courses partagees : <b>'+num(d.extra_passengers)+'</b> passager(s) supplementaire(s) couvert(s) &times; '+
-              xr.dash+' HTG = <b>'+num(d.extra_passenger_dash)+' HTG</b> (sur les '+xr.fee+
-              ' HTG deja percus &mdash; '+xr.driver+' chauffeur, '+xr.msouwout+' MsouWout).');
+              (xr.dash||13)+' HTG = <b>'+num(d.extra_passenger_dash)+' HTG</b>.');
+        }
+        /* The two rates side by side. One published rate was misleading the
+           moment cars went live at a different fee. */
+        if(xr.moto && xr.car){
+          html+='<br>'+((currentLang==='en')
+            ? 'Rate per extra passenger &mdash; moto <b>'+xr.moto.fee+' HTG</b> ('+xr.moto.dash+
+              ' DASH, '+xr.moto.driver+' driver, '+xr.moto.msouwout+' MsouWout) &middot; car <b>'+
+              xr.car.fee+' HTG</b> ('+xr.car.dash+' DASH, '+xr.car.driver+' driver, '+
+              xr.car.msouwout+' MsouWout). DASH receives '+xr.dash+' HTG either way.'
+            : 'Tarif par passager supplementaire &mdash; moto <b>'+xr.moto.fee+' HTG</b> ('+xr.moto.dash+
+              ' DASH, '+xr.moto.driver+' chauffeur, '+xr.moto.msouwout+' MsouWout) &middot; voiture <b>'+
+              xr.car.fee+' HTG</b> ('+xr.car.dash+' DASH, '+xr.car.driver+' chauffeur, '+
+              xr.car.msouwout+' MsouWout). DASH recoit '+xr.dash+' HTG dans les deux cas.');
         }
         if(d.owed_total!=null){
           html+='<br><b>'+((currentLang==='en')?'Total owed to DASH: ':'Total du a DASH : ')+
