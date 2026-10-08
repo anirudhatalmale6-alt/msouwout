@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portail DASH — ce qui a changé</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0A2463;--blue:#00209F;--red:#D21034;--green:#1B8C3D;
+  --ink:#0A0E1A;--text:#1A2A4A;--mid:#5A6B8A;--light:#8A95AA;
+  --line:#E2E8F0;--soft:#F1F5F9;--bg:#F7F9FC;--white:#fff;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --disp:'DM Serif Display',Georgia,serif;
+  --mono:'JetBrains Mono',monospace;
+}
+body{font-family:var(--body);background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;line-height:1.6}
+.stripe{height:4px;background:linear-gradient(90deg,var(--blue) 50%,var(--red) 50%)}
+.hero{background:linear-gradient(135deg,var(--navy),#123a8a);color:#fff;padding:34px 20px 30px}
+.hero .kicker{font-size:.7rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  opacity:.75;margin-bottom:10px}
+.hero h1{font-family:var(--disp);font-size:1.75rem;line-height:1.18;margin-bottom:10px}
+.hero p{font-size:.92rem;opacity:.92;max-width:40em}
+.wrap{max-width:720px;margin:0 auto;padding:22px 16px 60px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:16px;
+  padding:20px;margin-bottom:16px}
+.card h2{font-size:1.02rem;font-weight:800;color:var(--ink);margin-bottom:4px;
+  display:flex;align-items:baseline;gap:9px}
+.card h2 .n{font-family:var(--mono);font-size:.78rem;color:var(--blue);
+  background:#EEF3FF;border-radius:6px;padding:2px 8px;flex:0 0 auto}
+.card .sub{font-size:.8rem;color:var(--light);margin-bottom:13px}
+.ba{display:grid;gap:10px;margin-top:4px}
+@media(min-width:620px){.ba{grid-template-columns:1fr 1fr}}
+.box{border-radius:11px;padding:13px 15px;font-size:.87rem}
+.box .lbl{font-size:.66rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:6px}
+.before{background:#FEF2F2;border:1px solid #FCA5A5}
+.before .lbl{color:#991B1B}
+.after{background:#ECFDF5;border:1px solid #6EE7B7}
+.after .lbl{color:#065F46}
+.why{margin-top:12px;font-size:.85rem;color:var(--mid);
+  border-left:3px solid var(--line);padding-left:12px}
+.sum{background:var(--white);border:1px solid var(--line);border-radius:16px;
+  padding:18px 20px;margin-bottom:16px;font-family:var(--mono);font-size:.84rem;
+  line-height:1.9;overflow-x:auto}
+.sum b{color:var(--ink)}
+.cta{display:block;text-align:center;background:var(--blue);color:#fff;font-weight:800;
+  padding:15px;border-radius:12px;text-decoration:none;margin:4px 0 8px}
+.note{font-size:.78rem;color:var(--light);text-align:center;line-height:1.6}
+.foot{text-align:center;font-size:.76rem;color:var(--light);margin-top:26px;line-height:1.7}
+ul{margin:8px 0 0 18px;font-size:.87rem}
+li{margin-bottom:5px}
+</style>
+</head>
+<body>
+<div class="stripe"></div>
+<div class="hero">
+  <div class="kicker">MsouWout &times; DASH</div>
+  <h1>Ce qui a changé sur le portail DASH</h1>
+  <p>Quatre corrections apportées au tableau de bord partenaire. Les montants dus à DASH
+     n’ont pas changé — ce sont les libellés et les détails manquants qui ont été corrigés.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- 1 -->
+  <div class="card">
+    <h2><span class="n">1</span> La liste des cliniques</h2>
+    <div class="sub">La plus importante des quatre.</div>
+    <div class="ba">
+      <div class="box before"><div class="lbl">Avant</div>
+        Six hôpitaux qui ne sont pas des structures DASH : HUEH, Bernard Mevs,
+        St. Luc, Lambert Santé, Medika Mamba, Communauté Haïtienne.
+      </div>
+      <div class="box after"><div class="lbl">Maintenant</div>
+        Les 14 structures officielles de DASH, avec leurs téléphones, reprises
+        de dashhaiti.org/nos-structures. Les 6 temporairement indisponibles
+        pour raisons de sécurité sont indiquées comme telles.
+      </div>
+    </div>
+    <div class="why">Un passager blessé envoyé vers un hôpital sans convention
+      est refusé à la porte. Les sites fermés sont affichés en gris plutôt que
+      masqués : une structure qui disparaît silencieusement ressemble à une
+      structure qui n’a jamais existé.</div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card">
+    <h2><span class="n">2</span> « Frais collectés (25 HTG/course) »</h2>
+    <div class="sub">La tuile affichait la part DASH sous une étiquette qui promettait le pot entier.</div>
+    <div class="ba">
+      <div class="box before"><div class="lbl">Avant</div>
+        <b>Frais collectés (25 HTG/course) : 120 HTG</b> pour 6 courses.
+        Or 6 &times; 25 = 150.
+      </div>
+      <div class="box after"><div class="lbl">Maintenant</div>
+        <b>Pot de protection (25 HTG/course) : 150 HTG</b><br>
+        <b>Dû à DASH — 80% du pot : 120 HTG</b>
+      </div>
+    </div>
+    <div class="why">Le relevé mensuel affichait aussi le même chiffre dans les
+      colonnes « Frais collectés » et « Part DASH ». Les deux colonnes sont
+      maintenant distinctes.</div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card">
+    <h2><span class="n">3</span> Le calcul, affiché en toutes lettres</h2>
+    <div class="sub">Pour répondre à la question « où passe le 13<sup>e</sup> gourde du passager ? ».</div>
+    <div class="sum">
+      Par course : <b>25 HTG</b> = 13 du passager + 12 du chauffeur
+      &rarr; <b>20 pour DASH</b> + 5 pour MsouWout.<br>
+      Sur 6 courses payées : passagers <b>78</b> + chauffeurs <b>72</b>
+      = <b>150 HTG</b> collectés, dont <b>120 HTG dus à DASH</b>.
+    </div>
+    <div class="why">Il n’y a pas de demi-gourde en circulation : un pot de 25
+      ne se partage pas en deux parts égales, donc le passager porte la gourde
+      impaire et le chauffeur en paie 12. Rien ne manque. Si les deux moitiés
+      cessaient un jour de faire le total, la ligne passerait au rouge et
+      demanderait de ne rien régler sur cette base.</div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card">
+    <h2><span class="n">4</span> Les incidents</h2>
+    <div class="sub">La section promettait « tous les détails » et n’affichait rien.</div>
+    <div class="ba">
+      <div class="box before"><div class="lbl">Avant</div>
+        La tuile comptait 1 incident, la section en dessous affichait
+        « Aucun incident déclaré ». Les deux étaient visibles en même temps.
+      </div>
+      <div class="box after"><div class="lbl">Maintenant</div>
+        Chaque alerte est listée : passager, chauffeur avec plaque, personne
+        qui a commandé la course le cas échéant, trajet, et si la protection
+        a été payée.
+      </div>
+    </div>
+    <div class="why">Une urgence et une simple vérification ne sont plus
+      comptées ensemble : ce ne sont pas la même chose. Les noms n’apparaissent
+      que pour les courses ayant déclenché une alerte — un assureur voit les
+      personnes concernées par le dossier, pas l’ensemble du fichier client.</div>
+    <ul>
+      <li>Les passagers d’une course partagée sont listés séparément du
+          passager qui a réservé.</li>
+      <li>L’allocation de 13 HTG par passager supplémentaire couvert apparaît
+          sur sa propre ligne, jamais mélangée au pot de 25.</li>
+    </ul>
+  </div>
+
+  <a class="cta" href="../dash-dashboard.html">Ouvrir le portail DASH</a>
+  <div class="note">Le lien du portail n’a pas changé. Ouvrez-le avec votre clé
+    d’accès habituelle pour voir les chiffres réels.</div>
+
+  <div class="foot">
+    MsouWout &mdash; Protection &amp; Assistance DASH<br>
+    Page mise à jour le 8 octobre 2026
+  </div>
+</div>
+</body>
+</html>
