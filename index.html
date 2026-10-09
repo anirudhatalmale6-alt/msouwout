@@ -1253,15 +1253,20 @@ function geoPace(){ return new Promise(function(r){ setTimeout(r,GEO_PACE_MS); }
    get a real distance, or the fare falls back to a guess.
    ⛔ Only a CONFIDENT match is allowed to set a price. A weak fuzzy hit is
    fine for a list she can look at and reject; it is not fine for money. */
-function localGeocode(text){
+function localGeocode(text,minScore){
   try{
     if(!window.MW_PLACES||typeof MW_PLACES.search!=='function') return Promise.resolve(null);
+    var bar=(minScore==null)?0.9:minScore;
     var at=whereIsShe();
     return MW_PLACES.search(text,{limit:1,lat:at.lat,lng:at.lng}).then(function(list){
       if(!list||!list.length) return null;
-      if(!(list[0]._mw_score>=0.9)) return null;
+      if(!(list[0]._mw_score>=bar)) return null;
       var p={lat:parseFloat(list[0].lat),lng:parseFloat(list[0].lon)};
-      return (isFinite(p.lat)&&isFinite(p.lng))?p:null;
+      if(!(isFinite(p.lat)&&isFinite(p.lng))) return null;
+      /* Haiti only. A loose match that lands abroad is not a near miss, it is
+         a different country, and it would price a ride across the sea. */
+      if(p.lat<17.9||p.lat>20.3||p.lng<-74.6||p.lng>-71.5) return null;
+      return p;
     }).catch(function(){return null;});
   }catch(e){ return Promise.resolve(null); }
 }
@@ -1329,7 +1334,41 @@ function geocodeAddr(text){
         var q={lat:parseFloat(list[0].lat),lng:parseFloat(list[0].lon)};
         if(isFinite(q.lat)&&isFinite(q.lng)){ _geoCache[key]=q; return q; }
       }
-      return null;
+      /* ═══ LAST RESORT: OUR OWN LIST, ON THE SHORTENED FORMS ════════════
+         🚨 8 Oct, Jennifer mid-test: no price at all, "nou pa jwenn adrès sa
+         a sou kat la", so she could not order. On her carrier Nominatim and
+         Photon are both rate-limited behind one address, and neither answers.
+
+         I measured what our own index actually says about her two addresses
+         rather than assuming:
+           "Xtra market Pétion-Ville"  -> nothing
+           "Xtra market"               -> Extra Market, Rue Villate (0.79)
+         The place IS in our list. The trailing words were burying it.
+
+         acVariants already produces exactly those shortened forms - it is how
+         the remote path copes with the same problem - so the local index is
+         asked with each of them in turn. The bar stays high enough that
+         nonsense still finds nothing.
+
+         ⛔ Last, never first, and only after BOTH services have gone silent.
+         A ride priced from the right neighbourhood beats a passenger staring
+         at a dash where the fare should be; the address the driver reads is
+         her own text either way. */
+      var lv = acVariants(normHtAddr(splitGlued(text))).slice(0,5), li = 0;
+      function localTry(){
+        if(li >= lv.length) return Promise.resolve(null);
+        var form = lv[li++];
+        return localGeocode(form, 0.7).then(function(hit){
+          if(hit){
+            _geoCache[key] = hit;
+            try{ console.warn('[GEO] both map services silent; priced from our '+
+                              'own index via "'+form+'" for: '+text); }catch(e){}
+            return hit;
+          }
+          return localTry();
+        });
+      }
+      return localTry();
     });
     });
   });
