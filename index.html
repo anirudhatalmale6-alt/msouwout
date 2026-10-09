@@ -616,6 +616,34 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
   </div>
 </div>
 
+<!-- 🚨 9 Oct. Jennifer, testing on her tablet: "Chak m peze anile l pa anile"
+     - every single time she pressed cancel, nothing happened. cancelRide()
+     opened with window.confirm(), and a WebView can stop drawing JS dialogs
+     altogether: Chrome offers "prevent this page from creating additional
+     dialogs" after a few in a row, and from then on confirm() returns false
+     INSTANTLY with nothing on screen. The function then returned silently - no
+     dialog, no error, no cancellation. That is exactly what she described, and
+     it is permanent for the rest of that page's life, which is why it failed
+     every time rather than now and then.
+
+     So the confirmation is part of the page now. Nothing outside the page can
+     suppress it, it is translated like everything else, and the destructive
+     button is red and says what it does instead of "OK".
+
+     ⛔ No data-i18n on the two buttons: askConfirm() writes their text, and
+     applyLang() would overwrite it on a language switch. See the note in
+     feedback - data-i18n erases whatever JS put there. -->
+<div class="install-overlay" id="askOverlay" onclick="if(event.target===this)askAnswer(false)">
+  <div class="install-sheet">
+    <div class="install-sheet-handle"></div>
+    <div class="install-sheet-icon" style="background:var(--red);box-shadow:0 4px 16px rgba(210,16,52,.3)">⚠️</div>
+    <p id="askMsg" style="font-size:.95rem;color:#222;margin-bottom:22px;line-height:1.55"></p>
+    <button class="install-main-btn" id="askYes"
+            style="background:var(--red);box-shadow:0 4px 16px rgba(210,16,52,.3)"></button>
+    <button class="install-skip" id="askNo"></button>
+  </div>
+</div>
+
 <!-- Share FAB (visible when URL bar is hidden in standalone mode) -->
 <button class="share-fab" id="shareFab" style="display:none" onclick="toggleShareMenu()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -1859,6 +1887,10 @@ var T_RIDE_LIVE={
      rl_cancel_ride:'Anile kous la',
      rl_cancel_confirm:'Ou vle anile demann nan? Li gratis, okenn chofe poko pran l.',
      rl_cancel_confirm_driver:'Chofe a deja aksepte epi li ka sou wout la. Si 2 minit fin pase depi li aksepte, gen yon frè anilasyon 50 HTG. Ou vle anile kanmenm?',
+     rl_ask_yes:'Wi, anile kous la',
+     rl_ask_no:'Non, kite l konsa',
+     rl_cancel_working:'N ap anile...',
+     rl_cancel_nothing:'Pa gen kous pou anile sou paj sa a.',
      paym_label:"KIJAN OU VLE PEYE",
      pay_cash_short:"Kach",
      pay_wallet:"Lòt mwayen",pay_card:"&#128179; Kat kredi",
@@ -1905,6 +1937,10 @@ var T_RIDE_LIVE={
      rl_cancel_ride:'Annuler la course',
      rl_cancel_confirm:'Annuler la demande? C\'est gratuit, aucun chauffeur ne l\'a encore prise.',
      rl_cancel_confirm_driver:'Le chauffeur a deja accepte et il est peut-etre en route. Passe un delai de 2 minutes apres son acceptation, des frais d\'annulation de 50 HTG s\'appliquent. Annuler quand meme?',
+     rl_ask_yes:'Oui, annuler la course',
+     rl_ask_no:'Non, continuer',
+     rl_cancel_working:'Annulation en cours...',
+     rl_cancel_nothing:'Aucune course a annuler sur cette page.',
      paym_label:"COMMENT VOULEZ-VOUS PAYER",
      pay_cash_short:"Espèces",
      pay_wallet:"Autre moyen",pay_card:"&#128179; Carte bancaire",
@@ -1951,6 +1987,10 @@ var T_RIDE_LIVE={
      rl_cancel_ride:'Cancel this ride',
      rl_cancel_confirm:'Cancel the request? It is free, no driver has taken it yet.',
      rl_cancel_confirm_driver:'The driver has already accepted and may be on his way. More than 2 minutes after he accepted, a 50 HTG cancellation fee applies. Cancel anyway?',
+     rl_ask_yes:'Yes, cancel the ride',
+     rl_ask_no:'No, keep it',
+     rl_cancel_working:'Cancelling...',
+     rl_cancel_nothing:'There is no ride to cancel on this page.',
      paym_label:"HOW DO YOU WANT TO PAY",
      pay_cash_short:"Cash",
      pay_wallet:"Other method",pay_card:"&#128179; Credit card",
@@ -1997,6 +2037,10 @@ var T_RIDE_LIVE={
      rl_cancel_ride:'Cancelar el viaje',
      rl_cancel_confirm:'Cancelar la solicitud? Es gratis, ningun conductor la ha tomado todavia.',
      rl_cancel_confirm_driver:'El conductor ya acepto y puede estar en camino. Pasados 2 minutos desde que acepto, se aplica una tarifa de cancelacion de 50 HTG. Cancelar de todos modos?',
+     rl_ask_yes:'Si, cancelar la carrera',
+     rl_ask_no:'No, continuar',
+     rl_cancel_working:'Cancelando...',
+     rl_cancel_nothing:'No hay ninguna carrera que cancelar en esta pagina.',
      paym_label:"CÓMO QUIERE PAGAR",
      pay_cash_short:"Efectivo",
      pay_wallet:"Otro método",pay_card:"&#128179; Tarjeta",
@@ -3198,29 +3242,69 @@ function checkRideOnce(){
 
 /* Cancel, from her phone. The endpoint decides whether anything is owed — this
    page never invents a fee, it repeats the one the server returns. */
+/* The in-page replacement for window.confirm(). Resolves true or false and
+   never rejects, so a caller can always write .then(function(ok){...}).
+   If the sheet is missing from the DOM for any reason we fall back to the
+   native dialog rather than silently refusing - a cancel that cannot be
+   confirmed is the bug I am fixing, not the behaviour I want. */
+var _askResolve=null;
+function askConfirm(msg){
+  var ov=document.getElementById('askOverlay'),
+      m=document.getElementById('askMsg'),
+      y=document.getElementById('askYes'),
+      n=document.getElementById('askNo');
+  if(!ov||!m||!y||!n){ try{return Promise.resolve(!!confirm(msg));}catch(e){return Promise.resolve(false);} }
+  m.textContent=msg;
+  y.textContent=t('rl_ask_yes');
+  n.textContent=t('rl_ask_no');
+  y.disabled=false;
+  y.onclick=function(){askAnswer(true);};
+  n.onclick=function(){askAnswer(false);};
+  ov.classList.add('show');
+  return new Promise(function(res){ _askResolve=res; });
+}
+function askAnswer(v){
+  var ov=document.getElementById('askOverlay');
+  if(ov)ov.classList.remove('show');
+  var r=_askResolve; _askResolve=null;
+  if(r)r(!!v);
+}
+window.askConfirm=askConfirm; window.askAnswer=askAnswer;
+
 function cancelRide(stage){
-  if(!rideData.id)return;
+  /* It used to return here without a word. If the page has lost the ride id
+     the passenger still deserves to be told, otherwise the button looks
+     broken - which is precisely how this got reported. */
+  if(!rideData.id){ alert(t('rl_cancel_nothing')); return; }
   var msg=(stage==='accepted')?t('rl_cancel_confirm_driver'):t('rl_cancel_confirm');
-  if(!confirm(msg))return;
-  var btns=document.querySelectorAll('.cancel-ride-btn');
-  for(var i=0;i<btns.length;i++)btns[i].disabled=true;
-  apiFetch(API_URL+'/api/rides/'+rideData.id+'/cancel',{
-    method:'PATCH',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({cancelled_by:'rider',reason:'passenger cancelled from the app'})
-  }).then(function(r){return r.json().catch(function(){return {};})})
-    .then(function(j){
-      if(j&&j.status==='cancelled'){
-        _lastStatus='cancelled';
-        stopRidePolling();
-        showCancelled({cancelled_by:'rider',cancel_fee:j.cancel_fee});
-      }else{
-        alert((j&&j.error)||t('err_generic'));
-        for(var i=0;i<btns.length;i++)btns[i].disabled=false;
-      }
-    }).catch(function(){
-      alert(t('err_generic'));
-      for(var i=0;i<btns.length;i++)btns[i].disabled=false;
-    });
+  askConfirm(msg).then(function(ok){
+    if(!ok)return;
+    var btns=document.querySelectorAll('.cancel-ride-btn'), i;
+    var labels=[];
+    for(i=0;i<btns.length;i++){ labels.push(btns[i].textContent); btns[i].disabled=true; }
+    for(i=0;i<btns.length;i++) btns[i].textContent=t('rl_cancel_working');
+    function restore(){
+      for(var k=0;k<btns.length;k++){ btns[k].disabled=false; btns[k].textContent=labels[k]; }
+    }
+    apiFetch(API_URL+'/api/rides/'+rideData.id+'/cancel',{
+      method:'PATCH',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({cancelled_by:'rider',reason:'passenger cancelled from the app'})
+    }).then(function(r){return r.json().catch(function(){return {};})})
+      .then(function(j){
+        if(j&&j.status==='cancelled'){
+          _lastStatus='cancelled';
+          stopRidePolling();
+          clearActiveRide();
+          showCancelled({cancelled_by:'rider',cancel_fee:j.cancel_fee});
+        }else{
+          alert((j&&j.error)||t('err_generic'));
+          restore();
+        }
+      }).catch(function(){
+        alert(t('err_generic'));
+        restore();
+      });
+  });
 }
 
 function showRideDone(d){
