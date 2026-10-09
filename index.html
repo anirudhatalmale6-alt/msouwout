@@ -1888,6 +1888,7 @@ var T_RIDE_LIVE={
      rl_cancel_confirm:'Ou vle anile demann nan? Li gratis, okenn chofe poko pran l.',
      rl_cancel_confirm_driver:'Chofe a deja aksepte epi li ka sou wout la. Si 2 minit fin pase depi li aksepte, gen yon frè anilasyon 50 HTG. Ou vle anile kanmenm?',
      rl_ask_yes:'Wi, anile kous la',
+     rl_ask_yes_req:'Wi, anile demann nan',
      rl_ask_no:'Non, kite l konsa',
      rl_cancel_working:'N ap anile...',
      rl_cancel_nothing:'Pa gen kous pou anile sou paj sa a.',
@@ -1938,6 +1939,7 @@ var T_RIDE_LIVE={
      rl_cancel_confirm:'Annuler la demande? C\'est gratuit, aucun chauffeur ne l\'a encore prise.',
      rl_cancel_confirm_driver:'Le chauffeur a deja accepte et il est peut-etre en route. Passe un delai de 2 minutes apres son acceptation, des frais d\'annulation de 50 HTG s\'appliquent. Annuler quand meme?',
      rl_ask_yes:'Oui, annuler la course',
+     rl_ask_yes_req:'Oui, annuler la demande',
      rl_ask_no:'Non, continuer',
      rl_cancel_working:'Annulation en cours...',
      rl_cancel_nothing:'Aucune course a annuler sur cette page.',
@@ -1988,6 +1990,7 @@ var T_RIDE_LIVE={
      rl_cancel_confirm:'Cancel the request? It is free, no driver has taken it yet.',
      rl_cancel_confirm_driver:'The driver has already accepted and may be on his way. More than 2 minutes after he accepted, a 50 HTG cancellation fee applies. Cancel anyway?',
      rl_ask_yes:'Yes, cancel the ride',
+     rl_ask_yes_req:'Yes, cancel the request',
      rl_ask_no:'No, keep it',
      rl_cancel_working:'Cancelling...',
      rl_cancel_nothing:'There is no ride to cancel on this page.',
@@ -2038,6 +2041,7 @@ var T_RIDE_LIVE={
      rl_cancel_confirm:'Cancelar la solicitud? Es gratis, ningun conductor la ha tomado todavia.',
      rl_cancel_confirm_driver:'El conductor ya acepto y puede estar en camino. Pasados 2 minutos desde que acepto, se aplica una tarifa de cancelacion de 50 HTG. Cancelar de todos modos?',
      rl_ask_yes:'Si, cancelar la carrera',
+     rl_ask_yes_req:'Si, cancelar la solicitud',
      rl_ask_no:'No, continuar',
      rl_cancel_working:'Cancelando...',
      rl_cancel_nothing:'No hay ninguna carrera que cancelar en esta pagina.',
@@ -3248,14 +3252,14 @@ function checkRideOnce(){
    native dialog rather than silently refusing - a cancel that cannot be
    confirmed is the bug I am fixing, not the behaviour I want. */
 var _askResolve=null;
-function askConfirm(msg){
+function askConfirm(msg,yesKey){
   var ov=document.getElementById('askOverlay'),
       m=document.getElementById('askMsg'),
       y=document.getElementById('askYes'),
       n=document.getElementById('askNo');
   if(!ov||!m||!y||!n){ try{return Promise.resolve(!!confirm(msg));}catch(e){return Promise.resolve(false);} }
   m.textContent=msg;
-  y.textContent=t('rl_ask_yes');
+  y.textContent=t(yesKey||'rl_ask_yes');
   n.textContent=t('rl_ask_no');
   y.disabled=false;
   y.onclick=function(){askAnswer(true);};
@@ -3277,7 +3281,9 @@ function cancelRide(stage){
      broken - which is precisely how this got reported. */
   if(!rideData.id){ alert(t('rl_cancel_nothing')); return; }
   var msg=(stage==='accepted')?t('rl_cancel_confirm_driver'):t('rl_cancel_confirm');
-  askConfirm(msg).then(function(ok){
+  /* The button must name the thing being cancelled: at the searching stage
+     it is still a request, not a ride she is sitting in. */
+  askConfirm(msg,(stage==='accepted')?'rl_ask_yes':'rl_ask_yes_req').then(function(ok){
     if(!ok)return;
     var btns=document.querySelectorAll('.cancel-ride-btn'), i;
     var labels=[];
