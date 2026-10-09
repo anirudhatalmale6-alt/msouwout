@@ -402,7 +402,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
   <div class="table-card anim d6" style="overflow:visible">
     <div class="table-card-header">
       <h3 data-i18n="clinic_title">Localisation des Cliniques</h3>
-      <span class="badge badge-green" data-i18n="clinic_badge">14 Structures</span>
+      <span class="badge badge-green" id="clinicBadge" data-i18n="clinic_badge">14 Structures</span>
     </div>
     <div style="padding:20px 22px">
       <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:16px" data-i18n="clinic_desc">En cas d'accident, le systeme dirige automatiquement vers la clinique partenaire la plus proche selon la position GPS.</p>
@@ -811,6 +811,47 @@ document.addEventListener('DOMContentLoaded', function(){
          load must not be mistaken for a figure that is genuinely zero. */
       note('Impossible de charger les chiffres pour le moment ('+e.message+'). Les totaux ci-dessous ne sont pas a jour.',true);
     });
+})();
+</script>
+<script>
+/* ═══ THE CLINIC LIST, NOW LIVE ════════════════════════════════════════════
+   Jeffery, 8 Oct: the fourteen structures are maintained on dash-clinics.html
+   now, not in this file. The markup below stays as a FALLBACK: if the API is
+   unreachable the partner still sees the list that was correct on 8 October,
+   rather than an empty box that reads as "DASH has no structures".
+
+   ⛔ No key is needed to read it. A passenger looking for the nearest
+   hospital is not signed in to anything.
+   ⚠️ data-i18n is NOT used on anything this writes - applyLang() would erase
+   it on the next language switch. The badge keeps its data-i18n and is
+   written through the dictionary instead.                                   */
+(function(){
+  var API='https://msouwout-backend.onrender.com';
+  var box=document.getElementById('clinicList');
+  if(!box) return;
+  function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+
+  fetch(API+'/api/dash/clinics').then(function(r){return r.json();}).then(function(j){
+    /* `clinics: null` is the server telling us it failed. Leaving the
+       fallback markup in place is the right answer; wiping it for an empty
+       list is not. */
+    if(!j||!j.clinics||!j.clinics.length) return;
+    box.innerHTML=j.clinics.map(function(c){
+      var shut=c.status!=='open';
+      return '<div class="clinic-item'+(shut?' closed':'')+'">'+
+        '<span class="ci-dot '+(shut?'grey':'green')+'"></span><div><strong>'+
+        esc(c.name)+'</strong><br><span class="ci-addr">'+
+        esc(c.address||'')+(c.phones?' &middot; &#128222; '+esc(c.phones):'')+'</span>'+
+        (shut&&c.note?'<br><span class="ci-closed">'+esc(c.note)+'</span>':'')+
+        '</div></div>';
+    }).join('');
+    /* The badge counts every structure, open or not - six of them being shut
+       is exactly the thing somebody needs to see, and "8 Structures" would
+       hide it. */
+    var b=document.getElementById('clinicBadge');
+    if(b) b.textContent=j.count+' Structures';
+  }).catch(function(){ /* keep the fallback markup */ });
 })();
 </script>
 </body>

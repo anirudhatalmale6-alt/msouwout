@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Structures DASH — MsouWout</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0A2463">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0A2463;--blue:#00209F;--red:#D21034;--green:#1B8C3D;
+  --ink:#0A0E1A;--text:#1A2A4A;--mid:#5A6B8A;--light:#8A95AA;
+  --line:#E2E8F0;--soft:#F1F5F9;--bg:#F7F9FC;--white:#fff;
+  --gold:#D4A017;--gold-soft:#FDF3D7;
+  --body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --disp:'DM Serif Display',Georgia,serif;
+  --mono:'JetBrains Mono',monospace;
+}
+body{font-family:var(--body);background:var(--bg);color:var(--text);line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+button{font-family:var(--body);cursor:pointer;border:none;background:none}
+.stripe{height:4px;background:linear-gradient(90deg,var(--blue) 50%,var(--red) 50%)}
+.head{background:var(--navy);color:#fff;padding:18px 16px}
+.head h1{font-family:var(--disp);font-size:1.35rem;line-height:1.2}
+.head p{font-size:.8rem;opacity:.8;margin-top:4px}
+.wrap{max-width:720px;margin:0 auto;padding:18px 14px 70px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:14px;
+  padding:16px;margin-bottom:14px}
+h2{font-size:1rem;font-weight:800;color:var(--ink);margin-bottom:8px}
+.lead{font-size:.84rem;color:var(--mid);margin-bottom:12px}
+label{display:block;font-size:.72rem;font-weight:800;color:var(--mid);
+  margin:11px 0 4px;text-transform:uppercase;letter-spacing:.4px}
+input,select,textarea{width:100%;padding:11px;border:1.5px solid var(--line);
+  border-radius:10px;font-family:var(--body);font-size:.93rem;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{width:100%;margin-top:12px;padding:13px;border-radius:10px;font-weight:800;
+  font-size:.92rem;background:var(--blue);color:#fff}
+.btn.g{background:var(--green)}
+.btn.r{background:var(--red)}
+.btn.o{background:#fff;color:var(--mid);border:1.5px solid var(--line)}
+.btn.sm{width:auto;padding:8px 13px;font-size:.78rem;margin:0}
+.btn:disabled{opacity:.5}
+.acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.msg{border-radius:10px;padding:12px;font-size:.84rem;margin-bottom:11px;display:none}
+.msg.err{background:#FDECEF;color:#B00D2C;border:1px solid #F5C6CE}
+.msg.ok{background:#E8F5E9;color:#126B2C;border:1px solid #BEE5C6}
+.msg.warn{background:var(--gold-soft);color:#7A5C0A;border:1px solid #EBD9A0}
+.cl{border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:9px;
+  background:#fff}
+.cl.shut{background:var(--soft);opacity:.95}
+.cl-top{display:flex;justify-content:space-between;gap:9px;align-items:flex-start}
+.cl-n{font-weight:800;font-size:.95rem;color:var(--ink)}
+.cl-a{font-size:.8rem;color:var(--mid);margin-top:3px}
+.cl-note{font-size:.76rem;color:#7A5C0A;margin-top:5px}
+.dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;margin-top:6px}
+.dot.open{background:var(--green)}
+.dot.temporary{background:var(--gold)}
+.dot.closed{background:var(--light)}
+.pill{font-size:.64rem;font-weight:800;padding:3px 8px;border-radius:99px;
+  text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.pill.open{background:#E8F5E9;color:var(--green)}
+.pill.temporary{background:var(--gold-soft);color:#7A5C0A}
+.pill.closed{background:var(--soft);color:var(--light)}
+.mono{font-family:var(--mono);word-break:break-all}
+.hide{display:none}
+.foot{text-align:center;font-size:.72rem;color:var(--light);margin-top:20px;line-height:1.6}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.4);
+  border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="stripe"></div>
+<div class="head">
+  <h1>Structures partenaires DASH</h1>
+  <p>Mise à jour de la disponibilité, des adresses et des téléphones</p>
+</div>
+
+<div class="wrap">
+  <div class="msg ok" id="okBox"></div>
+  <div class="msg err" id="errBox"></div>
+
+  <!-- ── THE KEY ──────────────────────────────────────────────────────── -->
+  <div class="card" id="gate">
+    <h2>Clé d'accès</h2>
+    <p class="lead">Entrez la clé qui vous a été remise. Elle n'est demandée
+      qu'une fois par session.</p>
+    <div class="msg err" id="gateErr"></div>
+    <label for="k">Clé</label>
+    <input type="password" id="k" autocomplete="off">
+    <button class="btn" id="gateBtn" onclick="unlock()">Ouvrir</button>
+    <p class="lead" style="margin:12px 0 0">La liste ci-dessous est publique et
+      s'affiche sans clé. La clé ne sert qu'à la modifier.</p>
+  </div>
+
+  <!-- ── THE LIST ─────────────────────────────────────────────────────── -->
+  <div class="card">
+    <h2>La liste</h2>
+    <p class="lead" id="tot">Chargement...</p>
+    <div class="acts hide" id="addBar">
+      <button class="btn sm g" onclick="newClinic()">+ Ajouter une structure</button>
+    </div>
+    <div id="list" style="margin-top:12px"></div>
+  </div>
+
+  <!-- ── THE EDITOR ───────────────────────────────────────────────────── -->
+  <div class="card hide" id="editor">
+    <h2 id="edTitle">Modifier</h2>
+    <div class="msg err" id="edErr"></div>
+    <label for="fName">Nom *</label>
+    <input type="text" id="fName" maxlength="255">
+    <label for="fAddr">Adresse</label>
+    <input type="text" id="fAddr" maxlength="400">
+    <div class="two">
+      <div><label for="fPhone">Téléphone(s)</label>
+        <input type="text" id="fPhone" maxlength="200"></div>
+      <div><label for="fCity">Ville / zone</label>
+        <input type="text" id="fCity" maxlength="120"></div>
+    </div>
+    <label for="fStatus">Disponibilité</label>
+    <select id="fStatus" onchange="statusChanged()">
+      <option value="open">Ouverte</option>
+      <option value="temporary">Temporairement indisponible</option>
+      <option value="closed">Fermée définitivement</option>
+    </select>
+    <label for="fNote">Note affichée sous le nom</label>
+    <input type="text" id="fNote" maxlength="300">
+    <p class="lead" style="margin-top:6px">Laissez vide pour le texte par défaut
+      quand la structure n'est pas disponible.</p>
+    <div class="two">
+      <div><label for="fLat">Latitude (optionnel)</label>
+        <input type="text" id="fLat" inputmode="decimal"></div>
+      <div><label for="fLng">Longitude (optionnel)</label>
+        <input type="text" id="fLng" inputmode="decimal"></div>
+    </div>
+    <button class="btn" id="saveBtn" onclick="save()">Enregistrer</button>
+    <button class="btn o" onclick="closeEditor()">Annuler</button>
+    <button class="btn r hide" id="delBtn" onclick="remove()">Supprimer définitivement</button>
+  </div>
+
+  <!-- ── THE DASH KEY, OWNER ONLY ─────────────────────────────────────── -->
+  <div class="card hide" id="keyCard">
+    <h2>Clé pour DASH</h2>
+    <p class="lead">Donnez cette clé au Dr Laroche pour qu'il tienne la liste à
+      jour lui-même. Elle ne donne accès qu'à cette page — ni aux courses, ni
+      aux montants, ni au reste de MsouWout.</p>
+    <div class="msg ok" id="keyBox"></div>
+    <div class="acts">
+      <button class="btn sm" onclick="mintKey()">Générer une nouvelle clé</button>
+      <button class="btn sm o" onclick="revokeKey()">Révoquer</button>
+    </div>
+    <p class="lead" id="keyState" style="margin-top:10px"></p>
+  </div>
+
+  <div class="foot">
+    Source d'origine : dashhaiti.org/nos-structures<br>
+    Une structure fermée reste affichée en gris — elle n'est jamais supprimée
+    de la liste que voient les passagers.
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   THE CLINIC EDITOR
+
+   Jeffery, 8 Oct: "a simple admin screen so authorized personnel can update
+   clinic availability, addresses, and phone numbers without modifying the
+   code. Keep it lightweight and secure."
+
+   🔑 The list READS without a key, because that is the same list the public
+   dashboard and the emergency page show. The key is only needed to change
+   something, and the page says so rather than presenting a locked door to
+   somebody who only wants to look.
+
+   🔑 The key is kept in sessionStorage for the session and never written to
+   localStorage - a tablet passed between people at a clinic should not carry
+   it to the next person.
+   ═══════════════════════════════════════════════════════════════════════════ */
+var API = 'https://msouwout-backend.onrender.com';
+var SKEY = 'mw_dash_edit_key';
+var key = '';
+var role = null;          /* 'owner' | 'dash' | null */
+var clinics = [];
+var editing = null;
+
+function $(id) { return document.getElementById(id); }
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+    return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+  });
+}
+function say(id, text, ms) {
+  var el = $(id);
+  el.textContent = text || '';
+  el.style.display = text ? 'block' : 'none';
+  if (text && ms) setTimeout(function() { el.style.display = 'none'; }, ms);
+}
+
+/* The key goes in a header, never in the query string: a URL ends up in a
+   browser history, a screenshot and a server log. */
+function req(method, path, body) {
+  var opt = { method: method, headers: {} };
+  /* 🚨 ONE BOX, TWO POSSIBLE KINDS OF KEY. The page cannot know whether what
+     was typed is the MsouWout console secret or the key issued to DASH, and
+     the server reads them from different headers - so it goes in both and the
+     server decides which it is. The first version sent only the DASH header,
+     which meant the owner's own secret could never open his own page. */
+  if (key) {
+    opt.headers['x-dash-edit-key'] = key;
+    opt.headers['x-admin-secret'] = key;
+  }
+  if (body) { opt.headers['Content-Type'] = 'application/json'; opt.body = JSON.stringify(body); }
+  return fetch(API + path, opt).then(function(r) {
+    return r.json().catch(function() { return {}; }).then(function(j) {
+      if (!r.ok) { var e = new Error(j.error || ('Erreur ' + r.status)); e.status = r.status; throw e; }
+      return j;
+    });
+  });
+}
+
+/* ─── THE LIST ──────────────────────────────────────────────────────────── */
+function load() {
+  return req('GET', '/api/dash/clinics').then(function(j) {
+    /* ⛔ `clinics: null` means the server failed. An empty list and a failure
+       are not the same thing to somebody looking for a hospital. */
+    if (!j.clinics) throw new Error('La liste n\'a pas pu être chargée.');
+    clinics = j.clinics;
+    $('tot').textContent = j.count + ' structures · ' + j.open + ' ouvertes · ' +
+      j.unavailable + ' indisponibles';
+    draw();
+  }).catch(function(e) {
+    $('tot').textContent = '';
+    say('errBox', e.message, 9000);
+  });
+}
+
+function draw() {
+  if (!clinics.length) {
+    $('list').innerHTML = '<p class="lead">Aucune structure enregistrée.</p>';
+    return;
+  }
+  var h = '';
+  clinics.forEach(function(c) {
+    var lbl = c.status === 'open' ? 'Ouverte'
+            : (c.status === 'temporary' ? 'Indisponible' : 'Fermée');
+    h += '<div class="cl' + (c.status === 'open' ? '' : ' shut') + '">' +
+      '<div class="cl-top"><span class="dot ' + c.status + '"></span>' +
+      '<div style="flex:1"><div class="cl-n">' + esc(c.name) + '</div>' +
+      '<div class="cl-a">' + esc(c.address || '—') +
+        (c.phones ? ' &middot; &#128222; ' + esc(c.phones) : '') + '</div>' +
+      (c.note ? '<div class="cl-note">' + esc(c.note) + '</div>' : '') +
+      '</div><span class="pill ' + c.status + '">' + lbl + '</span></div>' +
+      (role ? '<div class="acts">' +
+        '<button class="btn sm o" onclick="edit(\'' + c.id + '\')">Modifier</button>' +
+        (c.status === 'open'
+          ? '<button class="btn sm o" onclick="quick(\'' + c.id + '\',\'temporary\')">Marquer indisponible</button>'
+          : '<button class="btn sm g" onclick="quick(\'' + c.id + '\',\'open\')">Marquer ouverte</button>') +
+        '</div>' : '') +
+      '</div>';
+  });
+  $('list').innerHTML = h;
+}
+
+/* ─── THE KEY ───────────────────────────────────────────────────────────── */
+function unlock() {
+  var v = ($('k').value || '').trim();
+  if (!v) return say('gateErr', 'Entrez la clé.');
+  say('gateErr', '');
+  var b = $('gateBtn');
+  b.disabled = true; b.innerHTML = '<span class="spin"></span> Vérification...';
+  key = v;
+  req('GET', '/api/dash/whoami').then(function(j) {
+    if (!j.editor) { key = ''; throw new Error('Cette clé n\'est pas valable.'); }
+    role = j.editor;
+    try { sessionStorage.setItem(SKEY, key); } catch (e) {}
+    $('k').value = '';
+    $('gate').classList.add('hide');
+    $('addBar').classList.remove('hide');
+    if (role === 'owner') { $('keyCard').classList.remove('hide'); keyState(); }
+    draw();
+    say('okBox', role === 'owner'
+      ? 'Ouvert en tant qu\'administrateur MsouWout.'
+      : 'Ouvert en tant que DASH. Vous pouvez modifier la liste.', 5000);
+  }).catch(function(e) {
+    key = ''; role = null;
+    say('gateErr', e.message);
+  }).then(function() { b.disabled = false; b.textContent = 'Ouvrir'; });
+}
+
+function keyState() {
+  req('GET', '/api/dash/clinics-key').then(function(j) {
+    $('keyState').textContent = j.exists
+      ? 'Une clé est active' + (j.key && j.key.last_used_at
+          ? ' (dernière utilisation ' + new Date(j.key.last_used_at).toLocaleString('fr-FR') + ')'
+          : ' (jamais utilisée)') + '.'
+      : 'Aucune clé active pour DASH.';
+  }).catch(function() {});
+}
+
+function mintKey() {
+  if (!confirm('Générer une nouvelle clé ? L\'ancienne cessera de fonctionner immédiatement.')) return;
+  req('POST', '/api/dash/clinics-key', {}).then(function(j) {
+    var el = $('keyBox');
+    el.innerHTML = '<b>Nouvelle clé :</b><br><span class="mono" style="font-size:1.05rem">' +
+      esc(j.key) + '</span><br><br>Notez-la maintenant. <b>Elle ne peut pas être ' +
+      'réaffichée</b> — si elle est perdue, il faut en générer une autre.';
+    el.style.display = 'block';
+    keyState();
+  }).catch(function(e) { say('errBox', e.message, 8000); });
+}
+
+function revokeKey() {
+  if (!confirm('Révoquer la clé DASH ? Le Dr Laroche ne pourra plus modifier la liste.')) return;
+  req('DELETE', '/api/dash/clinics-key').then(function() {
+    $('keyBox').style.display = 'none';
+    say('okBox', 'Clé révoquée.', 5000);
+    keyState();
+  }).catch(function(e) { say('errBox', e.message, 8000); });
+}
+
+/* ─── EDITING ───────────────────────────────────────────────────────────── */
+function statusChanged() {
+  /* Clearing the note when a structure reopens, so "fermée pour raisons de
+     sécurité" never sits under a clinic that is taking patients again. The
+     server does the same thing; this is just so the form is honest while it
+     is open. */
+  if ($('fStatus').value === 'open' && !$('fNote').value.trim()) $('fNote').value = '';
+}
+
+function newClinic() {
+  editing = null;
+  $('edTitle').textContent = 'Nouvelle structure';
+  ['fName','fAddr','fPhone','fCity','fNote','fLat','fLng'].forEach(function(i) { $(i).value = ''; });
+  $('fStatus').value = 'open';
+  $('delBtn').classList.add('hide');
+  say('edErr', '');
+  $('editor').classList.remove('hide');
+  $('editor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function edit(id) {
+  var c = clinics.filter(function(x) { return x.id === id; })[0];
+  if (!c) return;
+  editing = id;
+  $('edTitle').textContent = c.name;
+  $('fName').value = c.name; $('fAddr').value = c.address || '';
+  $('fPhone').value = c.phones || ''; $('fCity').value = c.city || '';
+  $('fStatus').value = c.status; $('fNote').value = c.note || '';
+  $('fLat').value = c.lat === null ? '' : c.lat;
+  $('fLng').value = c.lng === null ? '' : c.lng;
+  /* ⛔ Only the MsouWout console may delete. A DASH editor is not shown a
+     button that the server would refuse - offering an action and then saying
+     no is how a partner concludes the tool is broken. */
+  $('delBtn').classList.toggle('hide', role !== 'owner');
+  say('edErr', '');
+  $('editor').classList.remove('hide');
+  $('editor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function closeEditor() { $('editor').classList.add('hide'); editing = null; }
+
+function save() {
+  var name = ($('fName').value || '').trim();
+  if (!name) return say('edErr', 'Le nom est obligatoire.');
+  var body = {
+    name: name, address: $('fAddr').value, phones: $('fPhone').value,
+    city: $('fCity').value, status: $('fStatus').value, note: $('fNote').value,
+    lat: $('fLat').value, lng: $('fLng').value
+  };
+  say('edErr', '');
+  var b = $('saveBtn');
+  b.disabled = true; b.innerHTML = '<span class="spin"></span> Enregistrement...';
+  var p = editing ? req('PUT', '/api/dash/clinics/' + editing, body)
+                  : req('POST', '/api/dash/clinics', body);
+  p.then(function() { closeEditor(); say('okBox', 'Enregistré.', 4000); return load(); })
+   .catch(function(e) { say('edErr', e.message); })
+   .then(function() { b.disabled = false; b.textContent = 'Enregistrer'; });
+}
+
+/* The one-tap action this page exists for: a clinic shuts, somebody marks it
+   shut, and the passenger app stops sending people there. */
+function quick(id, status) {
+  req('PUT', '/api/dash/clinics/' + id, { status: status })
+    .then(function() { say('okBox', 'Mis à jour.', 3500); return load(); })
+    .catch(function(e) { say('errBox', e.message, 8000); });
+}
+
+function remove() {
+  if (role !== 'owner') return;
+  var c = clinics.filter(function(x) { return x.id === editing; })[0];
+  if (!confirm('Supprimer « ' + (c ? c.name : '') + ' » définitivement ?\n\n' +
+               'Dans presque tous les cas il vaut mieux la marquer fermée : ' +
+               'elle reste visible, en gris, et personne ne s\'y rend par erreur.')) return;
+  req('DELETE', '/api/dash/clinics/' + editing)
+    .then(function() { closeEditor(); say('okBox', 'Supprimée.', 4000); return load(); })
+    .catch(function(e) { say('edErr', e.message); });
+}
+
+/* ─── BOOT ──────────────────────────────────────────────────────────────── */
+(function boot() {
+  var t = '';
+  try { t = sessionStorage.getItem(SKEY) || ''; } catch (e) {}
+  load().then(function() {
+    if (!t) return;
+    key = t;
+    return req('GET', '/api/dash/whoami').then(function(j) {
+      if (!j.editor) { key = ''; try { sessionStorage.removeItem(SKEY); } catch (e) {} return; }
+      role = j.editor;
+      $('gate').classList.add('hide');
+      $('addBar').classList.remove('hide');
+      if (role === 'owner') { $('keyCard').classList.remove('hide'); keyState(); }
+      draw();
+    }).catch(function() { key = ''; });
+  });
+})();
+</script>
+</body>
+</html>
