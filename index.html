@@ -1327,14 +1327,63 @@ function geoPace(){ return new Promise(function(r){ setTimeout(r,GEO_PACE_MS); }
    get a real distance, or the fare falls back to a guess.
    ⛔ Only a CONFIDENT match is allowed to set a price. A weak fuzzy hit is
    fine for a list she can look at and reject; it is not fine for money. */
+/* 🚨🚨 11 Oct. A CHAIN WITH FIVE BRANCHES WAS BEING PRICED SILENTLY.
+   "Delimart" is five shops, from Route de Delmas to Route de Carrefour, eight
+   kilometres apart. This asked for ONE result and priced the ride off it. So a
+   passenger who typed "delimart" and pressed the button without tapping a
+   suggestion got a real price, calculated to a branch nobody chose - and the
+   driver was sent there. Nothing looked wrong at any point.
+
+   Jeffery, 11 Oct: "NO MORE SILENT FAILURES. If a step fails, the system must
+   report it clearly instead of appearing to work."
+
+   A name that matches several places far apart is not a confident match, it is
+   a QUESTION. Refuse to price it and ask her which one. ⛔ And say THAT, not
+   "we could not find this address" - we found it five times, and sending her
+   to hunt for an address that is in the list would be a lie. */
+window._mwAmbig = null;
+function ambiguousBranches(list){
+  if(!list || list.length < 2) return null;
+  var f = (window.MW_PLACES && MW_PLACES.fold) ? MW_PLACES.fold : function(s){
+    return String(s||'').toLowerCase(); };
+  var n0 = f(list[0].name || list[0].display_name || '');
+  if(!n0) return null;
+  var same = [list[0]];
+  for(var i=1;i<list.length;i++){
+    if(f(list[i].name || list[i].display_name || '') === n0) same.push(list[i]);
+  }
+  if(same.length < 2) return null;
+  /* Two shops of one chain on the same street are not a real choice - the
+     fare barely differs and either is the place she means. Far apart is. */
+  var far = false;
+  for(var j=1;j<same.length;j++){
+    var d = haversineKm({lat:parseFloat(same[0].lat),lng:parseFloat(same[0].lon)},
+                        {lat:parseFloat(same[j].lat),lng:parseFloat(same[j].lon)});
+    if(isFinite(d) && d > 1.2){ far = true; break; }
+  }
+  if(!far) return null;
+  return { name:(list[0].name || list[0].display_name), count:same.length };
+}
+
 function localGeocode(text,minScore){
   try{
     if(!window.MW_PLACES||typeof MW_PLACES.search!=='function') return Promise.resolve(null);
     var bar=(minScore==null)?0.9:minScore;
     var at=whereIsShe();
-    return MW_PLACES.search(text,{limit:1,lat:at.lat,lng:at.lng}).then(function(list){
+    /* ⚠️ MORE THAN ONE, deliberately. With limit:1 the ambiguity is invisible
+       from here - the second branch is the evidence, and asking for one result
+       throws it away. */
+    return MW_PLACES.search(text,{limit:4,lat:at.lat,lng:at.lng}).then(function(list){
       if(!list||!list.length) return null;
       if(!(list[0]._mw_score>=bar)) return null;
+      var amb = ambiguousBranches(list);
+      if(amb){
+        window._mwAmbig = amb;
+        try{ mwReport('fare_ambiguous',
+             'several places share this name - refused to guess which',
+             { typed:String(text).slice(0,60), name:amb.name, at_least:amb.count }); }catch(e){}
+        return null;
+      }
       var p={lat:parseFloat(list[0].lat),lng:parseFloat(list[0].lon)};
       if(!(isFinite(p.lat)&&isFinite(p.lng))) return null;
       /* Haiti only. A loose match that lands abroad is not a near miss, it is
@@ -1399,8 +1448,15 @@ function geocodeAddr(text){
      it does. */
   /* Our own list is asked FIRST here as well - it is instant, it cannot be
      rate-limited, and it knows the Haitian businesses OSM has never heard of. */
+  window._mwAmbig = null;
   return localGeocode(text).then(function(mine){
     if(mine){ _geoCache[key]=mine; return mine; }
+    /* ⛔ AND STOP HERE IF IT WAS AMBIGUOUS. Falling through to the map
+       services would undo the whole guard: they would cheerfully return ONE
+       Delimart, and the ride would be priced to a branch nobody chose - the
+       exact silent failure the check above exists to prevent. The answer to
+       "which of the five?" is not available from a different service. */
+    if(window._mwAmbig) return null;
     return attempt().then(function(pt){
     if(pt) return pt;
     return photonSearch(text,1).then(function(list){
@@ -1511,6 +1567,7 @@ var T={
     fare_fixed:'Pri kous la',
     fare_fixed_note:'Se egzakteman pri sa a chofè a ap wè',
     fare_unknown_msg:'Nou pa jwenn adrès sa a sou kat la, kidonk nou pa ka kalkile pri a. Chwazi adrès la nan lis la ki parèt anba kaz la pou nou ka ba ou pri egzak la.',
+    fare_many_msg:'Gen plizyè kote ki rele "{name}". Nou pa ka devine kilès ou vle, kidonk nou pa kalkile pri a. Chwazi bon an nan lis la anba kaz la.',
     phone_label:'NIMEWO POU KONTAKTE OU',
     ph_phone:'+509 37 12 3456',
     request_btn:'Mande Chofè',
@@ -1624,6 +1681,7 @@ var T={
     fare_fixed:'Prix de la course',
     fare_fixed_note:"C'est exactement ce prix que le chauffeur voit",
     fare_unknown_msg:"Nous n'avons pas trouvé cette adresse sur la carte, donc nous ne pouvons pas calculer le prix. Choisissez l'adresse dans la liste qui apparaît sous le champ pour obtenir le prix exact.",
+    fare_many_msg:"Plusieurs endroits s'appellent « {name} ». Nous ne pouvons pas deviner lequel vous voulez, donc nous ne calculons pas le prix. Choisissez le bon dans la liste sous le champ.",
     phone_label:'NUMÉRO DE CONTACT',
     ph_phone:'+509 37 12 3456',
     request_btn:'Demander un chauffeur',
@@ -1737,6 +1795,7 @@ var T={
     fare_fixed:'Ride price',
     fare_fixed_note:'This is exactly the price the driver is shown',
     fare_unknown_msg:'We could not find this address on the map, so we cannot work out the price. Pick the address from the list under the box and we will give you the exact price.',
+    fare_many_msg:'Several places are called "{name}". We cannot guess which one you mean, so we have not worked out the price. Pick the right one from the list under the box.',
     phone_label:'CONTACT NUMBER',
     ph_phone:'+509 37 12 3456',
     request_btn:'Request Driver',
@@ -1850,6 +1909,7 @@ var T={
     fare_fixed:'Precio del viaje',
     fare_fixed_note:'Es exactamente el precio que ve el conductor',
     fare_unknown_msg:'No encontramos esta dirección en el mapa, así que no podemos calcular el precio. Elija la dirección en la lista bajo el campo y le daremos el precio exacto.',
+    fare_many_msg:'Varios lugares se llaman «{name}». No podemos adivinar cuál quiere, así que no calculamos el precio. Elija el correcto en la lista bajo el campo.',
     phone_label:'NÚMERO DE CONTACTO',
     ph_phone:'+509 37 12 3456',
     request_btn:'Pedir conductor',
@@ -2225,7 +2285,12 @@ function syncOrderBtn(){
   var known=_rideDistanceKm!=null;
   btn.disabled=!known;
   btn.style.opacity=known?'':'.55';
-  btn.title=known?'':t('fare_unknown_msg');
+  /* the same two problems, so the same two messages - a tooltip that
+     contradicts the panel above it is still telling her something false */
+  btn.title = known ? '' : (window._mwAmbig
+    ? t('fare_many_msg').replace('{name}', window._mwAmbig.name)
+                        .replace('{n}', window._mwAmbig.count)
+    : t('fare_unknown_msg'));
 }
 pickupEl.addEventListener('input',checkInputs);
 dropEl.addEventListener('input',checkInputs);
@@ -2859,7 +2924,16 @@ function updateFare(){
     if(known){ try{ clearTimeout(window._fareUnknownTimer); }catch(e){} }
     if(!known){
       var m=document.getElementById('fareUnknownMsg');
-      if(m) m.textContent=t('fare_unknown_msg');
+      /* ⛔ TELL HER WHICH PROBLEM SHE HAS. "We could not find this address"
+         is false when we found it five times and cannot tell which branch she
+         means - and it would send her hunting for an address already in the
+         list. Two problems, two messages. */
+      if(m){
+        var amb=window._mwAmbig;
+        m.textContent = amb
+          ? t('fare_many_msg').replace('{name}', amb.name).replace('{n}', amb.count)
+          : t('fare_unknown_msg');
+      }
       /* 🚨 THE EXACT THING THAT HAPPENED TO JENNIFER. The screen said the
          address was not on the map and I only learned about it because she
          told Jeffery. Now it reaches me on its own, with which end failed.
@@ -4322,6 +4396,6 @@ try{ restoreActiveRide(); }catch(e){}
 <!-- The Haiti landmark index. Loaded LAST and without blocking: if it never
      arrives, acFetch falls straight through to the OpenStreetMap lookups that
      were always there, and nobody is stopped from ordering a car. -->
-<script src="js/haiti-places.js?v=1" defer></script>
+<script src="js/haiti-places.js?v=2" defer></script>
 </body>
 </html>

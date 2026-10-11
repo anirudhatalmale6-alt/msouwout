@@ -199,12 +199,21 @@
   /* ─── 4. THE INDEX ───────────────────────────────────────────────────────── */
   var PLACES = null, LOADING = null;
 
+  /* How many places in the whole index use each word. Built as rows arrive.
+     "delimart" lands on 6 places and so decides the answer on its own;
+     "delmas" lands on hundreds and decides almost nothing. See WEIGHT. */
+  var DF = {};
+  function countDf(words) {
+    for (var i = 0; i < words.length; i++) DF[words[i]] = (DF[words[i]] || 0) + 1;
+  }
+
   function prepare(rows) {
     for (var i = 0; i < rows.length; i++) {
       var r = rows[i];
       var names = [r.n].concat(r.alt || []);
       r._t = [];        /* every folded token of every spelling of the name */
       r._f = [];        /* the whole folded name, per spelling */
+      r._s = [];        /* 🆕 the ADDRESS: street and city, folded */
       for (var k = 0; k < names.length; k++) {
         var f = fold(names[k]);
         if (!f) continue;
@@ -216,9 +225,50 @@
           if (keep && !STOP[w] && r._t.indexOf(w) < 0) r._t.push(w);
         });
       }
+
+      /* 🚨🚨 11 Oct. THE WORDS OF ITS OWN ADDRESS WERE NOT INDEXED.
+         "Delimart" on Route de Delmas could not match the word "delmas" that
+         is literally in its own address, so "delimart delmas" scored it no
+         higher than every school on that road - and a nearer school won.
+         Jeffery, comparing us to a competitor: "when for example i put
+         delimart all 4 of them comes up". Jennifer, 8 Oct, typed "Xtra market
+         Pétion-Ville" and got no price at all. Same cause, both times.
+
+         Kept SEPARATE from the name on purpose. An address word is evidence
+         about WHERE a place is, not about WHAT IT IS CALLED, so it earns
+         partial credit (ADDR_CREDIT) and can never be the distinctive word
+         that justifies returning a place at all. Otherwise "rue" would
+         return nine hundred shops. */
+      [r.street, r.city].forEach(function (part) {
+        var f = fold(part || '');
+        if (!f) return;
+        f.split(' ').forEach(function (w) {
+          var keep = w.length >= 2 || /^[0-9]$/.test(w);
+          if (keep && !STOP[w] && r._t.indexOf(w) < 0 && r._s.indexOf(w) < 0) r._s.push(w);
+        });
+      });
+
+      countDf(r._t.concat(r._s));
     }
     return rows;
   }
+
+  /* ─── 4b. HOW MUCH IS ONE WORD WORTH ────────────────────────────────────
+     Every word she types used to count the same. That is what let three
+     schools on Route de Delmas tie with the Delimart she asked for: each
+     side matched one word of two. But the two words are not worth the same.
+     A word shared by hundreds of places narrows nothing; a word belonging to
+     six of them is the whole question. So weight by rarity. */
+  var ADDR_CREDIT = 0.62;    /* a word found in the address, not the name */
+  function weightOf(tok) {
+    if (tok.weak) return 0.3;          /* "mache", "otel" - a category, not a name */
+    var df = DF[tok.w] || 0;
+    if (df <= 25) return 1;            /* delimart, muncheez, karibe */
+    if (df <= 90) return 0.8;
+    if (df <= 300) return 0.5;
+    return 0.28;                       /* delmas, petion, vil, rue, route */
+  }
+  function isDistinctive(tok) { return !tok.weak && (DF[tok.w] || 0) <= 300; }
 
   /* Fetch one file, preferring a copy this phone already paid for. */
   function fetchSet(url, key) {
@@ -324,19 +374,50 @@
       }
 
       for (var i = 0; i < rows.length; i++) {
-        var r = rows[i], total = 0, matched = 0, strong = 0;
+        var r = rows[i], total = 0, matched = 0;
 
+        /* FIRST the name, and only the name. */
+        var wTotal = 0, nameHitW = 0, nameBest = [], solid = false;
         for (var j = 0; j < q.tokens.length; j++) {
-          var tok = q.tokens[j], best = 0;
-          for (var k = 0; k < r._t.length; k++) {
-            var s = tokenScore(tok.w, r._t[k]);
-            if (s > best) best = s;
-            if (best === 1) break;
+          var tok0 = q.tokens[j], nb = 0;
+          for (var k0 = 0; k0 < r._t.length; k0++) {
+            var s0 = tokenScore(tok0.w, r._t[k0]);
+            if (s0 > nb) nb = s0;
+            if (nb === 1) break;
+          }
+          nameBest.push(nb);
+          if (nb >= 0.8) solid = true;
+        }
+
+        /* 🚨 AND THE FLOOD TEST CAUGHT ME A SECOND TIME. Requiring merely
+           SOME name match was not enough: "route" fuzzily matches "Rose" at
+           0.5, which alone is below the bar - but then the address, on a
+           Route de something, lifted it over. 39 results became 208, and the
+           new ones were La Rose de Saron and the Croix-Rouge.
+
+           So the address only ever CORROBORATES a place already recognised
+           by name. If no word she typed matches this name properly, the
+           address is not consulted at all. */
+        for (var j = 0; j < q.tokens.length; j++) {
+          var tok = q.tokens[j], best = nameBest[j], w = weightOf(tok);
+          wTotal += w;
+          var fromName = best;
+          if (solid && best < 1) {
+            var bestAddr = 0;
+            for (var k2 = 0; k2 < r._s.length; k2++) {
+              var s2 = tokenScore(tok.w, r._s[k2]);
+              if (s2 > bestAddr) bestAddr = s2;
+              if (bestAddr === 1) break;
+            }
+            if (bestAddr * ADDR_CREDIT > best) best = bestAddr * ADDR_CREDIT;
           }
           if (best > 0) {
             matched++;
-            if (!tok.weak && best >= 0.8) strong++;
-            total += best * (tok.weak ? 0.35 : 1);
+            /* ⛔ Only a NAME match can be the reason a place is returned.
+               An address word is never enough on its own, or "rue" answers
+               with nine hundred shops. */
+            if (!tok.weak && fromName >= 0.8) nameHitW += w;
+            total += best * w;
           }
         }
         /* Every distinctive word she typed has to land somewhere. "Oasis
@@ -346,20 +427,58 @@
            🚨 But the threshold counts ONLY the distinctive words. "Otel
            Oasis" is two tokens, and "otel" was never going to appear in
            "Complexe Oasis" - demanding 60% of ALL tokens threw away the
-           exact search Jeffery asked for by name. */
-        var strongTokens = q.tokens.filter(function (t) { return !t.weak; });
-        var needed = strongTokens.length;
-        if (needed && strong === 0) continue;
-        if (needed && matched < Math.ceil(needed * 0.6)) continue;
-        if (!needed && !matched) continue;
+           exact search Jeffery asked for by name.
 
-        var score = total / q.tokens.length;
+           🆕 And "distinctive" now means what it says. It used to mean "not a
+           category word", which made "delmas" and "petion" distinctive - so
+           "xtra market petion-ville" demanded that 60% of FOUR words land,
+           and Extra Market, which answers the only word that identifies it,
+           was thrown away. A word shared by hundreds of places cannot be
+           something the passenger must satisfy. */
+        /* 🚨🚨 ONE RULE DECIDES WHETHER A PLACE IS AN ANSWER AT ALL, AND THE
+           FLOOD TEST HAD TO CATCH ME TWICE BEFORE I WROTE IT PROPERLY.
+
+           At least one word she typed must match this place's NAME well.
+           Not "match something". Not "match unless the word is common".
+
+           Both my earlier attempts tied that requirement to how the word was
+           weighted, and both leaked. Weighting is about RANKING - how much a
+           word should move a place up the list. It must have no say in
+           whether the place belongs on the list. I had made "route" a
+           low-weight word, which quietly excused it from having to match,
+           and 39 results became 203: Croix-Rouge, La Rose de Saron, Hôtel
+           Royale. Those have no street at all, so the address was innocent -
+           it was plain fuzz. fold("route") is "rote" and fold("Rouge") is
+           "roge", one edit apart on a four-letter word.
+
+           ⛔ And the hit must come from the NAME. An address word can rank a
+           place, break a tie, confirm which branch she means - it can never
+           be the reason a place appears. Requiring merely SOME name match
+           was not enough either: a 0.5 fuzzy hit on "Rose" was below the bar
+           on its own, and a Route de something address then lifted it over. */
+        if (!solid) continue;
+
+        var keyTokens = q.tokens.filter(isDistinctive);
+        var needed = keyTokens.length;
+        if (needed && matched < Math.ceil(needed * 0.6)) continue;
+
+        var score = wTotal > 0 ? total / wTotal : 0;
 
         /* the whole string, in one go - "oasis" typed against "Complexe Oasis" */
         for (var m = 0; m < r._f.length; m++) {
           if (r._f[m] === qFull) { score = Math.max(score, 1.15); break; }
           if (r._f[m].indexOf(qFull) === 0) score = Math.max(score, 1.0);
         }
+
+        /* 🚨 WHAT IT IS CALLED BEATS WHAT IT IS ALSO CALLED.
+           "Market Basket" carries alt_name "Delimart" in the map data - one
+           shop, somebody else's name, almost certainly an old rebranding
+           nobody corrected. It is an exact match, so it tied with the five
+           real Delimarts, and on a fresh page with no position yet the tie
+           fell to whichever happened to sit earlier in the file. A passenger
+           who types "delimart" was being offered a different supermarket
+           first. A match on the real name wins the tie. */
+        if (r._f.length && r._f[0] === qFull) score += 0.06;
 
         if (q.cats[r.c]) score += 0.22;        /* she said "otel", this is a hotel */
 
