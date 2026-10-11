@@ -2854,19 +2854,38 @@ function updateFare(){
   var unkRow=document.getElementById('fareUnknownRow');
   if(unkRow){
     unkRow.style.display=known?'none':'flex';
+    /* A price that arrives late must cancel the report that was queued while
+       it was still being worked out. */
+    if(known){ try{ clearTimeout(window._fareUnknownTimer); }catch(e){} }
     if(!known){
       var m=document.getElementById('fareUnknownMsg');
       if(m) m.textContent=t('fare_unknown_msg');
       /* 🚨 THE EXACT THING THAT HAPPENED TO JENNIFER. The screen said the
          address was not on the map and I only learned about it because she
-         told Jeffery. Now it reaches me on its own, with which end failed. */
+         told Jeffery. Now it reaches me on its own, with which end failed.
+
+         ⚠️ BUT ONLY WHEN IT HAS GENUINELY SETTLED. This fires on every
+         redraw, including the half-second while a lookup is still in flight -
+         and twenty SUCCESSFUL journeys produced twenty-two reports of a
+         failure that never happened. A diagnostic channel full of false
+         alarms is one I learn to ignore, and then I miss the real one.
+
+         So: wait, and only report if it is still unknown when the dust has
+         settled and both boxes actually have something in them. Any new
+         redraw cancels the pending report. */
       try{
-        mwReport('fare_unknown', 'no price: an address could not be located', {
-          pickup_typed: !!(pickupEl && pickupEl.value),
-          drop_typed: !!(dropEl && dropEl.value),
-          pickup_located: window._pickupLat!=null,
-          drop_located: window._dropLat!=null
-        });
+        clearTimeout(window._fareUnknownTimer);
+        window._fareUnknownTimer = setTimeout(function(){
+          var pv = pickupEl && pickupEl.value.trim();
+          var dv = dropEl && dropEl.value.trim();
+          var stillUnknown = document.getElementById('fareUnknownRow') &&
+                             document.getElementById('fareUnknownRow').style.display !== 'none';
+          if(!pv || !dv || !stillUnknown) return;
+          mwReport('fare_unknown', 'no price: an address could not be located', {
+            pickup_located: window._pickupLat!=null,
+            drop_located: window._dropLat!=null
+          });
+        }, 6000);
       }catch(e){}
     }
   }
