@@ -727,6 +727,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       <button onclick="useMyLocation()" id="gpsBtn" style="display:flex;align-items:center;gap:6px;padding:6px 14px;margin:4px 0 4px 24px;border-radius:100px;background:rgba(27,140,61,.08);border:1px solid rgba(27,140,61,.2);color:var(--green);font-size:.75rem;font-weight:700;cursor:pointer;transition:all .2s">
         <span>&#128205;</span> <span data-i18n="gps_btn">Sevi ak pozisyon mwen</span>
       </button>
+      <div id="gpsNote" style="display:none;margin:2px 0 6px 24px;font-size:.74rem;line-height:1.45;color:#B45309;max-width:30em"></div>
       <div class="loc-line"></div>
       <div class="ask-where second" data-i18n="ask_drop">&#127937; KOTE OU PRALE?</div>
       <div class="loc-row">
@@ -1137,6 +1138,51 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
 
 <script>
 var API_URL='https://msouwout-backend.onrender.com';
+
+
+/* ═══ WHAT FAILED, WRITTEN DOWN WHERE I CAN READ IT ═══════════════════════
+   Jeffery, 11 Oct: "NO MORE SILENT FAILURES. When something goes wrong, the
+   system must explain the problem clearly and record enough information for
+   you to diagnose it."
+
+   Both of Jennifer's bugs this week were silent. The fare never appeared and
+   nothing said why; cancel did nothing and nothing said why. All that reached
+   me was "it does not work", and finding each one meant guessing at her
+   network conditions.
+
+   ⛔ This never throws, never blocks anything and never shows the passenger a
+   thing. A page that is already in trouble must not acquire a second fault
+   because it tried to report the first. keepalive, so a report survives her
+   closing the tab.
+   ⛔ It sends no name, no address and no GPS position. Only what broke. */
+function mwReport(where, message, detail){
+  try{
+    var body = {
+      where: String(where||'').slice(0,80),
+      message: String(message||'').slice(0,500),
+      detail: (typeof detail==='string'?detail:JSON.stringify(detail||{})).slice(0,2000),
+      platform: 'msouwout',
+      app_version: (window.APP_VERSION||''),
+      online: (navigator.onLine!==false)
+    };
+    try{ if(window.rideData && rideData.tracking_code) body.tracking_code=rideData.tracking_code; }catch(e){}
+    try{ var p=localStorage.getItem('msw_phone'); if(p) body.phone=p; }catch(e){}
+    fetch(API_URL+'/api/diag',{method:'POST',keepalive:true,
+      headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).catch(function(){});
+  }catch(e){}
+}
+window.mwReport = mwReport;
+
+/* Anything the page throws, and any promise nobody caught. These are the
+   faults that produce a frozen screen and no explanation. */
+window.addEventListener('error', function(e){
+  mwReport('window.onerror', (e && e.message) || 'script error',
+           { file: e && e.filename, line: e && e.lineno });
+});
+window.addEventListener('unhandledrejection', function(e){
+  var r = e && e.reason;
+  mwReport('unhandledrejection', (r && r.message) || String(r || 'rejected'), {});
+});
 /* ⚠️ 5 seconds was hardcoded here. On a Haitian mobile connection the ride
    POST can take longer than that - the server creates the ride, this aborts,
    and the passenger is told the order failed for a ride that exists. Callers
@@ -1486,6 +1532,7 @@ var T={
     gps_found_short:'GPS jwenn!',
     gps_denied:'Pemisyon GPS refize',
     gps_turn_on:'Aktive lokalizasyon ou',
+    gps_type_instead:'Nou pa ka jwenn kote ou ye. Ekri adrès ou nan kaz la anwo a — sa mache menm jan an.',
     gps_error:'Pa ka jwenn pozisyon',
     wa_msg_prefix:'Bonjou, mwen mande yon',
     wa_msg_from:'de',
@@ -1598,6 +1645,7 @@ var T={
     gps_found_short:'GPS trouvé !',
     gps_denied:'Permission GPS refusee',
     gps_turn_on:'Activez votre localisation',
+    gps_type_instead:"Nous n'arrivons pas a vous localiser. Ecrivez votre adresse dans le champ ci-dessus — cela fonctionne aussi bien.",
     gps_error:'Impossible de trouver la position',
     wa_msg_prefix:'Bonjour, je demande un(e)',
     wa_msg_from:'de',
@@ -1710,6 +1758,7 @@ var T={
     gps_found_short:'GPS found!',
     gps_denied:'GPS permission denied',
     gps_turn_on:'Turn on your location',
+    gps_type_instead:'We cannot find where you are. Type your address in the box above — it works just as well.',
     gps_error:'Unable to find location',
     wa_msg_prefix:'Hello, I\'m requesting a',
     wa_msg_from:'from',
@@ -1822,6 +1871,7 @@ var T={
     gps_found_short:'¡GPS encontrado!',
     gps_denied:'Permiso GPS denegado',
     gps_turn_on:'Activa tu ubicacion',
+    gps_type_instead:'No podemos encontrar donde estas. Escribe tu direccion en el campo de arriba — funciona igual.',
     gps_error:'No se pudo encontrar la ubicacion',
     wa_msg_prefix:'Hola, solicito un(a)',
     wa_msg_from:'de',
@@ -2807,6 +2857,17 @@ function updateFare(){
     if(!known){
       var m=document.getElementById('fareUnknownMsg');
       if(m) m.textContent=t('fare_unknown_msg');
+      /* 🚨 THE EXACT THING THAT HAPPENED TO JENNIFER. The screen said the
+         address was not on the map and I only learned about it because she
+         told Jeffery. Now it reaches me on its own, with which end failed. */
+      try{
+        mwReport('fare_unknown', 'no price: an address could not be located', {
+          pickup_typed: !!(pickupEl && pickupEl.value),
+          drop_typed: !!(dropEl && dropEl.value),
+          pickup_located: window._pickupLat!=null,
+          drop_located: window._dropLat!=null
+        });
+      }catch(e){}
     }
   }
   var fixedNote=document.getElementById('fareFixedNote');
@@ -3304,10 +3365,16 @@ function cancelRide(stage){
           showCancelled({cancelled_by:'rider',cancel_fee:j.cancel_fee});
         }else{
           alert((j&&j.error)||t('err_generic'));
+          /* Her words were "chak m peze anile l pa anile". If a cancel is
+             ever refused again, I want to know why without having to ask. */
+          try{ mwReport('cancel_refused', (j&&j.error)||'cancel did not take',
+                        { stage: stage, answered: j }); }catch(e){}
           restore();
         }
-      }).catch(function(){
+      }).catch(function(e){
         alert(t('err_generic'));
+        try{ mwReport('cancel_failed', 'the cancel request never completed',
+                      { stage: stage, error: String(e&&e.message||e) }); }catch(x){}
         restore();
       });
   });
@@ -3901,16 +3968,10 @@ function reverseViaPhoton(lat, lng){
 }
 
 /* GPS LOCATION */
-function useMyLocation(){
-  var btn=document.getElementById('gpsBtn');
-  btn.innerHTML='<span>&#8987;</span> <span>'+t('gps_searching')+'</span>';
-  btn.style.opacity='.6';
-  if(!navigator.geolocation){
-    btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_unavail')+'</span>';
-    setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span data-i18n="gps_btn">'+t('gps_btn')+'</span>';btn.style.opacity='1'},2000);
-    return;
-  }
-  navigator.geolocation.getCurrentPosition(function(pos){
+/* The success half of useMyLocation, lifted out so the low-accuracy RETRY
+   uses exactly the same code. Two copies of this would be two places to
+   fix the next time the reverse geocoder changes. */
+function gpsGotPosition(pos, btn){
     var lat=pos.coords.latitude;
     var lng=pos.coords.longitude;
     window._pickupLat=lat;
@@ -3972,17 +4033,76 @@ function useMyLocation(){
         btn.style.opacity='1';
         setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span data-i18n="gps_btn">'+t('gps_btn')+'</span>'},2000);
       });
-  },function(err){
-    btn.style.opacity='1';
-    if(err.code===1){
-      btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_denied')+'</span>';
-    } else if(err.code===2){
-      btn.innerHTML='<span>&#128205;</span> <span>'+t('gps_turn_on')+'</span>';
-    } else {
-      btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_error')+'</span>';
+}
+
+function useMyLocation(){
+  var btn=document.getElementById('gpsBtn');
+  btn.innerHTML='<span>&#8987;</span> <span>'+t('gps_searching')+'</span>';
+  btn.style.opacity='.6';
+  if(!navigator.geolocation){
+    btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_unavail')+'</span>';
+    setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span data-i18n="gps_btn">'+t('gps_btn')+'</span>';btn.style.opacity='1'},2000);
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(function(pos){ gpsGotPosition(pos, btn); },
+  function(err){
+    /* ═══ 🚨 TRY AGAIN WITHOUT HIGH ACCURACY BEFORE GIVING UP ══════════════
+       Jennifer, 9 Oct: "Lem sevi ak pozisyon an li pa vle lokalizem" - when
+       she uses the position button it will not locate her.
+
+       She is on a TABLET. A Wi-Fi tablet usually has no GPS chip at all, and
+       enableHighAccuracy:true asks the device for exactly the thing it does
+       not have: it waits for a satellite fix, finds none indoors, and
+       answers POSITION_UNAVAILABLE or times out. The same device will answer
+       instantly from Wi-Fi positioning when high accuracy is not demanded.
+
+       So a failure is no longer the end of it. One more attempt, low
+       accuracy, a longer window and a cached fix accepted - which is how a
+       tablet actually knows where it is. She sees nothing of this; it either
+       works or she gets the message she got before.
+
+       ⛔ Permission denied is NOT retried. She said no; asking again is both
+       pointless and rude. */
+    if(err && err.code !== 1 && !useMyLocation._retried){
+      useMyLocation._retried = true;
+      try{ mwReport('gps_retry', 'high-accuracy position failed, retrying low',
+                    { code: err.code, message: err.message }); }catch(e){}
+      navigator.geolocation.getCurrentPosition(
+        function(pos){ useMyLocation._retried = false; gpsGotPosition(pos, btn); },
+        function(e2){
+          useMyLocation._retried = false;
+          gpsGaveUp(e2, btn);
+        },
+        {enableHighAccuracy:false, timeout:20000, maximumAge:300000});
+      return;
     }
-    setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span data-i18n="gps_btn">'+t('gps_btn')+'</span>';btn.style.opacity='1'},4000);
+    useMyLocation._retried = false;
+    gpsGaveUp(err, btn);
   },{enableHighAccuracy:true,timeout:15000,maximumAge:60000});
+}
+
+/* Shown when both attempts have failed. ⛔ It REPORTS - this is the exact
+   fault Jennifer described and the only reason I heard about it was that she
+   told Jeffery. */
+function gpsGaveUp(err, btn){
+  btn.style.opacity='1';
+  if(err && err.code===1){
+    btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_denied')+'</span>';
+  } else if(err && err.code===2){
+    btn.innerHTML='<span>&#128205;</span> <span>'+t('gps_turn_on')+'</span>';
+  } else {
+    btn.innerHTML='<span>&#10060;</span> <span>'+t('gps_error')+'</span>';
+  }
+  /* 🔑 And she is told what to do instead, under the box, where it stays -
+     a message on a button that disappears after four seconds is a message
+     she will miss on a slow phone. Typing the address still works. */
+  try{
+    var note=document.getElementById('gpsNote');
+    if(note){ note.textContent=t('gps_type_instead'); note.style.display='block'; }
+  }catch(e){}
+  try{ mwReport('gps_failed', 'could not get a position after two attempts',
+                { code: err && err.code, message: err && err.message }); }catch(e){}
+  setTimeout(function(){btn.innerHTML='<span>&#128205;</span> <span data-i18n="gps_btn">'+t('gps_btn')+'</span>';btn.style.opacity='1'},4000);
 }
 
 /* SAVE PHONE FOR NEXT TIME */
