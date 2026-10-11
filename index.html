@@ -2341,48 +2341,18 @@ function keepHouseNo(typed,label){
    The rule: any word he typed that also appears in a result's commune, town or
    neighbourhood lifts that result. Stable otherwise, so the map's own order
    survives wherever we have no opinion. */
-/* 🚨🚨 11 Oct — THIS WAS UNDOING THE SEARCH FIX, ONE LAYER ABOVE IT.
-   "Xtra Market Petion-Ville" put Big Star Market first and the Extra Market
-   she asked for THIRD. The ranker was right: it scored Extra Market 0.703 at
-   the top. This function then reordered the list underneath it.
-
-   Why: the rule below lifts anything whose CITY contains a word she typed.
-   Big Star and Caribbean carry city "Pétion-Ville", so "ville" matched and
-   both were lifted. Extra Market has street "Rue Villate" and NO city in our
-   data at all, so nothing matched and it was pushed down.
-
-   🔑 The real lesson is not the accent or the missing field. It is that this
-   was written for OSM results - which always carry a full address object -
-   and our own index entries are sparser, so a rule meant to help them
-   punished ours instead. Two different neighbourhood rules, fighting.
-
-   ⛔ So it no longer touches our own results. The index already weighs the
-   neighbourhood, and far better: it reads the street AND the city AND how
-   rare each word is. A cruder rule on top can only make that worse. OSM
-   results keep this treatment, which is what it was built for. */
 function acRank(items,typed){
   var words=String(typed||'').toLowerCase()
     .replace(/\d+[a-z]?/g,' ')                 /* the street number tells us nothing */
     .split(/[^a-zà-ÿ]+/).filter(function(w){return w.length>3;});
   if(!words.length)return items;
-
-  /* Ours stay exactly as the index ordered them, ahead of the map service's. */
-  var mine=[],theirs=[];
-  (items||[]).forEach(function(it){ (it&&it._mw_local?mine:theirs).push(it); });
-  if(!theirs.length) return mine;
-
-  var ranked=theirs.map(function(it,i){
+  return items.map(function(it,i){
     var a=it.address||{};
-    /* ⚠️ fold the accents, or "petion" never matches "Pétion-Ville" - which
-       is how half of Port-au-Prince is actually spelled in the map data. */
-    var where=[a.city,a.town,a.village,a.municipality,a.county,a.suburb,
-               a.city_district,a.neighbourhood].filter(Boolean).join(' ').toLowerCase();
-    try{ where=where.normalize('NFD').replace(/[̀-ͯ]/g,''); }catch(e){}
+    var where=[a.city,a.town,a.village,a.municipality,a.county,a.suburb,a.city_district,a.neighbourhood]
+      .filter(Boolean).join(' ').toLowerCase();
     return {it:it,i:i,miss:words.some(function(w){return where.indexOf(w)>-1;})?0:1};
   }).sort(function(x,y){return x.miss-y.miss||x.i-y.i;})
     .map(function(o){return o.it;});
-
-  return mine.concat(ranked);
 }
 /* The same street can come back several times as separate segments. Two rows
    reading "Delmas 40B / Cité Saint-Georges, Commune de Delmas" are the same
