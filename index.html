@@ -644,6 +644,71 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
   </div>
 </div>
 
+<!-- ═══ CONFIRM BEFORE BOOKING ═══════════════════════════════════════════
+     Jeffery, 11 Oct: "When multiple branches share a business name, the
+     passenger must select the correct one before the system calculates the
+     final fare. Please display the selected business name, neighborhood, and
+     location clearly before booking. We cannot allow passengers to pay for a
+     ride to the wrong branch." And: "Apply the same location verification to
+     both pickup and destination. A passenger waiting at Delimart Delmas must
+     not accidentally send a driver to Delimart Clercine."
+
+     Deliberately the LAST thing before a driver is called, so there is one
+     place where what she is about to pay for is written down in full. The
+     two "chanje" buttons are the point - a confirmation she cannot act on is
+     just a dialog to dismiss. -->
+<div class="install-overlay" id="confirmOverlay"
+     onclick="if(event.target===this)confirmAnswer(false)">
+  <div class="install-sheet">
+    <div class="install-sheet-handle"></div>
+    <p id="confirmTitle" style="font-size:1.05rem;font-weight:800;color:#0B1F2A;margin:2px 0 16px"></p>
+
+    <div style="text-align:left;background:#F6F8FA;border:1px solid #E3E8EC;border-radius:14px;padding:13px 14px;margin-bottom:14px">
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <span style="font-size:1.05rem;line-height:1.3">🟢</span>
+        <div style="flex:1;min-width:0">
+          <div id="cfPickupLabel" style="font-size:.7rem;font-weight:800;letter-spacing:.04em;color:#6A7985;text-transform:uppercase"></div>
+          <div id="cfPickup" style="font-size:.95rem;font-weight:700;color:#0B1F2A;word-break:break-word"></div>
+          <div id="cfPickupWarn" style="display:none;font-size:.78rem;color:#B45309;margin-top:3px;line-height:1.4"></div>
+        </div>
+        <button id="cfPickupEdit" onclick="confirmEdit('pickup')"
+                style="flex:none;background:none;border:none;color:var(--blue);font-weight:800;font-size:.8rem;padding:2px 0;cursor:pointer"></button>
+      </div>
+
+      <div style="height:1px;background:#E3E8EC;margin:11px 0"></div>
+
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <span style="font-size:1.05rem;line-height:1.3">🔴</span>
+        <div style="flex:1;min-width:0">
+          <div id="cfDropLabel" style="font-size:.7rem;font-weight:800;letter-spacing:.04em;color:#6A7985;text-transform:uppercase"></div>
+          <div id="cfDrop" style="font-size:.95rem;font-weight:700;color:#0B1F2A;word-break:break-word"></div>
+          <div id="cfDropWarn" style="display:none;font-size:.78rem;color:#B45309;margin-top:3px;line-height:1.4"></div>
+        </div>
+        <button id="cfDropEdit" onclick="confirmEdit('drop')"
+                style="flex:none;background:none;border:none;color:var(--blue);font-weight:800;font-size:.8rem;padding:2px 0;cursor:pointer"></button>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin:0 2px 18px">
+      <span id="cfFareLabel" style="font-size:.82rem;font-weight:700;color:#6A7985"></span>
+      <span id="cfFare" style="font-size:1.35rem;font-weight:900;color:#0B1F2A"></span>
+    </div>
+
+    <!-- 🚨 These two had NO handlers at first. The sheet appeared, showed the
+         right address, the right branch and the right fare - and the confirm
+         button did nothing at all. A passenger would have pressed it, waited,
+         and no driver would ever have come.
+
+         My own test suite passed 25 of 25 against that, because every case I
+         had written tested a way of DECLINING: no, Escape, the backdrop,
+         change. I never once tested ACCEPTING - the only path that actually
+         books a ride. The journey test found it in one run.
+         ⛔ Test the happy path FIRST. It is the one the customer uses. -->
+    <button class="install-main-btn" id="cfYes" onclick="confirmAnswer(true)"></button>
+    <button class="install-skip" id="cfNo" onclick="confirmAnswer(false)"></button>
+  </div>
+</div>
+
 <!-- Share FAB (visible when URL bar is hidden in standalone mode) -->
 <button class="share-fab" id="shareFab" style="display:none" onclick="toggleShareMenu()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -1519,6 +1584,15 @@ var ticketRef='';
 /* ═══ TRANSLATIONS ═══ */
 var T={
   ht:{
+    cf_title:'Tcheke kous la anvan ou mande chofè a',
+    cf_pickup:'Kote pou pran w',
+    cf_drop:'Kote w prale',
+    cf_change:'Chanje',
+    cf_fare_fixed:'Pri a',
+    cf_fare_est:'Pri apeprè',
+    cf_not_on_map:'Nou pa jwenn kote sa a sou kat la. Chofè a ap sèvi ak sa ou ekri a ak repè a.',
+    cf_yes:'Wi, mande chofè a',
+    cf_no:'Non, tounen',
     pax_title:'Ou se pasaje?',pax_sub:'Ou pa bezwen kont. Ekri kote ou ye ak kote ou prale anba a.',
     main_q:'Jwenn Yon Kous <em>Nan 2 Minit</em>',
     greeting:'Chofe ap reponn rapid via WhatsApp',
@@ -1633,6 +1707,15 @@ var T={
     fare_total:'Total'
   },
   fr:{
+    cf_title:'Vérifiez la course avant d’appeler le chauffeur',
+    cf_pickup:'Lieu de prise en charge',
+    cf_drop:'Destination',
+    cf_change:'Modifier',
+    cf_fare_fixed:'Prix',
+    cf_fare_est:'Prix estimé',
+    cf_not_on_map:'Nous n’avons pas localisé cet endroit sur la carte. Le chauffeur utilisera votre adresse et votre repère.',
+    cf_yes:'Oui, appeler le chauffeur',
+    cf_no:'Non, revenir',
     pax_title:'Vous êtes passager ?',pax_sub:'Pas besoin de compte. Indiquez votre position et votre destination ci-dessous.',
     main_q:'Trouvez un Trajet <em>en 2 Minutes</em>',
     greeting:'Les chauffeurs répondent rapidement via WhatsApp',
@@ -1747,6 +1830,15 @@ var T={
     fare_total:'Total'
   },
   en:{
+    cf_title:'Check your ride before calling a driver',
+    cf_pickup:'Pick-up',
+    cf_drop:'Destination',
+    cf_change:'Change',
+    cf_fare_fixed:'Price',
+    cf_fare_est:'Estimated price',
+    cf_not_on_map:'We could not place this on the map. The driver will use what you wrote and your landmark.',
+    cf_yes:'Yes, call the driver',
+    cf_no:'No, go back',
     pax_title:'Travelling as a passenger?',pax_sub:'No account needed. Just type where you are and where you are going, below.',
     main_q:'Get a Ride <em>in 2 Minutes</em>',
     greeting:'Drivers respond quickly via WhatsApp',
@@ -1861,6 +1953,15 @@ var T={
     fare_total:'Total'
   },
   es:{
+    cf_title:'Revise su viaje antes de llamar al conductor',
+    cf_pickup:'Lugar de recogida',
+    cf_drop:'Destino',
+    cf_change:'Cambiar',
+    cf_fare_fixed:'Precio',
+    cf_fare_est:'Precio estimado',
+    cf_not_on_map:'No pudimos ubicar este lugar en el mapa. El conductor usará lo que escribió y su referencia.',
+    cf_yes:'Sí, llamar al conductor',
+    cf_no:'No, volver',
     pax_title:'¿Eres pasajero?',pax_sub:'No necesitas cuenta. Escribe dónde estás y a dónde vas, abajo.',
     main_q:'Consigue un Viaje <em>en 2 Minutos</em>',
     greeting:'Los conductores responden rápido por WhatsApp',
@@ -3089,9 +3190,105 @@ function renderPayMethods(){
 }
 renderPayMethods();
 
+/* ═══ THE CONFIRMATION STEP ════════════════════════════════════════════════
+   Shows exactly what she is about to pay for and lets her fix either end.
+
+   🔑 It also tells her when an end has NO position on the map. choose() stores
+   the coordinates of the branch she tapped; "use what I typed" deliberately
+   stores none, and the fare then falls back to a standard estimate. She
+   should know which of those she is looking at BEFORE a driver is called -
+   that is the difference between a fixed price and a guess.
+
+   ⛔ Resolves false on anything except the confirm button, including the
+   backdrop and the Escape key. A confirmation that can be dismissed INTO the
+   action is not a confirmation. */
+var _cfResolve=null, _cfEditTarget=null;
+
+function rideConfirm(){
+  return new Promise(function(resolve){
+    var ov=document.getElementById('confirmOverlay');
+    if(!ov){ resolve(true); return; }          /* never block a booking */
+    _cfResolve=resolve; _cfEditTarget=null;
+
+    var pick=(pickupEl&&pickupEl.value.trim())||'', drop=(dropEl&&dropEl.value.trim())||'';
+    document.getElementById('cfPickup').textContent=pick;
+    document.getElementById('cfDrop').textContent=drop;
+    document.getElementById('confirmTitle').textContent=t('cf_title');
+    document.getElementById('cfPickupLabel').textContent=t('cf_pickup');
+    document.getElementById('cfDropLabel').textContent=t('cf_drop');
+    document.getElementById('cfPickupEdit').textContent=t('cf_change');
+    document.getElementById('cfDropEdit').textContent=t('cf_change');
+    document.getElementById('cfFareLabel').textContent=
+      (_rideDistanceKm!=null)?t('cf_fare_fixed'):t('cf_fare_est');
+    document.getElementById('cfFare').textContent=
+      (_lastRideFare?Math.round(_lastRideFare).toLocaleString('en-US'):'—')+' HTG';
+    document.getElementById('cfYes').textContent=t('cf_yes');
+    document.getElementById('cfNo').textContent=t('cf_no');
+
+    /* 🚨 say so when we could not place an end on the map */
+    [['cfPickupWarn',window._pickupLat],['cfDropWarn',window._dropLat]]
+      .forEach(function(p){
+        var el=document.getElementById(p[0]);
+        if(!el) return;
+        var located=(p[1]!=null);
+        el.style.display=located?'none':'block';
+        if(!located) el.textContent=t('cf_not_on_map');
+      });
+
+    ov.classList.add('show');
+    document.body.style.overflow='hidden';
+  });
+}
+
+function confirmAnswer(v){
+  var ov=document.getElementById('confirmOverlay');
+  if(ov) ov.classList.remove('show');
+  document.body.style.overflow='';
+  var r=_cfResolve; _cfResolve=null;
+  if(r) r(!!v);
+}
+
+/* "Change" closes the sheet and puts her cursor in the field she wants to fix,
+   with the list open. ⛔ It must also CANCEL the booking - otherwise the ride
+   goes ahead behind the edit she is still making. */
+function confirmEdit(which){
+  _cfEditTarget=which;
+  confirmAnswer(false);
+  var el=(which==='pickup')?pickupEl:dropEl;
+  if(!el) return;
+  /* 🚨 TAKE HER BACK TO THE STEP THE BOXES ARE ON.
+     The confirmation is shown from step 2, and both address boxes live on
+     step 1. focus() on an element inside a hidden step does nothing at all -
+     so the first version of this closed the sheet and left her standing on
+     step 2 with no way to change the thing it had just asked her to check.
+     Caught by the test asking where the cursor actually was, which is why
+     that assertion is worth more than "the sheet closed". */
+  try{ showStep(1); }catch(e){}
+  /* After the step swap, so the box is on screen when it is focused. */
+  setTimeout(function(){
+    try{
+      el.focus();
+      el.setSelectionRange(el.value.length,el.value.length);
+      el.dispatchEvent(new Event('input',{bubbles:true}));   /* reopen the list */
+      el.scrollIntoView({behavior:'smooth',block:'center'});
+    }catch(e){}
+  },0);
+}
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&_cfResolve) confirmAnswer(false);
+});
+
 function submitRide(){
   /* Second line of defence. The button is disabled without a distance, but a
      stale tap or a resumed page must not slip an invented fare through. */
+  if(_rideDistanceKm==null||!_lastRideFare){ syncOrderBtn(); return; }
+  /* ⛔ BEFORE either path below - the signed-up one and the sign-up one - so
+     there is no way to reach a driver without passing through it. */
+  rideConfirm().then(function(ok){ if(ok) submitRideConfirmed(); });
+}
+
+function submitRideConfirmed(){
   if(_rideDistanceKm==null||!_lastRideFare){ syncOrderBtn(); return; }
   var userSignedUp=localStorage.getItem('msw_user_name');
   if(userSignedUp){
