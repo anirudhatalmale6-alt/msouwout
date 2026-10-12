@@ -3220,8 +3220,24 @@ function rideConfirm(){
     document.getElementById('cfDropEdit').textContent=t('cf_change');
     document.getElementById('cfFareLabel').textContent=
       (_rideDistanceKm!=null)?t('cf_fare_fixed'):t('cf_fare_est');
+    /* 🚨🚨 READ THE PRICE OFF THE PAGE. DO NOT RECOMPUTE IT.
+       My first version printed _lastRideFare, and that is NOT what she pays:
+         rideFare      = (fare + extras) * legs        <- _lastRideFare
+         finalAmt      = rideFare + PRICING.dash_rider <- what the page shows
+       So the page said 435 HTG and my confirmation said 422 HTG, on the same
+       screen, thirteen gourdes apart - and the confirmation was the LOWER of
+       the two. A screen whose whole purpose is "this is what you are about to
+       pay" was understating it. I only caught it by looking at a screenshot.
+
+       ⛔ Taking the number from #farePrice means there is ONE price in the
+       page and the sheet cannot drift from it again. Two places computing
+       the same money will eventually disagree; this is the same lesson as
+       the two neighbourhood rules in the search. */
+    var shown=(document.getElementById('farePrice')||{}).textContent;
+    shown=(shown||'').trim();
     document.getElementById('cfFare').textContent=
-      (_lastRideFare?Math.round(_lastRideFare).toLocaleString('en-US'):'—')+' HTG';
+      (shown && shown!=='—' && shown!=='…') ? shown
+      : ((_lastRideFare?Math.round(_lastRideFare).toLocaleString('en-US'):'—')+' HTG');
     document.getElementById('cfYes').textContent=t('cf_yes');
     document.getElementById('cfNo').textContent=t('cf_no');
 
