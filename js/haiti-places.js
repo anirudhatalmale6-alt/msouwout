@@ -28,10 +28,19 @@
      enough to arrive quickly and answers on its own. The rest of the country
      is fetched behind it and merged in when it lands. Until either arrives,
      the OpenStreetMap lookups the page always had are still doing the work. */
-  var DATA_URL = 'data/haiti-places.json';
+  /* 🚨 A phone keeps its copy in localStorage FOR EVER, and fetch() below uses
+     force-cache. So a change to the DATA (not just this script) is invisible
+     to every phone that already searched once, unless BOTH the key and the
+     URL change. Bump the two together; the old key is deleted so three copies
+     of a 0.5 MB file never pile up against the storage quota.
+     v2, 13 Oct: the Pacot/Turgeau shop was listed under its old OSM name
+     "Market Basket", so Jennifer could not find the Delimart 0.7 km from her. */
+  var DATA_VER = 2;
+  var DATA_URL = 'data/haiti-places.json?v=' + DATA_VER;
   var REST_URL = 'data/haiti-places-rest.json';
-  var CACHE_KEY = 'mw_places_v1';
+  var CACHE_KEY = 'mw_places_v' + DATA_VER;
   var CACHE_KEY_REST = 'mw_places_rest_v1';
+  try { for (var v = 1; v < DATA_VER; v++) localStorage.removeItem('mw_places_v' + v); } catch (e) {}
 
   /* ─── 1. FOLDING ─────────────────────────────────────────────────────────
      Two spellings of the same Haitian place have to collapse to the same
