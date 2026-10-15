@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Sponsor Commission Structure</title>
+<style>
+:root{--bg:#F5F7FA;--card:#fff;--text:#1A2A4A;--muted:#5A6B8A;--line:#E2E8F0;--blue:#00209F;--warn-bg:#FFF7E6;--warn:#7A5C0A;--ok:#0b6b37}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#18202f;--text:#e8edf6;--muted:#9fb0c8;--line:#2a3448;--blue:#8fa8ff;--warn-bg:#2a2414;--warn:#e8c56a;--ok:#6fd49a}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:16px;line-height:1.55}
+.w{max-width:560px;margin:0 auto}
+h1{font-size:1.3rem;margin-bottom:4px}.s{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+.status{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 14px;font-weight:700;font-size:.9rem;margin-bottom:16px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.c h2{font-size:1rem;margin-bottom:8px}.c p,.c li{font-size:.88rem}.c ul,.c ol{padding-left:20px}.c li{margin:4px 0}
+table{width:100%;border-collapse:collapse;font-size:.84rem;margin-top:4px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.3px}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.wrap{overflow-x:auto}
+</style></head><body><div class="w">
+<h1>Sponsor Commission Structure</h1>
+<div class="s">HaitiBiznis Koutye (Ajan) system. Written 15 Oct 2026 from your referral PDF and your decisions of 15 Oct.</div>
+<div class="status">STATUS: DOCUMENTED ONLY. NOT ACTIVE. No sponsor commission is calculated or paid anywhere today. Nothing here is switched on without your written approval.</div>
+
+<div class="c"><h2>1. The two levels</h2>
+<ul>
+<li><b>Level 1, the direct Ajan</b>: the Ajan whose code brought the customer, driver or business. Earns the platform's normal rate.</li>
+<li><b>Level 2, the sponsor</b>: the Ajan who recruited that Level 1 Ajan. Earns <b>20% of the Level 1 commission</b>. Not another full percentage.</li>
+<li>Only these two levels are paid. There is no level 3.</li>
+</ul></div>
+
+<div class="c"><h2>2. Direct rates (your decisions, 15 Oct)</h2>
+<div class="wrap"><table><tr><th>Platform</th><th>Direct (Level 1)</th><th>Sponsor (Level 2)</th></tr>
+<tr><td>MyPlopPlop</td><td>3% of the eligible order value</td><td>20% of that = 0.6% of the order</td></tr>
+<tr><td>MsouWout</td><td>3% of the completed, paid ride fare, to the driver's Ajan</td><td>0.6% of the fare</td></tr>
+<tr><td>Tikè Lakay</td><td>3% of the ticket price (from the 7.5% fee)</td><td>0.6% of the ticket price</td></tr>
+<tr><td>48HoursReady</td><td>10% of the package price</td><td>2% of the package price</td></tr>
+<tr><td>LajanMaker (PDF)</td><td>digital 30% · training 20%</td><td>6% · 4%</td></tr>
+</table></div></div>
+
+<div class="c"><h2>3. Worked examples</h2>
+<div class="wrap"><table><tr><th>Sale</th><th>Direct</th><th>Sponsor</th><th>Total Ajan cost</th></tr>
+<tr><td>MyPlopPlop order 1,000 HTG</td><td class="n">30.00</td><td class="n">6.00</td><td class="n">36.00</td></tr>
+<tr><td>MsouWout ride 250 HTG (your example)</td><td class="n">7.50</td><td class="n">1.50</td><td class="n">9.00</td></tr>
+<tr><td>Tikè Lakay ticket 1,000 HTG</td><td class="n">30.00</td><td class="n">6.00</td><td class="n">36.00</td></tr>
+<tr><td>48HoursReady package 5,000 HTG</td><td class="n">500.00</td><td class="n">100.00</td><td class="n">600.00</td></tr>
+</table></div></div>
+
+<div class="c"><h2>4. Rules from your PDF</h2>
+<ol>
+<li>The sponsor is paid from the <b>platform's referral budget</b>. It must NEVER reduce the driver's payout, the DASH allocation, or the direct Ajan's commission.</li>
+<li>The first valid sponsor is <b>locked</b>. Another code or QR cannot take an existing Ajan.</li>
+<li>12-month attribution, the same as direct referrals.</li>
+<li>No self-referral and no circular referral (A sponsors B, B sponsors A).</li>
+<li>Same engine for every platform. Commission only on completed, paid sales; cancelled or refunded sales reverse both levels.</li>
+</ol></div>
+
+<div class="c"><h2>5. What is not built yet</h2>
+<ul>
+<li>No "sponsor" link between Ajan exists in the system. Each Ajan would need a locked <i>sponsor</i> field, set once when they register with a sponsor's code.</li>
+<li>No Level 2 calculation, no Level 2 line in the Ajan's wallet or dashboard, no reversal for Level 2.</li>
+</ul></div>
+
+<div class="c"><h2>6. Questions to decide before activation</h2>
+<ol>
+<li><b>Enterprise Ajan.</b> When a StarFlex Ajan earns a commission (credited to StarFlex), does the person who sponsored that Ajan still earn 20%? And if the SPONSOR belongs to an Enterprise, does the 20% go to that Enterprise?</li>
+<li><b>MyPlopPlop margin.</b> At an 8.5% fee, a 1,000 HTG order leaves about 15 HTG after the 30 Ajan commission and the 40 MonCash payout to the merchant, before the MonCash receiving fee. A 6 HTG sponsor share comes out of that. The final calculation needs your MonCash/NatCash receiving rate.</li>
+<li><b>Existing Ajan.</b> Do the 19 approved Ajan get sponsors assigned from your records, or only Ajan who register from now on?</li>
+</ol></div>
+<div class="s">Prepared by Anirudha for HaitiBiznis Technologies. Reference only.</div>
+</div></body></html>
