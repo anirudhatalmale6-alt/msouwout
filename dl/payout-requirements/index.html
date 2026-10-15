@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Payout Engine Requirements</title>
+<style>
+:root{--bg:#F5F7FA;--card:#fff;--text:#1A2A4A;--muted:#5A6B8A;--line:#E2E8F0;--ok:#0b6b37;--warn:#7A5C0A;--no:#b91c1c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#18202f;--text:#e8edf6;--muted:#9fb0c8;--line:#2a3448;--ok:#6fd49a;--warn:#e8c56a;--no:#f19a9a}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:16px;line-height:1.55}
+.w{max-width:580px;margin:0 auto}h1{font-size:1.3rem;margin-bottom:4px}.s{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.c h2{font-size:1.02rem;margin-bottom:8px}
+ol{padding-left:20px}li{font-size:.88rem;margin:9px 0}li b{display:block}
+.why{color:var(--muted);font-size:.82rem;display:block;margin-top:2px}
+.no{color:var(--no)}
+</style></head><body><div class="w">
+<h1>Payout Engine &amp; Financial Dashboard: What Is Still Needed</h1>
+<div class="s">For MsouWout, MyPlopPlop, Tikè Lakay and 48HoursReady, which all use the same SolutionIP account. Written 15 Oct 2026. Each item says why it matters and what happens without it.</div>
+
+<div class="c"><h2>A. Questions for SolutionIP (Guy)</h2>
+<ol>
+<li><b>1. Collection fee: MonCash %, NatCash %, KashPaw %.</b> Is it charged on the full amount the customer pays (delivery included)? Any fixed fee or minimum per payment?
+<span class="why">Without it, every "net earnings" figure is an estimate.</span></li>
+<li><b>2. An API to read the payout account balance</b> (and the collection account balance, if possible).
+<span class="why">Their documentation has none. Without it the dashboard can only show a running estimate (money moved in, minus payouts and fees), not the real balance.</span></li>
+<li><b>3. The 120-second wait between withdrawals.</b> Does it apply to every payout, including a batch? Can it be lifted for our account?
+<span class="why">If it stays: one payout every 2 minutes. 50 drivers ≈ 1 hour 40 minutes per payout run.</span></li>
+<li><b>4. Webhook address.</b> The 4 products share one client ID. Can each product have its own client ID, or must one webhook address receive everything?
+<span class="why">Decides how payment confirmations are routed to the right product.</span></li>
+<li><b>5. KashPaw payouts.</b> Their documentation lists only MonCash and NatCash for payouts. What is the method code for KashPaw?
+<span class="why">A driver or merchant who only has KashPaw cannot be paid otherwise.</span></li>
+<li><b>6. Payout limits.</b> Minimum and maximum per payout, daily limit, any fixed fee besides the 3–4%.</li>
+<li><b>7. A failed payout.</b> When the status is "remboursé", how long until the money is back in the payout balance?</li>
+<li><b>8. A statement or export</b> of collections and payouts by date.
+<span class="why">Needed to reconcile our records with theirs every day.</span></li>
+<li><b>9. Recipient check.</b> Can we see the name on a MonCash/NatCash number before sending?
+<span class="why">Protects against sending money to a mistyped number.</span></li>
+<li><b>10. The client secret.</b> Not for me: <span class="no">you</span> enter it yourself in the Render settings. It must never be sent in chat or WhatsApp.
+<span class="why">Required to sign payouts and to verify webhook messages.</span></li>
+</ol></div>
+
+<div class="c"><h2>B. Decisions for HaitiBiznis</h2>
+<ol>
+<li><b>1. Who pays the 3–4% payout fee?</b> The recommendation, matching your instruction: HaitiBiznis pays it on top, so the driver gets the full 80% and the merchant the full settlement.</li>
+<li><b>2. Payout schedule.</b> Daily or weekly? Minimum amount per payout? Merchants already have a hold of 24 hours (72 hours for a new shop).</li>
+<li><b>3. Who approves each payout run</b> before money moves. One administrator, or two?</li>
+<li><b>4. Funding the payout account.</b> Who moves money from the collection account, and at what balance should the system warn you?</li>
+<li><b>5. Payout numbers.</b> Every driver, merchant and Ajan must register the MonCash/NatCash number to be paid on, which is not always their login phone. DASH currently has a bank reference, not a wallet number.</li>
+<li><b>6. Refunds.</b> SolutionIP cannot refund, so a refund is a manual payout, and it costs 3–4% too. Who bears that fee? Who approves a refund, and within how many days?</li>
+</ol></div>
+
+<div class="c"><h2>C. Already built and reused (no rebuild)</h2>
+<ol>
+<li><b>Collecting payments</b> through SolutionIP, with server-side verification and unique references.</li>
+<li><b>Who is owed what:</b> MsouWout records each ride's driver, DASH and platform amounts; MyPlopPlop records each order's merchant settlement, driver 80% and platform 20%.</li>
+<li><b>The Ajan commission ledger,</b> with the Enterprise rule (no double payment) and reversals for refunds (built, waiting for your approval).</li>
+<li><b>The profit simulator,</b> for planning: msouwout.com/dl/mpp-pricing/simulator.html</li>
+</ol></div>
+<div class="s">Prepared by Anirudha for HaitiBiznis Technologies.</div>
+</div></body></html>
