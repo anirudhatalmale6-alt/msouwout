@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>MyPlopPlop Profit Simulator</title>
+<style>
+:root{--bg:#F5F7FA;--card:#fff;--text:#1A2A4A;--muted:#5A6B8A;--line:#E2E8F0;--ok:#0b6b37;--no:#b91c1c;--warn-bg:#FFF7E6;--warn:#7A5C0A;--in:#fff;--blue:#00209F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#18202f;--text:#e8edf6;--muted:#9fb0c8;--line:#2a3448;--ok:#6fd49a;--no:#f19a9a;--warn-bg:#2a2414;--warn:#e8c56a;--in:#0f1420;--blue:#8fa8ff}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:16px;line-height:1.5}
+.w{max-width:560px;margin:0 auto}h1{font-size:1.3rem;margin-bottom:4px}.s{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.c h2{font-size:1rem;margin-bottom:10px}
+label{display:block;font-size:.8rem;font-weight:700;color:var(--muted);margin:10px 0 4px}
+input,select{width:100%;font-size:1rem;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--in);color:var(--text)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.note{font-size:.76rem;color:var(--warn);margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+td{padding:7px 4px;border-bottom:1px solid var(--line)}td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.h td{font-weight:800;padding-top:12px;border-bottom:2px solid var(--line);font-size:.78rem;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
+tr.t td{font-weight:800}
+.big{text-align:center;padding:12px;border-radius:12px;margin-top:10px;font-weight:800;font-size:1.15rem;border:2px solid var(--line)}
+.pos{color:var(--ok)}.neg{color:var(--no)}
+.facts li{font-size:.84rem;margin:4px 0 4px 18px}
+.chk{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:.9rem}.chk input{width:auto}
+</style></head><body><div class="w">
+<h1>MyPlopPlop Profit Simulator</h1>
+<div class="s">Proposed pricing (not active). Uses SolutionIP's confirmed facts of 15 Oct. Change any number; everything recalculates.</div>
+
+<div class="c"><h2>The sale</h2>
+<div class="row2">
+<div><label for="p">Products (HTG)</label><input id="p" type="number" min="0" step="1" value="1000" inputmode="numeric"></div>
+<div><label for="d">Delivery fee (HTG)</label><input id="d" type="number" min="0" step="1" value="150" inputmode="numeric"></div>
+</div>
+<div class="chk"><input type="checkbox" id="acc" checked><label for="acc" style="margin:0;color:var(--text);font-weight:600">The merchant accepted the new pricing (5% seller fee)</label></div>
+<div class="chk"><input type="checkbox" id="aj" checked><label for="aj" style="margin:0;color:var(--text);font-weight:600">The shop was brought by an Ajan (3%)</label></div>
+</div>
+
+<div class="c"><h2>Payment company fees</h2>
+<label for="col">Collection fee: what MonCash/NatCash keep when the buyer pays (%)</label>
+<input id="col" type="number" min="0" max="20" step="0.1" value="3" inputmode="decimal">
+<div class="note">NOT CONFIRMED by SolutionIP yet. 3% is an assumption. Applied to the buyer's full payment, delivery included (also not confirmed).</div>
+<div class="row2">
+<div><label for="pm">Pay the merchant by</label><select id="pm"><option value="4">MonCash (4%)</option><option value="3">NatCash (3%)</option><option value="3">KashPaw (3%)</option></select></div>
+<div><label for="pd">Pay the driver by</label><select id="pd"><option value="4">MonCash (4%)</option><option value="3">NatCash (3%)</option><option value="3">KashPaw (3%)</option></select></div>
+</div>
+<label for="pa">Pay the Ajan by</label><select id="pa"><option value="4">MonCash (4%)</option><option value="3">NatCash (3%)</option><option value="3">KashPaw (3%)</option></select>
+<div class="note" style="color:var(--muted)">Confirmed: payout fees are ADDED to what is sent (send 1,000 by MonCash = 1,040 charged to HaitiBiznis), per recipient, even in a batch. Funding the payout account is free.</div>
+</div>
+
+<div class="c"><h2>Result</h2>
+<table id="out"></table>
+<div class="big" id="net"></div>
+</div>
+
+<div class="c"><h2>Confirmed by SolutionIP (15 Oct)</h2>
+<ul class="facts">
+<li>Collecting and paying out are separate transactions, each with its own fee.</li>
+<li>Payout fees: MonCash 4%, NatCash 3%, KashPaw 3%, per recipient, paid by HaitiBiznis on top.</li>
+<li>Payouts come from a prefunded payout account; moving money there from the collection account is free.</li>
+<li>Batch payouts don't reduce fees. No refunds through the integration. No pre-authorisation. No sandbox.</li>
+</ul>
+<p style="font-size:.84rem;margin-top:8px"><b>Still unconfirmed:</b> MonCash and NatCash collection %; whether it applies to the full payment; whether the 120-second withdrawal limit affects batches; whether there is an API to read the payout balance.</p>
+</div>
+<div class="s">Prepared by Anirudha for HaitiBiznis Technologies.</div>
+</div>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  function n(id) { var v = parseFloat($(id).value); return isFinite(v) && v >= 0 ? v : 0; }
+  function f(x) { return x.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function row(label, v, cls) { return '<tr' + (cls ? ' class="' + cls + '"' : '') + '><td>' + label + '</td><td class="n">' + v + '</td></tr>'; }
+  function head(t) { return '<tr class="h"><td colspan="2">' + t + '</td></tr>'; }
+  function calc() {
+    var P = n('p'), D = n('d'), c = n('col') / 100;
+    var fm = parseFloat($('pm').value) / 100, fd = parseFloat($('pd').value) / 100, fa = parseFloat($('pa').value) / 100;
+    var buyerFee = P * 0.075, sellerFee = $('acc').checked ? P * 0.05 : 0;
+    var drv = D * 0.80, hbDel = D - drv, ajan = $('aj').checked ? P * 0.03 : 0;
+    var buyerPays = P + buyerFee + D, merchant = P - sellerFee;
+    var gross = buyerFee + sellerFee + hbDel;
+    var colFee = buyerPays * c, payM = merchant * fm, payD = drv * fd, payA = ajan * fa;
+    var net = gross - colFee - ajan - payM - payD - payA;
+    var fund = merchant + payM + drv + payD + ajan + payA;
+    var h = head('What the buyer pays') +
+      row('Products', f(P)) + row('Buyer platform fee (7.5%)', f(buyerFee)) + row('Delivery', f(D)) + row('Buyer pays', f(buyerPays), 't') +
+      head('Paid out') +
+      row('Merchant settlement (products − ' + ($('acc').checked ? '5%' : '0%') + ')', f(merchant)) +
+      row('Driver (80% of delivery)', f(drv)) +
+      row('Ajan (3% of products)', f(ajan)) +
+      head('HaitiBiznis gross revenue') +
+      row('Buyer fee', f(buyerFee)) + row('Seller fee', f(sellerFee)) + row('Delivery share (20%)', f(hbDel)) + row('Gross revenue', f(gross), 't') +
+      head('Costs') +
+      row('Collection fee (' + n('col') + '% of ' + f(buyerPays) + ')', '− ' + f(colFee)) +
+      row('Ajan commission', '− ' + f(ajan)) +
+      row('Payout fee: merchant', '− ' + f(payM)) +
+      row('Payout fee: driver', '− ' + f(payD)) +
+      row('Payout fee: Ajan', '− ' + f(payA)) +
+      row('Net earnings', f(net), 't') +
+      head('Payout account must hold') +
+      row('Sent + payout fees, for this sale', f(fund));
+    $('out').innerHTML = h;
+    $('net').innerHTML = 'Net earnings: <span class="' + (net >= 0 ? 'pos' : 'neg') + '">' + f(net) + ' HTG</span>' +
+      '<div style="font-size:.85rem;font-weight:600;color:var(--muted);margin-top:4px">' + (P + D > 0 ? (net / (P + D) * 100).toFixed(2) + '% of products + delivery · ' : '') + 'gross ' + f(gross) + '</div>';
+  }
+  ['p', 'd', 'col', 'pm', 'pd', 'pa', 'acc', 'aj'].forEach(function (id) { $(id).addEventListener('input', calc); $(id).addEventListener('change', calc); });
+  calc();
+})();
+</script></body></html>
