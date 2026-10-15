@@ -78,6 +78,29 @@ tr.t td{font-weight:800}.y{color:var(--ok)}.x{color:var(--no)}
 </ul>
 <p><b>Recommended before activation:</b> update the Terms to the new pricing; show every merchant a "New pricing" notice in their dashboard with an Accept button (the date and version are recorded); apply the 5% only to sales after that merchant accepts. Until then, 0%.</p></div>
 
+<div class="c"><h2>8. Built and tested (not active)</h2>
+<p><b>The merchant's notice.</b> Every merchant sees this in their dashboard, in Kreyòl, French, English or Spanish. Pressing "Mwen dakò" records which version they accepted and when. The 5% applies only to their sales AFTER that.</p>
+<img src="merchant-notice.png" alt="Merchant pricing notice" style="width:100%;border-radius:10px;border:1px solid var(--line);margin:8px 0">
+<p><b>Each order in the merchant's dashboard:</b> the sale, the seller fee and what they receive. A merchant who has not accepted: 0%, receives everything.</p>
+<img src="merchant-orders.png" alt="Merchant orders with seller fee" style="width:100%;border-radius:10px;border:1px solid var(--line);margin:8px 0">
+<p><b>Three stages, switched by you:</b></p>
+<ul>
+<li><b>Off</b> (today): nothing changes.</li>
+<li><b>Notice</b>: merchants see the new pricing and can accept. No seller fee for anyone yet (your 0% during onboarding).</li>
+<li><b>Active</b>: buyer 7.5%, seller 5% (only merchants who accepted), Ajan 3% of the products.</li>
+</ul>
+<p>Tested on a test copy: 25 server checks, 17 screen checks, 12 checkout checks. One example: a merchant who accepted sells 1,000. The buyer pays 1,225 with delivery, the merchant receives 950, the Ajan 30. A merchant who has not accepted: 0%. A buyer paying less than the order is refused.</p></div>
+
+<div class="c"><h2>9. Terms: proposed new wording (for your approval)</h2>
+<p><b>Section 12, Fees:</b></p>
+<ul>
+<li>Registering a business and listing products on MyPlopPlop are free.</li>
+<li>Seller transaction fee: 5% of the eligible product sale amount, deducted from the merchant's settlement only after the order is completed and the payment is confirmed. It applies only to sales made after the merchant has accepted the current pricing in the merchant dashboard. The dashboard shows the fee and the expected net settlement on every order.</li>
+<li>Buyer platform fee: 7.5% of the product amount, paid by the buyer and shown before checkout. It is never taken from the merchant.</li>
+</ul>
+<p><b>Section 10, Merchant Terms:</b> the old "commission (default 15%)" is replaced by "the seller transaction fee set out in section 12".</p>
+<p><b>Section 8, Referral:</b> the old "10% of platform fees for the first 3 months" is replaced by: Ajan earn 3% of the eligible amount (MyPlopPlop products, MsouWout completed and paid fares to the driver's Ajan, Tikè Lakay ticket price), for 12 months. Paid from the platform's own fees, never from the merchant, driver or buyer. No commission on cancelled or refunded sales. Enterprise Ajan are credited to their Enterprise, never paid twice.</p></div>
+
 <div class="c"><h2>7. Marketing message</h2>
 <p style="font-size:1rem;font-weight:800">"Enskri Gratis! Mete pwodwi w yo gratis. Ou peye sèlman lè ou vann."</p>
 <p>It matches the proposal: registration and listings free, the 5% only on a completed sale.</p></div>
