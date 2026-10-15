@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>MyPlopPlop Delivery Audit</title>
+<style>
+:root{--bg:#F5F7FA;--card:#fff;--text:#1A2A4A;--muted:#5A6B8A;--line:#E2E8F0;--ok:#0b6b37;--okbg:#e7f6ec;--pa:#7A5C0A;--pabg:#FFF4D6;--no:#b91c1c;--nobg:#fee2e2;--fx:#00209F;--fxbg:#e6ecff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#18202f;--text:#e8edf6;--muted:#9fb0c8;--line:#2a3448;--ok:#6fd49a;--okbg:#14301f;--pa:#e8c56a;--pabg:#2a2414;--no:#f19a9a;--nobg:#3a1717;--fx:#9fb3ff;--fxbg:#1b2547}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:16px;line-height:1.5}
+.w{max-width:600px;margin:0 auto}h1{font-size:1.3rem;margin-bottom:4px}.s{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.c h2{font-size:1rem;margin-bottom:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+ul{padding-left:18px}li{font-size:.86rem;margin:5px 0}
+.t{display:inline-block;font-size:.66rem;font-weight:800;padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.3px;margin-right:4px;white-space:nowrap}
+.ok{background:var(--okbg);color:var(--ok)}.pa{background:var(--pabg);color:var(--pa)}.no{background:var(--nobg);color:var(--no)}.fx{background:var(--fxbg);color:var(--fx)}
+.sum{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+.sum div{border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.82rem}.sum b{display:block;font-size:1.3rem}
+.big{border:2px solid var(--no)}
+</style></head><body><div class="w">
+<h1>MyPlopPlop Delivery: Audit Against Your 17 Points</h1>
+<div class="s">15 Oct 2026. Every line comes from reading the LIVE code (backend and website), not from memory. <span class="t ok">Works</span> exists end to end · <span class="t pa">Partial</span> exists with a gap · <span class="t no">Missing / bug</span> · <span class="t fx">Fixed today</span> already live.</div>
+
+<div class="c big"><h2>Summary</h2>
+<p style="font-size:.9rem"><b>Not ready for public launch.</b> The ordering and payment basics exist, and the server verifies payments itself. But:</p>
+<ul>
+<li>Drivers are <b>never actually credited</b> for a dispatched delivery.</li>
+<li>The delivery code does not prove delivery.</li>
+<li>Nothing undoes money when an order is cancelled.</li>
+<li>Pickup verification and live tracking do not exist.</li>
+</ul>
+<p style="font-size:.9rem;margin-top:6px">I also found and closed <b>9 live security holes today</b>, including a 20 HTG payment able to complete a 50,000 HTG top-up. Nobody had used any of them; I checked the records.</p>
+<div class="sum"><div><b>9</b>security holes fixed and live today</div><div><b>5</b>must-fix areas before launch (your list)</div></div></div>
+
+<div class="c"><h2>Fixed and live today</h2><ul>
+<li><span class="t fx">Fixed</span>Delivery split: drivers were paid 75%, not 80%, on dispatched deliveries. Now 80/20, calculated on the server.</li>
+<li><span class="t fx">Fixed</span>Any merchant could make himself the "driver" on any order, read the customer's phone and address, mark it delivered and be paid.</li>
+<li><span class="t fx">Fixed</span>Any logged-in user could read any delivery: the customer's name, phone, address, GPS and delivery code.</li>
+<li><span class="t fx">Fixed</span>An old referral bonus paid wallet money when an order was PLACED, before payment. Unpaid orders created spendable money.</li>
+<li><span class="t fx">Fixed</span>A public page listed drivers' names, phones, licence numbers, ID-photo paths and exact GPS.</li>
+<li><span class="t fx">Fixed</span>A public page returned everybody's prepaid electricity tokens.</li>
+<li><span class="t fx">Fixed</span>A MonCash check could complete a big wallet top-up with a small payment, or with someone else's payment.</li>
+<li><span class="t fx">Fixed</span>Anyone could pay for someone else's ride from their wallet, crediting the driver again on every tap.</li>
+<li><span class="t fx">Fixed</span>A delivery's driver status was readable by anyone.</li>
+</ul></div>
+
+<div class="c"><h2>1. Customer ordering</h2><ul>
+<li><span class="t ok">Works</span>Cart with several shops, prices and quantities; delivery fee and service fee shown separately before paying.</li>
+<li><span class="t ok">Works</span>An order is marked paid ONLY after the server checks with SolutionIP itself. Returning from MonCash alone never marks it paid.</li>
+<li><span class="t pa">Partial</span>Search: shops by name only. Products are never matched.</li>
+<li><span class="t pa">Partial</span>Address: GPS is required. If GPS fails there is no way to place the pin by hand, and GPS accuracy is not checked.</li>
+<li><span class="t no">Bug</span>The delivery distance starts from central Port-au-Prince, not from the shop, so the fee can be wrong.</li>
+<li><span class="t no">Bug</span>Several shops in one basket: one payment, but only the FIRST shop's order is ever marked paid.</li>
+<li><span class="t no">Missing</span>If the customer closes the browser after paying, nothing confirms the payment later (no webhook, no server check).</li>
+<li><span class="t no">Bug</span>The tracking page always says "Ride Not Found", and deliveries never appear in the customer's history: the page and server disagree on a field name.</li>
+</ul></div>
+
+<div class="c"><h2>2. Merchant order management</h2><ul>
+<li><span class="t ok">Works</span>Sees own orders, products, quantities, the assigned driver. Cannot change an order's amount after it is placed.</li>
+<li><span class="t no">Missing</span>No new-order alert: merchants only see orders when they reload the page.</li>
+<li><span class="t no">Bug</span>UNPAID orders look like real ones. The merchant can prepare one and mark it Ready, and that sends a driver.</li>
+<li><span class="t no">Bug</span>No status rules: a merchant can mark a delivery order "delivered" with no driver and no code, and is credited.</li>
+<li><span class="t no">Bug</span>The merchant's screen shows the customer's delivery code.</li>
+<li><span class="t no">Missing</span>Rejecting a paid MonCash order: no refund record, nothing for an admin to act on, stock not restored.</li>
+<li><span class="t pa">Partial</span>Seller fee and expected settlement: built with the new pricing (not active). Dashboard "revenue" also counts unpaid orders.</li>
+</ul></div>
+
+<div class="c"><h2>3. Driver registration</h2><ul>
+<li><span class="t ok">Works</span>Name, phone, vehicle, plate, licence number. Admin approves or rejects. Only approved drivers receive requests.</li>
+<li><span class="t no">Missing</span>The form sends no ID, licence or vehicle photos, no profile photo, and no MonCash/NatCash payout number.</li>
+<li><span class="t no">Missing</span>No "suspend" button. A driver rejected mid-delivery can still finish and be paid.</li>
+<li><span class="t pa">Partial</span>Uploaded documents are kept on the server's temporary disk, which can be wiped at each update.</li>
+</ul></div>
+
+<div class="c"><h2>4. Availability and assignment</h2><ul>
+<li><span class="t ok">Works</span>Online/offline; nearest approved online driver within 15 km; 30 seconds to answer, then the next driver.</li>
+<li><span class="t no">Bug</span>Accepting is not protected: two drivers can accept the same delivery at the same moment.</li>
+<li><span class="t no">Bug</span>If the driver cancels after accepting, the order is stuck forever and never offered again.</li>
+<li><span class="t no">Bug</span>No driver available: it retries forever, re-offering to drivers who already declined. No alert to the customer or admin.</li>
+<li><span class="t pa">Partial</span>Driver positions are never refreshed after going online, so "nearest" can be stale. Customer and merchant see the driver only after reloading.</li>
+</ul></div>
+
+<div class="c"><h2>5 + 6. Delivery pricing and the 80/20</h2><ul>
+<li><span class="t fx">Fixed</span>80% driver / 20% HaitiBiznis, worked out on the server and stored separately from product sales.</li>
+<li><span class="t ok">Works</span>The driver sees the amount before accepting. The customer's fee does not change after payment.</li>
+<li><span class="t no">Bug</span>At dispatch the driver's fare is recalculated from the distance, so it can differ from 80% of what the customer actually paid.</li>
+<li><span class="t no">Bug</span>One ride route lets the person creating the ride set the distance, and so the price.</li>
+</ul></div>
+
+<div class="c"><h2>7. Pickup verification</h2><ul>
+<li><span class="t no">Missing</span>No merchant confirmation, no pickup code or QR, no pickup location. "Arrived at store" is recorded as the pickup time.</li>
+</ul></div>
+
+<div class="c"><h2>8. Delivery tracking</h2><ul>
+<li><span class="t no">Missing</span>No live driver location is sent; the map is a placeholder and the arrival time is fixed text. It reopens after a reload, but there is nothing to show.</li>
+</ul></div>
+
+<div class="c"><h2>9. Delivery confirmation code</h2><ul>
+<li><span class="t pa">Partial</span>A 4-digit code exists and the server checks it when the driver finishes from the delivery app.</li>
+<li><span class="t no">Bug</span>The CUSTOMER is never shown the code. The merchant is, and drivers can still read it in their own offer screens.</li>
+<li><span class="t no">Bug</span>Another route marks an order delivered with no code at all. Unlimited guesses are possible. There is no admin exception process.</li>
+</ul></div>
+
+<div class="c big"><h2>10. Driver payments</h2><ul>
+<li><span class="t no">Critical</span>A driver who completes a dispatched delivery is NEVER credited to their wallet: only a record is written. They can never withdraw.</li>
+<li><span class="t no">Missing</span>No pending / available / paid split for drivers. MonCash/NatCash payout fees are not recorded anywhere. Payouts are manual.</li>
+</ul></div>
+
+<div class="c"><h2>11. Merchant settlements</h2><ul>
+<li><span class="t ok">Works</span>A merchant is credited only when an order is delivered AND paid, into a pending balance.</li>
+<li><span class="t no">Bug</span>Nothing moves pending money to available (no schedule, no admin button), so merchants can never withdraw.</li>
+<li><span class="t no">Bug</span>Delivered first and paid later: never credited. Two simultaneous "delivered" taps, or two payout requests, can both succeed.</li>
+</ul></div>
+
+<div class="c big"><h2>12. Cancellations, refunds, disputes</h2><ul>
+<li><span class="t no">Missing</span>No refund record (amount, reason, reference, status, approval) and no admin refund screen.</li>
+<li><span class="t no">Bug</span>Cancelling never undoes the merchant credit, driver earning, Ajan commission or stock.</li>
+<li><span class="t no">Bug</span>A cancelled order's delivery keeps running. If delivered, it pays everyone. A customer can even cancel AFTER delivery.</li>
+<li><span class="t no">Missing</span>Product unavailable, customer unreachable, wrong or damaged package: no flow. The "report a problem" button sends to the wrong service.</li>
+</ul></div>
+
+<div class="c"><h2>13. Notifications</h2><ul>
+<li><span class="t pa">Partial</span>Web push only, with passenger-ride wording, for: driver assigned, at the store, picked up, delivered, driver cancelled.</li>
+<li><span class="t no">Missing</span>Nothing for: order placed, payment confirmed, merchant accepted, preparing, approaching, merchant/customer cancel, refund. No SMS or WhatsApp for orders.</li>
+</ul></div>
+
+<div class="c"><h2>14. Administrator dashboard</h2><ul>
+<li><span class="t pa">Partial</span>Counts and lists of rides and orders; a read-only orders page.</li>
+<li><span class="t no">Missing</span>Orders waiting for a driver, driver map, delayed or failed deliveries, complaints, driver earnings, net revenue, refunds, payout release.</li>
+<li><span class="t no">Bug</span>Admin actions that move money are not recorded with who did them. The console code can be passed in a link, and the original setup code never stops working.</li>
+</ul></div>
+
+<div class="c"><h2>15. Security and fraud</h2><ul>
+<li><span class="t fx">Fixed</span>The 9 holes above.</li>
+<li><span class="t no">Bug</span>Unpaid orders can be dispatched. Status changes have no rules. The delivery code is visible to drivers. Live-update channels need no login, and driver locations can be faked.</li>
+<li><span class="t no">Bug</span>A driver can create a ride as a customer and accept it himself, generating earnings with no money paid. A merchant can lift his own suspension.</li>
+<li><span class="t no">Missing</span>An audit log of financial changes (only driver approvals and store edits are logged).</li>
+</ul></div>
+
+<div class="c"><h2>16 + 17. Testing and report</h2>
+<p style="font-size:.86rem">The 10 end-to-end scenarios cannot pass today: drivers are never credited and tracking shows "Ride Not Found". They should be run after the must-fix list below. For the final real-money test, one controlled 20 HTG order is enough, as with MsouWout.</p></div>
+
+<div class="c big"><h2>Before public launch (your 5 mandatory areas)</h2><ul>
+<li><b>1. Server-confirmed payment:</b> no merchant preparation and no dispatch until the server has confirmed payment; a server-side check for customers who close the browser; one payment confirms every shop in the basket; the server's total is charged (already built, waiting).</li>
+<li><b>2. Reliable assignment:</b> one driver per delivery (protected accept); re-offer when a driver cancels; no-driver timeout with an alert and an admin list; refresh driver positions.</li>
+<li><b>3. Pickup and delivery proof:</b>
+<ul>
+<li>The code is shown ONLY to the customer (order page + notification) and is hidden from drivers and merchants.</li>
+<li>Every "delivered" path requires it, with an attempt limit.</li>
+<li>A pickup code, or the merchant's confirmation, at the store.</li>
+<li>An admin exception with a reason, logged.</li>
+</ul></li>
+<li><b>4. Accurate 80/20 earnings:</b> credit the driver on a genuine completion (pending → available); the driver's 80% always taken from the stored delivery fee; completion counted once.</li>
+<li><b>5. Cancellations and refunds:</b>
+<ul>
+<li>Refund records with admin approval.</li>
+<li>Cancelling undoes the merchant credit, driver earning, Ajan commission and stock, and stops the ride.</li>
+<li>Status rules (no cancel after delivery, no "delivered" by the merchant on a delivery order).</li>
+</ul></li>
+</ul>
+<p style="font-size:.86rem;margin-top:8px"><b>After launch, progressively:</b> live GPS tracking, full notifications, the admin operations dashboard, complaints, driver documents and photos, and the payout engine (it needs SolutionIP's answers).</p></div>
+<div class="s">Prepared by Anirudha for HaitiBiznis Technologies.</div>
+</div></body></html>
