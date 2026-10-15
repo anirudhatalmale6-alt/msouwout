@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>MyPlopPlop Pricing Simulation</title>
+<style>
+:root{--bg:#F5F7FA;--card:#fff;--text:#1A2A4A;--muted:#5A6B8A;--line:#E2E8F0;--ok:#0b6b37;--warn-bg:#FFF7E6;--warn:#7A5C0A;--no:#b91c1c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#18202f;--text:#e8edf6;--muted:#9fb0c8;--line:#2a3448;--ok:#6fd49a;--warn-bg:#2a2414;--warn:#e8c56a;--no:#f19a9a}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:16px;line-height:1.55}
+.w{max-width:560px;margin:0 auto}h1{font-size:1.3rem;margin-bottom:4px}.s{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+.status{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 14px;font-weight:700;font-size:.9rem;margin-bottom:16px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.c h2{font-size:1rem;margin-bottom:8px}.c p,.c li{font-size:.88rem}.c ul{padding-left:20px}.c li{margin:4px 0}
+table{width:100%;border-collapse:collapse;font-size:.84rem;margin:6px 0}
+th,td{text-align:left;padding:7px 5px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.3px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.t td{font-weight:800}.y{color:var(--ok)}.x{color:var(--no)}
+.big{font-size:1.05rem;font-weight:800;text-align:center;padding:10px;border:2px dashed var(--line);border-radius:12px;margin-top:6px}
+</style></head><body><div class="w">
+<h1>MyPlopPlop Pricing Simulation</h1>
+<div class="s">Your proposal of 15 Oct: buyer fee 7.5%, seller fee 5% (taken from the merchant's settlement), Ajan 3% of the product amount. Prepared 15 Oct 2026.</div>
+<div class="status">PROPOSED RATES. NOT ACTIVE. Nothing changes for any buyer or merchant until merchants accept and you approve.</div>
+
+<div class="c"><h2>1. The fees used</h2>
+<ul>
+<li><b>Sending money out</b> (paying merchants and Ajan), as quoted to you by SolutionIP: <b>MonCash 4%</b>, <b>NatCash 3%</b>. Their API charges this ON TOP, so HaitiBiznis pays it.</li>
+<li><b>Receiving the buyer's payment (collection):</b> <span class="x">not published anywhere</span>. It is not in their API documentation, and their payment confirmations do not show it (I checked your real 20 HTG ticket of 29 Sep). The tables below use <b>3%</b> as an assumption. Please confirm the real rate with SolutionIP.</li>
+<li>Delivery is left out: it is a separate charge, 80% to the rider and 20% to HaitiBiznis, which is extra income on top of these figures.</li>
+</ul></div>
+
+<div class="c"><h2>2. A 1,000 HTG sale, line by line (MonCash)</h2>
+<table>
+<tr><td>Buyer pays (1,000 + 7.5% fee)</td><td class="n">1,075.00</td></tr>
+<tr><td>MonCash keeps when receiving (3%, assumed)</td><td class="n">− 32.25</td></tr>
+<tr><td>Merchant settlement (1,000 − 5% seller fee)</td><td class="n">− 950.00</td></tr>
+<tr><td>MonCash fee to send it to the merchant (4%)</td><td class="n">− 38.00</td></tr>
+<tr><td>Ajan commission (3% of 1,000)</td><td class="n">− 30.00</td></tr>
+<tr><td>MonCash fee to pay the Ajan (4%)</td><td class="n">− 1.20</td></tr>
+<tr class="t"><td>HaitiBiznis keeps</td><td class="n y">23.55</td></tr>
+</table>
+<p>The same sale paid out by NatCash: HaitiBiznis keeps <b>33.35</b>.</p></div>
+
+<div class="c"><h2>3. 1,000 / 5,000 / 10,000 HTG (collection 3% assumed)</h2>
+<table><tr><th>Sale</th><th class="n">Buyer pays</th><th class="n">Merchant</th><th class="n">Ajan</th></tr>
+<tr><td>1,000</td><td class="n">1,075</td><td class="n">950</td><td class="n">30</td></tr>
+<tr><td>5,000</td><td class="n">5,375</td><td class="n">4,750</td><td class="n">150</td></tr>
+<tr><td>10,000</td><td class="n">10,750</td><td class="n">9,500</td><td class="n">300</td></tr>
+</table>
+<table><tr><th>Sale</th><th class="n">HB keeps<br>MonCash</th><th class="n">HB keeps<br>NatCash</th></tr>
+<tr><td>1,000</td><td class="n">23.55</td><td class="n">33.35</td></tr>
+<tr><td>5,000</td><td class="n">117.75</td><td class="n">166.75</td></tr>
+<tr><td>10,000</td><td class="n">235.50</td><td class="n">333.50</td></tr>
+</table>
+<p>HaitiBiznis keeps <b>2.35%</b> of every sale with MonCash payouts and <b>3.33%</b> with NatCash. Every fee is a percentage, so the share is the same at every size.</p></div>
+
+<div class="c"><h2>4. If the collection rate is different</h2>
+<table><tr><th>Collection</th><th class="n">HB keeps on 1,000<br>MonCash</th><th class="n"><br>NatCash</th></tr>
+<tr><td>0%</td><td class="n">55.80</td><td class="n">65.60</td></tr>
+<tr><td>2%</td><td class="n">34.30</td><td class="n">44.10</td></tr>
+<tr><td>3%</td><td class="n">23.55</td><td class="n">33.35</td></tr>
+</table>
+<div class="big">Break-even: HaitiBiznis only loses money if the collection rate is above <span class="x">5.19%</span> (MonCash payouts) or <span class="x">6.10%</span> (NatCash payouts).</div>
+<p style="margin-top:8px">The earlier plan (8.5% buyer fee, 0% seller fee) left about 15 HTG per 1,000 before collection, so it was likely to lose money. This proposal is sound.</p></div>
+
+<div class="c"><h2>5. What the merchant sees (1,000 HTG sale)</h2>
+<table>
+<tr><td>Sale</td><td class="n">1,000</td></tr>
+<tr><td>Seller fee (5%)</td><td class="n">− 50</td></tr>
+<tr class="t"><td>Expected settlement</td><td class="n">950</td></tr>
+</table>
+<p>Taken only from a completed, confirmed-paid order. The buyer's 7.5% is never taken from the merchant.</p></div>
+
+<div class="c"><h2>6. What existing merchants agreed to</h2>
+<ul>
+<li class="x">No merchant has a recorded acceptance of any fee. The merchant sign-up page shows no fee and has no "I agree" box.</li>
+<li class="x">The public Terms (effective 20 Apr 2026, myplopplop.com/terms.html) say merchants accept a <b>15%</b> commission "by default". The system is set to <b>10%</b> on 13 shops and 15% on 1. Your policy is 0% during onboarding. The three disagree.</li>
+<li class="y">No MyPlopPlop order has been paid yet (6 orders, all unpaid), so no merchant has been charged anything.</li>
+</ul>
+<p><b>Recommended before activation:</b> update the Terms to the new pricing; show every merchant a "New pricing" notice in their dashboard with an Accept button (the date and version are recorded); apply the 5% only to sales after that merchant accepts. Until then, 0%.</p></div>
+
+<div class="c"><h2>7. Marketing message</h2>
+<p style="font-size:1rem;font-weight:800">"Enskri Gratis! Mete pwodwi w yo gratis. Ou peye sèlman lè ou vann."</p>
+<p>It matches the proposal: registration and listings free, the 5% only on a completed sale.</p></div>
+<div class="s">Prepared by Anirudha for HaitiBiznis Technologies. Figures computed from the rates above; the 3% collection rate is an assumption until SolutionIP confirms it.</div>
+</div></body></html>
