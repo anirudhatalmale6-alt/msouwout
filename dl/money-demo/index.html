@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Commission Demonstration</title>
+<style>
+:root{--bg:#F5F7FA;--card:#fff;--text:#1A2A4A;--muted:#5A6B8A;--line:#E2E8F0;--ok:#0b6b37;--okbg:#e7f6ec;--no:#b91c1c;--nobg:#fee2e2;--warn-bg:#FFF7E6;--warn:#7A5C0A}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#18202f;--text:#e8edf6;--muted:#9fb0c8;--line:#2a3448;--ok:#6fd49a;--okbg:#14301f;--no:#f19a9a;--nobg:#3a1717;--warn-bg:#2a2414;--warn:#e8c56a}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:16px;line-height:1.55}
+.w{max-width:560px;margin:0 auto}h1{font-size:1.3rem;margin-bottom:4px}.s{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+.status{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 14px;font-weight:700;font-size:.9rem;margin-bottom:16px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.c h2{font-size:1rem;margin-bottom:8px}.c p,.c li{font-size:.88rem}.c ul{padding-left:20px}.c li{margin:4px 0}
+table{width:100%;border-collapse:collapse;font-size:.84rem;margin:6px 0}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.3px}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.y{color:var(--ok);font-weight:700}.x{color:var(--no);font-weight:700}
+.tag{display:inline-block;font-size:.7rem;font-weight:800;padding:2px 8px;border-radius:99px;background:var(--okbg);color:var(--ok)}
+.wrap{overflow-x:auto}
+</style></head><body><div class="w">
+<h1>Commission Demonstration</h1>
+<div class="s">15 Oct 2026. Every number below comes from the real HaitiBiznis code, run on a test copy of the databases. Nothing was charged or paid.</div>
+<div class="status">STATUS: BUILT AND TESTED. NOT LIVE. Each part switches on only after your approval. Today's live fees and commissions are unchanged.</div>
+
+<div class="c"><h2>1. A 1,000 HTG MyPlopPlop order <span class="tag">14/14 checks</span></h2>
+<div class="wrap"><table><tr><th></th><th>Today (live)</th><th>Proposed</th></tr>
+<tr><td>Products</td><td class="n">1,000</td><td class="n">1,000</td></tr>
+<tr><td>Service fee</td><td class="n">50<br><small>5%</small></td><td class="n">85<br><small>8.5%</small></td></tr>
+<tr><td>Delivery</td><td class="n">150</td><td class="n">150</td></tr>
+<tr><td><b>Buyer pays</b></td><td class="n"><b>1,200</b></td><td class="n"><b>1,235</b></td></tr>
+<tr><td>Ajan commission</td><td class="n">12</td><td class="n">30</td></tr>
+<tr><td colspan="3" style="font-size:.78rem;color:var(--muted)">Today: 1% of the whole total. Proposed: 3% of the products only.</td></tr>
+<tr><td>Fee kept</td><td class="n">38</td><td class="n">55</td></tr>
+</table></div>
+<ul>
+<li class="y">The Ajan's 3% is on the product value only: never on delivery, never on the fee itself.</li>
+<li class="y">A buyer who tries to pay the old 1,200 on a 1,235 order: the payment is refused and no commission is written.</li>
+<li class="y">The same payment confirmed twice: still one commission.</li>
+<li>The fee left (55) is BEFORE payment-processing costs. See section 6.</li>
+</ul></div>
+
+<div class="c"><h2>2. Completed MsouWout rides <span class="tag">21/21 checks</span></h2>
+<div class="wrap"><table><tr><th>Ride</th><th>Result</th></tr>
+<tr><td>500 HTG, completed, paid, approved driver</td><td class="y">15 to the driver's Ajan (3%)</td></tr>
+<tr><td>Same ride, recorded 3 times</td><td class="y">still one commission of 15</td></tr>
+<tr><td>Driver's own share</td><td class="y">400 (80%), untouched</td></tr>
+<tr><td>Passenger recruited by another Ajan</td><td class="y">recorded for reporting, NO second commission</td></tr>
+<tr><td>Driver not approved yet</td><td class="x">nothing</td></tr>
+<tr><td>Completed but not paid</td><td class="x">nothing until the payment arrives, then 15</td></tr>
+<tr><td>Test ride</td><td class="x">nothing</td></tr>
+<tr><td>Driver nobody recruited</td><td class="x">nothing</td></tr>
+<tr><td>MyPlopPlop service asleep</td><td class="y">retried every hour, paid once</td></tr>
+<tr><td>Rides from BEFORE the start date</td><td class="x">never paid (no back-pay)</td></tr>
+</table></div>
+<p>The 3% comes out of MsouWout's 20%. The driver's 80% and DASH are never touched.</p></div>
+
+<div class="c"><h2>3. A StarFlex Ajan</h2>
+<ul>
+<li class="y">MsouWout ride of 1,000: 30, credited to STARFLEX only.</li>
+<li class="y">MyPlopPlop order of 1,000 from a StarFlex Ajan's shop: 30, credited to STARFLEX only.</li>
+<li class="y">The Ajan's own wallet: 0. They cannot request a payout of StarFlex's money.</li>
+<li class="y">StarFlex's dashboard total rises by exactly 30. Payouts shown as not active.</li>
+</ul></div>
+
+<div class="c"><h2>4. Cancellations and refunds</h2>
+<ul>
+<li class="y">Refunded ride: the commission line becomes "reversed" (kept with the reason and date, never deleted). The Ajan's balance drops back by 15.</li>
+<li class="y">Reversed twice: nothing more is taken.</li>
+<li class="y">StarFlex refunded ride: StarFlex's total falls back by 30.</li>
+<li class="y">A commission already PAID is never silently erased. It is flagged for you to recover.</li>
+<li class="y">A cancelled ride never earned a commission in the first place.</li>
+</ul></div>
+
+<div class="c"><h2>5. Balances</h2>
+<ul>
+<li class="y">Independent Ajan: +15 when the ride is paid, back to the start after the refund.</li>
+<li class="y">Every figure comes from the commission lines themselves, so the wallet, the dashboard and StarFlex's total always agree.</li>
+</ul></div>
+
+<div class="c"><h2>6. Still needed from you before switching on</h2>
+<ul>
+<li><b>MonCash/NatCash receiving rate</b> (the % kept when a customer pays). After the Ajan's 30 and a 40 MonCash payout to the merchant, a 1,000 order leaves about 15 HTG BEFORE that rate.</li>
+<li><b>Merchants 0%:</b> OK to set all 14 stores from 10% to 0%?</li>
+<li><b>Old duplicate bonuses OFF:</b> the order "referral bonus" (paid when an order is created, before payment) and the old driver-refers-driver "ambassador bonus". Neither has ever paid anyone.</li>
+<li><b>MsouWout start date:</b> the first day rides earn the 3%. No back-pay before it.</li>
+</ul></div>
+
+<div class="c"><h2>7. Also fixed: checkout charges the server's total</h2>
+<p>MyPlopPlop used to send MonCash the total worked out in the buyer's phone. Now it charges the total the server calculated. If that differs from what the buyer saw, the buyer is asked "Pay X HTG?" before any money moves. Tested: buyer says no, nothing is sent; buyer says yes, the server's total is charged.</p></div>
+<div class="s">Prepared by Anirudha for HaitiBiznis Technologies.</div>
+</div></body></html>
