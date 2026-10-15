@@ -4234,7 +4234,14 @@ function haitiDateISO(d){
   var today=haitiDateISO();
   document.getElementById('rDate').value=params.get('date')||today;
   if(params.get('time')) document.getElementById('rTime').value=params.get('time');
-  ticketRef=params.get('ref')||'';
+  /* ?ref= has two meanings on this page. A Tikè Lakay ticket links here as
+     ?ref=TL-... to book a ride to the event; an Ajan's own MsouWout link is
+     ?ref=<their code>. Until 15 Oct an Ajan code was taken for a ticket
+     reference and written onto the ride. Now only TL- is a ticket; anything
+     else is remembered for 30 days so the driver signup can credit the Ajan. */
+  var refParam=(params.get('ref')||'').trim();
+  ticketRef=/^TL-/i.test(refParam)?refParam:'';
+  if(refParam&&!ticketRef){try{localStorage.setItem('mw_agent_ref',JSON.stringify({code:refParam.slice(0,40),at:Date.now()}));}catch(e){}}
 
   var phone=localStorage.getItem('msw_phone');
   if(phone) document.getElementById('rPhone').value=phone;

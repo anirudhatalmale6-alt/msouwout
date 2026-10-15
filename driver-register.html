@@ -183,6 +183,17 @@
       </select>
     </div>
 
+    <!-- 15 Oct 2026: the Ajan who recruited this driver. Filled in by itself
+         when he arrived through an Ajan's QR or link; typed by hand otherwise.
+         Optional, and nothing here can stop a signup - the server checks the
+         code again and keeps the driver either way. -->
+    <div class="field">
+      <label class="lbl" for="ajanCode" data-i18n="l_ajan">Kòd Ajan (si yon Ajan te ede w)</label>
+      <input id="ajanCode" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false"
+             maxlength="40" data-i18n-ph="ajan_ph" placeholder="Egz: KB-AB12CD">
+      <div id="ajanMsg" aria-live="polite" style="font-size:.82rem;margin-top:6px;min-height:1.1em"></div>
+    </div>
+
     <div class="row2">
       <div class="field">
         <label class="lbl" data-i18n="l_first">Non <span class="req">*</span></label>
@@ -403,6 +414,9 @@ var T = {
     l_phone:'Telefòn (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'Imèl', opt:'(opsyonèl)', l_city:'Vil', ph_city:'Pòtoprens',
     l_dtype:'Kalite Chofè', dt_moto:'Moto', dt_car:'Machin', continue:'Kontinye',
+    l_ajan:'Kòd Ajan (si yon Ajan te ede w)', ajan_ph:'Egz: KB-AB12CD', ajan_check:'Ap verifye kòd la…',
+    ajan_ok:'✓ Ajan:', ajan_bad:'Nou pa jwenn kòd sa a. Tcheke l, oswa kite l vid.', ajan_off:'Kòd sa a pa aktif kounye a.',
+    ajan_net:'Nou pa ka verifye kòd la kounye a — l ap anrejistre kanmenm.',
     l_ref:'Ki moun ki refere w?', ref_ph:'-- Chwazi --', ref_friend:'Zanmi / Fanmi', ref_other:'Lòt', opt_other:'Lòt (ekri)',
     s2_title:'Machin & Dokiman', s2_sub:'Ranpli chak chan epi ajoute foto dokiman yo.',
     g_vehicle:'Machin ou', g_docs:'Foto Dokiman',
@@ -431,6 +445,9 @@ var T = {
     l_phone:'Téléphone (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'E-mail', opt:'(facultatif)', l_city:'Ville', ph_city:'Port-au-Prince',
     l_dtype:'Type de chauffeur', dt_moto:'Moto', dt_car:'Voiture', continue:'Continuer',
+    l_ajan:'Code Ajan (si un Ajan vous a aidé)', ajan_ph:'Ex : KB-AB12CD', ajan_check:'Vérification du code…',
+    ajan_ok:'✓ Ajan :', ajan_bad:'Code introuvable. Vérifiez-le, ou laissez vide.', ajan_off:'Ce code n’est pas actif pour le moment.',
+    ajan_net:'Impossible de vérifier le code maintenant — il sera enregistré quand même.',
     l_ref:'Qui vous a référé ?', ref_ph:'-- Choisir --', ref_friend:'Ami / Famille', ref_other:'Autre', opt_other:'Autre (écrire)',
     s2_title:'Véhicule & Documents', s2_sub:'Remplissez chaque champ et ajoutez les photos des documents.',
     g_vehicle:'Votre véhicule', g_docs:'Photos des documents',
@@ -459,6 +476,9 @@ var T = {
     l_phone:'Phone (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'Email', opt:'(optional)', l_city:'City', ph_city:'Port-au-Prince',
     l_dtype:'Driver Type', dt_moto:'Moto', dt_car:'Car', continue:'Continue',
+    l_ajan:'Ajan code (if an Ajan helped you)', ajan_ph:'e.g. KB-AB12CD', ajan_check:'Checking the code…',
+    ajan_ok:'✓ Ajan:', ajan_bad:'Code not found. Check it, or leave it empty.', ajan_off:'This code is not active right now.',
+    ajan_net:'Can’t check the code right now — it will be saved anyway.',
     l_ref:'Who referred you?', ref_ph:'-- Select --', ref_friend:'Friend / Family', ref_other:'Other', opt_other:'Other (type it)',
     s2_title:'Vehicle & Documents', s2_sub:'Fill in each field and add the document photos.',
     g_vehicle:'Your vehicle', g_docs:'Document photos',
@@ -487,6 +507,9 @@ var T = {
     l_phone:'Teléfono (WhatsApp)', ph_phone:'+509 XXXX XXXX',
     l_email:'Correo', opt:'(opcional)', l_city:'Ciudad', ph_city:'Puerto Príncipe',
     l_dtype:'Tipo de conductor', dt_moto:'Moto', dt_car:'Auto', continue:'Continuar',
+    l_ajan:'Código Ajan (si un Ajan te ayudó)', ajan_ph:'Ej: KB-AB12CD', ajan_check:'Verificando el código…',
+    ajan_ok:'✓ Ajan:', ajan_bad:'Código no encontrado. Revísalo o déjalo vacío.', ajan_off:'Este código no está activo ahora.',
+    ajan_net:'No se puede verificar el código ahora — se guardará igual.',
     l_ref:'¿Quién te refirió?', ref_ph:'-- Seleccionar --', ref_friend:'Amigo / Familia', ref_other:'Otro', opt_other:'Otro (escribir)',
     s2_title:'Vehículo & Documentos', s2_sub:'Completa cada campo y agrega las fotos de los documentos.',
     g_vehicle:'Tu vehículo', g_docs:'Fotos de documentos',
@@ -546,7 +569,9 @@ document.getElementById('next1').addEventListener('click', function(){
   var t = T[currentLang];
   var first = val('firstName'), last = val('lastName'), city = pickVal('city','cityOther'), referral = val('referral');
   var digits = val('phone').replace(/[^0-9]/g,'').replace(/^509/,'');
-  if(!referral || !first || !last || !city || !digits){ return showErr('err1', t.e_req); }
+  /* A verified Ajan code IS the answer to "who referred you", so the
+     dropdown is not demanded on top of it. */
+  if((!referral && !(window._ajan && window._ajan.code)) || !first || !last || !city || !digits){ return showErr('err1', t.e_req); }
   if(digits.length < 8){ return showErr('err1', t.e_phone); }
   hideErr('err1'); gotoStep(2);
 });
@@ -625,7 +650,10 @@ document.getElementById('submitBtn').addEventListener('click', function(){
     license_plate: plate.toUpperCase(),
     license_number: licnum,
     oavct_number: oavct, oavct_expiry: val('oavctExp'),
-    referral_partner: val('referral'), preferred_service: 'both'
+    referral_partner: val('referral') || '', preferred_service: 'both',
+    /* Sent even when the live check could not run: the server checks it
+       again against the Ajan engine and keeps the driver either way. */
+    referral_code: val('ajanCode') || ''
   };
 
   createDriver(payload).then(function(driverId){
@@ -719,6 +747,67 @@ setLang(currentLang);
       });
     })
     .catch(function () { /* keep the fallback list */ });
+})();
+</script>
+<script>
+/* ═══ AJAN CODE (15 Oct 2026) ═══════════════════════════════════════════════
+   Where the code comes from, in order:
+     1. ?ref= or ?agent= on this page (an Ajan's driver QR)
+     2. what the MsouWout home page kept from an Ajan's link (mw_agent_ref)
+   A value starting "TL-" is a Tikè Lakay ticket reference, never an Ajan
+   code - the home page has always used ?ref= for those.
+   The live check only tells the driver what we found. It never blocks: the
+   server checks the code again and the signup goes through regardless. */
+(function(){
+  var MPP_API = 'https://myplopplop-api.onrender.com';
+  var input = document.getElementById('ajanCode');
+  var msg = document.getElementById('ajanMsg');
+  if(!input || !msg) return;
+  window._ajan = null;
+  function tr(k){ var d = (window.T && T[window.currentLang || 'ht']) || {}; return d[k] || (T.ht && T.ht[k]) || ''; }
+  function say(text, color){ msg.textContent = text || ''; msg.style.color = color || '#64748b'; }
+
+  var seq = 0, timer = null;
+  function check(){
+    var code = input.value.trim();
+    window._ajan = null;
+    if(!code){ say(''); return; }
+    var mine = ++seq;
+    say(tr('ajan_check'));
+    var ctl = ('AbortController' in window) ? new AbortController() : null;
+    var to = setTimeout(function(){ if(ctl) ctl.abort(); }, 15000);
+    fetch(MPP_API + '/api/referrals/validate/' + encodeURIComponent(code), ctl ? { signal: ctl.signal } : {})
+      .then(function(r){ return r.json().then(function(j){ return { status: r.status, j: j }; }); })
+      .then(function(x){
+        if(mine !== seq) return;                       // a newer keystroke won
+        if(x.status === 200 && x.j && x.j.success && x.j.kind === 'koutye'){
+          window._ajan = { code: x.j.code, org: x.j.organization || '' };
+          say(tr('ajan_ok') + ' ' + (x.j.referrerName || x.j.code) + (x.j.organization ? ' · ' + x.j.organization : ''), '#15803d');
+          /* An organisation's Ajan: preselect that organisation when it is in
+             the list, so the two answers on the form agree. */
+          var sel = document.getElementById('referral');
+          if(sel && x.j.organization){
+            for(var i = 0; i < sel.options.length; i++){
+              if(String(sel.options[i].value).toLowerCase() === x.j.organization.toLowerCase()){ sel.selectedIndex = i; break; }
+            }
+          }
+        } else if(x.status === 409){
+          say(tr('ajan_off'), '#b45309');
+        } else {
+          say(tr('ajan_bad'), '#b45309');
+        }
+      })
+      .catch(function(){ if(mine === seq) say(tr('ajan_net')); })
+      .then(function(){ clearTimeout(to); });
+  }
+  input.addEventListener('input', function(){ clearTimeout(timer); timer = setTimeout(check, 600); });
+  input.addEventListener('blur', function(){ clearTimeout(timer); check(); });
+
+  var p = new URLSearchParams(location.search);
+  var code = p.get('agent') || p.get('ref') || '';
+  if(!code){ try { var kept = JSON.parse(localStorage.getItem('mw_agent_ref') || 'null');
+    if(kept && kept.code && (Date.now() - kept.at) < 30*864e5) code = kept.code; } catch(e){} }
+  if(code && !/^TL-/i.test(code)){ input.value = code.slice(0, 40); check(); }
 })();
 </script>
 </body>
