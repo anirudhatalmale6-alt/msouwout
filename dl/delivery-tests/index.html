@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>MyPlopPlop Delivery Repairs</title>
+<style>
+:root{--bg:#F5F7FA;--card:#fff;--text:#1A2A4A;--muted:#5A6B8A;--line:#E2E8F0;--ok:#0b6b37;--okbg:#e7f6ec;--pa:#7A5C0A;--pabg:#FFF4D6;--no:#b91c1c;--nobg:#fee2e2;--fx:#00209F;--fxbg:#e6ecff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#18202f;--text:#e8edf6;--muted:#9fb0c8;--line:#2a3448;--ok:#6fd49a;--okbg:#14301f;--pa:#e8c56a;--pabg:#2a2414;--no:#f19a9a;--nobg:#3a1717;--fx:#9fb3ff;--fxbg:#1b2547}}
+:root[data-theme="dark"]{--bg:#0f1420;--card:#18202f;--text:#e8edf6;--muted:#9fb0c8;--line:#2a3448;--ok:#6fd49a;--okbg:#14301f;--pa:#e8c56a;--pabg:#2a2414;--no:#f19a9a;--nobg:#3a1717;--fx:#9fb3ff;--fxbg:#1b2547}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:16px;line-height:1.5}
+.w{max-width:600px;margin:0 auto}h1{font-size:1.3rem;margin-bottom:4px}.s{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.c h2{font-size:1rem;margin-bottom:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.c p{font-size:.9rem}
+ul,ol{padding-left:18px}li{font-size:.86rem;margin:5px 0}
+.t{display:inline-block;font-size:.66rem;font-weight:800;padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.3px;margin-right:4px;white-space:nowrap}
+.ok{background:var(--okbg);color:var(--ok)}.pa{background:var(--pabg);color:var(--pa)}.no{background:var(--nobg);color:var(--no)}.fx{background:var(--fxbg);color:var(--fx)}
+.sum{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.sum div{border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.82rem}.sum b{display:block;font-size:1.3rem}
+.big{border:2px solid var(--ok)}.warn{border:2px solid var(--pa)}
+.n{color:var(--muted);font-size:.78rem}
+</style></head><body><div class="w">
+<h1>MyPlopPlop Delivery: the 5 Repairs, Tested</h1>
+<div class="s">16 Oct 2026. All five repairs are built, tested and live. <span class="t ok">Passed</span> tested and passing · <span class="t fx">Fixed</span> a problem found and closed along the way · <span class="t pa">Limit</span> what is still open.</div>
+
+<div class="c big"><h2>Summary</h2>
+<p><b>All five areas are live</b> (server and website). <b>276 automated checks pass, 0 fail.</b></p>
+<ul>
+<li><b>94</b> checks on the real server code: payment, drivers, codes, money, cancellations, refunds.</li>
+<li><b>47</b> in a real phone-size browser, on the real pages. Customer pays → shop accepts → driver accepts → pickup code at the counter → customer's code at the door → driver paid 80% → admin handles a refund.</li>
+<li><b>10</b> on live chat and live driver position, plus <b>125</b> earlier checks: last night's security fixes, Enterprise, fees. All re-run and still passing.</li>
+</ul>
+<p style="margin-top:6px">Each important check was also shown to <b>fail</b> on the old code, or with its protection removed, so a pass means something.</p>
+<div class="sum"><div><b>5 / 5</b>must-fix areas done and live</div><div><b>276 / 276</b>checks passing</div></div>
+<p style="margin-top:10px"><b>Unchanged, as you asked:</b></p>
+<ul>
+<li>Customer fees are still the current 5%; the new pricing stays switched OFF.</li>
+<li>Payouts to drivers and shops stay manual.</li>
+<li>The QR still goes to haitibiznis.com/pos.</li>
+<li>Nothing in MsouWout was changed.</li>
+</ul>
+<p style="margin-top:6px"><b>Not launched yet.</b> One short real-money test is still needed. See the end of this page.</p>
+</div>
+
+<div class="c"><h2>1. Payment security</h2><ul>
+<li><span class="t ok">Passed</span>A shop cannot accept, prepare or mark ready an order that is not paid. No driver is ever sent for an unpaid order.</li>
+<li><span class="t ok">Passed</span>An order is "paid" only when the server confirms it with SolutionIP. A payment smaller than the order is refused.</li>
+<li><span class="t ok">Passed</span>A basket from <b>2 shops = 1 payment</b>, for the server's exact total. That one payment confirms both shops' orders. Paying only one shop's amount confirms neither.</li>
+<li><span class="t ok">Passed</span>The customer paid, then closed the page or lost connection: the server checks SolutionIP on its own at 2, 5, 10, 20 and 40 minutes, then every hour for 24 hours. Checking again never charges or confirms twice.</li>
+<li><span class="t ok">Passed</span>Still unpaid after 24 hours: the order is cancelled and its stock goes back on the shelf.</li>
+<li><span class="t fx">Fixed</span>Orders from before today are left as they are. Without this, the automatic check could have marked months-old orders paid and paid agent commission on them. A test proves it.</li>
+</ul></div>
+
+<div class="c"><h2>2. Driver assignment</h2><ul>
+<li><span class="t ok">Passed</span>Two drivers press "Accept" at the same instant: <b>exactly one</b> gets the delivery.</li>
+<li><span class="t ok">Passed</span>Only approved drivers whose position is less than 15 minutes old are offered jobs. The driver app now sends the position every minute.</li>
+<li><span class="t ok">Passed</span>A driver drops the delivery: it goes back to searching and is offered to another driver, never back to him. The customer is told.</li>
+<li><span class="t ok">Passed</span>No driver for 10 minutes: the customer, the shop and all admins are alerted once, and it appears on the admin's new "Swivi" page.</li>
+<li><span class="t fx">Fixed</span>A delivery with 0 HTG for the driver is never offered. That happens with a shop's "free delivery", or the 2nd shop of a basket, because the trip is charged once. An admin sets the driver's pay with a written reason.</li>
+</ul></div>
+
+<div class="c"><h2>3. Pickup and delivery proof</h2><ul>
+<li><span class="t ok">Passed</span><b>Pickup:</b> the driver who accepted gets a 4-digit pickup code. The shop types it to hand over the parcel. A wrong code, another shop, or the driver alone cannot do it. The time and the driver's position are recorded.</li>
+<li><span class="t ok">Passed</span><b>Delivery:</b> the delivery code is shown <b>only on the customer's order page</b>, with a warning. The shop never sees it, and neither does the driver: not in offers, the jobs list or his own list.</li>
+<li><span class="t ok">Passed</span>The driver must type the customer's code at the door. After 5 wrong codes, even the right one is refused.</li>
+<li><span class="t ok">Passed</span>Admin exception (customer lost their phone, etc.): admin only, a written reason is required, and who and why are recorded. A shop cannot use it.</li>
+<li><span class="t ok">Passed</span>No route can mark a delivery "delivered" without the code. The shop's status button refuses. An old side-door that booked a separate MsouWout cash ride with no code is closed.</li>
+<li><span class="t ok">Passed</span>A customer who collects at the shop gives the shop their code.</li>
+</ul></div>
+
+<div class="c"><h2>4. Driver earnings: exactly 80%, exactly once</h2><ul>
+<li><span class="t ok">Passed</span>The driver is credited <b>exactly 80% of the delivery fee the customer paid</b>. Examples: 200 of 250 in one test, 128 of 160 in the browser test. He sees the amount before accepting.</li>
+<li><span class="t ok">Passed</span>"Delivered" sent <b>twice at the same moment</b> (a bad connection) and again later: credited <b>once</b>. The shop's settlement is also credited once (2,000 − 10% = 1,800).</li>
+<li><span class="t ok">Passed</span>Earnings are held (driver 24 h, shop 24 h or 72 h for a new shop), then become withdrawable once. Running the release again moves nothing.</li>
+<li><span class="t fx">Fixed</span>Withdrawal requests: two quick taps used to create two withdrawals of the same balance. Rejecting twice gave the money back twice. Both now happen once only, and "sent" needs the MonCash/NatCash reference.</li>
+</ul></div>
+
+<div class="c"><h2>5. Cancellations and refunds</h2><ul>
+<li><span class="t ok">Passed</span>Who can cancel when:
+<ul>
+<li>the customer, until the shop starts preparing;</li>
+<li>the shop, until the handover (a reason is required);</li>
+<li>an admin, until delivery.</li>
+</ul>
+A delivered order cannot be cancelled: it becomes a refund case.</li>
+<li><span class="t ok">Passed</span>On cancel, the delivery is stopped, the stock comes back and the agent's commission is reversed. If the order was paid, a refund opens automatically.</li>
+<li><span class="t ok">Passed</span>A cancelled order can never be delivered and pays nobody, even if the driver didn't hear the news.</li>
+<li><span class="t ok">Passed</span>Refund steps, all on the "Swivi" page:
+<ol>
+<li>An admin approves it.</li>
+<li>The page says "Send X HTG by MonCash to (phone)".</li>
+<li>The admin types the transfer reference.</li>
+</ol>
+Every step is kept in its history. A shop cannot approve refunds.</li>
+<li><span class="t ok">Passed</span>A refund after delivery (e.g. a damaged item, 500 HTG) is taken back from the shop's held balance when it is approved.</li>
+</ul></div>
+
+<div class="c"><h2>6. Security and privacy</h2><ul>
+<li><span class="t ok">Passed</span>Every new admin action is admin-only on the server. Strangers cannot read anyone's order. Checked on the live server after the update: all 10 new routes refuse visitors who are not logged in.</li>
+<li><span class="t fx">Fixed</span><b>Live chat and driver position:</b> until today anyone, even without logging in, could do three things.
+<ul>
+<li>Listen to any delivery's chat and the driver's live position.</li>
+<li>Post fake messages or a fake position.</li>
+<li>Receive the addresses of every new ride.</li>
+</ul>
+Now only that ride's customer and driver can; new jobs go to approved drivers only. Checked on the live server.</li>
+<li><span class="t fx">Fixed</span>A driver could read the customer's delivery code from his own ride list. This was live until today.</li>
+<li><span class="t fx">Fixed</span>A shop could have read the driver's pickup code. My own test caught this before release.</li>
+<li><span class="t ok">Passed</span>No secret payment key is in any page. Only SolutionIP's client ID is there, and it is meant to be public. No customer phone numbers or addresses are on public pages (fixed last night).</li>
+<li><span class="t fx">Fixed</span>Pages:
+<ul>
+<li>The tracking page always said "Ride Not Found"; it works now.</li>
+<li>The driver's screen erased the customer's code while he was typing it.</li>
+<li>The customer's page showed the shop's commission as a "Platform fee".</li>
+</ul>
+All corrected.</li>
+</ul></div>
+
+<div class="c warn"><h2>Remaining limitations</h2><ol>
+<li><span class="t pa">Limit</span><b>No real money was used.</b> SolutionIP has no test mode, so payments were tested with a stand-in that answers like SolutionIP. One small controlled real payment is still needed (see below).</li>
+<li><span class="t pa">Limit</span><b>Refunds and payouts are sent by hand.</b> SolutionIP cannot refund, and you asked to keep payouts manual. The app tracks what is owed and records each transfer reference.</li>
+<li><span class="t pa">Limit</span><b>2-shop baskets:</b> the delivery is charged once, so each extra shop's parcel waits for an admin to set the driver's pay, which HaitiBiznis pays. <b>Your decision:</b>
+<ul>
+<li>(a) charge delivery per shop, or</li>
+<li>(b) one driver collects from both shops (a new feature).</li>
+</ul></li>
+<li><span class="t pa">Limit</span>The delivery distance starts from central Port-au-Prince when a shop has no GPS location. Shops are never asked for one yet (from the audit).</li>
+<li><span class="t pa">Limit</span>There is no live map for the customer yet. Alerts are app/browser notifications only, with no SMS or WhatsApp. These were "after launch" items.</li>
+<li><span class="t pa">Limit</span>Also from the audit, outside these 5 areas: driver ID/photo upload and payout number, a "suspend driver" button, and the admin console code in the web address.</li>
+</ol></div>
+
+<div class="c"><h2>Before public launch: one 30-minute real test</h2>
+<p>With your OK, and with Jennifer when she starts (MsouWout stays first):</p>
+<ol>
+<li>One real small MonCash payment (about 50 HTG) on a 2-shop basket.</li>
+<li>A real driver phone: accept, pickup code at the shop, customer's code at the door.</li>
+<li>One cancellation, refunded by hand, with the reference typed in "Swivi".</li>
+</ol>
+<p style="margin-top:6px">After that, launching is your call.</p></div>
+
+<p class="n">Live versions: server a176dd1, website 29ce173.</p>
+</div></body></html>
