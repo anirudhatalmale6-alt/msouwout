@@ -40,6 +40,11 @@ button.go:disabled{opacity:.45;cursor:not-allowed}
 .msg.ok{display:block;background:var(--okbg);color:var(--ok)}
 .note{margin-top:16px;font-size:.78rem;color:var(--muted);line-height:1.5}
 .done{text-align:center;padding:10px 0}
+.step{font-weight:800;font-size:.95rem;margin:4px 0 8px}
+.otp-btn{display:block;text-align:center;width:100%;min-height:52px;line-height:1.3;padding:15px 14px;border-radius:14px;background:var(--red);color:#fff;font-weight:800;text-decoration:none;margin:6px 0 8px}
+.key{font-family:ui-monospace,Menlo,monospace;font-size:.95rem;letter-spacing:.06em;word-break:break-all;background:var(--bg);border:1px dashed var(--line);border-radius:10px;padding:10px;user-select:all}
+.code-in{letter-spacing:.35em;text-align:center;font-weight:800;font-size:1.4rem;padding:0 14px}
+hr.sep{border:0;border-top:1px solid var(--line);margin:18px 0}
 .done .big{font-size:2.6rem}
 </style>
 </head>
@@ -51,6 +56,16 @@ button.go:disabled{opacity:.45;cursor:not-allowed}
     <h1>Chwazi nouvo modpas administratè a<br><span style="font-size:.85rem;color:var(--muted);font-weight:600">Choose the new administrator password</span></h1>
     <p class="sub" id="status">Ap verifye lyen an… / Checking the link…</p>
     <form id="f" style="display:none" autocomplete="off">
+      <div class="step">1. Mete MsouWout nan aplikasyon otantifikatè a / Add MsouWout to your authenticator app</div>
+      <p class="sub" style="margin-bottom:8px">Google Authenticator oswa Microsoft Authenticator. Si w poko genyen l, telechaje l nan Play Store / App Store anvan. / Install Google or Microsoft Authenticator first.</p>
+      <a class="otp-btn" id="otpLink" href="#">Ajoute nan aplikasyon an / Add to my authenticator app</a>
+      <p class="sub" style="margin:8px 0 4px">Si bouton an pa mache, ajoute kle sa a alamen (“Enter a setup key”): / If the button does not work, enter this key by hand:</p>
+      <div class="key" id="otpKey">…</div>
+      <hr class="sep">
+      <div class="step">2. Kòd 6 chif aplikasyon an montre / The 6-digit code the app shows</div>
+      <input id="code" class="code-in" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="••••••">
+      <hr class="sep">
+      <div class="step">3. Nouvo modpas / New password</div>
       <label for="p1">Nouvo modpas / New password</label>
       <div class="row"><input id="p1" type="password" autocomplete="new-password" minlength="12" required><button type="button" class="eye" data-for="p1" aria-label="Show">👁</button></div>
       <label for="p2">Ekri l ankò / Type it again</label>
@@ -58,6 +73,7 @@ button.go:disabled{opacity:.45;cursor:not-allowed}
       <ul class="rules">
         <li id="r1">Omwen 12 karaktè / At least 12 characters</li>
         <li id="r2">De fwa menm bagay / Both the same</li>
+        <li id="r3">Kòd 6 chif la / The 6-digit code</li>
       </ul>
       <button class="go" id="go" type="submit" disabled>Anrejistre / Save</button>
       <div class="msg" id="msg"></div>
@@ -73,32 +89,44 @@ button.go:disabled{opacity:.45;cursor:not-allowed}
   // the code leaves the address bar at once (history, screenshots, shoulder)
   try { history.replaceState(null, '', location.pathname); } catch (e) {}
   var st = document.getElementById('status'), f = document.getElementById('f');
-  var p1 = document.getElementById('p1'), p2 = document.getElementById('p2'), go = document.getElementById('go'), msg = document.getElementById('msg');
+  var p1 = document.getElementById('p1'), p2 = document.getElementById('p2'), go = document.getElementById('go'), msg = document.getElementById('msg'), cd = document.getElementById('code');
   function bad(t) { st.textContent = t; st.style.color = 'var(--bad)'; }
   if (!token) { bad('Lyen sa a pa valab. / This link is not valid.'); return; }
   fetch(API + '/api/admin-account/setup-status?t=' + token).then(function (r) { return r.json(); }).then(function (d) {
-    if (d && d.valid) { st.textContent = 'Lyen an bon. Ekri nouvo modpas ou a de fwa. / The link is valid. Type your new password twice.'; f.style.display = 'block'; p1.focus(); }
+    if (d && d.valid) {
+      return fetch(API + '/api/admin-account/begin-setup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: token }) })
+        .then(function (r) { return r.json().then(function (x) { return { ok: r.ok, d: x }; }); })
+        .then(function (x) {
+          if (!x.ok || !x.d.secret) { bad((x.d && x.d.error) || 'Erè / Error'); return; }
+          document.getElementById('otpLink').href = x.d.uri;
+          document.getElementById('otpKey').textContent = x.d.secret.replace(/(.{4})/g, '$1 ').trim();
+          st.textContent = 'Lyen an bon. Swiv 3 etap yo. / The link is valid. Follow the 3 steps.';
+          f.style.display = 'block';
+        });
+    }
     else bad('Lyen sa a deja sèvi oswa li ekspire. Mande yon lòt. / This link was already used or has expired. Ask for a new one.');
   }).catch(function () { bad('Pa ka kontakte sèvè a. Eseye ankò. / Cannot reach the server. Try again.'); });
   function check() {
     var a = p1.value, b = p2.value;
     document.getElementById('r1').className = a.length >= 12 ? 'met' : '';
     document.getElementById('r2').className = a && a === b ? 'met' : '';
-    go.disabled = !(a.length >= 12 && a === b);
+    var okCode = /^\d{6}$/.test((cd.value || '').replace(/\s/g, ''));
+    document.getElementById('r3').className = okCode ? 'met' : '';
+    go.disabled = !(a.length >= 12 && a === b && okCode);
   }
-  p1.addEventListener('input', check); p2.addEventListener('input', check);
+  p1.addEventListener('input', check); p2.addEventListener('input', check); cd.addEventListener('input', check);
   document.querySelectorAll('.eye').forEach(function (b) {
     b.addEventListener('click', function () { var i = document.getElementById(b.dataset.for); i.type = i.type === 'password' ? 'text' : 'password'; });
   });
   f.addEventListener('submit', function (e) {
     e.preventDefault(); if (go.disabled) return;
     go.disabled = true; msg.className = 'msg'; go.textContent = '…';
-    fetch(API + '/api/admin-account/set-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: token, password: p1.value }) })
+    fetch(API + '/api/admin-account/set-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: token, password: p1.value, code: (cd.value || '').replace(/\s/g, '') }) })
       .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
       .then(function (x) {
         if (!x.ok) { msg.className = 'msg bad'; msg.textContent = (x.d && x.d.error) || 'Erè / Error'; go.textContent = 'Anrejistre / Save'; check(); return; }
         p1.value = p2.value = ''; token = '';
-        document.getElementById('card').innerHTML = '<div class="done"><div class="big">✅</div><h1>Modpas la anrejistre</h1><p class="sub" style="margin-top:8px">Password saved. Use it on the driver-review and money pages from now on. The old password no longer works.</p></div>';
+        document.getElementById('card').innerHTML = '<div class="done"><div class="big">✅</div><h1>Modpas la anrejistre</h1><p class="sub" style="margin-top:8px">Password and authenticator saved. From now on every admin login asks for this password AND the 6-digit code from the app. The old password no longer works.</p></div>';
       })
       .catch(function () { msg.className = 'msg bad'; msg.textContent = 'Pa ka kontakte sèvè a. Eseye ankò. / Cannot reach the server.'; go.textContent = 'Anrejistre / Save'; check(); });
   });
