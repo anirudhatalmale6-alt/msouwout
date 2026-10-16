@@ -1077,6 +1077,9 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
         <span>&#128172;</span> <span data-i18n="rl_share">Voye kat la bay fanmi w</span>
       </button>
       <button class="cancel-ride-btn" id="mdCancel" onclick="cancelRide('accepted')" data-i18n="rl_cancel_ride">Anile kous la</button>
+      <!-- 16 Oct 2026: once the ride has STARTED the passenger cannot cancel it;
+           she can report a problem (and use SOS on the tracking page). -->
+      <button class="rp-open-btn" id="mdReport" type="button" onclick="MWReport.open({ride:rideData.id||'',reporter:'rider'})"><span class="rp-label">⚠️ Siyale yon pwoblèm</span></button>
     </div>
 
     <!-- The driver pressed Fini. She should be told, on her own phone, that the
@@ -3699,6 +3702,13 @@ function cancelRide(stage){
           stopRidePolling();
           clearActiveRide();
           showCancelled({cancelled_by:'rider',cancel_fee:j.cancel_fee});
+        }else if(j&&j.ride_started){
+          /* 16 Oct 2026: the ride started in the meantime - it can no longer be
+             cancelled. Say so, hide the button and offer the problem report. */
+          alert(j.error);
+          var _mc2=document.getElementById('mdCancel'); if(_mc2) _mc2.style.display='none';
+          restore();
+          try{ MWReport.open({ride:rideData.id||'',reporter:'rider'}); }catch(e){}
         }else{
           alert((j&&j.error)||t('err_generic'));
           /* Her words were "chak m peze anile l pa anile". If a cancel is
@@ -4109,6 +4119,9 @@ function showDriverFound(d){
     tk.style.display='none'; sh.style.display='none';
   }
   var mdT=document.getElementById('mdTitle');
+  /* 16 Oct 2026 policy: no cancelling a started ride - report a problem instead. */
+  var _started=(d.status==='in_progress'||!!d.started_at);
+  var _mc=document.getElementById('mdCancel'); if(_mc) _mc.style.display=_started?'none':'';
   if(d.status==='in_progress'){mdT.textContent=t('rl_started');}
   else if(d.arrived_at){mdT.textContent=t('rl_arrived');}
   else{mdT.textContent=t('rl_found');}
@@ -4647,5 +4660,134 @@ try{ restoreActiveRide(); }catch(e){}
      arrives, acFetch falls straight through to the OpenStreetMap lookups that
      were always there, and nobody is stopped from ordering a car. -->
 <script src="js/haiti-places.js?v=3" defer></script>
+<!-- ═══ REPORT A PROBLEM (16 Oct 2026) ═══
+     Jeffery: "Once a ride has started, passengers cannot cancel through the
+     normal cancellation process. Passengers must still have access to an
+     emergency or report-problem option."
+     A report is a NOTE for the MsouWout team. It never changes the ride, the
+     payment or the driver's earnings - an administrator reviews it. -->
+<style>
+.rp-open-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:46px;margin-top:10px;padding:10px 14px;border-radius:12px;border:1.5px solid #F59E0B;background:#FFF8EB;color:#92400E;font:inherit;font-weight:800;font-size:.9rem;cursor:pointer}
+.rp-back{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:99990;display:none;align-items:flex-end;justify-content:center}
+.rp-back.show{display:flex}
+.rp-sheet{background:#fff;color:#0F172A;width:100%;max-width:480px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));font-family:inherit;box-sizing:border-box}
+.rp-sheet h3{margin:0 0 4px;font-size:1.1rem}
+.rp-sheet .rp-sub{margin:0 0 12px;color:#5B6478;font-size:.85rem;line-height:1.45}
+.rp-cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.rp-cat{min-height:40px;padding:8px 12px;border-radius:999px;border:1.5px solid #E3E7EF;background:#fff;color:#0F172A;font:inherit;font-size:.85rem;font-weight:700;cursor:pointer}
+.rp-cat.on{border-color:#00209F;background:#EEF2FF;color:#00209F}
+.rp-sheet textarea{width:100%;min-height:96px;box-sizing:border-box;border:1.5px solid #E3E7EF;border-radius:12px;padding:10px 12px;font:inherit;font-size:1rem;color:#0F172A;background:#fff;resize:vertical}
+.rp-ref{display:flex;align-items:flex-start;gap:10px;margin:12px 0 4px;font-size:.88rem;line-height:1.4}
+.rp-ref input{width:22px;height:22px;flex:0 0 22px;margin:0}
+.rp-danger{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:#FDECEA;color:#B42318;font-size:.82rem;line-height:1.45;font-weight:600}
+.rp-btns{display:flex;gap:10px;margin-top:14px}
+.rp-btns button{flex:1;min-height:50px;border-radius:14px;font:inherit;font-weight:800;font-size:.95rem;cursor:pointer}
+.rp-send{border:0;background:#00209F;color:#fff}
+.rp-send:disabled{opacity:.5}
+.rp-close{border:1.5px solid #E3E7EF;background:#fff;color:#0F172A}
+.rp-msg{margin-top:12px;padding:10px 12px;border-radius:12px;font-size:.88rem;line-height:1.45;display:none}
+.rp-msg.ok{display:block;background:#E8F6EE;color:#0B7A3E}
+.rp-msg.bad{display:block;background:#FDECEA;color:#B42318}
+</style>
+<div class="rp-back" id="rpBack" role="dialog" aria-modal="true">
+  <div class="rp-sheet">
+    <h3 id="rpTitle"></h3>
+    <p class="rp-sub" id="rpSub"></p>
+    <div class="rp-cats" id="rpCats"></div>
+    <textarea id="rpText" maxlength="1000"></textarea>
+    <label class="rp-ref" id="rpRefWrap"><input type="checkbox" id="rpRefund"><span id="rpRefLabel"></span></label>
+    <div class="rp-danger" id="rpDanger"></div>
+    <div class="rp-msg" id="rpMsg"></div>
+    <div class="rp-btns"><button type="button" class="rp-close" id="rpClose"></button><button type="button" class="rp-send" id="rpSend"></button></div>
+  </div>
+</div>
+<script>
+(function () {
+  var API = 'https://msouwout-backend.onrender.com';
+  var S = {
+    ht: { btn: '⚠️ Siyale yon pwoblèm', title: 'Siyale yon pwoblèm', sub: 'Ekip MsouWout ap li l epi egzamine l. Kous la pa chanje.',
+          cats: { safety: 'Sekirite', driver: 'Chofè a', route: 'Wout la', price: 'Pri a', vehicle: 'Machin nan', payment: 'Peman', other: 'Lòt bagay' },
+          ph: 'Eksplike sa k pase…', refund: 'Mwen vle mande yon ranbousman (yon administratè ap deside)',
+          danger: 'Si ou an danje kounye a, sèvi ak bouton SOS / Sekirite Fanmi an sou paj swivi a.',
+          dangerDriver: 'Si gen yon ijans, rele sèvis ijans yo anvan.',
+          send: 'Voye', close: 'Fèmen', need: 'Chwazi yon kategori oswa ekri sa k pase.', fail: 'Pa ka voye l. Eseye ankò.' },
+    fr: { btn: '⚠️ Signaler un problème', title: 'Signaler un problème', sub: "L'équipe MsouWout va le lire et l'examiner. La course n'est pas modifiée.",
+          cats: { safety: 'Sécurité', driver: 'Le chauffeur', route: 'Le trajet', price: 'Le prix', vehicle: 'Le véhicule', payment: 'Paiement', other: 'Autre' },
+          ph: "Expliquez ce qui s'est passé…", refund: 'Je demande un remboursement (un administrateur décidera)',
+          danger: 'Si vous êtes en danger maintenant, utilisez le bouton SOS / Sécurité Famille sur la page de suivi.',
+          dangerDriver: "En cas d'urgence, appelez d'abord les secours.",
+          send: 'Envoyer', close: 'Fermer', need: 'Choisissez une catégorie ou écrivez ce qui se passe.', fail: "Envoi impossible. Réessayez." },
+    en: { btn: '⚠️ Report a problem', title: 'Report a problem', sub: 'The MsouWout team will read and review it. Your ride is not changed.',
+          cats: { safety: 'Safety', driver: 'The driver', route: 'The route', price: 'The price', vehicle: 'The vehicle', payment: 'Payment', other: 'Something else' },
+          ph: 'Tell us what happened…', refund: 'I am asking for a refund (an administrator will decide)',
+          danger: 'If you are in danger right now, use the SOS / Family Safety button on the tracking page.',
+          dangerDriver: 'In an emergency, call the emergency services first.',
+          send: 'Send', close: 'Close', need: 'Pick a category or write what happened.', fail: 'Could not send. Try again.' },
+    es: { btn: '⚠️ Reportar un problema', title: 'Reportar un problema', sub: 'El equipo de MsouWout lo leerá y lo revisará. El viaje no cambia.',
+          cats: { safety: 'Seguridad', driver: 'El conductor', route: 'La ruta', price: 'El precio', vehicle: 'El vehículo', payment: 'Pago', other: 'Otra cosa' },
+          ph: 'Cuéntanos qué pasó…', refund: 'Pido un reembolso (un administrador decidirá)',
+          danger: 'Si estás en peligro ahora, usa el botón SOS / Seguridad Familiar en la página de seguimiento.',
+          dangerDriver: 'En una emergencia, llama primero a los servicios de emergencia.',
+          send: 'Enviar', close: 'Cerrar', need: 'Elige una categoría o escribe qué pasó.', fail: 'No se pudo enviar. Inténtalo de nuevo.' }
+  };
+  function L() {
+    var l = 'ht';
+    try { if (typeof currentLang !== 'undefined' && currentLang) l = currentLang; } catch (e) {}
+    try { if (typeof lang !== 'undefined' && lang) l = lang; } catch (e) {}
+    return S[l] ? S[l] : S.ht;
+  }
+  function $(id) { return document.getElementById(id); }
+  var cur = null, cat = '';
+  function labels() {
+    var s = L(), b = document.querySelectorAll('.rp-label');
+    for (var i = 0; i < b.length; i++) b[i].textContent = s.btn;
+  }
+  function paint() {
+    var s = L(), driver = cur && cur.reporter === 'driver';
+    $('rpTitle').textContent = s.title; $('rpSub').textContent = s.sub;
+    $('rpText').placeholder = s.ph; $('rpRefLabel').textContent = s.refund;
+    $('rpRefWrap').style.display = driver ? 'none' : '';
+    $('rpDanger').textContent = driver ? s.dangerDriver : s.danger;
+    $('rpSend').textContent = s.send; $('rpClose').textContent = s.close;
+    var keys = driver ? ['safety', 'route', 'payment', 'vehicle', 'other'] : ['safety', 'driver', 'route', 'price', 'vehicle', 'other'];
+    $('rpCats').innerHTML = '';
+    keys.forEach(function (k) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rp-cat' + (cat === k ? ' on' : '');
+      b.textContent = s.cats[k];
+      b.onclick = function () { cat = k; paint(); };
+      $('rpCats').appendChild(b);
+    });
+  }
+  function open(o) {
+    cur = o || {}; cat = ''; $('rpText').value = ''; $('rpRefund').checked = false;
+    $('rpMsg').className = 'rp-msg'; $('rpSend').disabled = false;
+    paint(); $('rpBack').classList.add('show');
+  }
+  function close() { $('rpBack').classList.remove('show'); }
+  $('rpClose').onclick = close;
+  $('rpBack').addEventListener('click', function (e) { if (e.target === $('rpBack')) close(); });
+  $('rpSend').onclick = function () {
+    var s = L(), msg = $('rpText').value.trim(), m = $('rpMsg');
+    if (!cat && !msg) { m.className = 'rp-msg bad'; m.textContent = s.need; return; }
+    if (!cur || !cur.ride) { m.className = 'rp-msg bad'; m.textContent = s.fail; return; }
+    $('rpSend').disabled = true;
+    fetch(API + '/api/rides/' + encodeURIComponent(cur.ride) + '/report-problem', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reporter: cur.reporter || 'rider', category: cat || 'other', message: msg,
+                             refund_requested: !!$('rpRefund').checked })
+    }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (x) {
+        if (!x.ok) { m.className = 'rp-msg bad'; m.textContent = (x.j && x.j.error) || s.fail; $('rpSend').disabled = false; return; }
+        m.className = 'rp-msg ok'; m.textContent = x.j.message || 'OK';
+        setTimeout(close, 3500);
+      })
+      .catch(function () { m.className = 'rp-msg bad'; m.textContent = s.fail; $('rpSend').disabled = false; });
+  };
+  document.addEventListener('click', function () { setTimeout(labels, 60); }, true);
+  window.MWReport = { open: open, labels: labels };
+  labels();
+})();
+</script>
+
 </body>
 </html>
