@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>HaitiBiznis Security Audit</title>
+<style>
+:root{--bg:#F5F7FA;--card:#fff;--text:#1A2A4A;--muted:#5A6B8A;--line:#E2E8F0;--ok:#0b6b37;--okbg:#e7f6ec;--pa:#7A5C0A;--pabg:#FFF4D6;--no:#b91c1c;--nobg:#fee2e2;--fx:#00209F;--fxbg:#e6ecff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#18202f;--text:#e8edf6;--muted:#9fb0c8;--line:#2a3448;--ok:#6fd49a;--okbg:#14301f;--pa:#e8c56a;--pabg:#2a2414;--no:#f19a9a;--nobg:#3a1717;--fx:#9fb3ff;--fxbg:#1b2547}}
+:root[data-theme="dark"]{--bg:#0f1420;--card:#18202f;--text:#e8edf6;--muted:#9fb0c8;--line:#2a3448;--ok:#6fd49a;--okbg:#14301f;--pa:#e8c56a;--pabg:#2a2414;--no:#f19a9a;--nobg:#3a1717;--fx:#9fb3ff;--fxbg:#1b2547}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:16px;line-height:1.5}
+.w{max-width:620px;margin:0 auto}h1{font-size:1.3rem;margin-bottom:4px}.s{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.c h2{font-size:1rem;margin-bottom:8px}
+.c p{font-size:.88rem}
+ul,ol{padding-left:18px}li{font-size:.85rem;margin:5px 0}
+.t{display:inline-block;font-size:.64rem;font-weight:800;padding:2px 7px;border-radius:99px;text-transform:uppercase;letter-spacing:.3px;margin-right:4px;white-space:nowrap;vertical-align:1px}
+.ok{background:var(--okbg);color:var(--ok)}.pa{background:var(--pabg);color:var(--pa)}.no{background:var(--nobg);color:var(--no)}.fx{background:var(--fxbg);color:var(--fx)}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.sum div{border:1px solid var(--line);border-radius:10px;padding:9px;font-size:.78rem}.sum b{display:block;font-size:1.25rem}
+.big{border:2px solid var(--fx)}.warn{border:2px solid var(--pa)}
+.n{color:var(--muted);font-size:.76rem}
+</style></head><body><div class="w">
+<h1>HaitiBiznis Ecosystem: Security Audit</h1>
+<div class="s">16 Oct 2026, all free. Covers MyPlopPlop, MsouWout, Tikè Lakay / HaitiBiznis / LajanMaker, 48HoursReady and StarFlex. Every item was checked in the live code, and every fix was tested (and shown to fail on the old code) before deploy. <span class="t ok">Fixed</span> live and verified · <span class="t pa">Open</span> still to do · <span class="t no">Decision</span> needs you</div>
+
+<div class="c big"><h2>Summary</h2>
+<div class="sum"><div><b>45</b>fixed and live</div><div><b>10</b>still open, plus ~20 minor</div><div><b>0</b>signs that anyone outside used a hole (last 7 days of logs)</div></div>
+<p style="margin-top:10px">The class you were worried about, a small payment confirming a big purchase, existed in <b>3 more places</b>. All three are closed:</p>
+<ul>
+<li>MsouWout rides;</li>
+<li>Tikè Lakay tickets and courses;</li>
+<li>MyPlopPlop electricity/water bills.</li>
+</ul>
+<p style="margin-top:6px">Every MonCash/NatCash confirmation now also checks <b>the amount paid</b>, not just "ok".</p></div>
+
+<div class="c"><h2>1. Payment amounts and fake payments</h2><ul>
+<li><span class="t ok">Fixed</span><b>MsouWout:</b> a ride could be booked with any price the phone sent (20 HTG for any trip). Now refused under the real fare.</li>
+<li><span class="t ok">Fixed</span><b>MsouWout:</b> MonCash/NatCash "ok" was accepted for any amount. Now the amount paid must equal the charge.</li>
+<li><span class="t ok">Fixed</span><b>Tikè Lakay and courses:</b> same amount check.</li>
+<li><span class="t ok">Fixed</span><b>MyPlopPlop bills (EDH/DINEPA):</b> a 20 HTG payment marked a bill paid. Also, "500" typed as text made a 50,025 HTG charge.</li>
+<li><span class="t ok">Fixed</span><b>MsouWout:</b> partial payments, the same payment confirmed twice, a retry after a failed page, and a payment arriving after cancellation. Each is handled once, and any extra money is recorded as <b>owed back</b>, never as income.</li>
+<li><span class="t ok">Fixed</span><b>Tikè Lakay:</b> a ticket quantity of "-50" reopened 50 seats. Quantity is now 1 to 20.</li>
+</ul></div>
+
+<div class="c"><h2>2. Administrator access</h2><ul>
+<li><span class="t ok">Fixed</span><b>MsouWout and HaitiBiznis:</b> typing an admin address in CAPITAL letters skipped the password. That exposed driver payouts and bank details, all orders, and POS licence grants.</li>
+<li><span class="t ok">Fixed</span><b>MsouWout:</b> the admin password was still the original default, written in the public code. It is retired (the old one no longer works, checked on live) and now stored only as an encrypted hash, with a lockout after 8 wrong tries.</li>
+<li><span class="t ok">Fixed</span><b>Two-factor login</b> with an authenticator app (Google/Microsoft Authenticator). Once you set it up, the password alone opens nothing.</li>
+<li><span class="t ok">Fixed</span>Passwords and secrets removed from all code. All past versions were checked: <b>no database, payment, email or API key was ever in the code</b>. The old console PIN from early versions no longer works.</li>
+<li><span class="t ok">Fixed</span><b>HaitiBiznis:</b> the WhatsApp bot "test" door let anyone act as any phone number. It is now admin-only. The paid AI flyer scan now has a limit of 10 per hour.</li>
+</ul></div>
+
+<div class="c"><h2>3. Money moving twice, or without payment</h2><ul>
+<li><span class="t ok">Fixed</span><b>Payouts locked</b> on MsouWout, as you asked: payout runs, approvals, bank and MonCash/NatCash changes. They stay locked until you say so. Automatic payouts are off.</li>
+<li><span class="t ok">Fixed</span>Double-tap duplicates closed: MyPlopPlop driver withdrawals, agent (Ajan) payout requests and "mark paid", sol group payouts, featured boosts, and refund records on all platforms.</li>
+<li><span class="t ok">Fixed</span><b>MyPlopPlop:</b> a negative boost length or negative sol fee <b>added</b> money to a wallet. Sol payouts paid out money the app never received. Agent "package" commissions were created before any payment. All closed.</li>
+<li><span class="t ok">Fixed</span><b>Commissions before payment:</b> the console now refuses to approve a package commission with no completed payment. The old pre-payment referral bonus was switched off on 15 Oct.</li>
+<li><span class="t ok">Fixed</span><b>MsouWout:</b> anyone with a passenger's phone number could delete her account, and that <b>erased drivers' earnings</b> on her rides. Money rides are now kept (her personal details removed), and a ride in progress cannot be deleted.</li>
+<li><span class="t ok">Fixed</span><b>Refunds owed are visible:</b> MsouWout now lists every refund owed on the money page's "Needs a person" box, with a button to record the transfer reference once. MyPlopPlop has its "Swivi" page. <b>2 real MsouWout refunds were owed and never shown: 318 HTG (23 Sep) and 284 HTG (10 Oct), same customer.</b> Please check and send them, then record the reference.</li>
+</ul></div>
+
+<div class="c"><h2>4. Customer information</h2><ul>
+<li><span class="t ok">Fixed</span>On 15 Oct: driver names, phones and ID-photo paths, electricity tokens, and ride details readable by anyone.</li>
+<li><span class="t ok">Fixed</span><b>MyPlopPlop:</b> live chat, driver positions and new-ride addresses were broadcast to anyone connected. Delivery codes leaked to drivers and shops.</li>
+<li><span class="t pa">Open</span><b>Tikè Lakay:</b> ticket references can be listed by phone number, and the rate limit is fixed. Fully closing it needs a code sent to the buyer's phone.</li>
+</ul></div>
+
+<div class="c warn"><h2>Still open</h2><ol>
+<li><span class="t no">Decision</span><b>MsouWout:</b> a passenger can cancel even after the ride has started (cancellation is free, so she gets a full refund and the driver gets nothing), or press "emergency" to freeze it. Block cancel once started? Your call; changing it changes the app.</li>
+<li><span class="t pa">Open</span><b>MsouWout:</b> deleting a DRIVER account needs only his phone number. Fix: ask for his PIN (a small page change).</li>
+<li><span class="t pa">Open</span><b>MsouWout:</b> extra-passenger fees are not added to the server-side price, so a modified page could skip them. Low money impact.</li>
+<li><span class="t pa">Open</span><b>Tikè Lakay:</b> seats are counted when paid, so the last seats can be oversold if many people pay at once. Needs seat reservations.</li>
+<li><span class="t pa">Open</span><b>Tikè Lakay:</b> a buyer can enter their own agent code and get the 3% back on their own tickets. Policy question: allow it or not?</li>
+<li><span class="t pa">Open</span><b>WhatsApp bot:</b> messages from Meta are not signature-checked. Needs the Meta "app secret" from your WhatsApp account.</li>
+<li><span class="t pa">Open</span><b>MyPlopPlop:</b> about 20 lower-risk items (status changes that could be clicked twice in old admin screens, sol and international-order edge cases). None moves money without an administrator.</li>
+<li><span class="t pa">Open</span><b>48HoursReady API:</b> serious holes (no admin login, commissions without payment), but it is <b>not deployed</b>, so nothing is reachable. It must be fixed before it goes live.</li>
+<li><span class="t no">Decision</span><b>StarFlex</b> (owned by your partner, so I changed nothing): the login code is sent back in the server's reply. Anyone could take over a citizen account. No money is involved. Recommendation for the owner: connect an SMS/email sender and turn the demo mode off.</li>
+<li><span class="t pa">Open</span><b>Code repositories</b> are still public. Nothing secret is in them. Making them private needs your Render workspace, whenever you want.</li>
+</ol></div>
+
+<div class="c"><h2>Administrator access logs (MsouWout)</h2>
+<p><b>What exists:</b> Render keeps the MsouWout server log for about <b>7 days</b>. I searched all of it: <b>9 Oct 04:19 to 16 Oct 04:19 UTC</b>, 51,112 lines and 2,965 requests to admin addresses.</p>
+<ul>
+<li><span class="t ok">Clean</span>The capital-letter hole was used <b>only 3 times, all by me</b> (00:58 UTC today, while proving it), before it was closed.</li>
+<li><span class="t ok">Clean</span>Every answered request for payouts, the money report, the driver list and the full ride list came from <b>my own test tools</b>. No unknown phone or computer read them.</li>
+<li><span class="t ok">Clean</span>The only other answered calls were normal app use: a driver opening his own earnings page, the public clinic list, and two sign-ups made by my tests.</li>
+<li><span class="t pa">Unknown</span><b>Before 9 October there are no logs</b>, so I cannot prove whether anyone used the old default password earlier. It was in public code. That is why it was treated as compromised and retired.</li>
+</ul>
+<p class="n">The search runs inside the deploy system. The matching lines are encrypted with a key only I hold, and nothing personal is printed anywhere public.</p>
+</div>
+
+<div class="c"><h2>Unresolved financial risks</h2><ul>
+<li>Refunds are sent by hand (SolutionIP cannot refund), so a person must clear the "owed" list.</li>
+<li>Payouts are manual and currently locked. Earnings are recorded but not sent.</li>
+<li>MyPlopPlop 2-shop baskets: the second shop's delivery needs an admin to set the driver's pay, until the multi-shop feature exists.</li>
+<li>No real-money test yet on the new code (planned with Jennifer).</li>
+</ul></div>
+
+<div class="c"><h2>Before public launch, I recommend</h2><ol>
+<li>Set up your admin password and authenticator (link by email).</li>
+<li>Send the 2 owed refunds and record them.</li>
+<li>Jennifer's MsouWout test, then one real MyPlopPlop delivery test.</li>
+<li>Decide item 1 (cancel after start) and allow the driver-PIN fix.</li>
+<li>When convenient: give me Render workspace access so the repositories can go private, and change the Render API key (the GitHub account had an intrusion in September).</li>
+<li>Keep payouts locked until you have reviewed the first payout run yourself.</li>
+</ol></div>
+<p class="n">Live versions: MsouWout 7e7d47a · MyPlopPlop af9488a · HaitiBiznis de587e1. Automated checks across all fixes: 460+ passing.</p>
+</div></body></html>
