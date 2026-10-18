@@ -802,6 +802,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
       <div class="driver-info">
         <div class="driver-name" id="driverName">---</div>
         <div class="driver-vehicle" id="driverVehicle">---</div>
+        <div id="driverRating" style="font-size:12.5px;font-weight:800;color:#B45309"></div>
         <div class="driver-plate" id="driverPlate">---</div>
       </div>
     </div>
@@ -891,6 +892,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
            tracking response already carries, so ⛔ nothing on the server had to
            change while the ride workflow is frozen. -->
       <div id="receipt" class="receipt" style="display:none"></div>
+      <div id="endRate" style="margin:0 16px"></div>
       <button type="button" id="receiptShare" class="btn-ghost"
               style="display:none;margin-top:10px" onclick="shareReceipt()"></button>
     </div>
@@ -1580,6 +1582,8 @@ function updateUI(data) {
     if (data.driver.photo) avatar.innerHTML = '<img src="' + data.driver.photo + '" alt="">';
     else avatar.textContent = (data.driver.name || '?')[0].toUpperCase();
     document.getElementById('driverName').textContent = data.driver.name || '---';
+    var _dr = document.getElementById('driverRating'), _rr = data.driver.rating;
+    if (_dr) _dr.textContent = (_rr && _rr.count > 0) ? ('★ ' + Number(_rr.avg).toFixed(1) + ' (' + _rr.count + ')') : '';
     document.getElementById('driverVehicle').textContent = data.driver.vehicle_type === 'car' ? 'Machin' : 'Moto';
     document.getElementById('driverPlate').textContent = data.driver.license_plate || '';
     const callBtn = document.getElementById('callBtn');
@@ -1611,6 +1615,9 @@ function updateUI(data) {
     document.getElementById('endPrice').textContent =
       (total > 0 ? total : fare || '--') + ' HTG';
     renderReceipt(data);
+    /* 18 Oct 2026: the passenger who booked rates the driver. A family member
+       on the shared link has no key, so the widget stays empty for them. */
+    try { MWRate.mount(document.getElementById('endRate'), { ride: data.ride_id, token: ownerToken() }); } catch (e) {}
     stopPolling();
   } else if (status === 'cancelled') {
     hideActiveElements();
@@ -2919,6 +2926,74 @@ init();
   document.addEventListener('click', function () { setTimeout(labels, 60); }, true);
   window.MWReport = { open: open, labels: labels };
   labels();
+})();
+</script>
+
+<!-- ═══ DRIVER SCORE (18 Oct 2026) ═══
+     Jeffery: "The passenger can leave a 5 star or 1 star." Shown on the
+     finished-ride screen to the passenger who booked (her private key). -->
+<style>
+.mwr{margin-top:14px;background:#fff;border:1px solid #E3E7EF;border-radius:16px;padding:14px 12px;text-align:center;color:#0F172A;font-family:inherit}
+.mwr-t{font-weight:900;font-size:16px;margin-bottom:2px}
+.mwr-s{font-size:12.5px;color:#5B6478;margin-bottom:8px}
+.mwr-stars{display:flex;justify-content:center;gap:4px}
+.mwr-stars button{width:48px;height:48px;border:0;background:none;font-size:34px;line-height:1;cursor:pointer;color:#CBD3E0;padding:0}
+.mwr-stars button.on{color:#F5B301}
+.mwr textarea{width:100%;box-sizing:border-box;margin-top:10px;min-height:64px;border:1.5px solid #E3E7EF;border-radius:12px;padding:9px 11px;font:inherit;font-size:14.5px;color:#0F172A;background:#fff;resize:vertical}
+.mwr-go{width:100%;margin-top:10px;min-height:48px;border:0;border-radius:12px;background:#00209F;color:#fff;font:inherit;font-weight:800;font-size:15px;cursor:pointer}
+.mwr-go:disabled{opacity:.45}
+.mwr-msg{margin-top:8px;font-size:13px;font-weight:700}
+.mwr-done{font-size:26px;color:#F5B301;letter-spacing:2px}
+</style>
+<script>
+(function(){
+  var API='https://msouwout-backend.onrender.com';
+  var S={
+    ht:{t:'Bay chofè a yon nòt',s:'1 etwal = pa bon ditou · 5 etwal = ekselan',ph:'Yon ti mo (si ou vle)',go:'Voye nòt la',thanks:'Mèsi! Ou bay chofè a',need:'Chwazi 1 a 5 etwal.',fail:'Pa ka voye l. Eseye ankò.'},
+    fr:{t:'Notez votre chauffeur',s:'1 étoile = très mauvais · 5 étoiles = excellent',ph:'Un petit mot (facultatif)',go:'Envoyer la note',thanks:'Merci ! Vous avez donné',need:'Choisissez de 1 à 5 étoiles.',fail:"Envoi impossible. Réessayez."},
+    en:{t:'Rate your driver',s:'1 star = very bad · 5 stars = excellent',ph:'A short comment (optional)',go:'Send rating',thanks:'Thank you! You gave the driver',need:'Choose 1 to 5 stars.',fail:'Could not send. Try again.'},
+    es:{t:'Califica a tu conductor',s:'1 estrella = muy malo · 5 estrellas = excelente',ph:'Un comentario (opcional)',go:'Enviar calificación',thanks:'¡Gracias! Le diste al conductor',need:'Elige de 1 a 5 estrellas.',fail:'No se pudo enviar. Inténtalo de nuevo.'}
+  };
+  function L(){var l='ht';try{if(typeof currentLang!=='undefined'&&currentLang)l=currentLang;}catch(e){}try{if(typeof lang!=='undefined'&&lang)l=lang;}catch(e){}return S[l]||S.ht;}
+  function stars(n){var o='';for(var i=0;i<5;i++)o+=(i<n?'★':'☆');return o;}
+  function mount(el,o){
+    if(!el||!o||!o.ride||!o.token){ if(el) el.innerHTML=''; return; }
+    if(el.getAttribute('data-mwr')===o.ride) return;       /* already shown for this ride */
+    el.setAttribute('data-mwr',o.ride);
+    var s=L();
+    fetch(API+'/api/rides/'+encodeURIComponent(o.ride)+'/rating?t='+encodeURIComponent(o.token))
+      .then(function(r){return r.ok?r.json():null;})
+      .then(function(d){
+        if(!d){el.innerHTML='';return;}
+        if(d.rated){done(el,d.stars);return;}
+        if(!d.can_rate){el.innerHTML='';return;}
+        var pick=0;
+        el.innerHTML='<div class="mwr"><div class="mwr-t"></div><div class="mwr-s"></div><div class="mwr-stars"></div>'+
+          '<textarea maxlength="500"></textarea><button type="button" class="mwr-go" disabled></button><div class="mwr-msg"></div></div>';
+        el.querySelector('.mwr-t').textContent=s.t; el.querySelector('.mwr-s').textContent=s.s;
+        el.querySelector('textarea').placeholder=s.ph; var go=el.querySelector('.mwr-go'); go.textContent=s.go;
+        var box=el.querySelector('.mwr-stars');
+        for(var i=1;i<=5;i++){(function(n){var b=document.createElement('button');b.type='button';b.textContent='★';b.setAttribute('aria-label',n+'/5');
+          b.onclick=function(){pick=n;var all=box.querySelectorAll('button');for(var k=0;k<all.length;k++)all[k].classList.toggle('on',k<n);go.disabled=false;};
+          box.appendChild(b);})(i);}
+        go.onclick=function(){
+          var m=el.querySelector('.mwr-msg');
+          if(!pick){m.textContent=s.need;return;}
+          go.disabled=true;
+          fetch(API+'/api/rides/'+encodeURIComponent(o.ride)+'/rate',{method:'POST',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({stars:pick,comment:el.querySelector('textarea').value,token:o.token})})
+            .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+            .then(function(x){ if(x.ok||(x.j&&x.j.already)){done(el,x.ok?pick:null);} else {m.textContent=(x.j&&x.j.error)||s.fail;go.disabled=false;} })
+            .catch(function(){m.textContent=s.fail;go.disabled=false;});
+        };
+      }).catch(function(){el.innerHTML='';});
+  }
+  function done(el,n){var s=L();
+    el.innerHTML='<div class="mwr"><div class="mwr-msg" style="margin-top:0"></div>'+(n?'<div class="mwr-done"></div>':'')+'</div>';
+    el.querySelector('.mwr-msg').textContent=s.thanks+(n?'':' ✓');
+    if(n) el.querySelector('.mwr-done').textContent=stars(n);
+  }
+  window.MWRate={mount:mount};
 })();
 </script>
 

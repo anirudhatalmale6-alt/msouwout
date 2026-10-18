@@ -663,6 +663,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <div class="dp-id">
       <div class="dp-brand">MsouWout Chof&egrave;</div>
       <div class="dp-hello"><span data-i18n="dp_hello">Bonjou</span>, <span id="driverName"></span> &#128075;</div>
+      <div id="dpScore" style="font-size:12.5px;font-weight:800;color:#FCD34D;margin-top:1px"></div>
     </div>
     <div class="dp-plate" id="dpPlate"></div>
   </div>
@@ -1222,7 +1223,10 @@ async function handleLogin(e){
         status:d.status||(d.verified?'approved':'pending'),
         is_verified:d.is_verified||d.verified||false,
         created_at:d.created_at||d.createdAt,
-        zone:d.zone||''
+        zone:d.zone||'',
+        /* 18 Oct 2026: his passenger score - this mapping keeps only what it
+           names, so a new field has to be named here or it never arrives. */
+        rating:d.rating||null
       },
       rides:data.rides||[]
     };
@@ -1284,6 +1288,11 @@ function renderDashboard(data){
   const rides=data.rides||[];
 
   document.getElementById('driverName').textContent=d.full_name;
+  /* 18 Oct 2026: his score from passengers. */
+  (function(){var el=document.getElementById('dpScore');if(!el)return;var r=d.rating;
+    var L=(typeof currentLang!=='undefined'?currentLang:'ht');
+    var lbl={ht:['nòt','Poko gen nòt'],fr:['avis','Pas encore de note'],en:['ratings','No ratings yet'],es:['calificaciones','Sin calificaciones']}[L]||['nòt','Poko gen nòt'];
+    el.textContent=(r&&r.count>0)?('★ '+Number(r.avg).toFixed(1)+' · '+r.count+' '+lbl[0]):('☆ '+lbl[1]);})();
   const since=new Date(d.created_at);
   document.getElementById('driverSince').textContent=t('member_since')+' '+since.toLocaleDateString();
 
