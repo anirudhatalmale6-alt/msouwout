@@ -739,6 +739,10 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
         <h3>&#128276; <span data-i18n="inc_title">Demann Kous</span> <span id="incCount" style="font-weight:900"></span></h3>
         <button id="alertBtn" onclick="enableAlerts()" class="dp-alert-btn" data-i18n="alert_on">&#128276; Limen al&egrave;t pou nouvo kous</button>
         <div id="alertMsg" style="font-size:12.5px;line-height:1.45;margin:-2px 0 10px;color:#166534"></div>
+        <!-- 18 Oct 2026: a real request (MW-DJUD3J6) was sent to his phone and he
+             never saw it. He can now check, on his own phone, that alerts arrive. -->
+        <button id="alertTestBtn" type="button" onclick="testAlerts()" class="dp-alert-btn" style="display:none;background:#fff;color:#0B2E6F;border:2px solid #0B2E6F">&#128276; Teste alèt la</button>
+        <div id="alertTestMsg" style="font-size:12.5px;line-height:1.5;margin:-2px 0 10px;color:#334155"></div>
         <div id="incomingList"></div>
         <div id="incomingEmpty" class="sub" style="color:#64748B;font-size:13.5px" data-i18n="inc_empty">Pa gen demann kounye a. Paj sa a ap gade pou kont li.</div>
       </div>
@@ -1416,11 +1420,45 @@ async function enableAlerts(){
     try{ localStorage.setItem('mw_alerts_on','1'); }catch(e){}
     btn.style.display='none';
     alertSay(t('alert_ok'));
+    var tb2=document.getElementById('alertTestBtn'); if(tb2) tb2.style.display='';
   }catch(e){
     btn.disabled=false;
     alertSay(t('alert_denied'),true);
   }
 }
+var ALERT_TEST_T={
+  ht:{sent:'Nou voye yon alèt tès. Ou dwe wè l sou telefòn ou nan kèk segonn. Si ou pa wè l: 1) Paramèt telefòn > Aplikasyon > Chrome > Notifikasyon: Pèmèt. 2) Paramèt > Batri > Chrome: "Pa limite". Answit eseye ankò.',fail:'Alèt la pa ka pati. Peze "Limen alèt" ankò, epi eseye.',wait:'...'},
+  fr:{sent:"Une alerte test est envoyée. Elle doit apparaître dans quelques secondes. Sinon : 1) Paramètres > Applications > Chrome > Notifications : Autoriser. 2) Paramètres > Batterie > Chrome : « Sans restriction ». Puis réessayez.",fail:'Impossible d’envoyer l’alerte. Réactivez les alertes puis réessayez.',wait:'...'},
+  en:{sent:'A test alert was sent. It should appear within a few seconds. If not: 1) Phone Settings > Apps > Chrome > Notifications: Allow. 2) Settings > Battery > Chrome: "Unrestricted". Then try again.',fail:'The alert could not be sent. Turn alerts on again, then retry.',wait:'...'},
+  es:{sent:'Se envió una alerta de prueba. Debe aparecer en unos segundos. Si no: 1) Ajustes > Apps > Chrome > Notificaciones: Permitir. 2) Ajustes > Batería > Chrome: "Sin restricciones". Luego reintente.',fail:'No se pudo enviar la alerta. Active las alertas otra vez y reintente.',wait:'...'}
+};
+function alertTestSay(k){
+  var L=(typeof currentLang!=='undefined'&&ALERT_TEST_T[currentLang])?currentLang:'ht';
+  var el=document.getElementById('alertTestMsg'); if(el) el.textContent=ALERT_TEST_T[L][k];
+}
+async function testAlerts(){
+  var id=(window._driverData&&window._driverData.driver&&window._driverData.driver.id)||null;
+  var b=document.getElementById('alertTestBtn');
+  if(!id||!b) return;
+  b.disabled=true; alertTestSay('wait');
+  try{
+    var reg=await navigator.serviceWorker.ready;
+    var sub=await reg.pushManager.getSubscription();
+    if(!sub||Notification.permission!=='granted'){ alertTestSay('fail'); b.style.display='none'; syncAlertButton(); return; }
+    var r=await fetch(API+'/api/drivers/push/test',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({driver_id:id,endpoint:sub.endpoint})});
+    if(r.status===409){
+      /* the server no longer has this phone: subscribe again, then test */
+      await fetch(API+'/api/drivers/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({driver_id:id,subscription:sub.toJSON?sub.toJSON():sub})});
+      r=await fetch(API+'/api/drivers/push/test',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({driver_id:id,endpoint:sub.endpoint})});
+    }
+    alertTestSay(r.ok?'sent':'fail');
+  }catch(e){ alertTestSay('fail'); }
+  b.disabled=false;
+}
+
 /* Reflect the real state of the browser subscription, not what we remember -
    he may have cleared the site, or switched phones. */
 async function syncAlertButton(){
@@ -1429,8 +1467,9 @@ async function syncAlertButton(){
     if(!('serviceWorker' in navigator)||!('PushManager' in window)){ btn.style.display='none'; return; }
     var reg=await navigator.serviceWorker.ready;
     var sub=await reg.pushManager.getSubscription();
-    if(sub && Notification.permission==='granted'){ btn.style.display='none'; alertSay(t('alert_ok')); }
-    else { btn.style.display=''; }
+    var tb=document.getElementById('alertTestBtn');
+    if(sub && Notification.permission==='granted'){ btn.style.display='none'; alertSay(t('alert_ok')); if(tb) tb.style.display=''; }
+    else { btn.style.display=''; if(tb) tb.style.display='none'; }
   }catch(e){}
 }
 
