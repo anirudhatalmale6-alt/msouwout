@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MsouWout — 4 bouton (apèsi)</title><meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#00209F;--red:#D21034;--gold:#D4A017;--green:#1B8C3D;--dark:#0A0E1A;--text:#1A2A4A;--light:#5A6B8A;--muted:#8A95AA;--line:#E2E8F0;--bg:#F5F7FA;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#DDE3EE;color:var(--text);min-height:100vh}
+.note{max-width:430px;margin:0 auto;padding:10px 16px;background:#FFF4D6;color:#6B4E00;font-size:.8rem;font-weight:600;text-align:center;border-bottom:1px solid #F0DC9C}
+.tabs{max-width:430px;margin:0 auto;display:flex;gap:6px;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font:700 .78rem 'Plus Jakarta Sans',sans-serif;color:var(--light);cursor:pointer}
+.tabs button.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+.phone{max-width:430px;margin:0 auto;background:var(--bg);min-height:calc(100vh - 100px);position:relative;padding-bottom:84px}
+.scr{display:none;animation:in .25s ease}.scr.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.top{background:var(--dark);color:#fff;display:flex;align-items:center;gap:10px;padding:12px 16px}
+.top img{width:34px;height:34px;border-radius:9px}
+.top b{font-size:1.05rem;flex:1}
+.top .pill{background:#fff2;border-radius:999px;padding:6px 12px;font-size:.78rem;font-weight:700}
+.top .back{background:none;border:0;color:#fff;font-size:1.4rem;cursor:pointer;padding:0 4px}
+.stripe{height:4px;background:linear-gradient(90deg,var(--blue) 50%,var(--red) 50%)}
+.pad{padding:18px 16px}
+h1{font-size:1.45rem;font-weight:800;line-height:1.2}
+.sub{color:var(--light);font-size:.92rem;margin-top:4px}
+.tile{display:flex;align-items:center;gap:16px;width:100%;text-align:left;border:0;border-radius:22px;padding:20px 18px;margin-top:14px;color:#fff;cursor:pointer;font-family:inherit;box-shadow:0 8px 20px -10px #0006;min-height:108px}
+.tile .ic{font-size:2.6rem;width:64px;height:64px;border-radius:18px;background:#fff3;display:grid;place-items:center;flex:0 0 64px}
+.tile b{display:block;font-size:1.5rem;font-weight:800;letter-spacing:.02em}
+.tile span{display:block;font-size:.88rem;opacity:.92;margin-top:2px;line-height:1.35}
+.tile .ar{margin-left:auto;font-size:1.6rem;opacity:.8}
+.t-kous{background:linear-gradient(135deg,#D21034,#9E0B26)}
+.t-liv{background:linear-gradient(135deg,#00209F,#001466)}
+.t-mache{background:linear-gradient(135deg,#1B8C3D,#0F5E28)}
+.t-ev{background:linear-gradient(135deg,#7B2FBE,#4A148C)}
+.tile{min-height:92px;padding:16px 16px;margin-top:11px}
+.tile .ic{width:56px;height:56px;flex:0 0 56px;font-size:2.2rem}
+.tile b{font-size:1.35rem}
+.evbar{background:#4A148C}
+.form .lbl{margin-top:12px}
+.photo{border:2px dashed var(--line);border-radius:14px;padding:18px;text-align:center;color:var(--light);font-weight:700;background:#fff}
+.price{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:14px;font-weight:800}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.mini a{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 6px;text-align:center;font-size:.76rem;font-weight:700;color:var(--text);text-decoration:none;cursor:pointer}
+.mini a i{display:block;font-style:normal;font-size:1.3rem;margin-bottom:2px}
+.nav{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:flex}
+.nav a{flex:1;text-align:center;padding:10px 0 12px;font-size:.72rem;font-weight:700;color:var(--muted);text-decoration:none}
+.nav a i{display:block;font-style:normal;font-size:1.3rem}
+.nav a.on{color:var(--red)}
+.chips{display:flex;gap:10px;margin-top:14px}
+.chip{flex:1;border:2px solid var(--line);background:#fff;border-radius:16px;padding:14px 8px;text-align:center;font-weight:800;cursor:pointer;font-family:inherit;font-size:1rem;color:var(--text)}
+.chip.on{border-color:var(--red);background:#FFF0F3;color:var(--red)}
+.chip small{display:block;font-weight:600;font-size:.75rem;color:var(--light)}
+.lbl{font-size:.8rem;font-weight:800;margin:16px 0 6px;letter-spacing:.03em}
+.inp{background:#fff;border:2px solid var(--line);border-radius:14px;padding:15px;color:var(--muted);font-size:.95rem}
+.gps{display:inline-block;margin-top:8px;background:#E9F7EE;color:var(--green);border:1px solid #BfE5CB;border-radius:999px;padding:6px 12px;font-size:.8rem;font-weight:700}
+.big{display:block;width:100%;border:0;border-radius:16px;background:var(--red);color:#fff;font:800 1.1rem 'Plus Jakarta Sans',sans-serif;padding:17px;margin-top:20px;cursor:pointer}
+.same{margin-top:14px;font-size:.8rem;color:var(--light);background:#fff;border:1px dashed var(--line);border-radius:12px;padding:10px 12px}
+.opt{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:12px;cursor:pointer;width:100%;text-align:left;font-family:inherit;color:var(--text)}
+.opt .ic{font-size:2rem;width:54px;height:54px;border-radius:15px;display:grid;place-items:center;flex:0 0 54px;background:#EEF1FB}
+.opt b{display:block;font-size:1.05rem;color:var(--text)}
+.opt span{display:block;font-size:.84rem;color:var(--light);margin-top:2px;line-height:1.35}
+.opt.q{border-style:dashed;background:#FFFBEF}
+.opt .tag,.tag{display:inline-block;margin-top:6px;font-size:.7rem;font-weight:800;border-radius:6px;padding:2px 7px;background:#FDE9C5;color:#7A4B00}
+.mpbar{background:var(--blue);color:#fff;padding:10px 16px;font-size:.85rem;font-weight:700;display:flex;gap:10px;align-items:center}
+.mpbar button{background:#fff;color:var(--blue);border:0;border-radius:999px;padding:6px 12px;font:800 .78rem 'Plus Jakarta Sans',sans-serif;cursor:pointer}
+.shop{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.shop div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;font-size:.82rem;font-weight:700}
+.shop div i{display:block;font-style:normal;font-size:2rem;background:#F1F4FA;border-radius:10px;text-align:center;padding:12px 0;margin-bottom:8px}
+.shop div em{display:block;font-style:normal;color:var(--red);margin-top:2px}
+.on-line{display:flex;align-items:center;justify-content:space-between;background:#E9F7EE;border:2px solid var(--green);border-radius:18px;padding:14px 16px}
+.on-line b{color:var(--green);font-size:1.05rem}
+.sw{width:54px;height:30px;border-radius:999px;background:var(--green);position:relative}
+.sw:after{content:"";position:absolute;right:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff}
+.ok{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.ok span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 11px;font-size:.78rem;font-weight:700}
+.job{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:12px;border-left:6px solid var(--red)}
+.job.d{border-left-color:var(--blue)}
+.job .k{font-size:.72rem;font-weight:800;letter-spacing:.05em;color:var(--red)}
+.job.d .k{color:var(--blue)}
+.job .r{font-weight:800;margin-top:4px}
+.job .m{font-size:.82rem;color:var(--light);margin-top:2px}
+.job .row{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.job .p{font-size:1.15rem;font-weight:800}
+.job button{border:0;border-radius:12px;background:var(--green);color:#fff;font:800 .95rem 'Plus Jakarta Sans',sans-serif;padding:11px 18px;cursor:pointer}
+.earn{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.earn div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;font-size:.78rem;color:var(--light);font-weight:700}
+.earn div b{display:block;color:var(--text);font-size:1.15rem}
+.h2{font-size:1rem;font-weight:800;margin-top:20px}
+.cap{font-size:.78rem;color:var(--light);text-align:center;margin-top:16px}
+</style></head><body>
+<div class="note">APÈSI SÈLMAN — se pa sit la an dirèk. Peze bouton yo pou wè.</div>
+<div class="tabs" id="tabs">
+ <button data-s="home" class="on">1. Akèy</button><button data-s="kous">2. Kous</button><button data-s="liv">3. Livrezon</button><button data-s="mache">4. Achte</button><button data-s="ev">5. Evènman</button><button data-s="koli">6. Voye koli</button><button data-s="chofe">7. Chofè</button>
+</div>
+<div class="phone">
+
+<!-- 1 HOME -->
+<section class="scr on" id="home">
+ <div class="top"><img src="../../assets/apple-touch-icon.png" alt=""><b>MsouWout</b><span class="pill">Konekte</span></div><div class="stripe"></div>
+ <div class="pad">
+  <h1>Bonjou! 👋<br>Kisa ou bezwen jodi a?</h1>
+  <button class="tile t-kous" data-go="kous"><span class="ic">🚕</span><span><b>KOUS</b><span>Moto oswa machin. Chofè a vin chèche w.</span></span><span class="ar">›</span></button>
+  <button class="tile t-liv" data-go="liv"><span class="ic">📦</span><span><b>LIVREZON</b><span>Voye yon koli, oswa resevwa kòmand ou.</span></span><span class="ar">›</span></button>
+  <button class="tile t-mache" data-go="mache"><span class="ic">🛒</span><span><b>ACHTE</b><span>Achte manje, pwodwi ak lòt bagay sou MyPlopPlop.</span></span><span class="ar">›</span></button>
+  <button class="tile t-ev" data-go="ev"><span class="ic">🎟️</span><span><b>EVÈNMAN</b><span>Achte tikè pou konsè, fèt ak fòmasyon sou Tikè Lakay.</span></span><span class="ar">›</span></button>
+  <div class="mini">
+   <a><i>🆘</i>Ijans</a><a><i>📍</i>Swiv kous mwen</a><a data-go="chofe"><i>🛵</i>Mwen se chofè</a>
+  </div>
+ </div>
+ <div class="nav"><a class="on"><i>🏠</i>Akèy</a><a><i>🧾</i>Kous mwen</a><a><i>👤</i>Kont</a></div>
+</section>
+
+<!-- 2 KOUS -->
+<section class="scr" id="kous">
+ <div class="top"><button class="back" data-go="home">‹</button><b>🚕 Kous</b></div><div class="stripe"></div>
+ <div class="pad">
+  <div class="chips"><button class="chip on">🏍️ Moto<small>pi vit, pi bon mache</small></button><button class="chip">🚗 Machin<small>4 plas, pi alèz</small></button></div>
+  <div class="lbl">📍 KOTE OU YE?</div><div class="inp">Ki kote ou ye?</div><span class="gps">📍 Sèvi ak pozisyon mwen</span>
+  <div class="lbl">🏁 KOTE OU PRALE?</div><div class="inp">Ki kote ou prale?</div>
+  <button class="big">Mande Kous Kounye A</button>
+  <div class="same">Se menm fòm ki la jodi a. Li jis pa melanje ak lòt bagay ankò: yon sèl ekran, yon sèl bagay pou fè.</div>
+ </div>
+ <div class="nav"><a class="on" data-go="home"><i>🏠</i>Akèy</a><a><i>🧾</i>Kous mwen</a><a><i>👤</i>Kont</a></div>
+</section>
+
+<!-- 3 LIVREZON -->
+<section class="scr" id="liv">
+ <div class="top"><button class="back" data-go="home">‹</button><b>📦 Livrezon</b></div><div class="stripe"></div>
+ <div class="pad">
+  <h1 style="font-size:1.2rem">Kisa ou vle fè?</h1>
+  <button class="opt" data-go="koli"><span class="ic">📤</span><span><b>Voye yon koli bay yon moun</b><span>Foto koli a, kote, nimewo moun k ap resevwa l. Yon chofè pote l.</span><span class="tag">POKO LA — GADE EKRAN 6</span></span></button>
+  <button class="opt" data-go="mache"><span class="ic">🛍️</span><span><b>Fè yon boutik livre m</b><span>Chwazi yon pwodwi, yon chofè pote l lakay ou.</span></span></button>
+  <button class="opt"><span class="ic">📍</span><span><b>Swiv livrezon mwen</b><span>Wè kote kòmand ou ye kounye a.</span></span></button>
+  <button class="opt" data-go="chofe"><span class="ic">🛵</span><span><b>Mwen se chofè: travay livrezon</b><span>Resevwa travay livrezon sou menm paj ak kous ou yo.</span></span></button>
+ </div>
+ <div class="nav"><a class="on" data-go="home"><i>🏠</i>Akèy</a><a><i>🧾</i>Kous mwen</a><a><i>👤</i>Kont</a></div>
+</section>
+
+<!-- 4 ACHTE -->
+<section class="scr" id="mache">
+ <div class="mpbar"><button data-go="home">‹ MsouWout</button>MyPlopPlop — Achte</div>
+ <div class="pad">
+  <div class="inp">🔎 Chèche yon pwodwi oswa yon boutik…</div>
+  <div class="shop">
+   <div><i>🍗</i>Manje<em>Boutik toupre w</em></div><div><i>🛒</i>Makèt<em>Livre lakay ou</em></div>
+   <div><i>💊</i>Famasi<em>Livre lakay ou</em></div><div><i>📱</i>Telefòn<em>Livre lakay ou</em></div>
+  </div>
+  <div class="same">Se MyPlopPlop jan li ye jodi a. Bouton "‹ MsouWout" la anlè a fè moun nan retounen sou MsouWout san l pa pèdi tèt li.</div>
+ </div>
+</section>
+
+<!-- 5 EVENMAN -->
+<section class="scr" id="ev">
+ <div class="mpbar evbar"><button data-go="home">‹ MsouWout</button>Tikè Lakay — Evènman</div>
+ <div class="pad">
+  <h1 style="font-size:1.25rem">🎟️ Tikè Lakay</h1>
+  <p class="sub">Paj Tikè Lakay la jan li ye (nouvo paj la lè w apwouve l). Bouton "‹ MsouWout" la toujou anlè pou retounen.</p>
+  <div class="shop"><div><i>🎵</i>Konsè<em>Achte tikè</em></div><div><i>🎓</i>Fòmasyon<em>Achte tikè</em></div><div><i>🎉</i>Fèt<em>Achte tikè</em></div><div><i>➕</i>Kreye evènman<em>Gratis</em></div></div>
+ </div>
+</section>
+
+<!-- 6 KOLI -->
+<section class="scr" id="koli">
+ <div class="top"><button class="back" data-go="liv">‹</button><b>📤 Voye yon koli</b></div><div class="stripe"></div>
+ <div class="pad form">
+  <div class="photo">📷 Pran foto koli a</div>
+  <div class="lbl">🟢 KOTE POU CHOFÈ A PRAN L?</div><div class="inp">Ki kote koli a ye?</div>
+  <div class="lbl">🔴 KOTE POU L ALE?</div><div class="inp">Adrès moun k ap resevwa l</div>
+  <div class="lbl">📞 NIMEWO MOUN K AP RESEVWA L</div><div class="inp">+509 ...</div>
+  <div class="price"><span>Pri livrezon an</span><span>350 HTG</span></div>
+  <button class="big">Peye epi rele yon chofè</button>
+  <div class="same">Moun k ap resevwa a jwenn yon kòd 4 chif. Chofè a mande l kòd la lè l rive: se konsa livrezon an konfime. Pri a se yon egzanp.</div>
+ </div>
+</section>
+
+<!-- 7 CHOFE -->
+<section class="scr" id="chofe">
+ <div class="top"><button class="back" data-go="home">‹</button><b>🛵 Chofè — Jeffery</b></div><div class="stripe"></div>
+ <div class="pad">
+  <div class="on-line"><b>✅ Ou an liy</b><span class="sw"></span></div>
+  <div class="ok"><span>🚕 Kous: apwouve</span><span>📦 Livrezon: apwouve</span></div>
+  <div class="h2">Travay pou ou</div>
+  <div class="job"><div class="k">🚕 KOUS · MOTO</div><div class="r">Petyonvil → Delmas 33</div><div class="m">1.2 km de ou · pasaje: Marie</div><div class="row"><span class="p">450 HTG</span><button>Aksepte</button></div></div>
+  <div class="job d"><div class="k">📦 LIVREZON · MYPLOPPLOP</div><div class="r">Boutik Demo → Tabarre 41</div><div class="m">0.8 km de ou · ranmase nan boutik la</div><div class="row"><span class="p">300 HTG</span><button>Aksepte</button></div></div>
+  <div class="earn"><div>Kous jodi a<b>1,200 HTG</b></div><div>Livrezon jodi a<b>600 HTG</b></div></div>
+  <p class="cap">Egzanp tès: non, adrès ak pri yo pa vre.</p>
+ </div>
+ <div class="nav"><a class="on"><i>🛵</i>Travay</a><a><i>💰</i>Lajan</a><a><i>👤</i>Kont</a></div>
+</section>
+</div>
+<script>
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.s===id));window.scrollTo(0,0)}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-go],[data-s]');if(t)go(t.dataset.go||t.dataset.s)});
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===c))});
+</script>
+</body></html>
