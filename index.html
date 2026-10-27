@@ -158,6 +158,11 @@ a{text-decoration:none;color:inherit}
 .ht-kous{background:linear-gradient(135deg,#D21034,#9E0B26)}
 .ht-liv{background:linear-gradient(135deg,#00209F,#001466)}
 .ht-achte{background:linear-gradient(135deg,#1B8C3D,#0F5E28)}
+.ht-ev{background:linear-gradient(135deg,#7B2FBE,#4A148C)}
+/* Four buttons have to fit on a phone with the question above them. */
+.home-tile{min-height:92px;padding:16px 16px;margin-top:11px}
+.home-tile .ht-ic{width:56px;height:56px;flex:0 0 56px;font-size:2.2rem}
+.home-tile .ht-tx b{font-size:1.35rem}
 .home-mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
 .home-mini a{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center;font-size:.8rem;font-weight:700;color:var(--text);text-decoration:none}
 .home-mini a i{display:block;font-style:normal;font-size:1.35rem;margin-bottom:3px}
@@ -798,6 +803,11 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     <a class="home-tile ht-achte" href="https://myplopplop.com/?from=msouwout">
       <span class="ht-ic">🛒</span>
       <span class="ht-tx"><b data-i18n="home_achte">ACHTE</b><span data-i18n="home_achte_sub">Achte manje, pwodwi ak lòt bagay sou MyPlopPlop.</span></span>
+      <span class="ht-ar">›</span>
+    </a>
+    <a class="home-tile ht-ev" href="https://haitibiznis.com/events.html?from=msouwout">
+      <span class="ht-ic">🎟️</span>
+      <span class="ht-tx"><b data-i18n="home_ev">EVÈNMAN</b><span data-i18n="home_ev_sub">Achte tikè pou konsè, fèt ak fòmasyon sou Tikè Lakay.</span></span>
       <span class="ht-ar">›</span>
     </a>
     <div class="home-mini">
@@ -1673,6 +1683,8 @@ var T={
     cf_no:'Non, tounen',
     pax_title:'Ou se pasaje?',pax_sub:'Ou pa bezwen kont. Ekri kote ou ye ak kote ou prale anba a.',
     main_q:'Jwenn Yon Kous <em>Nan 2 Minit</em>',
+    home_ev:'EVÈNMAN',
+    home_ev_sub:'Achte tikè pou konsè, fèt ak fòmasyon sou Tikè Lakay.',
     home_q:'Bonjou! 👋<br>Kisa ou bezwen jodi a?',
     home_kous:'KOUS',
     home_kous_sub:'Moto oswa machin. Chofè a vin chèche w.',
@@ -1813,6 +1825,8 @@ var T={
     cf_no:'Non, revenir',
     pax_title:'Vous êtes passager ?',pax_sub:'Pas besoin de compte. Indiquez votre position et votre destination ci-dessous.',
     main_q:'Trouvez un Trajet <em>en 2 Minutes</em>',
+    home_ev:'ÉVÉNEMENTS',
+    home_ev_sub:'Billets pour concerts, fêtes et formations sur Tikè Lakay.',
     home_q:'Bonjour ! 👋<br>De quoi avez-vous besoin ?',
     home_kous:'COURSE',
     home_kous_sub:'Moto ou voiture. Le chauffeur vient vous chercher.',
@@ -1953,6 +1967,8 @@ var T={
     cf_no:'No, go back',
     pax_title:'Travelling as a passenger?',pax_sub:'No account needed. Just type where you are and where you are going, below.',
     main_q:'Get a Ride <em>in 2 Minutes</em>',
+    home_ev:'EVENTS',
+    home_ev_sub:'Tickets for concerts, parties and trainings on Tikè Lakay.',
     home_q:'Hello! 👋<br>What do you need today?',
     home_kous:'RIDE',
     home_kous_sub:'Moto or car. The driver comes to you.',
@@ -2093,6 +2109,8 @@ var T={
     cf_no:'No, volver',
     pax_title:'¿Eres pasajero?',pax_sub:'No necesitas cuenta. Escribe dónde estás y a dónde vas, abajo.',
     main_q:'Consigue un Viaje <em>en 2 Minutos</em>',
+    home_ev:'EVENTOS',
+    home_ev_sub:'Boletos para conciertos, fiestas y formaciones en Tikè Lakay.',
     home_q:'¡Hola! 👋<br>¿Qué necesitas hoy?',
     home_kous:'VIAJE',
     home_kous_sub:'Moto o carro. El chofer te recoge.',
