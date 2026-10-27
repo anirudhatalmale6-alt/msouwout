@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tikè Lakay — payment check</title><meta name="robots" content="noindex">
+<style>
+:root{--blue:#00209F;--red:#D21034;--green:#1B8C3D;--amber:#B45309;--ink:#0F172A;--muted:#5B6478;--bg:#F4F6FB;--card:#fff;--line:#E3E7EF;--q:#FFF4D6;--qi:#6B4E00}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#EEF2FA;--muted:#A3AEC4;--bg:#0E1320;--card:#161D2D;--line:#2A3346;--q:#3a300f;--qi:#F3DB8C;--green:#4ade80;--amber:#fbbf24}}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding:0 16px 40px;line-height:1.55}
+.stripe{height:4px;background:linear-gradient(90deg,var(--blue) 50%,var(--red) 50%);margin:0 -16px}.w{max-width:680px;margin:20px auto 0}
+h1{font-size:1.35rem;margin-bottom:4px}.sub{color:var(--muted);font-size:.9rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:14px}
+h2{font-size:1.02rem;margin-bottom:8px}p,li{font-size:.93rem}ul{padding-left:20px}li{margin:4px 0}
+.ok{color:var(--green);font-weight:800}.no{color:var(--red);font-weight:800}.warn{color:var(--amber);font-weight:800}
+.q{background:var(--q);color:var(--qi);border-radius:10px;padding:10px 12px;font-size:.9rem;margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:6px}td,th{border-bottom:1px solid var(--line);padding:7px 4px;text-align:left;vertical-align:top}th{color:var(--muted);font-weight:700}
+</style></head><body><div class="stripe"></div><div class="w">
+<h1>Tikè Lakay — payment verification</h1>
+<p class="sub">27 Oct 2026. Checked in the live code and in the providers' own documentation. Nothing was changed.</p>
+
+<div class="card"><h2>1. Where does the money go today?</h2>
+<p><span class="ok">Into HaitiBiznis's accounts, not the organizer's.</span></p><ul>
+<li><b>MonCash / NatCash:</b> into the SolutionIP merchant account ("Pay'm PlopPlop", the same one MyPlopPlop uses).</li>
+<li><b>Cards:</b> into the HaitiBiznis Stripe account.</li>
+<li>The organizer's MonCash/NatCash number is only <b>stored</b> on the event (hidden from the public). Nothing ever sends money to it.</li></ul>
+<p>So today: <b>no organizer is paid before the event, and no organizer is paid after it either</b>. There is no payout function yet. Technically, HaitiBiznis fully controls when organizers get paid.</p></div>
+
+<div class="card"><h2>2. Can we hold organizer money until after the event?</h2>
+<p><span class="ok">Technically: yes</span>, because the money is already in your accounts.</p>
+<p><span class="warn">Contracts and law: I can't confirm this from the code.</span> These are questions for the providers and a lawyer:</p>
+<div class="q"><b>To SolutionIP:</b> "We collect ticket payments for event organizers on our merchant account and pay them after the event from our balance. Does our agreement allow that? What is our collection fee, and the withdrawal fee? Please activate our client_secret for withdrawals."<br><br>
+<b>To Stripe:</b> "HaitiBiznis collects card payments for event organizers and pays them after the event. Is this allowed on our current account, or do you require Stripe Connect?" (Stripe's standard product for platforms that collect money for other sellers is called Connect.)<br><br>
+<b>To a lawyer:</b> holding customers' money for organizers, as a Florida company selling in Haiti.</div></div>
+
+<div class="card"><h2>3. How refunds work, by payment method</h2>
+<table><tr><th></th><th>Card (Stripe)</th><th>MonCash / NatCash (SolutionIP)</th></tr>
+<tr><td>Refund function</td><td><span class="ok">Yes.</span> Stripe has a refund function, and our current key is allowed to use it.</td><td><span class="no">No refund function.</span> A refund = a "withdrawal" we send to the buyer's MonCash/NatCash number.</td></tr>
+<tr><td>Needs</td><td>Nothing new on the Stripe side.</td><td>The SolutionIP <b>client_secret</b> (still not set up) and enough balance in the account.</td></tr>
+<tr><td>Cost</td><td>Stripe <b>keeps its original fee</b> (Stripe's docs).</td><td>A withdrawal fee <b>on top</b> (their example: 2.5%). The original collection fee is not given back.</td></tr>
+<tr><td>Time</td><td>5–10 business days to reach the customer (Stripe's docs).</td><td>Arrives as soon as it is sent. Limit: 1 every 2 minutes.</td></tr></table>
+<p style="margin-top:8px">Your <b>7–15 business days</b> works for both.</p></div>
+
+<div class="card"><h2>4. Can the 7.5% be refunded?</h2>
+<p><span class="ok">Yes.</span> We choose the refund amount, so ticket + 7.5% is possible with both methods.</p>
+<p><span class="warn">But it costs HaitiBiznis the provider fees</span>: the card fee Stripe keeps, the SolutionIP collection fee, plus the SolutionIP withdrawal fee. On a cancelled event, that money is lost unless it is taken from the organizer (your policy says the organizer is responsible for refunds caused by their cancellation).</p></div>
+
+<div class="card"><h2>5. What already works / what needs development</h2>
+<p><span class="ok">ALREADY WORKS</span></p><ul>
+<li>Money collected into your accounts; the server checks every payment (amount included)</li>
+<li>35-minute hold, no overselling, single-use QR at the door, finding tickets by phone, ticket by email</li>
+<li>Cancelling an event (tickets stay recorded, the event leaves the public list), attendee list</li>
+<li>Organizer payout numbers stored privately per event</li>
+<li>The Stripe key can refund (the function exists at Stripe; nothing in our system calls it yet)</li></ul>
+<p><span class="no">NEEDS DEVELOPMENT</span></p><ol style="padding-left:20px">
+<li>Buyer checkbox "vant final" + recorded with the payment (small)</li>
+<li>Organizer must accept the terms before publishing a paid event (small)</li>
+<li>Per-event money ledger: sold, collected, 7.5%, owed to the organizer</li>
+<li>Organizer payouts: due 3–5 business days after the event, "event took place" check, admin approval, blocked automatically if cancelled, paid by MonCash/NatCash (needs the client_secret)</li>
+<li>Admin dashboard: sales, payments, pending payouts, refunds, balances</li>
+<li>Refunds: request, review/approve, reason, status, audit trail; card refund button; MonCash/NatCash refund by withdrawal</li>
+<li>Email to buyers when an event is cancelled</li></ol>
+<p>Suggested order: <b>1 + 2</b> first (needed before the terms go live), then <b>3–5</b>, then <b>6–7</b>. Nothing will be built until you approve, and each part gets its price before I start.</p>
+<div class="q">⚠️ One risk today: an organizer can switch on a "manual" payment option that the system cannot record or turn into a QR ticket. I recommend switching it off until a real flow exists.</div></div>
+
+<div class="card"><h2>6. Terms of Service</h2><p>Draft 2, in Kreyòl, with your decisions and HaitiBiznis Technologies Inc / Boca Raton: <b>msouwout.com/dl/kondisyon-tike-lakay</b>. Not published. It marks what the system can't do yet, plus 3 questions for the lawyer.</p></div>
+</div></body></html>
