@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tikè Lakay — apèsi nouvo paj</title><meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#00209F;--blue-deep:#001566;--red:#D21034;--gold:#D4A017;--gold-soft:#FDF3D7;--green:#1B8C3D;--dark:#0A0E1A;--text:#1A2A4A;--light:#5A6B8A;--muted:#8A95AA;--line:#E2E8F0;--bg:#F5F7FA;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);padding-bottom:72px}
+a{color:inherit}
+.note{background:#FFF4D6;color:#6B4E00;font-size:.78rem;font-weight:700;text-align:center;padding:8px 16px;border-bottom:1px solid #F0DC9C}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+/* 1 HEADER */
+.lang{background:var(--dark);display:flex;justify-content:center;gap:4px;padding:6px 8px;overflow-x:auto}
+.lang a{color:#9AA6BF;font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:999px;text-decoration:none;white-space:nowrap}
+.lang a.on{color:var(--gold);background:rgba(212,160,23,.15)}
+.stripe{height:3px;background:linear-gradient(90deg,var(--blue) 50%,var(--red) 50%)}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+header .wrap{display:flex;align-items:center;gap:10px;height:60px}
+header img{height:42px}
+header .brand{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--dark);flex:1}
+header .brand em{color:var(--red)}
+header .brand small{display:block;font-family:'Plus Jakarta Sans';font-size:.62rem;font-weight:700;color:var(--muted);letter-spacing:.06em;margin-top:-3px}
+.btn-create{background:var(--red);color:#fff;text-decoration:none;font-weight:800;font-size:.82rem;padding:10px 14px;border-radius:12px;white-space:nowrap;box-shadow:0 6px 16px -6px rgba(210,16,52,.6)}
+nav.top{display:none;gap:18px;font-weight:700;font-size:.88rem}
+nav.top a{text-decoration:none;color:var(--light)}
+@media(min-width:820px){nav.top{display:flex}}
+/* 2 HERO */
+.hero{background:radial-gradient(120% 90% at 85% 0%,#1d3fd6 0%,var(--blue) 40%,var(--blue-deep) 100%);color:#fff;padding:28px 0 26px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(212,160,23,.18)}
+.hero .wrap{position:relative;z-index:1}
+.hero .kick{font-size:.8rem;font-weight:800;letter-spacing:.12em;color:var(--gold)}
+.hero h1{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(1.8rem,7vw,3rem);line-height:1.08;margin:6px 0 8px}
+.hero p{color:#C9D6FF;font-size:.95rem;max-width:34em}
+.hero .ctas{display:grid;grid-template-columns:1fr;gap:10px;margin-top:18px;max-width:560px}
+@media(min-width:480px){.hero .ctas{grid-template-columns:1fr 1fr}}
+.cta{display:flex;align-items:center;justify-content:center;gap:8px;padding:15px 16px;border-radius:14px;font-weight:800;font-size:1rem;text-decoration:none;color:#fff;border:0;cursor:pointer;font-family:inherit}
+.cta.g{background:var(--green);box-shadow:0 10px 22px -10px rgba(27,140,61,.8)}
+.cta.b{background:#fff;color:var(--blue)}
+.cta.r{background:var(--red);box-shadow:0 10px 22px -10px rgba(210,16,52,.7)}
+.chips-line{margin-top:16px;font-size:.82rem;color:#C9D6FF;font-weight:600;line-height:1.7}
+/* sections */
+section{padding:30px 0}
+.sec-h{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.6rem;line-height:1.15;color:var(--dark)}
+.sec-sub{color:var(--light);font-size:.92rem;margin-top:4px}
+/* 3 EVENTS */
+.grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px}
+@media(min-width:640px){.grid{grid-template-columns:1fr 1fr}}
+@media(min-width:960px){.grid{grid-template-columns:1fr 1fr 1fr}}
+.ev{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 26px -18px rgba(10,14,26,.45)}
+.ev .fl{aspect-ratio:4/5;background:#ddd center/cover no-repeat;position:relative;display:grid;place-items:center;font-size:4rem}
+.ev .fl img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0A0E1A}
+.ev .badge{position:absolute;left:12px;top:12px;z-index:2;background:rgba(10,14,26,.78);color:#fff;font-size:.7rem;font-weight:800;padding:5px 10px;border-radius:999px;letter-spacing:.04em}
+.ev .st{position:absolute;right:12px;top:12px;z-index:2;font-size:.7rem;font-weight:800;padding:5px 10px;border-radius:999px}
+.st.ok{background:#E9F7EE;color:var(--green)}
+.st.out{background:var(--red);color:#fff}
+.ev .bd{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.ev h3{font-size:1.08rem;font-weight:800;line-height:1.3}
+.ev .m{font-size:.85rem;color:var(--light);display:flex;gap:6px}
+.ev .row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:10px;gap:10px}
+.ev .pr{font-weight:900;font-size:1.1rem}
+.ev .pr.free{color:var(--green)}
+.ev .buy{background:var(--green);color:#fff;text-decoration:none;font-weight:800;font-size:.9rem;padding:11px 14px;border-radius:12px;white-space:nowrap}
+.ev .buy.off{background:#CBD2DE;pointer-events:none}
+.empty{background:linear-gradient(135deg,#fff,#FDF3D7);border:2px dashed #E8C766;border-radius:22px;padding:26px 20px;text-align:center;margin-top:16px}
+.empty b{display:block;font-size:1.25rem;font-weight:900;color:var(--dark)}
+.empty p{color:var(--light);margin:6px 0 16px}
+.empty .cta{display:inline-flex}
+.loading{color:var(--light);font-size:.9rem;margin-top:16px;display:flex;align-items:center;gap:10px}
+.spin{width:18px;height:18px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--blue);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+/* 4 SEARCH */
+.search{display:flex;gap:8px;margin-top:14px}
+.search input{flex:1;min-width:0;border:2px solid var(--line);border-radius:14px;padding:13px 14px;font:600 .95rem 'Plus Jakarta Sans',sans-serif;background:#fff}
+.search input:focus{outline:0;border-color:var(--blue)}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+@media(min-width:640px){.cats{grid-template-columns:repeat(6,1fr)}}
+.cat{background:#fff;border:2px solid var(--line);border-radius:16px;padding:14px 6px;text-align:center;font-weight:800;font-size:.86rem;cursor:pointer;font-family:inherit;color:var(--text)}
+.cat i{display:block;font-style:normal;font-size:1.7rem;margin-bottom:4px}
+.cat.on{border-color:var(--blue);background:#EEF1FB;color:var(--blue)}
+.allcats{display:none;flex-wrap:wrap;gap:8px;margin-top:12px}
+.allcats.show{display:flex}
+.allcats button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font:700 .8rem 'Plus Jakarta Sans',sans-serif;cursor:pointer;color:var(--text)}
+.allcats button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.link-btn{display:inline-block;margin-top:12px;background:none;border:0;color:var(--blue);font:800 .88rem 'Plus Jakarta Sans',sans-serif;cursor:pointer;padding:4px 0}
+.results-note{margin-top:12px;font-size:.88rem;color:var(--light)}
+/* 5 ORGANIZERS */
+.org{background:var(--dark);color:#fff;border-radius:26px;padding:26px 20px;margin-top:0}
+.org .sec-h{color:#fff}
+.org .sec-h em{font-style:normal;color:var(--gold)}
+.org .sec-sub{color:#AFBAD3}
+.ben{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+@media(min-width:760px){.ben{grid-template-columns:repeat(4,1fr)}}
+.ben div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:14px}
+.ben i{font-style:normal;font-size:1.6rem}
+.ben b{display:block;margin-top:6px;font-size:.95rem}
+.ben span{display:block;font-size:.8rem;color:#AFBAD3;margin-top:2px;line-height:1.4}
+.org .cta{margin-top:20px;max-width:420px}
+.fee{font-size:.8rem;color:#AFBAD3;margin-top:10px;line-height:1.5;max-width:40em}
+.fee b{color:#fff}
+/* 6 INVITES */
+.inv{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+@media(min-width:760px){.inv{grid-template-columns:repeat(4,1fr)}}
+.inv a{border-radius:18px;padding:22px 14px;text-decoration:none;text-align:center;font-weight:800;color:#3a2a10;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 8px 20px -14px rgba(0,0,0,.5)}
+.inv a i{font-style:normal;font-size:2.2rem}
+.inv .w{background:linear-gradient(135deg,#F5E6D0,#E8C9A0)}
+.inv .bd{background:linear-gradient(135deg,#FFE0EA,#FFB8CC)}
+.inv .gr{background:linear-gradient(135deg,#DCE6FF,#AFC4FF);color:#10204a}
+.inv .bp{background:linear-gradient(135deg,#DDF1F8,#A9D6EA);color:#0e3346}
+.center{text-align:center;margin-top:18px}
+.cta.o{background:#fff;color:var(--blue);border:2px solid var(--blue);display:inline-flex}
+/* 7 HOW */
+.how{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+@media(min-width:760px){.how{grid-template-columns:repeat(4,1fr)}}
+.how div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
+.how .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--blue);color:#fff;font-weight:900;font-size:.9rem}
+.how b{display:block;margin-top:8px;font-size:.95rem;letter-spacing:.03em}
+.how span{display:block;font-size:.82rem;color:var(--light);margin-top:2px;line-height:1.4}
+/* 8 AJAN */
+.ajan{background:linear-gradient(135deg,#FDF3D7,#FBE6A6);border-radius:24px;padding:24px 20px}
+.ajan ul{list-style:none;margin-top:12px;display:grid;gap:8px}
+.ajan li{font-weight:700;font-size:.92rem}
+.ajan .cta{margin-top:16px;display:inline-flex;background:var(--dark)}
+/* 9 TRUST */
+.trust{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.trust span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:700;font-size:.85rem}
+/* 10 FOOTER */
+footer{background:var(--dark);color:#AFBAD3;padding:26px 0 20px;margin-top:20px}
+footer b{color:#fff;font-family:'DM Serif Display',serif;font-weight:400;font-size:1.3rem}
+footer .links{display:flex;flex-wrap:wrap;gap:6px 16px;margin:14px 0}
+footer .links a{color:#D6DEF0;font-size:.85rem;font-weight:600;text-decoration:none}
+footer small{font-size:.75rem;color:#6F7C99}
+/* bottom nav */
+.bnav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:30}
+.bnav a{flex:1;text-align:center;padding:9px 0 11px;font-size:.7rem;font-weight:800;color:var(--muted);text-decoration:none}
+.bnav a i{display:block;font-style:normal;font-size:1.25rem}
+.bnav a.on{color:var(--blue)}
+@media(min-width:820px){.bnav{display:none}body{padding-bottom:0}}
+/* preview-only sample */
+.sample{border:2px dashed #E8C766;border-radius:22px;padding:16px;background:#FFFBEF;margin-top:10px}
+.sample .lbl{font-size:.75rem;font-weight:800;color:#7A4B00;margin-bottom:10px}
+</style></head>
+<body>
+<div class="note">APÈSI — se pa paj la an dirèk. Evènman yo se vrè evènman ki nan sistèm nan.</div>
+
+<!-- 1 HEADER -->
+<div class="lang"><a class="on">Kreyòl</a><a>Français</a><a>English</a><a>Español</a><a>Português</a></div>
+<div class="stripe"></div>
+<header><div class="wrap">
+  <img src="https://haitibiznis.com/assets/tike-lakay-logo.png" alt="Tikè Lakay">
+  <div class="brand">Tikè <em>Lakay</em><small>PA HAITIBIZNIS</small></div>
+  <nav class="top"><a href="#">Akèy</a><a href="#evenman">Evènman</a><a href="https://haitibiznis.com/my-tickets.html">Tikè Mwen</a></nav>
+  <a class="btn-create" href="https://haitibiznis.com/create-event.html">➕ Kreye Evènman</a>
+</div></header>
+
+<!-- 2 HERO -->
+<div class="hero"><div class="wrap">
+  <div class="kick">🎟️ TIKÈ LAKAY</div>
+  <h1>TOUT EVÈNMAN AYITI NAN MEN OU!</h1>
+  <p>Dekouvri evènman. Achte tikè. Kreye pwòp evènman pa w.</p>
+  <div class="ctas">
+    <a class="cta g" href="#evenman">🎟️ ACHTE TIKÈ</a>
+    <a class="cta b" href="https://haitibiznis.com/create-event.html">➕ KREYE EVÈNMAN GRATIS</a>
+  </div>
+  <div class="chips-line">🎵 Konsè • 🎓 Fòmasyon • 🎉 Fèt • 💼 Konferans • ⛪ Legliz</div>
+</div></div>
+
+<!-- 3 UPCOMING -->
+<section id="evenman"><div class="wrap">
+  <h2 class="sec-h">🔥 EVÈNMAN K AP VINI</h2>
+  <div id="evArea"><div class="loading"><span class="spin"></span>Ap chaje evènman yo… (sa ka pran yon ti moman)</div></div>
+</div></section>
+
+<!-- 4 SEARCH + CATEGORIES -->
+<section style="padding-top:6px"><div class="wrap">
+  <h2 class="sec-h">🔎 KI EVÈNMAN W AP CHÈCHE?</h2>
+  <div class="search"><input id="q" type="search" placeholder="Non evènman, kote, òganizatè…" autocomplete="off"></div>
+  <div class="cats" id="cats"></div>
+  <button class="link-btn" id="allBtn">WÈ TOUT KATEGORI YO ›</button>
+  <div class="allcats" id="allcats"></div>
+  <div class="results-note" id="resNote"></div>
+</div></section>
+
+<!-- 5 ORGANIZERS -->
+<section><div class="wrap"><div class="org">
+  <h2 class="sec-h">🎤 OU GEN YON EVÈNMAN?<br><em>KREYE L GRATIS SOU TIKÈ LAKAY!</em></h2>
+  <p class="sec-sub">Vann tikè, envite moun, epi jere evènman ou fasil.</p>
+  <div class="ben">
+    <div><i>🎟️</i><b>Vann Tikè</b><span>Vann tikè sou entènèt fasil.</span></div>
+    <div><i>💳</i><b>Resevwa Peman</b><span>MonCash, NatCash ak kat kredi.</span></div>
+    <div><i>📱</i><b>QR Code</b><span>Verifye tikè lè envite yo rive.</span></div>
+    <div><i>📊</i><b>Swiv Lavant Ou</b><span>Gade kantite tikè ou vann.</span></div>
+  </div>
+  <a class="cta r" href="https://haitibiznis.com/create-event.html">🚀 KREYE EVÈNMAN GRATIS</a>
+  <p class="fee"><b>Pa gen frè pou kreye evènman ou.</b> Evènman gratis: pa gen okenn frè. Evènman peye: moun k ap achte a peye yon frè sèvis 7.5% anplis pri tikè a, epi ou resevwa tout pri tikè ou mete a.</p>
+</div></div></section>
+
+<!-- 6 INVITATIONS -->
+<section style="padding-top:4px"><div class="wrap">
+  <h2 class="sec-h">💌 ENVITASYON POU TOUT OKAZYON</h2>
+  <p class="sec-sub">Ou pa bezwen vann tikè pou itilize Tikè Lakay.</p>
+  <div class="inv">
+    <a class="w" href="https://haitibiznis.com/create-event.html"><i>💍</i>Maryaj</a>
+    <a class="bd" href="https://haitibiznis.com/create-event.html"><i>🎂</i>Anivèsè</a>
+    <a class="gr" href="https://haitibiznis.com/create-event.html"><i>🎓</i>Gradyasyon</a>
+    <a class="bp" href="https://haitibiznis.com/create-event.html"><i>⛪</i>Batèm</a>
+  </div>
+  <div class="center"><a class="cta o" href="https://haitibiznis.com/create-event.html">🎨 KREYE ENVITASYON</a></div>
+</div></section>
+
+<!-- 7 HOW -->
+<section style="padding-top:4px"><div class="wrap">
+  <h2 class="sec-h">⚡ KIJAN TIKÈ LAKAY FONKSYONE?</h2>
+  <div class="how">
+    <div><span class="n">1</span><b>KREYE</b><span>Kreye evènman ou gratis.</span></div>
+    <div><span class="n">2</span><b>PATAJE</b><span>Pataje evènman an sou WhatsApp ak Facebook.</span></div>
+    <div><span class="n">3</span><b>VANN</b><span>Kliyan yo achte tikè epi peye sou entènèt.</span></div>
+    <div><span class="n">4</span><b>VERIFYE</b><span>Eskane QR Code tikè yo lè envite yo rive.</span></div>
+  </div>
+  <div class="center"><a class="cta r" style="display:inline-flex" href="https://haitibiznis.com/create-event.html">KÒMANSE KOUNYE A</a></div>
+</div></section>
+
+<!-- 8 AJAN -->
+<section style="padding-top:4px"><div class="wrap"><div class="ajan">
+  <h2 class="sec-h">💰 FÈ LAJAN AK TIKÈ LAKAY</h2>
+  <p class="sec-sub" style="color:#5a4a1a">Vin yon Ajan LajanMaker. Ede òganizatè mete evènman yo sou Tikè Lakay.</p>
+  <ul><li>🤝 Rekrite òganizatè.</li><li>📲 Pataje evènman.</li><li>💰 Touche komisyon sou tranzaksyon ki kalifye.</li></ul>
+  <a class="cta" href="https://haitibiznis.com/koutye.html">VIN YON AJAN LAJANMAKER</a>
+</div></div></section>
+
+<!-- 9 TRUST -->
+<section style="padding-top:4px"><div class="wrap">
+  <h2 class="sec-h" style="font-size:1.25rem">🔒 ACHTE TIKÈ OU AK KONFYANS</h2>
+  <div class="trust"><span>🟠 MonCash</span><span>🔵 NatCash</span><span>💳 Kat kredi</span><span>🎟️ Tikè ak QR Code</span></div>
+</div></section>
+
+<!-- preview only -->
+<section style="padding-top:0"><div class="wrap"><div class="sample">
+  <div class="lbl">APÈSI SÈLMAN (pa sou vrè paj la): men kijan yon kat ap parèt. Se evènman "LajanMaker Agent - Formation" 25 Okt la, ki deja pase, pou w wè fòm nan.</div>
+  <div class="grid" id="sample" style="margin-top:0"></div>
+</div></div></section>
+
+<!-- 10 FOOTER -->
+<footer><div class="wrap">
+  <b>TIKÈ LAKAY</b>
+  <div>Yon platfòm HaitiBiznis Technologies.</div>
+  <div class="links">
+    <a href="#">Akèy</a><a href="#evenman">Evènman</a><a href="https://haitibiznis.com/create-event.html">Kreye Evènman</a>
+    <a href="https://haitibiznis.com/my-tickets.html">Tikè Mwen</a><a href="https://wa.me/50946859702">Kontakte Nou</a><a href="#">Kondisyon Itilizasyon</a>
+  </div>
+  <small>© 2026 HaitiBiznis Technologies.</small>
+</div></footer>
+
+<nav class="bnav">
+  <a class="on" href="#"><i>🏠</i>Akèy</a><a href="#evenman"><i>🔎</i>Evènman</a>
+  <a href="https://haitibiznis.com/my-tickets.html"><i>🎫</i>Tikè Mwen</a><a href="#kont" id="kontLink"><i>👤</i>Kont</a>
+</nav>
+
+<script>
+(function(){
+var API='https://haitibiznis-api.onrender.com';
+var EV='https://haitibiznis.com/event.html?id=';
+var CREATE='https://haitibiznis.com/create-event.html';
+/* Six groups on the homepage; each is a set of the type keys events are saved
+   with (create-event.html typeConfig, plus older spellings already in the DB). */
+var GROUPS=[
+ {k:'mizik',e:'🎵',n:'Mizik',t:['konsè','bal','concert']},
+ {k:'fet',e:'🎉',n:'Fèt',t:['party','gala','nwèl','kanaval','jounen_nasyonal']},
+ {k:'fomasyon',e:'🎓',n:'Fòmasyon',t:['fòmasyon','seminè','gradyasyon']},
+ {k:'biznis',e:'💼',n:'Biznis',t:['biznis','konferans']},
+ {k:'legliz',e:'⛪',n:'Legliz',t:['legliz','batèm','kominyon','maryaj']},
+ {k:'espo',e:'⚽',n:'Espò',t:['futbol','foutbòl','baskètbòl','volibòl','tenis','badminton','bòks','karate']}
+];
+var ALL=[['konferans','🎤','Konferans'],['party','🎉','Fèt/Party'],['gala','💝','Gala/Kolèk'],['seminè','📚','Seminè'],['maryaj','💍','Maryaj'],['legliz','⛪','Legliz'],['biznis','💼','Biznis'],['konsè','🎵','Konsè'],['fòmasyon','🎓','Fòmasyon'],['kominyon','🕊️','Premye Kominyon'],['batèm','💧','Batèm'],['gradyasyon','🎓','Gradyasyon'],['bal','💃','Bal/Dans'],['nwèl','🎄','Nwèl'],['kanaval','🎭','Kanaval'],['jounen_nasyonal','🇭🇹','Jounen Nasyonal'],['futbol','⚽','Futbòl'],['baskètbòl','🏀','Baskètbòl'],['volibòl','🏐','Volibòl'],['tenis','🎾','Tenis'],['badminton','🏸','Badminton'],['bòks','🥊','Bòks'],['karate','🥋','Karate/Judo'],['lòt','📌','Lòt']];
+var MON=['Jan','Fev','Mas','Avr','Me','Jen','Jiy','Out','Sep','Okt','Nov','Des'];
+var DAY=['Dim','Len','Mad','Mèk','Jed','Van','Sam'];
+
+function haitiToday(){try{return new Date().toLocaleDateString('en-CA',{timeZone:'America/Port-au-Prince'});}catch(e){return new Date().toISOString().slice(0,10);}}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function fmtDate(d,t){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||'');if(!m)return '';var dt=new Date(+m[1],+m[2]-1,+m[3]);return DAY[dt.getDay()]+' '+(+m[3])+' '+MON[+m[2]-1]+' '+m[1]+(t?' · '+t:'');}
+function priceInfo(e){
+  var tk=(e.tickets||[]).filter(function(t){return t&&t.name!=null;});
+  var paid=tk.map(function(t){return +t.price||0;}).filter(function(p){return p>0;});
+  /* Sold out only when EVERY ticket type has a real limit and has reached it. A type with no qty never sells out. */
+  var limited=tk.length&&tk.every(function(t){return (+t.qty||+t.quantity||0)>0;});
+  var out=limited&&tk.every(function(t){return (+t.sold||0)>=(+t.qty||+t.quantity);});
+  return {free:!paid.length,min:paid.length?Math.min.apply(null,paid):0,out:out};
+}
+function groupOf(type){for(var i=0;i<GROUPS.length;i++)if(GROUPS[i].t.indexOf(type)>=0)return GROUPS[i];return null;}
+function card(e){
+  var p=priceInfo(e), id=e._id||e.id;
+  var label=e.typeCustom||e.typeLabel||'';
+  return '<article class="ev"><div class="fl" style="background:'+esc(e.gradient||'linear-gradient(135deg,#00209F,#D21034)')+'" data-flyer="'+esc(id)+'">'
+   +(label?'<span class="badge">'+esc((e.typeEmoji||'')+' '+label)+'</span>':'')
+   +'<span class="st '+(p.out?'out':'ok')+'">'+(p.out?'SOLD OUT':'✓ Disponib')+'</span>'
+   +'<span>'+esc(e.typeEmoji||'🎟️')+'</span></div>'
+   +'<div class="bd"><h3>'+esc(e.title)+'</h3>'
+   +'<div class="m">📅 <span>'+esc(fmtDate(e.date,e.startTime))+'</span></div>'
+   +(e.location?'<div class="m">📍 <span>'+esc(e.location)+'</span></div>':'')
+   +'<div class="row"><span class="pr'+(p.free?' free':'')+'">'+(p.free?'GRATIS':'HTG '+p.min.toLocaleString('en-US'))+'</span>'
+   +'<a class="buy'+(p.out?' off':'')+'" href="'+EV+encodeURIComponent(id)+'">'+(p.out?'Fini':(p.free?'🎟️ PRAN PLAS':'🎟️ ACHTE TIKÈ'))+'</a></div></div></article>';
+}
+/* The list endpoint leaves the flyer out (it is a big image). Fetch it per card, only for the few that are shown. */
+function loadFlyers(root){
+  root.querySelectorAll('[data-flyer]').forEach(function(box){
+    var id=box.getAttribute('data-flyer');
+    fetch(API+'/api/events/'+encodeURIComponent(id)).then(function(r){return r.json();}).then(function(d){
+      var e=d.event||d, img=e.inviteImage||e.flyer||'';
+      if(img&&/^(data:image\/|https:)/.test(img)){var i=new Image();i.alt='';i.src=img;box.appendChild(i);}
+    }).catch(function(){});
+  });
+}
+var upcoming=[], all=[], activeTypes=null, activeName='';
+function render(){
+  var area=document.getElementById('evArea');
+  var q=(document.getElementById('q').value||'').trim().toLowerCase();
+  var list=upcoming.filter(function(e){
+    if(activeTypes&&activeTypes.indexOf(e.type)<0)return false;
+    if(q&&((e.title||'')+' '+(e.location||'')+' '+(e.organizer||'')).toLowerCase().indexOf(q)<0)return false;
+    return true;
+  });
+  var note=document.getElementById('resNote');
+  note.textContent=(q||activeTypes)?(list.length?list.length+' evènman k ap vini'+(activeName?' · '+activeName:''):'Pa gen evènman k ap vini pou sa kounye a.'):'';
+  if(!upcoming.length){
+    area.innerHTML='<div class="empty"><b>🎉 NOUVO EVÈNMAN AP VINI!</b><p>Ou gen yon evènman? Se moman pou w mete l sou Tikè Lakay.</p><a class="cta r" href="'+CREATE+'">➕ KREYE EVÈNMAN OU</a></div>';
+    return;
+  }
+  area.innerHTML='<div class="grid">'+(list.length?list.map(card).join(''):'')+'</div>'+(list.length?'':'<p class="results-note">Pa gen evènman k ap vini pou rechèch sa a.</p>');
+  loadFlyers(area);
+}
+function load(){
+  var area=document.getElementById('evArea');
+  fetch(API+'/api/events?limit=100').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(d){
+    all=(d.events||[]).filter(function(e){return !e.status||e.status==='published';});
+    var today=haitiToday();
+    /* Upcoming = today or later, in Haiti's date. Nothing past is ever shown as upcoming. */
+    upcoming=all.filter(function(e){return /^\d{4}-\d{2}-\d{2}$/.test(e.date||'')&&e.date>=today;})
+      .sort(function(a,b){return (a.date+(a.startTime||'')).localeCompare(b.date+(b.startTime||''));});
+    render(); sample();
+  }).catch(function(){
+    area.innerHTML='<div class="empty"><b>Nou pa ka chaje evènman yo kounye a.</b><p>Koneksyon an ka fèb. Eseye ankò.</p><button class="cta r" id="retry" style="display:inline-flex">Eseye ankò</button></div>';
+    document.getElementById('retry').onclick=function(){area.innerHTML='<div class="loading"><span class="spin"></span>Ap chaje…</div>';load();};
+  });
+}
+function sample(){
+  var s=all.filter(function(e){return /LajanMaker/i.test(e.title||'')&&e.date==='2026-10-25';})[0]||all[0];
+  if(!s)return; var box=document.getElementById('sample'); box.innerHTML=card(s); loadFlyers(box);
+}
+/* categories */
+var cats=document.getElementById('cats');
+cats.innerHTML=GROUPS.map(function(g){return '<button class="cat" data-g="'+g.k+'"><i>'+g.e+'</i>'+g.n+'</button>';}).join('');
+cats.addEventListener('click',function(ev){
+  var b=ev.target.closest('.cat');if(!b)return;
+  var g=GROUPS.filter(function(x){return x.k===b.dataset.g;})[0];
+  var on=!b.classList.contains('on');
+  document.querySelectorAll('.cat.on,.allcats button.on').forEach(function(x){x.classList.remove('on');});
+  if(on){b.classList.add('on');activeTypes=g.t;activeName=g.n;}else{activeTypes=null;activeName='';}
+  render(); document.getElementById('evenman').scrollIntoView();
+});
+var allc=document.getElementById('allcats');
+allc.innerHTML=ALL.map(function(a){return '<button data-t="'+a[0]+'">'+a[1]+' '+a[2]+'</button>';}).join('');
+document.getElementById('allBtn').onclick=function(){allc.classList.toggle('show');};
+allc.addEventListener('click',function(ev){
+  var b=ev.target.closest('button');if(!b)return;
+  var on=!b.classList.contains('on');
+  document.querySelectorAll('.cat.on,.allcats button.on').forEach(function(x){x.classList.remove('on');});
+  if(on){b.classList.add('on');activeTypes=[b.dataset.t];activeName=b.textContent;}else{activeTypes=null;activeName='';}
+  render(); document.getElementById('evenman').scrollIntoView();
+});
+document.getElementById('q').addEventListener('input',render);
+load();
+})();
+</script>
+</body></html>
