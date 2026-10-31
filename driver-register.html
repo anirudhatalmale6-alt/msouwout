@@ -253,6 +253,7 @@
   <!-- STEP 2 : VEHICLE + LICENSE + DOCUMENTS (all fields) -->
   <section class="step" id="step2">
     <h1 class="h1" data-i18n="s2_title">Machin & Dokiman</h1>
+    <button type="button" id="vehChip" style="display:inline-flex;align-items:center;gap:8px;margin:2px 0 10px;padding:8px 14px;border-radius:999px;border:2px solid #00209F;background:#EEF1FB;color:#00209F;font:inherit;font-weight:800;font-size:.9rem;cursor:pointer"></button>
     <p class="sub" data-i18n="s2_sub">Ranpli chak chan epi ajoute foto dokiman yo.</p>
 
     <div class="grouphdr" data-i18n="g_vehicle">Machin ou</div>
@@ -534,6 +535,49 @@ var T = {
 };
 var currentLang = localStorage.getItem('mw_lang') || 'ht';
 
+/* 31 Oct 2026, Jennifer: "the second page didn't give any options for selecting
+   Moto, only for cars". Moto IS chosen on step 1, but step 2 then spoke only of
+   a car ("Machin & Dokiman", "Machin ou", Corolla, Toyota) and mixed car and
+   moto brands. Step 2 now follows the choice, shows it, and lets them change it. */
+var VT = {
+  ht:{ moto:{ps2:'2. Moto & Dokiman',s2_title:'Moto & Dokiman',g_vehicle:'Moto ou',d_veh:'Foto Moto',ph_make:'Bajaj',ph_model:'Boxer 150',e_docs:'Tanpri ajoute foto: Selfie, Kat, Lisans, OAVCT ak Moto.'}, chip:{motorcycle:'🛵 Moto · Chanje',car:'🚗 Machin · Chanje'} },
+  fr:{ moto:{ps2:'2. Moto & Documents',s2_title:'Moto & Documents',g_vehicle:'Votre moto',d_veh:'Photo de la moto',ph_make:'Bajaj',ph_model:'Boxer 150',e_docs:'Veuillez ajouter les photos : Selfie, Pièce, Permis, OAVCT et Moto.'}, chip:{motorcycle:'🛵 Moto · Changer',car:'🚗 Voiture · Changer'} },
+  en:{ moto:{ps2:'2. Moto & Docs',s2_title:'Moto & Documents',g_vehicle:'Your motorbike',d_veh:'Motorbike Photo',ph_make:'Bajaj',ph_model:'Boxer 150',e_docs:'Please add photos: Selfie, ID, License, OAVCT and Motorbike.'}, chip:{motorcycle:'🛵 Moto · Change',car:'🚗 Car · Change'} },
+  es:{ moto:{ps2:'2. Moto & Documentos',s2_title:'Moto & Documentos',g_vehicle:'Tu moto',d_veh:'Foto de la moto',ph_make:'Bajaj',ph_model:'Boxer 150',e_docs:'Agrega fotos: Selfie, ID, Licencia, OAVCT y Moto.'}, chip:{motorcycle:'🛵 Moto · Cambiar',car:'🚗 Auto · Cambiar'} }
+};
+var MAKES = {
+  motorcycle:['Bajaj','TVS','Haojue','Honda','Yamaha','Suzuki','Lifan','Sanya','Apsonic'],
+  car:['Toyota','Honda','Nissan','Hyundai','Kia','Suzuki','Mitsubishi','Isuzu','Mazda','Ford','Chevrolet','Jeep']
+};
+function vehType(){ return (document.querySelector('input[name="dtype"]:checked')||{}).value || 'motorcycle'; }
+/* the word for this driver's vehicle, in this language */
+function vt(k){
+  var t = T[currentLang] || T.ht, v = VT[currentLang] || VT.ht;
+  return (vehType() === 'motorcycle' && v.moto[k]) ? v.moto[k] : t[k];
+}
+function applyVehType(){
+  ['ps2','s2_title','g_vehicle','d_veh'].forEach(function(k){
+    document.querySelectorAll('[data-i18n="'+k+'"]').forEach(function(el){ el.textContent = vt(k); });
+  });
+  ['ph_make','ph_model'].forEach(function(k){
+    document.querySelectorAll('[data-i18n-ph="'+k+'"]').forEach(function(el){ el.setAttribute('placeholder', vt(k)); });
+  });
+  var chip = document.getElementById('vehChip');
+  if(chip) chip.textContent = (VT[currentLang] || VT.ht).chip[vehType()];
+  var sel = document.getElementById('make');
+  if(sel){
+    var keep = sel.value, other = sel.querySelector('option[value="__other__"]'), ph = sel.querySelector('option[value=""]');
+    var list = MAKES[vehType()] || MAKES.car;
+    sel.innerHTML = '';
+    if(ph) sel.appendChild(ph);
+    list.forEach(function(m){ var o = document.createElement('option'); o.textContent = m; sel.appendChild(o); });
+    if(keep && keep !== '__other__' && list.indexOf(keep) < 0){ var o2 = document.createElement('option'); o2.textContent = keep; sel.appendChild(o2); }
+    if(other) sel.appendChild(other);
+    sel.value = keep || '';
+    if(!sel.value && ph) ph.selected = true;
+  }
+}
+
 function setLang(lang){
   if(!T[lang]) return;
   currentLang = lang;
@@ -551,6 +595,7 @@ function setLang(lang){
   });
   // keep "Photo added" label localized on any already-picked upload
   document.querySelectorAll('.upload.done .t2').forEach(function(el){ el.textContent = '✓ ' + t.u_added; });
+  if(typeof applyVehType === 'function') applyVehType();
 }
 document.querySelectorAll('.lang button').forEach(function(b){
   b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); });
@@ -573,8 +618,10 @@ document.getElementById('next1').addEventListener('click', function(){
      dropdown is not demanded on top of it. */
   if((!referral && !(window._ajan && window._ajan.code)) || !first || !last || !city || !digits){ return showErr('err1', t.e_req); }
   if(digits.length < 8){ return showErr('err1', t.e_phone); }
-  hideErr('err1'); gotoStep(2);
+  hideErr('err1'); applyVehType(); gotoStep(2);
 });
+document.querySelectorAll('input[name="dtype"]').forEach(function(r){ r.addEventListener('change', applyVehType); });
+document.getElementById('vehChip').addEventListener('click', function(){ gotoStep(1); });
 document.getElementById('back2').addEventListener('click', function(){ gotoStep(1); });
 
 /* ══════════ document upload fields ══════════ */
@@ -630,7 +677,7 @@ document.getElementById('submitBtn').addEventListener('click', function(){
   var y = parseInt(year,10);
   if(!(y>=1980 && y<=2027)){ return showErr('err2', t.e_year); }
   var required = ['selfie','id','license','oavct','vehicle'];
-  if(required.filter(function(k){ return !docFiles[k]; }).length){ return showErr('err2', t.e_docs); }
+  if(required.filter(function(k){ return !docFiles[k]; }).length){ return showErr('err2', vt('e_docs')); }
   if(!document.getElementById('terms').checked){ return showErr('err2', t.e_terms); }
   hideErr('err2');
 
