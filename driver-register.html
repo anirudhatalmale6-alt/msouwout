@@ -336,7 +336,7 @@
         <span class="ico">🤳</span><img class="thumb" alt="">
         <span class="txt"><span class="t1" data-i18n="u_add">Ajoute foto</span><span class="t2" data-i18n="u_tap">Peze pou pran / chwazi yon foto</span></span>
         <span class="chev">›</span>
-        <input type="file" accept="image/*" capture="user" data-doc-input>
+        <input type="file" accept="image/*" data-doc-input>
       </label>
     </div>
 
@@ -346,7 +346,7 @@
         <span class="ico">🪪</span><img class="thumb" alt="">
         <span class="txt"><span class="t1" data-i18n="u_add">Ajoute foto</span><span class="t2" data-i18n="u_tap">Peze pou pran / chwazi yon foto</span></span>
         <span class="chev">›</span>
-        <input type="file" accept="image/*" capture="environment" data-doc-input>
+        <input type="file" accept="image/*" data-doc-input>
       </label>
     </div>
 
@@ -356,7 +356,7 @@
         <span class="ico">🚘</span><img class="thumb" alt="">
         <span class="txt"><span class="t1" data-i18n="u_add">Ajoute foto</span><span class="t2" data-i18n="u_tap">Peze pou pran / chwazi yon foto</span></span>
         <span class="chev">›</span>
-        <input type="file" accept="image/*" capture="environment" data-doc-input>
+        <input type="file" accept="image/*" data-doc-input>
       </label>
     </div>
 
@@ -366,7 +366,7 @@
         <span class="ico">📄</span><img class="thumb" alt="">
         <span class="txt"><span class="t1" data-i18n="u_add">Ajoute foto</span><span class="t2" data-i18n="u_tap">Peze pou pran / chwazi yon foto</span></span>
         <span class="chev">›</span>
-        <input type="file" accept="image/*" capture="environment" data-doc-input>
+        <input type="file" accept="image/*" data-doc-input>
       </label>
     </div>
 
@@ -376,7 +376,7 @@
         <span class="ico">🚙</span><img class="thumb" alt="">
         <span class="txt"><span class="t1" data-i18n="u_add">Ajoute foto</span><span class="t2" data-i18n="u_tap">Peze pou pran / chwazi yon foto</span></span>
         <span class="chev">›</span>
-        <input type="file" accept="image/*" capture="environment" data-doc-input>
+        <input type="file" accept="image/*" data-doc-input>
       </label>
     </div>
 
@@ -386,7 +386,7 @@
         <span class="ico">🛡️</span><img class="thumb" alt="">
         <span class="txt"><span class="t1" data-i18n="u_add">Ajoute foto</span><span class="t2" data-i18n="u_tap">Peze pou pran / chwazi yon foto</span></span>
         <span class="chev">›</span>
-        <input type="file" accept="image/*" capture="environment" data-doc-input>
+        <input type="file" accept="image/*" data-doc-input>
       </label>
     </div>
 
@@ -681,13 +681,13 @@ function compress(file){
       var img = new Image();
       var url = URL.createObjectURL(file);
       img.onload = function(){
-        var max = 1000, w = img.width, h = img.height;
+        var max = 1600, w = img.width, h = img.height;   /* 1 Nov: 1000 px made OAVCT text unreadable */
         if(w > h && w > max){ h = Math.round(h*max/w); w = max; }
         else if(h >= w && h > max){ w = Math.round(w*max/h); h = max; }
         var c = document.createElement('canvas'); c.width = w; c.height = h;
         c.getContext('2d').drawImage(img, 0, 0, w, h);
         URL.revokeObjectURL(url);
-        try { resolve(c.toDataURL('image/jpeg', 0.72)); }
+        try { resolve(c.toDataURL('image/jpeg', 0.85)); }
         catch(e){ resolve(null); }
       };
       img.onerror = function(){ URL.revokeObjectURL(url); resolve(null); };
@@ -938,65 +938,176 @@ setLang(currentLang);
 })();
 </script>
 <script>
+/* ═══ DOCUMENT CAMERA INSIDE THE PAGE (1 Nov 2026) ═══
+   Jennifer, on the first real registrations: a selfie in "Asirans", the same card
+   in "Kat ID" and "Lisans", OAVCT text unreadable ("li parèt efase"). Jeffery: the
+   photos must not go into the phone's gallery - Ajans have no space left.
+   So each document is photographed HERE: the camera opens with the name of the
+   document in big letters and a frame to fill, the Ajan checks the picture before
+   keeping it, and nothing is written to the phone's gallery (the frame is drawn
+   from the live video). Sharper than before: up to 1600 px, JPEG 0.85.
+   No camera (permission refused, old phone) = the usual photo picker, as before. */
+var DocCam = (function () {
+  var CSS = '.dcm{position:fixed;inset:0;z-index:2147483000;background:#000;display:flex;flex-direction:column;color:#fff;font-family:inherit}'
+    + '.dcm-top{padding:14px 56px 10px 16px;background:#D21034}.dcm-top b{display:block;font-size:20px;line-height:1.2}.dcm-top span{display:block;font-size:13.5px;font-weight:600;opacity:.95;margin-top:4px}'
+    + '.dcm-st{position:relative;flex:1;overflow:hidden;display:flex;align-items:center;justify-content:center}'
+    + '.dcm-st video,.dcm-st img{width:100%;height:100%;object-fit:contain;background:#000}'
+    + '.dcm-fr{position:absolute;left:7%;right:7%;top:50%;transform:translateY(-50%);aspect-ratio:1.586;border:3px dashed rgba(255,255,255,.9);border-radius:14px;box-shadow:0 0 0 9999px rgba(0,0,0,.35);pointer-events:none}'
+    + '.dcm-fr.face{left:22%;right:22%;aspect-ratio:.78;border-radius:50%}.dcm-fr.wide{left:4%;right:4%;aspect-ratio:1.33;border-radius:10px}'
+    + '.dcm-bar{display:flex;align-items:center;justify-content:space-around;padding:14px 10px 22px;background:#111;gap:8px}'
+    + '.dcm-bar button{border:0;border-radius:14px;padding:12px 14px;font:inherit;font-weight:800;font-size:14.5px;background:#2a2a2a;color:#fff}'
+    + '.dcm-bar .dcm-shot{width:74px;height:74px;border-radius:50%;background:#fff;border:6px solid #D21034;padding:0}'
+    + '.dcm-bar .dcm-ok{background:#16a34a}.dcm-x{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(0,0,0,.35);color:#fff;font-size:20px;font-weight:900}'
+    + '.dcm-msg{position:absolute;left:12px;right:12px;bottom:12px;text-align:center;font-weight:800;background:rgba(0,0,0,.6);padding:8px;border-radius:10px}';
+  var TX = {
+    ht: { shot: '📸', use: '✅ Kenbe foto sa a', redo: '🔁 Refè', gal: '🖼️ Galri', sw: '🔄', check: 'Tcheke: èske ou ka li tout ekriti yo byen?', wait: 'Ap louvri kamera a…' },
+    fr: { shot: '📸', use: '✅ Garder cette photo', redo: '🔁 Refaire', gal: '🖼️ Galerie', sw: '🔄', check: 'Vérifiez : tout le texte est-il lisible ?', wait: 'Ouverture de la caméra…' },
+    en: { shot: '📸', use: '✅ Keep this photo', redo: '🔁 Retake', gal: '🖼️ Gallery', sw: '🔄', check: 'Check: can you read all the text?', wait: 'Opening the camera…' },
+    es: { shot: '📸', use: '✅ Usar esta foto', redo: '🔁 Repetir', gal: '🖼️ Galería', sw: '🔄', check: 'Revisa: ¿se lee todo el texto?', wait: 'Abriendo la cámara…' },
+    pt: { shot: '📸', use: '✅ Usar esta foto', redo: '🔁 Refazer', gal: '🖼️ Galeria', sw: '🔄', check: 'Confira: dá para ler todo o texto?', wait: 'Abrindo a câmera…' }
+  };
+  var styled = false;
+  function open(o) {
+    return new Promise(function (resolve) {
+      if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) return resolve({ fallback: true });
+      if (!styled) { var st = document.createElement('style'); st.textContent = CSS; document.head.appendChild(st); styled = true; }
+      var L = TX[o.lang] || TX.ht, facing = o.facing || 'environment', stream = null, done = false, blob = null;
+      var el = document.createElement('div'); el.className = 'dcm';
+      el.innerHTML = '<div class="dcm-top"><b></b><span></span></div>'
+        + '<div class="dcm-st"><video playsinline muted autoplay></video><img alt="" style="display:none"><div class="dcm-fr ' + (o.frame || '') + '"></div><div class="dcm-msg"></div></div>'
+        + '<div class="dcm-bar dcm-live"><button type="button" class="dcm-gal"></button><button type="button" class="dcm-shot" aria-label="photo"></button><button type="button" class="dcm-sw"></button></div>'
+        + '<div class="dcm-bar dcm-rev" style="display:none"><button type="button" class="dcm-redo"></button><button type="button" class="dcm-ok"></button></div>'
+        + '<button type="button" class="dcm-x" aria-label="close">✕</button>';
+      el.querySelector('.dcm-top b').textContent = o.title || '';
+      el.querySelector('.dcm-top span').textContent = o.hint || '';
+      el.querySelector('.dcm-gal').textContent = L.gal; el.querySelector('.dcm-sw').textContent = L.sw;
+      el.querySelector('.dcm-redo').textContent = L.redo; el.querySelector('.dcm-ok').textContent = L.use;
+      var video = el.querySelector('video'), img = el.querySelector('img'), msg = el.querySelector('.dcm-msg'), fr = el.querySelector('.dcm-fr');
+      msg.textContent = L.wait;
+      document.body.appendChild(el);
+      try { history.pushState({ dcm: 1 }, ''); } catch (e) {}
+      function stop() { if (stream) { stream.getTracks().forEach(function (t) { t.stop(); }); stream = null; } }
+      function finish(v, fromBack) {
+        if (done) return; done = true; stop(); window.removeEventListener('popstate', onBack);
+        if (img.src && img.src.indexOf('blob:') === 0) URL.revokeObjectURL(img.src);
+        el.remove(); if (!fromBack) { try { history.back(); } catch (e) {} }
+        resolve(v);
+      }
+      function onBack() { finish(null, true); }
+      window.addEventListener('popstate', onBack);
+      function start() {
+        stop(); msg.style.display = ''; msg.textContent = L.wait;
+        navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: facing }, width: { ideal: 2560 }, height: { ideal: 1440 } } })
+          .then(function (s) { if (done) { s.getTracks().forEach(function (t) { t.stop(); }); return; } stream = s; video.srcObject = s;
+            video.style.transform = facing === 'user' ? 'scaleX(-1)' : ''; msg.style.display = 'none'; })
+          .catch(function () { finish({ fallback: true }); });   /* refused / no camera: the usual picker */
+      }
+      function live(on) { video.style.display = on ? '' : 'none'; img.style.display = on ? 'none' : ''; fr.style.display = on ? '' : 'none';
+        el.querySelector('.dcm-live').style.display = on ? '' : 'none'; el.querySelector('.dcm-rev').style.display = on ? 'none' : ''; }
+      el.querySelector('.dcm-shot').onclick = function () {
+        var w = video.videoWidth, h = video.videoHeight; if (!w || !h) return;
+        var k = Math.min(1, 1600 / Math.max(w, h)), c = document.createElement('canvas');
+        c.width = Math.round(w * k); c.height = Math.round(h * k);
+        c.getContext('2d').drawImage(video, 0, 0, c.width, c.height);
+        c.toBlob(function (b) { if (!b) return; blob = b; img.src = URL.createObjectURL(b); live(false);
+          msg.textContent = L.check; msg.style.display = ''; }, 'image/jpeg', 0.85);
+      };
+      el.querySelector('.dcm-redo').onclick = function () { blob = null; live(true); msg.style.display = 'none'; };
+      el.querySelector('.dcm-ok').onclick = function () { if (blob) finish({ blob: blob }); };
+      el.querySelector('.dcm-gal').onclick = function () { finish({ fallback: true }); };
+      el.querySelector('.dcm-sw').onclick = function () { facing = facing === 'user' ? 'environment' : 'user'; start(); };
+      el.querySelector('.dcm-x').onclick = function () { finish(null); };
+      live(true); start();
+    });
+  }
+  /* what each document is, said the same way on every form */
+  var DOCS = {
+    selfie:    { frame: 'face', ht: ['🤳 FOTO FIGI CHOFÈ A', 'Figi chofè a sèlman, byen klè, san linèt nwa ni chapo.'], fr: ['🤳 PHOTO DU VISAGE DU CHAUFFEUR', 'Le visage seul, bien net, sans lunettes noires ni casquette.'], en: ['🤳 DRIVER’S FACE', 'The face only, sharp, no dark glasses or cap.'] },
+    id:        { frame: '', ht: ['🪪 KAT IDANTITE (CIN / NIF) oswa PASPÒ', 'Mete TOUT kat la nan kad la. Non an ak nimewo a dwe li byen.'], fr: ['🪪 CARTE D’IDENTITÉ (CIN / NIF) ou PASSEPORT', 'Toute la carte dans le cadre. Nom et numéro lisibles.'], en: ['🪪 ID CARD (CIN / NIF) or PASSPORT', 'The whole card inside the frame. Name and number readable.'] },
+    license:   { frame: '', ht: ['🚘 LISANS CHOFÈ (PÈMI)', 'Pa kat idantite a: LISANS lan. Tout kat la nan kad la, li byen.'], fr: ['🚘 PERMIS DE CONDUIRE', 'Pas la carte d’identité : le PERMIS. Toute la carte, lisible.'], en: ['🚘 DRIVER’S LICENSE', 'Not the ID card: the LICENSE. The whole card, readable.'] },
+    oavct:     { frame: 'wide', ht: ['📄 DOKIMAN OAVCT', 'Tout paj la. Non an ak DAT ekspirasyon an dwe li byen.'], fr: ['📄 DOCUMENT OAVCT', 'Toute la page. Nom et DATE d’expiration lisibles.'], en: ['📄 OAVCT DOCUMENT', 'The whole page. Name and EXPIRY DATE readable.'] },
+    vehicle:   { frame: 'wide', ht: ['🛵 MOTO / 🚗 MACHIN NAN AK PLAK LA', 'Tout moto a oswa machin nan, plak la dwe parèt.'], fr: ['🛵 MOTO / 🚗 VOITURE AVEC LA PLAQUE', 'Tout le véhicule, la plaque doit être visible.'], en: ['🛵 MOTO / 🚗 CAR WITH THE PLATE', 'The whole vehicle, the plate must be visible.'] },
+    insurance: { frame: 'wide', ht: ['📄 ASIRANS', 'Paj asirans lan (si genyen). Non an ak dat yo dwe li byen.'], fr: ['📄 ASSURANCE', 'La page d’assurance (s’il y en a une). Lisible.'], en: ['📄 INSURANCE', 'The insurance page (if any). Readable.'] }
+  };
+  function doc(type, lang) { var d = DOCS[type] || {}; var x = d[lang] || d.ht || ['', '']; return { title: x[0], hint: x[1], frame: d.frame || '' }; }
+  return { open: open, doc: doc };
+})();
+
 /* ══════════ DRAFT: nothing typed is lost (1 Nov 2026) ══════════
    Jeffery, from the Ajans: "depi yo manke sot sou app la li retounen yo dèyè. Fòk
-   sistèm lan kenbe info yo t déjà antre yo." Opening the camera or WhatsApp lets
-   Android reload this page, and every answer was gone. Answers and the (already
-   shrunk) photos are now kept on the phone until the registration is sent. */
+   sistèm lan kenbe info yo t déjà antre yo." Answers are kept in localStorage and
+   the photos in IndexedDB (sharper photos no longer fit in localStorage) until the
+   registration is sent. Each photo is taken with DocCam: the camera opens inside
+   the page with the name of the document, and nothing goes to the gallery. */
 (function(){
   var KEY = 'mw_drv_draft', IDS = ['firstName','lastName','phone','email','city','cityOther','referral','ajanCode','make','makeOther','model','year','color','plate','licnum','oavct','oavctExp'];
-  var docData = {}, ready = false, timer;
+  var ready = false, timer;
+  function idb(){ return new Promise(function(res, rej){ var r = indexedDB.open('mw_drv_docs', 1);
+    r.onupgradeneeded = function(){ r.result.createObjectStore('d'); }; r.onsuccess = function(){ res(r.result); }; r.onerror = function(){ rej(r.error); }; }); }
+  function put(type, blob){ return idb().then(function(db){ return new Promise(function(res){ var tx = db.transaction('d','readwrite'); tx.objectStore('d').put(blob, type); tx.oncomplete = res; tx.onerror = res; }); }).catch(function(){}); }
+  function all(){ return idb().then(function(db){ return new Promise(function(res){ var out = {}, q = db.transaction('d').objectStore('d').openCursor();
+    q.onsuccess = function(){ var c = q.result; if(c){ out[c.key] = c.value; c.continue(); } else res(out); }; q.onerror = function(){ res(out); }; }); }).catch(function(){ return {}; }); }
+  function wipe(){ try { localStorage.removeItem(KEY); } catch(e){} idb().then(function(db){ db.transaction('d','readwrite').objectStore('d').clear(); }).catch(function(){}); }
   function radio(n){ var r = document.querySelector('input[name="'+n+'"]:checked'); return r ? r.value : ''; }
   function save(){
     if(!ready) return;
     var v = {}; IDS.forEach(function(id){ var el = document.getElementById(id); if(el) v[id] = el.value; });
     var d = { v: v, noAjan: !!(document.getElementById('noAjan')||{}).checked, terms: !!(document.getElementById('terms')||{}).checked,
-              dtype: radio('dtype'), svc: radio('svc'), docs: docData, at: Date.now() };
-    var any = IDS.some(function(id){ return id !== 'referral' && String(v[id]||'').trim(); }) || Object.keys(docData).length;
-    try { if(!any){ localStorage.removeItem(KEY); return; } localStorage.setItem(KEY, JSON.stringify(d)); }
-    catch(e){ try { d.docs = {}; localStorage.setItem(KEY, JSON.stringify(d)); } catch(x){} }   /* phone full: keep the answers at least */
+              dtype: radio('dtype'), svc: radio('svc'), docs: Object.keys(docFiles), at: Date.now() };
+    var any = IDS.some(function(id){ return id !== 'referral' && String(v[id]||'').trim(); }) || d.docs.length;
+    try { if(!any){ localStorage.removeItem(KEY); return; } localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){}
   }
   function soon(){ clearTimeout(timer); timer = setTimeout(save, 300); }
-  function toBlob(u){ var m = /^data:([^;]+);base64,(.*)$/.exec(u); if(!m) return null; var b = atob(m[2]), a = new Uint8Array(b.length);
-    for(var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return new Blob([a], { type: m[1] }); }
+  function show(box, type, blob){
+    docFiles[type] = blob; box.classList.add('done');
+    var th = box.querySelector('.thumb'); if(th.src && th.src.indexOf('blob:') === 0) URL.revokeObjectURL(th.src); th.src = URL.createObjectURL(blob);
+    box.querySelector('.t1').textContent = '📸 ' + (DocCam.doc(type, currentLang).title || '').replace(/^\S+\s/, '');
+    box.querySelector('.t2').textContent = '✓ ' + (T[currentLang] || T.ht).u_added;
+  }
   document.addEventListener('input', soon, true); document.addEventListener('change', soon, true);
   document.querySelectorAll('.upload').forEach(function(box){
     var input = box.querySelector('[data-doc-input]'), type = box.getAttribute('data-doc');
-    input.addEventListener('change', function(){ var f = input.files && input.files[0]; if(!f) return;
-      compress(f).then(function(u){ if(u){ docData[type] = u; save(); } }); });
+    input.addEventListener('change', function(){ var f = input.files && input.files[0]; if(f) put(type, f).then(save); });
+    /* the (invisible) file input covers the whole tile, so a tap lands ON it:
+       only our own fallback click may open the picker */
+    box.addEventListener('click', function(ev){
+      if(box._pick){ box._pick = false; return; }
+      ev.preventDefault();
+      var dd = DocCam.doc(type, currentLang);
+      DocCam.open({ title: dd.title, hint: dd.hint, frame: dd.frame, lang: currentLang, facing: type === 'selfie' ? 'user' : 'environment' }).then(function(r){
+        if(!r) return; if(r.fallback){ box._pick = true; input.click(); return; }
+        show(box, type, r.blob); put(type, r.blob).then(save);
+      });
+    });
   });
   /* sent = draft gone */
   var done = document.getElementById('doneScreen');
-  if(done && window.MutationObserver) new MutationObserver(function(){ if(done.classList.contains('on')){ ready = false; try { localStorage.removeItem(KEY); } catch(e){} } })
+  if(done && window.MutationObserver) new MutationObserver(function(){ if(done.classList.contains('on')){ ready = false; wipe(); } })
     .observe(done, { attributes: true, attributeFilter: ['class'] });
 
   var d = null; try { d = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e){}
-  if(d && d.v && Date.now() - (d.at || 0) < 3 * 864e5){
-    if(d.dtype){ var r = document.querySelector('input[name="dtype"][value="'+d.dtype+'"]'); if(r) r.checked = true; applyVehType(); }
-    if(d.svc && !/[?&]svc=/.test(location.search)){ var r2 = document.querySelector('input[name="svc"][value="'+d.svc+'"]'); if(r2) r2.checked = true; }
-    var urlAgent = /[?&](agent|ref)=/.test(location.search);
-    IDS.forEach(function(id){ var el = document.getElementById(id), val = d.v[id];
-      if(!el || val == null || val === '') return;
-      if(id === 'ajanCode' && urlAgent) return;                /* the Ajan's own link wins */
-      if(el.tagName === 'SELECT' && ![].some.call(el.options, function(o){ return o.value === val; })){ var o = document.createElement('option'); o.textContent = val; o.value = val; el.appendChild(o); }
-      el.value = val; });
-    if(d.v.city === '__other__') toggleOther('city','cityOther');
-    if(d.v.make === '__other__') toggleOther('make','makeOther');
-    var cityO = document.getElementById('cityOther'); if(cityO && d.v.cityOther) cityO.value = d.v.cityOther;
-    var makeO = document.getElementById('makeOther'); if(makeO && d.v.makeOther) makeO.value = d.v.makeOther;
-    if(d.noAjan){ document.getElementById('noAjan').checked = true; }
-    else if(d.v.ajanCode && !urlAgent){ document.getElementById('ajanCode').dispatchEvent(new Event('blur')); }
-    if(d.terms) document.getElementById('terms').checked = true;
-    Object.keys(d.docs || {}).forEach(function(type){
-      var box = document.querySelector('.upload[data-doc="'+type+'"]'), blob = toBlob(d.docs[type]); if(!box || !blob) return;
-      docFiles[type] = blob; docData[type] = d.docs[type];
-      box.classList.add('done'); box.querySelector('.thumb').src = d.docs[type];
-      box.querySelector('.t2').textContent = '✓ ' + (T[currentLang] || T.ht).u_added;
-    });
-    var e1 = document.getElementById('err1');
-    if(e1){ e1.textContent = ({ht:'✅ Enfòmasyon ou te deja antre yo retounen. Tcheke yo epi kontinye.',fr:'✅ Vos informations déjà saisies sont revenues. Vérifiez-les et continuez.',en:'✅ What you already entered is back. Check it and continue.',es:'✅ Lo que ya habías escrito volvió. Revísalo y continúa.'})[currentLang] || '✅'; e1.style.display = 'block'; e1.style.color = '#15803d'; }
-  }
-  ready = true;
+  if(!(d && d.v && Date.now() - (d.at || 0) < 3 * 864e5)){ if(d) wipe(); ready = true; return; }
+  if(d.dtype){ var r = document.querySelector('input[name="dtype"][value="'+d.dtype+'"]'); if(r) r.checked = true; applyVehType(); }
+  if(d.svc && !/[?&]svc=/.test(location.search)){ var r2 = document.querySelector('input[name="svc"][value="'+d.svc+'"]'); if(r2) r2.checked = true; }
+  var urlAgent = /[?&](agent|ref)=/.test(location.search);
+  IDS.forEach(function(id){ var el = document.getElementById(id), val = d.v[id];
+    if(!el || val == null || val === '') return;
+    if(id === 'ajanCode' && urlAgent) return;                /* the Ajan's own link wins */
+    if(el.tagName === 'SELECT' && ![].some.call(el.options, function(o){ return o.value === val; })){ var o = document.createElement('option'); o.textContent = val; o.value = val; el.appendChild(o); }
+    el.value = val; });
+  if(d.v.city === '__other__') toggleOther('city','cityOther');
+  if(d.v.make === '__other__') toggleOther('make','makeOther');
+  var cityO = document.getElementById('cityOther'); if(cityO && d.v.cityOther) cityO.value = d.v.cityOther;
+  var makeO = document.getElementById('makeOther'); if(makeO && d.v.makeOther) makeO.value = d.v.makeOther;
+  if(d.noAjan){ document.getElementById('noAjan').checked = true; }
+  else if(d.v.ajanCode && !urlAgent){ document.getElementById('ajanCode').dispatchEvent(new Event('blur')); }
+  if(d.terms) document.getElementById('terms').checked = true;
+  var e1 = document.getElementById('err1');
+  if(e1){ e1.textContent = ({ht:'✅ Enfòmasyon ou te deja antre yo retounen. Tcheke yo epi kontinye.',fr:'✅ Vos informations déjà saisies sont revenues. Vérifiez-les et continuez.',en:'✅ What you already entered is back. Check it and continue.',es:'✅ Lo que ya habías escrito volvió. Revísalo y continúa.'})[currentLang] || '✅'; e1.style.display = 'block'; e1.style.color = '#15803d'; }
+  all().then(function(m){
+    Object.keys(m).forEach(function(type){ var box = document.querySelector('.upload[data-doc="'+type+'"]'); if(box && m[type]) show(box, type, m[type]); });
+    ready = true;
+  });
 })();
 </script>
 </body>
