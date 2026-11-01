@@ -172,8 +172,13 @@
         <!-- The partners below are a FALLBACK. loadPartners() replaces them with
              the live list from the server so a new partner never needs a code
              change. If the request fails these stay, and sign-up still works. -->
-        <option value="FTPH" data-partner>FTPH</option>
-        <option value="COTRASMOTHA" data-partner>COTRASMOTHA</option>
+        <!-- 1 Nov 2026: kept IDENTICAL to the server list (codes + order). They
+             differed ("FTPH" / "COTRASMOTHA" vs "FTPH/COTRASMOTHA", StarFlex
+             missing), so the form looked different from one phone to the next
+             depending on whether the server had woken up, and a driver who
+             picked "FTPH" was recorded under a code no partner report counts. -->
+        <option value="FTPH/COTRASMOTHA" data-partner>FTPH/COTRASMOTHA</option>
+        <option value="STARFLEX" data-partner>StarFlex</option>
         <option value="SPAP">SPAP</option>
         <option value="Eglise Shalom">Eglise Shalom</option>
         <option value="Facebook">Facebook</option>
@@ -796,6 +801,11 @@ function pickVal(selId,otherId){var s=document.getElementById(selId);if(!s)retur
 function showErr(id, m){ var e=document.getElementById(id); e.textContent=m; e.style.display='block'; window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); }
 function hideErr(id){ document.getElementById(id).style.display='none'; }
 
+/* 1 Nov 2026: myplopplop.com's delivery sign-up sends new drivers here with
+   ?svc=delivery - ONE registration for rides and deliveries. */
+(function(){ var sv = new URLSearchParams(location.search).get('svc');
+  if(['ride','delivery','both'].indexOf(sv) >= 0){ var r = document.querySelector('input[name="svc"][value="'+sv+'"]'); if(r) r.checked = true; } })();
+
 setLang(currentLang);
 </script>
 <script>(function(){if(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform()){document.body.classList.add('capacitor-native');var s=document.createElement('script');s.src='capacitor-bridge.js';document.body.appendChild(s);}})();/* Referral partners come from the server, so Jeffery can add one without me.
@@ -823,6 +833,7 @@ setLang(currentLang);
     .then(function (d) {
       var list = (d && d.partners) || [];
       if (!list.length) return;
+      var had = sel.value;   /* a choice already made must survive the list arriving */
       sel.querySelectorAll('option[data-partner]').forEach(function (o) { o.remove(); });
       var first = sel.querySelector('option[value=""]');
       list.slice().reverse().forEach(function (p) {
@@ -831,6 +842,7 @@ setLang(currentLang);
         if (first && first.nextSibling) sel.insertBefore(o, first.nextSibling);
         else sel.appendChild(o);
       });
+      if (had) { for (var k = 0; k < sel.options.length; k++) { if (sel.options[k].value === had) { sel.selectedIndex = k; break; } } }
       pickWanted();
     })
     .catch(function () { /* keep the fallback list */ });
