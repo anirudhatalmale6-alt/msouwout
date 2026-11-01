@@ -937,5 +937,67 @@ setLang(currentLang);
   if(code && !/^TL-/i.test(code)){ input.value = code.slice(0, 40); check(); }
 })();
 </script>
+<script>
+/* ══════════ DRAFT: nothing typed is lost (1 Nov 2026) ══════════
+   Jeffery, from the Ajans: "depi yo manke sot sou app la li retounen yo dèyè. Fòk
+   sistèm lan kenbe info yo t déjà antre yo." Opening the camera or WhatsApp lets
+   Android reload this page, and every answer was gone. Answers and the (already
+   shrunk) photos are now kept on the phone until the registration is sent. */
+(function(){
+  var KEY = 'mw_drv_draft', IDS = ['firstName','lastName','phone','email','city','cityOther','referral','ajanCode','make','makeOther','model','year','color','plate','licnum','oavct','oavctExp'];
+  var docData = {}, ready = false, timer;
+  function radio(n){ var r = document.querySelector('input[name="'+n+'"]:checked'); return r ? r.value : ''; }
+  function save(){
+    if(!ready) return;
+    var v = {}; IDS.forEach(function(id){ var el = document.getElementById(id); if(el) v[id] = el.value; });
+    var d = { v: v, noAjan: !!(document.getElementById('noAjan')||{}).checked, terms: !!(document.getElementById('terms')||{}).checked,
+              dtype: radio('dtype'), svc: radio('svc'), docs: docData, at: Date.now() };
+    var any = IDS.some(function(id){ return id !== 'referral' && String(v[id]||'').trim(); }) || Object.keys(docData).length;
+    try { if(!any){ localStorage.removeItem(KEY); return; } localStorage.setItem(KEY, JSON.stringify(d)); }
+    catch(e){ try { d.docs = {}; localStorage.setItem(KEY, JSON.stringify(d)); } catch(x){} }   /* phone full: keep the answers at least */
+  }
+  function soon(){ clearTimeout(timer); timer = setTimeout(save, 300); }
+  function toBlob(u){ var m = /^data:([^;]+);base64,(.*)$/.exec(u); if(!m) return null; var b = atob(m[2]), a = new Uint8Array(b.length);
+    for(var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return new Blob([a], { type: m[1] }); }
+  document.addEventListener('input', soon, true); document.addEventListener('change', soon, true);
+  document.querySelectorAll('.upload').forEach(function(box){
+    var input = box.querySelector('[data-doc-input]'), type = box.getAttribute('data-doc');
+    input.addEventListener('change', function(){ var f = input.files && input.files[0]; if(!f) return;
+      compress(f).then(function(u){ if(u){ docData[type] = u; save(); } }); });
+  });
+  /* sent = draft gone */
+  var done = document.getElementById('doneScreen');
+  if(done && window.MutationObserver) new MutationObserver(function(){ if(done.classList.contains('on')){ ready = false; try { localStorage.removeItem(KEY); } catch(e){} } })
+    .observe(done, { attributes: true, attributeFilter: ['class'] });
+
+  var d = null; try { d = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e){}
+  if(d && d.v && Date.now() - (d.at || 0) < 3 * 864e5){
+    if(d.dtype){ var r = document.querySelector('input[name="dtype"][value="'+d.dtype+'"]'); if(r) r.checked = true; applyVehType(); }
+    if(d.svc && !/[?&]svc=/.test(location.search)){ var r2 = document.querySelector('input[name="svc"][value="'+d.svc+'"]'); if(r2) r2.checked = true; }
+    var urlAgent = /[?&](agent|ref)=/.test(location.search);
+    IDS.forEach(function(id){ var el = document.getElementById(id), val = d.v[id];
+      if(!el || val == null || val === '') return;
+      if(id === 'ajanCode' && urlAgent) return;                /* the Ajan's own link wins */
+      if(el.tagName === 'SELECT' && ![].some.call(el.options, function(o){ return o.value === val; })){ var o = document.createElement('option'); o.textContent = val; o.value = val; el.appendChild(o); }
+      el.value = val; });
+    if(d.v.city === '__other__') toggleOther('city','cityOther');
+    if(d.v.make === '__other__') toggleOther('make','makeOther');
+    var cityO = document.getElementById('cityOther'); if(cityO && d.v.cityOther) cityO.value = d.v.cityOther;
+    var makeO = document.getElementById('makeOther'); if(makeO && d.v.makeOther) makeO.value = d.v.makeOther;
+    if(d.noAjan){ document.getElementById('noAjan').checked = true; }
+    else if(d.v.ajanCode && !urlAgent){ document.getElementById('ajanCode').dispatchEvent(new Event('blur')); }
+    if(d.terms) document.getElementById('terms').checked = true;
+    Object.keys(d.docs || {}).forEach(function(type){
+      var box = document.querySelector('.upload[data-doc="'+type+'"]'), blob = toBlob(d.docs[type]); if(!box || !blob) return;
+      docFiles[type] = blob; docData[type] = d.docs[type];
+      box.classList.add('done'); box.querySelector('.thumb').src = d.docs[type];
+      box.querySelector('.t2').textContent = '✓ ' + (T[currentLang] || T.ht).u_added;
+    });
+    var e1 = document.getElementById('err1');
+    if(e1){ e1.textContent = ({ht:'✅ Enfòmasyon ou te deja antre yo retounen. Tcheke yo epi kontinye.',fr:'✅ Vos informations déjà saisies sont revenues. Vérifiez-les et continuez.',en:'✅ What you already entered is back. Check it and continue.',es:'✅ Lo que ya habías escrito volvió. Revísalo y continúa.'})[currentLang] || '✅'; e1.style.display = 'block'; e1.style.color = '#15803d'; }
+  }
+  ready = true;
+})();
+</script>
 </body>
 </html>
