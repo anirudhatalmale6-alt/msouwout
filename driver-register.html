@@ -735,9 +735,27 @@ document.getElementById('submitBtn').addEventListener('click', function(){
     referral_code: document.getElementById('noAjan').checked ? '' : ((window._ajan && window._ajan.code) || val('ajanCode') || '')
   };
 
-  createDriver(payload).then(function(driverId){
+  /* 2 Nov 2026: Jennifer saw registrations with 2 of 5 photos. A photo that failed
+     to upload was silently skipped and the driver was shown "done". Now each photo
+     is retried, the server is asked which ones really arrived, and only then is it
+     "done"; otherwise the missing ones are named and "send again" re-sends ONLY
+     those to the SAME driver (the id is kept: never a second account). */
+  var CK = 'mw_drv_created';
+  var made = null; try { made = JSON.parse(sessionStorage.getItem(CK) || 'null'); } catch(e){}
+  (made && made.phone === payload.phone && made.id ? Promise.resolve(made.id) : createDriver(payload)).then(function(driverId){
     if(!driverId) return; // error already shown
-    uploadDocs(driverId).then(function(){ finish(); });
+    try { sessionStorage.setItem(CK, JSON.stringify({ phone: payload.phone, id: driverId })); } catch(e){}
+    uploadDocs(driverId).then(function(missing){
+      if(missing.length){
+        var L = { selfie: t.d_selfie, id: t.d_id, license: t.d_lic, oavct: t.d_oavct, vehicle: vt('d_veh'), insurance: t.d_ins };
+        fail(({ht:'Foto sa yo pa rive: ',fr:'Ces photos ne sont pas arrivées : ',en:'These photos did not arrive: ',es:'Estas fotos no llegaron: '}[currentLang] || 'Foto sa yo pa rive: ')
+          + missing.map(function(x){ return L[x] || x; }).join(', ')
+          + ({ht:'. Tcheke siyal la epi peze bouton an ankò (sa ki deja rive pa bezwen voye ankò).',fr:'. Vérifiez le réseau et appuyez à nouveau (le reste est déjà reçu).',en:'. Check your signal and press the button again (the rest is already received).',es:'. Revisa la señal y presiona de nuevo (lo demás ya llegó).'}[currentLang] || ''));
+        return;
+      }
+      try { sessionStorage.removeItem(CK); } catch(e){}
+      finish();
+    });
   });
 
   function createDriver(data){
@@ -753,21 +771,37 @@ document.getElementById('submitBtn').addEventListener('click', function(){
     }).catch(function(){ fail(t.e_net); return null; });
   }
 
-  function uploadDocs(driverId){
-    var types = Object.keys(docFiles);
-    var chain = Promise.resolve();
-    types.forEach(function(type){
-      chain = chain.then(function(){
-        return compress(docFiles[type]).then(function(dataUrl){
-          if(!dataUrl) return;
-          return fetch(API_BASE + '/api/drivers/' + driverId + '/documents', {
-            method:'POST', headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({ doc_type: type, image_data: dataUrl })
-          }).catch(function(){});
-        });
-      });
+  function sendOne(driverId, type, dataUrl, tries){
+    return fetch(API_BASE + '/api/drivers/' + driverId + '/documents', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ doc_type: type, image_data: dataUrl })
+    }).then(function(r){ return r.status === 201; }).catch(function(){ return false; }).then(function(ok){
+      if(ok || tries <= 1) return ok;
+      return new Promise(function(res){ setTimeout(res, 2500); }).then(function(){ return sendOne(driverId, type, dataUrl, tries - 1); });
     });
-    return chain;
+  }
+  /* resolves with the REQUIRED photos the server still does not have */
+  function uploadDocs(driverId){
+    var need = ['selfie','id','license','oavct','vehicle'];
+    return fetch(API_BASE + '/api/drivers/status-batch', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ ids: [driverId] }) })
+      .then(function(r){ return r.json(); }).catch(function(){ return {}; })
+      .then(function(j){
+        var have = ((j.drivers || [])[0] || {}).docs || [];
+        var chain = Promise.resolve();
+        Object.keys(docFiles).forEach(function(type){
+          if(have.indexOf(type) >= 0) return;            /* already there: not sent twice */
+          chain = chain.then(function(){
+            return compress(docFiles[type]).then(function(dataUrl){ return dataUrl ? sendOne(driverId, type, dataUrl, 3) : false; });
+          });
+        });
+        return chain;
+      })
+      .then(function(){
+        return fetch(API_BASE + '/api/drivers/status-batch', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ ids: [driverId] }) })
+          .then(function(r){ return r.json(); })
+          .then(function(j){ var have = ((j.drivers || [])[0] || {}).docs || []; return need.filter(function(x){ return have.indexOf(x) < 0; }); })
+          .catch(function(){ return need.filter(function(x){ return !docFiles[x]; }); });
+      });
   }
 
   function fail(msg){
