@@ -323,7 +323,7 @@
         <input id="oavct" type="text" data-i18n-ph="ph_oavct" placeholder="OAVCT #">
       </div>
       <div class="field">
-        <label class="lbl" data-i18n="l_oavct_exp">Ekspirasyon OAVCT <span class="opt" data-i18n="opt">(opsyonèl)</span></label>
+        <label class="lbl" data-i18n="l_oavct_exp">Ekspirasyon OAVCT <span class="req">*</span></label>
         <input id="oavctExp" type="date">
       </div>
     </div>
@@ -702,7 +702,9 @@ document.getElementById('submitBtn').addEventListener('click', function(){
   var btn = this;
   var make=pickVal('make','makeOther'), model=val('model'), year=val('year'), color=val('color'),
       plate=val('plate'), licnum=val('licnum'), oavct=val('oavct');
-  if(!make||!model||!year||!color||!plate||!licnum||!oavct){ return showErr('err2', t.e_req); }
+  if(!make||!model||!year||!color||!plate||!licnum||!oavct||!val('oavctExp')){ return showErr('err2', t.e_req); }
+  /* 1 Nov 2026, Jeffery: an expired OAVCT cannot be approved - say it now, not after Jennifer looks */
+  if(val('oavctExp') < new Date().toISOString().slice(0,10)){ return showErr('err2', ({ht:'OAVCT ou a EKSPIRE. Fòk ou renouvle l anvan ou enskri.',fr:'Votre OAVCT est EXPIRÉ. Renouvelez-le avant de vous inscrire.',en:'Your OAVCT is EXPIRED. Renew it before registering.',es:'Tu OAVCT está VENCIDO. Renuévalo antes de inscribirte.'})[currentLang] || 'OAVCT EKSPIRE'); }
   var y = parseInt(year,10);
   if(!(y>=1980 && y<=2027)){ return showErr('err2', t.e_year); }
   var required = ['selfie','id','license','oavct','vehicle'];
