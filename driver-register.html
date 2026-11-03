@@ -341,7 +341,7 @@
     </div>
 
     <div class="field">
-      <label class="lbl" data-i18n="d_id">Kat Idantite / Paspò <span class="req">*</span></label>
+      <label class="lbl" data-i18n="d_id">Kat Idantite / Paspò <span class="opt" data-i18n="opt">(opsyonèl)</span></label>
       <label class="upload" data-doc="id">
         <span class="ico">🪪</span><img class="thumb" alt="">
         <span class="txt"><span class="t1" data-i18n="u_add">Ajoute foto</span><span class="t2" data-i18n="u_tap">Peze pou pran / chwazi yon foto</span></span>
@@ -707,7 +707,7 @@ document.getElementById('submitBtn').addEventListener('click', function(){
   if(val('oavctExp') < new Date().toISOString().slice(0,10)){ return showErr('err2', ({ht:'OAVCT ou a EKSPIRE. Fòk ou renouvle l anvan ou enskri.',fr:'Votre OAVCT est EXPIRÉ. Renouvelez-le avant de vous inscrire.',en:'Your OAVCT is EXPIRED. Renew it before registering.',es:'Tu OAVCT está VENCIDO. Renuévalo antes de inscribirte.'})[currentLang] || 'OAVCT EKSPIRE'); }
   var y = parseInt(year,10);
   if(!(y>=1980 && y<=2027)){ return showErr('err2', t.e_year); }
-  var required = ['selfie','id','license','oavct','vehicle'];
+  var required = ['selfie','license','oavct','vehicle'];   /* 3 Nov: ID optional (NIF on the licence) */
   if(required.filter(function(k){ return !docFiles[k]; }).length){ return showErr('err2', vt('e_docs')); }
   if(!document.getElementById('terms').checked){ return showErr('err2', t.e_terms); }
   hideErr('err2');
@@ -782,7 +782,7 @@ document.getElementById('submitBtn').addEventListener('click', function(){
   }
   /* resolves with the REQUIRED photos the server still does not have */
   function uploadDocs(driverId){
-    var need = ['selfie','id','license','oavct','vehicle'];
+    var need = ['selfie','license','oavct','vehicle'];
     return fetch(API_BASE + '/api/drivers/status-batch', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ ids: [driverId] }) })
       .then(function(r){ return r.json(); }).catch(function(){ return {}; })
       .then(function(j){
