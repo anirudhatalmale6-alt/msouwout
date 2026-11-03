@@ -738,7 +738,12 @@ document.getElementById('submitBtn').addEventListener('click', function(){
     preferred_service: (document.querySelector('input[name="svc"]:checked')||{}).value || 'both',
     /* Sent even when the live check could not run: the server checks it
        again against the Ajan engine and keeps the driver either way. */
-    referral_code: document.getElementById('noAjan').checked ? '' : ((window._ajan && window._ajan.code) || val('ajanCode') || '')
+    referral_code: document.getElementById('noAjan').checked ? '' : ((window._ajan && window._ajan.code) || val('ajanCode') || ''),
+    /* 3 Nov 2026: this phone's key for this registration (kept until it is done) - a retry after a lost answer
+       gets the SAME driver back instead of "already registered" */
+    client_ref: (function(){ var k = 'mw_drv_ref', v = ''; try { v = localStorage.getItem(k) || ''; } catch(e){}
+      if (!/^[A-Za-z0-9_-]{16,80}$/.test(v)) { var a = new Uint8Array(18); crypto.getRandomValues(a); v = Array.prototype.map.call(a, function(x){ return ('0' + x.toString(16)).slice(-2); }).join('');
+        try { localStorage.setItem(k, v); } catch(e){} } return v; })()
   };
 
   /* 2 Nov 2026: Jennifer saw registrations with 2 of 5 photos. A photo that failed
@@ -759,7 +764,7 @@ document.getElementById('submitBtn').addEventListener('click', function(){
           + ({ht:'. Tcheke siyal la epi peze bouton an ankò (sa ki deja rive pa bezwen voye ankò).',fr:'. Vérifiez le réseau et appuyez à nouveau (le reste est déjà reçu).',en:'. Check your signal and press the button again (the rest is already received).',es:'. Revisa la señal y presiona de nuevo (lo demás ya llegó).'}[currentLang] || ''));
         return;
       }
-      try { sessionStorage.removeItem(CK); } catch(e){}
+      try { sessionStorage.removeItem(CK); localStorage.removeItem('mw_drv_ref'); } catch(e){}
       finish();
     });
   });
@@ -771,7 +776,7 @@ document.getElementById('submitBtn').addEventListener('click', function(){
     }).then(function(r){
       return r.json().then(function(j){ return {status:r.status, body:j}; });
     }).then(function(res){
-      if(res.status === 201 && res.body.driver){ return res.body.driver.id; }
+      if((res.status === 201 || (res.status === 200 && res.body.resumed)) && res.body.driver){ return res.body.driver.id; }
       if(res.status === 409){ fail(t.e_dup); return null; }
       fail(t.e_net); return null;
     }).catch(function(){ fail(t.e_net); return null; });
