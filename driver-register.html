@@ -327,6 +327,11 @@
         <input id="oavctExp" type="date">
       </div>
     </div>
+    <!-- 3 Nov 2026 (Jeffery, OAVCT ASSISTANCE): register now, OAVCT later; no work until it is in order -->
+    <label class="assist" style="display:flex;gap:10px;align-items:flex-start;background:#FFF1E0;border:1.5px solid #F3B36B;border-radius:12px;padding:10px 12px;margin:4px 0 12px;font-weight:700;cursor:pointer">
+      <input type="checkbox" id="oavAssist" style="width:22px;height:22px;flex:none;margin-top:1px">
+      <span><span data-i18n="l_oav_assist">🟠 Mwen poko gen OAVCT (asistans OAVCT)</span><br><small style="font-weight:500;color:#7a4a12" data-i18n="h_oav_assist">Ou ka enskri kounye a epi voye lòt dokiman yo. OAVCT a ap ajoute pita sou MENM kont lan. Ou p ap ka fè kous ni livrezon jiskaske OAVCT ou an règ.</small></span>
+    </label>
 
     <div class="grouphdr" data-i18n="g_docs">Foto Dokiman</div>
 
@@ -443,7 +448,7 @@ var T = {
     l_year:'Ane', l_color:'Koulè', ph_color:'Wouj',
     l_plate:'Nimewo Plak', ph_plate:'AA-12345',
     l_licnum:'Nimewo Lisans Chofè', ph_licnum:'12345678',
-    l_oavct:'Nimewo OAVCT', ph_oavct:'OAVCT #', l_oavct_exp:'Ekspirasyon OAVCT',
+    l_oavct:'Nimewo OAVCT', ph_oavct:'OAVCT #', l_oavct_exp:'Ekspirasyon OAVCT', l_oav_assist:'🟠 Mwen poko gen OAVCT (asistans OAVCT)', h_oav_assist:'Ou ka enskri kounye a epi voye lòt dokiman yo. OAVCT a ap ajoute pita sou MENM kont lan. Ou p ap ka fè kous ni livrezon jiskaske OAVCT ou an règ.',
     u_add:'Ajoute foto', u_tap:'Peze pou pran / chwazi yon foto', u_added:'Foto ajoute',
     d_selfie:'Selfie', d_id:'Kat Idantite / Paspò', d_lic:'Lisans Chofè', d_oavct:'Dokiman OAVCT',
     d_veh:'Foto Machin', d_ins:'Asirans',
@@ -454,7 +459,7 @@ var T = {
     ok_share:'Pataje MsouWout', ok_paren:'Vin Parenaj Biznis pandan w ap tann',
     e_req:'Tanpri ranpli tout chan obligatwa yo.', e_phone:'Antre yon nimewo telefòn valab.',
     e_year:'Antre yon ane valab.', e_terms:'Tanpri aksepte kondisyon yo.',
-    e_docs:'Tanpri ajoute foto: Selfie, Kat, Lisans, OAVCT ak Machin.',
+    e_docs:'Tanpri ajoute foto: Selfie, Lisans, OAVCT ak Machin (Kat ID opsyonèl).',
     e_dup:'Yon chofè ak nimewo telefòn sa a deja enskri.', e_net:'Erè koneksyon. Tanpri eseye ankò.'
   },
   fr:{
@@ -474,7 +479,7 @@ var T = {
     l_year:'Année', l_color:'Couleur', ph_color:'Rouge',
     l_plate:'Numéro de plaque', ph_plate:'AA-12345',
     l_licnum:'Numéro de permis', ph_licnum:'12345678',
-    l_oavct:'Numéro OAVCT', ph_oavct:'OAVCT #', l_oavct_exp:'Expiration OAVCT',
+    l_oavct:'Numéro OAVCT', ph_oavct:'OAVCT #', l_oavct_exp:'Expiration OAVCT', l_oav_assist:'🟠 Je n’ai pas encore d’OAVCT (assistance OAVCT)', h_oav_assist:'Vous pouvez vous inscrire maintenant et envoyer les autres documents. L’OAVCT sera ajouté plus tard sur le MÊME compte. Pas de courses ni de livraisons tant que votre OAVCT n’est pas en règle.',
     u_add:'Ajouter une photo', u_tap:'Touchez pour prendre / choisir une photo', u_added:'Photo ajoutée',
     d_selfie:'Selfie', d_id:'CIN / Passeport', d_lic:'Permis', d_oavct:'Document OAVCT',
     d_veh:'Photo du véhicule', d_ins:'Assurance',
@@ -485,7 +490,7 @@ var T = {
     ok_share:'Partager MsouWout', ok_paren:'Devenir Parenaj Biznis en attendant',
     e_req:'Veuillez remplir tous les champs obligatoires.', e_phone:'Entrez un numéro de téléphone valide.',
     e_year:'Entrez une année valide.', e_terms:'Veuillez accepter les conditions.',
-    e_docs:'Ajoutez les photos : Selfie, CIN, Permis, OAVCT et Véhicule.',
+    e_docs:'Ajoutez les photos : Selfie, Permis, OAVCT et Véhicule (CIN facultative).',
     e_dup:'Un chauffeur avec ce numéro existe déjà.', e_net:'Erreur de connexion. Réessayez.'
   },
   en:{
@@ -505,7 +510,7 @@ var T = {
     l_year:'Year', l_color:'Color', ph_color:'Red',
     l_plate:'License Plate', ph_plate:'AA-12345',
     l_licnum:'Driver License #', ph_licnum:'12345678',
-    l_oavct:'OAVCT Number', ph_oavct:'OAVCT #', l_oavct_exp:'OAVCT Expiry',
+    l_oavct:'OAVCT Number', ph_oavct:'OAVCT #', l_oavct_exp:'OAVCT Expiry', l_oav_assist:'🟠 I do not have an OAVCT yet (OAVCT assistance)', h_oav_assist:'You can register now and send the other documents. The OAVCT is added later to the SAME account. No rides or deliveries until your OAVCT is in order.',
     u_add:'Add photo', u_tap:'Tap to take / choose a photo', u_added:'Photo added',
     d_selfie:'Selfie', d_id:'ID Card / Passport', d_lic:'Driver’s License', d_oavct:'OAVCT Document',
     d_veh:'Vehicle Photo', d_ins:'Insurance',
@@ -516,7 +521,7 @@ var T = {
     ok_share:'Share MsouWout', ok_paren:'Become a Parenaj Biznis while you wait',
     e_req:'Please fill in all required fields.', e_phone:'Enter a valid phone number.',
     e_year:'Enter a valid year.', e_terms:'Please accept the terms.',
-    e_docs:'Please add photos: Selfie, ID, License, OAVCT and Vehicle.',
+    e_docs:'Please add photos: Selfie, License, OAVCT and Vehicle (ID optional).',
     e_dup:'A driver with this phone number already exists.', e_net:'Connection error. Please try again.'
   },
   es:{
@@ -536,7 +541,7 @@ var T = {
     l_year:'Año', l_color:'Color', ph_color:'Rojo',
     l_plate:'Número de placa', ph_plate:'AA-12345',
     l_licnum:'N.º de licencia', ph_licnum:'12345678',
-    l_oavct:'Número OAVCT', ph_oavct:'OAVCT #', l_oavct_exp:'Vencimiento OAVCT',
+    l_oavct:'Número OAVCT', ph_oavct:'OAVCT #', l_oavct_exp:'Vencimiento OAVCT', l_oav_assist:'🟠 Todavía no tengo OAVCT (asistencia OAVCT)', h_oav_assist:'Puede inscribirse ahora y enviar los demás documentos. El OAVCT se agrega después en la MISMA cuenta. Sin viajes ni entregas hasta que su OAVCT esté en regla.',
     u_add:'Agregar foto', u_tap:'Toca para tomar / elegir una foto', u_added:'Foto agregada',
     d_selfie:'Selfie', d_id:'ID / Pasaporte', d_lic:'Licencia', d_oavct:'Documento OAVCT',
     d_veh:'Foto del vehículo', d_ins:'Seguro',
@@ -547,7 +552,7 @@ var T = {
     ok_share:'Compartir MsouWout', ok_paren:'Únete a Parenaj Biznis mientras esperas',
     e_req:'Completa todos los campos obligatorios.', e_phone:'Ingresa un teléfono válido.',
     e_year:'Ingresa un año válido.', e_terms:'Acepta los términos.',
-    e_docs:'Agrega fotos: Selfie, ID, Licencia, OAVCT y Vehículo.',
+    e_docs:'Agrega fotos: Selfie, Licencia, OAVCT y Vehículo (ID opcional).',
     e_dup:'Ya existe un conductor con este número.', e_net:'Error de conexión. Inténtalo de nuevo.'
   }
 };
@@ -558,10 +563,10 @@ var currentLang = localStorage.getItem('mw_lang') || 'ht';
    a car ("Machin & Dokiman", "Machin ou", Corolla, Toyota) and mixed car and
    moto brands. Step 2 now follows the choice, shows it, and lets them change it. */
 var VT = {
-  ht:{ moto:{ps2:'2. Moto & Dokiman',s2_title:'Moto & Dokiman',g_vehicle:'Moto ou',d_veh:'Foto Moto',ph_make:'Bajaj',ph_model:'Boxer 150',e_docs:'Tanpri ajoute foto: Selfie, Kat, Lisans, OAVCT ak Moto.'}, chip:{motorcycle:'🛵 Moto · Chanje',car:'🚗 Machin · Chanje'} },
-  fr:{ moto:{ps2:'2. Moto & Documents',s2_title:'Moto & Documents',g_vehicle:'Votre moto',d_veh:'Photo de la moto',ph_make:'Bajaj',ph_model:'Boxer 150',e_docs:'Veuillez ajouter les photos : Selfie, Pièce, Permis, OAVCT et Moto.'}, chip:{motorcycle:'🛵 Moto · Changer',car:'🚗 Voiture · Changer'} },
-  en:{ moto:{ps2:'2. Moto & Docs',s2_title:'Moto & Documents',g_vehicle:'Your motorbike',d_veh:'Motorbike Photo',ph_make:'Bajaj',ph_model:'Boxer 150',e_docs:'Please add photos: Selfie, ID, License, OAVCT and Motorbike.'}, chip:{motorcycle:'🛵 Moto · Change',car:'🚗 Car · Change'} },
-  es:{ moto:{ps2:'2. Moto & Documentos',s2_title:'Moto & Documentos',g_vehicle:'Tu moto',d_veh:'Foto de la moto',ph_make:'Bajaj',ph_model:'Boxer 150',e_docs:'Agrega fotos: Selfie, ID, Licencia, OAVCT y Moto.'}, chip:{motorcycle:'🛵 Moto · Cambiar',car:'🚗 Auto · Cambiar'} }
+  ht:{ moto:{ps2:'2. Moto & Dokiman',s2_title:'Moto & Dokiman',g_vehicle:'Moto ou',d_veh:'Foto Moto',ph_make:'Bajaj',ph_model:'Boxer 150',e_docs:'Tanpri ajoute foto: Selfie, Lisans, OAVCT ak Moto (Kat ID opsyonèl).'}, chip:{motorcycle:'🛵 Moto · Chanje',car:'🚗 Machin · Chanje'} },
+  fr:{ moto:{ps2:'2. Moto & Documents',s2_title:'Moto & Documents',g_vehicle:'Votre moto',d_veh:'Photo de la moto',ph_make:'Bajaj',ph_model:'Boxer 150',e_docs:'Veuillez ajouter les photos : Selfie, Permis, OAVCT et Moto (pièce facultative).'}, chip:{motorcycle:'🛵 Moto · Changer',car:'🚗 Voiture · Changer'} },
+  en:{ moto:{ps2:'2. Moto & Docs',s2_title:'Moto & Documents',g_vehicle:'Your motorbike',d_veh:'Motorbike Photo',ph_make:'Bajaj',ph_model:'Boxer 150',e_docs:'Please add photos: Selfie, License, OAVCT and Motorbike (ID optional).'}, chip:{motorcycle:'🛵 Moto · Change',car:'🚗 Car · Change'} },
+  es:{ moto:{ps2:'2. Moto & Documentos',s2_title:'Moto & Documentos',g_vehicle:'Tu moto',d_veh:'Foto de la moto',ph_make:'Bajaj',ph_model:'Boxer 150',e_docs:'Agrega fotos: Selfie, Licencia, OAVCT y Moto (ID opcional).'}, chip:{motorcycle:'🛵 Moto · Cambiar',car:'🚗 Auto · Cambiar'} }
 };
 var MAKES = {
   motorcycle:['Bajaj','TVS','Haojue','Honda','Yamaha','Suzuki','Lifan','Sanya','Apsonic'],
@@ -702,12 +707,13 @@ document.getElementById('submitBtn').addEventListener('click', function(){
   var btn = this;
   var make=pickVal('make','makeOther'), model=val('model'), year=val('year'), color=val('color'),
       plate=val('plate'), licnum=val('licnum'), oavct=val('oavct');
-  if(!make||!model||!year||!color||!plate||!licnum||!oavct||!val('oavctExp')){ return showErr('err2', t.e_req); }
+  var assist = !!(document.getElementById('oavAssist')||{}).checked;   /* 3 Nov: OAVCT assistance - OAVCT later */
+  if(!make||!model||!year||!color||!plate||!licnum||(!assist&&(!oavct||!val('oavctExp')))){ return showErr('err2', t.e_req); }
   /* 1 Nov 2026, Jeffery: an expired OAVCT cannot be approved - say it now, not after Jennifer looks */
-  if(val('oavctExp') < new Date().toISOString().slice(0,10)){ return showErr('err2', ({ht:'OAVCT ou a EKSPIRE. Fòk ou renouvle l anvan ou enskri.',fr:'Votre OAVCT est EXPIRÉ. Renouvelez-le avant de vous inscrire.',en:'Your OAVCT is EXPIRED. Renew it before registering.',es:'Tu OAVCT está VENCIDO. Renuévalo antes de inscribirte.'})[currentLang] || 'OAVCT EKSPIRE'); }
+  if(!assist && val('oavctExp') < new Date().toISOString().slice(0,10)){ return showErr('err2', ({ht:'OAVCT ou a EKSPIRE. Fòk ou renouvle l anvan ou enskri.',fr:'Votre OAVCT est EXPIRÉ. Renouvelez-le avant de vous inscrire.',en:'Your OAVCT is EXPIRED. Renew it before registering.',es:'Tu OAVCT está VENCIDO. Renuévalo antes de inscribirte.'})[currentLang] || 'OAVCT EKSPIRE'); }
   var y = parseInt(year,10);
   if(!(y>=1980 && y<=2027)){ return showErr('err2', t.e_year); }
-  var required = ['selfie','license','oavct','vehicle'];   /* 3 Nov: ID optional (NIF on the licence) */
+  var required = ['selfie','license','oavct','vehicle'].filter(function(k){ return !(assist && k === 'oavct'); });   /* 3 Nov: ID optional (NIF on the licence); OAVCT later with assistance */
   if(required.filter(function(k){ return !docFiles[k]; }).length){ return showErr('err2', vt('e_docs')); }
   if(!document.getElementById('terms').checked){ return showErr('err2', t.e_terms); }
   hideErr('err2');
@@ -727,7 +733,7 @@ document.getElementById('submitBtn').addEventListener('click', function(){
     vehicle_year: year, vehicle_color: color,
     license_plate: plate.toUpperCase(),
     license_number: licnum,
-    oavct_number: oavct, oavct_expiry: val('oavctExp'),
+    oavct_number: oavct, oavct_expiry: val('oavctExp'), oavct_assist: assist,
     referral_partner: val('referral') || '',
     preferred_service: (document.querySelector('input[name="svc"]:checked')||{}).value || 'both',
     /* Sent even when the live check could not run: the server checks it
@@ -782,7 +788,7 @@ document.getElementById('submitBtn').addEventListener('click', function(){
   }
   /* resolves with the REQUIRED photos the server still does not have */
   function uploadDocs(driverId){
-    var need = ['selfie','license','oavct','vehicle'];
+    var need = ['selfie','license','oavct','vehicle'].filter(function(k){ return !(k === 'oavct' && (document.getElementById('oavAssist')||{}).checked); });
     return fetch(API_BASE + '/api/drivers/status-batch', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ ids: [driverId] }) })
       .then(function(r){ return r.json(); }).catch(function(){ return {}; })
       .then(function(j){
@@ -1088,7 +1094,7 @@ var DocCam = (function () {
   function save(){
     if(!ready) return;
     var v = {}; IDS.forEach(function(id){ var el = document.getElementById(id); if(el) v[id] = el.value; });
-    var d = { v: v, noAjan: !!(document.getElementById('noAjan')||{}).checked, terms: !!(document.getElementById('terms')||{}).checked,
+    var d = { v: v, noAjan: !!(document.getElementById('noAjan')||{}).checked, terms: !!(document.getElementById('terms')||{}).checked, assist: !!(document.getElementById('oavAssist')||{}).checked,
               dtype: radio('dtype'), svc: radio('svc'), docs: Object.keys(docFiles), at: Date.now() };
     var any = IDS.some(function(id){ return id !== 'referral' && String(v[id]||'').trim(); }) || d.docs.length;
     try { if(!any){ localStorage.removeItem(KEY); return; } localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){}
@@ -1138,6 +1144,7 @@ var DocCam = (function () {
   if(d.noAjan){ document.getElementById('noAjan').checked = true; }
   else if(d.v.ajanCode && !urlAgent){ document.getElementById('ajanCode').dispatchEvent(new Event('blur')); }
   if(d.terms) document.getElementById('terms').checked = true;
+  if(d.assist) document.getElementById('oavAssist').checked = true;
   var e1 = document.getElementById('err1');
   if(e1){ e1.textContent = ({ht:'✅ Enfòmasyon ou te deja antre yo retounen. Tcheke yo epi kontinye.',fr:'✅ Vos informations déjà saisies sont revenues. Vérifiez-les et continuez.',en:'✅ What you already entered is back. Check it and continue.',es:'✅ Lo que ya habías escrito volvió. Revísalo y continúa.'})[currentLang] || '✅'; e1.style.display = 'block'; e1.style.color = '#15803d'; }
   all().then(function(m){
