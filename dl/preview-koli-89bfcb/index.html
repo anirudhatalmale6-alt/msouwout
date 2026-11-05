@@ -1,10 +1,13 @@
 <!doctype html><html lang="ht"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
 <title>MsouWout — videyo 4 ak 5 (preview)</title>
 <style>body{margin:0;background:#0B1340;color:#fff;font:16px/1.5 system-ui,sans-serif}.w{max-width:440px;margin:0 auto;padding:16px}
-h1{font-size:1.15rem;margin:18px 0 4px}p{opacity:.85;font-size:.88rem;margin:2px 0 10px}video{width:100%;border-radius:16px;background:#000}.n{background:#FFF7E6;color:#7C4A03;border-radius:12px;padding:10px 12px;font-size:.86rem;margin-top:18px}</style></head>
-<body><div class="w"><p style="margin-top:6px">PREVIEW · Kreyòl · pa pibliye ankò / not published yet</p>
-<h1>4 · 📦 Voye yon koli</h1><p>2:48 · pou moun k ap voye koli a / for the sender</p>
-<video controls playsinline preload="metadata" poster="p4.jpg" src="m4-ht.mp4"></video>
-<h1>5 · 🛵 Fòmasyon chofè: livrezon koli</h1><p>2:38 · pou chofè yo / for drivers</p>
-<video controls playsinline preload="metadata" poster="p5.jpg" src="m5-ht.mp4"></video>
-<div class="n">Videyo yo fèt sou yon kopi tès: peman tès, pèsonn pa peye. / Filmed on a test copy: test payments, nobody is charged.</div></div></body></html>
+h1{font-size:1.15rem;margin:18px 0 4px}p{opacity:.85;font-size:.88rem;margin:2px 0 10px}video{width:100%;border-radius:16px;background:#000}
+.tabs{display:flex;gap:6px;margin:6px 0 10px}.tabs button{flex:1;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;border-radius:99px;padding:8px;font:700 .85rem system-ui;cursor:pointer}.tabs button.on{background:#fff;color:#0B1340}
+.n{background:#FFF7E6;color:#7C4A03;border-radius:12px;padding:10px 12px;font-size:.86rem;margin-top:18px}</style></head>
+<body><div class="w"><p style="margin-top:6px">PREVIEW · pa pibliye ankò / not published yet</p><div class="tabs" id="tabs"><button data-l="ht" class="on">Kreyòl</button><button data-l="fr">Français</button><button data-l="en">English</button></div>
+<h1>4 · 📦 Voye yon koli</h1><p id="d4"></p><video id="v4" controls playsinline preload="metadata" poster="p4.jpg"></video>
+<h1>5 · 🛵 Fòmasyon chofè: livrezon koli</h1><p id="d5"></p><video id="v5" controls playsinline preload="metadata" poster="p5.jpg"></video>
+<div class="n">Videyo yo fèt sou yon kopi tès: peman tès, pèsonn pa peye. / Filmed on a test copy: test payments, nobody is charged.</div></div>
+<script>var DUR={"m4-ht": "1:53", "m4-fr": "2:00", "m4-en": "1:46", "m5-ht": "1:57", "m5-fr": "1:50", "m5-en": "1:31"};function show(l){document.querySelectorAll('#tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.l===l)});
+['4','5'].forEach(function(n){var v=document.getElementById('v'+n);v.src='m'+n+'-'+l+'.mp4';document.getElementById('d'+n).textContent=DUR['m'+n+'-'+l];});}
+document.querySelectorAll('#tabs button').forEach(function(b){b.onclick=function(){show(b.dataset.l)}});show('ht');</script></body></html>
