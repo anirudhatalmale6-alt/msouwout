@@ -1912,6 +1912,21 @@ function renderWait(d){
   var card = document.getElementById('waitCard');
   if (!card) return;
   var phase = d.phase;
+  /* 4 Nov 2026: a ride booked for later - say when, and that the driver search starts 30 minutes before */
+  if (d.status === 'scheduled') {
+    var L = (typeof currentLang !== 'undefined' && currentLang) || (typeof lang !== 'undefined' && lang) || 'ht';
+    var SC = { ht: ['📅 Kous la PWOGRAME', 'Pou {w}. N ap chèche chofè a 30 minit anvan lè a.'], fr: ['📅 Course PROGRAMMÉE', 'Pour {w}. Le chauffeur est cherché 30 minutes avant.'],
+               en: ['📅 Ride SCHEDULED', 'For {w}. We look for the driver 30 minutes before.'], es: ['📅 Viaje PROGRAMADO', 'Para {w}. Buscamos al conductor 30 minutos antes.'] }[L] || null;
+    var sc = SC || ['📅 Kous la PWOGRAME', 'Pou {w}. N ap chèche chofè a 30 minit anvan lè a.'];
+    var w = ''; try { w = new Date(d.scheduled_at).toLocaleString(L === 'en' ? 'en-US' : L === 'es' ? 'es' : 'fr-FR', { timeZone: 'America/Port-au-Prince', weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }); } catch (e) {}
+    card.className = 'wait-card';
+    document.getElementById('waitTitle').textContent = sc[0];
+    document.getElementById('waitBody').textContent = sc[1].replace('{w}', w);
+    document.getElementById('waitKeep').style.display = 'none';
+    document.getElementById('waitWa').style.display = 'none';
+    card.style.display = '';
+    return;
+  }
   if (d.expired || d.status === 'expired') {
     card.className = 'wait-card gone';
     document.getElementById('waitTitle').textContent = t('exp_t');

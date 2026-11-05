@@ -3138,32 +3138,34 @@ function selectVehicle(type,el){
    nothing can send roundTrip or a schedule to the server even by accident.
 
    To bring them back: set MW_HIDE_UNBUILT = false, once the server stores a
-   return trip and holds a scheduled ride back from the driver board. */
+   return trip and holds a scheduled ride back from the driver board.
+
+   ✅ 4 Nov 2026 (Jeffery: "bring back the Schedule A Ride feature and make sure it works"): PITA IS BUILT. The server
+   stores the time, keeps the ride off every driver screen as 'scheduled' and releases it 30 min before. So the flag
+   now holds back ALE-RETOU only. */
 var MW_HIDE_UNBUILT = true;
 
 (function hideUnbuilt(){
   if(!MW_HIDE_UNBUILT) return;
   function go(){
-    ['tripLabel','tripToggle','whenLabel','whenToggle','scheduleRow']
+    ['tripLabel','tripToggle']
       .forEach(function(id){
         var el=document.getElementById(id);
         if(el) el.style.display='none';
       });
     /* force the only states the server actually honours */
-    try{ tripType='oneway'; timeMode='now'; }catch(e){}
+    try{ tripType='oneway'; }catch(e){}
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go);
   else go();
 })();
 
 function selectTime(mode,el){
-  /* ⛔ 'later' is not built on the server - never let it be chosen. */
-  if(MW_HIDE_UNBUILT && mode==='later') return;
   timeMode=mode;
   el.parentElement.querySelectorAll('.tt-btn').forEach(function(b){b.classList.remove('sel')});
   el.classList.add('sel');
   var sr=document.getElementById('scheduleRow');
-  if(mode==='later'){sr.classList.add('show')}else{sr.classList.remove('show')}
+  if(mode==='later'){sr.classList.add('show');var d=document.getElementById('rDate');if(d)d.min=haitiDateISO();}else{sr.classList.remove('show')}
 }
 
 function selectTrip(mode,el){
@@ -3586,6 +3588,8 @@ function doSubmitRide(name,phone){
     timeoutMs:25000,
     body:JSON.stringify(rideData)
   }).then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d}})}).then(function(res){
+    /* 4 Nov 2026: a time the server will not schedule (too soon / too far) is HER choice to fix, not a lost order */
+    if(!res.ok&&res.d&&/^schedule_/.test(res.d.code||'')){ showStep(2); setTimeout(function(){alert(res.d.error);},50); return; }
     if(!res.ok||!(res.d.ride_id||res.d.id)){throw new Error(res.d.error||'rejected');}
     var d=res.d;
     rideData.id=d.ride_id||d.id;
@@ -3597,11 +3601,13 @@ function doSubmitRide(name,phone){
        and the passenger opened her own booking as if she were a stranger - no
        PIN, and (until this morning) no pay button. */
     rideData.owner_token=d.owner_token||'';
+    if(d.status==='scheduled'){ rideData.scheduled_at=d.scheduled_at; rideData.status='scheduled'; }
     saveActiveRide();
     if(rideData.pin){
       document.getElementById('ridePin').textContent=rideData.pin;
       document.getElementById('ridePinBox').style.display='';
     }
+    if(d.status==='scheduled') showScheduled(d);
     startRidePolling();
   }).catch(function(){
     /* 🚨 27 Sep. Jennifer's tablet showed "Nou pa ka voye demann nan kounye a"
@@ -3704,6 +3710,7 @@ function saveActiveRide(){
          creation, and never again - so if this is not kept here it is gone,
          and her own link degrades to the family view. */
       owner_token:rideData.owner_token||'',
+      scheduled_at:rideData.scheduled_at||null,
       ts:Date.now()}));
   }catch(e){}
 }
@@ -3717,8 +3724,10 @@ function restoreActiveRide(){
   try{ raw=localStorage.getItem(RIDE_KEY); }catch(e){ return false; }
   if(!raw)return false;
   var v; try{ v=JSON.parse(raw); }catch(e){ clearActiveRide(); return false; }
-  if(!v||!v.id||!v.ts||(Date.now()-v.ts)>6*60*60*1000){ clearActiveRide(); return false; }
-  rideData.id=v.id; rideData.tracking_code=v.tracking_code||''; rideData.pin=v.pin||'';
+  /* a ride booked for later is kept until 6 h after ITS time, not 6 h after booking */
+  var keepTo=(v&&v.scheduled_at?new Date(v.scheduled_at).getTime():(v&&v.ts)||0)+6*60*60*1000;
+  if(!v||!v.id||!v.ts||Date.now()>keepTo){ clearActiveRide(); return false; }
+  rideData.id=v.id; rideData.tracking_code=v.tracking_code||''; rideData.pin=v.pin||''; rideData.scheduled_at=v.scheduled_at||null;
   if(rideData.pin){
     var pe=document.getElementById('ridePin'), pb=document.getElementById('ridePinBox');
     if(pe){pe.textContent=rideData.pin;} if(pb){pb.style.display='';}
@@ -3753,6 +3762,33 @@ window.addEventListener('focus',resumeRideWatch);
 window.addEventListener('pageshow',resumeRideWatch);
 var _lastStatus='';
 var _lastArrived=false;
+/* ═══ SCHEDULED RIDE ON HER SCREEN (4 Nov 2026) ═══ */
+var SCH_T={
+  ht:{t:'📅 Kous ou PWOGRAME!',s:'Pou {when}. N ap chèche chofè a {m} minit anvan lè a. Ou ka fèmen paj la: kous la anrejistre.',code:'Kòd kous ou: {c}',rel:'⏰ Lè a rive: n ap chèche chofè a kounye a.'},
+  fr:{t:'📅 Course PROGRAMMÉE !',s:'Pour {when}. Nous cherchons le chauffeur {m} minutes avant. Vous pouvez fermer la page : la course est enregistrée.',code:'Code de la course : {c}',rel:'⏰ C’est l’heure : nous cherchons le chauffeur maintenant.'},
+  en:{t:'📅 Ride SCHEDULED!',s:'For {when}. We look for your driver {m} minutes before. You can close this page: the ride is saved.',code:'Ride code: {c}',rel:'⏰ It is time: we are finding your driver now.'},
+  es:{t:'📅 ¡Viaje PROGRAMADO!',s:'Para {when}. Buscamos al conductor {m} minutos antes. Puede cerrar la página: el viaje está guardado.',code:'Código del viaje: {c}',rel:'⏰ Es la hora: buscamos al conductor ahora.'}
+};
+function ts(k){ var L=SCH_T[currentLang]||SCH_T.ht; return L[k]||SCH_T.ht[k]; }
+function schWhen(iso){
+  try{ return new Date(iso).toLocaleString(currentLang==='en'?'en-US':currentLang==='es'?'es':'fr-FR',{timeZone:'America/Port-au-Prince',weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}); }catch(e){ return String(iso||''); }
+}
+var _schOrig=null;
+function showScheduled(d){
+  var box=document.getElementById('matchSearching'); if(!box) return;
+  var sp=box.querySelector('.match-spinner'), ti=box.querySelector('.match-title'), sub=document.getElementById('searchSub');
+  if(!_schOrig) _schOrig={t:ti?ti.textContent:'',s:sub?sub.textContent:''};
+  if(sp) sp.style.display='none';
+  if(ti) ti.textContent=ts('t');
+  if(sub) sub.textContent=ts('s').replace('{when}',schWhen(d.scheduled_at||rideData.scheduled_at)).replace('{m}',d.release_before_min||30)+' '+(rideData.tracking_code?ts('code').replace('{c}',rideData.tracking_code):'');
+}
+function showReleased(){
+  var box=document.getElementById('matchSearching'); if(!box) return;
+  var sp=box.querySelector('.match-spinner'), ti=box.querySelector('.match-title'), sub=document.getElementById('searchSub');
+  if(sp) sp.style.display='';
+  if(ti) ti.textContent=ts('rel');
+  if(sub&&_schOrig) sub.textContent=_schOrig.s;
+}
 function checkRideOnce(){
   if(Date.now()>_pollUntil){stopRidePolling();showWaitlist();return;}
   apiFetch(API_URL+'/api/rides/'+rideData.id)
@@ -3777,7 +3813,17 @@ function checkRideOnce(){
 
          ⛔ The marker now moves only AFTER a branch has actually run, so an
          unknown status can never silence the poller. */
-      if(d.status==='accepted'||d.status==='in_progress'){
+      /* scheduled: keep the booking on screen, look once a minute until her time; released: back to the normal search */
+      if(d.status==='scheduled'){
+        rideData.scheduled_at=d.scheduled_at||rideData.scheduled_at; showScheduled(d);
+        var due=new Date(rideData.scheduled_at||0).getTime();
+        _pollUntil=Math.max(_pollUntil,(due||Date.now())+2*60*60*1000);
+        clearInterval(_ridePoll); _ridePoll=setInterval(checkRideOnce,60000);
+      }
+      else if(d.status==='searching'){
+        if(_lastStatus==='scheduled'||rideData.scheduled_at){ showReleased(); _pollUntil=Date.now()+60*60*1000; clearInterval(_ridePoll); _ridePoll=setInterval(checkRideOnce,4000); }
+      }
+      else if(d.status==='accepted'||d.status==='in_progress'){
         /* Polling used to STOP the moment a driver accepted, so her screen froze on
            the driver card: she never saw the trip start and never saw it finish.
            Keep watching to the end of the ride, just less often. */
