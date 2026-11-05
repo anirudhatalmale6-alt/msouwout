@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="ht"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tikè Lakay — Demo Pati 2 / Part 2</title>
-<meta name="description" content="2 minit: yon QR pou chak moun, tablo òganizatè a (vant, lajan, antre), pwograme yon kous MsouWout. · 2 min: one QR per person, organizer dashboard, schedule a MsouWout ride.">
+<meta name="description" content="3 minit, ak vwa: yon QR pou chak moun, tablo òganizatè a (vant, lajan, antre), pwograme yon kous MsouWout. · 3 min, narrated: one QR per person, organizer dashboard, schedule a MsouWout ride.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Tikè Lakay">
 <meta property="og:title" content="Tikè Lakay — Demo Pati 2 / Part 2">
-<meta property="og:description" content="2 minit: yon QR pou chak moun, tablo òganizatè a (vant, lajan, antre), pwograme yon kous MsouWout. · 2 min: one QR per person, organizer dashboard, schedule a MsouWout ride.">
+<meta property="og:description" content="3 minit, ak vwa: yon QR pou chak moun, tablo òganizatè a (vant, lajan, antre), pwograme yon kous MsouWout. · 3 min, narrated: one QR per person, organizer dashboard, schedule a MsouWout ride.">
 <meta property="og:url" content="https://msouwout.com/dl/tike-lakay-demo-2/">
 <meta property="og:image" content="https://msouwout.com/dl/tike-lakay-demo-2/og.jpg">
 <meta property="og:image:secure_url" content="https://msouwout.com/dl/tike-lakay-demo-2/og.jpg">
@@ -15,7 +15,7 @@
 <meta property="og:image:alt" content="Tikè Lakay — Demo">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Tikè Lakay — Demo Pati 2 / Part 2">
-<meta name="twitter:description" content="2 minit: yon QR pou chak moun, tablo òganizatè a (vant, lajan, antre), pwograme yon kous MsouWout. · 2 min: one QR per person, organizer dashboard, schedule a MsouWout ride.">
+<meta name="twitter:description" content="3 minit, ak vwa: yon QR pou chak moun, tablo òganizatè a (vant, lajan, antre), pwograme yon kous MsouWout. · 3 min, narrated: one QR per person, organizer dashboard, schedule a MsouWout ride.">
 <meta name="twitter:image" content="https://msouwout.com/dl/tike-lakay-demo-2/og.jpg">
 <link rel="icon" href="logo.jpg">
 <style>
@@ -29,16 +29,21 @@ ul{margin:14px 0;padding-left:20px;line-height:1.6;color:#DCE3FF;font-size:.95re
 .note{font-size:.8rem;color:#AAB5E6;text-align:center;margin:8px 0}
 .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .btns a{flex:1;min-width:140px;text-align:center;text-decoration:none;font-weight:800;padding:12px;border-radius:12px;color:#fff}
-.wa{background:#25D366}.nx{background:var(--red)}
+.wa{background:#25D366}
+.lang{display:flex;gap:8px;margin:0 0 10px}.lang button{flex:1;padding:11px;border-radius:12px;border:2px solid #3B4A8C;background:transparent;color:#fff;font-weight:800;font-size:.95rem}.lang button.on{background:#fff;color:#00209F;border-color:#fff}.nx{background:var(--red)}
 .bar{height:6px;background:linear-gradient(90deg,var(--blue) 50%,var(--red) 50%)}
 </style></head>
 <body><div class="bar"></div><div class="top"><img src="logo.jpg" alt="Tikè Lakay"></div>
 <div class="wrap">
 <h1>Tikè Lakay — Demo Pati 2 / Part 2</h1>
-<video src="../tike-lakay-demo-2.mp4" poster="og.jpg" controls playsinline preload="metadata"></video>
+<div class="lang"><button id="bht" class="on" onclick="pick('ht')">🇭🇹 Kreyòl</button><button id="ben" onclick="pick('en')">🇺🇸 English</button></div>
+<video id="vid" src="../tike-lakay-demo-2-ht.mp4" poster="og.jpg" controls playsinline preload="metadata"></video>
 <p class="note">Kopi tès · peman tès · pèsonn pa peye · Test copy, test payments, nobody charged</p>
 <ul><li>Yon QR pou chak moun · One QR per person</li><li>Pòt la: Moun 1/3, 2/3 · Door scans each person</li><li>Tablo òganizatè: vant, lajan, antre · Organizer dashboard</li><li>Kòd pòt pa li · His own door code</li><li>MsouWout: pwograme yon kous · Schedule a ride</li></ul>
 <div class="btns"><a class="wa" id="wa" href="#">📲 Pataje sou WhatsApp</a><a class="nx" href="../tike-lakay-demo/">← Pati 1 / Part 1</a></div>
 </div>
-<script>document.getElementById('wa').href='https://wa.me/?text='+encodeURIComponent(document.title+'\n'+location.href.split('#')[0]);</script>
+<script>
+function pick(l){var v=document.getElementById('vid');v.src='../tike-lakay-demo-2-'+l+'.mp4';v.load();document.getElementById('bht').className=l==='ht'?'on':'';document.getElementById('ben').className=l==='en'?'on':'';try{history.replaceState(null,'','#'+l)}catch(e){}}
+if(location.hash==='#en')pick('en');
+document.getElementById('wa').href='https://wa.me/?text='+encodeURIComponent(document.title+'\n'+location.href.split('#')[0]);</script>
 </body></html>
