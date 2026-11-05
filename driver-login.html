@@ -1037,6 +1037,7 @@ const T={
 };
 
 let currentLang='ht';
+var _signInPin='', _typedPin='';   // the PIN the server ACCEPTED on this page load (memory only, never stored)
 function setLang(lang){
   currentLang=lang;
   document.querySelectorAll('.lang-bar a').forEach(a=>a.classList.remove('active'));
@@ -1099,6 +1100,7 @@ async function handleLogin(e){
   e.preventDefault();
   const phone=document.getElementById('phoneInput').value.trim();
   const pin=document.getElementById('pinInput').value.trim();
+  _typedPin=pin;   // becomes _signInPin only once the server accepts it
   if(!phone||!pin)return;
 
   const btn=document.getElementById('loginBtn');
@@ -1243,6 +1245,7 @@ async function handleLogin(e){
     /* He has no PIN yet. He is INSIDE - nothing is taken away from him - and
        he chooses one now, on the phone already in his hand. That is the whole
        migration: the fleet enrolls itself one man at a time. */
+    _signInPin = data.enrollment_required ? '' : _typedPin;   // verified by the server just now
     if(data.enrollment_required) askForPin(mapped.driver.id);
 
   }catch(err){
@@ -1273,7 +1276,7 @@ function askForPin(driverId){
       body:JSON.stringify({pin:pin})
     }).then(function(r){ return r.json().then(function(j){ return {s:r.status,j:j}; }); })
       .then(function(o){
-        if(o.s===200){ alert(t('pin_saved')); return; }
+        if(o.s===200){ _signInPin=pin; alert(t('pin_saved')); return; }
         tries++;
         if(tries>3) return;
         alert(o.j && o.j.error==='pin_too_simple' ? t('pin_too_simple') : t('pin_bad'));
@@ -2321,13 +2324,19 @@ async function driverCancel(){
 
 /* The KPI tiles were built once, from the login response, so "today's earnings"
    still showed the old number after a ride was finished on this very screen. */
+/* 🐞 5 Nov 2026: this asked /login with the phone alone. Since the PIN gate, the
+   server answers 401 "PIN obligatwa" to that, so the tiles stayed at the old
+   figure until the driver signed in again ("0 HTG" right after a paid ride).
+   It now sends the PIN typed on THIS page - held in memory, never stored. */
 async function refreshEarnings(){
   const d=(window._driverData&&window._driverData.driver)||{};
-  if(!d.phone)return;
+  /* ⛔ never send a PIN the server has not accepted: a wrong one counts as a failed
+     attempt and could lock him out. No verified PIN = refresh at next sign-in, as before. */
+  if(!d.phone||!_signInPin)return;
   try{
     const res=await fetch(API+'/api/drivers/login',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({phone:d.phone})
+      body:JSON.stringify({phone:d.phone,pin:_signInPin})
     });
     if(!res.ok)return;
     const j=await res.json();
@@ -2335,6 +2344,7 @@ async function refreshEarnings(){
     // from, which carries fields the raw login row does not.
     window._driverData.rides=j.rides||[];
     renderDashboard(window._driverData);
+    try{ loadPayout(); }catch(e){}
   }catch(e){/* the numbers refresh at the next login */}
 }
 
