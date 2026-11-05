@@ -36,8 +36,13 @@
      v2, 13 Oct: the Pacot/Turgeau shop was listed under its old OSM name
      "Market Basket", so Jennifer could not find the Delimart 0.7 km from her. */
   var DATA_VER = 2;
-  var DATA_URL = 'data/haiti-places.json?v=' + DATA_VER;
-  var REST_URL = 'data/haiti-places-rest.json';
+  /* 27 Oct 2026: MyPlopPlop's "Voye yon koli" page uses this same search.
+     It sets window.MW_PLACES_BASE = 'https://msouwout.com/' before loading
+     this file, so the data still comes from here (GitHub Pages answers any
+     site). On msouwout.com nothing sets it: the paths stay relative, as before. */
+  var BASE = (global.MW_PLACES_BASE || '');
+  var DATA_URL = BASE + 'data/haiti-places.json?v=' + DATA_VER;
+  var REST_URL = BASE + 'data/haiti-places-rest.json';
   var CACHE_KEY = 'mw_places_v' + DATA_VER;
   var CACHE_KEY_REST = 'mw_places_rest_v1';
   try { for (var v = 1; v < DATA_VER; v++) localStorage.removeItem('mw_places_v' + v); } catch (e) {}

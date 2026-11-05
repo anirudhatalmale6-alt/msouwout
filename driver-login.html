@@ -672,6 +672,8 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
 
     <!-- ══════════════ AKÈY ══════════════ -->
     <div id="dpTabHome">
+      <!-- 5 Nov 2026: OAVCT reminder (≤30 days) / hold (expired) - from the server (driver.oavct) -->
+      <div id="oavctBanner" style="display:none;border-radius:14px;padding:12px 14px;margin:0 0 12px;font-size:14px;line-height:1.45"></div>
 
       <!-- 1. ONLINE / OFFLINE — first and most obvious.
            ⛔ The second box that also said "you are not receiving rides" is
@@ -735,6 +737,9 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
         <button class="rp-open-btn" id="btnReportRide" type="button" onclick="MWReport.open({ride:(_activeRide&&_activeRide.id)||'',reporter:'driver'})"><span class="rp-label">⚠️ Siyale yon pwoblèm</span></button>
       </div>
 
+      <!-- 2b. PACKAGES (MyPlopPlop parcels + shop deliveries), 5 Nov 2026 - filled by the KOLI block at the end -->
+      <div class="active-ride-card" id="kolCard" style="display:none;border-color:#7C3AED"></div>
+
       <!-- 3. INCOMING REQUESTS -->
       <div class="active-ride-card" id="incomingCard" style="display:none;border-color:#F59E0B">
         <h3>&#128276; <span data-i18n="inc_title">Demann Kous</span> <span id="incCount" style="font-weight:900"></span></h3>
@@ -784,6 +789,8 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
         <div class="payout-note" id="payoutNote"></div>
         <div class="payout-runs" id="payoutRuns"></div>
       </div>
+      <!-- 5 Nov 2026: package + shop-delivery earnings (held by MyPlopPlop, a separate balance) -->
+      <div class="payout-card" id="pkgEarnCard" style="display:none"></div>
     </div>
 
     <!-- ══════════════ KONT ══════════════ -->
@@ -1228,7 +1235,9 @@ async function handleLogin(e){
         zone:d.zone||'',
         /* 18 Oct 2026: his passenger score - this mapping keeps only what it
            names, so a new field has to be named here or it never arrives. */
-        rating:d.rating||null
+        rating:d.rating||null,
+        /* 5 Nov 2026: OAVCT reminder / hold banner (renderOavct) */
+        oavct:d.oavct||null
       },
       rides:data.rides||[]
     };
@@ -1286,7 +1295,35 @@ function askForPin(driverId){
   })();
 }
 
+/* 5 Nov 2026, Jeffery: "Any approved driver whose OAVCT expires must automatically become unavailable for
+   new rides and deliveries until a valid document is uploaded and verified. Notify the driver..." The server
+   decides (services/oavctWatch.js); this only tells him, and how to fix it. */
+var OAV_T = {
+  ht:{soon:'⚠️ OAVCT ou ap ekspire {d} (nan {n} jou).',today:'⚠️ OAVCT ou ekspire JODI A ({d}).',held:'⛔ OAVCT ou ekspire depi {d}. Ou p ap resevwa nouvo kous ni livrezon. Kous ou deja genyen an kontinye nòmal.',
+      how:'Kijan pou korije l: voye yon foto nouvo OAVCT ou bay <b>Ajan ou</b> oswa bay <b>Jennifer</b> sou WhatsApp. Lè yo verifye l epi yo mete nouvo dat la, ou ka travay ankò otomatikman.'},
+  fr:{soon:'⚠️ Votre OAVCT expire le {d} (dans {n} jours).',today:'⚠️ Votre OAVCT expire AUJOURD’HUI ({d}).',held:'⛔ Votre OAVCT a expiré le {d}. Vous ne recevez plus de nouvelles courses ni livraisons. La course en cours continue normalement.',
+      how:'Pour corriger : envoyez une photo de votre nouvel OAVCT à <b>votre Ajan</b> ou à <b>Jennifer</b> sur WhatsApp. Dès qu’elle est vérifiée et la nouvelle date enregistrée, vous pouvez retravailler automatiquement.'},
+  en:{soon:'⚠️ Your OAVCT expires on {d} (in {n} days).',today:'⚠️ Your OAVCT expires TODAY ({d}).',held:'⛔ Your OAVCT expired on {d}. You will not receive new rides or deliveries. A job you already have continues normally.',
+      how:'How to fix it: send a photo of your new OAVCT to <b>your Ajan</b> or to <b>Jennifer</b> on WhatsApp. Once it is verified and the new date is entered, you can work again automatically.'},
+  es:{soon:'⚠️ Su OAVCT vence el {d} (en {n} días).',today:'⚠️ Su OAVCT vence HOY ({d}).',held:'⛔ Su OAVCT venció el {d}. No recibirá nuevos viajes ni entregas. El trabajo que ya tiene continúa normalmente.',
+      how:'Cómo corregirlo: envíe una foto de su nuevo OAVCT a <b>su Ajan</b> o a <b>Jennifer</b> por WhatsApp. Cuando se verifique y se registre la nueva fecha, podrá trabajar de nuevo automáticamente.'}
+};
+function renderOavct(){
+  var el = document.getElementById('oavctBanner'); if(!el) return;
+  var o = window._driverData && window._driverData.driver && window._driverData.driver.oavct;
+  if(!o || !o.expiry || (o.state !== 'soon' && o.state !== 'expired')){ el.style.display='none'; return; }
+  var L = OAV_T[currentLang] || OAV_T.ht, p = o.expiry.split('-'), d = p[2]+'/'+p[1]+'/'+p[0];
+  var head = o.state === 'expired' ? L.held : (o.days === 0 ? L.today : L.soon);
+  el.innerHTML = '<div style="font-weight:800;margin-bottom:6px">' + head.replace('{d}', d).replace('{n}', o.days) + '</div><div>' + L.how + '</div>';
+  el.style.background = o.state === 'expired' ? '#FEE2E2' : '#FFF7E6';
+  el.style.border = '1px solid ' + (o.state === 'expired' ? '#FCA5A5' : '#F5C26B');
+  el.style.color = o.state === 'expired' ? '#7F1D1D' : '#7C4A03';
+  el.style.display = 'block';
+}
+(function(){ var o = window.setLang; window.setLang = function(l){ o(l); try{ renderOavct(); }catch(e){} }; })();
+
 function renderDashboard(data){
+  try{ setTimeout(renderOavct, 0); }catch(e){}
   const d=data.driver;
   const rides=data.rides||[];
 
@@ -1498,10 +1535,56 @@ function item(label,value){
    The whole card is skipped in silence if the endpoint is not there yet. A
    driver whose backend has not been deployed must still see his rides. */
 var _payoutBusy = false;
+/* 5 Nov 2026, Jeffery: "the driver's package earnings should be visible in the MsouWout earnings
+   dashboard, even if ride and delivery balances are accounted for separately." The MsouWout server asks
+   MyPlopPlop's server; this only shows it. */
+var PKG_T = {
+  ht:{t:'📦 Livrezon & koli',sub:'Kont apa: se MyPlopPlop ki kenbe lajan sa a.',held:'Bloke 24 è',avail:'Ou ka retire',today:'Jodi a',week:'7 jou',total:'Total',n:'livrezon',parcel:'Koli',deliv:'Livrezon boutik',heldTag:'bloke',none:'Ou poko fè okenn livrezon.',off:'Nou pa ka montre lajan livrezon yo kounye a. Eseye ankò pita.',wd:'Pou retire lajan livrezon:'},
+  fr:{t:'📦 Livraisons & colis',sub:'Compte séparé : cet argent est tenu par MyPlopPlop.',held:'Bloqué 24 h',avail:'Disponible',today:"Aujourd'hui",week:'7 jours',total:'Total',n:'livraisons',parcel:'Colis',deliv:'Livraison boutique',heldTag:'bloqué',none:"Aucune livraison pour l'instant.",off:'Impossible d\'afficher les gains de livraison maintenant. Réessayez plus tard.',wd:'Pour retirer vos gains de livraison :'},
+  en:{t:'📦 Deliveries & packages',sub:'Separate account: this money is held by MyPlopPlop.',held:'Held 24 h',avail:'Can withdraw',today:'Today',week:'7 days',total:'Total',n:'deliveries',parcel:'Package',deliv:'Shop delivery',heldTag:'held',none:'No deliveries yet.',off:'Delivery earnings cannot be shown right now. Try again later.',wd:'To withdraw delivery earnings:'},
+  es:{t:'📦 Entregas y paquetes',sub:'Cuenta aparte: este dinero lo guarda MyPlopPlop.',held:'Retenido 24 h',avail:'Puede retirar',today:'Hoy',week:'7 días',total:'Total',n:'entregas',parcel:'Paquete',deliv:'Entrega de tienda',heldTag:'retenido',none:'Aún no tiene entregas.',off:'No se pueden mostrar las ganancias de entregas ahora. Intente más tarde.',wd:'Para retirar las ganancias de entregas:'}
+};
+function loadPkgEarn(){
+  var id = (window._driverData && window._driverData.driver && window._driverData.driver.id) || null;
+  var card = document.getElementById('pkgEarnCard');
+  if(!id || !card) return;
+  fetch(API + '/api/payouts/driver/' + id + '/packages')
+    .then(function(r){ return r.ok ? r.json() : { available:false }; })
+    .then(function(d){ window._pkgEarn = d; renderPkgEarn(); })
+    .catch(function(){ window._pkgEarn = { available:false }; renderPkgEarn(); });
+}
+function renderPkgEarn(){
+  var card = document.getElementById('pkgEarnCard'), d = window._pkgEarn;
+  if(!card || !d) return;
+  /* not linked to MyPlopPlop and never delivered: nothing to show */
+  if(d.available && !d.linked){ card.style.display='none'; return; }
+  var L = PKG_T[currentLang] || PKG_T.ht, n = function(v){ return Math.round(v||0).toLocaleString(); };
+  var h = '<h3>' + L.t + '</h3><div class="payout-note" style="margin:-6px 0 10px">' + L.sub + '</div>';
+  if(!d.available){ card.innerHTML = h + '<div class="payout-note">' + L.off + '</div>'; card.style.display='block'; return; }
+  h += '<div class="payout-sums">' +
+    '<div class="s"><div class="sv">'+n(d.wallet.held)+' <small>HTG</small></div><div class="sl">'+L.held+'</div></div>' +
+    '<div class="s"><div class="sv">'+n(d.wallet.available)+' <small>HTG</small></div><div class="sl">'+L.avail+'</div></div>' +
+    '<div class="s"><div class="sv">'+n(d.total.amount)+' <small>HTG</small></div><div class="sl">'+L.total+' · '+d.total.count+' '+L.n+'</div></div></div>' +
+    '<div class="payout-sums" style="grid-template-columns:repeat(2,1fr)">' +
+    '<div class="s"><div class="sv">'+n(d.today.amount)+' <small>HTG</small></div><div class="sl">'+L.today+' · '+d.today.count+'</div></div>' +
+    '<div class="s"><div class="sv">'+n(d.week.amount)+' <small>HTG</small></div><div class="sl">'+L.week+' · '+d.week.count+'</div></div></div>';
+  if(!(d.recent||[]).length) h += '<div class="payout-note">' + L.none + '</div>';
+  else h += '<div class="payout-runs">' + d.recent.map(function(x){
+    var dt = new Date(x.at);
+    return '<div style="display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-top:1px solid #F1F5F9;font-size:13px">' +
+      '<span>' + (x.kind==='parcel' ? L.parcel : L.deliv) + ' · ' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + '</span>' +
+      '<b>' + n(x.amount) + ' HTG' + (x.held ? ' <small style="color:#B45309">(' + L.heldTag + ')</small>' : '') + '</b></div>';
+  }).join('') + '</div>';
+  h += '<div class="payout-note" style="margin-top:10px">' + L.wd + ' <a href="https://myplopplop.com/rider/wallet.html" target="_blank" rel="noopener">myplopplop.com/rider/wallet.html</a></div>';
+  card.innerHTML = h; card.style.display = 'block';
+}
+(function(){ var o = window.setLang; window.setLang = function(l){ o(l); try{ renderPkgEarn(); }catch(e){} }; })();
+
 function loadPayout(){
   var id = (window._driverData && window._driverData.driver && window._driverData.driver.id) || null;
   var card = document.getElementById('payoutCard');
   if(!id || !card) return;
+  try{ loadPkgEarn(); }catch(e){}
   fetch(API + '/api/payouts/driver/' + id)
     .then(function(r){ if(!r.ok) throw new Error('unavailable'); return r.json(); })
     .then(function(d){ card.style.display='block'; renderPayout(d); })
@@ -2343,6 +2426,7 @@ async function refreshEarnings(){
     // Only the ride list moved. Keep the driver object the dashboard was built
     // from, which carries fields the raw login row does not.
     window._driverData.rides=j.rides||[];
+    if(j.driver&&window._driverData.driver) window._driverData.driver.oavct=j.driver.oavct||null;
     renderDashboard(window._driverData);
     try{ loadPayout(); }catch(e){}
   }catch(e){/* the numbers refresh at the next login */}
@@ -2682,6 +2766,157 @@ function dpOn(){
   document.addEventListener('click', function () { setTimeout(labels, 60); }, true);
   window.MWReport = { open: open, labels: labels };
   labels();
+})();
+</script>
+
+<!-- ═══ ONE DRIVER SCREEN: PACKAGES (5 Nov 2026) ════════════════════════════
+     Jeffery: "Drivers should manage both passenger rides and package deliveries from ONE unified
+     MsouWout driver interface. I don't want drivers switching between MsouWout and MyPlopPlop."
+     A driver approved on MsouWout for LIVREZON or TOUDE is signed in to MyPlopPlop's delivery service
+     with the PIN the MsouWout server just accepted (kept in memory only, never stored), goes online
+     there when he goes online here, sends it the same GPS position, and gets parcels and shop
+     deliveries in THIS card. One job at a time is enforced by both servers (driver_busy). -->
+<script>
+(function(){
+  var MPP='https://myplopplop-api.onrender.com';
+  var tok=null, poll=null, timer=null, lastKey='', holdUntil=0, on=false;
+  var S={
+    ht:{badge:'📦 KOLI',shop:'🛍️ LIVREZON',nw:'NOUVO',earn:'Sa w ap touche',acc:'Aksepte nan {s}s',exp:'Tan an pase…',pick:'Pran nan',drop:'Livre bay',what:'Koli',dist:'Distans',
+        accept:'Aksepte livrezon an',pass:'Kite l pou yon lòt chofè',goPick:'ALE PRAN KOLI A',toRecip:'AN WOUT POU MOUN K AP RESEVWA A',sender:'Moun k ap voye l',recip:'Moun k ap resevwa l',
+        arrived:'Mwen rive kote pou m pran koli a',have:'Mwen gen koli a nan men m',check:'Gade koli a: se li menm ki sou foto a?',askPin:'Devan moun k ap resevwa a, mande l KÒD 4 chif PA L:',
+        complete:'Fini livrezon an',cannot:'Mwen pa ka fè livrezon sa a',why:'Poukisa ou pa ka fè l?',youEarn:'Ou touche',maps:'🗺️ Louvri wout la',call:'Rele',
+        toShop:'ALE NAN BOUTIK LA',toCust:'AN WOUT POU KAY KLIYAN AN',shopArr:'Mwen rive nan boutik la',shopTypes:'Boutik la ap tape kòd sa a pou l ba w kòmand lan.',pcode:'Kòd pou w pran kòmand lan',
+        done:'Livrezon an fini',earned:'Ou touche {m} (kont livrezon MyPlopPlop). Li rete an atant 24 èdtan, apre sa ou ka retire l.',noAcc:'Nou pa t kapab aksepte l',noUpd:'Nou pa t kapab mete l ajou'},
+    fr:{badge:'📦 COLIS',shop:'🛍️ LIVRAISON',nw:'NOUVEAU',earn:'Ce que vous gagnez',acc:'Acceptez dans {s}s',exp:'Offre expirée…',pick:'Retrait',drop:'Livrer à',what:'Colis',dist:'Distance',
+        accept:'Accepter la livraison',pass:'Laisser à un autre chauffeur',goPick:'ALLEZ CHERCHER LE COLIS',toRecip:'EN ROUTE VERS LE DESTINATAIRE',sender:'Expéditeur',recip:'Destinataire',
+        arrived:'Je suis au point de retrait',have:'J’ai le colis en main',check:'Vérifiez le colis : est-ce celui de la photo ?',askPin:'Devant le destinataire, demandez-lui SON code à 4 chiffres :',
+        complete:'Terminer la livraison',cannot:'Je ne peux pas faire cette livraison',why:'Pourquoi ?',youEarn:'Vous gagnez',maps:'🗺️ Ouvrir l’itinéraire',call:'Appeler',
+        toShop:'ALLEZ À LA BOUTIQUE',toCust:'EN ROUTE VERS LE CLIENT',shopArr:'Je suis à la boutique',shopTypes:'La boutique tape ce code pour vous remettre la commande.',pcode:'Votre code de retrait',
+        done:'Livraison terminée',earned:'Vous avez gagné {m} (compte livraisons MyPlopPlop). Retenu 24 heures, puis vous pouvez le retirer.',noAcc:'Impossible d’accepter',noUpd:'Mise à jour impossible'},
+    en:{badge:'📦 PACKAGE',shop:'🛍️ DELIVERY',nw:'NEW',earn:'You earn',acc:'Accept within {s}s',exp:'Offer expired…',pick:'Pick up',drop:'Deliver to',what:'Package',dist:'Distance',
+        accept:'Accept delivery',pass:'Pass to another driver',goPick:'GO PICK UP THE PACKAGE',toRecip:'ON THE WAY TO THE RECIPIENT',sender:'Sender',recip:'Recipient',
+        arrived:'I am at the pickup',have:'I have the package',check:'Check the package: is it the one in the photo?',askPin:'With the recipient, ask for THEIR 4-digit code:',
+        complete:'Complete delivery',cannot:'I cannot do this delivery',why:'Why not?',youEarn:'You earn',maps:'🗺️ Open the route',call:'Call',
+        toShop:'GO TO THE SHOP',toCust:'ON THE WAY TO THE CUSTOMER',shopArr:'I am at the shop',shopTypes:'The shop types this code to hand you the order.',pcode:'Your pickup code',
+        done:'Delivery complete',earned:'You earned {m} (MyPlopPlop delivery account). Held 24 hours, then you can withdraw it.',noAcc:'Could not accept',noUpd:'Could not update'},
+    es:{badge:'📦 PAQUETE',shop:'🛍️ ENTREGA',nw:'NUEVO',earn:'Lo que ganas',acc:'Acepta en {s}s',exp:'Oferta vencida…',pick:'Recoger en',drop:'Entregar a',what:'Paquete',dist:'Distancia',
+        accept:'Aceptar la entrega',pass:'Dejar a otro chofer',goPick:'VE A RECOGER EL PAQUETE',toRecip:'EN CAMINO AL DESTINATARIO',sender:'Remitente',recip:'Destinatario',
+        arrived:'Estoy en el punto de recogida',have:'Tengo el paquete',check:'Revisa el paquete: ¿es el de la foto?',askPin:'Frente al destinatario, pídele SU código de 4 dígitos:',
+        complete:'Terminar la entrega',cannot:'No puedo hacer esta entrega',why:'¿Por qué?',youEarn:'Ganas',maps:'🗺️ Abrir la ruta',call:'Llamar',
+        toShop:'VE A LA TIENDA',toCust:'EN CAMINO AL CLIENTE',shopArr:'Estoy en la tienda',shopTypes:'La tienda escribe este código para darte el pedido.',pcode:'Tu código de recogida',
+        done:'Entrega terminada',earned:'Ganaste {m} (cuenta de entregas MyPlopPlop). Retenido 24 horas, luego puedes retirarlo.',noAcc:'No se pudo aceptar',noUpd:'No se pudo actualizar'}
+  };
+  function k(key,v){ var L=(typeof currentLang==='string'&&S[currentLang])?currentLang:'ht'; var s=(S[L]||S.ht)[key]||key;
+    if(v) Object.keys(v).forEach(function(x){ s=s.replace('{'+x+'}',v[x]); }); return s; }
+  function E(v){ return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function money(n){ return (Number(n)||0).toLocaleString()+' HTG'; }
+  function card(){ return document.getElementById('kolCard'); }
+  function drv(){ return (window._driverData&&window._driverData.driver)||{}; }
+  function can(){ var d=drv(); return d.status==='approved' && ['delivery','both'].indexOf(d.preferred_service||'both')!==-1 && d.id && d.id!=='demo'; }
+
+  function api(method,path,body,retry){
+    if(!tok) return Promise.resolve({ok:false,s:0,d:{}});
+    return fetch(MPP+path,{method:method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok},body:body?JSON.stringify(body):undefined})
+      .then(function(r){ return r.json().catch(function(){return {};}).then(function(d){ return {ok:r.ok,s:r.status,d:d}; }); })
+      .then(function(o){ if(o.s===401&&!retry) return signIn().then(function(){ return api(method,path,body,true); }); return o; })
+      .catch(function(){ return {ok:false,s:0,d:{}}; });
+  }
+  /* the PIN MsouWout ACCEPTED on this page (refreshEarnings fix): never a guessed one */
+  function signIn(){
+    var d=drv(); if(!can()||!window._signInPin) return Promise.resolve(false);
+    return fetch(MPP+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:d.phone,pin:window._signInPin})})
+      .then(function(r){ return r.json(); }).then(function(j){ tok=(j&&j.token)||null; return !!tok; }).catch(function(){ return false; });
+  }
+  function setOn(v){
+    on=!!v; clearInterval(poll); poll=null;
+    if(!tok) return;
+    api('PUT','/api/drivers/online',{isOnline:on});
+    if(on){ refresh(); poll=setInterval(refresh,6000); }
+    else { var c=card(); if(c){ c.style.display='none'; c.innerHTML=''; } lastKey=''; }
+  }
+  function photo(r){ var p=r.parcel&&r.parcel.photo; return (p&&/^data:image\/(jpeg|png|webp);base64,/.test(p))?'<img src="'+p+'" alt="" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin:8px 0">':''; }
+  function row(a,b){ return '<div class="ride-info-row"><span class="ride-info-label">'+E(a)+'</span><span class="ride-info-value" style="text-align:right;max-width:62%">'+b+'</span></div>'; }
+  function tel(ph){ var n=String(ph||'').replace(/[^\d+]/g,''); return n?' · <a href="tel:'+E(n)+'">'+k('call')+'</a>':''; }
+  function btn(txt,fn,style){ return '<button class="btn-start-ride" style="margin-top:10px;'+(style||'')+'" onclick="'+fn+'">'+E(txt)+'</button>'; }
+  function render(data){
+    var c=card(); if(!c) return;
+    var o=data.offer, a=data.active;
+    if(!o&&!a){ c.style.display='none'; c.innerHTML=''; return; }
+    c.style.display='block';
+    if(o){
+      var kp=o.source==='parcel', secs=Math.max(0,Math.round((new Date(o.offerExpiresAt)-new Date())/1000));
+      c.innerHTML='<h3>'+(kp?k('badge'):k('shop'))+' · '+k('nw')+'</h3>'+(kp?photo(o):'')+
+        '<div style="font-size:28px;font-weight:900;color:#12A150">'+money(o.fare&&o.fare.driverEarning)+'</div><div class="sub">'+k('earn')+'</div>'+
+        '<div id="kolCd" style="font-weight:800;color:#B45309;margin:6px 0">'+k('acc',{s:secs})+'</div>'+
+        row(k('pick'),E(o.pickup&&o.pickup.address))+row(k('drop'),E(o.dropoff&&o.dropoff.address))+
+        (kp&&o.parcel&&o.parcel.description?row(k('what'),E(o.parcel.description)):'')+row(k('dist'),(o.distanceKm||0)+' km')+
+        btn(k('accept'),"KOLI.accept('"+o._id+"')")+btn(k('pass'),"KOLI.pass('"+o._id+"')",'background:#fff;color:#0F172A;border:2px solid #CBD5E1');
+      clearInterval(timer); var exp=new Date(o.offerExpiresAt);
+      timer=setInterval(function(){ var el=document.getElementById('kolCd'); if(!el){clearInterval(timer);return;}
+        var s=Math.max(0,Math.round((exp-new Date())/1000)); el.textContent=s>0?k('acc',{s:s}):k('exp'); if(s<=0) clearInterval(timer); },1000);
+      return;
+    }
+    var st=a.status, kp2=a.source==='parcel', step='', dest=(st==='in_progress')?a.dropoff:a.pickup, dc=dest&&dest.coordinates&&dest.coordinates.coordinates;
+    if(kp2){
+      if(st==='accepted') step=btn(k('arrived'),"KOLI.go('"+a._id+"','picking_up')");
+      else if(st==='picking_up') step='<p class="sub" style="margin:10px 0 0">'+k('check')+'</p>'+btn(k('have'),"KOLI.go('"+a._id+"','in_progress')");
+      else if(st==='in_progress') step='<p class="sub" style="margin:10px 0 6px">'+k('askPin')+'</p><input class="pin-input-ride" id="kolPin" maxlength="4" inputmode="numeric" placeholder="- - - -" autocomplete="off">'+btn(k('complete'),"KOLI.go('"+a._id+"','delivered')");
+    }else{
+      if(st==='accepted') step=btn(k('shopArr'),"KOLI.go('"+a._id+"','picking_up')");
+      else if(st==='picking_up') step='<p class="sub" style="margin:6px 0 0">'+k('shopTypes')+'</p>';
+      else if(st==='in_progress') step='<p class="sub" style="margin:10px 0 6px">'+k('askPin')+'</p><input class="pin-input-ride" id="kolPin" maxlength="4" inputmode="numeric" placeholder="- - - -" autocomplete="off">'+btn(k('complete'),"KOLI.go('"+a._id+"','delivered')");
+    }
+    var code=(!kp2&&a.pickupCode&&(st==='accepted'||st==='picking_up'))?'<div style="margin:10px 0;padding:12px;border:2px dashed #00209F;border-radius:14px;text-align:center"><div class="sub">'+k('pcode')+'</div><div style="font-size:36px;font-weight:900;letter-spacing:.3em">'+E(a.pickupCode)+'</div></div>':'';
+    var snd=a.customer||{}, rc=a.recipient||{};
+    c.innerHTML='<h3>'+(kp2?k('badge'):k('shop'))+' · '+(st==='in_progress'?(kp2?k('toRecip'):k('toCust')):(kp2?k('goPick'):k('toShop')))+'</h3>'+(kp2?photo(a):'')+
+      row(k('pick'),E(a.pickup&&a.pickup.address))+(kp2?row(k('sender'),E(snd.name||'')+tel(snd.phone)):'')+
+      row(k('drop'),E(a.dropoff&&a.dropoff.address))+(kp2?row(k('recip'),E(rc.name||'')+tel(rc.phone)):'')+
+      (kp2&&a.parcel&&a.parcel.description?row(k('what'),E(a.parcel.description)):'')+row(k('youEarn'),money(a.fare&&a.fare.driverEarning))+
+      code+step+((st==='accepted'||st==='picking_up')?btn(k('cannot'),"KOLI.drop('"+a._id+"')",'background:#fff;color:#D21034;border:2px solid #FCA5A5'):'')+
+      '<div id="kolErr" style="color:#D21034;font-weight:700;margin-top:8px"></div>'+
+      (dc?'<a class="dp-nav-link" style="display:block;margin-top:10px;text-align:center" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination='+Number(dc[1])+','+Number(dc[0])+'">'+k('maps')+'</a>':'');
+  }
+  function refresh(){
+    if(!tok||!on) return;
+    api('GET','/api/rides/my-offer').then(function(o){
+      if(!(o.ok&&o.d&&o.d.data)) return;
+      if(Date.now()<holdUntil&&!o.d.data.offer) return;
+      var a=o.d.data.active, of=o.d.data.offer, key=of?'o'+of._id:a?'a'+a._id+a.status:'idle';
+      if(key===lastKey&&!of) return;      /* never wipe the code he is typing */
+      lastKey=key; render(o.d.data);
+    });
+  }
+  window.KOLI={
+    accept:function(id){ api('PUT','/api/rides/'+id+'/accept').then(function(o){ if(!o.ok) alert((o.d&&o.d.message)||k('noAcc')); lastKey=''; refresh(); }); },
+    pass:function(id){ api('PUT','/api/rides/'+id+'/decline').then(function(){ lastKey=''; refresh(); }); },
+    drop:function(id){ var why=prompt(k('why')); if(why===null) return;
+      api('PUT','/api/rides/'+id+'/status',{status:'cancelled',reason:String(why).slice(0,200)}).then(function(){ lastKey=''; refresh(); }); },
+    go:function(id,next){ var b={status:next}; if(next==='delivered'){ var p=document.getElementById('kolPin'); b.pin=p?p.value.trim():''; }
+      api('PUT','/api/rides/'+id+'/status',b).then(function(o){
+        if(!o.ok||!(o.d&&o.d.success)){ var e=document.getElementById('kolErr'); if(e) e.textContent=(o.d&&o.d.message)||k('noUpd'); return; }
+        if(next==='delivered'){ holdUntil=Date.now()+8000; var c=card();
+          c.innerHTML='<div style="text-align:center;padding:10px 0"><div style="font-size:44px">✅</div><h3 style="color:#12A150">'+k('done')+'</h3><p class="sub">'+k('earned',{m:money(o.d.earned)})+'</p></div>';
+          try{ loadPkgEarn(); }catch(e){}
+          setTimeout(function(){ lastKey=''; refresh(); },8100); return; }
+        lastKey=''; refresh(); }); },
+    refresh:function(){ lastKey=''; refresh(); },
+    isOn:function(){ return !!tok; }
+  };
+  /* hook the existing screen: sign-in, online switch, GPS, language, sign-out */
+  var _initP=window.initPresence;
+  window.initPresence=function(){ _initP.apply(this,arguments);
+    /* the PIN is confirmed a moment AFTER this (or, the first time, once he has chosen it): try a few times */
+    var tries=0; (function again(){ if(tok||!can()) return;
+      signIn().then(function(ok){ if(ok) setOn(!!window._dpOnline); else if(++tries<12) setTimeout(again, tries<4?800:5000); }); })(); };
+  var _setOnline=window.setOnline;
+  window.setOnline=function(v){ _setOnline.apply(this,arguments); if(tok) setOn(!!v); };
+  var _sendLoc=window.sendLocation;
+  window.sendLocation=function(pos){ _sendLoc.apply(this,arguments);
+    if(tok&&pos&&pos.coords&&pos.coords.latitude) api('PUT','/api/drivers/location',{latitude:pos.coords.latitude,longitude:pos.coords.longitude}); };
+  var _setLang=window.setLang;
+  window.setLang=function(l){ _setLang.apply(this,arguments); lastKey=''; if(tok&&on) refresh(); };
+  var _logout=window.logout;
+  window.logout=function(){ if(tok) api('PUT','/api/drivers/online',{isOnline:false}); tok=null; clearInterval(poll); _logout.apply(this,arguments); };
 })();
 </script>
 

@@ -799,7 +799,7 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
     </button>
     <button class="home-tile ht-liv" onclick="showStep('Liv')">
       <span class="ht-ic">📦</span>
-      <span class="ht-tx"><b data-i18n="home_liv">LIVREZON</b><span data-i18n="home_liv_sub">Resevwa kòmand ou rapid ak sekirite.</span></span>
+      <span class="ht-tx"><b data-i18n="home_liv">LIVREZON</b><span data-i18n="home_liv_sub">Voye yon koli, oswa resevwa kòmand ou.</span></span>
       <span class="ht-ar">›</span>
     </button>
     <!-- 4 Nov 2026 (Jeffery): "It should be Sell because we are onboarding stores" -->
@@ -831,6 +831,10 @@ body.capacitor-native input,body.capacitor-native textarea{-webkit-user-select:t
   <div class="home-wrap">
     <button class="home-back" onclick="showStep('Home')">‹ <span data-i18n="home_back">Akèy</span></button>
     <h1 class="home-q" style="font-size:1.3rem" data-i18n="liv_q">Kisa ou vle fè?</h1>
+    <a class="liv-opt" href="https://myplopplop.com/voye-koli.html?from=msouwout">
+      <span class="lo-ic">📤</span>
+      <span><b data-i18n="liv_send">Voye yon koli bay yon moun</b><span data-i18n="liv_send_sub">Foto koli a, kote, nimewo moun nan. Peye, yon chofè pote l.</span></span>
+    </a>
     <a class="liv-opt" href="https://myplopplop.com/?from=msouwout">
       <span class="lo-ic">🛍️</span>
       <span><b data-i18n="liv_shop">Fè yon boutik livre m</b><span data-i18n="liv_shop_sub">Chwazi yon pwodwi, yon chofè pote l lakay ou.</span></span>
@@ -1699,7 +1703,9 @@ var T={
     home_kous:'KOUS',
     home_kous_sub:'Moto oswa machin. Chofè a vin chèche w.',
     home_liv:'LIVREZON',
-    home_liv_sub:'Resevwa kòmand ou rapid ak sekirite.',
+    home_liv_sub:'Voye yon koli, oswa resevwa kòmand ou.',
+    liv_send:'Voye yon koli bay yon moun',
+    liv_send_sub:'Foto koli a, kote, nimewo moun nan. Peye, yon chofè pote l.',
     home_achte:'VANN',
     home_achte_sub:'Mete biznis ou sou MyPlopPlop epi vann pwodwi ou an liy.',
     home_im_driver:'Mwen se chofè',
@@ -1843,7 +1849,9 @@ var T={
     home_kous:'COURSE',
     home_kous_sub:'Moto ou voiture. Le chauffeur vient vous chercher.',
     home_liv:'LIVRAISON',
-    home_liv_sub:'Recevez votre commande vite et en sécurité.',
+    home_liv_sub:'Envoyez un colis ou recevez votre commande.',
+    liv_send:'Envoyer un colis à quelqu\'un',
+    liv_send_sub:'Photo du colis, lieux, numéro du destinataire. Payez, un chauffeur le livre.',
     home_achte:'VENDRE',
     home_achte_sub:'Inscrivez votre commerce sur MyPlopPlop et vendez en ligne.',
     home_im_driver:'Je suis chauffeur',
@@ -1987,7 +1995,9 @@ var T={
     home_kous:'RIDE',
     home_kous_sub:'Moto or car. The driver comes to you.',
     home_liv:'DELIVERY',
-    home_liv_sub:'Get your order fast and safely.',
+    home_liv_sub:'Send a package or receive your order.',
+    liv_send:'Send a package to someone',
+    liv_send_sub:'Photo, places, the recipient\'s number. Pay, a driver brings it.',
     home_achte:'SELL',
     home_achte_sub:'Put your business on MyPlopPlop and sell online.',
     home_im_driver:'I\'m a driver',
@@ -2131,7 +2141,9 @@ var T={
     home_kous:'VIAJE',
     home_kous_sub:'Moto o carro. El chofer te recoge.',
     home_liv:'ENTREGA',
-    home_liv_sub:'Recibe tu pedido rápido y seguro.',
+    home_liv_sub:'Envía un paquete o recibe tu pedido.',
+    liv_send:'Enviar un paquete a alguien',
+    liv_send_sub:'Foto, lugares, el número de quien recibe. Paga, un chofer lo lleva.',
     home_achte:'VENDER',
     home_achte_sub:'Registra tu negocio en MyPlopPlop y vende en línea.',
     home_im_driver:'Soy chofer',
