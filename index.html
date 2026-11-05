@@ -4136,7 +4136,7 @@ function offerMethods(){
   paySet('payAsk');
   payEl('payTitle').textContent = t('pay_title').replace('{amt}', payState.amount);
   var box = payEl('payMethods'); box.innerHTML='';
-  var LABEL = { moncash:'MonCash', natcash:'NatCash', kashpaw:'Kashpaw', all:t('pay_choose_there') };
+  var LABEL = { card:t('pay_card'), moncash:'MonCash', natcash:'NatCash', kashpaw:'Kashpaw', all:t('pay_choose_there') };   /* 5 Nov: card had no label */
 
   apiFetch(API_URL+'/api/payments/methods')
     .then(function(r){ return r.json(); })
