@@ -2781,25 +2781,25 @@ function dpOn(){
   var MPP='https://myplopplop-api.onrender.com';
   var tok=null, poll=null, timer=null, lastKey='', holdUntil=0, on=false;
   var S={
-    ht:{badge:'📦 KOLI',shop:'🛍️ LIVREZON',nw:'NOUVO',earn:'Sa w ap touche',acc:'Aksepte nan {s}s',exp:'Tan an pase…',pick:'Pran nan',drop:'Livre bay',what:'Koli',dist:'Distans',
+    ht:{badge:'📦 KOLI',e_pin:'Kòd la pa bon. Mande moun k ap resevwa a kòd 4 chif pa l la.',e_pinlock:'Twòp kòd ki pa bon. Rele Jennifer pou l tcheke livrezon sa a.',e_busy:'Ou gen yon travay ki poko fini (kous oswa livrezon). Fini l anvan ou pran yon lòt.',e_unver:'Nou pa ka verifye kounye a si ou lib. Eseye ankò nan kèk segonn.',e_oavct:'OAVCT ou ekspire. Ou pa ka pran nouvo livrezon jiskaske nouvo OAVCT ou verifye.',e_gone:'Livrezon sa a pa disponib ankò.',shop:'🛍️ LIVREZON',nw:'NOUVO',earn:'Sa w ap touche',acc:'Aksepte nan {s}s',exp:'Tan an pase…',pick:'Pran nan',drop:'Livre bay',what:'Koli',dist:'Distans',
         accept:'Aksepte livrezon an',pass:'Kite l pou yon lòt chofè',goPick:'ALE PRAN KOLI A',toRecip:'AN WOUT POU MOUN K AP RESEVWA A',sender:'Moun k ap voye l',recip:'Moun k ap resevwa l',
         arrived:'Mwen rive kote pou m pran koli a',have:'Mwen gen koli a nan men m',check:'Gade koli a: se li menm ki sou foto a?',askPin:'Devan moun k ap resevwa a, mande l KÒD 4 chif PA L:',
         complete:'Fini livrezon an',cannot:'Mwen pa ka fè livrezon sa a',why:'Poukisa ou pa ka fè l?',youEarn:'Ou touche',maps:'🗺️ Louvri wout la',call:'Rele',
         toShop:'ALE NAN BOUTIK LA',toCust:'AN WOUT POU KAY KLIYAN AN',shopArr:'Mwen rive nan boutik la',shopTypes:'Boutik la ap tape kòd sa a pou l ba w kòmand lan.',pcode:'Kòd pou w pran kòmand lan',
         done:'Livrezon an fini',earned:'Ou touche {m} (kont livrezon MyPlopPlop). Li rete an atant 24 èdtan, apre sa ou ka retire l.',noAcc:'Nou pa t kapab aksepte l',noUpd:'Nou pa t kapab mete l ajou'},
-    fr:{badge:'📦 COLIS',shop:'🛍️ LIVRAISON',nw:'NOUVEAU',earn:'Ce que vous gagnez',acc:'Acceptez dans {s}s',exp:'Offre expirée…',pick:'Retrait',drop:'Livrer à',what:'Colis',dist:'Distance',
+    fr:{badge:'📦 COLIS',e_pin:'Code incorrect. Demandez au destinataire son code à 4 chiffres.',e_pinlock:'Trop de codes incorrects. Appelez Jennifer pour vérifier cette livraison.',e_busy:'Vous avez un travail en cours (course ou livraison). Terminez-le avant d’en prendre un autre.',e_unver:'Impossible de vérifier pour l’instant que vous êtes libre. Réessayez dans quelques secondes.',e_oavct:'Votre OAVCT a expiré. Pas de nouvelle livraison tant que le nouvel OAVCT n’est pas vérifié.',e_gone:'Cette livraison n’est plus disponible.',shop:'🛍️ LIVRAISON',nw:'NOUVEAU',earn:'Ce que vous gagnez',acc:'Acceptez dans {s}s',exp:'Offre expirée…',pick:'Retrait',drop:'Livrer à',what:'Colis',dist:'Distance',
         accept:'Accepter la livraison',pass:'Laisser à un autre chauffeur',goPick:'ALLEZ CHERCHER LE COLIS',toRecip:'EN ROUTE VERS LE DESTINATAIRE',sender:'Expéditeur',recip:'Destinataire',
         arrived:'Je suis au point de retrait',have:'J’ai le colis en main',check:'Vérifiez le colis : est-ce celui de la photo ?',askPin:'Devant le destinataire, demandez-lui SON code à 4 chiffres :',
         complete:'Terminer la livraison',cannot:'Je ne peux pas faire cette livraison',why:'Pourquoi ?',youEarn:'Vous gagnez',maps:'🗺️ Ouvrir l’itinéraire',call:'Appeler',
         toShop:'ALLEZ À LA BOUTIQUE',toCust:'EN ROUTE VERS LE CLIENT',shopArr:'Je suis à la boutique',shopTypes:'La boutique tape ce code pour vous remettre la commande.',pcode:'Votre code de retrait',
         done:'Livraison terminée',earned:'Vous avez gagné {m} (compte livraisons MyPlopPlop). Retenu 24 heures, puis vous pouvez le retirer.',noAcc:'Impossible d’accepter',noUpd:'Mise à jour impossible'},
-    en:{badge:'📦 PACKAGE',shop:'🛍️ DELIVERY',nw:'NEW',earn:'You earn',acc:'Accept within {s}s',exp:'Offer expired…',pick:'Pick up',drop:'Deliver to',what:'Package',dist:'Distance',
+    en:{badge:'📦 PACKAGE',e_pin:'Wrong code. Ask the recipient for their 4-digit code.',e_pinlock:'Too many wrong codes. Call Jennifer to check this delivery.',e_busy:'You have a job in progress (ride or delivery). Finish it before taking another.',e_unver:'We cannot check right now that you are free. Try again in a few seconds.',e_oavct:'Your OAVCT has expired. No new deliveries until your new OAVCT is verified.',e_gone:'This delivery is no longer available.',shop:'🛍️ DELIVERY',nw:'NEW',earn:'You earn',acc:'Accept within {s}s',exp:'Offer expired…',pick:'Pick up',drop:'Deliver to',what:'Package',dist:'Distance',
         accept:'Accept delivery',pass:'Pass to another driver',goPick:'GO PICK UP THE PACKAGE',toRecip:'ON THE WAY TO THE RECIPIENT',sender:'Sender',recip:'Recipient',
         arrived:'I am at the pickup',have:'I have the package',check:'Check the package: is it the one in the photo?',askPin:'With the recipient, ask for THEIR 4-digit code:',
         complete:'Complete delivery',cannot:'I cannot do this delivery',why:'Why not?',youEarn:'You earn',maps:'🗺️ Open the route',call:'Call',
         toShop:'GO TO THE SHOP',toCust:'ON THE WAY TO THE CUSTOMER',shopArr:'I am at the shop',shopTypes:'The shop types this code to hand you the order.',pcode:'Your pickup code',
         done:'Delivery complete',earned:'You earned {m} (MyPlopPlop delivery account). Held 24 hours, then you can withdraw it.',noAcc:'Could not accept',noUpd:'Could not update'},
-    es:{badge:'📦 PAQUETE',shop:'🛍️ ENTREGA',nw:'NUEVO',earn:'Lo que ganas',acc:'Acepta en {s}s',exp:'Oferta vencida…',pick:'Recoger en',drop:'Entregar a',what:'Paquete',dist:'Distancia',
+    es:{badge:'📦 PAQUETE',e_pin:'Código incorrecto. Pida al destinatario su código de 4 dígitos.',e_pinlock:'Demasiados códigos incorrectos. Llame a Jennifer para revisar esta entrega.',e_busy:'Tiene un trabajo en curso (viaje o entrega). Termínelo antes de tomar otro.',e_unver:'No podemos verificar ahora que esté libre. Intente de nuevo en unos segundos.',e_oavct:'Su OAVCT venció. No hay nuevas entregas hasta que se verifique el nuevo OAVCT.',e_gone:'Esta entrega ya no está disponible.',shop:'🛍️ ENTREGA',nw:'NUEVO',earn:'Lo que ganas',acc:'Acepta en {s}s',exp:'Oferta vencida…',pick:'Recoger en',drop:'Entregar a',what:'Paquete',dist:'Distancia',
         accept:'Aceptar la entrega',pass:'Dejar a otro chofer',goPick:'VE A RECOGER EL PAQUETE',toRecip:'EN CAMINO AL DESTINATARIO',sender:'Remitente',recip:'Destinatario',
         arrived:'Estoy en el punto de recogida',have:'Tengo el paquete',check:'Revisa el paquete: ¿es el de la foto?',askPin:'Frente al destinatario, pídele SU código de 4 dígitos:',
         complete:'Terminar la entrega',cannot:'No puedo hacer esta entrega',why:'¿Por qué?',youEarn:'Ganas',maps:'🗺️ Abrir la ruta',call:'Llamar',
@@ -2886,14 +2886,20 @@ function dpOn(){
       lastKey=key; render(o.d.data);
     });
   }
+  var KERR={pin_required:'e_pin',pin_locked:'e_pinlock',driver_busy:'e_busy',busy_unverified:'e_unver',oavct_expired:'e_oavct'};
+  function kErr(d, dflt){ var c=d&&d.code; if(c&&KERR[c]) return k(KERR[c]);
+    if(d&&/taken|offered to another|expired|reserved/i.test(String(d.message||''))) return k('e_gone');
+    return (currentLang==='ht'&&d&&d.message)||k(dflt); }
   window.KOLI={
-    accept:function(id){ api('PUT','/api/rides/'+id+'/accept').then(function(o){ if(!o.ok) alert((o.d&&o.d.message)||k('noAcc')); lastKey=''; refresh(); }); },
+    /* 6 Nov 2026 (Jeffery: "error messages must match the language"): the server's codes are translated HERE;
+       its own sentence (Kreyòl) is shown only on a Kreyòl screen, for a code this page does not know yet */
+    accept:function(id){ api('PUT','/api/rides/'+id+'/accept').then(function(o){ if(!o.ok) alert(kErr(o.d,'noAcc')); lastKey=''; refresh(); }); },
     pass:function(id){ api('PUT','/api/rides/'+id+'/decline').then(function(){ lastKey=''; refresh(); }); },
     drop:function(id){ var why=prompt(k('why')); if(why===null) return;
       api('PUT','/api/rides/'+id+'/status',{status:'cancelled',reason:String(why).slice(0,200)}).then(function(){ lastKey=''; refresh(); }); },
     go:function(id,next){ var b={status:next}; if(next==='delivered'){ var p=document.getElementById('kolPin'); b.pin=p?p.value.trim():''; }
       api('PUT','/api/rides/'+id+'/status',b).then(function(o){
-        if(!o.ok||!(o.d&&o.d.success)){ var e=document.getElementById('kolErr'); if(e) e.textContent=(o.d&&o.d.message)||k('noUpd'); return; }
+        if(!o.ok||!(o.d&&o.d.success)){ var e=document.getElementById('kolErr'); if(e) e.textContent=kErr(o.d,'noUpd'); return; }
         if(next==='delivered'){ holdUntil=Date.now()+8000; var c=card();
           c.innerHTML='<div style="text-align:center;padding:10px 0"><div style="font-size:44px">✅</div><h3 style="color:#12A150">'+k('done')+'</h3><p class="sub">'+k('earned',{m:money(o.d.earned)})+'</p></div>';
           try{ loadPkgEarn(); }catch(e){}
