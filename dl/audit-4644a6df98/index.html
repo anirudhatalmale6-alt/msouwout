@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Launch Readiness Audit</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1d1d1f;--mute:#5f6168;--line:#e3e0d8;--red:#c0182f;--redbg:#fdecee;--amb:#a35b00;--ambbg:#fff4e0;--grn:#17713a;--grnbg:#e8f6ed;--blu:#00209f;--blubg:#e9edfb}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121214;--card:#1c1c20;--ink:#ececf0;--mute:#a3a4ad;--line:#2d2d33;--red:#ff6b7d;--redbg:#3a1a20;--amb:#ffb648;--ambbg:#3a2a12;--grn:#5fd38a;--grnbg:#14301f;--blu:#8ea2ff;--blubg:#1a2142}}
+:root[data-theme="dark"]{--bg:#121214;--card:#1c1c20;--ink:#ececf0;--mute:#a3a4ad;--line:#2d2d33;--red:#ff6b7d;--redbg:#3a1a20;--amb:#ffb648;--ambbg:#3a2a12;--grn:#5fd38a;--grnbg:#14301f;--blu:#8ea2ff;--blubg:#1a2142}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+.w{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:1.55rem;line-height:1.2;margin:.2em 0 .3em}
+h2{font-size:1.15rem;margin:2em 0 .6em;padding-bottom:.3em;border-bottom:2px solid var(--line)}
+h3{font-size:1rem;margin:1.2em 0 .4em}
+.sub{color:var(--mute);font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0}
+.b{border-left:5px solid var(--red)}
+.a{border-left:5px solid var(--amb)}
+.g{border-left:5px solid var(--grn)}
+.n{display:inline-block;min-width:26px;height:26px;border-radius:13px;background:var(--red);color:#fff;text-align:center;font-weight:700;font-size:.85rem;line-height:26px;margin-right:6px}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:10px;margin:2px 4px 2px 0;white-space:nowrap}
+.free{background:var(--grnbg);color:var(--grn)}
+.you{background:var(--blubg);color:var(--blu)}
+.jen{background:var(--ambbg);color:var(--amb)}
+.dev{background:var(--redbg);color:var(--red)}
+ul{padding-left:20px;margin:.4em 0}
+li{margin:.25em 0}
+.ok li::marker{content:"✔  ";color:var(--grn)}
+.sum{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0}
+.sum div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.sum b{display:block;font-size:1.35rem}
+.sum span{font-size:.82rem;color:var(--mute)}
+.mute{color:var(--mute);font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="w">
+<p class="sub">HaitiBiznis ecosystem · Audit of 16 Nov 2026 · prepared by Anirudha</p>
+<h1>Launch readiness audit</h1>
+<p>MsouWout, MyPlopPlop, Tikè Lakay, LajanMaker Academy and LajanMaker Center. The code running live was tested on full test copies (registration, payments, referrals, commissions, deliveries, tickets, admin). The live sites were checked <b>read-only</b>: nothing was created, charged or sent.</p>
+
+<div class="sum">
+<div><b>263</b><span>live pages load</span></div>
+<div><b>800+</b><span>automated checks passed</span></div>
+<div><b>189</b><span>admin/money routes locked</span></div>
+<div><b>0</b><span>gap between GitHub and live</span></div>
+</div>
+
+<p><b>Bottom line:</b> the money logic (payments, commissions, refunds, delivery pay, certificates) works in testing. What stops revenue today is mostly <b>not code</b>: nothing is on sale, drivers are not online, and shops are empty. There is also <b>one urgent privacy problem</b> and a few wrong prices that I can fix quickly at no charge.</p>
+
+<p><span class="tag free">FREE FIX</span> I fix it at no charge (my own code) &nbsp; <span class="tag you">YOUR DECISION</span> &nbsp; <span class="tag jen">JENNIFER</span> operations task &nbsp; <span class="tag dev">NEW WORK</span> needs your approval</p>
+
+<!-- ===================== 4 ===================== -->
+<h2>4. What can stop the launch or revenue (in priority order)</h2>
+
+<div class="card b"><span class="n">1</span><b>URGENT privacy: MsouWout passenger data can be read without logging in</b>
+<p>Some MsouWout safety and ride information (including SOS alerts with real names, phone numbers and locations, and the pickup PIN) can be read by anyone who knows where to look. This must be closed before any marketing.</p>
+<span class="tag free">FREE FIX</span> I need one "OK" from you, and it goes first.</div>
+
+<div class="card b"><span class="n">2</span><b>Nothing is on sale right now</b>
+<p>There is no upcoming Formation session and no upcoming Tikè Lakay event (the last one was 8 Nov). The Enskri page can only say "next session coming soon, WhatsApp us". Academy and ticket revenue stays at 0 until a session or event exists.</p>
+<span class="tag jen">JENNIFER</span> Create the next Formation session in Tikè Lakay, tick it in her Ajan console (seats tab), and set the exam code.</div>
+
+<div class="card b"><span class="n">3</span><b>Old and cancelled events still accept payment</b>
+<p>Past sessions (4 Oct, 8 Nov…) and cancelled events can still be paid for. The printed flyer QR (haitibiznis.com/fomasyon/) opens the <b>4 Oct</b> session. Someone can pay for a session that is over, which means a refund and a bad experience.</p>
+<span class="tag free">FREE FIX</span> Block payment on past and cancelled events, and make /fomasyon/ always open the next session automatically (no reprint needed).</div>
+
+<div class="card b"><span class="n">4</span><b>MsouWout: drivers are not taking rides</b>
+<p>In November, 10 of 11 real ride requests expired with no driver, and 0 rides were completed. There are 52 approved drivers, but nobody is online. Of the 13 rides ever completed, 11 were on your own driver account. The booking and payment code works in testing. This is an operational problem.</p>
+<span class="tag jen">JENNIFER</span> Call the approved drivers and get even 5 of them online at set hours with alerts turned on, then run real test 1 below. <span class="tag you">YOUR DECISION</span> A launch incentive for the first rides?</div>
+
+<div class="card b"><span class="n">5</span><b>Wrong prices live</b>
+<ul>
+<li><b>AI flyer:</b> the server charges <b>50 HTG</b>, but every page says <b>500 HTG</b> (probably a test value left in the settings).</li>
+<li><b>Online courses</b> "Lajanmaker Academy" and "Formation Lajanmaker" cost <b>20 HTG</b>.</li>
+</ul>
+<span class="tag you">YOUR DECISION</span> Confirm the correct prices (500 for the flyer?) <span class="tag free">FREE FIX</span> I set them.</div>
+
+<div class="card a"><span class="n">6</span><b>MyPlopPlop: the shop window is not ready for customers</b>
+<ul>
+<li>3 <b>demo shops</b> ("Boutik Demo HaitiBiznis", "Quincaillerie Modèl", "Depo Gwosis Modèl") are public and can be paid with real money. Nobody would deliver.</li>
+<li>13 of 20 shops have <b>0 products</b>. Only 4 real shops have products. There are 2 duplicate shops (Extreme picca pollo ×2, PC STORE / Pc Store).</li>
+<li>18 of 20 shops have <b>no map location</b>, so delivery is priced from central Port-au-Prince. The price is wrong outside downtown, and the driver only gets the typed street.</li>
+<li>The international "Order through MyPlopPlop" search shows <b>sample (demo) Amazon/Walmart products</b> with HTG prices.</li>
+</ul>
+<span class="tag you">YOUR DECISION</span> Hide the 3 demo shops, the duplicates and the empty shops until they have products? <span class="tag free">FREE FIX</span> Hide the international demo ordering. <span class="tag jen">JENNIFER</span> Contact the 13 empty shops. <span class="tag dev">NEW WORK</span> A "pin my shop on the map" step (small; I'll quote only if you want it).</div>
+
+<div class="card a"><span class="n">7</span><b>No real-money test yet on the current version</b>
+<p>Every payment path passes with a simulated gateway, but none has been run with real money since the latest changes: MonCash, NatCash, card, refund, POS renewal. See the checklist in section 3. This is the last proof before launch.</p></div>
+
+<div class="card a"><span class="n">8</span><b>Ajan rates shown wrong: risk of disputes</b>
+<p>The Ajan dashboard (koutye-dashboard) says <b>3%</b> on tickets, drivers and businesses. The system actually pays <b>1.5%</b> on tickets (30% on trainings for certified Ajan), <b>1%</b> on MyPlopPlop orders and nothing yet on MsouWout rides.</p>
+<span class="tag you">YOUR DECISION</span> Confirm the official rates <span class="tag free">FREE FIX</span> I make the page match.</div>
+
+<div class="card a"><span class="n">9</span><b>iPhone</b>
+<p>The App Store still has MsouWout <b>1.0 from July</b>, with old screens and fares, and Haiti has no App Store. Android (1.1.5) is fine and always loads the live site.</p>
+<span class="tag jen">JENNIFER</span> For now, send iPhone users to <b>msouwout.com</b> in Safari → Share → "Add to Home Screen". <span class="tag you">YOUR DECISION</span> Submit a new iPhone build later.</div>
+
+<div class="card a"><span class="n">10</span><b>Notifications</b>
+<p>WhatsApp sending is still off (it needs the Meta business account). So a ticket buyer who gives no email gets nothing sent: they must keep the page or use "find my ticket". On MyPlopPlop, a shop learns of a new paid order <b>only</b> by app push notification. If push is not allowed on the shop's phone, the order can sit unnoticed.</p>
+<span class="tag jen">JENNIFER</span> Make sure every shop turns notifications on. <span class="tag you">YOUR DECISION</span> WhatsApp Business setup, when ready.</div>
+
+<!-- ===================== 1 ===================== -->
+<h2>1. Fully working and verified today</h2>
+<p class="mute">Tested on the exact code that is live. Each test also fails when the feature is broken, so a pass means something.</p>
+
+<h3>MsouWout</h3>
+<ul class="ok">
+<li>Driver sign-up with Ajan code → documents → approval. Approval is refused while documents are missing or the OAVCT is expired. An expired OAVCT blocks new rides (12/12).</li>
+<li>Jennifer's driver console: "what's missing" WhatsApp button for pending drivers, OAVCT button (8/8).</li>
+<li>Address search and price before booking, and "confirm before booking" (115 checks).</li>
+<li>Full ride: book → driver accepts → arrives → pays → PIN → complete (journeys clean).</li>
+<li>Cancel at every stage with the right fee, refused once the ride has started (22/22).</li>
+<li>Card payments (28/28), shared ride / extra passenger (74/74), DASH clinics and money split (69/69), emergency locator (23/23).</li>
+<li>Driver payouts: admin only, no double payment (54/54). Test rides never move real money (38/38).</li>
+<li>Ajan commission rules for drivers (16/16 + 12/12).</li>
+</ul>
+
+<h3>MyPlopPlop</h3>
+<ul class="ok">
+<li>Full shop order in a real browser: pay → both shops see "paid" → accept → driver offer (80%) → pickup code → customer code at the door → driver credited (47/47).</li>
+<li>Delivery money rules: partial or underpaid baskets refused, one driver per job, 80/20 split paid once, cancel + refund reverses the Ajan commission (94/94).</li>
+<li>Merchant sign-up through an Ajan link/QR with camera photos → shop permanently tied to the Ajan → Jennifer sees dates and earning status → manual "Mete Ajan an" (23/23).</li>
+<li>Guest checkout cannot take money without an account. A shop without location is never priced from "0,0". Service fee 7.5% is shown and charged the same.</li>
+<li>6 approved delivery drivers online around Port-au-Prince at the time of the check.</li>
+</ul>
+
+<h3>Tikè Lakay</h3>
+<ul class="ok">
+<li>Ticket purchase: 2 × 1000 + 7.5% = 2150 HTG. No QR before payment, one QR per person on group tickets. Card amount checked to the cent (32 of 35 checks; the 3 failures are item 3 above).</li>
+<li>Door scan: first scan VALID, second "ALREADY USED". The printed number alone does not get in. A door code is required.</li>
+<li>No overselling: 20 buyers at once for 3 seats → exactly 3 (13/13).</li>
+<li>Refund: console only, once only, cancels the Ajan commission, puts the seat back on sale.</li>
+<li>Buy page works in all 5 languages (17/17).</li>
+</ul>
+
+<h3>LajanMaker Academy and Center</h3>
+<ul class="ok">
+<li>Paid seat → exam → unique certificate ID → badge. Unpaid students, refunded students and the old public code are all refused (60/60 + 35/35).</li>
+<li>New Payments box for Jennifer (20/20). Missing exam code warning (4/4).</li>
+<li>Training 30% only for certified Ajan, otherwise 1.5% (2/2). Online classes: Classroom link only after payment (6/6).</li>
+<li>All 77 Academy/agent admin actions require the console code. The POS device list is now locked.</li>
+<li>POS referral link shows the Ajan's real KB code (12/12).</li>
+</ul>
+
+<!-- ===================== 2 ===================== -->
+<h2>2. Incomplete or broken (full list)</h2>
+<div class="card">
+<h3 style="margin-top:0">Fix at no charge (my code), waiting for your OK</h3>
+<ul>
+<li>MsouWout privacy (item 1), plus some driver/business statistics that are public.</li>
+<li>Past and cancelled events accept payment. /fomasyon/ points to 4 Oct (item 3).</li>
+<li>The checkout ignores the organiser's chosen payment methods (e.g. card accepted on a MonCash-only event).</li>
+<li>"Find my ticket by phone" shows the ticket to anyone who knows the buyer's phone number. It needs a second check.</li>
+<li>Ajan dashboard rates text (item 8). International demo ordering visible (item 6).</li>
+<li>Small: a broken MsouWout logo on haitibiznis.com, a blocked event image on kou.html, "[object Object]" on the BiznisIQ page, a few "server error" messages for bad links.</li>
+<li>Test data visible publicly: a "TÈS…" event, a "Test Event", events dated 2003 and 2023, a ZZ test badge, a "Test Auto" listing, MsouWout demo logistics. I would <b>hide</b> them, not delete them.</li>
+<li>My own internal MsouWout test suite needs updating for the new home menu. I'll do that before any further MsouWout change.</li>
+</ul>
+</div>
+<div class="card">
+<h3 style="margin-top:0">Not broken, but built to work by hand (by design)</h3>
+<ul>
+<li>Refunds (MonCash/NatCash cannot be reversed automatically) and driver/merchant payouts are sent by hand, then recorded in the console. No payout has been run in production yet (driver earnings owed: 1,649 HTG, all on your account).</li>
+<li>Ajan payouts are OFF, as you asked. StarFlex is unchanged.</li>
+<li>POS subscription payments are checked on the phone itself, so there is no central list of who paid.</li>
+<li>Shop-order problems (refund approval, "paid but not accepted after 30 min", stuck deliveries) are on the MyPlopPlop admin page, which needs an admin login. <span class="tag you">YOUR DECISION</span> Give Jennifer an MyPlopPlop admin login (free), or add these lists to her console.</li>
+</ul>
+</div>
+
+<!-- ===================== 3 ===================== -->
+<h2>3. Still needs a real-world test (real phone, real money)</h2>
+<p class="mute">These cannot be proven on a test copy, because they need the real payment company, real phones and real drivers. Small amounts are fine. Do them after the free fixes.</p>
+<div class="card g"><b>1. MsouWout ride.</b> One approved driver online with alerts on. Book from a second phone and pay with MonCash. Check that the driver gets the alert, accepts, uses the PIN and completes, and that the earning shows. Then one card ride, and one refund recorded in Jennifer's console.</div>
+<div class="card g"><b>2. MyPlopPlop order with delivery.</b> One real shop with products and notifications on. Order 1 item (75+ HTG) with delivery and pay with MonCash. Check: the shop sees it paid, accepts, the driver gets the offer, pickup code, customer code, driver credited, Ajan line.</div>
+<div class="card g"><b>3. Tikè Lakay ticket.</b> On the next real event, buy one ticket with MonCash using an Ajan code and an email address. Check that the QR shows, the email arrives, the door scan works on a phone, and the commission line appears.</div>
+<div class="card g"><b>4. Academy.</b> Jennifer sets the exam code and creates and ticks the next session. One student pays → takes the exam → gets the certificate → badge approved.</div>
+<div class="card g"><b>5. Card + refund.</b> One small card payment (any platform), then a refund. Check that the money returns.</div>
+<div class="card g"><b>6. POS renewal.</b> Renew one POS with real MonCash and check that it unlocks.</div>
+<div class="card g"><b>7. iPhone.</b> One iPhone user: msouwout.com in Safari → Add to Home Screen → book.</div>
+
+<h2>What I need from you</h2>
+<div class="card">
+<ol>
+<li><b>"OK FIX"</b> for the free fixes in section 2, privacy first. No new features.</li>
+<li>Correct prices: AI flyer (500?), the two online courses.</li>
+<li>Official Ajan rates to show on the dashboard.</li>
+<li>Hide the demo shops, duplicates and empty shops? (yes/no)</li>
+<li>MyPlopPlop admin login for Jennifer? (yes/no)</li>
+</ol>
+</div>
+<p class="mute">Prepared from automated tests on the current live code plus read-only checks of production on 16 Nov 2026. No data was created or changed on the live systems during this audit.</p>
+</div>
+</body>
+</html>
